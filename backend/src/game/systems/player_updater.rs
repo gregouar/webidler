@@ -13,8 +13,7 @@ use shared::{
         passive::{PassivesTreeSpecs, PassivesTreeState},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatType},
-        temple::StatEffect,
+        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
     },
 };

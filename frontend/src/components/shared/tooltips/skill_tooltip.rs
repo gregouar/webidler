@@ -8,14 +8,12 @@ use shared::data::{
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
-    passive::StatEffect,
     skill::{
         DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreType,
         SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs, SkillTargetsGroup, SkillType,
         TargetType,
     },
-    stat_effect::{StatSkillEffectType, StatStatusType},
-    temple::StatType,
+    stat_effect::{StatEffect, StatSkillEffectType, StatStatusType, StatType},
     trigger::TriggerEffectModifier,
 };
 use strum::IntoEnumIterator;

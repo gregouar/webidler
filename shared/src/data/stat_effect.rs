@@ -469,8 +469,7 @@ impl LuckyRollType {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct StatConverterSpecs {
     pub source: StatConverterSource,
-    pub target_stat: Box<StatType>,
-    pub target_modifier: Modifier,
+    pub stat: Box<StatType>,
 
     #[serde(default)]
     pub is_extra: bool,

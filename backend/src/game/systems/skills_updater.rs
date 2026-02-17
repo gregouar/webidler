@@ -83,29 +83,7 @@ pub fn update_skill_specs(
         .into();
 
     apply_effects_to_skill_specs(skill_specs, local_effects.iter().chain(effects));
-
-    // apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
-    // apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
-    // apply_effects_to_skill_specs(
-    //     skill_specs,
-    //     local_effects.iter().filter(|e| !is_local_flat(e)),
-    // );
-    // apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
 }
-
-// fn is_local_flat(stat_effect: &&StatEffect) -> bool {
-//     match &stat_effect.stat {
-//         StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
-//         _ => stat_effect.modifier == Modifier::Flat,
-//     }
-// }
-
-// fn is_global_flat(stat_effect: &&StatEffect) -> bool {
-//     match &stat_effect.stat {
-//         StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
-//         _ => stat_effect.modifier == Modifier::Flat,
-//     }
-// }
 
 pub fn apply_effects_to_skill_specs<'a>(
     skill_specs: &mut SkillSpecs,
@@ -331,10 +309,7 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-    // NB: With this approach, Inc Spell Crit Chance is multiplicative with Inc Crit Chance...
-    // But maybe that's fine...
-
-    let mut stat_converters = Vec::new();
+    let mut stats_converters = Vec::new();
 
     for effect in effects.clone() {
         if !effect.bypass_ignore
@@ -366,7 +341,7 @@ pub fn compute_skill_specs_effect<'a>(
         }
 
         if let StatType::StatConverter(specs) = &effect.stat {
-            stat_converters.push((specs.clone(), effect.value));
+            stats_converters.push((specs.clone(), effect.modifier, effect.value));
             continue;
         }
 
@@ -524,13 +499,18 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-    if !stat_converters.is_empty() {
-        stat_converters
-            .sort_by_key(|(stat_converter, _)| (stat_converter.is_extra, stat_converter.source));
+    if !stats_converters.is_empty() {
+        stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
+            (
+                stat_converter.source,
+                stat_converter.stat.clone(),
+                *modifier,
+            )
+        });
 
-        let mut stats_converted = Vec::with_capacity(stat_converters.len());
+        let mut stats_converted = Vec::with_capacity(stats_converters.len());
 
-        for (specs, factor) in stat_converters {
+        for (specs, modifier, factor) in stats_converters {
             if specs.skill_type.is_some_and(|s| s != skill_type) {
                 continue;
             }
@@ -543,8 +523,8 @@ pub fn compute_skill_specs_effect<'a>(
                     let amount = crit_damage.convert_value(factor, specs.is_extra, false);
 
                     (amount > 0.0).then(|| StatEffect {
-                        stat: (*specs.target_stat).clone(),
-                        modifier: specs.target_modifier,
+                        stat: (*specs.stat).clone(),
+                        modifier,
                         value: amount,
                         bypass_ignore: true,
                     })
@@ -593,7 +573,7 @@ pub fn compute_skill_specs_effect<'a>(
                             skill_type,
                             damage_type,
                             min_max: None,
-                        } = *specs.target_stat
+                        } = *specs.stat
                     {
                         stats_converted.push(StatEffect {
                             stat: StatType::Damage {
@@ -601,7 +581,7 @@ pub fn compute_skill_specs_effect<'a>(
                                 damage_type,
                                 min_max: Some(MinMax::Min),
                             },
-                            modifier: specs.target_modifier,
+                            modifier,
                             value: amount.0,
                             bypass_ignore: true,
                         });
@@ -611,14 +591,14 @@ pub fn compute_skill_specs_effect<'a>(
                                 damage_type,
                                 min_max: Some(MinMax::Max),
                             },
-                            modifier: specs.target_modifier,
+                            modifier,
                             value: amount.1,
                             bypass_ignore: true,
                         })
                     } else {
                         Some(StatEffect {
-                            stat: (*specs.target_stat).clone(),
-                            modifier: specs.target_modifier,
+                            stat: (*specs.stat).clone(),
+                            modifier,
                             value: (amount.0 + amount.1),
                             bypass_ignore: true,
                         })

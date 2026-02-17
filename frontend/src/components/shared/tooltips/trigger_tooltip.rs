@@ -5,7 +5,7 @@ use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
     skill::TargetType,
-    temple::{StatEffect, StatType},
+    stat_effect::{StatEffect, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,

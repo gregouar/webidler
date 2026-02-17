@@ -395,19 +395,18 @@
             "stat": {
               "StatConverter": {
                 "source": "CritDamage",
-                "target_stat": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
                 "is_extra": true,
                 "skill_type": null
               }
             },
-            "modifier": "Flat",
+            "modifier": "Multiplier",
             "value": 25.0
           }
         ],
@@ -8314,10 +8313,9 @@
                 "source": {
                   "Block": "Attack"
                 },
-                "target_stat": {
+                "stat": {
                   "Block": "Spell"
                 },
-                "target_modifier": "Flat",
                 "is_extra": false,
                 "skill_type": null
               }
@@ -10468,8 +10466,7 @@
             "stat": {
               "StatConverter": {
                 "source": "LifeRegen",
-                "target_stat": "ManaRegen",
-                "target_modifier": "Flat",
+                "stat": "ManaRegen",
                 "is_extra": false,
                 "skill_type": null
               }

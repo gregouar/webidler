@@ -8,9 +8,8 @@ use shared::{
         character::{CharacterId, CharacterSpecs, CharacterState},
         conditional_modifier::ConditionalModifier,
         modifier::Modifier,
-        passive::StatEffect,
         skill::{DamageType, RestoreType, SkillType},
-        stat_effect::{LuckyRollType, StatConverterSource, StatType},
+        stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
     },
 };
 
@@ -110,7 +109,7 @@ fn compute_character_specs(
     character_specs: &mut CharacterSpecs,
     effects: &[StatEffect],
 ) -> Vec<StatEffect> {
-    let mut stat_converters = Vec::new();
+    let mut stats_converters = Vec::new();
 
     for effect in effects.iter() {
         match &effect.stat {
@@ -263,7 +262,7 @@ fn compute_character_specs(
             },
 
             StatType::StatConverter(specs) => {
-                stat_converters.push((specs.clone(), effect.value));
+                stats_converters.push((specs.clone(), effect.modifier, effect.value));
             }
             StatType::StatConditionalModifier { stat, conditions } => {
                 character_specs
@@ -303,12 +302,17 @@ fn compute_character_specs(
         }
     }
 
-    let mut stats_converted = Vec::with_capacity(stat_converters.len());
-    if !stat_converters.is_empty() {
-        stat_converters
-            .sort_by_key(|(stat_converter, _)| (stat_converter.is_extra, stat_converter.source));
+    let mut stats_converted = Vec::with_capacity(stats_converters.len());
+    if !stats_converters.is_empty() {
+        stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
+            (
+                stat_converter.source,
+                stat_converter.stat.clone(),
+                *modifier,
+            )
+        });
 
-        for (specs, factor) in stat_converters {
+        for (specs, modifier, factor) in stats_converters {
             // let factor = factor * 0.01;
             let amount = match specs.source {
                 StatConverterSource::MaxLife => {
@@ -345,8 +349,8 @@ fn compute_character_specs(
             };
 
             stats_converted.push(StatEffect {
-                stat: (*specs.target_stat).clone(),
-                modifier: specs.target_modifier,
+                stat: (*specs.stat).clone(),
+                modifier,
                 value: amount,
                 bypass_ignore: true,
             });

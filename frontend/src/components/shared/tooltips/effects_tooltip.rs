@@ -352,6 +352,22 @@ pub fn formatted_effects_list(
 pub fn format_stat(effect: &StatEffect) -> String {
     if effect.value == 0.0 {
         "No Effect".to_string()
+    } else if let StatType::StatConverter(stat_converter_specs) = &effect.stat {
+        let extra_str = match stat_converter_specs.is_extra {
+            true => "gained as",
+            false => "converted to",
+        };
+        format!(
+            "{}% of {} {extra_str} {}{}",
+            format_flat_number(Some(effect.value), false),
+            stat_converter_source_str(stat_converter_specs.source),
+            match effect.modifier {
+                Modifier::Multiplier => "Increased ",
+                Modifier::More => "More ",
+                Modifier::Flat => "",
+            },
+            format_multiplier_stat_name(&stat_converter_specs.stat)
+        )
     } else {
         match effect.modifier {
             Modifier::Multiplier | Modifier::More => format_multiplier_stat(effect),
@@ -484,13 +500,13 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 format!(
                     "Gain {} as {}",
                     stat_converter_source_str(stat_converter_specs.source),
-                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat)
                 )
             } else {
                 format!(
                     "Convert {} to {}",
                     stat_converter_source_str(stat_converter_specs.source),
-                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat)
                 )
             }
         }
@@ -753,15 +769,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 false => "converted to",
             };
             format!(
-                "{}% of {} {extra_str} {}{}",
+                "{}% of {} {extra_str} {}",
                 format_flat_number(value, false),
                 stat_converter_source_str(stat_converter_specs.source),
-                match stat_converter_specs.target_modifier {
-                    Modifier::Multiplier => "Increased ",
-                    Modifier::More => "More ",
-                    Modifier::Flat => "",
-                },
-                format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                format_multiplier_stat_name(&stat_converter_specs.stat)
             )
         }
         StatType::SuccessChance {

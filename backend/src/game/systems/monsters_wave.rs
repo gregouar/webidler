@@ -9,9 +9,8 @@ use shared::{
         character_status::StatusSpecs,
         modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
-        passive::StatEffect,
         skill::SkillEffectType,
-        stat_effect::{EffectsMap, StatType},
+        stat_effect::{EffectsMap, StatEffect, StatType},
     },
 };
 

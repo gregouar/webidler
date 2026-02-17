@@ -8,10 +8,9 @@ use shared::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
         modifier::Modifier,
-        passive::StatEffect,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::StatType,
+        stat_effect::{StatEffect, StatType},
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,

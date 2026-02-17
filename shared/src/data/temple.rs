@@ -2,9 +2,10 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::data::modifier::Modifier;
-
-pub use super::stat_effect::{StatEffect, StatType};
+use crate::data::{
+    modifier::Modifier,
+    stat_effect::{StatEffect, StatType},
+};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct BenedictionSpecs {

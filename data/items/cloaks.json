@@ -85,10 +85,9 @@
             "source": {
               "Damage": { "damage_type": "Storm" }
             },
-            "target_stat": {
+            "stat": {
               "Damage": { "damage_type": "Fire" }
-            },
-            "target_modifier": "Flat"
+            }
           }
         },
         "modifier": "Flat",

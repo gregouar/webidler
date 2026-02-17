@@ -9,8 +9,7 @@ use shared::{
         item::SkillRange,
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
-        stat_effect::{StatStatusType, compare_options},
-        temple::StatType,
+        stat_effect::{StatStatusType, StatType, compare_options},
     },
 };
 

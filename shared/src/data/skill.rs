@@ -6,14 +6,12 @@ use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::ConditionalModifier,
     modifier::{ModifiableValue, Modifier},
-    stat_effect::{MinMax, StatType},
+    stat_effect::{MinMax, StatEffect, StatType},
     trigger::TriggerSpecs,
 };
 
 pub use super::stat_effect::DamageType;
-use super::{
-    character_status::StatusSpecs, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
-};
+use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseSkillSpecs {

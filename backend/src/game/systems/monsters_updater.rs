@@ -8,8 +8,7 @@ use shared::{
         character_status::StatusSpecs,
         modifier::Modifier,
         monster::{MonsterSpecs, MonsterState},
-        stat_effect::StatType,
-        temple::StatEffect,
+        stat_effect::{StatEffect, StatType},
     },
 };
 
