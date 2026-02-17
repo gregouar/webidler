@@ -583,7 +583,7 @@ fn modify_skill_specs_effect<'a>(
                     } else {
                         0.0
                     };
-                    let max_factor = if let Some(MinMax::Min) | None = min_max {
+                    let max_factor = if let Some(MinMax::Max) | None = min_max {
                         factor
                     } else {
                         0.0
@@ -679,7 +679,7 @@ impl From<&mut SkillEffect> for ModifiableSkillEffect {
         Self {
             success_chance: value.success_chance.into(),
             effect_type: (&value.effect_type).into(),
-            ignore_stat_effects: value.ignore_stat_effects.clone(), // TODO: don't clone?
+            ignore_stat_effects: value.ignore_stat_effects.clone(),
             conditional_modifiers: value.conditional_modifiers.clone(),
         }
     }
@@ -723,12 +723,12 @@ impl ModifiableSkillEffectType {
                 crit_chance,
                 crit_damage,
             } => FlatDamage {
-                damage: damage.iter().map(|(x,y)| (*x, y.evaluate())).collect(),
+                damage: damage.into_iter().map(|(x,y)| (x, y.evaluate())).collect(),
                 crit_chance: crit_chance.evaluate(),
                 crit_damage: crit_damage.evaluate(),
             },
             ModifiableSkillEffectType::ApplyStatus { statuses, duration } => ApplyStatus {
-                statuses: statuses.iter().map(|s| s.evaluate()).collect(),
+                statuses: statuses.into_iter().map(|s| s.evaluate()).collect(),
                 duration: duration.evaluate(),
             },
             ModifiableSkillEffectType::Restore {
@@ -812,9 +812,9 @@ impl From<&ApplyStatusEffect> for ModifiableApplyStatusEffect {
 }
 
 impl ModifiableApplyStatusEffect{
-    fn evaluate(&self) -> ApplyStatusEffect {
+    fn evaluate(self) -> ApplyStatusEffect {
         ApplyStatusEffect{
-            status_type: self.status_type.clone(),
+            status_type: self.status_type,
             value: self.value.evaluate(),
             cumulate: self.cumulate,
             replace_on_value_only: self.replace_on_value_only,
