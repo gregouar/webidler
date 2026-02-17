@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
+    modifier::{compute_more_factor, ModifiableValue, Modifier},
     skill::{RestoreType, SkillEffectType},
     values::NonNegative,
 };
@@ -47,33 +47,8 @@ pub enum MinMax {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
-    Life,
-    LifeRegen,
-    Mana,
-    ManaRegen,
-    ManaCost {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-    },
-    Armor(Option<DamageType>),
-    DamageResistance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    TakeFromManaBeforeLife,
-    TakeFromLifeBeforeMana,
-    Block(#[serde(default)] Option<SkillType>),
-    BlockDamageTaken,
-    Evade(#[serde(default)] Option<DamageType>),
-    EvadeDamageTaken,
-    StatusResistance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        status_type: Option<StatStatusType>,
-    },
+    ItemRarity,
+    SkillLevel(#[serde(default)] Option<SkillType>),
     Damage {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -81,17 +56,6 @@ pub enum StatType {
         damage_type: Option<DamageType>,
         #[serde(default)]
         min_max: Option<MinMax>,
-    },
-    RestoreOnHit {
-        restore_type: RestoreType,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-    },
-    Restore {
-        #[serde(default)]
-        restore_type: Option<RestoreType>,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
     },
     CritChance(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
@@ -110,14 +74,56 @@ pub enum StatType {
         skill_type: Option<SkillType>,
     },
     Speed(#[serde(default)] Option<SkillType>),
+    Armor(Option<DamageType>),
+    DamageResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    Block(#[serde(default)] Option<SkillType>),
+    BlockDamageTaken,
+    Evade(#[serde(default)] Option<DamageType>),
+    EvadeDamageTaken,
+    StatusResistance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+    },
+    RestoreOnHit {
+        restore_type: RestoreType,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    Restore {
+        #[serde(default)]
+        restore_type: Option<RestoreType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    Life,
+    LifeRegen,
+    Mana,
+    ManaRegen,
+    ManaCost {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    TakeFromManaBeforeLife,
+    TakeFromLifeBeforeMana,
     MovementSpeed,
-    GoldFind,
-    ItemRarity,
     ThreatGain,
     Lucky {
         #[serde(default)]
         skill_type: Option<SkillType>,
         roll_type: LuckyRollType,
+    },
+    SuccessChance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        effect_type: Option<StatSkillEffectType>,
     },
     SkillConditionalModifier {
         stat: Box<StatType>,
@@ -135,19 +141,13 @@ pub enum StatType {
         #[serde(default)]
         shape: Option<SkillShape>,
     },
-    SkillLevel(#[serde(default)] Option<SkillType>),
-    StatConverter(StatConverterSpecs),
     StatConditionalModifier {
         stat: Box<StatType>,
         #[serde(default)]
         conditions: Vec<Condition>,
     },
-    SuccessChance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        effect_type: Option<StatSkillEffectType>,
-    },
+    StatConverter(StatConverterSpecs),
+    GoldFind,
 }
 
 pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
