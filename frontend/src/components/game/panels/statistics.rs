@@ -544,7 +544,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }),
                                 conditions: vec![Condition::ThreatLevel],
                             },
-                            Modifier::Increased,
+                            Modifier::More,
                             0.0,
                         )}
                     </StatCategory>
@@ -658,7 +658,7 @@ fn make_opt_stat(stat_type: StatType, modifier: Modifier, default: f64) -> impl 
                 .character_specs
                 .effects
                 .0
-                .get(&(stat_type.clone(), Modifier::Increased))
+                .get(&(stat_type.clone(), modifier))
                 .copied()
                 .unwrap_or_default();
             (default != value).then(|| make_stat(stat_type.clone(), modifier))

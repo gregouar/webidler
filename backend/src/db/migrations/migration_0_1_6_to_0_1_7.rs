@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, Transaction};
 
 use shared::data::{
     area::AreaLevel,
@@ -24,7 +24,7 @@ use crate::{
     constants::DATA_VERSION,
     db::{
         self,
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
     game::{data::inventory_data::InventoryData, systems::passives_controller},
@@ -481,7 +481,7 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
 pub struct OldStatConverterSpecs {
     pub source: OldStatConverterSource,
     pub target_stat: Box<OldStatType>,
-    pub target_modifier: Modifier,
+    pub target_modifier: OldModifier,
 
     #[serde(default)]
     pub is_extra: bool,
