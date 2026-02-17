@@ -4554,7 +4554,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -4568,7 +4568,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -6463,7 +6463,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -6477,7 +6477,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -9278,7 +9278,7 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
@@ -9292,7 +9292,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }

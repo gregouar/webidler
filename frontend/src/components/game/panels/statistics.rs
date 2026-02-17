@@ -113,11 +113,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Stat
                             label="Life Regeneration per second"
                             value=move || {
-                                format!(
-                                    "{:.1}%",
-                                    *game_context.player_specs.read().character_specs.life_regen
-                                        * 0.1,
-                                )
+                                let value = *game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .life_regen * 0.1;
+                                if value > 0.0 { format!("{:.1}%", value) } else { "-".into() }
                             }
                         />
                         <Stat
@@ -131,11 +132,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Stat
                             label="Mana Regeneration per second"
                             value=move || {
-                                format!(
-                                    "{:.1}%",
-                                    *game_context.player_specs.read().character_specs.mana_regen
-                                        * 0.1,
-                                )
+                                let value = *game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .mana_regen * 0.1;
+                                if value > 0.0 { format!("{:.1}%", value) } else { "-".into() }
                             }
                         />
                         <Stat
@@ -310,18 +312,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 })
                         }}
                         {move || {
-                            let take_from_mana_before_life = game_context
+                            let take_from_life_before_mana = game_context
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .take_from_mana_before_life
+                                .take_from_life_before_mana
                                 .get() as f64;
-                            (take_from_mana_before_life != 0.0)
+                            (take_from_life_before_mana != 0.0)
                                 .then(move || {
                                     view! {
                                         <Stat
                                             label="Life Taken Before Mana"
-                                            value=move || format!("{:.0}%", take_from_mana_before_life)
+                                            value=move || format!("{:.0}%", take_from_life_before_mana)
                                         />
                                     }
                                 })
@@ -427,7 +429,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         {move || {
                             let mana_on_hit = effect(
                                 StatType::RestoreOnHit {
-                                    restore_type: RestoreType::Life,
+                                    restore_type: RestoreType::Mana,
                                     skill_type: Some(SkillType::Attack),
                                 },
                                 Modifier::Flat,
