@@ -75,7 +75,7 @@ fn update_status(
     }
 
     if let Some(duration) = status_state.duration.as_mut() {
-        *duration -= elapsed_time_f64.into()
+        *duration -= elapsed_time_f64
     }
 
     let remove_status = status_state

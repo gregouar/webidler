@@ -26,11 +26,7 @@ pub fn update_skills_states(
             skill_state.elapsed_cooldown +=
                 (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
         }
-        if skill_state.elapsed_cooldown.get() >= 1.0 {
-            skill_state.is_ready = true;
-        } else {
-            skill_state.is_ready = false;
-        }
+        skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
     }
 }
 
@@ -184,7 +180,7 @@ fn compute_skill_modifier_effects<'a>(
                         ) {
                             (ItemStatsSource::Armor, _, Some(armor_specs)) => *armor_specs.armor,
                             (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
-                                weapon_specs.cooldown.get() as f64
+                                weapon_specs.cooldown.get()
                             }
                             (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
                                 weapon_specs.crit_chance.value.get() as f64
