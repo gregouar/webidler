@@ -1353,10 +1353,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             StatType::Speed(Some(SkillType::Attack)),
             Modifier::Increased,
         ),
-        (
-            StatType::Speed(Some(SkillType::Spell)),
-            Modifier::Increased,
-        ),
+        (StatType::Speed(Some(SkillType::Spell)), Modifier::Increased),
         (StatType::MovementSpeed, Modifier::Increased),
         (StatType::GoldFind, Modifier::Increased),
         (

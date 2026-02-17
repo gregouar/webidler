@@ -14,6 +14,8 @@ pub fn decrease_area_level(world_specs: &AreaSpecs, area_state: &mut AreaState, 
 
 pub fn compute_area_state(area_state: &mut AreaState, effects: &[StatEffect]) {
     for effect in effects.iter() {
-        if effect.stat == StatType::ItemRarity { area_state.loot_rarity.apply_effect(effect) }
+        if effect.stat == StatType::ItemRarity {
+            area_state.loot_rarity.apply_effect(effect)
+        }
     }
 }
