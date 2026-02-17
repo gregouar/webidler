@@ -15,7 +15,6 @@ use shared::{
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
     systems::{characters_controller::restore_character, stats_updater},
-    utils::rng::Rollable,
 };
 
 use super::statuses_controller;
@@ -49,26 +48,30 @@ pub fn update_character_state(
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
-        elapsed_time_f64 * character_specs.life_regen.evaluate() * 0.1,
+        elapsed_time_f64 * *character_specs.life_regen * 0.1,
         RestoreModifier::Percent,
     );
 
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
-        elapsed_time_f64 * character_specs.mana_regen.evaluate() * 0.1,
+        elapsed_time_f64 * *character_specs.mana_regen * 0.1,
         RestoreModifier::Percent,
     );
 
     character_state.life = character_state
         .life
-        .min(character_specs.max_life.evaluate());
+        .get()
+        .min(character_specs.max_life.get())
+        .into();
     character_state.mana = character_state
         .mana
-        .min(character_specs.max_mana.evaluate());
+        .get()
+        .min(character_specs.max_mana.get())
+        .into();
 
-    if character_state.life < 0.5 {
-        character_state.life = character_state.life.min(0.0);
+    if character_state.life.get() < 0.5 {
+        character_state.life = 0.0.into();
         character_state.is_alive = false;
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
@@ -100,6 +103,25 @@ pub fn update_character_specs(
     effects: &[StatEffect],
 ) -> (CharacterSpecs, Vec<StatEffect>) {
     let mut character_specs = base_specs.clone();
+
+    for skill_type in SkillType::iter() {
+        character_specs
+            .block
+            .entry(skill_type)
+            .or_default()
+            .value
+            .set_bounds(Some(0.0), Some(MAX_BLOCK));
+    }
+
+    for damage_type in DamageType::iter() {
+        character_specs
+            .evade
+            .entry(damage_type)
+            .or_default()
+            .value
+            .set_bounds(Some(0.0), Some(MAX_EVADE));
+    }
+
     let converted_effects = compute_character_specs(&mut character_specs, effects);
     (character_specs, converted_effects)
 }
@@ -314,16 +336,14 @@ fn compute_character_specs(
         for (specs, modifier, factor) in stats_converters {
             // let factor = factor * 0.01;
             let amount = match specs.source {
-                StatConverterSource::MaxLife => {
-                    character_specs
-                        .max_life
-                        .convert_value(factor, specs.is_extra, false)
-                }
-                StatConverterSource::MaxMana => {
-                    character_specs
-                        .max_mana
-                        .convert_value(factor, specs.is_extra, false)
-                }
+                StatConverterSource::MaxLife => character_specs
+                    .max_life
+                    .convert_value(factor, specs.is_extra, false)
+                    .get(),
+                StatConverterSource::MaxMana => character_specs
+                    .max_mana
+                    .convert_value(factor, specs.is_extra, false)
+                    .get(),
                 StatConverterSource::ManaRegen => {
                     character_specs
                         .mana_regen
@@ -336,7 +356,10 @@ fn compute_character_specs(
                 }
                 StatConverterSource::Block(skill_type) => {
                     if let Some(block) = character_specs.block.get_mut(&skill_type) {
-                        block.value.convert_value(factor, specs.is_extra, false) as f64
+                        block
+                            .value
+                            .convert_value(factor, specs.is_extra, false)
+                            .get() as f64
                     } else {
                         0.0
                     }
@@ -357,27 +380,6 @@ fn compute_character_specs(
 
         compute_character_specs(character_specs, &stats_converted);
     }
-
-    character_specs.max_life = character_specs.max_life.evaluate().max(1.0).into();
-    character_specs.max_mana = character_specs.max_mana.evaluate().max(0.0).into();
-    for block in character_specs.block.values_mut() {
-        block.clamp();
-        block.value = block.value.evaluate().min(MAX_BLOCK).into();
-    }
-    character_specs.block_damage = character_specs
-        .block_damage
-        .evaluate()
-        .clamp(0.0, 100.0)
-        .into();
-    for evade in character_specs.evade.values_mut() {
-        evade.clamp();
-        evade.value = evade.value.evaluate().min(MAX_EVADE).into();
-    }
-    character_specs.evade_damage = character_specs
-        .evade_damage
-        .evaluate()
-        .clamp(0.0, 100.0)
-        .into();
 
     stats_converted
 }

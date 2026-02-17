@@ -74,12 +74,12 @@ impl PlayerController {
         let min_mana_needed = if player_specs
             .character_specs
             .take_from_mana_before_life
-            .evaluate()
+            .get()
             > 0.0
             || player_specs
                 .character_specs
                 .take_from_life_before_mana
-                .evaluate()
+                .get()
                 > 0.0
         {
             0.0
@@ -88,7 +88,7 @@ impl PlayerController {
                 .skills_specs
                 .iter()
                 .take(player_specs.max_skills as usize)
-                .map(|s| s.mana_cost.evaluate())
+                .map(|s| s.mana_cost.get())
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         };
@@ -102,8 +102,8 @@ impl PlayerController {
         {
             // Always keep enough mana for a manual trigger, could be optional
             if (!player_specs.auto_skills.get(i).unwrap_or(&false)
-                || (skill_specs.mana_cost.evaluate() > 0.0
-                    && mana_available < min_mana_needed + skill_specs.mana_cost.evaluate()))
+                || (skill_specs.mana_cost.get() > 0.0
+                    && mana_available.get() < min_mana_needed + skill_specs.mana_cost.get()))
                 && !self.use_skills.contains(&i)
             {
                 continue;
@@ -130,7 +130,7 @@ pub fn reward_player(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> (f64, f64) {
-    let gold_reward = (monster_specs.reward_factor * player_specs.gold_find * 0.01).round();
+    let gold_reward = (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
         ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0).floor()
@@ -171,7 +171,7 @@ pub fn level_up_no_cost(
     player_resources.passive_points += 1;
     player_specs.experience_needed = computations::player_level_up_cost(player_specs);
 
-    player_state.character_state.life += PLAYER_LIFE_PER_LEVEL;
+    player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
 }
 
 pub fn equip_item_from_bag(
@@ -253,7 +253,7 @@ pub fn sell_item(
             ItemRarity::Rare => 4.0,
             ItemRarity::Unique => 8.0,
             ItemRarity::Masterwork => 8.0,
-        } * player_specs.gold_find
+        } * player_specs.gold_find.get()
             * 0.01
             * computations::exponential(
                 item_specs

@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::ops::Deref;
+#[cfg(feature = "modifiable")]
+use std::ops::DerefMut;
 
 #[cfg(feature = "modifiable")]
 use {
@@ -61,11 +63,11 @@ pub struct ModifiableValue<T> {
 #[cfg(feature = "modifiable")]
 impl<T> ModifiableValue<T>
 where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+    T: BaseModifiableValue + Default + Copy,
 {
-    pub fn evaluate(&self) -> T {
-        self.evaluated
-    }
+    // pub fn evaluate(&self) -> T {
+    //     self.evaluated
+    // }
 
     fn evaluate_impl(&self, convert: bool) -> T {
         let div = (1.0 - self.decreased * 0.01).max(0.0);
@@ -135,22 +137,22 @@ where
 }
 
 #[cfg(feature = "modifiable")]
-impl<T> Deref for ModifiableValue<T>
-where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
-{
+impl<T> Deref for ModifiableValue<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
         &self.evaluated
     }
 }
+#[cfg(feature = "modifiable")]
+impl<T> DerefMut for ModifiableValue<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.evaluated
+    }
+}
 
 #[cfg(feature = "modifiable")]
-impl<T> AsRef<T> for ModifiableValue<T>
-where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
-{
+impl<T> AsRef<T> for ModifiableValue<T> {
     fn as_ref(&self) -> &T {
         &self.evaluated
     }
@@ -159,14 +161,13 @@ where
 #[cfg(feature = "modifiable")]
 impl<T> Serialize for ModifiableValue<T>
 where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
-    T: Serialize,
+    T: Serialize + Copy,
 {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        self.evaluate().serialize(serializer)
+        self.evaluated.serialize(serializer)
     }
 }
 
@@ -200,22 +201,20 @@ where
 #[cfg(feature = "modifiable")]
 impl<T> PartialOrd for ModifiableValue<T>
 where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
     T: PartialOrd,
 {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.evaluate().partial_cmp(&other.evaluate())
+        self.evaluated.partial_cmp(&other.evaluated)
     }
 }
 
 #[cfg(feature = "modifiable")]
 impl<T> PartialEq for ModifiableValue<T>
 where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
     T: PartialEq,
 {
     fn eq(&self, other: &Self) -> bool {
-        self.evaluate() == other.evaluate()
+        self.evaluated == other.evaluated
     }
 }
 

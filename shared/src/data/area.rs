@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::modifier::ModifiableValue;
+use crate::data::{
+    modifier::ModifiableValue,
+    values::{Cooldown, NonNegative},
+};
 
 pub type AreaLevel = u16;
 pub type ThreatLevel = u16;
@@ -44,8 +47,8 @@ pub struct AreaState {
 pub struct AreaThreat {
     pub threat_level: ThreatLevel,
 
-    pub cooldown: f32,
-    pub elapsed_cooldown: f32,
+    pub cooldown: NonNegative,
+    pub elapsed_cooldown: Cooldown,
 
     pub just_increased: bool,
 }

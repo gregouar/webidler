@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::data::{modifier::Modifier, skill::SkillType, trigger::TriggerSpecs};
+use crate::data::{
+    modifier::Modifier, skill::SkillType, trigger::TriggerSpecs, values::NonNegative,
+};
 
 use super::{skill::DamageType, stat_effect::StatType};
 
@@ -86,8 +88,8 @@ pub enum StatModifierType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusState {
-    pub value: f64,
-    pub duration: Option<f64>,
+    pub value: NonNegative,
+    pub duration: Option<NonNegative>,
     pub cumulate: bool,
     pub skill_type: SkillType,
 }

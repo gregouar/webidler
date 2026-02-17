@@ -4,6 +4,7 @@ use shared::data::{
     character_status::{StatusMap, StatusSpecs, StatusState},
     player::{CharacterSpecs, CharacterState},
     stat_effect::EffectsMap,
+    values::NonNegative,
 };
 
 use super::characters_controller;
@@ -13,7 +14,7 @@ pub fn update_character_statuses(
     character_state: &mut CharacterState,
     elapsed_time: Duration,
 ) {
-    let elapsed_time_f64 = elapsed_time.as_secs_f64();
+    let elapsed_time_f64 = elapsed_time.as_secs_f64().into();
 
     character_state
         .statuses
@@ -48,12 +49,12 @@ pub fn update_character_statuses(
 
 fn update_status(
     character_specs: &CharacterSpecs,
-    character_life: &mut f64,
-    character_mana: &mut f64,
+    character_life: &mut NonNegative,
+    character_mana: &mut NonNegative,
     character_buff_status_change: &mut bool,
     status_specs: &StatusSpecs,
     status_state: &mut StatusState,
-    elapsed_time_f64: f64,
+    elapsed_time_f64: NonNegative,
 ) -> bool {
     if let StatusSpecs::DamageOverTime { damage_type, .. } = status_specs {
         characters_controller::damage_character(
@@ -62,8 +63,11 @@ fn update_status(
             character_mana,
             &HashMap::from([(
                 *damage_type,
-                status_state.value
-                    * elapsed_time_f64.min(status_state.duration.unwrap_or(elapsed_time_f64)),
+                (status_state.value.get()
+                    * elapsed_time_f64
+                        .get()
+                        .min(status_state.duration.unwrap_or(elapsed_time_f64).get()))
+                .into(),
             )]),
             status_state.skill_type,
             false,
@@ -71,10 +75,13 @@ fn update_status(
     }
 
     if let Some(duration) = status_state.duration.as_mut() {
-        *duration -= elapsed_time_f64
+        *duration -= elapsed_time_f64.into()
     }
 
-    let remove_status = status_state.duration.unwrap_or(1.0) <= 0.0;
+    let remove_status = status_state
+        .duration
+        .map(|d| d.get() <= 0.0)
+        .unwrap_or_default();
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger(_) = status_specs
         && remove_status
@@ -118,9 +125,9 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
             } => Some((
                 (stat.clone(), *modifier),
                 if *debuff {
-                    -status_state.value
+                    -status_state.value.get()
                 } else {
-                    status_state.value
+                    status_state.value.get()
                 },
             )),
             _ => None,

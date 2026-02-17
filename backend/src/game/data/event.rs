@@ -5,6 +5,7 @@ use shared::data::{
     character::CharacterId,
     skill::{DamageType, SkillRange, SkillType},
     stat_effect::StatStatusType,
+    values::NonNegative,
 };
 
 #[derive(Debug, Clone)]
@@ -35,7 +36,7 @@ pub struct HitEvent {
     pub is_hurt: bool,
     pub is_triggered: bool,
 
-    pub damage: HashMap<DamageType, f64>,
+    pub damage: HashMap<DamageType, NonNegative>,
 }
 #[derive(Debug, Clone)]
 pub struct StatusEvent {
@@ -46,8 +47,8 @@ pub struct StatusEvent {
     pub is_triggered: bool,
 
     pub status_type: StatStatusType,
-    pub value: f64,
-    pub duration: Option<f64>,
+    pub value: NonNegative,
+    pub duration: Option<NonNegative>,
 }
 
 #[derive(Debug, Default)]

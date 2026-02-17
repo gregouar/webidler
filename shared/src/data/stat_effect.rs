@@ -10,6 +10,7 @@ use crate::data::{
     item::{SkillRange, SkillShape},
     modifier::{ModifiableValue, Modifier, compute_more_factor},
     skill::{RestoreType, SkillEffectType},
+    values::NonNegative,
 };
 
 use super::skill::SkillType;
@@ -36,7 +37,7 @@ pub enum DamageType {
     Storm,
 }
 
-pub type DamageMap = HashMap<DamageType, ChanceRange<ModifiableValue<f64>>>;
+pub type DamageMap = HashMap<DamageType, ChanceRange<ModifiableValue<NonNegative>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {

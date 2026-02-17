@@ -220,7 +220,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let damage_ticks = ArcRwSignal::new(Vec::new());
     let dot_tick = ArcRwSignal::new(None);
 
-    let mut old_life = *specs.character_specs.max_life;
+    let mut old_life = specs.character_specs.max_life.get();
     let life = RwSignal::new(old_life);
 
     Effect::new({
@@ -230,7 +230,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 .monster_states
                 .read()
                 .get(index)
-                .map(|s| s.character_state.life)
+                .map(|s| s.character_state.life.get())
                 .unwrap_or_default();
 
             let diff = old_life - new_life;
@@ -317,14 +317,14 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(*specs.character_specs.max_life)}
+            {format_number(specs.character_specs.max_life.get())}
         }
     };
 
     let life_percent = Memo::new(move |_| {
-        let max_life = *specs.character_specs.max_life;
+        let max_life = specs.character_specs.max_life.get();
         if max_life > 0.0 {
-            (life.get() / *specs.character_specs.max_life * 100.0) as f32
+            (life.get() / max_life * 100.0) as f32
         } else {
             0.0
         }
@@ -553,22 +553,22 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             .map(|monster_state| monster_state.character_state.is_stunned())
             .unwrap_or_default()
         {
-            f32::MAX
+            f64::MAX
         } else {
             (1.0 - game_context
                 .monster_states
                 .read()
                 .get(monster_index)
                 .and_then(|m| m.skill_states.get(index))
-                .map(|s| s.elapsed_cooldown)
-                .unwrap_or(0.0))
-                * *game_context
+                .map(|s| s.elapsed_cooldown.get())
+                .unwrap_or_default())
+                * game_context
                     .monster_specs
                     .read()
                     .get(monster_index)
                     .and_then(|m| m.skill_specs.get(index))
-                    .map(|s| s.cooldown)
-                    .unwrap_or_default() as f32
+                    .map(|s| s.cooldown.get())
+                    .unwrap_or_default()
         }
     });
 

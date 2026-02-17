@@ -113,9 +113,9 @@ async fn control_entities(
     master_store: &MasterStore,
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
-        game_data.area_threat.cooldown = 0.0;
+        game_data.area_threat.cooldown = Default::default();
         game_data.monster_wave_delay =
-            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
 
         if game_data.player_respawn_delay.is_zero() {
             respawn_player(master_store, game_data);
@@ -149,7 +149,7 @@ async fn control_entities(
 
     let wave_completed = monsters_still_alive.is_empty();
     if wave_completed || game_data.area_state.read().going_back > 0 {
-        game_data.area_threat.cooldown = 0.0;
+        game_data.area_threat.cooldown = Default::default();
         if wave_completed
             && !game_data.wave_completed
             && monsters_exist
@@ -186,11 +186,11 @@ async fn control_entities(
             game_data.area_threat = AreaThreat {
                 threat_level: 0,
                 cooldown: if game_data.area_state.read().is_boss {
-                    THREAT_BOSS_COOLDOWN
+                    THREAT_BOSS_COOLDOWN.into()
                 } else {
-                    THREAT_COOLDOWN
+                    THREAT_COOLDOWN.into()
                 },
-                elapsed_cooldown: 0.0,
+                elapsed_cooldown: Default::default(),
                 just_increased: false,
             };
 
@@ -198,7 +198,7 @@ async fn control_entities(
         }
     } else {
         game_data.monster_wave_delay =
-            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
         monsters_controller::control_monsters(
             events_queue,
             &game_data.monster_specs,
@@ -217,12 +217,13 @@ pub fn update_threat(
     elapsed_time: Duration,
 ) {
     game_data.area_threat.just_increased = false;
-    if game_data.area_threat.cooldown > 0.0 {
+    if game_data.area_threat.cooldown.get() > 0.0 {
         game_data.area_threat.elapsed_cooldown +=
-            elapsed_time.as_secs_f32() * game_data.player_specs.read().threat_gain * 0.01
-                / game_data.area_threat.cooldown;
-        if game_data.area_threat.elapsed_cooldown >= 1.0 {
-            game_data.area_threat.elapsed_cooldown -= 1.0;
+            (elapsed_time.as_secs_f64() * game_data.player_specs.read().threat_gain.get() * 0.01
+                / game_data.area_threat.cooldown.get())
+            .into();
+        if game_data.area_threat.elapsed_cooldown.get() >= 1.0 {
+            game_data.area_threat.elapsed_cooldown -= 1.0.into();
             game_data.area_threat.threat_level =
                 game_data.area_threat.threat_level.saturating_add(1);
             game_data.area_threat.just_increased = true;

@@ -4,7 +4,11 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::data::{
-    chance::Chance, item_affix::AffixType, modifier::ModifiableValue, trigger::TriggerSpecs,
+    chance::Chance,
+    item_affix::AffixType,
+    modifier::ModifiableValue,
+    trigger::TriggerSpecs,
+    values::{NonNegative, Percent},
 };
 
 pub use super::skill::{SkillRange, SkillShape};
@@ -186,7 +190,7 @@ pub struct WeaponSpecs {
     #[serde(default)]
     pub shape: SkillShape,
 
-    pub cooldown: ModifiableValue<f32>,
+    pub cooldown: ModifiableValue<NonNegative>,
 
     // #[serde(rename_all = "snake_case")]
     pub damage: DamageMap,
@@ -200,7 +204,7 @@ pub struct ArmorSpecs {
     #[serde(default)]
     pub armor: ModifiableValue<f64>,
     #[serde(default)]
-    pub block: ModifiableValue<f32>,
+    pub block: ModifiableValue<Percent>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

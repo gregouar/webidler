@@ -95,20 +95,22 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <p class="text-xs xl:text-sm text-gray-400 leading-snug">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
-                {if *skill_specs.cooldown > 0.0 {
+                {if skill_specs.cooldown.get() > 0.0 {
                     view! {
                         "Cooldown: "
-                        <span class="text-white">{format!("{:.1}s", *skill_specs.cooldown)}</span>
+                        <span class="text-white">
+                            {format!("{:.1}s", skill_specs.cooldown.get())}
+                        </span>
                     }
                         .into_any()
                 } else {
                     view! { "Permanent" }.into_any()
                 }}
-                {(*skill_specs.mana_cost > 0.0)
+                {(skill_specs.mana_cost.get() > 0.0)
                     .then(|| {
                         view! {
                             " | Mana Cost: "
-                            <span class="text-white">{*skill_specs.mana_cost}</span>
+                            <span class="text-white">{skill_specs.mana_cost.get()}</span>
                         }
                     })}
             </p>
@@ -237,9 +239,11 @@ pub fn format_skill_effect(
     effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
 ) -> impl IntoView + use<> {
-    let success_chance = if *effect.success_chance.value < 100.0 {
+    let success_chance = if effect.success_chance.value.get() < 100.0 {
         Some(view! {
-            <span class="font-semibold">{format!("{:.0}%", *effect.success_chance.value)}</span>
+            <span class="font-semibold">
+                {format!("{:.0}%", effect.success_chance.value.get())}
+            </span>
             " chance to "
         })
     } else {
@@ -270,7 +274,9 @@ pub fn format_skill_effect(
                         ),
                         " as",
                     );
-                    if *value.min > 0.0 || *value.max > 0.0 || trigger_modifier_str.is_some() {
+                    if value.min.get() > 0.0 || value.max.get() > 0.0
+                        || trigger_modifier_str.is_some()
+                    {
                         damage_lines
                             .push(
                                 view! {
@@ -287,13 +293,13 @@ pub fn format_skill_effect(
                 }
                 damage_lines
             }
-            {if *crit_chance.value > 0.0 {
+            {if crit_chance.value.get() > 0.0 {
                 Some(
                     view! {
                         <EffectLi>
                             "Critical hit chance: "
                             <span class="font-semibold">
-                                {format!("{:.2}%", *crit_chance.value)}
+                                {format!("{:.2}%", crit_chance.value.get())}
                             </span>
                         </EffectLi>
                         <EffectLi>
@@ -364,8 +370,8 @@ pub fn format_skill_effect(
                             "",
                         );
 
-                        (*status_effect.value.min > 0.0
-                            || *status_effect.value.max > 0.0
+                        (status_effect.value.min.get() > 0.0
+                            || status_effect.value.max.get() > 0.0
                             || trigger_modifier_damage_str.is_some())
                         .then({
                             || {
@@ -400,9 +406,9 @@ pub fn format_skill_effect(
                             stat: stat.clone(),
                             modifier,
                             value: if debuff {
-                                -*status_effect.value.min
+                                -status_effect.value.min.get()
                             } else {
-                                *status_effect.value.min
+                                status_effect.value.min.get()
                             },
                             bypass_ignore: false,
                         });
@@ -411,9 +417,9 @@ pub fn format_skill_effect(
                                 stat: stat.clone(),
                                 modifier,
                                 value: if debuff {
-                                    -*status_effect.value.max
+                                    -status_effect.value.max.get()
                                 } else {
-                                    *status_effect.value.max
+                                    status_effect.value.max.get()
                                 },
                                 bypass_ignore: false,
                             });

@@ -8,6 +8,7 @@ use crate::data::{
     modifier::ModifiableValue,
     stat_effect::{MinMax, StatEffect, StatType},
     trigger::TriggerSpecs,
+    values::{Cooldown, NonNegative},
 };
 
 pub use super::stat_effect::DamageType;
@@ -22,9 +23,9 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub skill_type: SkillType,
 
-    pub cooldown: f32,
+    pub cooldown: NonNegative,
     #[serde(default)]
-    pub mana_cost: f64,
+    pub mana_cost: NonNegative,
 
     #[serde(default)]
     pub upgrade_cost: f64,
@@ -44,8 +45,8 @@ pub struct BaseSkillSpecs {
 pub struct SkillSpecs {
     pub base: BaseSkillSpecs,
 
-    pub cooldown: ModifiableValue<f32>,
-    pub mana_cost: ModifiableValue<f64>,
+    pub cooldown: ModifiableValue<NonNegative>,
+    pub mana_cost: ModifiableValue<NonNegative>,
 
     pub upgrade_level: u16,
     pub next_upgrade_cost: f64,
@@ -61,7 +62,7 @@ pub struct SkillSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
-    pub elapsed_cooldown: f32,
+    pub elapsed_cooldown: Cooldown,
 
     pub is_ready: bool,
     pub just_triggered: bool,
@@ -147,7 +148,7 @@ impl Default for SkillRepeat {
             value: ChanceRange {
                 min: 1,
                 max: 1,
-                lucky_chance: 0.0.into(),
+                lucky_chance: Default::default(),
             },
             target: SkillRepeatTarget::Any,
         }
@@ -187,7 +188,7 @@ pub enum SkillEffectType {
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,
-        duration: ChanceRange<ModifiableValue<f64>>,
+        duration: ChanceRange<ModifiableValue<NonNegative>>,
     },
     Restore {
         restore_type: RestoreType,
@@ -207,7 +208,7 @@ pub enum RestoreModifier {
 pub struct ApplyStatusEffect {
     pub status_type: StatusSpecs,
     #[serde(default)]
-    pub value: ChanceRange<ModifiableValue<f64>>,
+    pub value: ChanceRange<ModifiableValue<NonNegative>>,
     #[serde(default)]
     pub cumulate: bool,
     #[serde(default)]

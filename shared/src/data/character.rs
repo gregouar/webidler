@@ -3,13 +3,14 @@ use std::{collections::HashMap, hash::Hash};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    chance::Chance,
+    chance::BoundedChance,
     character_status::StatusId,
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
     skill::{DamageType, SkillType},
     stat_effect::{EffectsMap, StatStatusType},
     trigger::TriggeredEffect,
+    values::{AtLeastOne, NonNegative, Percent},
 };
 
 use super::character_status::StatusMap;
@@ -62,37 +63,37 @@ pub struct CharacterSpecs {
     // TODO: All the above: move elsewhere ^^^
     // TODO: Remove ModifiableValue and have a separate backend only struct to handle those
     //
-    pub max_life: ModifiableValue<f64>,
+    pub max_life: ModifiableValue<AtLeastOne>,
     #[serde(default)]
     pub life_regen: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub max_mana: ModifiableValue<f64>,
+    pub max_mana: ModifiableValue<NonNegative>,
     #[serde(default)]
     pub mana_regen: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub take_from_mana_before_life: ModifiableValue<f32>,
+    pub take_from_mana_before_life: ModifiableValue<Percent>,
     #[serde(default)]
-    pub take_from_life_before_mana: ModifiableValue<f32>,
+    pub take_from_life_before_mana: ModifiableValue<Percent>,
 
     #[serde(default)]
     pub armor: HashMap<DamageType, ModifiableValue<f64>>,
 
     #[serde(default)]
-    pub block: HashMap<SkillType, Chance>,
+    pub block: HashMap<SkillType, BoundedChance>,
     #[serde(default)]
-    pub block_damage: ModifiableValue<f32>,
+    pub block_damage: ModifiableValue<Percent>,
 
     #[serde(default)]
-    pub evade: HashMap<DamageType, Chance>,
+    pub evade: HashMap<DamageType, BoundedChance>,
     #[serde(default)]
-    pub evade_damage: ModifiableValue<f32>,
+    pub evade_damage: ModifiableValue<Percent>,
 
     #[serde(default)]
     pub status_resistances: HashMap<(SkillType, Option<StatStatusType>), ModifiableValue<f64>>,
     #[serde(default)]
-    pub stun_lockout: ModifiableValue<f64>,
+    pub stun_lockout: ModifiableValue<NonNegative>,
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
@@ -109,8 +110,8 @@ pub struct CharacterSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
-    pub life: f64,
-    pub mana: f64,
+    pub life: NonNegative,
+    pub mana: NonNegative,
 
     pub statuses: StatusMap,
     // This feels dirty

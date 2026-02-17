@@ -12,6 +12,7 @@ use shared::{
             SkillEffect, SkillEffectType, SkillRepeatTarget, SkillTargetsGroup, SkillType,
             TargetType,
         },
+        values::NonNegative,
     },
 };
 
@@ -34,8 +35,8 @@ pub fn use_skill<'a>(
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
-) -> f64 {
-    if !skill_state.is_ready || me.1.1.mana < skill_specs.mana_cost.evaluate() {
+) -> NonNegative {
+    if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
         return me.1.1.mana;
     }
 
@@ -52,10 +53,10 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        characters_controller::spend_mana(me.1.0, me.1.1, skill_specs.mana_cost.evaluate());
+        characters_controller::spend_mana(me.1.0, me.1.1, *skill_specs.mana_cost);
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
-        skill_state.elapsed_cooldown = 0.0;
+        skill_state.elapsed_cooldown = Default::default();
     }
 
     characters_controller::mana_available(me.1.0, me.1.1)
@@ -167,7 +168,7 @@ fn find_main_target<'a, 'b>(
     let target_specs = pre_targets
         .iter()
         .filter(|(_, (_, state))| {
-            targets_group.target_dead != (state.is_alive & (state.life > 0.0))
+            targets_group.target_dead != (state.is_alive & (state.life.get() > 0.0))
         })
         .filter(|(id, _)| match targets_group.repeat.target {
             SkillRepeatTarget::Any => true,
@@ -357,9 +358,9 @@ fn apply_skill_effect_on_target(
                 .map(|(damage_type, value)| {
                     (
                         *damage_type,
-                        value.roll_with_seed(seed)
+                        (*value).roll_with_seed(seed)
                             * (if is_crit {
-                                1.0 + crit_damage.evaluate() * 0.01
+                                1.0 + **crit_damage * 0.01
                             } else {
                                 1.0
                             }),

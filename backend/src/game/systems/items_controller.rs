@@ -11,9 +11,10 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
+    values::NonNegative,
 };
 
-use crate::game::{data::items_store::ItemsStore, utils::rng::Rollable};
+use crate::game::data::items_store::ItemsStore;
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
 
@@ -131,15 +132,13 @@ fn compute_weapon_specs(
         }
     }
 
-    weapon_specs.cooldown = weapon_specs.cooldown.evaluate().max(0.0).into();
-    weapon_specs.crit_chance.clamp();
-    weapon_specs.damage.retain(|_, value| {
-        value.max = value.max.evaluate().max(0.0).into();
-        value.min = value.min.evaluate().max(0.0).into();
-        value.clamp();
+    // weapon_specs.damage.retain(|_, value| {
+    //     value.max = value.max.evaluate().max(0.0).into();
+    //     value.min = value.min.evaluate().max(0.0).into();
+    //     value.clamp();
 
-        value.max.evaluate() > 0.0
-    });
+    //     value.max.evaluate() > 0.0
+    // });
 
     weapon_specs
 }
@@ -161,7 +160,6 @@ fn compute_armor_specs(
             _ => {}
         }
     }
-    armor_specs.block = armor_specs.block.evaluate().clamp(0.0, 100.0).into();
 
     armor_specs
 }
@@ -187,9 +185,9 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
                 duration: ChanceRange {
-                    min: WEAPON_POISON_DAMAGE_DURATION.into(),
-                    max: WEAPON_POISON_DAMAGE_DURATION.into(),
-                    lucky_chance: 0.0.into(),
+                    min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+                    max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+                    lucky_chance: Default::default(),
                 },
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {
@@ -211,8 +209,8 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),
         skill_type: SkillType::Attack,
-        cooldown: weapon_specs.cooldown.evaluate(),
-        mana_cost: 0.0,
+        cooldown: *weapon_specs.cooldown,
+        mana_cost: Default::default(),
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
         upgrade_effects: vec![StatEffect {
             stat: StatType::Damage {

@@ -20,3 +20,4 @@ pub mod stat_effect;
 pub mod temple;
 pub mod trigger;
 pub mod user;
+pub mod values;

@@ -16,20 +16,17 @@ use shared::data::{
 };
 use strum::IntoEnumIterator;
 
-use crate::game::utils::rng::Rollable;
-
 pub fn update_skills_states(
     elapsed_time: Duration,
     skill_specs: &[SkillSpecs],
     skill_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
-        if skill_specs.cooldown.evaluate() > 0.0 {
+        if skill_specs.cooldown.get() > 0.0 {
             skill_state.elapsed_cooldown +=
-                elapsed_time.as_secs_f32() / skill_specs.cooldown.evaluate();
+                (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
         }
-        if skill_state.elapsed_cooldown >= 1.0 {
-            skill_state.elapsed_cooldown = 1.0;
+        if skill_state.elapsed_cooldown.get() >= 1.0 {
             skill_state.is_ready = true;
         } else {
             skill_state.is_ready = false;
@@ -185,17 +182,15 @@ fn compute_skill_modifier_effects<'a>(
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
-                            (ItemStatsSource::Armor, _, Some(armor_specs)) => {
-                                armor_specs.armor.evaluate()
-                            }
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => *armor_specs.armor,
                             (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
-                                weapon_specs.cooldown.evaluate() as f64
+                                weapon_specs.cooldown.get() as f64
                             }
                             (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
-                                weapon_specs.crit_chance.value.evaluate() as f64
+                                weapon_specs.crit_chance.value.get() as f64
                             }
                             (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
-                                weapon_specs.crit_damage.evaluate()
+                                *weapon_specs.crit_damage
                             }
                             (
                                 ItemStatsSource::Damage {
@@ -210,9 +205,9 @@ fn compute_skill_modifier_effects<'a>(
                                         .damage
                                         .get(dmg_type)
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min.evaluate(),
-                                            Some(MinMax::Max) => d.max.evaluate(),
-                                            None => (d.min.evaluate() + d.max.evaluate()) * 0.5,
+                                            Some(MinMax::Min) => d.min.get(),
+                                            Some(MinMax::Max) => d.max.get(),
+                                            None => (d.min.get() + d.max.get()) * 0.5,
                                         })
                                         .unwrap_or_default()
                                 } else {
@@ -220,9 +215,9 @@ fn compute_skill_modifier_effects<'a>(
                                         .damage
                                         .values()
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min.evaluate(),
-                                            Some(MinMax::Max) => d.max.evaluate(),
-                                            None => (d.min.evaluate() + d.max.evaluate()) * 0.5,
+                                            Some(MinMax::Min) => d.min.get(),
+                                            Some(MinMax::Max) => d.max.get(),
+                                            None => (d.min.get() + d.max.get()) * 0.5,
                                         })
                                         .sum()
                                 }
@@ -550,8 +545,8 @@ pub fn compute_skill_specs_effect<'a>(
                             .get_mut(&damage_type)
                             .map(|d| {
                                 (
-                                    d.min.convert_value(min_factor, specs.is_extra, true),
-                                    d.max.convert_value(max_factor, specs.is_extra, true),
+                                    d.min.convert_value(min_factor, specs.is_extra, true).get(),
+                                    d.max.convert_value(max_factor, specs.is_extra, true).get(),
                                 )
                             })
                             .unwrap_or_default(),
@@ -559,8 +554,14 @@ pub fn compute_skill_specs_effect<'a>(
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
                                 (
-                                    min_acc + d.min.convert_value(min_factor, specs.is_extra, true),
-                                    max_acc + d.max.convert_value(max_factor, specs.is_extra, true),
+                                    min_acc
+                                        + d.min
+                                            .convert_value(min_factor, specs.is_extra, true)
+                                            .get(),
+                                    max_acc
+                                        + d.max
+                                            .convert_value(max_factor, specs.is_extra, true)
+                                            .get(),
                                 )
                             }),
                     };
@@ -611,16 +612,16 @@ pub fn compute_skill_specs_effect<'a>(
         compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
     }
 
-    if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
-        damage.retain(|_, value| {
-            // value.min = value.min.evaluate().max(0.0).into();
-            // value.max = value.max.evaluate().max(0.0).into();
-            if value.min.evaluate() < 0.0 {
-                value.min = 0.0.into();
-            }
-            value.clamp();
+    // if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
+    //     damage.retain(|_, value| {
+    //         // value.min = value.min.evaluate().max(0.0).into();
+    //         // value.max = value.max.evaluate().max(0.0).into();
+    //         if value.min.get() < 0.0 {
+    //             value.min = 0.0.into();
+    //         }
+    //         value.clamp();
 
-            value.max.evaluate() > 0.0
-        });
-    }
+    //         value.max.evaluate() > 0.0
+    //     });
+    // }
 }

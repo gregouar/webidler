@@ -5,8 +5,9 @@ use rand::{
 use rand_chacha::ChaCha8Rng;
 
 use shared::data::{
-    chance::{Chance, ChanceRange},
-    modifier::{BaseModifiableValue, ModifiableValue},
+    chance::{BoundedChance, Chance, ChanceRange},
+    modifier::ModifiableValue,
+    values::Luck,
 };
 
 pub type RngSeed = ChaCha8Rng;
@@ -65,26 +66,35 @@ pub trait Rollable<T> {
     fn roll(&self) -> T {
         self.roll_with_seed(&mut roll_seed())
     }
-    fn clamp(&mut self);
 }
 
 impl Rollable<bool> for Chance {
     fn roll_with_seed(&self, seed: &mut RngSeed) -> bool {
         let first_result =
-            random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.evaluate();
+            random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get();
         let second_result =
-            random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.evaluate();
+            random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get();
 
-        match roll_luck(self.lucky_chance.evaluate(), seed) {
+        match roll_luck(*self.lucky_chance, seed) {
             LuckResult::Unlucky => first_result.min(second_result),
             LuckResult::Normal => first_result,
             LuckResult::Lucky => first_result.max(second_result),
         }
     }
+}
 
-    fn clamp(&mut self) {
-        self.value = self.value.evaluate().clamp(0.0, 100.0).into();
-        self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
+impl Rollable<bool> for BoundedChance {
+    fn roll_with_seed(&self, seed: &mut RngSeed) -> bool {
+        let first_result =
+            random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get();
+        let second_result =
+            random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get();
+
+        match roll_luck(*self.lucky_chance, seed) {
+            LuckResult::Unlucky => first_result.min(second_result),
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => first_result.max(second_result),
+        }
     }
 }
 
@@ -93,10 +103,18 @@ where
     T: rand::distr::uniform::SampleUniform + PartialOrd + Copy,
 {
     fn roll_with_seed(&self, seed: &mut RngSeed) -> T {
-        let first_result = random_range_with_seed(self.min..=self.max, seed).unwrap_or(self.max);
-        let second_result = random_range_with_seed(self.min..=self.max, seed).unwrap_or(self.max);
+        let min = if let Some(ordering) = self.min.partial_cmp(&self.max)
+            && ordering == std::cmp::Ordering::Greater
+        {
+            self.max
+        } else {
+            self.min
+        };
 
-        match roll_luck(self.lucky_chance.evaluate(), seed) {
+        let first_result = random_range_with_seed(min..=self.max, seed).unwrap_or(self.max);
+        let second_result = random_range_with_seed(min..=self.max, seed).unwrap_or(self.max);
+
+        match roll_luck(*self.lucky_chance, seed) {
             LuckResult::Unlucky => match first_result.partial_cmp(&second_result) {
                 Some(std::cmp::Ordering::Greater) => second_result,
                 _ => first_result,
@@ -108,38 +126,35 @@ where
             },
         }
     }
-
-    fn clamp(&mut self) {
-        if let Some(ordering) = self.min.partial_cmp(&self.max)
-            && ordering == std::cmp::Ordering::Greater
-        {
-            self.min = self.max;
-        }
-        // self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
-    }
 }
+
+// impl<T> Rollable<T> for ChanceRange<ModifiableValue<T>>
+// where
+//     T: rand::distr::uniform::SampleUniform + PartialOrd + Copy,
+//     // T: std::ops::Add<Output = T> + BaseModifiableValue + Default,
+// {
+//     fn roll_with_seed(&self, seed: &mut RngSeed) -> T {
+//         ChanceRange::<T> {
+//             min: *self.min,
+//             max: *self.max,
+//             lucky_chance: self.lucky_chance,
+//         }
+//         .roll_with_seed(seed)
+//     }
+// }
 
 impl<T> Rollable<T> for ChanceRange<ModifiableValue<T>>
 where
-    T: rand::distr::uniform::SampleUniform + PartialOrd + Copy,
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default,
+    T: Into<f64> + From<f64> + Copy,
 {
     fn roll_with_seed(&self, seed: &mut RngSeed) -> T {
-        ChanceRange::<T> {
-            min: self.min.evaluate(),
-            max: self.max.evaluate(),
+        ChanceRange::<f64> {
+            min: (*self.min).into(),
+            max: (*self.max).into(),
             lucky_chance: self.lucky_chance,
         }
         .roll_with_seed(seed)
-    }
-
-    fn clamp(&mut self) {
-        if let Some(ordering) = self.min.partial_cmp(&self.max)
-            && ordering == std::cmp::Ordering::Greater
-        {
-            self.min = self.max;
-        }
-        // self.lucky_chance = self.lucky_chance.evaluate().clamp(-100.0, 100.0).into();
+        .into()
     }
 }
 
@@ -149,7 +164,8 @@ enum LuckResult {
     Lucky,
 }
 
-fn roll_luck(lucky_chance: f32, seed: &mut RngSeed) -> LuckResult {
+fn roll_luck(lucky_chance: Luck, seed: &mut RngSeed) -> LuckResult {
+    let lucky_chance = lucky_chance.get();
     if random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= lucky_chance.abs() {
         if lucky_chance < 0.0 {
             return LuckResult::Unlucky;

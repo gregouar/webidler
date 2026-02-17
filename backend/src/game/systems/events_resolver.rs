@@ -107,7 +107,7 @@ fn handle_hit_event<'a>(
                         hit_event
                             .damage
                             .get(&damage_type)
-                            .copied()
+                            .map(|d| d.get())
                             .unwrap_or_default()
                             > 0.0
                     })
@@ -317,7 +317,7 @@ fn handle_area_completed_event(
         is_boss_level,
         new_max, // Only drop unique when new area completed
         None,
-        area_state.loot_rarity.evaluate(),
+        *area_state.loot_rarity,
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(

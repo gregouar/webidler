@@ -17,6 +17,7 @@ use shared::{
         },
         stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
+        values::{AtLeastOne, NonNegative},
     },
 };
 
@@ -34,9 +35,10 @@ pub fn base_player_character_specs(name: String, portrait: String, level: u8) ->
         size: CharacterSize::Small,
         position_x: 0,
         position_y: 0,
-        max_life: (100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64).into(),
+        max_life: AtLeastOne::new(100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64)
+            .into(),
         life_regen: 10.0.into(),
-        max_mana: 100.0.into(),
+        max_mana: NonNegative::new(100.0).into(),
         mana_regen: 10.0.into(),
         ..Default::default()
     }
@@ -118,9 +120,9 @@ pub fn update_player_specs(
         player_specs.level,
     );
 
-    player_specs.gold_find = 100.0;
-    player_specs.threat_gain = 100.0;
-    player_specs.movement_cooldown = 3.0;
+    player_specs.gold_find = 100.0.into();
+    player_specs.threat_gain = 100.0.into();
+    player_specs.movement_cooldown = 3.0.into();
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -129,7 +131,7 @@ pub fn update_player_specs(
         .filter_map(|item| item.armor_specs.as_ref())
         .map(|spec| (spec.armor, spec.block))
         .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| {
-            (a_sum + a.evaluate(), b_sum + b.evaluate())
+            (a_sum + *a, b_sum + b.get())
         });
 
     player_specs
@@ -209,9 +211,9 @@ fn compute_player_specs(
         &effects,
     );
 
-    player_specs.movement_cooldown = movement_cooldown.evaluate();
-    player_specs.gold_find = gold_find.evaluate();
-    player_specs.threat_gain = threat_gain.evaluate();
+    player_specs.movement_cooldown = *movement_cooldown;
+    player_specs.gold_find = *gold_find;
+    player_specs.threat_gain = *threat_gain;
 
     for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {
         player_specs.character_specs.triggers.push(TriggeredEffect {
@@ -236,7 +238,7 @@ fn compute_player_specs(
                     value: ChanceRange {
                         min: value,
                         max: value,
-                        lucky_chance: 0.0.into(),
+                        lucky_chance: Default::default(),
                     },
                     modifier: RestoreModifier::Flat,
                 },
@@ -255,9 +257,9 @@ fn compute_player_specs(
 
 #[derive(Clone, Default)]
 pub struct ModifiablePlayerSpecs {
-    pub movement_cooldown: ModifiableValue<f32>,
-    pub gold_find: ModifiableValue<f64>,
-    pub threat_gain: ModifiableValue<f32>,
+    pub movement_cooldown: ModifiableValue<AtLeastOne>,
+    pub gold_find: ModifiableValue<NonNegative>,
+    pub threat_gain: ModifiableValue<NonNegative>,
 
     pub restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
 }

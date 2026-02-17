@@ -19,8 +19,8 @@ use crate::{
             card::Card,
             number::format_number,
             progress_bars::{
-                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
-                predictive_cooldown,
+                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
+                VerticalProgressBar,
             },
             toast::*,
             tooltip::{
@@ -31,83 +31,99 @@ use crate::{
     },
 };
 
-use super::{GameContext, portrait::CharacterPortrait};
+use super::{portrait::CharacterPortrait, GameContext};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let max_life = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
-    let life = Signal::derive(move || game_context.player_state.read().character_state.life);
+    let max_life = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .max_life
+            .get()
+    });
+    let life = Signal::derive(move || game_context.player_state.read().character_state.life.get());
 
     let life_tooltip = move || {
         view! {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(*game_context.player_specs.read().character_specs.max_life)}
+            {format_number(game_context.player_specs.read().character_specs.max_life.get())}
         }
     };
 
     let life_percent = Signal::derive(move || {
-        let max_life = *max_life.get();
+        let max_life = max_life.get();
         if max_life > 0.0 {
-            (life.get() / max_life) as f32
+            life.get() / max_life
         } else {
             0.0
         }
     });
 
-    let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
+    let max_mana = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .max_mana
+            .get()
+    });
     let reserved_mana = Memo::new(move |_| {
-        if *game_context
+        if game_context
             .player_specs
             .read()
             .character_specs
             .take_from_mana_before_life
+            .get()
             > 0.0
-            || *game_context
+            || game_context
                 .player_specs
                 .read()
                 .character_specs
                 .take_from_life_before_mana
+                .get()
                 > 0.0
         {
             0.0
         } else {
-            *game_context
+            game_context
                 .player_specs
                 .read()
                 .skills_specs
                 .iter()
-                .map(|s| s.mana_cost)
+                .map(|s| s.mana_cost.get())
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         }
     });
-    let mana = Signal::derive(move || game_context.player_state.read().character_state.mana);
+    let mana = Signal::derive(move || game_context.player_state.read().character_state.mana.get());
 
     let mana_tooltip = move || {
         view! {
             "Mana: "
             {format_number(mana.get())}
             "/"
-            {format_number(*max_mana.get())}
+            {format_number(max_mana.get())}
         }
     };
 
     let mana_percent = Signal::derive(move || {
-        let max_mana = *max_mana.get();
+        let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (mana.get() / max_mana) as f32
+            mana.get() / max_mana
         } else {
             0.0
         }
     });
     let reserved_mana_percent = Memo::new(move |_| {
-        let max_mana = *max_mana.get();
+        let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (reserved_mana.get() / max_mana) as f32
+            reserved_mana.get() / max_mana
         } else {
             0.0
         }
@@ -416,14 +432,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .read()
             .skills_states
             .get(index)
-            .map(|x| x.elapsed_cooldown)
-            .unwrap_or_default()) as f32)
+            .map(|x| x.elapsed_cooldown.get())
+            .unwrap_or_default()))
             * game_context
                 .player_specs
                 .read()
                 .skills_specs
                 .get(index)
-                .map(|x| *x.cooldown)
+                .map(|x| x.cooldown.get())
                 .unwrap_or_default()
     });
 
@@ -551,7 +567,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .read()
             .skills_specs
             .get(index)
-            .map(|x| *x.cooldown)
+            .map(|x| x.cooldown.get())
             .unwrap_or_default()
             == 0.0
     });

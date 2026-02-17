@@ -158,13 +158,13 @@ pub fn apply_trigger_effects(
                                         .hit_context
                                         .as_ref()
                                         .and_then(|hit| hit.damage.get(damage_type))
-                                        .copied()
+                                        .map(|d| d.get())
                                         .unwrap_or_default()
                                 }
                                 TriggerEffectModifierSource::HitDamage(None) => trigger_context
                                     .hit_context
                                     .as_ref()
-                                    .map(|hit| hit.damage.values().sum())
+                                    .map(|hit| hit.damage.values().map(|d| d.get()).sum())
                                     .unwrap_or_default(),
                                 TriggerEffectModifierSource::HitCrit => trigger_context
                                     .hit_context
@@ -188,7 +188,7 @@ pub fn apply_trigger_effects(
                                             &Some(&status_event.skill_type),
                                         )
                                     })
-                                    .map(|status_event| status_event.value)
+                                    .map(|status_event| status_event.value.get())
                                     .sum(),
                                 TriggerEffectModifierSource::StatusDuration {
                                     status_type,
@@ -204,7 +204,9 @@ pub fn apply_trigger_effects(
                                             &Some(&status_event.skill_type),
                                         )
                                     })
-                                    .map(|status_event| status_event.duration.unwrap_or(1e20))
+                                    .map(|status_event| {
+                                        status_event.duration.map(|d| d.get()).unwrap_or(1e20)
+                                    })
                                     .sum(),
                                 TriggerEffectModifierSource::StatusStacks {
                                     status_type,

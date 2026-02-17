@@ -95,16 +95,16 @@ pub fn check_condition(
             })
             .count() as f64,
         Condition::MaximumLife => {
-            (character_state.life >= character_specs.max_life.evaluate() * 0.99) as usize as f64
+            (character_state.life.get() >= character_specs.max_life.get() * 0.99) as usize as f64
         }
         Condition::MaximumMana => {
-            (character_state.mana >= character_specs.max_mana.evaluate() * 0.99) as usize as f64
+            (character_state.mana.get() >= character_specs.max_mana.get() * 0.99) as usize as f64
         }
         Condition::LowLife => {
-            (character_state.life <= character_specs.max_life.evaluate() * 0.5) as usize as f64
+            (character_state.life.get() <= character_specs.max_life.get() * 0.5) as usize as f64
         }
         Condition::LowMana => {
-            (character_state.mana <= character_specs.max_mana.evaluate() * 0.5) as usize as f64
+            (character_state.mana.get() <= character_specs.max_mana.get() * 0.5) as usize as f64
         }
         Condition::ThreatLevel => area_threat.threat_level as f64,
     }

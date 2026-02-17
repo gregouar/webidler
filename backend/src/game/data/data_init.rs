@@ -36,8 +36,8 @@ impl DataInit<&AreaSpecs> for AreaState {
 impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            life: specs.max_life.evaluate(),
-            mana: specs.max_mana.evaluate(),
+            life: specs.max_life.get().into(),
+            mana: specs.max_mana.get().into(),
 
             statuses: StatusMap::default(),
             dirty_specs: true,
@@ -65,9 +65,9 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
-            movement_cooldown: 3.0,
-            gold_find: 100.0,
-            threat_gain: 100.0,
+            movement_cooldown: 3.0.into(),
+            gold_find: 100.0.into(),
+            threat_gain: 100.0.into(),
             max_level: DEFAULT_MAX_LEVEL,
         }
     }
@@ -114,7 +114,7 @@ impl DataInit<&SkillSpecs> for SkillState {
     fn init(specs: &SkillSpecs) -> Self {
         let _ = specs;
         Self {
-            elapsed_cooldown: 0.0,
+            elapsed_cooldown: Default::default(),
             is_ready: false,
             just_triggered: false,
         }
