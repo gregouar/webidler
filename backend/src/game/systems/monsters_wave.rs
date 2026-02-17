@@ -4,13 +4,13 @@ use shared::{
     computations,
     constants::{CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR, MONSTERS_DEFAULT_DAMAGE_INCREASE},
     data::{
-        area::{AreaLevel, AreaState, AreaThreat},
+        area::{AreaLevel, AreaState},
         character::CharacterId,
         character_status::StatusSpecs,
+        modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
-        passive::StatEffect,
         skill::SkillEffectType,
-        stat_effect::{EffectsMap, Modifier, StatType},
+        stat_effect::{EffectsMap, StatEffect, StatType},
     },
 };
 
@@ -21,7 +21,7 @@ use crate::game::{
         master_store::MonstersSpecsStore,
         monster::BaseMonsterSpecs,
     },
-    systems::{characters_updater, stats_updater},
+    systems::characters_updater,
     utils::rng::{self, RandomWeighted, Rollable},
 };
 
@@ -43,14 +43,12 @@ impl RandomWeighted for &BossBlueprint {
 pub fn generate_monsters_wave(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
-    area_threat: &AreaThreat,
     area_effects: &EffectsMap,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
     let (monster_specs, is_boss) = generate_monsters_wave_specs(
         area_blueprint,
         area_state,
-        area_threat,
         area_effects,
         monsters_specs_store,
     )?;
@@ -63,7 +61,6 @@ pub fn generate_monsters_wave(
 fn generate_monsters_wave_specs(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
-    area_threat: &AreaThreat,
     area_effects: &EffectsMap,
     monsters_specs_store: &MonstersSpecsStore,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
@@ -86,7 +83,6 @@ fn generate_monsters_wave_specs(
                     area_blueprint,
                     area_state,
                     monsters_specs_store,
-                    area_threat,
                     area_effects,
                 ),
                 true,
@@ -110,7 +106,6 @@ fn generate_monsters_wave_specs(
                 area_blueprint,
                 area_state,
                 monsters_specs_store,
-                area_threat,
                 area_effects,
             ),
             false,
@@ -125,7 +120,6 @@ fn generate_all_monsters_specs(
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
     monsters_specs_store: &MonstersSpecsStore,
-    area_threat: &AreaThreat,
     area_effects: &EffectsMap,
 ) -> Vec<MonsterSpecs> {
     let mut grid = [[true; 3]; 2];
@@ -151,7 +145,6 @@ fn generate_all_monsters_specs(
                     template,
                     area_blueprint,
                     area_state,
-                    area_threat,
                     area_effects,
                 );
                 specs.character_specs.position_x = (x + 1) as u8;
@@ -200,7 +193,6 @@ fn generate_monster_specs(
     bp_specs: &BaseMonsterSpecs,
     area_blueprint: &AreaBlueprint,
     area_state: &mut AreaState,
-    area_threat: &AreaThreat,
     area_effects: &EffectsMap,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(bp_specs.clone());
@@ -224,7 +216,10 @@ fn generate_monster_specs(
 
     monster_specs.power_factor *= exp_factor;
     monster_specs.reward_factor *= reward_factor;
-    monster_specs.character_specs.max_life *= exp_factor;
+    monster_specs
+        .character_specs
+        .max_life
+        .apply_modifier(exp_factor - 1.0, Modifier::More);
 
     // Apply upgrade effects
     let upgrade_effects = [StatEffect {
@@ -233,22 +228,17 @@ fn generate_monster_specs(
             damage_type: None,
             min_max: None,
         },
-        modifier: Modifier::Multiplier,
+        modifier: Modifier::Increased,
         value: (monster_level as f64 - 1.0) * MONSTERS_DEFAULT_DAMAGE_INCREASE,
         bypass_ignore: true,
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
-            skills_updater::update_skill_specs(
-                skill_specs,
-                upgrade_effects.iter(),
-                None,
-                area_threat,
-            );
+            skills_updater::update_skill_specs(skill_specs, &upgrade_effects, None);
         } else {
             let effects: Vec<_> =
                 (&skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)).into();
-            skills_updater::update_skill_specs(skill_specs, effects.iter(), None, area_threat);
+            skills_updater::update_skill_specs(skill_specs, &effects, None);
         }
 
         // Link monster_id to triggers of skills
@@ -275,7 +265,7 @@ fn generate_monster_specs(
     }
 
     // Apply area effects
-    let mut area_effects = stats_updater::stats_map_to_vec(area_effects, area_threat);
+    let mut area_effects: Vec<_> = area_effects.into();
     let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&monster_specs.character_specs, &area_effects);
     monster_specs.character_specs = character_specs;

@@ -193,7 +193,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [2, 4]
       }
     ]
@@ -211,7 +211,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [5, 7]
       }
     ]
@@ -229,7 +229,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 10]
       }
     ]
@@ -247,7 +247,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [11, 13]
       }
     ]
@@ -265,7 +265,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [14, 16]
       }
     ]
@@ -283,7 +283,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [17, 19]
       }
     ]
@@ -301,7 +301,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 22]
       }
     ]
@@ -319,7 +319,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [23, 25]
       }
     ]
@@ -337,7 +337,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [26, 28]
       }
     ]
@@ -355,7 +355,7 @@
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [29, 32]
       }
     ]

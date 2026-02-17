@@ -1,20 +1,20 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, Transaction};
 
 use shared::data::{
     area::AreaLevel,
     conditional_modifier::Condition,
     item::{ItemModifiers, ItemRarity, ItemSlot},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    modifier::Modifier,
     passive::PassivesTreeAscension,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
-        LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatSkillEffectType,
-        StatStatusType,
+        LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatSkillEffectType, StatStatusType, StatType,
     },
-    temple::{Modifier, StatEffect, StatType},
     trigger::HitTrigger,
     user::UserCharacterId,
 };
@@ -24,7 +24,7 @@ use crate::{
     constants::DATA_VERSION,
     db::{
         self,
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
     game::{data::inventory_data::InventoryData, systems::passives_controller},
@@ -138,7 +138,6 @@ async fn migrate_stash_items(executor: &mut Transaction<'static, Database>) -> a
     }
     Ok(())
 }
-// TODO: Migrate items in inventory, stash_items and stash_item_stats
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct OldInventoryData {
@@ -234,7 +233,7 @@ impl From<OldAffixEffect> for AffixEffect {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct OldStatEffect {
     pub stat: OldStatType,
-    pub modifier: Modifier,
+    pub modifier: OldModifier,
     pub value: f64,
 
     #[serde(default)]
@@ -243,9 +242,15 @@ pub struct OldStatEffect {
 
 impl From<OldStatEffect> for StatEffect {
     fn from(value: OldStatEffect) -> Self {
+        let modifier = match value.modifier {
+            OldModifier::Multiplier if value.stat.is_multiplicative() => Modifier::More,
+            OldModifier::Multiplier => Modifier::Increased,
+            OldModifier::Flat => Modifier::Flat,
+            OldModifier::More => Modifier::More,
+        };
         Self {
             stat: value.stat.into(),
-            modifier: value.modifier,
+            modifier,
             value: value.value,
             bypass_ignore: value.bypass_ignore,
         }
@@ -291,7 +296,6 @@ pub enum OldStatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
-    // TODO: Collapse to simple Effect, if more involved trigger is needed, we can always add as pure trigger
     LifeOnHit(#[serde(default)] HitTrigger),
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),
@@ -376,10 +380,12 @@ impl From<OldStatType> for StatType {
                 damage_type,
                 min_max: Some(MinMax::Max),
             },
-            OldStatType::LifeOnHit(hit_trigger) => LifeOnHit {
+            OldStatType::LifeOnHit(hit_trigger) => RestoreOnHit {
+                restore_type: RestoreType::Life,
                 skill_type: hit_trigger.skill_type,
             },
-            OldStatType::ManaOnHit(hit_trigger) => ManaOnHit {
+            OldStatType::ManaOnHit(hit_trigger) => RestoreOnHit {
+                restore_type: RestoreType::Mana,
                 skill_type: hit_trigger.skill_type,
             },
             OldStatType::Restore(restore_type) => Restore {
@@ -420,7 +426,14 @@ impl From<OldStatType> for StatType {
             },
             OldStatType::SkillLevel(skill_type) => SkillLevel(skill_type),
             OldStatType::StatConverter(stat_converter_specs) => {
-                StatConverter(stat_converter_specs.into())
+                if let OldStatConverterSource::ThreatLevel = stat_converter_specs.source {
+                    StatConditionalModifier {
+                        stat: Box::new((*stat_converter_specs.target_stat).into()),
+                        conditions: vec![Condition::ThreatLevel],
+                    }
+                } else {
+                    StatConverter(stat_converter_specs.into())
+                }
             }
             OldStatType::StatConditionalModifier { stat, conditions } => StatConditionalModifier {
                 stat: Box::new((*stat).into()),
@@ -468,7 +481,7 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
 pub struct OldStatConverterSpecs {
     pub source: OldStatConverterSource,
     pub target_stat: Box<OldStatType>,
-    pub target_modifier: Modifier,
+    pub target_modifier: OldModifier,
 
     #[serde(default)]
     pub is_extra: bool,
@@ -480,8 +493,7 @@ impl From<OldStatConverterSpecs> for StatConverterSpecs {
     fn from(value: OldStatConverterSpecs) -> Self {
         Self {
             source: value.source.into(),
-            target_stat: Box::new((*value.target_stat).into()),
-            target_modifier: value.target_modifier,
+            stat: Box::new((*value.target_stat).into()),
             is_extra: value.is_extra,
             skill_type: value.skill_type,
         }
@@ -509,7 +521,6 @@ pub enum OldStatConverterSource {
     ManaRegen,
     LifeRegen,
     Block(SkillType),
-    // TODO: Add others, like armor, ...
 }
 
 impl From<OldStatConverterSource> for StatConverterSource {
@@ -529,7 +540,7 @@ impl From<OldStatConverterSource> for StatConverterSource {
                 damage_type,
                 min_max: None,
             },
-            OldStatConverterSource::ThreatLevel => ThreatLevel,
+            OldStatConverterSource::ThreatLevel => todo!(),
             OldStatConverterSource::MaxLife => MaxLife,
             OldStatConverterSource::MaxMana => MaxMana,
             OldStatConverterSource::ManaRegen => ManaRegen,
@@ -561,5 +572,29 @@ impl From<OldLuckyRollType> for LuckyRollType {
             OldLuckyRollType::CritChance => CritChance,
             OldLuckyRollType::SuccessChance => SuccessChance { effect_type: None },
         }
+    }
+}
+
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
+)]
+pub enum OldModifier {
+    #[default]
+    Multiplier,
+    Flat,
+    More,
+}
+
+impl OldStatType {
+    pub fn is_multiplicative(&self) -> bool {
+        use OldStatType::*;
+
+        matches!(
+            self,
+            Damage { .. }
+                | CritDamage(_)
+                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
+                | GoldFind
+        )
     }
 }

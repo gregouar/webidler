@@ -1,5 +1,10 @@
 use serde::{Deserialize, Serialize};
 
+use crate::data::{
+    modifier::ModifiableValue,
+    values::{Cooldown, NonNegative},
+};
+
 pub type AreaLevel = u16;
 pub type ThreatLevel = u16;
 
@@ -26,7 +31,7 @@ pub struct AreaState {
     pub is_boss: bool,
     pub waves_done: u8, // TODO: could rename to current wave
 
-    pub loot_rarity: f64,
+    pub loot_rarity: ModifiableValue<f64>,
 
     pub max_area_level: AreaLevel,      // Max for this grind
     pub max_area_level_ever: AreaLevel, // Max for all grind of this area
@@ -42,8 +47,8 @@ pub struct AreaState {
 pub struct AreaThreat {
     pub threat_level: ThreatLevel,
 
-    pub cooldown: f32,
-    pub elapsed_cooldown: f32,
+    pub cooldown: NonNegative,
+    pub elapsed_cooldown: Cooldown,
 
     pub just_increased: bool,
 }

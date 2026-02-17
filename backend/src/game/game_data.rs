@@ -1,25 +1,26 @@
 use anyhow::Result;
-use shared::data::quest::QuestRewards;
-use shared::data::stat_effect::{ApplyStatModifier, EffectsMap};
-use shared::data::temple::{Modifier, PlayerBenedictions, StatEffect, StatType};
+use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-use crate::game::data::master_store;
-use crate::game::systems::{benedictions_controller, passives_controller, player_updater};
-
-use super::data::DataInit;
-use super::systems::player_controller::PlayerController;
-use super::{data::area::AreaBlueprint, utils::LazySyncer};
-
-use serde::{Deserialize, Serialize};
-use shared::data::area::{AreaLevel, AreaThreat};
-use shared::data::game_stats::GameStats;
-use shared::data::passive::{PassivesTreeSpecs, PassivesTreeState};
 use shared::data::{
-    area::AreaState,
+    area::{AreaLevel, AreaState, AreaThreat},
+    game_stats::GameStats,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    quest::QuestRewards,
+    stat_effect::EffectsMap,
+    temple::PlayerBenedictions,
+};
+
+use crate::game::{
+    data::{DataInit, area::AreaBlueprint, master_store},
+    systems::{
+        area_controller, benedictions_controller, passives_controller,
+        player_controller::PlayerController, player_updater,
+    },
+    utils::LazySyncer,
 };
 
 #[derive(Debug, Clone)]
@@ -92,6 +93,14 @@ pub struct SavedGameData {
     quest_rewards: Option<QuestRewards>,
 }
 
+impl std::ops::Deref for SavedGameData {
+    type Target = GameStats;
+
+    fn deref(&self) -> &Self::Target {
+        &self.game_stats
+    }
+}
+
 impl GameInstanceData {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
@@ -111,26 +120,8 @@ impl GameInstanceData {
         let mut area_state = AreaState::init(&area_blueprint.specs);
         area_state.max_area_level_ever = max_area_level_completed;
 
-        // TODO: Move elsewhere
-        if let Some(&value) = area_effects.0.get(&(StatType::ItemRarity, Modifier::Flat)) {
-            area_state.loot_rarity.apply_effect(&StatEffect {
-                stat: StatType::ItemRarity,
-                modifier: Modifier::Flat,
-                value,
-                bypass_ignore: false,
-            });
-        }
-        if let Some(&value) = area_effects
-            .0
-            .get(&(StatType::ItemRarity, Modifier::Multiplier))
-        {
-            area_state.loot_rarity.apply_effect(&StatEffect {
-                stat: StatType::ItemRarity,
-                modifier: Modifier::Multiplier,
-                value,
-                bypass_ignore: false,
-            });
-        }
+        let effects: Vec<_> = (&area_effects).into();
+        area_controller::compute_area_state(&mut area_state, &effects);
 
         Self {
             area_id,

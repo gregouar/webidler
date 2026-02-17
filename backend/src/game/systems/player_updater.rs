@@ -1,4 +1,4 @@
-use std::{iter, time::Duration};
+use std::{collections::HashMap, iter, time::Duration};
 
 use shared::{
     constants::PLAYER_LIFE_PER_LEVEL,
@@ -9,14 +9,15 @@ use shared::{
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
+        modifier::{ModifiableValue, Modifier},
         passive::{PassivesTreeSpecs, PassivesTreeState},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
-        skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
-        stat_effect::{
-            ApplyStatModifier, EffectsMap, Modifier, StatConverterSource, StatConverterSpecs,
-            StatType,
+        skill::{
+            DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
+        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
+        values::{AtLeastOne, NonNegative},
     },
 };
 
@@ -34,10 +35,11 @@ pub fn base_player_character_specs(name: String, portrait: String, level: u8) ->
         size: CharacterSize::Small,
         position_x: 0,
         position_y: 0,
-        max_life: 100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64,
-        life_regen: 10.0,
-        max_mana: 100.0,
-        mana_regen: 10.0,
+        max_life: AtLeastOne::new(100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64)
+            .into(),
+        life_regen: 10.0.into(),
+        max_mana: NonNegative::new(100.0).into(),
+        mana_regen: 10.0.into(),
         ..Default::default()
     }
 }
@@ -47,6 +49,7 @@ pub fn update_player_state(
     elapsed_time: Duration,
     player_specs: &PlayerSpecs,
     player_state: &mut PlayerState,
+    area_threat: &AreaThreat,
 ) {
     if !player_state.character_state.is_alive {
         return;
@@ -58,6 +61,7 @@ pub fn update_player_state(
         CharacterId::Player,
         &player_specs.character_specs,
         &mut player_state.character_state,
+        area_threat,
     );
 
     if !player_state.character_state.is_stunned() {
@@ -101,6 +105,7 @@ pub fn update_player_specs(
             ))
             .chain(iter::once(
                 stats_updater::compute_conditional_modifiers(
+                    area_threat,
                     &player_specs.character_specs,
                     &player_state.character_state,
                     &player_specs.character_specs.conditional_modifiers,
@@ -115,9 +120,9 @@ pub fn update_player_specs(
         player_specs.level,
     );
 
-    player_specs.gold_find = 100.0;
-    player_specs.threat_gain = 100.0;
-    player_specs.movement_cooldown = 3.0;
+    player_specs.gold_find = 100.0.into();
+    player_specs.threat_gain = 100.0.into();
+    player_specs.movement_cooldown = 3.0.into();
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -125,19 +130,23 @@ pub fn update_player_specs(
         .map(|(_, item)| item)
         .filter_map(|item| item.armor_specs.as_ref())
         .map(|spec| (spec.armor, spec.block))
-        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| (a_sum + a, b_sum + b));
+        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| {
+            (a_sum + *a, b_sum + b.get())
+        });
 
-    (*player_specs
+    player_specs
         .character_specs
         .armor
         .entry(DamageType::Physical)
-        .or_default()) += total_armor;
+        .or_default()
+        .apply_modifier(total_armor, Modifier::Flat);
     player_specs
         .character_specs
         .block
         .entry(SkillType::Attack)
         .or_default()
-        .value += total_block;
+        .value
+        .apply_modifier(total_block as f64, Modifier::Flat);
 
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
@@ -169,25 +178,15 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory, area_threat, effects_map);
-
-    // We only add skills trigger after because they were already increased by skill update
-    // player_specs.character_specs.triggers.extend(
-    //     player_specs
-    //         .skills_specs
-    //         .iter()
-    //         .flat_map(|skill_specs| skill_specs.triggers.iter())
-    //         .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-    // );
+    compute_player_specs(player_specs, player_inventory, effects_map);
 }
 
 fn compute_player_specs(
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
-    area_threat: &AreaThreat,
     effects_map: EffectsMap,
 ) {
-    let mut effects = stats_updater::stats_map_to_vec(&effects_map, area_threat);
+    let mut effects: Vec<_> = (&effects_map).into();
 
     let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&player_specs.character_specs, &effects);
@@ -197,53 +196,102 @@ fn compute_player_specs(
     );
     effects.extend(converted_effects);
 
+    let ModifiablePlayerSpecs {
+        movement_cooldown,
+        gold_find,
+        threat_gain,
+        restore_on_hit,
+    } = modify_player_specs(
+        ModifiablePlayerSpecs {
+            movement_cooldown: player_specs.movement_cooldown.into(),
+            gold_find: player_specs.gold_find.into(),
+            threat_gain: player_specs.threat_gain.into(),
+            restore_on_hit: Default::default(),
+        },
+        &effects,
+    );
+
+    player_specs.movement_cooldown = *movement_cooldown;
+    player_specs.gold_find = *gold_find;
+    player_specs.threat_gain = *threat_gain;
+
+    for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {
+        player_specs.character_specs.triggers.push(TriggeredEffect {
+            trigger: EventTrigger::OnHit(HitTrigger {
+                skill_type: Some(skill_type),
+                range: None,
+                is_crit: None,
+                is_blocked: None,
+                is_hurt: Some(true),
+                is_triggered: Some(false),
+                damage_type: None,
+            }),
+            target: TriggerTarget::Source,
+            skill_range: SkillRange::Any,
+            skill_type,
+            skill_shape: SkillShape::Single,
+            modifiers: Vec::new(),
+            effects: vec![SkillEffect {
+                success_chance: Chance::new_sure(),
+                effect_type: SkillEffectType::Restore {
+                    restore_type,
+                    value: ChanceRange {
+                        min: value,
+                        max: value,
+                        lucky_chance: Default::default(),
+                    },
+                    modifier: RestoreModifier::Flat,
+                },
+                ignore_stat_effects: Default::default(),
+                conditional_modifiers: Default::default(),
+            }],
+            owner: Some(CharacterId::Player),
+            inherit_modifiers: false,
+        });
+    }
+
+    for skill_specs in player_specs.skills_specs.iter_mut() {
+        skills_updater::update_skill_specs(skill_specs, &effects, Some(player_inventory));
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct ModifiablePlayerSpecs {
+    pub movement_cooldown: ModifiableValue<AtLeastOne>,
+    pub gold_find: ModifiableValue<NonNegative>,
+    pub threat_gain: ModifiableValue<NonNegative>,
+
+    pub restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
+}
+
+fn modify_player_specs(
+    mut modifiable_player_specs: ModifiablePlayerSpecs,
+    effects: &[StatEffect],
+) -> ModifiablePlayerSpecs {
     for effect in effects.iter() {
         match effect.stat {
-            StatType::MovementSpeed => player_specs.movement_cooldown.apply_negative_effect(effect),
-            StatType::GoldFind => player_specs.gold_find.apply_effect(effect),
-            StatType::ThreatGain => player_specs.threat_gain.apply_effect(effect),
-            // TODO: Move the character specs
-            StatType::LifeOnHit { skill_type } | StatType::ManaOnHit { skill_type } => {
-                if let Modifier::Flat = effect.modifier {
-                    player_specs.character_specs.triggers.push(TriggeredEffect {
-                        trigger: EventTrigger::OnHit(HitTrigger {
-                            skill_type,
-                            range: None,
-                            is_crit: None,
-                            is_blocked: None,
-                            is_hurt: Some(true),
-                            is_triggered: Some(false),
-                            damage_type: None,
-                        }),
-                        target: TriggerTarget::Source,
-                        skill_range: SkillRange::Any,
-                        skill_type: skill_type.unwrap_or_default(),
-                        skill_shape: SkillShape::Single,
-                        modifiers: Vec::new(),
-                        effects: vec![SkillEffect {
-                            success_chance: Chance::new_sure(),
-                            effect_type: SkillEffectType::Restore {
-                                restore_type: if let StatType::LifeOnHit { .. } = effect.stat {
-                                    RestoreType::Life
-                                } else {
-                                    RestoreType::Mana
-                                },
-                                value: ChanceRange {
-                                    min: effect.value,
-                                    max: effect.value,
-                                    lucky_chance: 0.0,
-                                },
-                                modifier: Modifier::Flat,
-                            },
-                            ignore_stat_effects: Default::default(),
-                            conditional_modifiers: Default::default(),
-                        }],
-                        owner: Some(CharacterId::Player),
-                        inherit_modifiers: false,
-                    });
+            StatType::MovementSpeed => modifiable_player_specs
+                .movement_cooldown
+                .apply_negative_effect(effect),
+            StatType::GoldFind => modifiable_player_specs.gold_find.apply_effect(effect),
+            StatType::ThreatGain => modifiable_player_specs.threat_gain.apply_effect(effect),
+            // TODO: Move to character specs
+            StatType::RestoreOnHit {
+                restore_type,
+                skill_type,
+            } => {
+                let skill_types = match skill_type {
+                    Some(skill_type) => vec![skill_type],
+                    None => SkillType::iter().collect(),
+                };
+
+                for skill_type in skill_types {
+                    modifiable_player_specs
+                        .restore_on_hit
+                        .entry((restore_type, skill_type))
+                        .or_default()
+                        .apply_effect(effect);
                 }
-                // TODO: Find way to do increase?
-                // TODO: For multiplier, should iterate and apply to all trigger matching?
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character
@@ -289,30 +337,9 @@ fn compute_player_specs(
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
-            StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::ThreatLevel,
-                ..
-            })
-            | StatType::ItemRarity => {}
+            StatType::ItemRarity => {}
         }
     }
 
-    for skill_specs in player_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(
-            skill_specs,
-            effects.iter(),
-            Some(player_inventory),
-            area_threat,
-        );
-    }
-
-    // for trigger_effect in player_specs.character_specs.triggers.iter_mut() {
-    //     for effect in trigger_effect.effects.iter_mut() {
-    //         skills_updater::compute_skill_specs_effect(
-    //             trigger_effect.skill_type,
-    //             effect,
-    //             effects.iter(),
-    //         )
-    //     }
-    // }
+    modifiable_player_specs
 }

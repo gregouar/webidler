@@ -5,9 +5,10 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item_affix::AffixEffectScope,
+    modifier::Modifier,
     skill::{DamageType, SkillType},
     stat_effect::{
-        LuckyRollType, MinMax, Modifier, StatConverterSource, StatEffect, StatSkillEffectType,
+        LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
         StatStatusType, StatType,
     },
 };
@@ -23,26 +24,28 @@ use crate::components::{
 pub fn format_effect_value(effect: &StatEffect) -> String {
     match effect.modifier {
         Modifier::Flat => format_number(effect.value),
-        Modifier::Multiplier => {
+        Modifier::Increased => {
             let (number_value, word) = if effect.value >= 0.0 {
-                (
-                    effect.value,
-                    if effect.stat.is_multiplicative() {
-                        "More"
-                    } else {
-                        "Increased"
-                    },
-                )
+                (effect.value, "Increased")
             } else {
                 let div = (1.0 - effect.value * 0.01).max(0.0);
                 (
                     -(if div != 0.0 { effect.value / div } else { 0.0 }),
-                    if effect.stat.is_multiplicative() {
-                        "Less"
-                    } else {
-                        "Reduced"
-                    },
+                    "Reduced",
                 )
+            };
+            if effect.value < 0.0 && number_value.round() >= 100.0 {
+                "Removes All".into()
+            } else {
+                format!("{}% {word}", format_number(number_value))
+            }
+        }
+        Modifier::More => {
+            let (number_value, word) = if effect.value >= 0.0 {
+                (effect.value, "More")
+            } else {
+                let div = (1.0 - effect.value * 0.01).max(0.0);
+                (-(if div != 0.0 { effect.value / div } else { 0.0 }), "Less")
             };
             if effect.value < 0.0 && number_value.round() >= 100.0 {
                 "Removes All".into()
@@ -118,7 +121,6 @@ fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> Stri
                 damage_type_str(damage_type)
             )
         }
-        StatConverterSource::ThreatLevel => "Threat Level".into(),
         StatConverterSource::MaxLife => "Maximum Life".into(),
         StatConverterSource::MaxMana => "Maximum Mana".into(),
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),
@@ -236,7 +238,6 @@ pub fn formatted_effects_list(
     mut affix_effects: Vec<StatEffect>,
     // scope: AffixEffectScope,
 ) -> Vec<impl IntoView> {
-    use Modifier::*;
     use StatType::*;
 
     // let _ = scope; // TODO: maybe later display scope for some effects like armor
@@ -254,7 +255,7 @@ pub fn formatted_effects_list(
     for effect in affix_effects.iter().rev() {
         match (effect.modifier, &effect.stat) {
             (
-                Flat,
+                Modifier::Flat,
                 Damage {
                     skill_type,
                     damage_type,
@@ -267,7 +268,7 @@ pub fn formatted_effects_list(
                 );
             }
             (
-                Flat,
+                Modifier::Flat,
                 Damage {
                     skill_type,
                     damage_type,
@@ -346,11 +347,31 @@ pub fn formatted_effects_list(
 pub fn format_stat(effect: &StatEffect) -> String {
     if effect.value == 0.0 {
         "No Effect".to_string()
+    } else if let StatType::StatConverter(stat_converter_specs) = &effect.stat {
+        let extra_str = match stat_converter_specs.is_extra {
+            true => "gained as",
+            false => "converted to",
+        };
+        format!(
+            "{}% of {} {extra_str} {}{}",
+            format_flat_number(Some(effect.value), false),
+            stat_converter_source_str(stat_converter_specs.source),
+            modifier_str(effect.modifier),
+            format_multiplier_stat_name(&stat_converter_specs.stat)
+        )
     } else {
         match effect.modifier {
-            Modifier::Multiplier => format_multiplier_stat(effect),
+            Modifier::Increased | Modifier::More => format_multiplier_stat(effect),
             Modifier::Flat => format_flat_stat(&effect.stat, Some(effect.value)),
         }
+    }
+}
+
+pub fn modifier_str(modifier: Modifier) -> &'static str {
+    match modifier {
+        Modifier::Increased => "Increased ",
+        Modifier::More => "More ",
+        Modifier::Flat => "",
     }
 }
 
@@ -450,11 +471,15 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
         StatType::ItemRarity => "Item Rarity".to_string(),
-        StatType::LifeOnHit { skill_type } => {
-            format!("Life gained on {}Hit", skill_type_str(*skill_type))
-        }
-        StatType::ManaOnHit { skill_type } => {
-            format!("Mana gained on {}Hit", skill_type_str(*skill_type))
+        StatType::RestoreOnHit {
+            restore_type,
+            skill_type,
+        } => {
+            format!(
+                "{} gained on {}Hit",
+                restore_type_str(Some(*restore_type)),
+                skill_type_str(*skill_type)
+            )
         }
         StatType::DamageResistance {
             skill_type,
@@ -474,13 +499,13 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 format!(
                     "Gain {} as {}",
                     stat_converter_source_str(stat_converter_specs.source),
-                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat)
                 )
             } else {
                 format!(
                     "Convert {} to {}",
                     stat_converter_source_str(stat_converter_specs.source),
-                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat)
                 )
             }
         }
@@ -691,14 +716,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::LifeOnHit { skill_type } => format!(
-            "Gain {} Life on {}Hit",
+        StatType::RestoreOnHit {
+            restore_type,
+            skill_type,
+        } => format!(
+            "Gain {} {} on {}Hit",
             format_flat_number(value, false),
-            skill_type_str(*skill_type)
-        ),
-        StatType::ManaOnHit { skill_type } => format!(
-            "Gain {} Mana on {}Hit",
-            format_flat_number(value, false),
+            restore_type_str(Some(*restore_type)),
             skill_type_str(*skill_type)
         ),
         StatType::DamageResistance {
@@ -738,37 +762,18 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::StatConverter(stat_converter_specs) => match stat_converter_specs.source {
-            StatConverterSource::ThreatLevel => {
-                let target_stat_effect = StatEffect {
-                    stat: (*stat_converter_specs.target_stat).clone(),
-                    modifier: stat_converter_specs.target_modifier,
-                    value: value.unwrap_or_default(),
-                    bypass_ignore: false,
-                };
-                format!(
-                    "{} {} per Threat Level",
-                    format_effect_value(&target_stat_effect),
-                    format_multiplier_stat_name(&target_stat_effect.stat),
-                )
-            }
-            _ => {
-                let extra_str = match stat_converter_specs.is_extra {
-                    true => "gained as",
-                    false => "converted to",
-                };
-                format!(
-                    "{}% of {} {extra_str} {}{}",
-                    format_flat_number(value, false),
-                    stat_converter_source_str(stat_converter_specs.source),
-                    match stat_converter_specs.target_modifier {
-                        Modifier::Multiplier => "Increased ",
-                        Modifier::Flat => "",
-                    },
-                    format_multiplier_stat_name(&stat_converter_specs.target_stat)
-                )
-            }
-        },
+        StatType::StatConverter(stat_converter_specs) => {
+            let extra_str = match stat_converter_specs.is_extra {
+                true => "gained as",
+                false => "converted to",
+            };
+            format!(
+                "{}% of {} {extra_str} {}",
+                format_flat_number(value, false),
+                stat_converter_source_str(stat_converter_specs.source),
+                format_multiplier_stat_name(&stat_converter_specs.stat)
+            )
+        }
         StatType::SuccessChance {
             skill_type,
             effect_type,

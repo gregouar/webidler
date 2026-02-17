@@ -12,13 +12,13 @@
       {
         "scope": "Local",
         "stat": { "Damage": {} },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 100
       },
       {
         "scope": "Local",
         "stat": "ItemRarity",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50
       }
     ]
@@ -36,13 +36,13 @@
       {
         "scope": "Local",
         "stat": { "Speed": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50
       },
       {
         "scope": "Local",
         "stat": "ItemRarity",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50
       }
     ]

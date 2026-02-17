@@ -12,7 +12,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -46,7 +46,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -93,7 +93,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -123,7 +123,7 @@
                       "stat": {
                         "Speed": null
                       },
-                      "modifier": "Multiplier",
+                      "modifier": "Increased",
                       "debuff": true
                     }
                   },
@@ -149,7 +149,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -182,7 +182,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -231,7 +231,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -272,7 +272,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -303,7 +303,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -390,7 +390,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -530,7 +530,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -626,7 +626,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -690,7 +690,7 @@
                           "stat": {
                             "Damage": { "damage_type": "Fire" }
                           },
-                          "modifier": "Multiplier",
+                          "modifier": "More",
                           "factor": 100.0,
                           "source": {
                             "HitDamage": "Fire"
@@ -730,7 +730,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 5
       }
     ],
@@ -753,7 +753,7 @@
                           "damage_type": null
                         }
                       },
-                      "modifier": "Multiplier",
+                      "modifier": "More",
                       "debuff": true
                     }
                   },
@@ -777,7 +777,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 5
       }
     ],
@@ -796,7 +796,7 @@
                       "stat": {
                         "Speed": null
                       },
-                      "modifier": "Multiplier"
+                      "modifier": "Increased"
                     }
                   },
                   "value": 20
@@ -819,7 +819,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -848,7 +848,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": { "CritDamage": null },
-                      "modifier": "Multiplier"
+                      "modifier": "More"
                     }
                   },
                   "value": 20
@@ -871,7 +871,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -912,7 +912,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": { "Armor": null },
-                      "modifier": "Multiplier"
+                      "modifier": "Increased"
                     }
                   },
                   "value": 10
@@ -937,12 +937,12 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       },
       {
         "stat": { "StatusDuration": {} },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 1
       }
     ],
@@ -1035,7 +1035,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": {} },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -1057,7 +1057,7 @@
                           "skill_type": "Attack"
                         }
                       },
-                      "modifier": "Multiplier"
+                      "modifier": "More"
                     }
                   },
                   "value": 30
@@ -1072,7 +1072,7 @@
                           "skill_type": "Attack"
                         }
                       },
-                      "modifier": "Multiplier"
+                      "modifier": "More"
                     }
                   },
                   "value": 30
@@ -1093,10 +1093,9 @@
                           "source": {
                             "Damage": { "damage_type": "Physical" }
                           },
-                          "target_stat": {
+                          "stat": {
                             "Damage": { "damage_type": "Fire" }
-                          },
-                          "target_modifier": "Flat"
+                          }
                         }
                       },
                       "modifier": "Flat"
@@ -1113,19 +1112,18 @@
                           "source": {
                             "Damage": { "damage_type": "Physical" }
                           },
-                          "target_stat": {
+                          "stat": {
                             "Damage": {
                               "damage_type": "Storm",
                               "min_max": "Max"
                             }
-                          },
-                          "target_modifier": "Flat"
+                          }
                         }
                       },
                       "modifier": "Flat"
                     }
                   },
-                  "value": 100
+                  "value": 50
                 }
               ]
             },
@@ -1150,7 +1148,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": {} },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10
       }
     ],
@@ -1172,7 +1170,7 @@
                           "skill_type": "Attack"
                         }
                       },
-                      "modifier": "Multiplier"
+                      "modifier": "More"
                     }
                   },
                   "value": 10
@@ -1269,7 +1267,7 @@
         "stat": {
           "Restore": { "restore_type": "Life" }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 20
       }
     ],
@@ -1299,7 +1297,7 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 4
       }
     ],
@@ -1378,7 +1376,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],
@@ -1451,7 +1449,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 50
       }
     ],

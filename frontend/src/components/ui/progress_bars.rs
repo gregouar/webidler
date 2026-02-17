@@ -107,7 +107,7 @@ pub fn HorizontalProgressBar(
 #[component]
 pub fn VerticalProgressBar(
     // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f32>,
+    #[prop(into)] value: Signal<f64>,
     // Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     // Instant reset
@@ -115,7 +115,11 @@ pub fn VerticalProgressBar(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let set_value = move || {
-        if reset.get() { 0.0 } else { value.get() }
+        if reset.get() {
+            0.0
+        } else {
+            value.get()
+        }
     };
 
     // Trick to reset animation by removing it when ended
@@ -182,7 +186,7 @@ pub fn VerticalProgressBar(
 #[component]
 pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f32>,
+    #[prop(into)] value: Signal<f64>,
     bar_color: &'static str,
     bar_width: u8,
     // Instant reset
@@ -197,7 +201,7 @@ pub fn CircularProgressBar(
     let enable_transition = RwSignal::new(true);
 
     let in_transition = RwSignal::new(false);
-    let next_value = RwSignal::new(0.0f32);
+    let next_value = RwSignal::new(0.0);
 
     // let right_rotation = RwSignal::new(0.0);
     // let bottom_rotation = RwSignal::new(0.0);
@@ -407,17 +411,18 @@ pub fn CircularProgressBar(
 }
 
 pub fn predictive_cooldown(
-    remaining_time: Signal<f32>,
+    remaining_time: Signal<f64>,
     reset: Signal<bool>,
     disabled: Signal<bool>,
-) -> RwSignal<f32> {
-    let progress_value = RwSignal::new(0.0f32);
+) -> RwSignal<f64> {
+    let progress_value = RwSignal::new(0.0);
     let rate = RwSignal::new(0.0);
 
     Effect::new(move || {
         let remaining_time = remaining_time.get();
         if remaining_time > 0.0 {
-            rate.set((1.0 - progress_value.get_untracked()).clamp(0.0, 1.0) / remaining_time);
+            let remaining: f64 = (1.0f64 - progress_value.get_untracked()).clamp(0.0, 1.0);
+            rate.set(remaining / remaining_time);
         }
     });
 

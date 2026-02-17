@@ -35,7 +35,7 @@
                         "damage_type": "Physical"
                       }
                     },
-                    "value": [1,2]
+                    "value": [1, 2]
                   }
                 ]
               }
@@ -96,7 +96,7 @@
               "Restore": {
                 "restore_type": "Life",
                 "value": 100,
-                "modifier": "Multiplier"
+                "modifier": "Percent"
               }
             },
             {

@@ -1,22 +1,20 @@
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
-    area::AreaThreat,
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
+    modifier::Modifier,
     player::PlayerInventory,
     skill::{
         DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        ApplyStatModifier, EffectsMap, LuckyRollType, MinMax, Modifier, StatConverterSource,
-        StatEffect, StatType, compare_options,
+        EffectsMap, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatType,
+        compare_options,
     },
 };
 use strum::IntoEnumIterator;
-
-use crate::game::{systems::stats_updater, utils::rng::Rollable};
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -24,11 +22,11 @@ pub fn update_skills_states(
     skill_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
-        if skill_specs.cooldown > 0.0 {
-            skill_state.elapsed_cooldown += elapsed_time.as_secs_f32() / skill_specs.cooldown;
+        if skill_specs.cooldown.get() > 0.0 {
+            skill_state.elapsed_cooldown +=
+                (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
         }
-        if skill_state.elapsed_cooldown >= 1.0 {
-            skill_state.elapsed_cooldown = 1.0;
+        if skill_state.elapsed_cooldown.get() >= 1.0 {
             skill_state.is_ready = true;
         } else {
             skill_state.is_ready = false;
@@ -42,19 +40,19 @@ pub fn reset_skills(skill_states: &mut [SkillState]) {
     }
 }
 
-pub fn update_skill_specs<'a>(
+pub fn update_skill_specs(
     skill_specs: &mut SkillSpecs,
-    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    // effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    effects: &[StatEffect],
     inventory: Option<&PlayerInventory>,
-    area_threat: &AreaThreat,
 ) {
     skill_specs.targets = skill_specs.base.targets.clone();
     skill_specs.triggers = skill_specs.base.triggers.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown;
-    skill_specs.mana_cost = skill_specs.base.mana_cost;
+    skill_specs.cooldown = skill_specs.base.cooldown.into();
+    skill_specs.mana_cost = skill_specs.base.mana_cost.into();
 
     skill_specs.level_modifier = effects
-        .clone()
+        .iter()
         .map(|e| {
             if e.modifier == Modifier::Flat
                 && e.stat
@@ -67,43 +65,21 @@ pub fn update_skill_specs<'a>(
         })
         .sum();
 
-    let local_effects = stats_updater::stats_map_to_vec(
-        &EffectsMap::combine_all(
-            std::iter::once(compute_skill_upgrade_effects(
-                skill_specs,
-                skill_specs
-                    .upgrade_level
-                    .saturating_add(skill_specs.level_modifier),
-            ))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                skill_specs,
-                inventory,
-            ))),
-        ),
-        area_threat,
-    );
+    let local_effects: Vec<_> = (&EffectsMap::combine_all(
+        std::iter::once(compute_skill_upgrade_effects(
+            skill_specs,
+            skill_specs
+                .upgrade_level
+                .saturating_add(skill_specs.level_modifier),
+        ))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            skill_specs,
+            inventory,
+        ))),
+    ))
+        .into();
 
-    apply_effects_to_skill_specs(skill_specs, local_effects.iter().filter(is_local_flat));
-    apply_effects_to_skill_specs(skill_specs, effects.clone().filter(is_global_flat));
-    apply_effects_to_skill_specs(
-        skill_specs,
-        local_effects.iter().filter(|e| !is_local_flat(e)),
-    );
-    apply_effects_to_skill_specs(skill_specs, effects.filter(|e| !is_global_flat(e)));
-}
-
-fn is_local_flat(stat_effect: &&StatEffect) -> bool {
-    match &stat_effect.stat {
-        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
-        _ => stat_effect.modifier == Modifier::Flat,
-    }
-}
-
-fn is_global_flat(stat_effect: &&StatEffect) -> bool {
-    match &stat_effect.stat {
-        StatType::StatConverter(specs) => specs.target_modifier == Modifier::Flat,
-        _ => stat_effect.modifier == Modifier::Flat,
-    }
+    apply_effects_to_skill_specs(skill_specs, local_effects.iter().chain(effects));
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -170,9 +146,7 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ef
                 .0
                 .entry((effect.stat.clone(), effect.modifier))
                 .or_default() += match effect.modifier {
-                Modifier::Multiplier if effect.stat.is_multiplicative() => {
-                    ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0
-                }
+                Modifier::More => ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0,
                 _ => effect.value * level,
             };
             effects_map
@@ -208,15 +182,15 @@ fn compute_skill_modifier_effects<'a>(
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
-                            (ItemStatsSource::Armor, _, Some(armor_specs)) => armor_specs.armor,
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => *armor_specs.armor,
                             (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
-                                weapon_specs.cooldown as f64
+                                weapon_specs.cooldown.get() as f64
                             }
                             (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
-                                weapon_specs.crit_chance.value as f64
+                                weapon_specs.crit_chance.value.get() as f64
                             }
                             (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
-                                weapon_specs.crit_damage
+                                *weapon_specs.crit_damage
                             }
                             (
                                 ItemStatsSource::Damage {
@@ -231,9 +205,9 @@ fn compute_skill_modifier_effects<'a>(
                                         .damage
                                         .get(dmg_type)
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min,
-                                            Some(MinMax::Max) => d.max,
-                                            None => (d.min + d.max) * 0.5,
+                                            Some(MinMax::Min) => d.min.get(),
+                                            Some(MinMax::Max) => d.max.get(),
+                                            None => (d.min.get() + d.max.get()) * 0.5,
                                         })
                                         .unwrap_or_default()
                                 } else {
@@ -241,9 +215,9 @@ fn compute_skill_modifier_effects<'a>(
                                         .damage
                                         .values()
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min,
-                                            Some(MinMax::Max) => d.max,
-                                            None => (d.min + d.max) * 0.5,
+                                            Some(MinMax::Min) => d.min.get(),
+                                            Some(MinMax::Max) => d.max.get(),
+                                            None => (d.min.get() + d.max.get()) * 0.5,
                                         })
                                         .sum()
                                 }
@@ -328,10 +302,7 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-    // NB: With this approach, Inc Spell Crit Chance is multiplicative with Inc Crit Chance...
-    // But maybe that's fine...
-
-    let mut stat_converters = Vec::new();
+    let mut stats_converters = Vec::new();
 
     for effect in effects.clone() {
         if !effect.bypass_ignore
@@ -353,6 +324,7 @@ pub fn compute_skill_specs_effect<'a>(
                 .success_chance
                 .lucky_chance
                 .apply_effect(effect);
+            continue;
         }
 
         if effect.stat.is_match(&StatType::SuccessChance {
@@ -360,10 +332,11 @@ pub fn compute_skill_specs_effect<'a>(
             effect_type: (&skill_effect.effect_type).into(),
         }) {
             skill_effect.success_chance.value.apply_effect(effect);
+            continue;
         }
 
         if let StatType::StatConverter(specs) = &effect.stat {
-            stat_converters.push((specs.clone(), effect.value));
+            stats_converters.push((specs.clone(), effect.modifier, effect.value));
             continue;
         }
 
@@ -386,6 +359,7 @@ pub fn compute_skill_specs_effect<'a>(
                     }]
                     .into(),
                 });
+            continue;
         }
 
         match &mut skill_effect.effect_type {
@@ -445,7 +419,7 @@ pub fn compute_skill_specs_effect<'a>(
                     crit_damage.apply_effect(effect);
                 }
 
-                crit_chance.clamp();
+                // crit_chance.clamp();
             }
             SkillEffectType::ApplyStatus { statuses, duration } => {
                 if statuses.iter().any(|status_effect| {
@@ -521,10 +495,18 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-    if !stat_converters.is_empty() {
-        let mut stats_converted = Vec::with_capacity(stat_converters.len());
+    if !stats_converters.is_empty() {
+        stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
+            (
+                stat_converter.source,
+                stat_converter.stat.clone(),
+                *modifier,
+            )
+        });
 
-        for (specs, factor) in stat_converters {
+        let mut stats_converted = Vec::with_capacity(stats_converters.len());
+
+        for (specs, modifier, factor) in stats_converters {
             if specs.skill_type.is_some_and(|s| s != skill_type) {
                 continue;
             }
@@ -534,14 +516,11 @@ pub fn compute_skill_specs_effect<'a>(
                     StatConverterSource::CritDamage,
                     SkillEffectType::FlatDamage { crit_damage, .. },
                 ) => {
-                    let amount = *crit_damage * factor * 0.01;
-                    if !specs.is_extra {
-                        *crit_damage -= amount;
-                    }
+                    let amount = crit_damage.convert_value(factor, specs.is_extra, false);
 
                     (amount > 0.0).then(|| StatEffect {
-                        stat: (*specs.target_stat).clone(),
-                        modifier: specs.target_modifier,
+                        stat: (*specs.stat).clone(),
+                        modifier,
                         value: amount,
                         bypass_ignore: true,
                     })
@@ -559,7 +538,7 @@ pub fn compute_skill_specs_effect<'a>(
                     } else {
                         0.0
                     };
-                    let max_factor = if let Some(MinMax::Min) | None = min_max {
+                    let max_factor = if let Some(MinMax::Max) | None = min_max {
                         factor
                     } else {
                         0.0
@@ -568,23 +547,25 @@ pub fn compute_skill_specs_effect<'a>(
                         Some(damage_type) => damage
                             .get_mut(&damage_type)
                             .map(|d| {
-                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
-                                if !specs.is_extra {
-                                    d.min -= amount.0;
-                                    d.max -= amount.1;
-                                }
-                                amount
+                                (
+                                    d.min.convert_value(min_factor, specs.is_extra, true).get(),
+                                    d.max.convert_value(max_factor, specs.is_extra, true).get(),
+                                )
                             })
                             .unwrap_or_default(),
                         None => damage
                             .values_mut()
                             .fold((0.0, 0.0), |(min_acc, max_acc), d| {
-                                let amount = (d.min * min_factor * 0.01, d.max * max_factor * 0.01);
-                                if !specs.is_extra {
-                                    d.min -= amount.0;
-                                    d.max -= amount.1;
-                                }
-                                (min_acc + amount.0, max_acc + amount.1)
+                                (
+                                    min_acc
+                                        + d.min
+                                            .convert_value(min_factor, specs.is_extra, true)
+                                            .get(),
+                                    max_acc
+                                        + d.max
+                                            .convert_value(max_factor, specs.is_extra, true)
+                                            .get(),
+                                )
                             }),
                     };
 
@@ -594,7 +575,7 @@ pub fn compute_skill_specs_effect<'a>(
                             skill_type,
                             damage_type,
                             min_max: None,
-                        } = *specs.target_stat
+                        } = *specs.stat
                     {
                         stats_converted.push(StatEffect {
                             stat: StatType::Damage {
@@ -602,7 +583,7 @@ pub fn compute_skill_specs_effect<'a>(
                                 damage_type,
                                 min_max: Some(MinMax::Min),
                             },
-                            modifier: specs.target_modifier,
+                            modifier,
                             value: amount.0,
                             bypass_ignore: true,
                         });
@@ -612,14 +593,14 @@ pub fn compute_skill_specs_effect<'a>(
                                 damage_type,
                                 min_max: Some(MinMax::Max),
                             },
-                            modifier: specs.target_modifier,
+                            modifier,
                             value: amount.1,
                             bypass_ignore: true,
                         })
                     } else {
                         Some(StatEffect {
-                            stat: (*specs.target_stat).clone(),
-                            modifier: specs.target_modifier,
+                            stat: (*specs.stat).clone(),
+                            modifier,
                             value: (amount.0 + amount.1),
                             bypass_ignore: true,
                         })
@@ -634,13 +615,16 @@ pub fn compute_skill_specs_effect<'a>(
         compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
     }
 
-    if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
-        damage.retain(|_, value| {
-            value.min = value.min.max(0.0);
-            value.max = value.max.max(0.0);
-            value.clamp();
+    // if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
+    //     damage.retain(|_, value| {
+    //         // value.min = value.min.evaluate().max(0.0).into();
+    //         // value.max = value.max.evaluate().max(0.0).into();
+    //         if value.min.get() < 0.0 {
+    //             value.min = 0.0.into();
+    //         }
+    //         value.clamp();
 
-            value.max > 0.0
-        });
-    }
+    //         value.max.evaluate() > 0.0
+    //     });
+    // }
 }

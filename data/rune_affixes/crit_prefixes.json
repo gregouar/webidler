@@ -12,7 +12,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [5, 10]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [15, 20]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [25, 30]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [35, 40]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [45, 50]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [55, 60]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [65, 70]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [75, 80]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [85, 90]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [95, 100]
       }
     ]

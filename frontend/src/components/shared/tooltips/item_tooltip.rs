@@ -281,7 +281,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             };
 
             view! {
-                {if specs.armor > 0.0 {
+                {if *specs.armor > 0.0 {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm leading-snug">
@@ -289,14 +289,14 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                                 <span class=format!(
                                     "{} font-semibold",
                                     armor_color,
-                                )>{format!("{:.0}", specs.armor)}</span>
+                                )>{format!("{:.0}", *specs.armor)}</span>
                             </li>
                         },
                     )
                 } else {
                     None
                 }}
-                {if specs.block > 0.0 {
+                {if specs.block.get() > 0.0 {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm leading-snug">
@@ -304,7 +304,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                                 <span class=format!(
                                     "{} font-semibold",
                                     block_color,
-                                )>{format!("{:.0}%", specs.block)}</span>
+                                )>{format!("{:.0}%", specs.block.get())}</span>
                             </li>
                         },
                     )
@@ -334,8 +334,8 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 let damage_color = match damage_type {
                     DamageType::Physical => {
-                        if specs_value.min.round() != base_value.min.round()
-                            || specs_value.max.round() != base_value.max.round()
+                        if specs_value.min.get().round() != base_value.min.get().round()
+                            || specs_value.max.get().round() != base_value.max.get().round()
                         {
                             "text-blue-400"
                         } else {
@@ -347,14 +347,20 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     DamageType::Storm => "text-amber-400",
                 };
 
-                if specs_value.min > 0.0 || specs_value.max > 0.0 {
+                if specs_value.min.get() > 0.0 || specs_value.max.get() > 0.0 {
                     damage_lines.push(view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                             {effects_tooltip::damage_type_str(Some(damage_type))} "Damage: "
                             <span class=format!(
                                 "{} font-semibold",
                                 damage_color,
-                            )>{format!("{:.0} - {:.0}", specs_value.min, specs_value.max)}</span>
+                            )>
+                                {format!(
+                                    "{:.0} - {:.0}",
+                                    specs_value.min.get(),
+                                    specs_value.max.get(),
+                                )}
+                            </span>
                         </li>
                     });
                 }
@@ -402,21 +408,21 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     <span class=format!(
                         "{} font-semibold",
                         crit_chance_color,
-                    )>{format!("{:.2}%", specs.crit_chance.value)}</span>
+                    )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                     "Critical hit damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
-                    )>{format!("+{:.0}%", specs.crit_damage)}</span>
+                    )>{format!("+{:.0}%", *specs.crit_damage)}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                     "Cooldown: "
                     <span class=format!(
                         "{} font-semibold",
                         cooldown_color,
-                    )>{format!("{:.2}s", specs.cooldown)}</span>
+                    )>{format!("{:.2}s", specs.cooldown.get())}</span>
                 </li>
             }
         })

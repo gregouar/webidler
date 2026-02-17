@@ -1,8 +1,10 @@
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    conditional_modifier::Condition,
+    modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{Modifier, StatConverterSource, StatConverterSpecs, StatStatusType, StatType},
+    stat_effect::{StatStatusType, StatType},
 };
 use strum::IntoEnumIterator;
 
@@ -104,36 +106,38 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             label="Maximum Life"
                             value=move || {
                                 format_number(
-                                    game_context.player_specs.read().character_specs.max_life,
+                                    game_context.player_specs.read().character_specs.max_life.get(),
                                 )
                             }
                         />
                         <Stat
                             label="Life Regeneration per second"
                             value=move || {
-                                format!(
-                                    "{:.1}%",
-                                    game_context.player_specs.read().character_specs.life_regen
-                                        * 0.1,
-                                )
+                                let value = *game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .life_regen * 0.1;
+                                if value > 0.0 { format!("{:.1}%", value) } else { "-".into() }
                             }
                         />
                         <Stat
                             label="Maximum Mana"
                             value=move || {
                                 format_number(
-                                    game_context.player_specs.read().character_specs.max_mana,
+                                    game_context.player_specs.read().character_specs.max_mana.get(),
                                 )
                             }
                         />
                         <Stat
                             label="Mana Regeneration per second"
                             value=move || {
-                                format!(
-                                    "{:.1}%",
-                                    game_context.player_specs.read().character_specs.mana_regen
-                                        * 0.1,
-                                )
+                                let value = *game_context
+                                    .player_specs
+                                    .read()
+                                    .character_specs
+                                    .mana_regen * 0.1;
+                                if value > 0.0 { format!("{:.1}%", value) } else { "-".into() }
                             }
                         />
                         <Stat
@@ -141,7 +145,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{}%",
-                                    format_number(game_context.player_specs.read().gold_find),
+                                    format_number(game_context.player_specs.read().gold_find.get()),
                                 )
                             }
                         />
@@ -150,7 +154,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.2}s",
-                                    game_context.player_specs.read().movement_cooldown,
+                                    game_context.player_specs.read().movement_cooldown.get(),
                                 )
                             }
                         />
@@ -162,7 +166,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.0}",
-                                    game_context
+                                    *game_context
                                         .player_specs
                                         .read()
                                         .character_specs
@@ -178,7 +182,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.0}",
-                                    game_context
+                                    *game_context
                                         .player_specs
                                         .read()
                                         .character_specs
@@ -194,7 +198,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.0}",
-                                    game_context
+                                    *game_context
                                         .player_specs
                                         .read()
                                         .character_specs
@@ -210,7 +214,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             value=move || {
                                 format!(
                                     "{:.0}",
-                                    game_context
+                                    *game_context
                                         .player_specs
                                         .read()
                                         .character_specs
@@ -232,7 +236,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .character_specs
                                         .block
                                         .get(&SkillType::Attack)
-                                        .map(|x| x.value)
+                                        .map(|x| x.value.get())
                                         .unwrap_or_default(),
                                 )
                             }
@@ -244,7 +248,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .character_specs
                                 .block
                                 .get(&SkillType::Spell)
-                                .map(|x| x.value)
+                                .map(|x| x.value.get())
                                 .unwrap_or_default();
                             (block_spell != 0.0)
                                 .then(move || {
@@ -261,7 +265,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .block_damage as f64;
+                                .block_damage
+                                .get() as f64;
                             (block_damage != 0.0)
                                 .then(move || {
                                     view! {
@@ -277,7 +282,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .evade_damage as f64;
+                                .evade_damage
+                                .get() as f64;
                             (evade_damage != 0.0)
                                 .then(move || {
                                     view! {
@@ -293,7 +299,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .take_from_mana_before_life as f64;
+                                .take_from_mana_before_life
+                                .get() as f64;
                             (take_from_mana_before_life != 0.0)
                                 .then(move || {
                                     view! {
@@ -305,17 +312,18 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 })
                         }}
                         {move || {
-                            let take_from_mana_before_life = game_context
+                            let take_from_life_before_mana = game_context
                                 .player_specs
                                 .read()
                                 .character_specs
-                                .take_from_mana_before_life as f64;
-                            (take_from_mana_before_life != 0.0)
+                                .take_from_life_before_mana
+                                .get() as f64;
+                            (take_from_life_before_mana != 0.0)
                                 .then(move || {
                                     view! {
                                         <Stat
                                             label="Life Taken Before Mana"
-                                            value=move || format!("{:.0}%", take_from_mana_before_life)
+                                            value=move || format!("{:.0}%", take_from_life_before_mana)
                                         />
                                     }
                                 })
@@ -394,12 +402,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Stat
                             label="Threat Gain"
                             value=move || {
-                                format!("{:.0}%", game_context.player_specs.read().threat_gain)
+                                format!(
+                                    "{:.0}%",
+                                    game_context.player_specs.read().threat_gain.get(),
+                                )
                             }
                         />
                         {move || {
                             let life_on_hit = effect(
-                                StatType::LifeOnHit {
+                                StatType::RestoreOnHit {
+                                    restore_type: RestoreType::Life,
                                     skill_type: Some(SkillType::Attack),
                                 },
                                 Modifier::Flat,
@@ -408,7 +420,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Life on Hit"
+                                            label="Life on Attack Hit"
                                             value=move || { format!("{:.0}", life_on_hit) }
                                         />
                                     }
@@ -416,7 +428,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                         {move || {
                             let mana_on_hit = effect(
-                                StatType::ManaOnHit {
+                                StatType::RestoreOnHit {
+                                    restore_type: RestoreType::Mana,
                                     skill_type: Some(SkillType::Attack),
                                 },
                                 Modifier::Flat,
@@ -425,21 +438,25 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Mana on Hit"
+                                            label="Mana on Attack Hit"
                                             value=move || { format!("{:.0}", mana_on_hit) }
                                         />
                                     }
                                 })
                         }}
-                        {make_stat(StatType::Restore {
-                            restore_type: None,
-                            skill_type: None,
-                        })}
+                        {make_stat(
+                            StatType::Restore {
+                                restore_type: None,
+                                skill_type: None,
+                            },
+                            Modifier::Increased,
+                        )}
                         {make_opt_stat(
                             StatType::Restore {
                                 restore_type: Some(RestoreType::Life),
                                 skill_type: None,
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -447,17 +464,24 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 restore_type: Some(RestoreType::Mana),
                                 skill_type: None,
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
-                        {make_stat(StatType::StatusDuration {
-                            status_type: None,
-                            skill_type: None,
-                        })}
-                        {make_stat(StatType::StatusPower {
-                            status_type: None,
-                            skill_type: None,
-                            min_max: None,
-                        })}
+                        {make_stat(
+                            StatType::StatusDuration {
+                                status_type: None,
+                                skill_type: None,
+                            },
+                            Modifier::Increased,
+                        )}
+                        {make_stat(
+                            StatType::StatusPower {
+                                status_type: None,
+                                skill_type: None,
+                                min_max: None,
+                            },
+                            Modifier::Increased,
+                        )}
                         // TODO: More for stun?
                         {make_opt_stat(
                             StatType::StatusPower {
@@ -465,6 +489,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 skill_type: Some(SkillType::Blessing),
                                 min_max: None,
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -472,6 +497,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 status_type: None,
                                 skill_type: Some(SkillType::Blessing),
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -480,6 +506,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 skill_type: Some(SkillType::Curse),
                                 min_max: None,
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -487,6 +514,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 status_type: None,
                                 skill_type: Some(SkillType::Curse),
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -494,28 +522,31 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 skill_type: None,
                                 effect_type: None,
                             },
+                            Modifier::Increased,
                             0.0,
                         )}
                     </StatCategory>
 
                     <StatCategory title="Combat">
-                        {make_stat(StatType::Speed(None))}
-                        {make_stat(StatType::Speed(Some(SkillType::Attack)))}
-                        {make_stat(StatType::Speed(Some(SkillType::Spell)))}
-                        {make_stat(StatType::CritChance(None))}
-                        {make_opt_stat(StatType::CritChance(Some(SkillType::Spell)), 0.0)}
+                        {make_stat(StatType::Speed(None), Modifier::Increased)}
+                        {make_stat(StatType::Speed(Some(SkillType::Attack)), Modifier::Increased)}
+                        {make_stat(StatType::Speed(Some(SkillType::Spell)), Modifier::Increased)}
+                        {make_stat(StatType::CritChance(None), Modifier::Increased)}
                         {make_opt_stat(
-                            StatType::StatConverter(StatConverterSpecs {
-                                source: StatConverterSource::ThreatLevel,
-                                target_stat: Box::new(StatType::Damage {
+                            StatType::CritChance(Some(SkillType::Spell)),
+                            Modifier::Increased,
+                            0.0,
+                        )}
+                        {make_opt_stat(
+                            StatType::StatConditionalModifier {
+                                stat: Box::new(StatType::Damage {
                                     skill_type: None,
                                     damage_type: None,
                                     min_max: None,
                                 }),
-                                target_modifier: Modifier::Multiplier,
-                                is_extra: false,
-                                skill_type: None,
-                            }),
+                                conditions: vec![Condition::ThreatLevel],
+                            },
+                            Modifier::More,
                             0.0,
                         )}
                     </StatCategory>
@@ -526,24 +557,32 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 damage_type: None,
                                 min_max: None,
                             },
+                            Modifier::More,
                             0.0,
                         )}
-                        {make_stat(StatType::Damage {
-                            skill_type: Some(SkillType::Attack),
-                            damage_type: None,
-                            min_max: None,
-                        })}
-                        {make_stat(StatType::Damage {
-                            skill_type: Some(SkillType::Spell),
-                            damage_type: None,
-                            min_max: None,
-                        })}
+                        {make_stat(
+                            StatType::Damage {
+                                skill_type: Some(SkillType::Attack),
+                                damage_type: None,
+                                min_max: None,
+                            },
+                            Modifier::More,
+                        )}
+                        {make_stat(
+                            StatType::Damage {
+                                skill_type: Some(SkillType::Spell),
+                                damage_type: None,
+                                min_max: None,
+                            },
+                            Modifier::More,
+                        )}
                         {make_opt_stat(
                             StatType::Damage {
                                 skill_type: None,
                                 damage_type: Some(DamageType::Physical),
                                 min_max: None,
                             },
+                            Modifier::More,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -552,6 +591,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 damage_type: Some(DamageType::Fire),
                                 min_max: None,
                             },
+                            Modifier::More,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -560,6 +600,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 damage_type: Some(DamageType::Poison),
                                 min_max: None,
                             },
+                            Modifier::More,
                             0.0,
                         )}
                         {make_opt_stat(
@@ -568,6 +609,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 damage_type: Some(DamageType::Storm),
                                 min_max: None,
                             },
+                            Modifier::More,
                             0.0,
                         )} // TODO: Elemental dot?
                         {make_opt_stat(
@@ -578,8 +620,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 skill_type: None,
                                 min_max: None,
                             },
+                            Modifier::More,
                             0.0,
-                        )} {make_opt_stat(StatType::CritDamage(None), 0.0)}
+                        )} {make_opt_stat(StatType::CritDamage(None), Modifier::More, 0.0)}
                     </StatCategory>
                 </div>
 
@@ -606,7 +649,7 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     }
 }
 
-fn make_opt_stat(stat_type: StatType, default: f64) -> impl IntoView + use<> {
+fn make_opt_stat(stat_type: StatType, modifier: Modifier, default: f64) -> impl IntoView + use<> {
     let game_context = expect_context::<GameContext>();
 
     view! {
@@ -617,22 +660,22 @@ fn make_opt_stat(stat_type: StatType, default: f64) -> impl IntoView + use<> {
                 .character_specs
                 .effects
                 .0
-                .get(&(stat_type.clone(), Modifier::Multiplier))
+                .get(&(stat_type.clone(), modifier))
                 .copied()
                 .unwrap_or_default();
-            (default != value).then(|| make_stat(stat_type.clone()))
+            (default != value).then(|| make_stat(stat_type.clone(), modifier))
         }}
     }
 }
 
-fn make_stat(stat_type: StatType) -> impl IntoView + use<> {
+fn make_stat(stat_type: StatType, modifier: Modifier) -> impl IntoView + use<> {
     let game_context = expect_context::<GameContext>();
 
     view! {
         <Stat
             label=format!(
                 "{} {}",
-                if stat_type.is_multiplicative() { "More" } else { "Increased" },
+                effects_tooltip::modifier_str(modifier),
                 format_multiplier_stat_name(&stat_type),
             )
             value=move || format_effect_value(
@@ -642,7 +685,7 @@ fn make_stat(stat_type: StatType) -> impl IntoView + use<> {
                     .character_specs
                     .effects
                     .0
-                    .get(&(stat_type.clone(), Modifier::Multiplier))
+                    .get(&(stat_type.clone(), modifier))
                     .copied()
                     .unwrap_or_default(),
             )

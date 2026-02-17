@@ -4,9 +4,11 @@ use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{item::ItemSpecs, stat_effect::EffectsMap, trigger::TriggerSpecs};
-
-pub use super::stat_effect::StatEffect;
+use crate::data::{
+    item::ItemSpecs,
+    stat_effect::{EffectsMap, StatEffect},
+    trigger::TriggerSpecs,
+};
 
 pub type PassiveNodeId = uuid::Uuid;
 

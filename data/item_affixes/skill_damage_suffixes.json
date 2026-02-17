@@ -12,7 +12,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [25, 45]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [55, 70]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 95]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [105, 120]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [130, 145]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [155, 170]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [180, 195]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [205, 220]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [230, 250]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [260, 300]
       }
     ]
@@ -193,13 +193,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 90]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -5
       }
     ]
@@ -217,13 +217,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [110, 140]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -10
       }
     ]
@@ -241,13 +241,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [160, 190]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -15
       }
     ]
@@ -265,13 +265,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [210, 240]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -20
       }
     ]
@@ -289,13 +289,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [260, 290]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -25
       }
     ]
@@ -313,13 +313,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [310, 340]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -30
       }
     ]
@@ -337,13 +337,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [360, 390]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -35
       }
     ]
@@ -361,13 +361,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [410, 440]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -40
       }
     ]
@@ -385,13 +385,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [460, 500]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -45
       }
     ]
@@ -409,13 +409,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [520, 600]
       },
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -50
       }
     ]
@@ -434,7 +434,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [25, 45]
       }
     ]
@@ -452,7 +452,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [55, 70]
       }
     ]
@@ -470,7 +470,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 95]
       }
     ]
@@ -488,7 +488,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [105, 120]
       }
     ]
@@ -506,7 +506,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [120, 145]
       }
     ]
@@ -524,7 +524,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [155, 170]
       }
     ]
@@ -542,7 +542,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [180, 195]
       }
     ]
@@ -560,7 +560,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [205, 220]
       }
     ]
@@ -578,7 +578,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [230, 250]
       }
     ]
@@ -596,7 +596,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [260, 300]
       }
     ]
@@ -615,13 +615,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 90]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 25
       }
     ]
@@ -639,13 +639,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [110, 140]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50
       }
     ]
@@ -663,13 +663,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [160, 190]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 75
       }
     ]
@@ -687,13 +687,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [210, 240]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 100
       }
     ]
@@ -711,13 +711,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [260, 290]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 125
       }
     ]
@@ -735,13 +735,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [310, 340]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 150
       }
     ]
@@ -759,13 +759,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [360, 390]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 175
       }
     ]
@@ -783,13 +783,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [410, 440]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 200
       }
     ]
@@ -807,13 +807,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [460, 500]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 225
       }
     ]
@@ -831,13 +831,13 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [520, 600]
       },
       {
         "scope": "Global",
         "stat": { "ManaCost": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 250
       }
     ]

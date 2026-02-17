@@ -41,7 +41,7 @@
       {
         "scope": "Local",
         "stat": { "Block": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 40]
       },
       {
@@ -49,7 +49,7 @@
         "stat": {
           "Armor": "Physical"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       }
     ],
@@ -113,20 +113,19 @@
       {
         "scope": "Global",
         "stat": {
-          "StatConverter": {
-            "source": "ThreatLevel",
-            "target_stat": { "Damage": {} },
-            "target_modifier": "Multiplier"
+          "StatConditionalModifier": {
+            "conditions": ["ThreatLevel"],
+            "stat": { "Damage": {} }
           }
         },
-        "modifier": "Flat",
+        "modifier": "More",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60],
         "ignore_quality": true
       },
@@ -141,7 +140,7 @@
         "stat": {
           "Armor": "Physical"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 120]
       },
       {
@@ -204,7 +203,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 120]
       },
       {
@@ -278,7 +277,7 @@
     ],
     "min_area_level": 260
   },
-  "pavise": {
+  "shield_7": {
     "name": "Pavise",
     "icon": "items/pavise.webp",
     "slot": "Shield",

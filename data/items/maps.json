@@ -10,7 +10,7 @@
       {
         "scope": "Local",
         "stat": "ItemRarity",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 25.0
       }
     ],

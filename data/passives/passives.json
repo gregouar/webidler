@@ -45,7 +45,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -56,7 +56,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -80,7 +80,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -95,7 +95,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -113,7 +113,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -122,7 +122,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -146,7 +146,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -161,7 +161,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -185,7 +185,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -200,7 +200,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -224,7 +224,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -239,7 +239,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -257,7 +257,7 @@
         "effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -266,7 +266,7 @@
         "upgrade_effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -324,8 +324,8 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           },
           {
             "stat": {
@@ -338,13 +338,43 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -25.0
           }
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": -10.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -359,7 +389,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -368,7 +398,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -388,26 +418,25 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -1e300
           },
           {
             "stat": {
               "StatConverter": {
                 "source": "CritDamage",
-                "target_stat": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
                 "is_extra": true,
                 "skill_type": null
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -430,7 +459,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -441,7 +470,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -479,7 +508,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -508,7 +537,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -532,7 +561,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -547,7 +576,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -571,7 +600,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -586,7 +615,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -618,7 +647,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 30.0
           }
         ],
@@ -641,7 +670,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -661,7 +690,7 @@
             "stat": {
               "CritDamage": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -672,7 +701,7 @@
             "stat": {
               "CritDamage": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -692,7 +721,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -703,7 +732,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -723,7 +752,7 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -734,7 +763,7 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -776,7 +805,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -809,7 +838,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -833,7 +862,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -848,7 +877,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -875,7 +904,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -893,7 +922,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -911,7 +940,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -920,7 +949,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -958,7 +987,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -987,7 +1016,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1005,7 +1034,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1014,7 +1043,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1038,7 +1067,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -1053,7 +1082,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -1090,7 +1119,7 @@
             "stat": {
               "Evade": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 50.0
           }
         ],
@@ -1113,7 +1142,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -1124,7 +1153,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1169,7 +1198,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           },
           {
@@ -1183,7 +1212,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           },
           {
@@ -1206,7 +1235,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1215,7 +1244,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1233,7 +1262,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1242,7 +1271,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1266,7 +1295,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -1281,7 +1310,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -1301,7 +1330,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -1312,7 +1341,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -1336,7 +1365,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -1351,7 +1380,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -1374,7 +1403,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -1388,7 +1417,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -1408,7 +1437,7 @@
             "stat": {
               "CritDamage": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1419,7 +1448,7 @@
             "stat": {
               "CritDamage": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1437,7 +1466,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1446,7 +1475,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1497,7 +1526,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": -1e300
           },
           {
@@ -1560,7 +1589,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -1575,7 +1604,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -1598,7 +1627,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -1612,7 +1641,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -1630,7 +1659,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1639,7 +1668,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1666,7 +1695,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -1684,7 +1713,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -1719,7 +1748,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -1730,7 +1759,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -1750,14 +1779,14 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -1768,14 +1797,14 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           },
           {
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -1793,7 +1822,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1802,7 +1831,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1826,7 +1855,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -1841,7 +1870,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -1861,7 +1890,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -1872,7 +1901,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -1896,7 +1925,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -1911,7 +1940,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -1937,10 +1966,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -1957,10 +1988,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -1978,7 +2011,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -1987,7 +2020,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -2032,7 +2065,7 @@
         "effects": [
           {
             "stat": "MovementSpeed",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -2041,7 +2074,7 @@
         "upgrade_effects": [
           {
             "stat": "MovementSpeed",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -2065,7 +2098,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2080,7 +2113,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2106,10 +2139,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -2126,10 +2161,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2180,7 +2217,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2195,7 +2232,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2215,7 +2252,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -2226,7 +2263,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -2246,7 +2283,7 @@
             "stat": {
               "Speed": "Curse"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -2257,7 +2294,7 @@
             "stat": {
               "Speed": "Curse"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -2284,7 +2321,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           },
           {
@@ -2299,7 +2336,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -2317,7 +2354,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
@@ -2332,7 +2369,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -2350,21 +2387,20 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -2373,21 +2409,20 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2412,7 +2447,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -2428,7 +2463,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -2446,7 +2481,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -2455,7 +2490,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -2473,7 +2508,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -2482,7 +2517,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -2506,7 +2541,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2521,7 +2556,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2541,7 +2576,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -2552,7 +2587,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -2594,7 +2629,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -2627,7 +2662,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -2650,7 +2685,7 @@
                 "effect_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 12.0
           }
         ],
@@ -2664,7 +2699,7 @@
                 "effect_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 6.0
           }
         ],
@@ -2692,7 +2727,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -1e300
           },
           {
@@ -2703,7 +2738,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 50.0
           }
         ],
@@ -2757,7 +2792,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2772,7 +2807,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2800,7 +2835,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2819,7 +2854,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2843,7 +2878,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2858,7 +2893,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2885,7 +2920,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           },
           {
@@ -2895,7 +2930,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -2913,7 +2948,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
@@ -2923,7 +2958,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -2947,7 +2982,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -2962,7 +2997,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -2989,7 +3024,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -3007,7 +3042,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3027,7 +3062,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -3038,7 +3073,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -3062,7 +3097,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -3077,7 +3112,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -3125,7 +3160,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -3134,7 +3169,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -3154,7 +3189,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -3165,7 +3200,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -3196,7 +3231,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -3218,7 +3253,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3250,7 +3285,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -3273,7 +3308,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3291,7 +3326,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -3300,7 +3335,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -3318,7 +3353,7 @@
         "effects": [
           {
             "stat": "ThreatGain",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 50.0
           }
         ],
@@ -3327,7 +3362,7 @@
         "upgrade_effects": [
           {
             "stat": "ThreatGain",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 25.0
           }
         ],
@@ -3374,7 +3409,7 @@
                           "stat": {
                             "Armor": null
                           },
-                          "modifier": "Multiplier",
+                          "modifier": "Increased",
                           "debuff": true
                         }
                       },
@@ -3445,7 +3480,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3460,7 +3495,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -3484,7 +3519,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -3499,7 +3534,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -3523,7 +3558,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -3538,7 +3573,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -3562,7 +3597,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -3577,7 +3612,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -3604,7 +3639,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -3622,7 +3657,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3646,7 +3681,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -3661,7 +3696,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -3684,7 +3719,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -3698,7 +3733,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3740,7 +3775,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -3773,7 +3808,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -3807,7 +3842,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": -33.0
           }
         ],
@@ -3833,7 +3868,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -3847,7 +3882,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -3865,21 +3900,20 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -3888,21 +3922,20 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -3920,7 +3953,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -3929,7 +3962,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -3961,7 +3994,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 30.0
           }
         ],
@@ -3984,7 +4017,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -4010,10 +4043,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -4030,10 +4065,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -4080,7 +4117,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -4091,7 +4128,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -4113,7 +4150,7 @@
                 "skill_type": "Curse"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -4126,7 +4163,7 @@
                 "skill_type": "Curse"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -5.0
           }
         ],
@@ -4150,7 +4187,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -4165,7 +4202,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -4193,7 +4230,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           },
           {
@@ -4207,7 +4244,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -25.0
           }
         ],
@@ -4226,7 +4263,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           },
           {
@@ -4240,7 +4277,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -4258,7 +4295,7 @@
         "effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           },
           {
@@ -4272,7 +4309,7 @@
         "upgrade_effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           },
           {
@@ -4301,7 +4338,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -4316,7 +4353,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -4361,7 +4398,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -4370,7 +4407,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -4397,7 +4434,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -4415,7 +4452,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -4433,21 +4470,20 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -4456,21 +4492,20 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -4490,7 +4525,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -4501,7 +4536,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -4519,12 +4554,12 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -4533,12 +4568,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -4558,14 +4593,14 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           },
           {
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -4576,14 +4611,14 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -4605,7 +4640,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -4618,7 +4653,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -5.0
           }
         ],
@@ -4646,7 +4681,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -4665,7 +4700,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -4683,7 +4718,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -4692,7 +4727,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -4716,7 +4751,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -4731,7 +4766,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -4800,7 +4835,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -4833,7 +4868,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -4851,7 +4886,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -4860,7 +4895,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -4880,7 +4915,7 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -4891,7 +4926,7 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -4909,7 +4944,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -4918,7 +4953,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -4936,7 +4971,8 @@
         "effects": [
           {
             "stat": {
-              "ManaOnHit": {
+              "RestoreOnHit": {
+                "restore_type": "Mana",
                 "skill_type": "Attack"
               }
             },
@@ -4949,7 +4985,8 @@
         "upgrade_effects": [
           {
             "stat": {
-              "ManaOnHit": {
+              "RestoreOnHit": {
+                "restore_type": "Mana",
                 "skill_type": "Attack"
               }
             },
@@ -4977,7 +5014,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -4992,7 +5029,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5016,7 +5053,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5031,7 +5068,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5054,7 +5091,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -5068,7 +5105,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -5088,7 +5125,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -5099,7 +5136,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -5123,7 +5160,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5138,7 +5175,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5166,7 +5203,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5185,7 +5222,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5205,7 +5242,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 70.0
           },
           {
@@ -5214,7 +5251,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 300.0
           }
         ],
@@ -5241,7 +5278,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5256,7 +5293,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5363,7 +5400,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -5372,7 +5409,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -5396,7 +5433,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5411,7 +5448,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5433,7 +5470,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -5446,7 +5483,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -5.0
           }
         ],
@@ -5500,7 +5537,7 @@
                 "effect_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 8.0
           }
         ],
@@ -5514,7 +5551,7 @@
                 "effect_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -5565,7 +5602,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5580,7 +5617,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5603,7 +5640,7 @@
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -5617,7 +5654,7 @@
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -5635,7 +5672,8 @@
         "effects": [
           {
             "stat": {
-              "LifeOnHit": {
+              "RestoreOnHit": {
+                "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
@@ -5648,7 +5686,8 @@
         "upgrade_effects": [
           {
             "stat": {
-              "LifeOnHit": {
+              "RestoreOnHit": {
+                "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
@@ -5676,7 +5715,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5691,7 +5730,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5711,7 +5750,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -5722,7 +5761,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -5759,7 +5798,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 2.0
           }
         ],
@@ -5787,7 +5826,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 1.0
           }
         ],
@@ -5815,7 +5854,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5834,7 +5873,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5885,7 +5924,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5900,7 +5939,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5924,7 +5963,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -5939,7 +5978,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -5990,7 +6029,7 @@
                               "min_max": null
                             }
                           },
-                          "modifier": "Multiplier",
+                          "modifier": "More",
                           "debuff": false
                         }
                       },
@@ -6042,10 +6081,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -6062,10 +6103,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -6092,7 +6135,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -6110,7 +6153,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -6134,7 +6177,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6149,7 +6192,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6167,7 +6210,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -6176,7 +6219,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -6202,10 +6245,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -6222,10 +6267,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6252,7 +6299,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -6270,7 +6317,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -6288,21 +6335,20 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -6311,21 +6357,20 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -6353,8 +6398,8 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           },
           {
             "stat": {
@@ -6367,13 +6412,43 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -25.0
           }
         ],
         "triggers": [],
         "locked": false,
-        "upgrade_effects": [],
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": -10.0
+          }
+        ],
         "max_upgrade_level": 3,
         "socket": false
       },
@@ -6388,12 +6463,12 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -6402,12 +6477,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -6425,7 +6500,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -6434,7 +6509,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -6457,7 +6532,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -6471,7 +6546,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -6495,7 +6570,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
@@ -6505,7 +6580,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -6520,7 +6595,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           },
           {
@@ -6530,7 +6605,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -6561,10 +6636,12 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 75.0
           }
         ],
@@ -6586,10 +6663,12 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -6613,7 +6692,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6628,7 +6707,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6646,7 +6725,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -6655,7 +6734,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -6683,7 +6762,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6702,7 +6781,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6734,7 +6813,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -6757,7 +6836,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -6775,7 +6854,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -6784,7 +6863,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -6808,7 +6887,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6823,7 +6902,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6841,7 +6920,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -6850,7 +6929,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -6874,7 +6953,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6889,7 +6968,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6913,7 +6992,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6928,7 +7007,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6952,7 +7031,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -6967,7 +7046,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -6995,7 +7074,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7014,7 +7093,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7036,7 +7115,7 @@
                 "skill_type": "Curse"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -7049,7 +7128,7 @@
                 "skill_type": "Curse"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -5.0
           }
         ],
@@ -7067,7 +7146,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 50.0
           }
         ],
@@ -7076,7 +7155,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -7094,7 +7173,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -7103,7 +7182,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -7123,7 +7202,7 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -7134,7 +7213,7 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -7161,7 +7240,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -7179,7 +7258,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -7197,7 +7276,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -7206,7 +7285,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -7224,7 +7303,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -7233,7 +7312,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -7253,7 +7332,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -7264,7 +7343,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -7292,7 +7371,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7311,7 +7390,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7349,7 +7428,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -7378,7 +7457,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -7398,7 +7477,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -7409,7 +7488,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -7460,7 +7539,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7475,7 +7554,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7526,7 +7605,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7541,7 +7620,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7565,7 +7644,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7580,7 +7659,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7598,7 +7677,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -7607,7 +7686,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -7631,7 +7710,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7646,7 +7725,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7704,7 +7783,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -7722,7 +7801,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -7746,7 +7825,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7761,7 +7840,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7807,7 +7886,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -7830,7 +7909,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -7841,7 +7920,7 @@
             "stat": {
               "CritDamage": null
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7869,7 +7948,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -7888,7 +7967,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -7908,7 +7987,7 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -7919,7 +7998,7 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -7942,7 +8021,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -7956,7 +8035,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -7976,7 +8055,7 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -7987,7 +8066,7 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -8019,7 +8098,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -8042,7 +8121,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -8080,7 +8159,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -8109,7 +8188,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -8133,7 +8212,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -8148,7 +8227,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -8216,7 +8295,7 @@
                           "stat": {
                             "Armor": "Poison"
                           },
-                          "modifier": "Multiplier",
+                          "modifier": "Increased",
                           "debuff": true
                         }
                       },
@@ -8281,7 +8360,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -8290,7 +8369,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -8310,7 +8389,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -8321,7 +8400,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -8356,7 +8435,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -8367,7 +8446,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -8394,10 +8473,9 @@
                 "source": {
                   "Block": "Attack"
                 },
-                "target_stat": {
+                "stat": {
                   "Block": "Spell"
                 },
-                "target_modifier": "Flat",
                 "is_extra": false,
                 "skill_type": null
               }
@@ -8429,7 +8507,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -8444,7 +8522,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -8468,7 +8546,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 100.0
           },
           {
@@ -8482,7 +8560,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -100.0
           }
         ],
@@ -8497,7 +8575,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 100.0
           },
           {
@@ -8511,7 +8589,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -100.0
           }
         ],
@@ -8535,7 +8613,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -8550,7 +8628,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -8578,7 +8656,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -8597,7 +8675,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -8615,7 +8693,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -8624,7 +8702,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -8644,7 +8722,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -8655,7 +8733,7 @@
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -8693,7 +8771,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -8722,7 +8800,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -8742,7 +8820,7 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -8753,7 +8831,7 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -8781,7 +8859,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -8800,7 +8878,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -8824,7 +8902,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -8839,7 +8917,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -8957,10 +9035,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -8977,10 +9057,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -8998,7 +9080,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -9007,7 +9089,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -9027,14 +9109,14 @@
             "stat": {
               "CritDamage": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           },
           {
             "stat": {
               "CritChance": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -9045,14 +9127,14 @@
             "stat": {
               "CritDamage": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           },
           {
             "stat": {
               "CritChance": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -9075,7 +9157,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -9089,7 +9171,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -9107,7 +9189,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -9116,7 +9198,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -9136,7 +9218,7 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -9147,7 +9229,7 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -9167,7 +9249,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -9178,7 +9260,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -9196,12 +9278,12 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -9210,12 +9292,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
+              "RestoreOnHit": {
                 "restore_type": "Life",
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -9239,7 +9321,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -9254,7 +9336,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -9272,7 +9354,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -9281,7 +9363,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -9299,7 +9381,7 @@
         "effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -9308,7 +9390,7 @@
         "upgrade_effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -9326,21 +9408,20 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -9349,21 +9430,20 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -9386,7 +9466,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -9400,7 +9480,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -9424,7 +9504,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -9439,7 +9519,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -9457,7 +9537,7 @@
         "effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -9466,7 +9546,7 @@
         "upgrade_effects": [
           {
             "stat": "Mana",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -9484,7 +9564,7 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -9493,7 +9573,7 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 2.0
           }
         ],
@@ -9540,7 +9620,7 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -9551,7 +9631,7 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -9569,7 +9649,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -9578,7 +9658,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -9600,7 +9680,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -9613,7 +9693,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -5.0
           }
         ],
@@ -9636,7 +9716,7 @@
                 "effect_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 8.0
           }
         ],
@@ -9650,7 +9730,7 @@
                 "effect_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 4.0
           }
         ],
@@ -9676,10 +9756,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -9696,10 +9778,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -9738,7 +9822,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -9753,7 +9837,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -9773,7 +9857,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -9784,7 +9868,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -9842,7 +9926,7 @@
                               }
                             }
                           },
-                          "modifier": "Multiplier",
+                          "modifier": "More",
                           "debuff": false
                         }
                       },
@@ -9891,7 +9975,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 30.0
           }
         ],
@@ -9905,7 +9989,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -9929,7 +10013,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -9944,7 +10028,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -9962,7 +10046,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -9971,7 +10055,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -10020,7 +10104,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 50.0
           }
         ],
@@ -10029,7 +10113,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -10180,7 +10264,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -10195,7 +10279,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -10217,7 +10301,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": -1e300
           },
           {
@@ -10228,7 +10312,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": -33.0
           }
         ],
@@ -10255,7 +10339,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -10270,7 +10354,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -10290,12 +10374,12 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
             "stat": "LifeRegen",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -10306,12 +10390,12 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           },
           {
             "stat": "LifeRegen",
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -10337,10 +10421,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 45.0
           }
         ],
@@ -10357,10 +10443,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -10411,7 +10499,7 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -10422,7 +10510,7 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -10459,7 +10547,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 2.0
           }
         ],
@@ -10487,7 +10575,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 1.0
           }
         ],
@@ -10505,7 +10593,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -10514,7 +10602,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -10559,15 +10647,14 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": -1e300
           },
           {
             "stat": {
               "StatConverter": {
                 "source": "LifeRegen",
-                "target_stat": "ManaRegen",
-                "target_modifier": "Flat",
+                "stat": "ManaRegen",
                 "is_extra": false,
                 "skill_type": null
               }
@@ -10599,14 +10686,14 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           },
           {
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -10621,14 +10708,14 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           },
           {
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -10896,13 +10983,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -10913,6 +10993,13 @@
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -10954,16 +11041,16 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -11006,16 +11093,16 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -11059,16 +11146,16 @@
                     }
                   },
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   }
                 ],
@@ -11104,10 +11191,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -11124,10 +11213,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -11150,7 +11241,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -11164,7 +11255,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -11209,7 +11300,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 50.0
           }
         ],
@@ -11218,7 +11309,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -11238,7 +11329,7 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -11249,7 +11340,7 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -11273,7 +11364,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -11288,7 +11379,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -11314,10 +11405,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -11334,10 +11427,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -11360,7 +11455,7 @@
                 "skill_type": "Curse"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
@@ -11371,7 +11466,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -11385,7 +11480,7 @@
                 "skill_type": "Curse"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           },
           {
@@ -11396,7 +11491,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -11420,7 +11515,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -11435,7 +11530,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -11455,7 +11550,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -11466,7 +11561,7 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -11515,7 +11610,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -11528,7 +11623,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -5.0
           }
         ],
@@ -11556,7 +11651,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -11575,7 +11670,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -11617,7 +11712,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -11650,7 +11745,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -11670,7 +11765,7 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -11681,7 +11776,7 @@
             "stat": {
               "Block": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -11704,7 +11799,7 @@
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -11718,7 +11813,7 @@
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -11807,7 +11902,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -11822,7 +11917,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -11840,7 +11935,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -11849,7 +11944,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -11873,7 +11968,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -11888,7 +11983,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -11906,7 +12001,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -11915,7 +12010,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -11953,7 +12048,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -11982,7 +12077,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -12005,7 +12100,7 @@
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -12019,7 +12114,7 @@
                 "skill_type": "Attack"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -12042,7 +12137,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -12056,7 +12151,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -12084,7 +12179,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           },
           {
@@ -12098,7 +12193,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -12117,7 +12212,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           },
           {
@@ -12131,7 +12226,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -12186,7 +12281,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 50.0
           }
         ],
@@ -12195,7 +12290,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -12213,7 +12308,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -12222,7 +12317,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -12249,7 +12344,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -12267,7 +12362,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -12290,7 +12385,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -12304,7 +12399,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -12328,7 +12423,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -12343,7 +12438,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -12367,7 +12462,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -12382,7 +12477,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -12414,7 +12509,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -12437,7 +12532,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -12488,7 +12583,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -12503,7 +12598,7 @@
                 "min_max": "Max"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -12523,7 +12618,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -12534,7 +12629,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -12558,7 +12653,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -12573,7 +12668,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -12597,7 +12692,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -12612,7 +12707,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -12636,7 +12731,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -12651,7 +12746,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -12677,10 +12772,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -12697,10 +12794,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -12738,7 +12837,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 40.0
           },
           {
@@ -12763,7 +12862,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 40.0
           }
         ],
@@ -12792,7 +12891,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           },
           {
@@ -12817,7 +12916,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -12844,7 +12943,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -12862,7 +12961,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -12899,7 +12998,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 4.0
           }
         ],
@@ -12927,7 +13026,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 2.0
           }
         ],
@@ -12977,7 +13076,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -12991,7 +13090,7 @@
                 "skill_type": "Blessing"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -13011,7 +13110,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -13022,7 +13121,7 @@
             "stat": {
               "Speed": "Attack"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],
@@ -13042,7 +13141,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -13053,7 +13152,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -13076,10 +13175,12 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 80.0
           },
           {
@@ -13093,10 +13194,12 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 40.0
           }
         ],
@@ -13110,10 +13213,12 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 40.0
           },
           {
@@ -13127,10 +13232,12 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -13152,7 +13259,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -20.0
           }
         ],
@@ -13165,7 +13272,7 @@
                 "skill_type": "Spell"
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": -10.0
           }
         ],
@@ -13183,7 +13290,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 50.0
           }
         ],
@@ -13192,7 +13299,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -13212,7 +13319,7 @@
             "stat": {
               "Speed": "Curse"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -13223,7 +13330,7 @@
             "stat": {
               "Speed": "Curse"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -13254,7 +13361,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -13276,7 +13383,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -13302,10 +13409,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 30.0
           }
         ],
@@ -13322,10 +13431,12 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -13349,7 +13460,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -13364,7 +13475,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -13395,7 +13506,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -13417,7 +13528,7 @@
                 }
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 5.0
           }
         ],
@@ -13450,21 +13561,20 @@
         "effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -13473,21 +13583,20 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatConverter": {
-                "source": "ThreatLevel",
-                "target_stat": {
+              "StatConditionalModifier": {
+                "stat": {
                   "Damage": {
                     "skill_type": null,
                     "damage_type": null,
                     "min_max": null
                   }
                 },
-                "target_modifier": "Multiplier",
-                "is_extra": false,
-                "skill_type": null
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
-            "modifier": "Flat",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -13529,7 +13638,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -13562,7 +13671,7 @@
                 ]
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -13589,7 +13698,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 20.0
           }
         ],
@@ -13607,7 +13716,7 @@
                 "skill_type": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 10.0
           }
         ],
@@ -13631,7 +13740,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -13646,7 +13755,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           }
         ],
@@ -13664,7 +13773,7 @@
         "effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 20.0
           }
         ],
@@ -13673,7 +13782,7 @@
         "upgrade_effects": [
           {
             "stat": "GoldFind",
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 10.0
           }
         ],
@@ -13697,14 +13806,14 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 15.0
           },
           {
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 3.0
           }
         ],
@@ -13719,14 +13828,14 @@
                 "min_max": null
               }
             },
-            "modifier": "Multiplier",
+            "modifier": "More",
             "value": 5.0
           },
           {
             "stat": {
               "Speed": "Spell"
             },
-            "modifier": "Multiplier",
+            "modifier": "Increased",
             "value": 1.0
           }
         ],

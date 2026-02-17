@@ -32,13 +32,13 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "MovementSpeed",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 10,
         "ignore_quality": true
       },
@@ -66,7 +66,7 @@
             "Restore": {
               "restore_type": "Mana",
               "value": [5, 10],
-              "modifier": "Multiplier"
+              "modifier": "Percent"
             }
           }
         ]
@@ -128,7 +128,7 @@
       {
         "scope": "Global",
         "stat": "MovementSpeed",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 20,
         "ignore_quality": true
       },
@@ -153,7 +153,7 @@
             "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [30, 50],
         "ignore_quality": true
       }
@@ -186,7 +186,7 @@
     ],
     "min_area_level": 260
   },
-  "plated_boots": {
+  "boots_7": {
     "name": "Plated Boots",
     "icon": "items/plated_boots.webp",
     "slot": "Boots",

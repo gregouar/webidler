@@ -12,7 +12,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [5, 7]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 10]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [11, 13]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [14, 16]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [17, 19]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 22]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [23, 25]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [26, 28]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [29, 31]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [32, 34]
       }
     ]
@@ -374,7 +374,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 15]
       }
     ]
@@ -392,7 +392,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 25]
       }
     ]
@@ -410,7 +410,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [30, 35]
       }
     ]
@@ -428,7 +428,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 45]
       }
     ]
@@ -446,7 +446,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [50, 55]
       }
     ]
@@ -464,7 +464,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [60, 65]
       }
     ]
@@ -482,7 +482,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [70, 75]
       }
     ]
@@ -500,7 +500,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 85]
       }
     ]
@@ -518,7 +518,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [90, 95]
       }
     ]
@@ -536,7 +536,7 @@
       {
         "scope": "Local",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [100, 120]
       }
     ]
@@ -555,7 +555,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [25, 45]
       }
     ]
@@ -573,7 +573,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [55, 70]
       }
     ]
@@ -591,7 +591,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 95]
       }
     ]
@@ -609,7 +609,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [105, 120]
       }
     ]
@@ -627,7 +627,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [130, 145]
       }
     ]
@@ -645,7 +645,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [155, 170]
       }
     ]
@@ -663,7 +663,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [180, 195]
       }
     ]
@@ -681,7 +681,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [205, 220]
       }
     ]
@@ -699,7 +699,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [230, 245]
       }
     ]
@@ -717,7 +717,7 @@
       {
         "scope": "Local",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [255, 270]
       }
     ]
@@ -735,7 +735,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [1, 2]
       }
@@ -753,7 +755,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [3, 4]
       }
@@ -771,7 +775,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [5, 6]
       }
@@ -789,7 +795,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [7, 8]
       }
@@ -807,7 +815,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [9, 10]
       }
@@ -825,7 +835,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [11, 12]
       }
@@ -843,7 +855,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [13, 14]
       }
@@ -861,7 +875,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [15, 16]
       }
@@ -879,7 +895,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [17, 18]
       }
@@ -897,7 +915,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "LifeOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [19, 20]
       }
@@ -916,7 +936,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [1, 2]
       }
@@ -934,7 +956,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [3, 4]
       }
@@ -952,7 +976,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [5, 6]
       }
@@ -970,7 +996,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [7, 8]
       }
@@ -988,7 +1016,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [9, 10]
       }
@@ -1006,7 +1036,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [11, 12]
       }
@@ -1024,7 +1056,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [13, 14]
       }
@@ -1042,7 +1076,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [15, 16]
       }
@@ -1060,7 +1096,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [17, 18]
       }
@@ -1078,7 +1116,9 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "ManaOnHit": {  "skill_type": "Attack" } },
+        "stat": {
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+        },
         "modifier": "Flat",
         "value": [19, 20]
       }

@@ -11,14 +11,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat":  "Life",
-        "modifier": "Multiplier",
+        "stat": "Life",
+        "modifier": "Increased",
         "value": 100
       },
       {
         "scope": "Local",
         "stat": "ItemRarity",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50
       }
     ]
@@ -35,14 +35,14 @@
     "effects": [
       {
         "scope": "Local",
-        "stat":  {"Armor": null},
+        "stat": { "Armor": null },
         "modifier": "Flat",
         "value": 100
       },
       {
         "scope": "Local",
         "stat": "ItemRarity",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50
       }
     ]

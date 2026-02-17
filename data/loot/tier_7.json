@@ -1,55 +1,55 @@
 {
   "entries": [
     {
-      "item_id": "battleaxe",
+      "item_id": "weapon_1h_7",
       "weight": 64000
     },
     {
-      "item_id": "barbute",
+      "item_id": "helmet_7",
       "weight": 64000
     },
     {
-      "item_id": "cavalry_armor",
+      "item_id": "body_7",
       "weight": 64000
     },
     {
-      "item_id": "plated_gauntlets",
+      "item_id": "gloves_7",
       "weight": 64000
     },
     {
-      "item_id": "plated_boots",
+      "item_id": "boots_7",
       "weight": 64000
     },
     {
-      "item_id": "warhammer",
+      "item_id": "weapon_2h_7",
       "weight": 64000
     },
     {
-      "item_id": "crossbow",
+      "item_id": "weapon_ranged_7",
       "weight": 64000
     },
     {
-      "item_id": "mage_wand",
+      "item_id": "weapon_spell_7",
       "weight": 64000
     },
     {
-      "item_id": "pavise",
+      "item_id": "shield_7",
       "weight": 64000
     },
     {
-      "item_id": "grimoire",
+      "item_id": "focus_7",
       "weight": 64000
     },
     {
-      "item_id": "elven_cape",
+      "item_id": "cloak_7",
       "weight": 64000
     },
     {
-      "item_id": "runic_ring",
+      "item_id": "ring_7",
       "weight": 64000
     },
     {
-      "item_id": "sacred_talisman",
+      "item_id": "amulet_7",
       "weight": 64000
     },
     {

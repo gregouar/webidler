@@ -5,14 +5,16 @@ use shared::data::{
     character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
+    modifier::Modifier,
     skill::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{ApplyStatModifier, LuckyRollType, MinMax, Modifier, StatEffect, StatType},
+    stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
+    values::NonNegative,
 };
 
-use crate::game::{data::items_store::ItemsStore, utils::rng::Rollable};
+use crate::game::data::items_store::ItemsStore;
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
 
@@ -26,13 +28,12 @@ pub fn init_item_specs_from_store(
 }
 
 pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: bool) -> ItemSpecs {
-    let mut effects: Vec<StatEffect> =
-        (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
+    let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
 
-    effects.sort_by_key(|e| match e.modifier {
-        Modifier::Flat => 0,
-        Modifier::Multiplier => 1,
-    });
+    // effects.sort_by_key(|e| match e.modifier {
+    //     Modifier::Flat => 0,
+    //     Modifier::Multiplier => 1,
+    // });
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
@@ -66,8 +67,8 @@ fn compute_weapon_specs(
     effects: &[StatEffect],
 ) -> WeaponSpecs {
     weapon_specs.damage.values_mut().for_each(|value| {
-        value.min *= 1.0 + quality as f64 * 0.01;
-        value.max *= 1.0 + quality as f64 * 0.01;
+        value.min.apply_modifier(quality as f64, Modifier::More);
+        value.max.apply_modifier(quality as f64, Modifier::More);
     });
 
     for effect in effects {
@@ -131,15 +132,13 @@ fn compute_weapon_specs(
         }
     }
 
-    weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
-    weapon_specs.crit_chance.clamp();
-    weapon_specs.damage.retain(|_, value| {
-        value.max = value.max.max(0.0);
-        value.min = value.min.max(0.0);
-        value.clamp();
+    // weapon_specs.damage.retain(|_, value| {
+    //     value.max = value.max.evaluate().max(0.0).into();
+    //     value.min = value.min.evaluate().max(0.0).into();
+    //     value.clamp();
 
-        value.max > 0.0
-    });
+    //     value.max.evaluate() > 0.0
+    // });
 
     weapon_specs
 }
@@ -149,7 +148,9 @@ fn compute_armor_specs(
     quality: f32,
     effects: &[StatEffect],
 ) -> ArmorSpecs {
-    armor_specs.armor *= 1.0 + quality as f64 * 0.01;
+    armor_specs
+        .armor
+        .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
             StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
@@ -159,7 +160,6 @@ fn compute_armor_specs(
             _ => {}
         }
     }
-    armor_specs.block = armor_specs.block.clamp(0.0, 100.0);
 
     armor_specs
 }
@@ -175,7 +175,6 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 .collect(),
             crit_chance: weapon_specs.crit_chance,
             crit_damage: weapon_specs.crit_damage,
-            ignore_armor: false,
         },
         success_chance: Chance::new_sure(),
         ignore_stat_effects: Default::default(),
@@ -186,9 +185,9 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
                 duration: ChanceRange {
-                    min: WEAPON_POISON_DAMAGE_DURATION,
-                    max: WEAPON_POISON_DAMAGE_DURATION,
-                    lucky_chance: 0.0,
+                    min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+                    max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+                    lucky_chance: Default::default(),
                 },
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {
@@ -210,8 +209,8 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),
         skill_type: SkillType::Attack,
-        cooldown: weapon_specs.cooldown,
-        mana_cost: 0.0,
+        cooldown: *weapon_specs.cooldown,
+        mana_cost: Default::default(),
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
         upgrade_effects: vec![StatEffect {
             stat: StatType::Damage {
@@ -219,7 +218,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 damage_type: None,
                 min_max: None,
             },
-            modifier: Modifier::Multiplier,
+            modifier: Modifier::Increased,
             value: 50.0,
             bypass_ignore: true,
         }],

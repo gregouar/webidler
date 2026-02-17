@@ -107,7 +107,7 @@
     "effect": {
       "StatEffect": {
         "stat": { "Damage": { "damage_type": "Physical" } },
-        "modifier": "Multiplier"
+        "modifier": "More"
       }
     },
     "price_increase_factor": 6,
@@ -121,7 +121,7 @@
     "effect": {
       "StatEffect": {
         "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "Multiplier"
+        "modifier": "More"
       }
     },
     "price_increase_factor": 6,
@@ -135,7 +135,7 @@
     "effect": {
       "StatEffect": {
         "stat": { "Damage": { "damage_type": "Poison" } },
-        "modifier": "Multiplier"
+        "modifier": "More"
       }
     },
     "price_increase_factor": 6,
@@ -149,7 +149,7 @@
     "effect": {
       "StatEffect": {
         "stat": { "Damage": { "damage_type": "Storm" } },
-        "modifier": "Multiplier"
+        "modifier": "More"
       }
     },
     "price_increase_factor": 6,

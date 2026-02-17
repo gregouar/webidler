@@ -5,6 +5,7 @@ members = [
     "tools", 
     "shared"
 ]
+default-members = ["backend"]
 
 resolver = "3"
 

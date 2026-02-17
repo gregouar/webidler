@@ -107,7 +107,7 @@ fn handle_hit_event<'a>(
                         hit_event
                             .damage
                             .get(&damage_type)
-                            .copied()
+                            .map(|d| d.get())
                             .unwrap_or_default()
                             > 0.0
                     })
@@ -216,6 +216,7 @@ fn handle_kill_event(
                         if let EventTrigger::OnKill(kill_trigger) = &triggered_effects.trigger
                             && all(kill_trigger.conditions.iter(), |condition| {
                                 check_condition(
+                                    &game_data.area_threat,
                                     &monster_specs.character_specs,
                                     &monster_state.character_state,
                                     condition,
@@ -316,7 +317,7 @@ fn handle_area_completed_event(
         is_boss_level,
         new_max, // Only drop unique when new area completed
         None,
-        area_state.loot_rarity,
+        *area_state.loot_rarity,
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(
@@ -391,7 +392,7 @@ fn handle_threat_increased_event(
     for monster_state in game_data.monster_states.iter_mut() {
         monster_state.character_state.dirty_specs = true;
     }
-    game_data.player_state.character_state.dirty_specs = true;
+    // game_data.player_state.character_state.dirty_specs = true;
 
     for triggered_effects in game_data
         .player_specs

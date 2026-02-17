@@ -79,7 +79,7 @@
                     "status_type": {
                       "StatModifier": {
                         "stat": { "Speed": null },
-                        "modifier": "Multiplier"
+                        "modifier": "Increased"
                       }
                     },
                     "value": 50
@@ -88,7 +88,7 @@
                     "status_type": {
                       "StatModifier": {
                         "stat": { "Damage": {} },
-                        "modifier": "Multiplier"
+                        "modifier": "Increased"
                       }
                     },
                     "value": 100

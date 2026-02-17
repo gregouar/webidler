@@ -32,7 +32,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [500, 1000]
       }
     ],
@@ -93,7 +93,7 @@
                           "damage_type": null
                         }
                       },
-                      "modifier": "Multiplier",
+                      "modifier": "Increased",
                       "debuff": false
                     }
                   },
@@ -141,14 +141,13 @@
             "source": {
               "Damage": { "damage_type": "Storm", "min_max": "Max" }
             },
-            "target_stat": {
+            "stat": {
               "Damage": {
                 "skill_type": null,
                 "damage_type": "Storm",
                 "min_max": "Min"
               }
             },
-            "target_modifier": "Flat",
             "is_extra": false,
             "skill_type": null
           }
@@ -159,7 +158,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Storm" } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [100, 200]
       }
     ],
@@ -243,19 +242,18 @@
         "stat": {
           "StatConverter": {
             "source": "MaxMana",
-            "target_stat": {
+            "stat": {
               "Damage": {
                 "skill_type": null,
                 "damage_type": null,
                 "min_max": null
               }
             },
-            "target_modifier": "Multiplier",
             "is_extra": true,
             "skill_type": null
           }
         },
-        "modifier": "Flat",
+        "modifier": "Increased",
         "value": 100
       },
       {

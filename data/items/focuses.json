@@ -45,7 +45,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Poison" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [40, 60]
       },
       {
@@ -76,7 +76,8 @@
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Damage": { "damage_type": "Poison" } }
+                      "stat": { "Damage": { "damage_type": "Poison" } },
+                      "modifier": "More"
                     }
                   },
                   "value": 200
@@ -166,28 +167,28 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Storm" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [150, 200],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [60, 80],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [150, 200],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 40],
         "ignore_quality": true
       },
@@ -207,7 +208,7 @@
     ],
     "min_area_level": 260
   },
-  "grimoire": {
+  "focus_7": {
     "name": "Grimoire",
     "icon": "items/grimoire.webp",
     "slot": "Shield",

@@ -4,19 +4,17 @@ use strum::IntoEnumIterator;
 use shared::{
     constants::{MAX_BLOCK, MAX_EVADE},
     data::{
+        area::AreaThreat,
         character::{CharacterId, CharacterSpecs, CharacterState},
         conditional_modifier::ConditionalModifier,
-        passive::StatEffect,
-        skill::{DamageType, RestoreType, SkillType},
-        stat_effect::{ApplyStatModifier, LuckyRollType, StatConverterSource, StatType},
-        temple::Modifier,
+        skill::{DamageType, RestoreModifier, RestoreType, SkillType},
+        stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
     },
 };
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
     systems::{characters_controller::restore_character, stats_updater},
-    utils::rng::Rollable,
 };
 
 use super::statuses_controller;
@@ -27,6 +25,7 @@ pub fn update_character_state(
     character_id: CharacterId,
     character_specs: &CharacterSpecs,
     character_state: &mut CharacterState,
+    area_threat: &AreaThreat,
 ) {
     if !character_state.is_alive {
         return;
@@ -49,22 +48,30 @@ pub fn update_character_state(
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
-        elapsed_time_f64 * character_specs.life_regen * 0.1,
-        Modifier::Multiplier,
+        elapsed_time_f64 * *character_specs.life_regen * 0.1,
+        RestoreModifier::Percent,
     );
 
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
-        elapsed_time_f64 * character_specs.mana_regen * 0.1,
-        Modifier::Multiplier,
+        elapsed_time_f64 * *character_specs.mana_regen * 0.1,
+        RestoreModifier::Percent,
     );
 
-    character_state.life = character_state.life.min(character_specs.max_life);
-    character_state.mana = character_state.mana.min(character_specs.max_mana);
+    character_state.life = character_state
+        .life
+        .get()
+        .min(character_specs.max_life.get())
+        .into();
+    character_state.mana = character_state
+        .mana
+        .get()
+        .min(character_specs.max_mana.get())
+        .into();
 
-    if character_state.life < 0.5 {
-        character_state.life = character_state.life.min(0.0);
+    if character_state.life.get() < 0.5 {
+        character_state.life = 0.0.into();
         character_state.is_alive = false;
         events_queue.register_event(GameEvent::Kill {
             target: character_id,
@@ -72,6 +79,7 @@ pub fn update_character_state(
     }
 
     let new_conditions = stats_updater::compute_conditions(
+        area_threat,
         character_specs,
         character_state,
         &character_specs.conditional_modifiers,
@@ -95,6 +103,25 @@ pub fn update_character_specs(
     effects: &[StatEffect],
 ) -> (CharacterSpecs, Vec<StatEffect>) {
     let mut character_specs = base_specs.clone();
+
+    for skill_type in SkillType::iter() {
+        character_specs
+            .block
+            .entry(skill_type)
+            .or_default()
+            .value
+            .set_bounds(Some(0.0), Some(MAX_BLOCK));
+    }
+
+    for damage_type in DamageType::iter() {
+        character_specs
+            .evade
+            .entry(damage_type)
+            .or_default()
+            .value
+            .set_bounds(Some(0.0), Some(MAX_EVADE));
+    }
+
     let converted_effects = compute_character_specs(&mut character_specs, effects);
     (character_specs, converted_effects)
 }
@@ -103,7 +130,7 @@ fn compute_character_specs(
     character_specs: &mut CharacterSpecs,
     effects: &[StatEffect],
 ) -> Vec<StatEffect> {
-    let mut stat_converters = Vec::new();
+    let mut stats_converters = Vec::new();
 
     for effect in effects.iter() {
         match &effect.stat {
@@ -190,7 +217,7 @@ fn compute_character_specs(
                         character_specs
                             .damage_resistance
                             .entry((skill, damage))
-                            .or_insert(0.0)
+                            .or_default()
                             .apply_effect(effect);
                     }
                 }
@@ -256,7 +283,7 @@ fn compute_character_specs(
             },
 
             StatType::StatConverter(specs) => {
-                stat_converters.push((specs.clone(), effect.value));
+                stats_converters.push((specs.clone(), effect.modifier, effect.value));
             }
             StatType::StatConditionalModifier { stat, conditions } => {
                 character_specs
@@ -274,7 +301,7 @@ fn compute_character_specs(
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
-            StatType::LifeOnHit { .. } | StatType::ManaOnHit { .. } => {}
+            StatType::RestoreOnHit { .. } => {}
             // Only for player
             StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
             // Delegate to skills
@@ -296,62 +323,56 @@ fn compute_character_specs(
         }
     }
 
-    // TODO: How to propagate to player/monster/skills? Return effects?
-    let mut stats_converted = Vec::with_capacity(stat_converters.len());
-    if !stat_converters.is_empty() {
-        for (specs, factor) in stat_converters {
-            let factor = factor * 0.01;
+    let mut stats_converted = Vec::with_capacity(stats_converters.len());
+    if !stats_converters.is_empty() {
+        stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
+            (
+                stat_converter.source,
+                stat_converter.stat.clone(),
+                *modifier,
+            )
+        });
+
+        for (specs, modifier, factor) in stats_converters {
+            // let factor = factor * 0.01;
             let amount = match specs.source {
-                StatConverterSource::MaxLife => {
-                    let amount = character_specs.max_life * factor;
-                    if !specs.is_extra {
-                        character_specs.max_life -= amount;
-                    }
-                    amount
-                }
-                StatConverterSource::MaxMana => {
-                    let amount = character_specs.max_mana * factor;
-                    if !specs.is_extra {
-                        character_specs.max_mana -= amount;
-                    }
-                    amount
-                }
+                StatConverterSource::MaxLife => character_specs
+                    .max_life
+                    .convert_value(factor, specs.is_extra, false)
+                    .get(),
+                StatConverterSource::MaxMana => character_specs
+                    .max_mana
+                    .convert_value(factor, specs.is_extra, false)
+                    .get(),
                 StatConverterSource::ManaRegen => {
-                    let amount = character_specs.mana_regen * factor;
-                    if !specs.is_extra {
-                        character_specs.mana_regen -= amount;
-                    }
-                    amount
+                    character_specs
+                        .mana_regen
+                        .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::LifeRegen => {
-                    let amount = character_specs.life_regen * factor;
-                    if !specs.is_extra {
-                        character_specs.life_regen -= amount;
-                    }
-                    amount
+                    character_specs
+                        .life_regen
+                        .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::Block(skill_type) => {
                     if let Some(block) = character_specs.block.get_mut(&skill_type) {
-                        let amount = block.value as f64 * factor;
-                        if !specs.is_extra {
-                            block.value -= amount as f32;
-                        }
-                        amount
+                        block
+                            .value
+                            .convert_value(factor, specs.is_extra, false)
+                            .get() as f64
                     } else {
                         0.0
                     }
                 }
 
-                StatConverterSource::CritDamage
-                | StatConverterSource::Damage { .. }
-                | StatConverterSource::ThreatLevel => {
+                StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => {
                     continue;
                 }
             };
 
             stats_converted.push(StatEffect {
-                stat: (*specs.target_stat).clone(),
-                modifier: specs.target_modifier,
+                stat: (*specs.stat).clone(),
+                modifier,
                 value: amount,
                 bypass_ignore: true,
             });
@@ -359,19 +380,6 @@ fn compute_character_specs(
 
         compute_character_specs(character_specs, &stats_converted);
     }
-
-    character_specs.max_life = character_specs.max_life.max(1.0);
-    character_specs.max_mana = character_specs.max_mana.max(0.0);
-    for block in character_specs.block.values_mut() {
-        block.clamp();
-        block.value = block.value.min(MAX_BLOCK);
-    }
-    character_specs.block_damage = character_specs.block_damage.clamp(0.0, 100.0);
-    for evade in character_specs.evade.values_mut() {
-        evade.clamp();
-        evade.value = evade.value.min(MAX_EVADE);
-    }
-    character_specs.evade_damage = character_specs.evade_damage.clamp(0.0, 100.0);
 
     stats_converted
 }

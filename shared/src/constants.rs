@@ -27,8 +27,8 @@ pub const MAX_EVADE: f32 = 80.0;
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
 pub const MAX_ITEM_QUALITY: f32 = 25.0;
 
-pub const THREAT_COOLDOWN: f32 = 20.0;
-pub const THREAT_BOSS_COOLDOWN: f32 = 60.0;
+pub const THREAT_COOLDOWN: f64 = 20.0;
+pub const THREAT_BOSS_COOLDOWN: f64 = 60.0;
 pub const THREAT_EFFECT: f64 = 0.5;
 
 pub const ITEM_REWARDS_MIN_LEVEL: u16 = 50;

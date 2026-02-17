@@ -1,14 +1,12 @@
 use shared::data::{
     character::CharacterId,
-    passive::StatEffect,
-    stat_effect::compare_options,
+    stat_effect::{StatEffect, compare_options},
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
 };
 
 use crate::game::{
     data::event::{EventsQueue, HitEvent, StatusEvent},
     game_data::GameInstanceData,
-    systems::stats_updater,
 };
 
 use super::{skills_controller, skills_updater};
@@ -160,13 +158,13 @@ pub fn apply_trigger_effects(
                                         .hit_context
                                         .as_ref()
                                         .and_then(|hit| hit.damage.get(damage_type))
-                                        .copied()
+                                        .map(|d| d.get())
                                         .unwrap_or_default()
                                 }
                                 TriggerEffectModifierSource::HitDamage(None) => trigger_context
                                     .hit_context
                                     .as_ref()
-                                    .map(|hit| hit.damage.values().sum())
+                                    .map(|hit| hit.damage.values().map(|d| d.get()).sum())
                                     .unwrap_or_default(),
                                 TriggerEffectModifierSource::HitCrit => trigger_context
                                     .hit_context
@@ -190,7 +188,7 @@ pub fn apply_trigger_effects(
                                             &Some(&status_event.skill_type),
                                         )
                                     })
-                                    .map(|status_event| status_event.value)
+                                    .map(|status_event| status_event.value.get())
                                     .sum(),
                                 TriggerEffectModifierSource::StatusDuration {
                                     status_type,
@@ -206,7 +204,9 @@ pub fn apply_trigger_effects(
                                             &Some(&status_event.skill_type),
                                         )
                                     })
-                                    .map(|status_event| status_event.duration.unwrap_or(1e20))
+                                    .map(|status_event| {
+                                        status_event.duration.map(|d| d.get()).unwrap_or(1e20)
+                                    })
                                     .sum(),
                                 TriggerEffectModifierSource::StatusStacks {
                                     status_type,
@@ -229,16 +229,13 @@ pub fn apply_trigger_effects(
             );
             // .collect();
 
-            let stat_effects =
-                stats_updater::combine_effects(source_effects, &game_data.area_threat);
-
             // stats_updater::sort_stat_effects(&mut effects_modifiers);
 
             for mut effect in trigger_context.trigger.effects.iter().cloned() {
                 skills_updater::compute_skill_specs_effect(
                     trigger_context.trigger.skill_type,
                     &mut effect,
-                    stat_effects.iter(),
+                    source_effects.iter(),
                 );
                 skills_controller::apply_skill_effect(
                     events_queue,

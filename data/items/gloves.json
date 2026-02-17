@@ -22,7 +22,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [40, 60]
       },
       {
@@ -97,15 +97,13 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 15]
       },
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": {
-            "skill_type": "Attack"
-          }
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [4, 8]
@@ -176,7 +174,7 @@
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": {}
+          "RestoreOnHit": { "restore_type": "Mana" }
         },
         "modifier": "Flat",
         "value": 2,
@@ -185,7 +183,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [60, 100]
       },
       {
@@ -298,7 +296,7 @@
     ],
     "min_area_level": 260
   },
-  "plated_gauntlets": {
+  "gloves_7": {
     "name": "Plated Gauntlets",
     "icon": "items/plated_gauntlets.webp",
     "slot": "Gloves",

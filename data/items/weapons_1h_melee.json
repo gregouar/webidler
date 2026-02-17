@@ -34,7 +34,7 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 100,
         "ignore_quality": true
       },
@@ -124,7 +124,7 @@
                       "stat": {
                         "Armor": "Physical"
                       },
-                      "modifier": "Multiplier",
+                      "modifier": "Increased",
                       "debuff": true
                     }
                   },
@@ -210,7 +210,7 @@
             "damage_type": "Physical"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [-100, -100],
         "ignore_quality": true
       },
@@ -221,13 +221,13 @@
             "damage_type": "Poison"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 120]
       },
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": { "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
@@ -239,13 +239,13 @@
             "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 20]
       },
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": { "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [4, 6]
@@ -255,7 +255,7 @@
         "stat": {
           "Speed": "Attack"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 20]
       }
     ],
@@ -309,7 +309,7 @@
     },
     "min_area_level": 250
   },
-  "battleaxe": {
+  "weapon_1h_7": {
     "name": "Battleaxe",
     "icon": "items/battleaxe.webp",
     "slot": "Weapon",

@@ -34,19 +34,19 @@
         "stat": {
           "Restore": { "restore_type": "Life" }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [30, 50]
       },
       {
         "scope": "Global",
         "stat": "LifeRegen",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": "Life",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 10]
       },
       {
@@ -100,20 +100,20 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -1e300,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": {"Block": "Attack"},
+        "stat": { "Block": "Attack" },
         "modifier": "Flat",
         "value": 10,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": {"Block": "Spell"},
+        "stat": { "Block": "Spell" },
         "modifier": "Flat",
         "value": 10,
         "ignore_quality": true
@@ -159,7 +159,7 @@
       {
         "scope": "Global",
         "stat": "LifeRegen",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": -1e300,
         "ignore_quality": true
       },
@@ -172,7 +172,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 120]
       },
       {
@@ -220,7 +220,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [150, 200],
         "ignore_quality": true
       },
@@ -233,14 +233,14 @@
       {
         "scope": "Global",
         "stat": "Life",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 15],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [200, 300]
       },
       {
@@ -250,10 +250,9 @@
             "source": {
               "Damage": { "damage_type": "Physical" }
             },
-            "target_stat": {
+            "stat": {
               "Damage": { "damage_type": "Fire" }
             },
-            "target_modifier": "Flat",
             "is_extra": true
           }
         },
@@ -282,7 +281,7 @@
     ],
     "min_area_level": 260
   },
-  "cavalry_armor": {
+  "body_7": {
     "name": "Cavalry Armor",
     "icon": "items/cavalry_armor.webp",
     "slot": "Body",
