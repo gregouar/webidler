@@ -19,8 +19,8 @@ use crate::game::{
     data::event::EventsQueue,
     systems::{skills_updater, stats_updater},
     utils::{
+        rng::{self, flip_coin, RngSeed, Rollable},
         AnyAll,
-        rng::{self, RngSeed, Rollable, flip_coin},
     },
 };
 
@@ -35,8 +35,8 @@ pub fn use_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> f64 {
-    if !skill_state.is_ready || me.1.1.mana < skill_specs.mana_cost {
-        return me.1.1.mana;
+    if !skill_state.is_ready || me.1 .1.mana < skill_specs.mana_cost {
+        return me.1 .1.mana;
     }
 
     let mut applied = false;
@@ -52,13 +52,13 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        characters_controller::spend_mana(me.1.0, me.1.1, skill_specs.mana_cost);
+        characters_controller::spend_mana(me.1 .0, me.1 .1, skill_specs.mana_cost);
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = 0.0;
     }
 
-    characters_controller::mana_available(me.1.0, me.1.1)
+    characters_controller::mana_available(me.1 .0, me.1 .1)
 }
 
 fn apply_skill_on_targets<'a>(
@@ -106,13 +106,13 @@ fn apply_repeated_skill_on_targets<'a>(
         match targets_group.target_type {
             TargetType::Enemy => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (me.1 .0.position_x, me.1 .0.position_y),
                 enemies,
                 already_hit,
             ),
             TargetType::Friend => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (me.1 .0.position_x, me.1 .0.position_y),
                 friends,
                 already_hit,
             ),
@@ -289,13 +289,18 @@ pub fn apply_skill_effect(
     let seed = rng::roll_seed();
 
     targets.iter_mut().any_all(|target| {
+        let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
+            skill_effect
+        } else {
+            &apply_conditional_modifiers(target, skill_effect, skill_type)
+        };
+
         apply_skill_effect_on_target(
             events_queue,
             attacker,
             skill_type,
             range,
-            // TODO: Could branch to only clone when needed
-            &apply_conditional_modifiers(target, skill_effect, skill_type),
+            skill_effect,
             target,
             is_triggered,
             &mut seed.clone(),
@@ -315,8 +320,8 @@ fn apply_conditional_modifiers(
         &mut new_skill_effect,
         stats_updater::compute_conditional_modifiers(
             &Default::default(),
-            target.1.0,
-            target.1.1,
+            target.1 .0,
+            target.1 .1,
             &skill_effect.conditional_modifiers,
         )
         .iter(),
