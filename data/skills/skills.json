@@ -259,6 +259,54 @@
       }
     ]
   },
+  "irradiate": {
+    "name": "Irradiate",
+    "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time..",
+    "icon": "skills/irradiate.svg",
+    "skill_type": "Spell",
+    "cooldown": 3,
+    "mana_cost": 8,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "More",
+        "value": 50
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Vertical2",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [0, 10]
+              }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 4,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": [3, 5]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "voodoo_doll": {
     "name": "Voodoo Doll",
     "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
@@ -1428,6 +1476,71 @@
               "damage": {
                 "Physical": [5, 10]
               },
+              "crit_chance": 5,
+              "crit_damage": 100
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "shield_bash": {
+    "name": "Shield Bash",
+    "description": "Slams the target with your shield, dealing damage based on your equipped shield’s Armor.",
+    "icon": "skills/shield_bash.svg",
+    "skill_type": "Attack",
+    "cooldown": 3,
+    "mana_cost": 5,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "More",
+        "value": 50
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          },
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 2
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Shield",
+            "item_stats": "Armor"
+          }
+        },
+        "factor": 0.1
+      }
+    ],
+    "targets": [
+      {
+        "range": "Melee",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {},
               "crit_chance": 5,
               "crit_damage": 100
             }

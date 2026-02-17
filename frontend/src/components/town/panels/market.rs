@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -1264,6 +1264,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
         (StatType::Armor(Some(DamageType::Poison)), Modifier::Flat),
         (StatType::Armor(Some(DamageType::Storm)), Modifier::Flat),
+        (StatType::Evade(None), Modifier::Flat),
         (
             StatType::Damage {
                 skill_type: None,
