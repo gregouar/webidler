@@ -328,319 +328,6 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-    // let mut stat_converters = Vec::new();
-
-    // for effect in effects.clone() {
-    //     if !effect.bypass_ignore
-    //         && skill_effect
-    //             .ignore_stat_effects
-    //             .iter()
-    //             .any(|ignore| effect.stat.is_match(ignore))
-    //     {
-    //         continue;
-    //     }
-
-    //     if effect.stat.is_match(&StatType::Lucky {
-    //         skill_type: Some(skill_type),
-    //         roll_type: LuckyRollType::SuccessChance {
-    //             effect_type: (&skill_effect.effect_type).into(),
-    //         },
-    //     }) {
-    //         skill_effect
-    //             .success_chance
-    //             .lucky_chance
-    //             .apply_effect(effect);
-    //     }
-
-    //     if effect.stat.is_match(&StatType::SuccessChance {
-    //         skill_type: Some(skill_type),
-    //         effect_type: (&skill_effect.effect_type).into(),
-    //     }) {
-    //         skill_effect.success_chance.value.apply_effect(effect);
-    //     }
-
-    //     if let StatType::StatConverter(specs) = &effect.stat {
-    //         stat_converters.push((specs.clone(), effect.value, effect.modifier));
-    //         continue;
-    //     }
-
-    //     if let StatType::SkillConditionalModifier {
-    //         skill_type: modifier_skill_type,
-    //         conditions,
-    //         stat,
-    //     } = &effect.stat
-    //         && compare_options(modifier_skill_type, &Some(skill_type))
-    //     {
-    //         skill_effect
-    //             .conditional_modifiers
-    //             .push(ConditionalModifier {
-    //                 conditions: conditions.clone(),
-    //                 effects: [StatEffect {
-    //                     stat: *(stat.clone()),
-    //                     modifier: effect.modifier,
-    //                     value: effect.value,
-    //                     bypass_ignore: effect.bypass_ignore,
-    //                 }]
-    //                 .into(),
-    //             });
-    //     }
-
-    //     match &mut skill_effect.effect_type {
-    //         SkillEffectType::FlatDamage {
-    //             damage,
-    //             crit_chance,
-    //             crit_damage,
-    //             ..
-    //         } => {
-    //             for damage_type in DamageType::iter() {
-    //                 let value = damage.entry(damage_type).or_default();
-
-    //                 if effect.stat.is_match(&StatType::Damage {
-    //                     skill_type: Some(skill_type),
-    //                     damage_type: Some(damage_type),
-    //                     min_max: Some(MinMax::Min),
-    //                 }) {
-    //                     value.min.apply_effect(effect);
-    //                 }
-
-    //                 if effect.stat.is_match(&StatType::Damage {
-    //                     skill_type: Some(skill_type),
-    //                     damage_type: Some(damage_type),
-    //                     min_max: Some(MinMax::Max),
-    //                 }) {
-    //                     value.max.apply_effect(effect);
-    //                 }
-
-    //                 if effect.stat.is_match(&StatType::Lucky {
-    //                     skill_type: Some(skill_type),
-    //                     roll_type: LuckyRollType::Damage {
-    //                         damage_type: Some(damage_type),
-    //                     },
-    //                 }) {
-    //                     value.lucky_chance.apply_effect(effect);
-    //                 }
-    //             }
-
-    //             if effect
-    //                 .stat
-    //                 .is_match(&StatType::CritChance(Some(skill_type)))
-    //             {
-    //                 crit_chance.value.apply_effect(effect);
-    //             }
-
-    //             if effect.stat.is_match(&StatType::Lucky {
-    //                 skill_type: Some(skill_type),
-    //                 roll_type: LuckyRollType::CritChance,
-    //             }) {
-    //                 crit_chance.lucky_chance.apply_effect(effect);
-    //             }
-
-    //             if effect
-    //                 .stat
-    //                 .is_match(&StatType::CritDamage(Some(skill_type)))
-    //             {
-    //                 crit_damage.apply_effect(effect);
-    //             }
-
-    //             crit_chance.clamp();
-    //         }
-    //         SkillEffectType::ApplyStatus { statuses, duration } => {
-    //             if statuses.iter().any(|status_effect| {
-    //                 effect.stat.is_match(&StatType::StatusDuration {
-    //                     status_type: Some((&status_effect.status_type).into()),
-    //                     skill_type: Some(skill_type),
-    //                 })
-    //             }) {
-    //                 duration.min.apply_effect(effect);
-    //                 duration.max.apply_effect(effect);
-    //             }
-
-    //             for status_effect in statuses.iter_mut() {
-    //                 if effect.stat.is_match(&StatType::StatusPower {
-    //                     status_type: Some((&status_effect.status_type).into()),
-    //                     skill_type: Some(skill_type),
-    //                     min_max: Some(MinMax::Min),
-    //                 }) {
-    //                     status_effect.value.min.apply_effect(effect);
-    //                 }
-    //                 if effect.stat.is_match(&StatType::StatusPower {
-    //                     status_type: Some((&status_effect.status_type).into()),
-    //                     skill_type: Some(skill_type),
-    //                     min_max: Some(MinMax::Max),
-    //                 }) {
-    //                     status_effect.value.max.apply_effect(effect);
-    //                 }
-
-    //                 if let StatusSpecs::DamageOverTime { damage_type, .. } =
-    //                     status_effect.status_type
-    //                 {
-    //                     if effect.stat.is_match(&StatType::Damage {
-    //                         skill_type: Some(skill_type),
-    //                         damage_type: Some(damage_type),
-    //                         min_max: Some(MinMax::Min),
-    //                     }) {
-    //                         status_effect.value.min.apply_effect(effect);
-    //                     }
-
-    //                     if effect.stat.is_match(&StatType::Damage {
-    //                         skill_type: Some(skill_type),
-    //                         damage_type: Some(damage_type),
-    //                         min_max: Some(MinMax::Max),
-    //                     }) {
-    //                         status_effect.value.max.apply_effect(effect);
-    //                     }
-
-    //                     if effect.stat.is_match(&StatType::Lucky {
-    //                         skill_type: Some(skill_type),
-    //                         roll_type: LuckyRollType::Damage {
-    //                             damage_type: Some(damage_type),
-    //                         },
-    //                     }) {
-    //                         status_effect.value.lucky_chance.apply_effect(effect);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         SkillEffectType::Restore {
-    //             restore_type,
-    //             value,
-    //             ..
-    //         } => {
-    //             if effect.stat.is_match(&StatType::Restore {
-    //                 restore_type: Some(*restore_type),
-    //                 skill_type: Some(skill_type),
-    //             }) {
-    //                 value.min.apply_effect(effect);
-    //                 value.max.apply_effect(effect);
-    //             };
-    //         }
-    //         SkillEffectType::Resurrect => {}
-    //     }
-    // }
-
-    // if !stat_converters.is_empty() {
-    //     stat_converters.sort_by_key(|(stat_converter, _, modifier)| {
-    //         (
-    //             stat_converter.source,
-    //             stat_converter.stat.clone(),
-    //             *modifier,
-    //         )
-    //     });
-
-    //     let mut stats_converted = Vec::with_capacity(stat_converters.len());
-
-    //     for (specs, factor, modifier) in stat_converters {
-    //         if specs.skill_type.is_some_and(|s| s != skill_type) {
-    //             continue;
-    //         }
-
-    //         if let Some(stat) = match (specs.source, &mut skill_effect.effect_type) {
-    //             (
-    //                 StatConverterSource::CritDamage,
-    //                 SkillEffectType::FlatDamage { crit_damage, .. },
-    //             ) => {
-    //                 let amount = crit_damage.convert_value(factor, specs.is_extra, false);
-
-    //                 (amount > 0.0).then(|| StatEffect {
-    //                     stat: (*specs.stat).clone(),
-    //                     modifier,
-    //                     value: amount,
-    //                     bypass_ignore: true,
-    //                 })
-    //             }
-    //             // TODO: Apply status?
-    //             (
-    //                 StatConverterSource::Damage {
-    //                     damage_type,
-    //                     min_max,
-    //                 },
-    //                 SkillEffectType::FlatDamage { damage, .. },
-    //             ) => {
-    //                 let min_factor = if let Some(MinMax::Min) | None = min_max {
-    //                     factor
-    //                 } else {
-    //                     0.0
-    //                 };
-    //                 let max_factor = if let Some(MinMax::Min) | None = min_max {
-    //                     factor
-    //                 } else {
-    //                     0.0
-    //                 };
-    //                 let amount = match damage_type {
-    //                     Some(damage_type) => damage
-    //                         .get_mut(&damage_type)
-    //                         .map(|d| {
-    //                             (
-    //                                 d.min.convert_value(min_factor, specs.is_extra, true),
-    //                                 d.max.convert_value(max_factor, specs.is_extra, true),
-    //                             )
-    //                         })
-    //                         .unwrap_or_default(),
-    //                     None => damage
-    //                         .values_mut()
-    //                         .fold((0.0, 0.0), |(min_acc, max_acc), d| {
-    //                             (
-    //                                 min_acc + d.min.convert_value(min_factor, specs.is_extra, true),
-    //                                 max_acc + d.max.convert_value(max_factor, specs.is_extra, true),
-    //                             )
-    //                         }),
-    //                 };
-
-    //                 // Special case, when converting damage we map on min and max respectively
-    //                 if let None = min_max
-    //                     && let StatType::Damage {
-    //                         skill_type,
-    //                         damage_type,
-    //                         min_max: None,
-    //                     } = *specs.stat
-    //                 {
-    //                     stats_converted.push(StatEffect {
-    //                         stat: StatType::Damage {
-    //                             skill_type,
-    //                             damage_type,
-    //                             min_max: Some(MinMax::Min),
-    //                         },
-    //                         modifier,
-    //                         value: amount.0,
-    //                         bypass_ignore: true,
-    //                     });
-    //                     Some(StatEffect {
-    //                         stat: StatType::Damage {
-    //                             skill_type,
-    //                             damage_type,
-    //                             min_max: Some(MinMax::Max),
-    //                         },
-    //                         modifier,
-    //                         value: amount.1,
-    //                         bypass_ignore: true,
-    //                     })
-    //                 } else {
-    //                     Some(StatEffect {
-    //                         stat: (*specs.stat).clone(),
-    //                         modifier,
-    //                         value: (amount.0 + amount.1),
-    //                         bypass_ignore: true,
-    //                     })
-    //                 }
-    //             }
-    //             _ => None,
-    //         } {
-    //             stats_converted.push(stat);
-    //         }
-    //     }
-
-    //     compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
-    // }
-
-    // let mut modifiable_skill_effect = skill_effect.into();
-
-    // let ModifiableSkillEffect {
-    //     success_chance,
-    //     effect_type,
-    //     ignore_stat_effects,
-    //     conditional_modifiers,
-    // } = modify_skill_specs_effect(skill_type, modifiable_skill_effect, effects);
-
     (*skill_effect) =
         modify_skill_specs_effect(skill_type, skill_effect.into(), effects).evaluate();
 
@@ -981,10 +668,10 @@ pub struct ModifiableSkillSpecs {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ModifiableSkillEffect {
-    pub success_chance: ModifiableChance,
-    pub effect_type: ModifiableSkillEffectType,
-    pub ignore_stat_effects: HashSet<StatType>,
-    pub conditional_modifiers: Vec<ConditionalModifier>,
+    success_chance: ModifiableChance,
+    effect_type: ModifiableSkillEffectType,
+    ignore_stat_effects: HashSet<StatType>,
+    conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 impl From<&mut SkillEffect> for ModifiableSkillEffect {
@@ -1036,13 +723,13 @@ impl ModifiableSkillEffectType {
                 crit_chance,
                 crit_damage,
             } => FlatDamage {
-                // damage: todo!(),
-                crit_chance: todo!(),
-                crit_damage: todo!(),
+                damage: damage.iter().map(|(x,y)| (*x, y.evaluate())).collect(),
+                crit_chance: crit_chance.evaluate(),
+                crit_damage: crit_damage.evaluate(),
             },
             ModifiableSkillEffectType::ApplyStatus { statuses, duration } => ApplyStatus {
-                statuses: todo!(),
-                duration: todo!(),
+                statuses: statuses.iter().map(|s| s.evaluate()).collect(),
+                duration: duration.evaluate(),
             },
             ModifiableSkillEffectType::Restore {
                 restore_type,
@@ -1050,7 +737,7 @@ impl ModifiableSkillEffectType {
                 modifier,
             } => Restore {
                 restore_type,
-                value: todo!(),
+                value: value.evaluate(),
                 modifier,
             },
             ModifiableSkillEffectType::Resurrect => Resurrect,
@@ -1120,6 +807,17 @@ impl From<&ApplyStatusEffect> for ModifiableApplyStatusEffect {
             value: value.value.into(),
             cumulate: value.cumulate,
             replace_on_value_only: value.replace_on_value_only,
+        }
+    }
+}
+
+impl ModifiableApplyStatusEffect{
+    fn evaluate(&self) -> ApplyStatusEffect {
+        ApplyStatusEffect{
+            status_type: self.status_type.clone(),
+            value: self.value.evaluate(),
+            cumulate: self.cumulate,
+            replace_on_value_only: self.replace_on_value_only,
         }
     }
 }

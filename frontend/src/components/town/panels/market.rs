@@ -7,11 +7,9 @@ use shared::{
     data::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy},
-        modifier::Modifier,
-        passive::StatEffect,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::StatType,
+        stat_effect::{Modifier, StatEffect, StatType},
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -29,8 +27,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},

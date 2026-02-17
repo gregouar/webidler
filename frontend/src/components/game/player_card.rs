@@ -19,8 +19,8 @@ use crate::{
             card::Card,
             number::format_number,
             progress_bars::{
-                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
-                predictive_cooldown,
+                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
+                VerticalProgressBar,
             },
             toast::*,
             tooltip::{
@@ -31,20 +31,13 @@ use crate::{
     },
 };
 
-use super::{GameContext, portrait::CharacterPortrait};
+use super::{portrait::CharacterPortrait, GameContext};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let max_life = Memo::new(move |_| {
-        game_context
-            .player_specs
-            .read()
-            .character_specs
-            .max_life
-            .evaluate()
-    });
+    let max_life = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
     let life = Signal::derive(move || game_context.player_state.read().character_state.life);
 
     let life_tooltip = move || {
@@ -52,7 +45,7 @@ pub fn PlayerCard() -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(game_context.player_specs.read().character_specs.max_life.evaluate())}
+            {format_number(game_context.player_specs.read().character_specs.max_life)}
         }
     };
 
@@ -65,28 +58,19 @@ pub fn PlayerCard() -> impl IntoView {
         }
     });
 
-    let max_mana = Memo::new(move |_| {
-        game_context
-            .player_specs
-            .read()
-            .character_specs
-            .max_mana
-            .evaluate()
-    });
+    let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
     let reserved_mana = Memo::new(move |_| {
         if game_context
             .player_specs
             .read()
             .character_specs
             .take_from_mana_before_life
-            .evaluate()
             > 0.0
             || game_context
                 .player_specs
                 .read()
                 .character_specs
                 .take_from_life_before_mana
-                .evaluate()
                 > 0.0
         {
             0.0
@@ -96,7 +80,7 @@ pub fn PlayerCard() -> impl IntoView {
                 .read()
                 .skills_specs
                 .iter()
-                .map(|s| s.mana_cost.evaluate())
+                .map(|s| s.mana_cost)
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         }
@@ -439,7 +423,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 .read()
                 .skills_specs
                 .get(index)
-                .map(|x| x.cooldown.evaluate())
+                .map(|x| x.cooldown)
                 .unwrap_or_default()
     });
 
@@ -567,7 +551,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .read()
             .skills_specs
             .get(index)
-            .map(|x| x.cooldown.evaluate())
+            .map(|x| x.cooldown)
             .unwrap_or_default()
             == 0.0
     });

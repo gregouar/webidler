@@ -3,9 +3,8 @@ use leptos::prelude::*;
 
 use shared::data::{
     item::{SkillRange, SkillShape},
-    modifier::Modifier,
     skill::TargetType,
-    temple::{StatEffect, StatType},
+    stat_effect::{Modifier, StatEffect, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
@@ -15,7 +14,7 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {

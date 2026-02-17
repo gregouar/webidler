@@ -5,10 +5,9 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     item_affix::AffixEffectScope,
-    modifier::Modifier,
     skill::{DamageType, SkillType},
     stat_effect::{
-        LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
+        LuckyRollType, MinMax, Modifier, StatConverterSource, StatEffect, StatSkillEffectType,
         StatStatusType, StatType,
     },
 };

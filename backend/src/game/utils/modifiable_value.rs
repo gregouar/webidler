@@ -235,11 +235,24 @@ pub struct ModifiableChanceRange<T> {
     pub lucky_chance: ModifiableValue<f32>,
 }
 
-impl<T> ModifiableChanceRange<T> {
+// impl<T> ModifiableChanceRange<T> {
+//     pub fn evaluate(self) -> ChanceRange<T> {
+//         ChanceRange {
+//             min: self.min,
+//             max: self.max,
+//             lucky_chance: self.lucky_chance.evaluate(),
+//         }
+//     }
+// }
+
+impl<T> ModifiableChanceRange<ModifiableValue<T>>
+where
+    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+{
     pub fn evaluate(self) -> ChanceRange<T> {
         ChanceRange {
-            min: self.min,
-            max: self.max,
+            min: self.min.evaluate(),
+            max: self.max.evaluate(),
             lucky_chance: self.lucky_chance.evaluate(),
         }
     }
