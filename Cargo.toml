@@ -21,6 +21,3 @@ opt-level = 0
 [profile.release]
 lto = "thin"         # Enable Link Time Optimization
 codegen-units = 1    # Maximize optimization
-
-[patch.crates-io]
-native-tls = "0.2.14"
