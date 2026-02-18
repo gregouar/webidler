@@ -1,14 +1,14 @@
 use std::{collections::HashMap, time::Duration};
 use strum::IntoEnumIterator;
 
-
 use shared::data::{
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
     modifier::Modifier,
     player::{CharacterSpecs, PlayerInventory},
     skill::{
-        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType
+        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
+        SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
         EffectsMap, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatType,
@@ -16,7 +16,7 @@ use shared::data::{
     },
 };
 
-use crate::game::systems::{characters_updater};
+use crate::game::systems::characters_updater;
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -265,9 +265,11 @@ fn compute_skill_modifier_effects<'a>(
         .iter()
         .filter_map(|me| match &me.source {
             ModifierEffectSource::ItemStats { .. } => None,
-            ModifierEffectSource::CharacterStats(stat_converter) => {
-                Some((me.clone(), me.factor * characters_updater::compute_stat_converter(character_specs,stat_converter)))
-            }
+            ModifierEffectSource::CharacterStats(stat_converter) => Some((
+                me.clone(),
+                me.factor
+                    * characters_updater::compute_stat_converter(character_specs, stat_converter),
+            )),
         })
         .collect();
 

@@ -394,7 +394,7 @@ pub fn compute_stat_converter(
         StatConverterSource::ManaRegen => *character_specs.mana_regen,
         StatConverterSource::LifeRegen => *character_specs.life_regen,
         StatConverterSource::Block(skill_type) => {
-            if let Some(block) = character_specs.block.get(&skill_type) {
+            if let Some(block) = character_specs.block.get(skill_type) {
                 block.value.get() as f64
             } else {
                 0.0

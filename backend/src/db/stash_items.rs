@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use sqlx::{types::JsonValue, FromRow, Transaction};
+use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
     item::{ItemSpecs, WeaponSpecs},
