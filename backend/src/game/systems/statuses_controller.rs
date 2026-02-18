@@ -123,7 +123,7 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
                 modifier,
                 debuff,
             } => Some((
-                (stat.clone(), *modifier),
+                (stat.clone(), *modifier, false),
                 if *debuff {
                     -status_state.value.get()
                 } else {

@@ -116,7 +116,9 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             </p>
 
             <ul class="list-none space-y-1 text-xs xl:text-sm">
-                {targets_lines}{trigger_lines}{modifier_lines}
+                {targets_lines}{trigger_lines}
+                {(!modifier_lines.is_empty())
+                    .then(|| view! { <hr class="border-t border-gray-700" /> })} {modifier_lines}
             </ul>
 
             {(skill_specs.next_upgrade_cost > 0.0)
@@ -641,7 +643,11 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 }
             )
         }
-        ModifierEffectSource::PlaceHolder => todo!(),
+        ModifierEffectSource::CharacterStats(stat_converter) => format!(
+            "Per {} {}:",
+            format_number(1.0 / skill_modifier.factor),
+            effects_tooltip::stat_converter_source_str(stat_converter),
+        ),
     };
     let effects = formatted_effects_list(skill_modifier.effects);
 

@@ -251,7 +251,12 @@ fn compute_player_specs(
     }
 
     for skill_specs in player_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(skill_specs, &effects, Some(player_inventory));
+        skills_updater::update_skill_specs(
+            skill_specs,
+            &effects,
+            &player_specs.character_specs,
+            Some(player_inventory),
+        );
     }
 }
 

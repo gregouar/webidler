@@ -1,20 +1,22 @@
 use std::{collections::HashMap, time::Duration};
+use strum::IntoEnumIterator;
+
 
 use shared::data::{
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
     modifier::Modifier,
-    player::PlayerInventory,
+    player::{CharacterSpecs, PlayerInventory},
     skill::{
-        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
-        SkillSpecs, SkillState, SkillType,
+        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType
     },
     stat_effect::{
         EffectsMap, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatType,
         compare_options,
     },
 };
-use strum::IntoEnumIterator;
+
+use crate::game::systems::{characters_updater};
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -40,6 +42,7 @@ pub fn update_skill_specs(
     skill_specs: &mut SkillSpecs,
     // effects: impl Iterator<Item = &'a StatEffect> + Clone,
     effects: &[StatEffect],
+    character_specs: &CharacterSpecs,
     inventory: Option<&PlayerInventory>,
 ) {
     skill_specs.targets = skill_specs.base.targets.clone();
@@ -70,6 +73,7 @@ pub fn update_skill_specs(
         ))
         .chain(std::iter::once(compute_skill_modifier_effects(
             skill_specs,
+            character_specs,
             inventory,
         ))),
     ))
@@ -140,7 +144,7 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ef
         |mut effects_map, effect| {
             *effects_map
                 .0
-                .entry((effect.stat.clone(), effect.modifier))
+                .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
                 .or_default() += match effect.modifier {
                 Modifier::More => ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0,
                 _ => effect.value * level,
@@ -152,6 +156,7 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ef
 
 fn compute_skill_modifier_effects<'a>(
     skill_specs: &'a SkillSpecs,
+    character_specs: &CharacterSpecs,
     inventory: Option<&'a PlayerInventory>,
 ) -> EffectsMap {
     let item_sources: Vec<_> = skill_specs
@@ -260,7 +265,9 @@ fn compute_skill_modifier_effects<'a>(
         .iter()
         .filter_map(|me| match &me.source {
             ModifierEffectSource::ItemStats { .. } => None,
-            ModifierEffectSource::PlaceHolder => todo!(),
+            ModifierEffectSource::CharacterStats(stat_converter) => {
+                Some((me.clone(), me.factor * characters_updater::compute_stat_converter(character_specs,stat_converter)))
+            }
         })
         .collect();
 
@@ -270,7 +277,7 @@ fn compute_skill_modifier_effects<'a>(
         .flat_map(|(modifier_effect, factor)| {
             modifier_effect.effects.iter().map(move |effect| {
                 (
-                    (effect.stat.clone(), effect.modifier),
+                    (effect.stat.clone(), effect.modifier, effect.bypass_ignore),
                     effect.value * factor,
                 )
             })

@@ -30,7 +30,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
             .character_specs
             .effects
             .0
-            .get(&(stat, modifier))
+            .get(&(stat, modifier, false))
             .copied()
             .unwrap_or_default()
     };
@@ -377,6 +377,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                     damage_type: Some(damage_type),
                                                 },
                                                 Modifier::Flat,
+                                                false,
                                             ),
                                         )
                                         .copied()
@@ -660,7 +661,7 @@ fn make_opt_stat(stat_type: StatType, modifier: Modifier, default: f64) -> impl 
                 .character_specs
                 .effects
                 .0
-                .get(&(stat_type.clone(), modifier))
+                .get(&(stat_type.clone(), modifier, false))
                 .copied()
                 .unwrap_or_default();
             (default != value).then(|| make_stat(stat_type.clone(), modifier))
@@ -685,7 +686,7 @@ fn make_stat(stat_type: StatType, modifier: Modifier) -> impl IntoView + use<> {
                     .character_specs
                     .effects
                     .0
-                    .get(&(stat_type.clone(), modifier))
+                    .get(&(stat_type.clone(), modifier, false))
                     .copied()
                     .unwrap_or_default(),
             )

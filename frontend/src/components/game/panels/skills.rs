@@ -192,9 +192,6 @@ fn SkillCard(
             <div class="mt-2 text-lg font-bold text-white text-center">
                 {skill_specs.base.name.clone()}
             </div>
-        // <div class="text-sm text-gray-400 text-center line-clamp-3">
-        // {skill_specs.base.description.clone()}
-        // </div>
         </div>
     }
 }

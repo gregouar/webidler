@@ -6,7 +6,7 @@ use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::ConditionalModifier,
     modifier::ModifiableValue,
-    stat_effect::{MinMax, StatEffect, StatType},
+    stat_effect::{MinMax, StatConverterSource, StatEffect, StatType},
     trigger::TriggerSpecs,
     values::{Cooldown, NonNegative},
 };
@@ -95,13 +95,13 @@ pub struct ModifierEffect {
     pub hidden: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ModifierEffectSource {
     ItemStats {
         slot: Option<ItemSlot>,
         item_stats: ItemStatsSource,
     },
-    PlaceHolder,
+    CharacterStats(StatConverterSource),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

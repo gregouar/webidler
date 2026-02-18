@@ -511,17 +511,17 @@ pub struct StatEffect {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct EffectsMap(pub HashMap<(StatType, Modifier), f64>);
+pub struct EffectsMap(pub HashMap<(StatType, Modifier, bool), f64>);
 
 impl From<&EffectsMap> for Vec<StatEffect> {
     fn from(val: &EffectsMap) -> Self {
         val.0
             .iter()
-            .map(|((stat, effect_type), value)| StatEffect {
+            .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {
                 stat: stat.clone(),
                 modifier: *effect_type,
                 value: *value,
-                bypass_ignore: false,
+                bypass_ignore: *bypass_ignore,
             })
             .collect()
     }
@@ -529,21 +529,23 @@ impl From<&EffectsMap> for Vec<StatEffect> {
 
 impl From<Vec<StatEffect>> for EffectsMap {
     fn from(value: Vec<StatEffect>) -> Self {
-        EffectsMap::combine_all(
-            value
-                .into_iter()
-                .map(|x| EffectsMap(HashMap::from([((x.stat, x.modifier), x.value)]))),
-        )
+        EffectsMap::combine_all(value.into_iter().map(|x| {
+            EffectsMap(HashMap::from([(
+                (x.stat, x.modifier, x.bypass_ignore),
+                x.value,
+            )]))
+        }))
     }
 }
 
 impl From<Vec<&StatEffect>> for EffectsMap {
     fn from(value: Vec<&StatEffect>) -> Self {
-        EffectsMap::combine_all(
-            value
-                .iter()
-                .map(|x| EffectsMap(HashMap::from([((x.stat.clone(), x.modifier), x.value)]))),
-        )
+        EffectsMap::combine_all(value.iter().map(|x| {
+            EffectsMap(HashMap::from([(
+                (x.stat.clone(), x.modifier, x.bypass_ignore),
+                x.value,
+            )]))
+        }))
     }
 }
 
@@ -551,9 +553,9 @@ impl EffectsMap {
     pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
         EffectsMap(maps.flat_map(|m| m.0.into_iter()).fold(
             HashMap::new(),
-            |mut result, ((target, modifier), value)| {
+            |mut result, ((target, modifier, bypass_ignore), value)| {
                 result
-                    .entry((target.clone(), modifier))
+                    .entry((target.clone(), modifier, bypass_ignore))
                     .and_modify(|entry| match modifier {
                         Modifier::More => {
                             if *entry == 0.0 {

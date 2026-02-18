@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use sqlx::{FromRow, Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, FromRow, Transaction};
 
 use shared::data::{
     item::{ItemSpecs, WeaponSpecs},
@@ -135,7 +135,7 @@ pub async fn store_item<'c>(
             .aggregate_effects(AffixEffectScope::Global)
             .0
             .into_iter()
-            .filter_map(|((stat_type, modifier), stat_value)| {
+            .filter_map(|((stat_type, modifier, _), stat_value)| {
                 Some((
                     serde_json::to_value(stat_type).ok()?,
                     serde_plain::to_string(&modifier).ok()?,

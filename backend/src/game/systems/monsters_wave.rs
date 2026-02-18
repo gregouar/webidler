@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use shared::{
     computations,
-    constants::{CHAMPION_LEVEL_INC, MONSTER_INCREASE_FACTOR, MONSTERS_DEFAULT_DAMAGE_INCREASE},
+    constants::{CHAMPION_LEVEL_INC, MONSTERS_DEFAULT_DAMAGE_INCREASE, MONSTER_INCREASE_FACTOR},
     data::{
         area::{AreaLevel, AreaState},
         character::CharacterId,
@@ -16,10 +16,10 @@ use shared::{
 
 use crate::game::{
     data::{
-        DataInit,
         area::{AreaBlueprint, BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
         master_store::MonstersSpecsStore,
         monster::BaseMonsterSpecs,
+        DataInit,
     },
     systems::characters_updater,
     utils::rng::{self, RandomWeighted, Rollable},
@@ -234,11 +234,21 @@ fn generate_monster_specs(
     }];
     for skill_specs in monster_specs.skill_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
-            skills_updater::update_skill_specs(skill_specs, &upgrade_effects, None);
+            skills_updater::update_skill_specs(
+                skill_specs,
+                &upgrade_effects,
+                &monster_specs.character_specs,
+                None,
+            );
         } else {
             let effects: Vec<_> =
                 (&skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)).into();
-            skills_updater::update_skill_specs(skill_specs, &effects, None);
+            skills_updater::update_skill_specs(
+                skill_specs,
+                &effects,
+                &monster_specs.character_specs,
+                None,
+            );
         }
 
         // Link monster_id to triggers of skills

@@ -108,7 +108,7 @@ pub fn lucky_roll_str(roll_type: &LuckyRollType) -> String {
     }
 }
 
-fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> String {
+pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> String {
     match stat_converter_source {
         StatConverterSource::CritDamage => "Critical Hit Damage".into(),
         StatConverterSource::Damage {
