@@ -20,6 +20,7 @@ use shared::{
         values::{AtLeastOne, NonNegative},
     },
 };
+use strum::IntoEnumIterator;
 
 use crate::game::{
     data::event::EventsQueue,
