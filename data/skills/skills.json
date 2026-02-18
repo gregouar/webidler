@@ -222,7 +222,7 @@
     "name": "Righteous Fire",
     "description": "Remove your pants and burn everything, including yourself.",
     "icon": "skills/righteous_fire.svg",
-    "skill_type": "Spell",
+    "skill_type": "Other",
     "cooldown": 1,
     "mana_cost": 2,
     "upgrade_cost": 50,
