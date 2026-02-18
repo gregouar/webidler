@@ -531,7 +531,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         ),
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::StatConditionalModifier { stat, conditions } => format!(
-            "{} when {}{}",
+            "{} {}{}",
             format_multiplier_stat_name(stat),
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions)

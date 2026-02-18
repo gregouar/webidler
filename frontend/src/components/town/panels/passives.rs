@@ -268,8 +268,7 @@ pub fn AscendPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400 flex items-center">
-
+                    <div class="text-sm xl:text-base text-gray-400 flex items-center gap-2">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {

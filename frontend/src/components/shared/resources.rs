@@ -35,12 +35,13 @@ pub fn ResourceCounter(
     name: &'static str,
     description: &'static str,
     value: Signal<f64>,
+    w_full: bool,
 ) -> impl IntoView {
     view! {
         <div class="flex-1 text-shadow-md shadow-gray-950
         text-sm xl:text-xl 
         flex justify-center items-center space-x-1">
-            <div class="font-number w-[8ch] text-right ">
+            <div class=format!("font-number {} text-right", if w_full { "w-[8ch]" } else { "" })>
                 <Number value=value />
             </div>
             <ResourceIcon icon name description />
@@ -59,7 +60,7 @@ pub fn GoldIcon() -> impl IntoView {
     }
 }
 #[component]
-pub fn GoldCounter(value: Signal<f64>) -> impl IntoView {
+pub fn GoldCounter(value: Signal<f64>, #[prop(default = false)] w_full: bool) -> impl IntoView {
     view! {
         <ResourceCounter
             class:text-amber-200
@@ -67,6 +68,7 @@ pub fn GoldCounter(value: Signal<f64>) -> impl IntoView {
             name="Gold"
             description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Blessings in Town."
             value
+            w_full
         />
     }
 }
@@ -82,7 +84,7 @@ pub fn GemsIcon() -> impl IntoView {
     }
 }
 #[component]
-pub fn GemsCounter(value: Signal<f64>) -> impl IntoView {
+pub fn GemsCounter(value: Signal<f64>, #[prop(default = false)] w_full: bool) -> impl IntoView {
     view! {
         <ResourceCounter
             class:text-fuchsia-300
@@ -90,6 +92,7 @@ pub fn GemsCounter(value: Signal<f64>) -> impl IntoView {
             name="Gems"
             description="To exchange Items in the Market or craft Items at the Forge, in Town between Grinds. Obtained by killing Champion Monsters."
             value
+            w_full
         />
     }
 }
@@ -105,7 +108,7 @@ pub fn ShardsIcon() -> impl IntoView {
     }
 }
 #[component]
-pub fn ShardsCounter(value: Signal<f64>) -> impl IntoView {
+pub fn ShardsCounter(value: Signal<f64>, #[prop(default = false)] w_full: bool) -> impl IntoView {
     view! {
         <ResourceCounter
             class:text-cyan-300
@@ -113,6 +116,7 @@ pub fn ShardsCounter(value: Signal<f64>) -> impl IntoView {
             name="Power Shards"
             description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
             value
+            w_full
         />
     }
 }

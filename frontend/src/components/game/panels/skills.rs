@@ -13,12 +13,11 @@ use crate::{
     components::{
         backend_client::BackendClient,
         game::game_context::GameContext,
-        shared::tooltips::SkillTooltip,
+        shared::{resources::GoldCounter, tooltips::SkillTooltip},
         ui::{
             buttons::FancyButton,
             card::{Card, CardHeader, CardInset},
             menu_panel::MenuPanel,
-            number::format_number,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
         websocket::WebsocketContext,
@@ -124,12 +123,12 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
         <div class="flex items-center justify-center">
             <FancyButton disabled=disable_confirm on:click=buy_skill class:py-2 class:px-4>
-                {move || {
-                    format!(
-                        "Confirm buying selected skill for {} Gold",
-                        format_number(game_context.player_specs.read().buy_skill_cost),
-                    )
-                }}
+                <span class="flex items-center gap-2">
+                    "Confirm buying selected skill for"
+                    <GoldCounter value=Signal::derive(move || {
+                        game_context.player_specs.read().buy_skill_cost
+                    }) />
+                </span>
             </FancyButton>
         </div>
     }
@@ -172,16 +171,13 @@ fn SkillCard(
             class=move || {
                 let base = format!(
                     "relative group  border rounded-md p-4 flex flex-col items-center
-             transition-all shadow cursor-pointer {}",
+                    transition-all shadow cursor-pointer {}",
                     skill_type_color(skill_specs.base.skill_type),
                 );
                 if is_selected.get() {
                     format!("{} ring-4 bg-neutral-600", base)
                 } else if was_last_bought.get() {
-                    format!(
-                        "{} hover:ring-2 ring-1 ring-slate-500 border-slate-400 bg-neutral-800",
-                        base,
-                    )
+                    format!("{} hover:ring-2 ring-1 bg-mauve-800", base)
                 } else {
                     format!("{} hover:ring-2 bg-neutral-800", base)
                 }
@@ -232,10 +228,10 @@ fn SkillCard(
 
 fn skill_type_color(skill_type: SkillType) -> &'static str {
     match skill_type {
-        SkillType::Attack => "ring-red-600 border-red-300",
-        SkillType::Spell => "ring-blue-600 border-blue-300",
-        SkillType::Curse => "ring-purple-600 border-purple-300",
-        SkillType::Blessing => "ring-yellow-600 border-yellow-200",
-        SkillType::Other => "ring-slate-700 border-slate-400",
+        SkillType::Attack => "ring-red-600 border-red-400/50",
+        SkillType::Spell => "ring-blue-600 border-blue-400/50",
+        SkillType::Curse => "ring-purple-600 border-purple-400/50",
+        SkillType::Blessing => "ring-yellow-600 border-yellow-400/50",
+        SkillType::Other => "ring-slate-700 border-slate-400/50",
     }
 }

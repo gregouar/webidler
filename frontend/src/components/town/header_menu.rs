@@ -129,9 +129,9 @@ pub fn HeaderMenu() -> impl IntoView {
         <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
         bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
             <div class="flex justify-around w-full items-center">
-                <GoldCounter value=gold />
-                <GemsCounter value=gems />
-                <ShardsCounter value=shards />
+                <GoldCounter value=gold w_full=true />
+                <GemsCounter value=gems w_full=true />
+                <ShardsCounter value=shards w_full=true />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
