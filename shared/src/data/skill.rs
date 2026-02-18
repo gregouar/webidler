@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use crate::data::{
     chance::{Chance, ChanceRange},
@@ -69,7 +70,18 @@ pub struct SkillState {
 }
 
 #[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash, PartialOrd, Ord,
+    Serialize,
+    Deserialize,
+    Debug,
+    Clone,
+    Copy,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    PartialOrd,
+    Ord,
+    EnumIter,
 )]
 pub enum SkillType {
     #[default]
@@ -78,12 +90,6 @@ pub enum SkillType {
     Curse,
     Blessing,
     Other,
-}
-
-impl SkillType {
-    pub fn iter() -> impl Iterator<Item = SkillType> {
-        [SkillType::Attack, SkillType::Spell].into_iter()
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

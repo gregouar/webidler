@@ -1491,7 +1491,7 @@
     "name": "Meditate",
     "description": "Focus your mind to recover mana, replenishing your magical energy.",
     "icon": "skills/meditate.svg",
-    "skill_type": "Spell",
+    "skill_type": "Other",
     "cooldown": 5,
     "mana_cost": 0,
     "upgrade_cost": 50,

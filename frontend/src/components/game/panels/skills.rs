@@ -1,8 +1,12 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use leptos::{html::*, prelude::*};
 
-use shared::{data::skill::SkillSpecs, messages::client::BuySkillMessage};
+use shared::{
+    data::skill::{SkillSpecs, SkillType},
+    messages::client::BuySkillMessage,
+};
+use strum::IntoEnumIterator;
 
 use crate::{
     assets::img_asset,
@@ -51,57 +55,71 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
-    let skills_response = LocalResource::new({
+    let available_skills = LocalResource::new({
         let backend = expect_context::<BackendClient>();
-        move || async move { backend.get_skills().await.unwrap_or_default() }
-    });
+        move || async move {
+            let skills_response = backend.get_skills().await.unwrap_or_default();
 
-    // TODO: sort by types, add dropdown to filter by type, etc
-    let available_skills = Signal::derive({
-        move || {
-            let mut skills = skills_response
-                .get()
-                .map(|skills_response| {
-                    skills_response
-                        .skills
-                        .clone()
-                        .into_iter()
-                        .filter(|(skill_id, _)| {
-                            !game_context
-                                .player_specs
-                                .read()
-                                .bought_skills
-                                .contains(skill_id)
-                        })
-                        .collect::<Vec<_>>()
-                })
-                .unwrap_or_default();
-            skills.sort_by_key(|(_, skill_specs)| skill_specs.base.name.clone());
+            let mut skills = skills_response.skills.clone().into_iter().fold(
+                HashMap::<_, Vec<_>>::new(),
+                |mut acc, skill| {
+                    acc.entry(skill.1.base.skill_type).or_default().push(skill);
+                    acc
+                },
+            );
+
+            for section in skills.values_mut() {
+                section.sort_by_key(|(_, skill_specs)| skill_specs.base.name.clone());
+            }
+
             skills
         }
     });
 
     view! {
         <CardInset>
-            <div class="grid grid-cols-6 xl:grid-cols-10 gap-2 xl:gap-4
-            ">
-                <Suspense fallback=move || {
-                    view! { "Loading..." }
-                }>
-                    {move || {
-                        view! {
-                            <For
-                            each=move || available_skills.get().into_iter()
-                            key=|(skill_id, _)| skill_id.clone()
-                            let:((skill_id,skill_specs))
-                            >
-                                <SkillCard skill_id skill_specs selected=selected_skill />
-                            </For>
-                        }
+            <Suspense fallback=move || {
+                view! { "Loading..." }
+            }>
+                {move || {
+                    Suspend::new(async move {
+                        let available_skills = available_skills.await;
+                        SkillType::iter()
+                            .map(move |skill_type| {
+                                let available_skills = available_skills
+                                    .get(&skill_type)
+                                    .cloned()
+                                    .unwrap_or_default();
+                                view! {
+                                    <div class="grid grid-cols-6 xl:grid-cols-10 gap-2 xl:gap-4">
+                    <For
+                        each=move || available_skills.clone().into_iter()
+                        key=|(skill_id,_)| skill_id.clone()
+                        let:((skill_id, skill_specs))
+                    >
+                    {
+                        move || {
+                (!game_context
+                        .player_specs
+                        .read()
+                        .bought_skills
+                        .contains(&skill_id)).then(||
+                        view!{
+                        <SkillCard
+                            skill_id=skill_id.clone()
+                            skill_specs=skill_specs.clone()
+                            selected=selected_skill
+                        />})
                     }}
+                    </For>
+                </div>
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    })
+                }}
 
-                </Suspense>
-            </div>
+            </Suspense>
         </CardInset>
 
         <div class="flex items-center justify-center">
@@ -154,13 +172,15 @@ fn SkillCard(
             class=move || {
                 format!(
                     "relative group bg-neutral-800 border rounded-md p-4 flex flex-col items-center
-                transition-all shadow cursor-pointer hover:ring-2 hover:ring-amber-400 {}",
+                    group
+                    transition-all shadow cursor-pointer  {} {}",
+                    skill_type_color(skill_specs.base.skill_type),
                     if is_selected.get() {
-                        "border-amber-400 ring-2 ring-amber-500"
+                        "ring-3"
                     } else if was_last_bought.get() {
-                        "border-slate-400 ring-1 ring-slate-500"
+                        "hover:ring-2 ring-1 ring-slate-500 border-slate-400"
                     } else {
-                        "border-zinc-700"
+                        "hover:ring-2"
                     },
                 )
             }
@@ -186,12 +206,26 @@ fn SkillCard(
                     src=img_asset(&skill_specs.base.icon)
                     alt=skill_specs.base.name.clone()
                     class="w-full h-full flex-no-shrink fill-current
-                    drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                    drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert
+                    transition-all ease-in-out
+                    group-hover:scale-105 group-hover:brightness-110
+                    group-active:scale-90 group-active:brightness-90
+                    "
                 />
             </div>
             <div class="mt-2 text-lg font-bold text-white text-center">
                 {skill_specs.base.name.clone()}
             </div>
         </div>
+    }
+}
+
+fn skill_type_color(skill_type: SkillType) -> &'static str {
+    match skill_type {
+        SkillType::Attack => "ring-red-600 border-red-300",
+        SkillType::Spell => "ring-blue-600 border-blue-300",
+        SkillType::Curse => "ring-purple-600 border-purple-300",
+        SkillType::Blessing => "ring-yellow-600 border-yellow-300",
+        SkillType::Other => "ring-slate-600 border-slate-300",
     }
 }
