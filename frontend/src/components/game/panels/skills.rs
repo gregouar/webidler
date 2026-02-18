@@ -170,25 +170,26 @@ fn SkillCard(
     view! {
         <div
             class=move || {
-                format!(
-                    "relative group bg-neutral-800 border rounded-md p-4 flex flex-col items-center
-                    group
-                    transition-all shadow cursor-pointer  {} {}",
+                let base = format!(
+                    "relative group  border rounded-md p-4 flex flex-col items-center
+             transition-all shadow cursor-pointer {}",
                     skill_type_color(skill_specs.base.skill_type),
-                    if is_selected.get() {
-                        "ring-3"
-                    } else if was_last_bought.get() {
-                        "hover:ring-2 ring-1 ring-slate-500 border-slate-400"
-                    } else {
-                        "hover:ring-2"
-                    },
-                )
+                );
+                if is_selected.get() {
+                    format!("{} ring-4 bg-neutral-600", base)
+                } else if was_last_bought.get() {
+                    format!(
+                        "{} hover:ring-2 ring-1 ring-slate-500 border-slate-400 bg-neutral-800",
+                        base,
+                    )
+                } else {
+                    format!("{} hover:ring-2 bg-neutral-800", base)
+                }
             }
             on:click=move |_| {
                 hide_tooltip();
                 selected.set(Some(skill_id.clone()))
             }
-
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
                 move |_| { show_tooltip() }
@@ -196,7 +197,6 @@ fn SkillCard(
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
-
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
         >
@@ -205,12 +205,22 @@ fn SkillCard(
                     draggable="false"
                     src=img_asset(&skill_specs.base.icon)
                     alt=skill_specs.base.name.clone()
-                    class="w-full h-full flex-no-shrink fill-current
-                    drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert
-                    transition-all ease-in-out
-                    group-hover:scale-105 group-hover:brightness-110
-                    group-active:scale-90 group-active:brightness-90
-                    "
+                    class=move || {
+                        format!(
+                            "w-full h-full flex-no-shrink fill-current
+                            drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert
+                            transition-all ease-in-out
+                            {}",
+                            if is_selected.get() {
+                                "scale-105 brightness-110"
+                            } else {
+                                "
+                                group-hover:scale-105 group-hover:brightness-110
+                                group-active:scale-90 group-active:brightness-90
+                                "
+                            },
+                        )
+                    }
                 />
             </div>
             <div class="mt-2 text-lg font-bold text-white text-center">
@@ -225,7 +235,7 @@ fn skill_type_color(skill_type: SkillType) -> &'static str {
         SkillType::Attack => "ring-red-600 border-red-300",
         SkillType::Spell => "ring-blue-600 border-blue-300",
         SkillType::Curse => "ring-purple-600 border-purple-300",
-        SkillType::Blessing => "ring-yellow-600 border-yellow-300",
-        SkillType::Other => "ring-slate-600 border-slate-300",
+        SkillType::Blessing => "ring-yellow-600 border-yellow-200",
+        SkillType::Other => "ring-slate-700 border-slate-400",
     }
 }
