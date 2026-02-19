@@ -41,7 +41,10 @@ pub fn ResourceCounter(
         <div class="flex-1 text-shadow-md shadow-gray-950
         text-sm xl:text-xl 
         flex justify-center items-center space-x-1">
-            <div class=format!("font-number {} text-right", if w_full { "w-[8ch]" } else { "" })>
+            <div class=format!(
+                "font-number font-semibold {} text-right",
+                if w_full { "w-[8ch]" } else { "" },
+            )>
                 <Number value=value />
             </div>
             <ResourceIcon icon name description />

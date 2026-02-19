@@ -536,6 +536,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
+        StatType::Description(description) => description.clone(),
     }
 }
 
@@ -825,6 +826,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions),
         ),
+        StatType::Description(description) => description.clone(),
     }
 }
 

@@ -287,6 +287,88 @@
     },
     "min_area_level": 190
   },
+  "treasure_gun": {
+    "name": "Pistol of the Damned",
+    "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
+    "icon": "items/treasure_gun.webp",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Single",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [19, 23]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Min"
+          }
+        },
+        "modifier": "Flat",
+        "value": [10, 13],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Max"
+          }
+        },
+        "modifier": "Flat",
+        "value": [14, 16],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Increased",
+        "value": [100, 120],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Speed": "Attack"
+        },
+        "modifier": "Increased",
+        "value": [20, 30],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChance": null
+        },
+        "modifier": "Increased",
+        "value": [40, 60],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Description": "Can be wielded One Handed, but only affect a Single Target."
+        },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ],
+    "triggers": [],
+    "min_area_level": 200
+  },
   "compound_bow": {
     "name": "Compound Bow",
     "icon": "items/compound_bow.webp",

@@ -343,7 +343,7 @@ fn modify_player_specs(
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
-            StatType::ItemRarity => {}
+            StatType::ItemRarity | StatType::Description(_) => {}
         }
     }
 

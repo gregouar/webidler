@@ -107,6 +107,14 @@
         },
         "modifier": "Flat",
         "value": [4, 8]
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Description": "Prevent to use a Weapon."
+        },
+        "modifier": "Flat",
+        "value": 1
       }
     ],
     "triggers": [

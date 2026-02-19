@@ -148,6 +148,7 @@ pub enum StatType {
     },
     StatConverter(StatConverterSpecs),
     GoldFind,
+    Description(String),
 }
 
 pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
