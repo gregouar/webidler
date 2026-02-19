@@ -393,26 +393,23 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
         }
     });
 
-    let can_equip = Signal::derive({
-        let maybe_item = maybe_item.clone();
-        move || {
-            maybe_item
-                .get()
-                .map(|item_specs| {
-                    if let Some(use_item_category_filter) = inventory
-                        .use_item_category_filter
-                        .and_then(|use_item_category_filter| use_item_category_filter.get())
-                    {
-                        item_specs
-                            .base
-                            .categories
-                            .contains(&use_item_category_filter)
-                    } else {
-                        item_specs.base.slot.is_some()
-                    }
-                })
-                .unwrap_or_default()
-        }
+    let can_equip = Signal::derive(move || {
+        maybe_item
+            .get()
+            .map(|item_specs| {
+                if let Some(use_item_category_filter) = inventory
+                    .use_item_category_filter
+                    .and_then(|use_item_category_filter| use_item_category_filter.get())
+                {
+                    item_specs
+                        .base
+                        .categories
+                        .contains(&use_item_category_filter)
+                } else {
+                    item_specs.base.slot.is_some()
+                }
+            })
+            .unwrap_or_default()
     });
 
     let sell_queue = expect_context::<SellQueue>();
