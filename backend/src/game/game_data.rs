@@ -127,7 +127,7 @@ impl GameInstanceData {
             &mut area_blueprint,
             &map_item,
         );
-        
+
         let mut area_state = AreaState::init(&area_specs);
         area_state.max_area_level_ever = max_area_level_completed;
 
@@ -161,16 +161,15 @@ impl GameInstanceData {
             &AreaThreat::default(),
         );
 
-
         Ok(Self {
-            area_id.to_string(),
+            area_id: area_id.to_string(),
             map_item,
             area_specs,
             area_state: LazySyncer::new(area_state),
             area_blueprint,
             area_threat: AreaThreat::default(),
 
-            passives_tree_id.to_string(),
+            passives_tree_id: passives_tree_id.to_string(),
             passives_tree_specs,
             passives_tree_state: LazySyncer::new(passives_tree_state),
 
