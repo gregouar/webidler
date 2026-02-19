@@ -99,6 +99,12 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
+    Effect::new(move || {
+        if open.get() {
+            item_reward_picked.set(None);
+        }
+    });
+
     view! {
         <Card class="max-w-2xl max-h-full mx-auto">
             <CardHeader title="Grind Ended" on_close=move || open.set(false) />
@@ -148,6 +154,35 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
     // TODO: Make responsive on mobile
 
     view! {
+        <style>
+            ".perspective {
+                perspective: 1000px;
+            }
+            
+            .transform-style-3d {
+                transform-style: preserve-3d;
+            }
+            
+            .backface-hidden {
+                backface-visibility: hidden;
+            }
+            
+            @keyframes reward-reveal {
+                0% {
+                    transform: rotateY(180deg);
+                }
+                100% {
+                    transform: rotateY(0deg);
+                }
+            }
+            
+            .reward-flip {
+                transform: rotateY(180deg);
+                animation: reward-reveal 0.6s ease-out forwards;
+            }
+            "
+        </style>
+
         <div class="w-full h-full flex flex-col gap-2 items-center justify-center">
 
             <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
@@ -178,20 +213,21 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
                                     .into_iter()
                                     .enumerate()
                                     .map(|(index, item_reward)| {
+                                        let is_selected = move || {
+                                            item_reward_picked.get() == Some(index)
+                                        };
                                         view! {
                                             <div
                                                 class="
+                                                perspective rounded-md
                                                 transition-all duration-150
+                                                ring-amber-400
                                                 cursor-pointer
                                                 "
-                                                class:opacity-40=move || {
-                                                    item_reward_picked.get() != Some(index)
-                                                }
-                                                class:ring-2=move || item_reward_picked.get() == Some(index)
-                                                class:ring-amber-400=move || {
-                                                    item_reward_picked.get() == Some(index)
-                                                }
-                                                class:rounded-md=true
+                                                class:ring-4=is_selected
+                                                class:pointer-events-none=is_selected
+                                                class:brightness-110=is_selected
+                                                class:opacity-80=move || !is_selected()
                                                 on:click=move |_| {
                                                     item_reward_picked
                                                         .update(|picked| {
@@ -203,7 +239,33 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
                                                         });
                                                 }
                                             >
-                                                <ItemCard item_specs=Arc::new(item_reward) />
+                                                <div
+                                                    class="
+                                                    relative w-full h-full
+                                                    transform-style-3d
+                                                    reward-flip
+                                                    "
+                                                    style=move || {
+                                                        format!("animation-delay: {}ms", 500 + index * 350)
+                                                    }
+                                                >
+                                                    <ItemCard
+                                                        item_specs=Arc::new(item_reward.clone())
+                                                        class:backface-hidden
+                                                    />
+
+                                                    <div class="
+                                                    absolute inset-0
+                                                    backface-hidden
+                                                    rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900
+                                                    ring-stone-500
+                                                    ring-1 xl:ring-2
+                                                    rounded-md
+                                                    flex items-center justify-center
+                                                    text-amber-200 text-8xl
+                                                    rotate-y-180
+                                                    ">"?"</div>
+                                                </div>
                                             </div>
                                         }
                                     })
