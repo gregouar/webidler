@@ -15,7 +15,7 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::{area::AreaBlueprint, master_store, DataInit},
+    data::{DataInit, area::AreaBlueprint, master_store},
     systems::{
         area_controller, benedictions_controller, passives_controller,
         player_controller::PlayerController, player_updater,

@@ -13,7 +13,7 @@ use crate::{
 pub type AreaLevel = u16;
 pub type ThreatLevel = u16;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct AreaSpecs {
     pub name: String,
     pub description: String,

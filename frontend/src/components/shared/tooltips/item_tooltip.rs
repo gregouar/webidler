@@ -10,8 +10,9 @@ use shared::data::{
     skill::DamageType,
 };
 
-use crate::components::shared::tooltips::{
-    effects_tooltip::scope_str, trigger_tooltip::format_trigger,
+use crate::components::{
+    data_context::DataContext,
+    shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
 };
 
 use super::effects_tooltip;
@@ -450,18 +451,27 @@ pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
 #[component]
 pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    let data_context: DataContext = expect_context();
+
     item_specs.base.map_specs.as_ref().map(|specs| {
         view! {
             <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Edict"</li>
 
             {specs
                 .area_id
-                .clone()
+                .as_ref()
                 .map(|area_id| {
                     view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                             "Can only be applied to: "
-                            <span class="text-white font-semibold">{area_id}</span>
+                            <span class="text-white font-semibold">
+                                {data_context
+                                    .areas_specs
+                                    .read()
+                                    .get(area_id)
+                                    .map(|area| area.name.clone())
+                                    .unwrap_or(area_id.clone())}
+                            </span>
                         </li>
                     }
                 })}

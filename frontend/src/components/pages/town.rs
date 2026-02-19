@@ -11,15 +11,16 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
+    data_context::DataContext,
     shared::player_count::PlayerCount,
     town::{
-        TownContext,
         header_menu::HeaderMenu,
         panels::{
             forge::ForgePanel, inventory::TownInventoryPanel, market::MarketPanel,
             passives::PassivesPanel, stash::StashPanel, temple::TemplePanel,
         },
         town_scene::TownScene,
+        TownContext,
     },
     ui::tooltip::DynamicTooltip,
 };
@@ -29,11 +30,14 @@ pub fn TownPage() -> impl IntoView {
     let town_context = TownContext::default();
     provide_context(town_context);
 
+    let data_context: DataContext = expect_context();
+    let backend = expect_context::<BackendClient>();
+    let auth = expect_context::<AuthContext>();
+
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
 
     let passives_tree_specs = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
         move || async move {
             backend
                 .get_passives()
@@ -44,7 +48,6 @@ pub fn TownPage() -> impl IntoView {
     });
 
     let benedictions_specs = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
         move || async move {
             backend
                 .get_benedictions()
@@ -54,10 +57,15 @@ pub fn TownPage() -> impl IntoView {
         }
     });
 
-    let initial_load = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
-        let auth = expect_context::<AuthContext>();
+    let data_load = LocalResource::new({
+        move || async move {
+            if let Err(_) = data_context.load_data(backend).await {
+                use_navigate()("/", Default::default());
+            }
+        }
+    });
 
+    let initial_load = LocalResource::new({
         move || async move {
             match backend
                 .get_character_details(&auth.token(), &get_character_id_storage.get())
@@ -108,6 +116,7 @@ pub fn TownPage() -> impl IntoView {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || Suspend::new(async move {
+                    data_load.await;
                     initial_load.await;
                     town_context.passives_tree_specs.set(passives_tree_specs.await);
                     town_context.benedictions_specs.set(benedictions_specs.await);

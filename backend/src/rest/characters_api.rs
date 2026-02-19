@@ -154,7 +154,6 @@ async fn read_character_details(
         .iter()
         .map(|(area_id, available_area)| UserGrindArea {
             area_id: area_id.clone(),
-            area_specs: available_area.specs.clone(),
             max_level_reached: areas_completed
                 .iter()
                 .find(|area_completed| area_completed.area_id.eq(area_id))

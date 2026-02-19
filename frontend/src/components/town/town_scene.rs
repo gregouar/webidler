@@ -14,9 +14,10 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
+        data_context::DataContext,
         shared::{
             item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
         },
         town::TownContext,
         ui::{
@@ -31,7 +32,8 @@ use crate::{
 
 #[component]
 pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+    let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
 
     let max_area_level = move || town_context.character.read().max_area_level;
 
@@ -73,7 +75,15 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                             <For
                                 each=move || {
                                     let mut areas = town_context.areas.get();
-                                    areas.sort_by_key(|area| area.area_specs.required_level);
+                                    areas
+                                        .sort_by_key(|area| {
+                                            data_context
+                                                .areas_specs
+                                                .read()
+                                                .get(&area.area_id)
+                                                .map(|area_specs| area_specs.required_level)
+                                                .unwrap_or_default()
+                                        });
                                     areas
                                 }
                                 key=|area| area.area_id.clone()
@@ -263,11 +273,24 @@ fn GrindingAreaCard(
     view_only: bool,
     selected_area: RwSignal<Option<UserGrindArea>>,
 ) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+    let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
+
+    let area_specs = Memo::new({
+        let area_id = area.area_id.clone();
+        move |_| {
+            data_context
+                .areas_specs
+                .read()
+                .get(&area_id)
+                .cloned()
+                .unwrap_or_default()
+        }
+    });
 
     let locked = move || {
-        town_context.character.read().max_area_level < area.area_specs.required_level
-            || area.area_specs.coming_soon
+        town_context.character.read().max_area_level < area_specs.read().required_level
+            || area_specs.read().coming_soon
     };
 
     let select_area = {
@@ -298,20 +321,20 @@ fn GrindingAreaCard(
             <div class="h-10 xl:h-16 w-full relative">
                 <img
                     draggable="false"
-                    src=img_asset(&area.area_specs.header_background)
+                    src=img_asset(&area_specs.read().header_background)
                     class="object-cover w-full h-full"
                 />
             </div>
 
             <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
                 <div class="text-base xl:text-lg font-semibold text-amber-200">
-                    {area.area_specs.name.clone()}
+                    {area_specs.read().name.clone()}
                 </div>
 
                 <div class="text-xs xl:text-sm text-gray-400">
-                    "Starting Level: " {area.area_specs.starting_level}
-                    {(area.area_specs.item_level_modifier > 0)
-                        .then(|| format!(" (+{})", area.area_specs.item_level_modifier))}
+                    "Starting Level: " {area_specs.read().starting_level}
+                    {(area_specs.read().item_level_modifier > 0)
+                        .then(|| format!(" (+{})", area_specs.read().item_level_modifier))}
                 </div>
 
                 <div class="text-xs xl:text-sm text-gray-400">
@@ -326,7 +349,7 @@ fn GrindingAreaCard(
             <div class="h-10 xl:h-16 w-full relative">
                 <img
                     draggable="false"
-                    src=img_asset(&area.area_specs.footer_background)
+                    src=img_asset(&area_specs.read().footer_background)
                     class="object-cover w-full h-full"
                 />
             </div>
@@ -334,13 +357,13 @@ fn GrindingAreaCard(
             <Show when=move || locked()>
                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
                     <div class="text-amber-400 text-lg font-bold tracking-wide">
-                        {if area.area_specs.coming_soon { "Coming Soon..." } else { "Locked" }}
+                        {if area_specs.read().coming_soon { "Coming Soon..." } else { "Locked" }}
                     </div>
                     <div class="text-gray-300 text-xs mt-1">
-                        {format!("Requires Level {}", area.area_specs.required_level)}
+                        {format!("Requires Level {}", area_specs.read().required_level)}
                     </div>
                     <div class="mt-2 text-xs text-gray-500 italic">
-                        {if area.area_specs.coming_soon {
+                        {if area_specs.read().coming_soon {
                             "Wait for a future update!"
                         } else {
                             "Keep grinding to unlock this area!"
@@ -359,6 +382,19 @@ pub fn StartGrindPanel(
     selected_area: RwSignal<Option<UserGrindArea>>,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
+
+    let area_specs = move || {
+        selected_area.read().as_ref().map(|selected_area| {
+            data_context
+                .areas_specs
+                .read()
+                .get(&selected_area.area_id)
+                .cloned()
+                .unwrap_or_default()
+        })
+    };
+
     let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
 
     let selected_map = Signal::derive(move || {
@@ -427,8 +463,6 @@ pub fn StartGrindPanel(
         town_context.open_inventory.set(true);
     };
 
-    // let play_area =;
-
     let disable_confirm = Signal::derive(move || {
         selected_map
             .read()
@@ -442,133 +476,101 @@ pub fn StartGrindPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
-                <div class="h-10 xl:h-16 w-full relative">
-                    <img
-                        draggable="false"
-                        src=move || {
-                            selected_area
-                                .read()
-                                .as_ref()
-                                .map(|area| img_asset(&area.area_specs.header_background))
-                                .unwrap_or_default()
+            {move || {
+                area_specs()
+                    .map(|area_specs| {
+                        view! {
+                            <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
+                                <div class="h-10 xl:h-16 w-full relative">
+                                    <img
+                                        draggable="false"
+                                        src=img_asset(&area_specs.header_background)
+                                        class="object-cover w-full h-full"
+                                    />
+                                    <div class="absolute inset-0">
+                                        <div class="w-full h-full flex justify-end items-center px-4">
+                                            <CloseButton on:click=move |_| open.set(false) />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <CardInset class="xl:space-y-4">
+                                    <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
+                                        {area_specs.name}
+                                    </span>
+
+                                    <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
+                                    xl:mb-4 max-w-xl mx-auto">{area_specs.description}</span>
+
+                                    <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+
+                                    <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
+                                        <li class="leading-snug ">
+                                            "Starting Level: "
+                                            <span class="font-semibold text-white">
+                                                {area_specs.starting_level}
+                                            </span>
+                                        </li>
+                                        <li class="leading-snug ">
+                                            "Item Level Modifier: "
+                                            <span class="font-semibold text-white">
+                                                "+" {area_specs.item_level_modifier}
+                                            </span>
+                                        </li>
+                                    </ul>
+
+                                    <div class="w-full h-full px-4 flex items-center justify-center">
+                                        <div
+                                            class="flex flex-row gap-6 items-center
+                                            w-full h-auto aspect-5/2 overflow-y-auto
+                                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
+                                            hover:ring-amber-400 hover:shadow-lg active:scale-95 
+                                            active:ring-amber-500 cursor-pointer transition"
+                                            on:click=choose_map
+                                        >
+                                            {map_details}
+                                        </div>
+                                    </div>
+
+                                </CardInset>
+
+                                <div class="h-10 xl:h-16 w-full relative">
+                                    <img
+                                        draggable="false"
+                                        src=img_asset(&area_specs.footer_background)
+                                        class="object-cover w-full h-full"
+                                    />
+                                    <div class="absolute inset-0">
+                                        <div class="w-full h-full flex justify-around px-4 py-1 xl:py-2">
+                                            <MenuButton
+                                                on:click={
+                                                    let navigate = use_navigate();
+                                                    move |_| {
+                                                        if let Some(selected_area) = selected_area.get_untracked() {
+                                                            set_area_config_storage
+                                                                .set(
+                                                                    Some(StartAreaConfig {
+                                                                        area_id: selected_area.area_id,
+                                                                        map_item_index: town_context
+                                                                            .selected_item_index
+                                                                            .get_untracked(),
+                                                                    }),
+                                                                );
+                                                            navigate("/game", Default::default());
+                                                        }
+                                                    }
+                                                }
+                                                disabled=disable_confirm
+                                            >
+                                                "Confirm & Start Grind"
+                                            </MenuButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
                         }
-                        class="object-cover w-full h-full"
-                    />
-                    <div class="absolute inset-0">
-                        <div class="w-full h-full flex justify-end items-center px-4">
-                            <CloseButton on:click=move |_| open.set(false) />
-                        </div>
-                    </div>
-                </div>
-
-                <CardInset class="xl:space-y-4">
-                    <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
-                        {move || {
-                            selected_area
-                                .read()
-                                .as_ref()
-                                .map(|area| area.area_specs.name.clone())
-                                .unwrap_or_default()
-                        }}
-                    </span>
-
-                    <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
-                    xl:mb-4 max-w-xl mx-auto">
-                        {move || {
-                            selected_area
-                                .read()
-                                .as_ref()
-                                .map(|area| area.area_specs.description.clone())
-                                .unwrap_or_default()
-                        }}
-                    </span>
-
-                    <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
-
-                    <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
-                        <li class="leading-snug ">
-                            "Starting Level: "
-                            <span class="font-semibold text-white">
-                                {move || {
-                                    selected_area
-                                        .read()
-                                        .as_ref()
-                                        .map(|area| area.area_specs.starting_level)
-                                        .unwrap_or_default()
-                                }}
-                            </span>
-                        </li>
-                        <li class="leading-snug ">
-                            "Item Level Modifier: "
-                            <span class="font-semibold text-white">
-                                "+"
-                                {move || {
-                                    selected_area
-                                        .read()
-                                        .as_ref()
-                                        .map(|area| area.area_specs.item_level_modifier)
-                                        .unwrap_or_default()
-                                }}
-                            </span>
-                        </li>
-                    </ul>
-
-                    <div class="w-full h-full px-4 flex items-center justify-center">
-                        <div
-                            class="flex flex-row gap-6 items-center
-                            w-full h-auto aspect-5/2 overflow-y-auto
-                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
-                            hover:ring-amber-400 hover:shadow-lg active:scale-95 
-                            active:ring-amber-500 cursor-pointer transition"
-                            on:click=choose_map
-                        >
-                            {map_details}
-                        </div>
-                    </div>
-
-                </CardInset>
-
-                <div class="h-10 xl:h-16 w-full relative">
-                    <img
-                        draggable="false"
-                        src=move || {
-                            selected_area
-                                .read()
-                                .as_ref()
-                                .map(|area| img_asset(&area.area_specs.footer_background))
-                                .unwrap_or_default()
-                        }
-                        class="object-cover w-full h-full"
-                    />
-                    <div class="absolute inset-0">
-                        <div class="w-full h-full flex justify-around px-4 py-1 xl:py-2">
-                            <MenuButton
-                                on:click={
-                                    let navigate = use_navigate();
-                                    move |_| {
-                                        if let Some(selected_area) = selected_area.get_untracked() {
-                                            set_area_config_storage
-                                                .set(
-                                                    Some(StartAreaConfig {
-                                                        area_id: selected_area.area_id,
-                                                        map_item_index: town_context
-                                                            .selected_item_index
-                                                            .get_untracked(),
-                                                    }),
-                                                );
-                                            navigate("/game", Default::default());
-                                        }
-                                    }
-                                }
-                                disabled=disable_confirm
-                            >
-                                "Confirm & Start Grind"
-                            </MenuButton>
-                        </div>
-                    </div>
-                </div>
-            </Card>
+                    })
+            }}
         </MenuPanel>
     }
 }

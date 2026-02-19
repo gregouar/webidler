@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
+    modifier::{compute_more_factor, ModifiableValue, Modifier},
     skill::{RestoreType, SkillEffectType},
     values::NonNegative,
 };
@@ -510,7 +510,7 @@ pub struct StatEffect {
     pub bypass_ignore: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct EffectsMap(pub HashMap<(StatType, Modifier, bool), f64>);
 
 impl From<&EffectsMap> for Vec<StatEffect> {
