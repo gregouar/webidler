@@ -272,7 +272,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "value": [10, 20],
+              "value": [5, 10],
               "modifier": "Flat"
             }
           }

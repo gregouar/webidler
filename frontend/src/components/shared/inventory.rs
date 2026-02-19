@@ -35,6 +35,14 @@ pub enum SellType {
 }
 
 #[derive(Clone, Default)]
+pub enum InventoryEquipFilter {
+    #[default]
+    Slot,
+    Map(String),
+    Rune,
+}
+
+#[derive(Clone, Default)]
 pub struct InventoryConfig {
     pub player_inventory: RwSignal<PlayerInventory>,
     pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
@@ -43,7 +51,7 @@ pub struct InventoryConfig {
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
     pub sell_type: SellType,
     pub max_item_level: Signal<AreaLevel>,
-    pub use_item_category_filter: Option<Signal<Option<ItemCategory>>>,
+    pub equip_filter: Signal<InventoryEquipFilter>,
 }
 
 #[component]
@@ -397,17 +405,24 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
         maybe_item
             .get()
             .map(|item_specs| {
-                if let Some(use_item_category_filter) = inventory
-                    .use_item_category_filter
-                    .and_then(|use_item_category_filter| use_item_category_filter.get())
-                {
-                    item_specs
-                        .base
-                        .categories
-                        .contains(&use_item_category_filter)
-                } else {
-                    item_specs.base.slot.is_some()
-                }
+                inventory
+                    .equip_filter
+                    .with(|equip_filter| match equip_filter {
+                        InventoryEquipFilter::Slot => item_specs.base.slot.is_some(),
+                        InventoryEquipFilter::Map(area_id) => item_specs
+                            .base
+                            .map_specs
+                            .as_ref()
+                            .map(|map_specs| {
+                                map_specs
+                                    .area_id
+                                    .as_ref()
+                                    .map(|map_area_id| *area_id == *map_area_id)
+                                    .unwrap_or(true)
+                            })
+                            .unwrap_or_default(),
+                        InventoryEquipFilter::Rune => item_specs.base.rune_specs.is_some(),
+                    })
             })
             .unwrap_or_default()
     });

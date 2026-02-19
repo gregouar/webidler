@@ -8,7 +8,7 @@ use shared::{
 
 use crate::components::{
     game::game_context::GameContext,
-    shared::inventory::{Inventory, InventoryConfig, SellType},
+    shared::inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
     ui::confirm::ConfirmContext,
     websocket::WebsocketContext,
 };
@@ -131,7 +131,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         on_sell: Some(Arc::new(sell)),
         sell_type: SellType::Sell,
         max_item_level: Signal::derive(move || game_context.player_specs.read().max_area_level),
-        use_item_category_filter: None,
+        equip_filter: Signal::derive(move || InventoryEquipFilter::Slot),
     };
 
     view! { <Inventory open=open inventory=inventory_config /> }

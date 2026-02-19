@@ -2,7 +2,10 @@ use leptos::{html::*, prelude::*};
 
 use crate::components::{
     events::{EventsContext, Key},
-    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
+    shared::{
+        inventory::InventoryEquipFilter,
+        resources::{GemsCounter, GoldCounter, ShardsCounter},
+    },
     town::TownContext,
     ui::{buttons::MenuButton, fullscreen::FullscreenButton, wiki::WikiButton},
 };
@@ -31,7 +34,7 @@ pub fn HeaderMenu() -> impl IntoView {
             .set(!town_context.open_inventory.get_untracked());
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
-        town_context.use_item_category_filter.set(None);
+        town_context.equip_filter.set(InventoryEquipFilter::Slot);
     };
 
     Effect::new(move || {

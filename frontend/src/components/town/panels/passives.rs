@@ -7,7 +7,6 @@ use std::{
 
 use shared::{
     data::{
-        item::ItemCategory,
         item_affix::AffixEffectScope,
         passive::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
@@ -22,8 +21,7 @@ use crate::components::{
     backend_client::BackendClient,
     events::{EventsContext, Key},
     shared::{
-        passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
-        resources::ShardsCounter,
+        inventory::InventoryEquipFilter, passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus}, resources::ShardsCounter
     },
     town::TownContext,
     ui::{
@@ -883,8 +881,8 @@ fn AscendNode(
                     selected_socket_node.set(Some(node_id));
                     town_context.selected_item_index.set(None);
                     town_context
-                        .use_item_category_filter
-                        .set(Some(ItemCategory::Rune));
+                        .equip_filter
+                        .set(InventoryEquipFilter::Rune);
                     town_context.open_inventory.set(true);
                 } else {
                     passives_tree_ascension.update(|passives_tree_ascension| {

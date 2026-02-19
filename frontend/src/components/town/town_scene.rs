@@ -16,6 +16,7 @@ use crate::{
     components::{
         data_context::DataContext,
         shared::{
+            inventory::InventoryEquipFilter,
             item_card::ItemCard,
             tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
         },
@@ -457,9 +458,13 @@ pub fn StartGrindPanel(
 
     let choose_map = move |_| {
         town_context.selected_item_index.set(None);
-        town_context
-            .use_item_category_filter
-            .set(Some(ItemCategory::Map));
+        town_context.equip_filter.set(InventoryEquipFilter::Map(
+            selected_area
+                .read_untracked()
+                .as_ref()
+                .map(|area| area.area_id.clone())
+                .unwrap_or_default(),
+        ));
         town_context.open_inventory.set(true);
     };
 
