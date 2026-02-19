@@ -8,14 +8,7 @@
     "map_specs": {
       "reward_slots": 1
     },
-    "affixes": [
-      {
-        "scope": "Local",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 25.0
-      }
-    ],
+    "affixes": [],
     "min_area_level": 100
   },
   "edict_2": {
@@ -28,14 +21,7 @@
       "reward_slots": 1,
       "reward_picks": 1
     },
-    "affixes": [
-      {
-        "scope": "Local",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 50.0
-      }
-    ],
+    "affixes": [],
     "min_area_level": 250
   },
   "edict_treasure_map": {

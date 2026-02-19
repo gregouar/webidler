@@ -59,7 +59,7 @@ pub fn TownPage() -> impl IntoView {
 
     let data_load = LocalResource::new({
         move || async move {
-            if let Err(_) = data_context.load_data(backend).await {
+            if data_context.load_data(backend).await.is_err() {
                 use_navigate()("/", Default::default());
             }
         }

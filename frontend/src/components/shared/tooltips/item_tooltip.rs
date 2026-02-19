@@ -463,7 +463,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .map(|area_id| {
                     view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            "Can only be applied to: "
+                            "Only for: "
                             <span class="text-white font-semibold">
                                 {data_context
                                     .areas_specs
@@ -480,7 +480,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            "Extra rare reward slots: "
+                            "Rare reward slots: "
                             <span class="text-white font-semibold">
                                 {format!("+{:.0}", specs.reward_slots)}
                             </span>
@@ -492,7 +492,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            "Extra reward picks: "
+                            "Reward picks: "
                             <span class="text-white font-semibold">
                                 {format!("+{:.0}", specs.reward_picks)}
                             </span>

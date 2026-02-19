@@ -76,7 +76,11 @@ fn generate_end_quest_rewards(
     };
 
     let amount_map_rewards = if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
-        if rewards_amount > 2 { 2 } else { 1 }
+        if rewards_amount > 2 {
+            2
+        } else {
+            1
+        }
     } else {
         0
     };
@@ -133,7 +137,7 @@ fn generate_end_quest_rewards(
                     .read()
                     .max_area_level
                     .saturating_add(game_data.area_specs.item_level_modifier),
-                false,
+                true,
                 true,
                 None,
                 *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
