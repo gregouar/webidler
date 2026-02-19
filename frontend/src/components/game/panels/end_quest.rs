@@ -218,16 +218,20 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
                                         };
                                         view! {
                                             <div
-                                                class="
-                                                perspective rounded-md
-                                                transition-all duration-150
-                                                ring-amber-400
-                                                cursor-pointer
-                                                "
-                                                class:ring-4=is_selected
-                                                class:pointer-events-none=is_selected
-                                                class:brightness-110=is_selected
-                                                class:opacity-80=move || !is_selected()
+                                                class=move || {
+                                                    format!(
+                                                        "
+                                                        perspective rounded-md
+                                                        transition-all duration-150
+                                                        {}
+                                                        ",
+                                                        if is_selected() {
+                                                            "drop-shadow-[0_0_8px_gold] brightness-110 pointer-events-none"
+                                                        } else {
+                                                            "opacity-80 cursor-pointer"
+                                                        },
+                                                    )
+                                                }
                                                 on:click=move |_| {
                                                     item_reward_picked
                                                         .update(|picked| {
