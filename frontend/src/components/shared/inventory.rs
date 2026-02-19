@@ -379,7 +379,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
 fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let is_being_equipped = RwSignal::new(false);
 
-    let maybe_item = {
+    let maybe_item = Signal::derive({
         let inventory = inventory.clone();
         move || {
             is_being_equipped.set(false);
@@ -391,7 +391,29 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 .cloned()
                 .map(Arc::new)
         }
-    };
+    });
+
+    let can_equip = Signal::derive({
+        let maybe_item = maybe_item.clone();
+        move || {
+            maybe_item
+                .get()
+                .map(|item_specs| {
+                    if let Some(use_item_category_filter) = inventory
+                        .use_item_category_filter
+                        .and_then(|use_item_category_filter| use_item_category_filter.get())
+                    {
+                        item_specs
+                            .base
+                            .categories
+                            .contains(&use_item_category_filter)
+                    } else {
+                        item_specs.base.slot.is_some()
+                    }
+                })
+                .unwrap_or_default()
+        }
+    });
 
     let sell_queue = expect_context::<SellQueue>();
     let is_queued_for_sale = move || sell_queue.read().contains(&item_index);
@@ -437,7 +459,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     view! {
         <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
             {move || {
-                match maybe_item() {
+                match maybe_item.get() {
                     Some(item_specs) => {
                         let inventory = inventory.clone();
                         let comparable_item_specs = item_specs
@@ -456,24 +478,12 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         EquippedSlot::ExtraSlot(_) => None,
                                     })
                             });
-                        let can_equip = Signal::derive({
-                            let item_specs = item_specs.clone();
-                            move || {
-                                if let Some(use_item_category_filter) = inventory
-                                    .use_item_category_filter
-                                    .and_then(|use_item_category_filter| {
-                                        use_item_category_filter.get()
-                                    })
-                                {
-                                    item_specs.base.categories.contains(&use_item_category_filter)
-                                } else {
-                                    item_specs.base.slot.is_some()
-                                }
-                            }
-                        });
 
                         view! {
-                            <div class="relative w-full h-full overflow-visible">
+                            <div
+                                class="relative w-full h-full overflow-visible"
+                                class:brightness-50=move || !can_equip.get()
+                            >
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     comparable_item_specs=comparable_item_specs.clone()
@@ -495,7 +505,6 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     }
                                     tooltip_position=DynamicTooltipPosition::AutoLeft
                                     max_item_level=inventory.max_item_level
-                                    class:brightness-50=move || !can_equip.get()
                                 />
 
                                 <Show when=is_queued_for_sale>
@@ -531,7 +540,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                             }
                                         >
                                             <ItemTooltip
-                                                item_specs=maybe_item().unwrap().clone()
+                                                item_specs=maybe_item.get().unwrap().clone()
                                                 max_item_level=inventory.max_item_level
                                             />
                                         </div>
