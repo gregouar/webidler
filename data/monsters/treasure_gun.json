@@ -7,6 +7,12 @@
   "initiative": [1.0, 1.5],
   "armor": { "Physical": 100 },
   "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 50
+    }
+  ],
   "skills": [
     {
       "name": "Explosive Round",

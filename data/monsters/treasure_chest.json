@@ -7,6 +7,12 @@
   "initiative": [2.5, 3.5],
   "armor": { "Physical": 50, "Poison": 50 },
   "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 50
+    }
+  ],
   "skills": [
     {
       "name": "Protective Hull",

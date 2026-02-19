@@ -8,6 +8,12 @@
   "initiative": 3,
   "armor": { "Physical": 100, "Fire": 100 },
   "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 66
+    }
+  ],
   "skills": [
     {
       "name": "Crushing Tail",

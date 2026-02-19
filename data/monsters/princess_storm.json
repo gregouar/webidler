@@ -8,6 +8,12 @@
   "initiative": [0, 1],
   "armor": { "Physical": 50, "Storm": 100 },
   "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 50
+    }
+  ],
   "skills": [
     {
       "name": "Grieving Tear",

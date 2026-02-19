@@ -65,11 +65,7 @@ impl<T> ModifiableValue<T>
 where
     T: BaseModifiableValue + Default + Copy,
 {
-    // pub fn evaluate(&self) -> T {
-    //     self.evaluated
-    // }
-
-    fn evaluate_impl(&self, convert: bool) -> T {
+    fn evaluate(&self, convert: bool) -> T {
         let div = (1.0 - self.decreased * 0.01).max(0.0);
         let base = if convert {
             self.base.multiply_value(1.0 - self.converted * 0.01)
@@ -89,7 +85,7 @@ where
     }
 
     fn compute(&mut self) {
-        self.evaluated = self.evaluate_impl(true);
+        self.evaluated = self.evaluate(true);
     }
 
     pub fn apply_modifier(&mut self, value: f64, modifier: Modifier) {
@@ -130,7 +126,7 @@ where
         (if only_base {
             self.base
         } else {
-            self.evaluate_impl(false)
+            self.evaluate(false)
         })
         .multiply_value(percent * 0.01)
     }
