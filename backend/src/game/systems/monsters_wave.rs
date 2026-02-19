@@ -42,8 +42,8 @@ impl RandomWeighted for &BossBlueprint {
 /// Return generated monsters
 pub fn generate_monsters_wave(
     monsters_specs_store: &MonstersSpecsStore,
-    waves: &Vec<MonsterWaveBlueprint>,
-    bosses: &Vec<BossBlueprint>,
+    waves: &[MonsterWaveBlueprint],
+    bosses: &[BossBlueprint],
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
@@ -57,8 +57,8 @@ pub fn generate_monsters_wave(
 /// Return generated monsters + if it is boss
 fn generate_monsters_wave_specs(
     monsters_specs_store: &MonstersSpecsStore,
-    waves: &Vec<MonsterWaveBlueprint>,
-    bosses: &Vec<BossBlueprint>,
+    waves: &[MonsterWaveBlueprint],
+    bosses: &[BossBlueprint],
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
