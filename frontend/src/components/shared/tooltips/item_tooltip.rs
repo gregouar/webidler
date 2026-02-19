@@ -450,9 +450,46 @@ pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
 #[component]
 pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    item_specs.base.map_specs.as_ref().map(|_| {
+    item_specs.base.map_specs.as_ref().map(|specs| {
         view! {
             <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Edict"</li>
+
+            {specs
+                .area_id
+                .clone()
+                .map(|area_id| {
+                    view! {
+                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            "Can only be applied to: "
+                            <span class="text-white font-semibold">{area_id}</span>
+                        </li>
+                    }
+                })}
+
+            {(specs.reward_slots > 0)
+                .then(|| {
+                    view! {
+                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            "Extra rare reward slots: "
+                            <span class="text-white font-semibold">
+                                {format!("+{:.0}", specs.reward_slots)}
+                            </span>
+                        </li>
+                    }
+                })}
+
+            {(specs.reward_picks > 0)
+                .then(|| {
+                    view! {
+                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            "Extra reward picks: "
+                            <span class="text-white font-semibold">
+                                {format!("+{:.0}", specs.reward_picks)}
+                            </span>
+                        </li>
+                    }
+                })}
+
             <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
                 "Apply to a Grind to give all Enemies the following effects:"
             </li>

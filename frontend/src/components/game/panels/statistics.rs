@@ -118,7 +118,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .read()
                                     .character_specs
                                     .life_regen * 0.1;
-                                if value > 0.0 { format!("{:.1}%", value) } else { "-".into() }
+                                if value == 0.0 { "-".into() } else { format!("{:.1}%", value) }
                             }
                         />
                         <Stat
@@ -137,7 +137,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .read()
                                     .character_specs
                                     .mana_regen * 0.1;
-                                if value > 0.0 { format!("{:.1}%", value) } else { "-".into() }
+                                if value == 0.0 { "-".into() } else { format!("{:.1}%", value) }
                             }
                         />
                         <Stat

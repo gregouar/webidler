@@ -57,7 +57,7 @@ pub struct ClientConnectMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TerminateQuestMessage {
-    pub item_index: Option<u8>,
+    pub reward_picks: Vec<u8>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

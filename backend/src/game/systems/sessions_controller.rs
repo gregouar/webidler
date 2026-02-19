@@ -7,11 +7,9 @@ use shared::{
     constants::MAX_PLAYER_STAMINA,
     data::{
         area::{AreaLevel, StartAreaConfig},
-        item::{ItemCategory, ItemRarity},
-        item_affix::AffixEffectScope,
+        item::ItemRarity,
         passive::PassivesTreeState,
         player::{PlayerInventory, PlayerResources, PlayerSpecs},
-        stat_effect::EffectsMap,
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
     },
@@ -185,42 +183,38 @@ async fn new_game_instance(
         }
     };
 
-    let area_effects = if let Some(map_item_index) = area_config.map_item_index {
-        let selected_map = if (map_item_index as usize) < player_inventory.bag.len() {
-            player_inventory.bag.remove(map_item_index as usize)
-        } else {
-            return Err(anyhow::anyhow!("missing map item"));
-        };
+    let area_map = match area_config.map_item_index {
+        Some(map_item_index) => {
+            if (map_item_index as usize) < player_inventory.bag.len() {
+                let map_item = player_inventory.bag.remove(map_item_index as usize);
 
-        if !selected_map.base.categories.contains(&ItemCategory::Map) {
-            return Err(anyhow::anyhow!("missing map item"));
+                if let Some(map_specs) = &map_item.base.map_specs {
+                    if let Some(map_area_id) = &map_specs.area_id
+                        && *map_area_id != area_config.area_id
+                    {
+                        return Err(anyhow::anyhow!("incorrect area"));
+                    }
+                } else {
+                    return Err(anyhow::anyhow!("missing map item"));
+                }
+
+                if map_item.required_level > player_specs.max_area_level {
+                    return Err(anyhow::anyhow!("power level too low"));
+                }
+
+                Some(map_item)
+            } else {
+                return Err(anyhow::anyhow!("missing map item"));
+            }
         }
-
-        if !selected_map.required_level > player_specs.max_area_level {
-            return Err(anyhow::anyhow!("power level too low"));
-        }
-
-        EffectsMap::combine_all(
-            std::iter::once(
-                selected_map
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Local),
-            )
-            .chain(std::iter::once(
-                selected_map
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Global),
-            )),
-        )
-    } else {
-        Default::default()
+        None => None,
     };
 
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
         &area_config.area_id,
+        area_map,
         area_level_completed as AreaLevel,
-        area_effects,
         "default",
         passives_tree_state,
         player_benedictions,
@@ -230,7 +224,7 @@ async fn new_game_instance(
         Default::default(),
     )?;
 
-    if game_data.area_blueprint.specs.coming_soon {
+    if game_data.area_specs.coming_soon {
         return Err(anyhow!("forbidden area"));
     }
 
@@ -245,10 +239,8 @@ async fn new_game_instance(
     }
 
     // Only the delta is saved in db, so we adjust by starting_level
-    game_data.area_state.mutate().max_area_level_ever +=
-        game_data.area_blueprint.specs.starting_level - 1;
-    game_data.area_state.mutate().last_champion_spawn +=
-        game_data.area_blueprint.specs.starting_level - 1;
+    game_data.area_state.mutate().max_area_level_ever += game_data.area_specs.starting_level - 1;
+    game_data.area_state.mutate().last_champion_spawn += game_data.area_specs.starting_level - 1;
 
     game_data.player_resources.mutate().gold += benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,

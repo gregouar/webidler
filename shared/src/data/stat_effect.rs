@@ -578,4 +578,15 @@ impl EffectsMap {
             },
         ))
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = StatEffect> {
+        self.0
+            .iter()
+            .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {
+                stat: stat.clone(),
+                modifier: *effect_type,
+                value: *value,
+                bypass_ignore: *bypass_ignore,
+            })
+    }
 }

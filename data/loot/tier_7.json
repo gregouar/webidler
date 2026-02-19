@@ -53,8 +53,13 @@
       "weight": 64000
     },
     {
+      "item_id": "edict",
+      "weight": 3200,
+      "min_area_level": 320
+    },
+    {
       "item_id": "edict_2",
-      "weight": 6400,
+      "weight": 3200,
       "min_area_level": 320
     },
     {

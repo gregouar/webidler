@@ -51,7 +51,7 @@ fn handle_client_message(
             quests_controller::end_quest(master_store, game_data);
         }
         ClientMessage::TerminateQuest(m) => {
-            if let Err(err) = quests_controller::terminate_quest(game_data, m.item_index) {
+            if let Err(err) = quests_controller::terminate_quest(game_data, m.reward_picks) {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: err.to_string(),
@@ -141,7 +141,7 @@ fn handle_client_message(
             item_indexes.sort_by_key(|&i| i);
             for &item_index in item_indexes.iter().rev() {
                 player_controller::sell_item_from_bag(
-                    &game_data.area_blueprint.specs,
+                    &game_data.area_specs,
                     game_data.player_specs.read(),
                     game_data.player_inventory.mutate(),
                     game_data.player_resources.mutate(),
@@ -158,7 +158,7 @@ fn handle_client_message(
                     loot_controller::take_loot(game_data.queued_loot.mutate(), m.loot_identifier)
                 {
                     player_controller::sell_item(
-                        &game_data.area_blueprint.specs,
+                        &game_data.area_specs,
                         game_data.player_specs.read(),
                         game_data.player_resources.mutate(),
                         &item_specs,

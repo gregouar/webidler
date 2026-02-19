@@ -3,19 +3,19 @@ use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 use shared::data::{
-    area::{AreaLevel, AreaState, AreaThreat},
+    area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
+    item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
-    stat_effect::EffectsMap,
     temple::PlayerBenedictions,
 };
 
 use crate::game::{
-    data::{DataInit, area::AreaBlueprint, master_store},
+    data::{area::AreaBlueprint, master_store, DataInit},
     systems::{
         area_controller, benedictions_controller, passives_controller,
         player_controller::PlayerController, player_updater,
@@ -26,7 +26,10 @@ use crate::game::{
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
     pub area_id: String,
+    pub map_item: Option<ItemSpecs>,
+
     pub area_blueprint: AreaBlueprint,
+    pub area_specs: AreaSpecs,
     pub area_state: LazySyncer<AreaState>,
     pub area_threat: AreaThreat,
 
@@ -44,8 +47,6 @@ pub struct GameInstanceData {
 
     pub player_controller: PlayerController,
     pub player_respawn_delay: Duration,
-
-    pub area_effects: EffectsMap,
 
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
@@ -67,8 +68,9 @@ pub struct GameInstanceData {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SavedGameData {
     area_id: String,
+    map_item: Option<ItemSpecs>,
     area_level: AreaLevel,
-    max_area_level_ever: AreaLevel,
+    max_area_level_completed: AreaLevel,
     passives_tree_id: String,
     passives_tree_state: PassivesTreeState,
     player_resources: PlayerResources,
@@ -84,8 +86,6 @@ pub struct SavedGameData {
     player_benedictions: PlayerBenedictions,
     #[serde(default)]
     player_stamina: Duration,
-    #[serde(default)]
-    area_effects: EffectsMap,
 
     #[serde(default)]
     end_quest: bool,
@@ -103,69 +103,11 @@ impl std::ops::Deref for SavedGameData {
 
 impl GameInstanceData {
     #[allow(clippy::too_many_arguments)]
-    pub fn new(
-        area_id: String,
-        area_blueprint: AreaBlueprint,
-        max_area_level_completed: AreaLevel,
-        area_effects: EffectsMap,
-        passives_tree_id: String,
-        passives_tree_specs: PassivesTreeSpecs,
-        passives_tree_state: PassivesTreeState,
-        player_benedictions: PlayerBenedictions,
-        player_resources: PlayerResources,
-        player_specs: PlayerSpecs,
-        player_inventory: PlayerInventory,
-        player_stamina: Duration,
-    ) -> Self {
-        let mut area_state = AreaState::init(&area_blueprint.specs);
-        area_state.max_area_level_ever = max_area_level_completed;
-
-        let effects: Vec<_> = (&area_effects).into();
-        area_controller::compute_area_state(&mut area_state, &effects);
-
-        Self {
-            area_id,
-            area_state: LazySyncer::new(area_state),
-            area_blueprint,
-            area_threat: AreaThreat::default(),
-            area_effects,
-
-            passives_tree_id,
-            passives_tree_specs,
-            passives_tree_state: LazySyncer::new(passives_tree_state),
-
-            player_benedictions,
-
-            player_resources: LazySyncer::new(player_resources),
-            player_state: PlayerState::init(&player_specs),
-            player_controller: PlayerController::init(&player_specs),
-            player_specs: LazySyncer::new(player_specs),
-            player_inventory: LazySyncer::new(player_inventory),
-            player_respawn_delay: Default::default(),
-            player_stamina,
-
-            monster_base_specs: LazySyncer::new(Vec::new()),
-            monster_specs: Vec::new(),
-            monster_states: Vec::new(),
-            monster_wave_delay: Default::default(),
-
-            wave_completed: false,
-            queued_loot: LazySyncer::new(Default::default()),
-
-            game_stats: Default::default(),
-
-            end_quest: false,
-            quest_rewards: LazySyncer::new(None),
-            terminate_quest: false,
-        }
-    }
-
-    #[allow(clippy::too_many_arguments)]
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
         area_id: &str,
+        map_item: Option<ItemSpecs>,
         max_area_level_completed: AreaLevel,
-        area_effects: EffectsMap,
         passives_tree_id: &str,
         mut passives_tree_state: PassivesTreeState,
         player_benedictions: PlayerBenedictions,
@@ -174,11 +116,20 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
         player_stamina: Duration,
     ) -> Result<Self> {
-        let area_blueprint = master_store
+        let mut area_blueprint = master_store
             .area_blueprints_store
             .get(area_id)
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
+
+        let area_specs = area_controller::init_area_specs(
+            &master_store.loot_tables_store,
+            &mut area_blueprint,
+            &map_item,
+        );
+        
+        let mut area_state = AreaState::init(&area_specs);
+        area_state.max_area_level_ever = max_area_level_completed;
 
         let mut passives_tree_specs = master_store
             .passives_store
@@ -210,29 +161,52 @@ impl GameInstanceData {
             &AreaThreat::default(),
         );
 
-        Ok(Self::new(
+
+        Ok(Self {
             area_id.to_string(),
+            map_item,
+            area_specs,
+            area_state: LazySyncer::new(area_state),
             area_blueprint,
-            max_area_level_completed,
-            area_effects,
+            area_threat: AreaThreat::default(),
+
             passives_tree_id.to_string(),
             passives_tree_specs,
-            passives_tree_state,
+            passives_tree_state: LazySyncer::new(passives_tree_state),
+
             player_benedictions,
-            player_resources,
-            player_specs,
-            player_inventory,
+
+            player_resources: LazySyncer::new(player_resources),
+            player_state: PlayerState::init(&player_specs),
+            player_controller: PlayerController::init(&player_specs),
+            player_specs: LazySyncer::new(player_specs),
+            player_inventory: LazySyncer::new(player_inventory),
+            player_respawn_delay: Default::default(),
             player_stamina,
-        ))
+
+            monster_base_specs: LazySyncer::new(Vec::new()),
+            monster_specs: Vec::new(),
+            monster_states: Vec::new(),
+            monster_wave_delay: Default::default(),
+
+            wave_completed: false,
+            queued_loot: LazySyncer::new(Default::default()),
+
+            game_stats: Default::default(),
+
+            end_quest: false,
+            quest_rewards: LazySyncer::new(None),
+            terminate_quest: false,
+        })
     }
 
     pub fn to_bytes(self) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(&SavedGameData {
             area_id: self.area_id,
+            map_item: self.map_item,
             area_level: self.area_state.read().area_level,
             max_area_level: self.area_state.read().max_area_level,
-            max_area_level_ever: self.area_state.read().max_area_level_ever,
-            area_effects: self.area_effects,
+            max_area_level_completed: self.area_state.read().max_area_level_ever,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_benedictions: self.player_benedictions,
@@ -252,10 +226,10 @@ impl GameInstanceData {
     pub fn from_bytes(master_store: &master_store::MasterStore, bytes: &[u8]) -> Result<Self> {
         let SavedGameData {
             area_id,
+            map_item,
             area_level,
             max_area_level,
-            max_area_level_ever,
-            area_effects,
+            max_area_level_completed,
             passives_tree_id,
             passives_tree_state,
             player_benedictions,
@@ -274,8 +248,8 @@ impl GameInstanceData {
         let mut s = Self::init_from_store(
             master_store,
             &area_id,
-            max_area_level_ever,
-            area_effects,
+            map_item,
+            max_area_level_completed,
             &passives_tree_id,
             passives_tree_state,
             player_benedictions,

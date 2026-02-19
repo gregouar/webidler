@@ -129,20 +129,21 @@ pub fn update_monster_specs(
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 
-    monster_specs.character_specs.triggers = monster_specs
-        .skill_specs
-        .iter()
-        .flat_map(|skill_specs| skill_specs.triggers.iter())
-        .chain(
-            monster_state
-                .character_state
-                .statuses
-                .iter()
-                .filter_map(|(status_specs, _)| match status_specs {
-                    StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
-                    _ => None,
-                }),
-        )
-        .map(|trigger_specs| trigger_specs.triggered_effect.clone())
-        .collect();
+    monster_specs.character_specs.triggers.extend(
+        monster_specs
+            .skill_specs
+            .iter()
+            .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .chain(
+                monster_state
+                    .character_state
+                    .statuses
+                    .iter()
+                    .filter_map(|(status_specs, _)| match status_specs {
+                        StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                        _ => None,
+                    }),
+            )
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    );
 }

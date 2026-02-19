@@ -165,19 +165,16 @@ async fn control_entities(
             if game_data.area_state.read().going_back > 0 {
                 let area_state = game_data.area_state.mutate();
                 let amount = area_state.going_back;
-                area_controller::decrease_area_level(
-                    &game_data.area_blueprint.specs,
-                    area_state,
-                    amount,
-                );
+                area_controller::decrease_area_level(&game_data.area_specs, area_state, amount);
                 area_state.going_back = 0;
             }
 
             let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
-                &game_data.area_blueprint,
-                game_data.area_state.mutate(),
-                &game_data.area_effects,
                 &master_store.monster_specs_store,
+                &game_data.area_blueprint.waves,
+                &game_data.area_blueprint.bosses,
+                &game_data.area_specs,
+                game_data.area_state.mutate(),
             )?;
             game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
             game_data.monster_specs = monster_specs;
@@ -289,7 +286,7 @@ fn respawn_player(master_store: &MasterStore, game_data: &mut GameInstanceData) 
 
     if game_data.area_state.read().auto_progress {
         area_controller::decrease_area_level(
-            &game_data.area_blueprint.specs,
+            &game_data.area_specs,
             game_data.area_state.mutate(),
             1,
         );

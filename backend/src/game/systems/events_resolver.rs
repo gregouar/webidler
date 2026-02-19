@@ -83,14 +83,9 @@ fn handle_hit_event<'a>(
 
     for (character_id, character_specs) in characters {
         for triggered_effects in character_specs.triggers.iter() {
-            match triggered_effects.trigger {
-                EventTrigger::OnHit(_) if hit_event.source == character_id => {}
-                EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
-                _ => continue,
-            };
-
             let hit_trigger = match triggered_effects.trigger {
-                EventTrigger::OnHit(ht) | EventTrigger::OnTakeHit(ht) => ht,
+                EventTrigger::OnHit(ht) if hit_event.source == character_id => ht,
+                EventTrigger::OnTakeHit(ht) if hit_event.target == character_id => ht,
                 _ => continue,
             };
 
@@ -199,7 +194,7 @@ fn handle_kill_event(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),
                     monster_specs,
-                    &game_data.area_blueprint.specs,
+                    &game_data.area_specs,
                     game_data.area_state.mutate(),
                 );
                 if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
@@ -284,10 +279,9 @@ fn handle_area_completed_event(
 ) {
     let area_state = game_data.area_state.mutate();
 
-    if !game_data.area_blueprint.specs.disable_shards
+    if !game_data.area_specs.disable_shards
         && (area_state.area_level > area_state.max_area_level_ever)
-        && (area_state.area_level - game_data.area_blueprint.specs.starting_level + 1)
-            .is_multiple_of(10)
+        && (area_state.area_level - game_data.area_specs.starting_level + 1).is_multiple_of(10)
     {
         game_data.player_resources.mutate().shards += 1.0;
     }
@@ -296,7 +290,7 @@ fn handle_area_completed_event(
         game_data.player_specs.read().max_area_level.max(
             area_state
                 .area_level
-                .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+                .saturating_add(game_data.area_specs.item_level_modifier),
         );
 
     let new_max = area_state.area_level > area_state.max_area_level;
@@ -313,11 +307,11 @@ fn handle_area_completed_event(
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
-        area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+        area_level.saturating_add(game_data.area_specs.item_level_modifier),
         is_boss_level,
         new_max, // Only drop unique when new area completed
         None,
-        *area_state.loot_rarity,
+        *game_data.area_specs.loot_rarity,
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(
@@ -326,7 +320,7 @@ fn handle_area_completed_event(
                 item_specs,
             ) {
                 player_controller::sell_item(
-                    &game_data.area_blueprint.specs,
+                    &game_data.area_specs,
                     game_data.player_specs.read(),
                     game_data.player_resources.mutate(),
                     &item_specs,

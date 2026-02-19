@@ -214,11 +214,14 @@ pub struct RuneSpecs {
 }
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct MapSpecs {
-    // TODO
-    // #[serde(default)]
-    // pub extra_reward_picks: bool,
-    // #[serde(default)]
-    // pub extra_reward_slots: bool,
+    #[serde(default)]
+    pub area_id: Option<String>,
+    #[serde(default)]
+    pub reward_picks: u8,
+    #[serde(default)]
+    pub reward_slots: u8,
+    #[serde(default)]
+    pub loot_tables: Vec<String>,
 }
 
 impl ItemModifiers {

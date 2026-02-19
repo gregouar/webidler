@@ -5,7 +5,9 @@
     "categories": ["Map"],
     "ignore_quality": true,
     "rarity": "Magic",
-    "map_specs": {},
+    "map_specs": {
+      "reward_slots": 1
+    },
     "affixes": [
       {
         "scope": "Local",
@@ -22,7 +24,10 @@
     "categories": ["Map"],
     "ignore_quality": true,
     "rarity": "Magic",
-    "map_specs": {},
+    "map_specs": {
+      "reward_slots": 1,
+      "reward_picks": 1
+    },
     "affixes": [
       {
         "scope": "Local",
@@ -32,5 +37,77 @@
       }
     ],
     "min_area_level": 250
+  },
+  "edict_treasure_map": {
+    "name": "Cursed Treasure Map",
+    "description": "It does not lead to treasure. It leads to what remains of those who sought it.",
+    "icon": "items/edict_treasure_map.webp",
+    "categories": ["Map"],
+    "ignore_quality": true,
+    "rarity": "Unique",
+    "map_specs": {
+      "area_id": "island.json",
+      "reward_slots": 2,
+      "reward_picks": 1,
+      "loot_tables": ["pirate_treasure.json"]
+    },
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 50.0
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": [150, 250]
+      },
+      {
+        "scope": "Local",
+        "stat": "Life",
+        "modifier": "Increased",
+        "value": 200
+      },
+      {
+        "scope": "Local",
+        "stat": { "Damage": {} },
+        "modifier": "Increased",
+        "value": 100
+      },
+      {
+        "scope": "Local",
+        "stat": { "StatusPower": {} },
+        "modifier": "Increased",
+        "value": 100
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "edict_treasure_map",
+        "OnHit": { "is_triggered": false, "is_hurt": true },
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 3,
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "LifeRegen",
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 20.0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 260
   }
 }

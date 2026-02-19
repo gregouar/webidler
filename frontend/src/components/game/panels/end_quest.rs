@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use indexmap::IndexSet;
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
@@ -64,14 +65,18 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
             + 1
     };
 
-    let item_reward_picked = RwSignal::new(None);
+    let item_rewards_picked = RwSignal::new(IndexSet::new());
 
     let do_confirm_end = Arc::new({
         let conn: WebsocketContext = expect_context();
         move || {
             conn.send(
                 &TerminateQuestMessage {
-                    item_index: item_reward_picked.get_untracked().map(|x| x as u8),
+                    reward_picks: item_rewards_picked
+                        .get_untracked()
+                        .into_iter()
+                        .map(|x| x as u8)
+                        .collect(),
                 }
                 .into(),
             );
@@ -81,7 +86,8 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     let try_confirm_end = {
         let confirm_context: ConfirmContext = expect_context();
         move |_| {
-            if item_reward_picked.read_untracked().is_some()
+            if item_rewards_picked.read_untracked().len()
+                == game_context.area_specs.read_untracked().reward_picks as usize
                 || game_context
                     .quest_rewards
                     .read_untracked()
@@ -92,7 +98,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                 do_confirm_end.clone()();
             } else {
                 (confirm_context.confirm)(
-                    "Are you sure you want to quit without picking an Item Reward?".into(),
+                    "Are you sure you want to quit without picking all your Item Rewards?".into(),
                     do_confirm_end.clone(),
                 );
             }
@@ -101,7 +107,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 
     Effect::new(move || {
         if open.get() {
-            item_reward_picked.set(None);
+            item_rewards_picked.set(Default::default());
         }
     });
 
@@ -137,7 +143,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                     </div>
                 </div>
 
-                <ItemRewards item_reward_picked />
+                <ItemRewards item_rewards_picked class:mt-2 />
             </CardInset>
 
             <div class="flex justify-center">
@@ -148,8 +154,21 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
+fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView {
     let game_context: GameContext = expect_context();
+
+    let pick_reward = move |index| {
+        item_rewards_picked.update(|picked| {
+            if picked.contains(&index) {
+                picked.shift_remove(&index);
+            } else {
+                picked.insert(index);
+                if picked.len() > game_context.area_specs.read_untracked().reward_picks as usize {
+                    picked.shift_remove_index(0);
+                }
+            }
+        });
+    };
 
     // TODO: Make responsive on mobile
 
@@ -185,9 +204,21 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
 
         <div class="w-full h-full flex flex-col gap-2 items-center justify-center">
 
-            <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
-                "Pick a Reward"
-            </span>
+            <div class="w-full flex justify-between px-4">
+                <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
+                    "Pick a Reward"
+                </span>
+
+                <span class="text-center text-sm xl:text-base text-gray-400 ">
+                    {move || {
+                        format!(
+                            "({:0}/{:0})",
+                            item_rewards_picked.read().len(),
+                            game_context.area_specs.read_untracked().reward_picks,
+                        )
+                    }}
+                </span>
+            </div>
 
             <div class="w-full flex flex-row gap-4 items-center justify-center
             bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-4">
@@ -214,7 +245,7 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
                                     .enumerate()
                                     .map(|(index, item_reward)| {
                                         let is_selected = move || {
-                                            item_reward_picked.get() == Some(index)
+                                            item_rewards_picked.read().contains(&index)
                                         };
                                         view! {
                                             <div
@@ -223,29 +254,21 @@ fn ItemRewards(item_reward_picked: RwSignal<Option<usize>>) -> impl IntoView {
                                                         "
                                                         perspective rounded-md
                                                         transition-all duration-150
+                                                        cursor-pointer
                                                         {}
                                                         ",
                                                         if is_selected() {
-                                                            "drop-shadow-[0_0_8px_gold] brightness-110 pointer-events-none"
+                                                            "shadow-[0_0_8px_gold] brightness-110"
                                                         } else {
-                                                            "opacity-80 cursor-pointer"
+                                                            "opacity-80"
                                                         },
                                                     )
                                                 }
-                                                on:click=move |_| {
-                                                    item_reward_picked
-                                                        .update(|picked| {
-                                                            *picked = if *picked == Some(index) {
-                                                                None
-                                                            } else {
-                                                                Some(index)
-                                                            };
-                                                        });
-                                                }
+                                                on:click=move |_| pick_reward(index)
                                             >
                                                 <div
                                                     class="
-                                                    relative w-full h-full
+                                                    relative w-full h-full max-w-48
                                                     transform-style-3d
                                                     reward-flip
                                                     "

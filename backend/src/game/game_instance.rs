@@ -206,7 +206,7 @@ impl<'a> GameInstance<'a> {
             self.game_data.player_resources.read().shards,
             self.game_data.player_resources.read().gold_total
                 * computations::exponential(
-                    self.game_data.area_blueprint.specs.item_level_modifier,
+                    self.game_data.area_specs.item_level_modifier,
                     constants::MONSTER_INCREASE_FACTOR,
                 ),
         )
@@ -220,7 +220,7 @@ impl<'a> GameInstance<'a> {
         .await?;
 
         let delta_area_level = self.game_data.area_state.read().max_area_level_ever as i32
-            - self.game_data.area_blueprint.specs.starting_level as i32
+            - self.game_data.area_specs.starting_level as i32
             + 1;
 
         if delta_area_level > 0 {

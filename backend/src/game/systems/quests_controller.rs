@@ -1,5 +1,5 @@
 use shared::{
-    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL},
+    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
     data::{item::ItemCategory, quest::QuestRewards},
 };
 
@@ -22,7 +22,7 @@ pub fn end_quest(master_store: &MasterStore, game_data: &mut GameInstanceData) {
 
 pub fn terminate_quest(
     game_data: &mut GameInstanceData,
-    item_index: Option<u8>,
+    reward_picks: Vec<u8>,
 ) -> Result<(), AppError> {
     if !game_data.end_quest {
         return Err(AppError::UserError("grind not yet ended".into()));
@@ -32,14 +32,25 @@ pub fn terminate_quest(
         return Err(AppError::UserError("grind already terminated".into()));
     }
 
-    if let Some(quest_rewards) = game_data.quest_rewards.read()
-        && let Some(item_specs) =
-            item_index.and_then(|item_index| quest_rewards.item_rewards.get(item_index as usize))
+    if reward_picks.len() > game_data.area_specs.reward_picks as usize {
+        return Err(AppError::UserError("too many reward picks".into()));
+    }
+
+    if game_data.player_inventory.read().bag.len() + reward_picks.len()
+        > game_data.player_inventory.read().max_bag_size as usize
     {
-        inventory_controller::store_item_to_bag(
-            game_data.player_inventory.mutate(),
-            item_specs.clone(),
-        )?;
+        return Err(AppError::UserError("not enough space".into()));
+    }
+
+    if let Some(quest_rewards) = game_data.quest_rewards.read() {
+        for reward_pick in reward_picks.into_iter() {
+            if let Some(item_specs) = quest_rewards.item_rewards.get(reward_pick as usize) {
+                inventory_controller::store_item_to_bag(
+                    game_data.player_inventory.mutate(),
+                    item_specs.clone(),
+                )?;
+            }
+        }
     }
 
     game_data.terminate_quest = true;
@@ -51,17 +62,34 @@ fn generate_end_quest_rewards(
     master_store: &MasterStore,
     game_data: &GameInstanceData,
 ) -> QuestRewards {
-    let delta_area_level = 1 + game_data
+    let delta_area_level = game_data
         .area_state
         .read()
         .max_area_level
-        .saturating_sub(game_data.area_blueprint.specs.starting_level);
+        .saturating_sub(game_data.area_specs.starting_level);
 
-    let mut item_rewards = Vec::new();
+    // Up to 2 rewards are edict, only 1 if only 2 rewards available.
+    let rewards_amount = if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
+        game_data.area_specs.reward_slots
+    } else {
+        0
+    };
 
-    // If enough, generate 2 Maps
-    if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
-        item_rewards.extend((0..2).flat_map(|_| {
+    let amount_map_rewards = if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
+        if rewards_amount > 2 {
+            2
+        } else {
+            1
+        }
+    } else {
+        0
+    };
+
+    let amount_normal_rewards = (2 - amount_map_rewards).min(rewards_amount);
+    let amount_rare_rewards = rewards_amount - amount_normal_rewards - amount_map_rewards;
+
+    let item_rewards = (0..amount_map_rewards)
+        .flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
@@ -72,16 +100,14 @@ fn generate_end_quest_rewards(
                     .area_state
                     .read()
                     .max_area_level
-                    .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+                    .saturating_add(game_data.area_specs.item_level_modifier),
                 false,
                 true,
                 Some(ItemCategory::Map),
-                *game_data.area_state.read().loot_rarity,
+                *game_data.area_specs.loot_rarity,
             )
-        }));
-    // Otherwise fill with normal items
-    } else if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
-        item_rewards.extend((0..2).flat_map(|_| {
+        })
+        .chain((0..amount_normal_rewards).flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
@@ -92,18 +118,14 @@ fn generate_end_quest_rewards(
                     .area_state
                     .read()
                     .max_area_level
-                    .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+                    .saturating_add(game_data.area_specs.item_level_modifier),
                 false,
                 true,
                 None,
-                *game_data.area_state.read().loot_rarity,
+                *game_data.area_specs.loot_rarity,
             )
-        }));
-    }
-
-    // Add an extra rarer item
-    if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
-        item_rewards.extend((0..1).flat_map(|_| {
+        }))
+        .chain((0..amount_rare_rewards).flat_map(|_| {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
@@ -114,14 +136,14 @@ fn generate_end_quest_rewards(
                     .area_state
                     .read()
                     .max_area_level
-                    .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
-                true,
+                    .saturating_add(game_data.area_specs.item_level_modifier),
+                false,
                 true,
                 None,
-                *game_data.area_state.read().loot_rarity * 5.0,
+                *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
             )
         }))
-    }
+        .collect();
 
     QuestRewards { item_rewards }
 }
