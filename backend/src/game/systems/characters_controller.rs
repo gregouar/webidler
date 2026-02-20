@@ -217,7 +217,7 @@ pub fn should_apply_status(
 ) -> bool {
     let (_, (_, target_state)) = target;
 
-    if duration.map(|d| d.get() <= 0.0).unwrap_or_default() || !target_state.is_alive {
+    if duration.map(|d| d.get() <= 0.1).unwrap_or_default() || !target_state.is_alive {
         return false;
     }
 
@@ -285,7 +285,7 @@ pub fn apply_status(
         (duration, value)
     };
 
-    if duration.map(|d| d.get() <= 0.0).unwrap_or_default() || !target_state.is_alive {
+    if duration.map(|d| d.get() <=  0.1).unwrap_or_default() || !target_state.is_alive {
         return false;
     }
 

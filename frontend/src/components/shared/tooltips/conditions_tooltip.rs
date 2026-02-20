@@ -4,7 +4,10 @@ use shared::data::{
     stat_effect::StatStatusType,
 };
 
-pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String {
+pub fn format_skill_modifier_conditions_pre(
+    conditions: &[Condition],
+    prefix: &'static str,
+) -> String {
     // TODO: sort?
     conditions
         .iter()
@@ -14,7 +17,8 @@ pub fn format_skill_modifier_conditions_pre(conditions: &[Condition]) -> String 
                 skill_type,
                 not,
             } => format!(
-                " when {}{} ",
+                " {}{}{} ",
+                prefix,
                 if *not { "Non-" } else { "" },
                 format_status_type_condition(status_type.as_ref(), *skill_type),
             ),
@@ -76,7 +80,7 @@ pub fn format_status_type_condition(
                 trigger_description: _,
             } => "Under Trigger Effects".to_string(),
         },
-        None => "Effects".to_string(),
+        None => "".to_string(),
     };
 
     format!("{}{}", skilled_type_str(skill_type), status_type_str)

@@ -15,7 +15,7 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
@@ -144,9 +144,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnTakeHit(hit_trigger) => {
             format!("On {}Hit Taken", format_hit_trigger(hit_trigger))
         }
-        EventTrigger::OnKill(kill_trigger) => {
-            format!("On {}Enemy Kill", format_kill_trigger(kill_trigger))
-        }
+        EventTrigger::OnKill(kill_trigger) => format_kill_trigger(kill_trigger),
         EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
         EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),
         EventTrigger::OnDeath(target_type) => {
@@ -229,8 +227,8 @@ fn critical_str(value: Option<bool>) -> &'static str {
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
-        "{}{}",
-        conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions),
+        "On {}Enemy{} Kill",
+        conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions, ""),
         conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions),
     )
 }
