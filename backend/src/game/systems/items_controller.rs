@@ -222,7 +222,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             value: 50.0,
             bypass_ignore: true,
         }],
-        modifier_effects: vec![],
+        modifier_effects: Default::default(),
         targets: vec![SkillTargetsGroup {
             range: weapon_specs.range,
             target_type: TargetType::Enemy,
@@ -231,6 +231,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             repeat: Default::default(),
             effects,
         }],
-        triggers: vec![],
+        triggers: Default::default(),
+        auto_use_conditions: Default::default(),
     }
 }

@@ -10,9 +10,9 @@ use crate::game::systems::benedictions_controller;
 
 use super::{
     data::{
-        DataInit,
         event::{EventsQueue, GameEvent},
         master_store::MasterStore,
+        DataInit,
     },
     game_data::GameInstanceData,
     systems::{
@@ -142,6 +142,7 @@ async fn control_entities(
 
     game_data.player_controller.control_player(
         events_queue,
+        &game_data.area_threat,
         game_data.player_specs.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,

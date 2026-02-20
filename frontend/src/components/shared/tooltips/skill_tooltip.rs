@@ -20,6 +20,7 @@ use strum::IntoEnumIterator;
 
 use crate::components::{
     shared::tooltips::{
+        conditions_tooltip,
         effects_tooltip::{
             self, damage_over_time_type_str, formatted_effects_list, min_max_str,
             stat_skill_effect_type_str, status_type_str,
@@ -114,6 +115,27 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         }
                     })}
             </p>
+
+            {(!skill_specs.base.auto_use_conditions.is_empty())
+                .then(|| {
+                    view! {
+                        <hr class="border-t border-gray-700" />
+                        <ul class="text-xs xl:text-sm ">
+                            <li>
+                                <span class="text-gray-400 leading-snug">
+                                    "Auto-use only when "
+                                    {conditions_tooltip::format_skill_modifier_conditions_pre(
+                                        &skill_specs.base.auto_use_conditions,
+                                        "",
+                                    )}
+                                    {conditions_tooltip::format_skill_modifier_conditions_post(
+                                        &skill_specs.base.auto_use_conditions,
+                                    )}
+                                </span>
+                            </li>
+                        </ul>
+                    }
+                })}
 
             <ul class="list-none space-y-1 text-xs xl:text-sm">
                 {targets_lines}{trigger_lines}

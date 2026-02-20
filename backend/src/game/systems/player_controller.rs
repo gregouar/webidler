@@ -6,7 +6,7 @@ use shared::{
         MONSTER_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR,
     },
     data::{
-        area::{AreaSpecs, AreaState},
+        area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
         item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
@@ -18,7 +18,7 @@ use shared::{
 use crate::{
     game::{
         data::{DataInit, event::EventsQueue, master_store::SkillsStore},
-        systems::{characters_controller, inventory_controller},
+        systems::{characters_controller, inventory_controller, stats_updater},
     },
     rest::AppError,
 };
@@ -48,6 +48,7 @@ impl PlayerController {
     pub fn control_player<'a>(
         &mut self,
         events_queue: &mut EventsQueue,
+        area_threat: &AreaThreat,
         player_specs: &'a PlayerSpecs,
         player_state: &'a mut PlayerState,
         monsters: &mut [Target<'a>],
@@ -55,6 +56,22 @@ impl PlayerController {
         if !player_state.character_state.is_alive || player_state.character_state.is_stunned() {
             return;
         }
+
+        let no_auto_use: Vec<_> = player_specs
+            .skills_specs
+            .iter().map(|skill_specs|  skill_specs
+            .base
+            .auto_use_conditions
+            .iter()
+            .any(|condition| {
+                stats_updater::check_condition(
+                    area_threat,
+                    &player_specs.character_specs,
+                    &player_state.character_state,
+                    condition,
+                ) == 0.0})).collect();
+        
+
 
         let mut mana_available = characters_controller::mana_available(
             &player_specs.character_specs,
@@ -93,15 +110,16 @@ impl PlayerController {
                 .unwrap_or_default()
         };
 
-        for (i, (skill_specs, skill_state)) in player_specs
+        for (i, ((skill_specs, skill_state), no_auto_use)) in player_specs
             .skills_specs
             .iter()
             .zip(player_state.skills_states.iter_mut())
+            .zip(no_auto_use.into_iter())
             .take(player_specs.max_skills as usize)
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
-            if (!player_specs.auto_skills.get(i).unwrap_or(&false)
+            if (!player_specs.auto_skills.get(i).unwrap_or(&false) || no_auto_use
                 || (skill_specs.mana_cost.get() > 0.0
                     && mana_available.get() < min_mana_needed + skill_specs.mana_cost.get()))
                 && !self.use_skills.contains(&i)

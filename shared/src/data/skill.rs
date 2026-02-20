@@ -5,7 +5,7 @@ use strum_macros::EnumIter;
 
 use crate::data::{
     chance::{Chance, ChanceRange},
-    conditional_modifier::ConditionalModifier,
+    conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
     stat_effect::{MinMax, StatConverterSource, StatEffect, StatType},
     trigger::TriggerSpecs,
@@ -40,6 +40,9 @@ pub struct BaseSkillSpecs {
     pub targets: Vec<SkillTargetsGroup>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
+
+    #[serde(default)]
+    pub auto_use_conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
