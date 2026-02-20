@@ -116,7 +116,7 @@ pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> 
             min_max,
         } => {
             format!(
-                "{}Base {}Damage",
+                "{}Base {}Hit Damage",
                 min_max_str(min_max),
                 damage_type_str(damage_type)
             )
@@ -494,21 +494,6 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
             roll_type,
         } => skill_type_str(*skill_type).to_string() + &lucky_roll_str(roll_type),
-        StatType::StatConverter(stat_converter_specs) => {
-            if stat_converter_specs.is_extra {
-                format!(
-                    "Gain {} as {}",
-                    stat_converter_source_str(stat_converter_specs.source),
-                    format_multiplier_stat_name(&stat_converter_specs.stat)
-                )
-            } else {
-                format!(
-                    "Convert {} to {}",
-                    stat_converter_source_str(stat_converter_specs.source),
-                    format_multiplier_stat_name(&stat_converter_specs.stat)
-                )
-            }
-        }
         StatType::SuccessChance {
             skill_type,
             effect_type,
@@ -536,6 +521,21 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
+        StatType::StatConverter(stat_converter_specs) => {
+            if stat_converter_specs.is_extra {
+                format!(
+                    "Gain {} as {}",
+                    stat_converter_source_str(stat_converter_specs.source),
+                    format_multiplier_stat_name(&stat_converter_specs.stat)
+                )
+            } else {
+                format!(
+                    "Convert {} to {}",
+                    stat_converter_source_str(stat_converter_specs.source),
+                    format_multiplier_stat_name(&stat_converter_specs.stat)
+                )
+            }
+        }
         StatType::Description(description) => description.clone(),
     }
 }

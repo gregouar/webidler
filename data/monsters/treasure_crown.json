@@ -10,7 +10,7 @@
   "status_resistances": [
     {
       "status_type": "Stun",
-      "value": 50
+      "value": 100
     }
   ],
   "skills": [

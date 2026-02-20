@@ -296,7 +296,7 @@
     "categories": ["AttackWeapon", "RangedWeapon"],
     "weapon_specs": {
       "range": "Distance",
-      "shape": "Single",
+      "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
         "Physical": [19, 23]
@@ -358,9 +358,16 @@
         "ignore_quality": true
       },
       {
-        "scope": "Local",
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": [50, 100],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
         "stat": {
-          "Description": "Can be wielded One Handed, but only affect a Single Target."
+          "Description": "Can be wielded One Handed."
         },
         "modifier": "Flat",
         "value": 1

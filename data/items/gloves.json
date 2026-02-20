@@ -109,9 +109,9 @@
         "value": [4, 8]
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": {
-          "Description": "Prevent to use a Weapon."
+          "Description": "Cannot use a Weapon."
         },
         "modifier": "Flat",
         "value": 1

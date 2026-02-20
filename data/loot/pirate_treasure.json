@@ -1,9 +1,13 @@
 {
   "entries": [
     {
-      "item_id": "breastplate_unique",
-      "weight": 250,
-      "min_area_level": 1
+      "item_id": "treasure_gun",
+      "weight": 25000000,
+      "min_area_level": 240
+    },
+    {
+      "item_id": "treasure_crown",
+      "weight": 25000000
     }
   ]
 }
