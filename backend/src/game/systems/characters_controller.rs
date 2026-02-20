@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+
 use shared::{
     computations,
     constants::ARMOR_FACTOR,
@@ -285,7 +286,7 @@ pub fn apply_status(
         (duration, value)
     };
 
-    if duration.map(|d| d.get() <=  0.1).unwrap_or_default() || !target_state.is_alive {
+    if duration.map(|d| d.get() <= 0.1).unwrap_or_default() || !target_state.is_alive {
         return false;
     }
 
@@ -384,7 +385,7 @@ pub fn apply_status(
         status_type: status_specs.into(),
         value,
         duration,
-        trigger_id:trigger_id.map(String::from),
+        trigger_id: trigger_id.map(String::from),
     }));
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
@@ -411,7 +412,7 @@ pub fn apply_status(
             100.0.into(),
             duration.map(|d| d + stun_lockout),
             false,
-             Some("stun_lockout"),
+            Some("stun_lockout"),
         );
     }
 

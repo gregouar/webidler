@@ -21,7 +21,9 @@ use crate::components::{
     backend_client::BackendClient,
     events::{EventsContext, Key},
     shared::{
-        inventory::InventoryEquipFilter, passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus}, resources::ShardsCounter
+        inventory::InventoryEquipFilter,
+        passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+        resources::ShardsCounter,
     },
     town::TownContext,
     ui::{
@@ -880,9 +882,7 @@ fn AscendNode(
                 if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
                     selected_socket_node.set(Some(node_id));
                     town_context.selected_item_index.set(None);
-                    town_context
-                        .equip_filter
-                        .set(InventoryEquipFilter::Rune);
+                    town_context.equip_filter.set(InventoryEquipFilter::Rune);
                     town_context.open_inventory.set(true);
                 } else {
                     passives_tree_ascension.update(|passives_tree_ascension| {
