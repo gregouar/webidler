@@ -51,7 +51,7 @@ pub fn apply_trigger_effects(
                                 source: trigger_context.source,
                                 target: trigger_context.target,
                                 skill_type: status_state.skill_type,
-                                is_triggered: false,
+                                trigger_id: None,
                                 status_type: status_specs.into(),
                                 value: status_state.value,
                                 duration: status_state.duration,
@@ -69,7 +69,7 @@ pub fn apply_trigger_effects(
                                         source: trigger_context.source,
                                         target: trigger_context.target,
                                         skill_type: status_state.skill_type,
-                                        is_triggered: false,
+                                        trigger_id: None,
                                         status_type: status_specs.into(),
                                         value: status_state.value,
                                         duration: status_state.duration,
@@ -244,7 +244,7 @@ pub fn apply_trigger_effects(
                     trigger_context.trigger.skill_range,
                     &effect,
                     &mut targets,
-                    true,
+                    Some(&trigger_context.trigger.trigger_id),
                 );
             }
         }

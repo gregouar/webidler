@@ -61,7 +61,6 @@ pub struct KillTrigger {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
-    pub trigger_id: String,
     #[serde(default)]
     pub description: String,
     #[serde(flatten)]
@@ -70,6 +69,8 @@ pub struct TriggerSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggeredEffect {
+    pub trigger_id: String,
+
     #[serde(flatten)]
     pub trigger: EventTrigger,
     #[serde(default)]
@@ -86,9 +87,9 @@ pub struct TriggeredEffect {
     #[serde(default)]
     pub skill_shape: SkillShape,
 
-    #[serde(default)] // For retro compatibility
+    #[serde(default)]
     pub owner: Option<CharacterId>,
-    #[serde(default)] // For retro compatibility
+    #[serde(default)]
     pub inherit_modifiers: bool,
 }
 

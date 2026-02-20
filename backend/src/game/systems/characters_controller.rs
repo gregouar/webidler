@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-
 use shared::{
     computations,
     constants::ARMOR_FACTOR,
@@ -30,7 +29,7 @@ pub fn attack_character(
     skill_type: SkillType,
     range: SkillRange,
     is_crit: bool,
-    is_triggered: bool,
+    trigger_id: Option<&str>,
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
@@ -69,7 +68,7 @@ pub fn attack_character(
         is_crit,
         is_blocked,
         is_hurt,
-        is_triggered,
+        trigger_id: trigger_id.map(String::from),
     }));
 }
 
@@ -261,7 +260,7 @@ pub fn apply_status(
     value: NonNegative,
     duration: Option<NonNegative>,
     cumulate: bool,
-    is_triggered: bool,
+    trigger_id: Option<&str>,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
 
@@ -385,7 +384,7 @@ pub fn apply_status(
         status_type: status_specs.into(),
         value,
         duration,
-        is_triggered,
+        trigger_id:trigger_id.map(String::from),
     }));
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
@@ -412,7 +411,7 @@ pub fn apply_status(
             100.0.into(),
             duration.map(|d| d + stun_lockout),
             false,
-            true,
+             Some("stun_lockout"),
         );
     }
 

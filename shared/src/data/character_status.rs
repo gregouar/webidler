@@ -71,7 +71,7 @@ impl From<&StatusSpecs> for StatusId {
                 debuff: *debuff,
             },
             StatusSpecs::Trigger(trigger_specs) => {
-                StatusId::Trigger(trigger_specs.trigger_id.clone())
+                StatusId::Trigger(trigger_specs.triggered_effect.trigger_id.clone())
             }
         }
     }

@@ -218,6 +218,7 @@ fn compute_player_specs(
 
     for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {
         player_specs.character_specs.triggers.push(TriggeredEffect {
+            trigger_id: "restore_on_hit".into(),
             trigger: EventTrigger::OnHit(HitTrigger {
                 skill_type: Some(skill_type),
                 range: None,

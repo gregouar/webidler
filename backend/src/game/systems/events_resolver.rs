@@ -94,8 +94,8 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
                 && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
-                && hit_trigger.is_triggered.unwrap_or(hit_event.is_triggered)
-                    == hit_event.is_triggered
+                && hit_trigger.is_triggered.unwrap_or(hit_event.trigger_id.is_some())
+                    == hit_event.trigger_id.is_some()
                 && hit_trigger
                     .damage_type
                     .map(|damage_type| {
@@ -107,6 +107,7 @@ fn handle_hit_event<'a>(
                             > 0.0
                     })
                     .unwrap_or(true)
+                && hit_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
@@ -159,13 +160,14 @@ fn handle_status_event<'a>(
                 == status_event.skill_type
                 && status_trigger
                     .is_triggered
-                    .unwrap_or(status_event.is_triggered)
-                    == status_event.is_triggered
+                    .unwrap_or(status_event.trigger_id.is_some())
+                    == status_event.trigger_id.is_some()
                 && status_trigger
                     .status_type
                     .as_ref()
                     .map(|status_type| status_event.status_type.is_match(status_type))
                     .unwrap_or(true)
+                && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),

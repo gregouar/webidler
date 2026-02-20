@@ -371,7 +371,7 @@ impl From<&StatusSpecs> for StatStatusType {
                 debuff: Some(*debuff),
             },
             StatusSpecs::Trigger(trigger_specs) => StatStatusType::Trigger {
-                trigger_id: Some(trigger_specs.trigger_id.clone()),
+                trigger_id: Some(trigger_specs.triggered_effect.trigger_id.clone()),
                 trigger_description: None,
             },
         }
