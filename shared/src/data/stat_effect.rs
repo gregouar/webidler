@@ -47,6 +47,7 @@ pub enum MinMax {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
+    Description(String),
     ItemRarity,
     SkillLevel(#[serde(default)] Option<SkillType>),
     Armor(Option<DamageType>),
@@ -148,7 +149,7 @@ pub enum StatType {
     },
     StatConverter(StatConverterSpecs),
     GoldFind,
-    Description(String),
+    Description2(String),
 }
 
 pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {

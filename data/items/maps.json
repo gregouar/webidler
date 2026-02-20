@@ -40,6 +40,14 @@
     "affixes": [
       {
         "scope": "Local",
+        "stat": {
+          "Description": "May drop Cursed Treasures"
+        },
+        "modifier": "Flat",
+        "value": 1
+      },
+      {
+        "scope": "Local",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 50.0

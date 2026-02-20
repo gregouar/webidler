@@ -319,7 +319,7 @@ fn compute_character_specs(
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. } => {}
             // Other
-            StatType::ItemRarity | StatType::Description(_) => {}
+            StatType::ItemRarity | StatType::Description(_) | StatType::Description2(_) => {}
         }
     }
 

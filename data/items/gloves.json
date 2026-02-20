@@ -111,7 +111,7 @@
       {
         "scope": "Global",
         "stat": {
-          "Description": "Cannot use a Weapon."
+          "Description2": "Cannot use a Weapon"
         },
         "modifier": "Flat",
         "value": 1

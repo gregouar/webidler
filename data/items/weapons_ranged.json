@@ -309,6 +309,14 @@
       {
         "scope": "Local",
         "stat": {
+          "Description": "Can be wielded One Handed"
+        },
+        "modifier": "Flat",
+        "value": 1
+      },
+      {
+        "scope": "Local",
+        "stat": {
           "Damage": {
             "damage_type": "Fire",
             "min_max": "Min"
@@ -363,14 +371,6 @@
         "modifier": "More",
         "value": [50, 100],
         "ignore_quality": true
-      },
-      {
-        "scope": "Global",
-        "stat": {
-          "Description": "Can be wielded One Handed."
-        },
-        "modifier": "Flat",
-        "value": 1
       }
     ],
     "triggers": [],
