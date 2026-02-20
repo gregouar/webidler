@@ -4,6 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::computations;
 use shared::constants::{THREAT_EFFECT, WAVES_PER_AREA_LEVEL};
+use shared::data::item::ItemSpecs;
 use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage};
 
 use crate::assets::img_asset;
@@ -139,9 +140,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 <div class="relative z-10 inline-flex items-center justify-center space-x-2 xl:space-x-4
                 text-shadow/30 text-amber-200">
                     {move || {
-                        (!game_context.area_specs.read().effects.is_empty()
-                            || game_context.area_specs.read().triggers.is_empty())
-                            .then(|| view! { <EdictIcon /> })
+                        game_context.map_item.get().map(|map_item| view! { <EdictIcon map_item /> })
                     }} <p class=" text-lg xl:text-2xl font-bold">
                         <span class="[font-variant:small-caps]">
                             {move || game_context.area_specs.read().name.clone()}
@@ -479,29 +478,29 @@ fn RushOverlay() -> impl IntoView {
 }
 
 #[component]
-pub fn EdictIcon() -> impl IntoView {
-    let game_context: GameContext = expect_context();
+pub fn EdictIcon(map_item: ItemSpecs) -> impl IntoView {
     let tooltip_context: DynamicTooltipContext = expect_context();
+    let item_specs = Arc::new(map_item);
 
     let show_tooltip = move || {
-        if let Some(map_item) = game_context.map_item.get() {
-            let item_specs = Arc::new(map_item);
-
-            tooltip_context.set_content(
+        let item_specs = item_specs.clone();
+        tooltip_context.set_content(
                 move || {
                     view! { <ItemTooltip item_specs=item_specs.clone() max_item_level=Signal::derive(|| 9999) /> }
                         .into_any()
                 },
                 DynamicTooltipPosition::BottomLeft,
             );
-        }
     };
 
     let hide_tooltip = move || tooltip_context.hide();
 
     view! {
         <div
-            on:touchstart=move |_| { show_tooltip() }
+            on:touchstart={
+                let show_tooltip = show_tooltip.clone();
+                move |_| show_tooltip()
+            }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
