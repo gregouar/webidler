@@ -1,0 +1,254 @@
+[
+  {
+    "name": "Deflecting",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 1,
+    "weight": 100000000,
+    "restrictions": ["Map"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 10
+      },
+      {
+        "scope": "Local",
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 20
+      }
+    ]
+  },
+  {
+    "name": "Deflecting",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 12
+      },
+      {
+        "scope": "Local",
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "value": 25
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 40
+      }
+    ]
+  },
+  {
+    "name": "Protective",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 15
+      },
+      {
+        "scope": "Local",
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "value": 20
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 60
+      }
+    ]
+  },
+  {
+    "name": "Guarding",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 18
+      },
+      {
+        "scope": "Local",
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "value": 15
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 80
+      }
+    ]
+  },
+  {
+    "name": "Shielding",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 20
+      },
+      {
+        "scope": "Local",
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "value": 10
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 100
+      }
+    ]
+  },
+  {
+    "name": "Fortified",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Map"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 22
+      },
+      {
+        "scope": "Local",
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "value": 5
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 120
+      }
+    ]
+  },
+  {
+    "name": "Vigilant",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Map"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 25
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 140
+      }
+    ]
+  },
+  {
+    "name": "Preserving",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Map"],
+    "item_level": 800,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 28
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 160
+      }
+    ]
+  },
+  {
+    "name": "Safeguarding",
+    "family": "add_block",
+    "tags": ["Armor"],
+    "affix_type": "Prefix",
+    "tier": 9,
+    "weight": 500,
+    "restrictions": ["Map"],
+    "item_level": 900,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Block": null },
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 200
+      }
+    ]
+  }
+]

@@ -610,55 +610,55 @@ pub fn compute_skill_specs_effect<'a>(
                         })
                     }
                 }
-                (
-                    StatConverterSource::DamageOverTime {
-                        damage_type,
-                        min_max,
-                    },
-                    SkillEffectType::ApplyStatus { statuses, .. },
-                ) => {
-                    let min_factor = if let Some(MinMax::Min) | None = min_max {
-                        factor
-                    } else {
-                        0.0
-                    };
-                    let max_factor = if let Some(MinMax::Max) | None = min_max {
-                        factor
-                    } else {
-                        0.0
-                    };
-                    let amount: (f64, f64) = statuses
-                        .iter_mut()
-                        .flat_map(|status| match status.status_type {
-                            StatusSpecs::DamageOverTime {
-                                damage_type: status_damage_type,
-                            } if status_damage_type
-                                == damage_type.unwrap_or(status_damage_type) =>
-                            {
-                                Some((
-                                    status
-                                        .value
-                                        .min
-                                        .convert_value(min_factor, specs.is_extra, true)
-                                        .get(),
-                                    status
-                                        .value
-                                        .max
-                                        .convert_value(max_factor, specs.is_extra, true)
-                                        .get(),
-                                ))
-                            }
-                            _ => None,
-                        })
-                        .fold((0.0, 0.0), |(a, b), (c, d)| (a + c, b + d));
+                // (
+                //     StatConverterSource::DamageOverTime {
+                //         damage_type,
+                //         min_max,
+                //     },
+                //     SkillEffectType::ApplyStatus { statuses, .. },
+                // ) => {
+                //     let min_factor = if let Some(MinMax::Min) | None = min_max {
+                //         factor
+                //     } else {
+                //         0.0
+                //     };
+                //     let max_factor = if let Some(MinMax::Max) | None = min_max {
+                //         factor
+                //     } else {
+                //         0.0
+                //     };
+                //     let amount: (f64, f64) = statuses
+                //         .iter_mut()
+                //         .flat_map(|status| match status.status_type {
+                //             StatusSpecs::DamageOverTime {
+                //                 damage_type: status_damage_type,
+                //             } if status_damage_type
+                //                 == damage_type.unwrap_or(status_damage_type) =>
+                //             {
+                //                 Some((
+                //                     status
+                //                         .value
+                //                         .min
+                //                         .convert_value(min_factor, specs.is_extra, true)
+                //                         .get(),
+                //                     status
+                //                         .value
+                //                         .max
+                //                         .convert_value(max_factor, specs.is_extra, true)
+                //                         .get(),
+                //                 ))
+                //             }
+                //             _ => None,
+                //         })
+                //         .fold((0.0, 0.0), |(a, b), (c, d)| (a + c, b + d));
 
-                    Some(StatEffect {
-                        stat: (*specs.stat).clone(),
-                        modifier,
-                        value: (amount.0 + amount.1),
-                        bypass_ignore: true,
-                    })
-                }
+                //     Some(StatEffect {
+                //         stat: (*specs.stat).clone(),
+                //         modifier,
+                //         value: (amount.0 + amount.1),
+                //         bypass_ignore: true,
+                //     })
+                // }
                 _ => None,
             } {
                 stats_converted.push(stat);

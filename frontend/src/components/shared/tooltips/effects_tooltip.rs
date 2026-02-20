@@ -121,16 +121,16 @@ pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> 
                 damage_type_str(damage_type)
             )
         }
-        StatConverterSource::DamageOverTime {
-            damage_type,
-            min_max,
-        } => {
-            format!(
-                "{}Base {}",
-                min_max_str(min_max),
-                damage_over_time_type_str(damage_type)
-            )
-        }
+        // StatConverterSource::DamageOverTime {
+        //     damage_type,
+        //     min_max,
+        // } => {
+        //     format!(
+        //         "{}Base {}",
+        //         min_max_str(min_max),
+        //         damage_over_time_type_str(damage_type)
+        //     )
+        // }
         StatConverterSource::MaxLife => "Maximum Life".into(),
         StatConverterSource::MaxMana => "Maximum Mana".into(),
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),

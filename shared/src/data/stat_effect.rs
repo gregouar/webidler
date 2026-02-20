@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
+    modifier::{compute_more_factor, ModifiableValue, Modifier},
     skill::{RestoreType, SkillEffectType},
     values::NonNegative,
 };
@@ -490,12 +490,12 @@ pub enum StatConverterSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    DamageOverTime {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-        #[serde(default)]
-        min_max: Option<MinMax>,
-    },
+    // DamageOverTime {
+    //     #[serde(default)]
+    //     damage_type: Option<DamageType>,
+    //     #[serde(default)]
+    //     min_max: Option<MinMax>,
+    // },
     // ThreatLevel,
     MaxLife,
     MaxMana,

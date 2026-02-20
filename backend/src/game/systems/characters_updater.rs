@@ -370,7 +370,8 @@ fn compute_character_specs(
 
                 StatConverterSource::CritDamage
                 | StatConverterSource::Damage { .. }
-                | StatConverterSource::DamageOverTime { .. } => {
+                // | StatConverterSource::DamageOverTime { .. }
+                 => {
                     continue;
                 }
             };
@@ -408,6 +409,7 @@ pub fn compute_stat_converter(
 
         StatConverterSource::CritDamage
         | StatConverterSource::Damage { .. }
-        | StatConverterSource::DamageOverTime { .. } => 0.0,
+        // | StatConverterSource::DamageOverTime { .. } 
+        => 0.0,
     }
 }
