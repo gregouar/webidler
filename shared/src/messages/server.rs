@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
+    item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
@@ -46,6 +47,7 @@ pub enum ErrorType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
     pub character_id: UserCharacterId,
+    pub map_item: Option<ItemSpecs>,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,
     pub passives_tree_specs: PassivesTreeSpecs,

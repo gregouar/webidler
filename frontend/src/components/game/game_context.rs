@@ -9,7 +9,7 @@ use leptos::prelude::{
 use shared::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
-    item::ItemCategory,
+    item::{ItemCategory, ItemSpecs},
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
@@ -26,6 +26,7 @@ pub struct GameContext {
 
     pub character_id: RwSignal<UserCharacterId>,
 
+    pub map_item: RwSignal<Option<ItemSpecs>>,
     pub area_specs: RwSignal<AreaSpecs>,
     pub area_state: Syncable<AreaState>,
     pub area_threat: RwSignal<AreaThreat>,
@@ -74,6 +75,7 @@ impl GameContext {
             started: RwSignal::new(false),
             character_id: Default::default(),
 
+            map_item: RwSignal::new(Default::default()),
             area_specs: RwSignal::new(Default::default()),
             area_state: Default::default(),
             area_threat: RwSignal::new(Default::default()),

@@ -559,6 +559,10 @@ impl From<Vec<&StatEffect>> for EffectsMap {
 }
 
 impl EffectsMap {
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+
     pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
         EffectsMap(maps.flat_map(|m| m.0.into_iter()).fold(
             HashMap::new(),
