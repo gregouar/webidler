@@ -319,7 +319,10 @@ fn compute_character_specs(
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. } => {}
             // Other
-            StatType::ItemRarity | StatType::Description(_) | StatType::Description2(_) => {}
+            StatType::ItemRarity
+            | StatType::GemsFind
+            | StatType::Description(_)
+            | StatType::Description2(_) => {}
         }
     }
 
@@ -365,7 +368,9 @@ fn compute_character_specs(
                     }
                 }
 
-                StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => {
+                StatConverterSource::CritDamage
+                | StatConverterSource::Damage { .. }
+                | StatConverterSource::DamageOverTime { .. } => {
                     continue;
                 }
             };
@@ -401,6 +406,8 @@ pub fn compute_stat_converter(
             }
         }
 
-        StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => 0.0,
+        StatConverterSource::CritDamage
+        | StatConverterSource::Damage { .. }
+        | StatConverterSource::DamageOverTime { .. } => 0.0,
     }
 }

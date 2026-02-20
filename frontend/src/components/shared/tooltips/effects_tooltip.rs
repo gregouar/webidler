@@ -121,6 +121,16 @@ pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> 
                 damage_type_str(damage_type)
             )
         }
+        StatConverterSource::DamageOverTime {
+            damage_type,
+            min_max,
+        } => {
+            format!(
+                "{}Base {}",
+                min_max_str(min_max),
+                damage_over_time_type_str(damage_type)
+            )
+        }
         StatConverterSource::MaxLife => "Maximum Life".into(),
         StatConverterSource::MaxMana => "Maximum Mana".into(),
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),
@@ -424,7 +434,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
         } => {
             format!(
-                "Restore{} Effect{}",
+                "Restore{} Effects{}",
                 restore_type_str(*restore_type),
                 with_skill_type_str(*skill_type)
             )
@@ -471,6 +481,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
         StatType::ItemRarity => "Item Rarity".to_string(),
+        StatType::GemsFind => "Gems Find".to_string(),
         StatType::RestoreOnHit {
             restore_type,
             skill_type,
@@ -708,6 +719,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format!("-{}s Movement Cooldown", format_flat_number(value, true))
         }
         StatType::GoldFind => format!("Adds {} Gold per Kill", format_flat_number(value, false)),
+        StatType::GemsFind => format!(
+            "Adds {} Gems per Champion Kill",
+            format_flat_number(value, false)
+        ),
         StatType::ItemRarity => format!("Adds {}% Item Rarity", format_flat_number(value, false)),
         StatType::ThreatGain => {
             if value.unwrap_or_default() >= 0.0 {

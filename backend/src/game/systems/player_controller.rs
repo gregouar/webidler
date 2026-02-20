@@ -59,19 +59,22 @@ impl PlayerController {
 
         let no_auto_use: Vec<_> = player_specs
             .skills_specs
-            .iter().map(|skill_specs|  skill_specs
-            .base
-            .auto_use_conditions
             .iter()
-            .any(|condition| {
-                stats_updater::check_condition(
-                    area_threat,
-                    &player_specs.character_specs,
-                    &player_state.character_state,
-                    condition,
-                ) == 0.0})).collect();
-        
-
+            .map(|skill_specs| {
+                skill_specs
+                    .base
+                    .auto_use_conditions
+                    .iter()
+                    .any(|condition| {
+                        stats_updater::check_condition(
+                            area_threat,
+                            &player_specs.character_specs,
+                            &player_state.character_state,
+                            condition,
+                        ) == 0.0
+                    })
+            })
+            .collect();
 
         let mut mana_available = characters_controller::mana_available(
             &player_specs.character_specs,
@@ -119,7 +122,8 @@ impl PlayerController {
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
-            if (!player_specs.auto_skills.get(i).unwrap_or(&false) || no_auto_use
+            if (!player_specs.auto_skills.get(i).unwrap_or(&false)
+                || no_auto_use
                 || (skill_specs.mana_cost.get() > 0.0
                     && mana_available.get() < min_mana_needed + skill_specs.mana_cost.get()))
                 && !self.use_skills.contains(&i)
@@ -151,7 +155,10 @@ pub fn reward_player(
     let gold_reward = (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
-        ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0).floor()
+        ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0
+            * *area_specs.gems_find
+            * 0.01)
+            .floor()
     } else {
         0.0
     };

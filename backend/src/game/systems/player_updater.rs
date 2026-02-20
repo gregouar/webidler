@@ -336,7 +336,10 @@ fn modify_player_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. },
+                source:
+                    StatConverterSource::CritDamage
+                    | StatConverterSource::Damage { .. }
+                    | StatConverterSource::DamageOverTime { .. },
                 ..
             })
             | StatType::SuccessChance { .. }
@@ -344,7 +347,10 @@ fn modify_player_specs(
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
-            StatType::ItemRarity | StatType::Description(_) | StatType::Description2(_) => {}
+            StatType::ItemRarity
+            | StatType::GemsFind
+            | StatType::Description(_)
+            | StatType::Description2(_) => {}
         }
     }
 

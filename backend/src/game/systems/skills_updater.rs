@@ -530,7 +530,6 @@ pub fn compute_skill_specs_effect<'a>(
                         bypass_ignore: true,
                     })
                 }
-                // TODO: Apply status?
                 (
                     StatConverterSource::Damage {
                         damage_type,
@@ -611,6 +610,55 @@ pub fn compute_skill_specs_effect<'a>(
                         })
                     }
                 }
+                (
+                    StatConverterSource::DamageOverTime {
+                        damage_type,
+                        min_max,
+                    },
+                    SkillEffectType::ApplyStatus { statuses, .. },
+                ) => {
+                    let min_factor = if let Some(MinMax::Min) | None = min_max {
+                        factor
+                    } else {
+                        0.0
+                    };
+                    let max_factor = if let Some(MinMax::Max) | None = min_max {
+                        factor
+                    } else {
+                        0.0
+                    };
+                    let amount: (f64, f64) = statuses
+                        .iter_mut()
+                        .flat_map(|status| match status.status_type {
+                            StatusSpecs::DamageOverTime {
+                                damage_type: status_damage_type,
+                            } if status_damage_type
+                                == damage_type.unwrap_or(status_damage_type) =>
+                            {
+                                Some((
+                                    status
+                                        .value
+                                        .min
+                                        .convert_value(min_factor, specs.is_extra, true)
+                                        .get(),
+                                    status
+                                        .value
+                                        .max
+                                        .convert_value(max_factor, specs.is_extra, true)
+                                        .get(),
+                                ))
+                            }
+                            _ => None,
+                        })
+                        .fold((0.0, 0.0), |(a, b), (c, d)| (a + c, b + d));
+
+                    Some(StatEffect {
+                        stat: (*specs.stat).clone(),
+                        modifier,
+                        value: (amount.0 + amount.1),
+                        bypass_ignore: true,
+                    })
+                }
                 _ => None,
             } {
                 stats_converted.push(stat);
@@ -619,17 +667,4 @@ pub fn compute_skill_specs_effect<'a>(
 
         compute_skill_specs_effect(skill_type, skill_effect, stats_converted.iter());
     }
-
-    // if let SkillEffectType::FlatDamage { damage, .. } = &mut skill_effect.effect_type {
-    //     damage.retain(|_, value| {
-    //         // value.min = value.min.evaluate().max(0.0).into();
-    //         // value.max = value.max.evaluate().max(0.0).into();
-    //         if value.min.get() < 0.0 {
-    //             value.min = 0.0.into();
-    //         }
-    //         value.clamp();
-
-    //         value.max.evaluate() > 0.0
-    //     });
-    // }
 }

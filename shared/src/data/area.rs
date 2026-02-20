@@ -37,6 +37,9 @@ pub struct AreaSpecs {
     pub reward_picks: u8,
     #[serde(default = "default_item_rarity")]
     pub loot_rarity: ModifiableValue<f64>,
+    #[serde(default = "default_item_rarity")]
+    pub gems_find: ModifiableValue<f64>,
+
     #[serde(default)]
     pub effects: EffectsMap,
     #[serde(default)]

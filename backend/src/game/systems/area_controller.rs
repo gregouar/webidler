@@ -73,8 +73,10 @@ pub fn init_area_specs(
 
 fn compute_area_specs(area_specs: &mut AreaSpecs) {
     for effect in area_specs.effects.iter() {
-        if effect.stat == StatType::ItemRarity {
-            area_specs.loot_rarity.apply_effect(&effect)
+        match effect.stat {
+            StatType::ItemRarity => area_specs.loot_rarity.apply_effect(&effect),
+            StatType::GemsFind => area_specs.gems_find.apply_effect(&effect),
+            _ => {}
         }
     }
 }

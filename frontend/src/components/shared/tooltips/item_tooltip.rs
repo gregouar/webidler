@@ -480,7 +480,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            "Rare reward slots: "
+                            "Rare Reward Slots: "
                             <span class="text-white font-semibold">
                                 {format!("+{:.0}", specs.reward_slots)}
                             </span>
@@ -492,7 +492,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <li class="text-gray-400 text-xs xl:text-sm leading-snug">
-                            "Reward picks: "
+                            "Reward Picks: "
                             <span class="text-white font-semibold">
                                 {format!("+{:.0}", specs.reward_picks)}
                             </span>

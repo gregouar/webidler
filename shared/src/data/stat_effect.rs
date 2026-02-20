@@ -48,6 +48,7 @@ pub enum MinMax {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
+    GemsFind,
     ItemRarity,
     SkillLevel(#[serde(default)] Option<SkillType>),
     Armor(Option<DamageType>),
@@ -484,6 +485,12 @@ pub struct StatConverterSpecs {
 pub enum StatConverterSource {
     CritDamage,
     Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
+    },
+    DamageOverTime {
         #[serde(default)]
         damage_type: Option<DamageType>,
         #[serde(default)]

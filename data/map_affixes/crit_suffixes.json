@@ -1,0 +1,272 @@
+[
+  {
+    "name": "of Destruction",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 100
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 10
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 20
+      }
+    ]
+  },
+  {
+    "name": "of Havoc",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 140
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 12
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 40
+      }
+    ]
+  },
+  {
+    "name": "of Demolition",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 180
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 14
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 60
+      }
+    ]
+  },
+  {
+    "name": "of Annihilation",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 220
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 16
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 80
+      }
+    ]
+  },
+  {
+    "name": "of Obliteration",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 260
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 18
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 100
+      }
+    ]
+  },
+  {
+    "name": "of Rampage",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Map"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 300
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 20
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 120
+      }
+    ]
+  },
+  {
+    "name": "of Ruination",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Map"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 340
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 22
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 140
+      }
+    ]
+  },
+  {
+    "name": "of Devastation",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Map"],
+    "item_level": 800,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 380
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 24
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 160
+      }
+    ]
+  },
+  {
+    "name": "of Extermination",
+    "family": "inc_crit_damage",
+    "tags": ["Attack", "Critical"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 500,
+    "restrictions": ["Map"],
+    "item_level": 900,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "CritDamage": null },
+        "modifier": "Flat",
+        "value": 420
+      },
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 200
+      }
+    ]
+  }
+]

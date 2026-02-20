@@ -1,6 +1,6 @@
 # Changelog
 
-## Edicts Update
+## Major Game Update: «Proclamation of Power»
 
 Features:
 

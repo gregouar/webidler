@@ -56,7 +56,7 @@
         "scope": "Local",
         "stat": "ItemRarity",
         "modifier": "Increased",
-        "value": [150, 250]
+        "value": [100, 150]
       },
       {
         "scope": "Local",

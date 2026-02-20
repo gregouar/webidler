@@ -3,9 +3,14 @@
     "enabled": true
   },
   "resources": {
-    "item_affixes": [      
+    "item_affixes": [
+      "crit_suffixes.json",
+      "damage_suffixes.json",
+      "fire_suffixes.json",
+      "storm_suffixes.json",
       "map_prefixes.json",
-      "map_suffixes.json"
+      "speed_suffixes.json",
+      "storm_suffixes.json"
     ]
   }
 }
