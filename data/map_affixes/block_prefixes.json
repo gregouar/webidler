@@ -5,7 +5,7 @@
     "tags": ["Armor"],
     "affix_type": "Prefix",
     "tier": 1,
-    "weight": 100000000,
+    "weight": 1000,
     "restrictions": ["Map"],
     "item_level": 100,
     "effects": [
