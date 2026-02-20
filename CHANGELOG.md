@@ -22,6 +22,7 @@ Content:
 - Added Skill: Irradiate.
 - Added Skill: Righteous Fire.
 - Added Skill: Shield Bash.
+- Added new Unique Items to discover, including an Edict and multiple Runes.
 
 Balance Changes:
 

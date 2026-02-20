@@ -151,6 +151,18 @@
       },
       {
         "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Increased",
+        "value": [12, 16]
+      },
+      {
+        "scope": "Global",
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "value": [8, 12]
+      },
+      {
+        "scope": "Global",
         "stat": {
           "StatusDuration": {
             "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
@@ -175,7 +187,7 @@
     "triggers": [
       {
         "trigger_id": "treasure_idol",
-        "description": "",
+        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per second for the same Duration. You deal 20% more Poison Damage per stack of Venom.",
         "OnApplyStatus": {
           "skill_type": null,
           "status_type": {
@@ -220,7 +232,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "value": 20,
+                  "value": 5,
                   "cumulate": true
                 },
                 {
@@ -236,15 +248,22 @@
               ],
               "duration": 0
             },
-            "ignore_stat_effects": [],
+            "ignore_stat_effects": [
+              {
+                "Damage": {}
+              },
+              {
+                "StatusPower": {}
+              }
+            ],
             "conditional_modifiers": [
               {
                 "conditions": ["LowLife"],
                 "effects": [
                   {
-                    "stat": { "SuccessChance": {} },
-                    "modifier": "Flat",
-                    "value": -100
+                    "stat": { "StatusDuration": {} },
+                    "modifier": "More",
+                    "value": -1e300
                   }
                 ]
               }
