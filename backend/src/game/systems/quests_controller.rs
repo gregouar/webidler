@@ -1,5 +1,5 @@
 use shared::{
-    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
+    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_ADD},
     data::{item::ItemCategory, quest::QuestRewards},
 };
 
@@ -76,7 +76,11 @@ fn generate_end_quest_rewards(
     };
 
     let amount_map_rewards = if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
-        if rewards_amount > 2 { 2 } else { 1 }
+        if rewards_amount > 2 {
+            2
+        } else {
+            1
+        }
     } else {
         0
     };
@@ -136,7 +140,7 @@ fn generate_end_quest_rewards(
                 true,
                 true,
                 None,
-                *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
+                *game_data.area_specs.loot_rarity + ITEM_REWARDS_RARE_ADD,
             )
         }))
         .collect();
