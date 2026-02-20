@@ -8,6 +8,33 @@
       "armor": 20
     }
   },
+  "padded_tunic_unique": {
+    "name": "A Simple Shirt",
+    "description": "Who needs more?",
+    "icon": "items/shirt.webp",
+    "slot": "Body",
+    "categories": ["Armor", "Body"],
+    "armor_specs": {
+      "armor": 20
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": { "Armor": "Physical" },
+        "modifier": "More",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": [1, 5],
+        "ignore_quality": true
+      }
+    ]
+  },
   "leather_armor": {
     "name": "Leather Armor",
     "icon": "items/leather_armor.webp",
