@@ -181,29 +181,29 @@ pub fn status_type_str(status_type: Option<&StatStatusType>) -> String {
 pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
     match status_type {
         Some(status_type) => match status_type {
-            StatStatusType::Stun => "Stun Power".to_string(),
+            StatStatusType::Stun => "Stun Effects".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
                 // format!("{}Damage per second", damage_type_str(*damage_type))
                 damage_over_time_type_str(*damage_type).into()
             }
             StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => "Negative Statuses Power".to_string(),
-                Some(false) => "Positive Statuses Power".to_string(),
-                None => "Statuses Power".to_string(),
+                Some(true) => "Negative Statuses Effects".to_string(),
+                Some(false) => "Positive Statuses Effects".to_string(),
+                None => "Statuses Effects".to_string(),
             },
             StatStatusType::Trigger {
                 trigger_id: Some(trigger_id),
                 trigger_description,
             } => format!(
-                "{} Power",
+                "{} Effects",
                 trigger_description.clone().unwrap_or(trigger_id.clone())
             ),
             StatStatusType::Trigger {
                 trigger_id: _,
                 trigger_description: _,
-            } => "Triggered Effects Power".to_string(),
+            } => "Triggered Effects".to_string(),
         },
-        None => "Effects over Time Power".to_string(),
+        None => "Effects over Time".to_string(),
     }
 }
 

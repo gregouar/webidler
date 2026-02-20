@@ -135,6 +135,129 @@
     ],
     "min_area_level": 190
   },
+  "treasure_idol": {
+    "name": "Idol of the Serpent Queen",
+    "description": "Her children drank the poison willingly. The wise died quickly.",
+    "icon": "items/treasure_idol.webp",
+    "slot": "Shield",
+    "categories": ["Focus"],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 60.0
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
+        },
+        "modifier": "Increased",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": { "Damage": { "damage_type": "Poison" } },
+            "conditions": ["LowLife"]
+          }
+        },
+        "modifier": "More",
+        "value": 200.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "treasure_idol",
+        "description": "",
+        "OnApplyStatus": {
+          "skill_type": null,
+          "status_type": {
+            "DamageOverTime": {
+              "damage_type": "Poison"
+            }
+          },
+          "is_triggered": null
+        },
+        "target": "Me",
+        "modifiers": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": null,
+                "skill_type": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 1.0,
+            "source": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            }
+          }
+        ],
+        "skill_range": "Any",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 20,
+                  "cumulate": true
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": { "Damage": { "damage_type": "Poison" } },
+                      "modifier": "More"
+                    }
+                  },
+                  "value": 20,
+                  "cumulate": true
+                }
+              ],
+              "duration": 0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [
+              {
+                "conditions": ["LowLife"],
+                "effects": [
+                  {
+                    "stat": { "SuccessChance": {} },
+                    "modifier": "Flat",
+                    "value": -100
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
+      }
+    ],
+    "min_area_level": 200
+  },
   "ritual_orb": {
     "name": "Ritual Orb",
     "icon": "items/ritual_orb.webp",

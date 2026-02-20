@@ -115,7 +115,11 @@ pub fn VerticalProgressBar(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let set_value = move || {
-        if reset.get() { 0.0 } else { value.get() }
+        if reset.get() {
+            0.0
+        } else {
+            value.get()
+        }
     };
 
     // Trick to reset animation by removing it when ended
@@ -395,6 +399,7 @@ pub fn CircularProgressBar(
                 // Icon
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    scale-125
                     will-change-[filter,transform] transition-[filter,transform] duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
