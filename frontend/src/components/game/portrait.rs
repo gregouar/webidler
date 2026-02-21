@@ -413,6 +413,6 @@ pub fn status_id_str(status_id: &StatusId, value: f64) -> String {
             value: if *debuff { -value } else { value },
             bypass_ignore: false,
         }),
-        StatusId::Trigger(trigger_id) => trigger_id.clone(),
+        StatusId::Trigger(_) => "Special Effect".into(),
     }
 }

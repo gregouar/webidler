@@ -7,17 +7,14 @@ use leptos_router::{
 use shared::http::server::GetCharacterDetailsResponse;
 
 use crate::components::{
-    backend_client::BackendClient,
-    shared::{
+    backend_client::BackendClient, data_context::DataContext, shared::{
         player_count::PlayerCount,
         resources::{GemsCounter, ShardsCounter},
-    },
-    town::{
+    }, town::{
         TownContext,
         panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
         town_scene::TownScene,
-    },
-    ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
+    }, ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip}
 };
 
 #[derive(Clone, Params, PartialEq)]
@@ -29,6 +26,9 @@ struct CharacterParams {
 pub fn ViewCharacterPage() -> impl IntoView {
     let town_context = TownContext::default();
     provide_context(town_context);
+    
+    let data_context: DataContext = expect_context();
+    let backend = expect_context::<BackendClient>();
 
     let params = use_params::<CharacterParams>();
 
@@ -51,6 +51,15 @@ pub fn ViewCharacterPage() -> impl IntoView {
                 .await
                 .map(|response| response.benedictions_specs)
                 .unwrap_or_default()
+        }
+    });
+    
+
+    let data_load = LocalResource::new({
+        move || async move {
+            if data_context.load_data(backend).await.is_err() {
+                use_navigate()("/", Default::default());
+            }
         }
     });
 
@@ -101,6 +110,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || Suspend::new(async move {
+                    data_load.await;
                     initial_load.await;
                     town_context.passives_tree_specs.set(passives_tree_specs.await);
                     town_context.benedictions_specs.set(benedictions_specs.await);
