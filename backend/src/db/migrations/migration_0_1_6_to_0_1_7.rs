@@ -300,6 +300,7 @@ pub enum OldStatType {
     ManaOnHit(#[serde(default)] HitTrigger),
     Restore(#[serde(default)] Option<RestoreType>),
     CritChance(#[serde(default)] Option<SkillType>),
+    CritChances(#[serde(default)] Option<SkillType>),
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower(#[serde(default)] Option<StatStatusType>),
     StatusDuration(#[serde(default)] Option<StatStatusType>),
@@ -393,6 +394,7 @@ impl From<OldStatType> for StatType {
                 skill_type: None,
             },
             OldStatType::CritChance(skill_type) => CritChance(skill_type),
+            OldStatType::CritChances(skill_type) => CritChance(skill_type),
             OldStatType::CritDamage(skill_type) => CritDamage(skill_type),
             OldStatType::StatusPower(stat_status_type) => StatusPower {
                 status_type: stat_status_type,
@@ -559,6 +561,7 @@ pub enum OldLuckyRollType {
     Block,
     Evade(Option<DamageType>),
     CritChance,
+    CritChances,
     SuccessChance,
 }
 
@@ -570,6 +573,7 @@ impl From<OldLuckyRollType> for LuckyRollType {
             OldLuckyRollType::Block => Block,
             OldLuckyRollType::Evade(damage_type) => Evade(damage_type),
             OldLuckyRollType::CritChance => CritChance,
+            OldLuckyRollType::CritChances => CritChance,
             OldLuckyRollType::SuccessChance => SuccessChance { effect_type: None },
         }
     }
