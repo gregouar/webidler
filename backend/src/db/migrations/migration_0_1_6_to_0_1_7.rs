@@ -305,6 +305,7 @@ pub enum OldStatType {
     StatusPower(#[serde(default)] Option<StatStatusType>),
     StatusDuration(#[serde(default)] Option<StatStatusType>),
     Speed(#[serde(default)] Option<SkillType>),
+    SpellPower,
     MovementSpeed,
     GoldFind,
     ItemRarity,
@@ -404,6 +405,11 @@ impl From<OldStatType> for StatType {
             OldStatType::StatusDuration(stat_status_type) => StatusDuration {
                 status_type: stat_status_type,
                 skill_type: None,
+            },
+            OldStatType::SpellPower => Damage {
+                skill_type: Some(SkillType::Spell),
+                damage_type: None,
+                min_max: None,
             },
             OldStatType::Speed(skill_type) => Speed(skill_type),
             OldStatType::MovementSpeed => MovementSpeed,
