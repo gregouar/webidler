@@ -82,10 +82,8 @@ where
         if let Some(value) = bind.get() {
             validation_error.set(None);
             prop_value.set(serde_plain::to_string(&value).ok().unwrap_or_default())
-        } else {
-            if validation_error.read().is_none() {
-                prop_value.set("".into());
-            }
+        } else if validation_error.read().is_none() {
+            prop_value.set("".into());
         }
     });
 
