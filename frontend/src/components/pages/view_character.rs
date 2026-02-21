@@ -191,7 +191,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     }
                     disabled=disable_inventory
                 >
-                    "Ascend"
+                    "Passives"
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
