@@ -1966,7 +1966,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -1986,7 +1988,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -2135,7 +2139,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -2155,7 +2161,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -2387,7 +2395,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -2407,7 +2417,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -3368,8 +3380,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "crushing_blow",
             "description": "",
+            "trigger_id": "crushing_blow",
             "OnHit": {
               "skill_type": null,
               "range": null,
@@ -3896,7 +3908,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -3916,7 +3930,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -4027,7 +4043,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -4047,7 +4065,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -4458,7 +4478,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -4478,7 +4500,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -4658,7 +4682,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4677,7 +4701,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -5287,8 +5311,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "healing_aura",
             "description": "",
+            "trigger_id": "healing_aura",
             "OnWaveCompleted": null,
             "target": "Me",
             "modifiers": [
@@ -5972,8 +5996,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "pyromaniac",
             "description": "",
+            "trigger_id": "pyromaniac",
             "OnApplyStatus": {
               "skill_type": null,
               "status_type": {
@@ -6057,7 +6081,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -6077,7 +6103,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -6217,7 +6245,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -6237,7 +6267,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -6311,7 +6343,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -6331,7 +6365,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -6600,7 +6636,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "More",
@@ -6625,7 +6663,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "More",
@@ -7332,7 +7372,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -7351,7 +7391,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -8205,8 +8245,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "sickening_concoction",
             "description": "",
+            "trigger_id": "sickening_concoction",
             "OnApplyStatus": {
               "skill_type": null,
               "status_type": {
@@ -8617,7 +8657,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -8636,7 +8676,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -8895,8 +8935,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "blazing_inferno",
             "description": "",
+            "trigger_id": "blazing_inferno",
             "OnHit": {
               "skill_type": null,
               "range": null,
@@ -8995,7 +9035,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -9015,7 +9057,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -9372,7 +9416,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -9392,7 +9438,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -9708,7 +9756,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -9728,7 +9778,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -9834,8 +9886,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "bonfire",
             "description": "",
+            "trigger_id": "bonfire",
             "OnHit": {
               "skill_type": null,
               "range": null,
@@ -10079,8 +10131,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "open_wound",
             "description": "20% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
+            "trigger_id": "open_wound",
             "OnHit": {
               "skill_type": "Attack",
               "range": null,
@@ -10120,8 +10172,8 @@
                     {
                       "status_type": {
                         "Trigger": {
-                          "trigger_id": "passives/open_wound.svg",
                           "description": "Takes additional Physical Damage when Hit.",
+                          "trigger_id": "passives/open_wound.svg",
                           "OnTakeHit": {
                             "skill_type": null,
                             "range": null,
@@ -10369,7 +10421,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -10389,7 +10443,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -10722,8 +10778,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "dot_spread",
             "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
+            "trigger_id": "dot_spread",
             "OnKill": {
               "conditions": []
             },
@@ -10927,9 +10983,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -10940,9 +10996,9 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -10985,16 +11041,16 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -11083,6 +11139,13 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -11093,13 +11156,6 @@
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
                     }
                   }
                 ],
@@ -11135,7 +11191,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -11155,7 +11213,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -11345,7 +11405,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -11365,7 +11427,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -11588,7 +11652,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -11607,7 +11671,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 3,
@@ -11767,8 +11831,8 @@
         "effects": [],
         "triggers": [
           {
-            "trigger_id": "stunning_blow",
             "description": "",
+            "trigger_id": "stunning_blow",
             "OnHit": {
               "skill_type": "Attack",
               "range": null,
@@ -12708,7 +12772,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -12728,7 +12794,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ]
               }
             },
             "modifier": "More",
@@ -13107,7 +13175,9 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Increased",
@@ -13124,7 +13194,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -13141,7 +13213,9 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Increased",
@@ -13158,7 +13232,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -13333,7 +13409,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -13353,7 +13431,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -13489,7 +13569,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",
@@ -13509,7 +13591,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ]
               }
             },
             "modifier": "More",

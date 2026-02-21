@@ -4,6 +4,8 @@ use shared::data::{
     stat_effect::StatStatusType,
 };
 
+use crate::components::shared::tooltips::{effects_tooltip, skill_tooltip};
+
 pub fn format_skill_modifier_conditions_pre(
     conditions: &[Condition],
     prefix: &'static str,
@@ -20,7 +22,7 @@ pub fn format_skill_modifier_conditions_pre(
                 " {}{}{} ",
                 prefix,
                 if *not { "Non-" } else { "" },
-                format_status_type_condition(status_type.as_ref(), *skill_type),
+                format_under_status_type_condition(status_type.as_ref(), *skill_type),
             ),
             Condition::StatusStacks { .. } => "".into(),
             Condition::MaximumLife => "".into(),
@@ -43,8 +45,9 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
                 status_type,
                 skill_type,
             } => format!(
-                " per {} stack",
-                format_status_type_condition(status_type.as_ref(), *skill_type),
+                " per {}{} stack",
+                skill_tooltip::skill_type_str(*skill_type),
+                effects_tooltip::status_type_str(status_type.as_ref()),
             ),
             Condition::MaximumLife => " on Maximum Life".into(),
             Condition::MaximumMana => " on Maximum Mana".into(),
@@ -56,7 +59,7 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
         .join("")
 }
 
-pub fn format_status_type_condition(
+pub fn format_under_status_type_condition(
     status_type: Option<&StatStatusType>,
     skill_type: Option<SkillType>,
 ) -> String {
