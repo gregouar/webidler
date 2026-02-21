@@ -466,9 +466,9 @@ fn factor_str(modifier: Modifier, debuff: bool) -> &'static str {
     match (modifier, debuff) {
         (Modifier::Increased, true) => "Decreased",
         (Modifier::Increased, false) => "Increased",
-        (Modifier::Flat, true) => "Added",
-        (Modifier::Flat, false) => "Removed",
-        (Modifier::More, true) => "More",
-        (Modifier::More, false) => "Less",
+        (Modifier::Flat, true) => "Removed",
+        (Modifier::Flat, false) => "Added",
+        (Modifier::More, true) => "Less",
+        (Modifier::More, false) => "More",
     }
 }

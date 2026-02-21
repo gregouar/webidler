@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use leptos::{ev, html::Div, portal::Portal, prelude::*, web_sys};
 use leptos_use::{use_mouse, use_window_size};
-use web_sys::DomRect;
 
 #[derive(Clone, Debug, Copy)]
 pub struct DynamicTooltipContext {
@@ -205,37 +204,80 @@ where
     let is_open = RwSignal::new(false);
 
     let container_ref = NodeRef::<Div>::new();
+    let tooltip_ref = NodeRef::<Div>::new();
     let _ = leptos_use::on_click_outside(container_ref, move |_| is_open.set(false));
 
-    // let tooltip_style = RwSignal::new(String::new());
-    let tooltip_pos = RwSignal::new((200.0, 200.0));
+    let tooltip_pos = RwSignal::new(Default::default());
 
-    // Recalculate position when opened
     Effect::new(move |_| {
-        if is_open.get() {
-            if let Some(el) = container_ref.get() {
-                let rect: DomRect = el.get_bounding_client_rect();
-
-                tooltip_pos.set(match position {
-                    StaticTooltipPosition::Top => (rect.left() + rect.width() / 2.0, rect.top()),
-                    StaticTooltipPosition::Bottom => {
-                        (rect.left() + rect.width() / 2.0, rect.bottom())
-                    }
-                    StaticTooltipPosition::Left => (rect.left(), rect.top() + rect.height() / 2.0),
-                    StaticTooltipPosition::Right => {
-                        (rect.right(), rect.top() + rect.height() / 2.0)
-                    }
-                });
-            }
+        if !is_open.get() {
+            return;
         }
+
+        let Some(trigger) = container_ref.get() else {
+            return;
+        };
+        let Some(tip) = tooltip_ref.get() else {
+            return;
+        };
+
+        let rect = trigger.get_bounding_client_rect();
+        let tip_rect = tip.get_bounding_client_rect();
+
+        let (x, y) = match position {
+            StaticTooltipPosition::Top => (rect.left() + rect.width() / 2.0, rect.top()),
+            StaticTooltipPosition::Bottom => (rect.left() + rect.width() / 2.0, rect.bottom()),
+            StaticTooltipPosition::Left => (rect.left(), rect.top() + rect.height() / 2.0),
+            StaticTooltipPosition::Right => (rect.right(), rect.top() + rect.height() / 2.0),
+        };
+
+        // Viewport size
+        let window = web_sys::window().unwrap();
+        let vw = window.inner_width().unwrap().as_f64().unwrap();
+        let vh = window.inner_height().unwrap().as_f64().unwrap();
+
+        // Compute actual rendered box depending on transform
+        let (mut left, mut top) = match position {
+            StaticTooltipPosition::Top => (x - tip_rect.width() / 2.0, y - tip_rect.height()),
+            StaticTooltipPosition::Bottom => (x - tip_rect.width() / 2.0, y),
+            StaticTooltipPosition::Left => (x - tip_rect.width(), y - tip_rect.height() / 2.0),
+            StaticTooltipPosition::Right => (x, y - tip_rect.height() / 2.0),
+        };
+
+        // Clamp inside viewport with 8px padding
+        let padding = 8.0;
+
+        left = left.clamp(padding, vw - tip_rect.width() - padding);
+        top = top.clamp(padding, vh - tip_rect.height() - padding);
+
+        tooltip_pos.set((left, top));
     });
 
-    let transform = match position {
-        StaticTooltipPosition::Top => "translate(-50%, -100%)",
-        StaticTooltipPosition::Bottom => "translate(-50%, 0)",
-        StaticTooltipPosition::Left => "translate(-100%, -50%)",
-        StaticTooltipPosition::Right => "translate(0, -50%)",
-    };
+    // Effect::new(move |_| {
+    //     if is_open.get() {
+    //         if let Some(el) = container_ref.get() {
+    //             let rect: DomRect = el.get_bounding_client_rect();
+
+    //             tooltip_pos.set(match position {
+    //                 StaticTooltipPosition::Top => (rect.left() + rect.width() / 2.0, rect.top()),
+    //                 StaticTooltipPosition::Bottom => {
+    //                     (rect.left() + rect.width() / 2.0, rect.bottom())
+    //                 }
+    //                 StaticTooltipPosition::Left => (rect.left(), rect.top() + rect.height() / 2.0),
+    //                 StaticTooltipPosition::Right => {
+    //                     (rect.right(), rect.top() + rect.height() / 2.0)
+    //                 }
+    //             });
+    //         }
+    //     }
+    // });
+
+    // let transform = match position {
+    //     StaticTooltipPosition::Top => "translate(-50%, -100%)",
+    //     StaticTooltipPosition::Bottom => "translate(-50%, 0)",
+    //     StaticTooltipPosition::Left => "translate(-100%, -50%)",
+    //     StaticTooltipPosition::Right => "translate(0, -50%)",
+    // };
 
     let handle = window_event_listener(ev::touchend, {
         move |ev| {
@@ -269,15 +311,11 @@ where
                 view! {
                     <Portal>
                         <div
+                            node_ref=tooltip_ref
                             class="p-2  fixed z-50"
                             style=move || {
                                 let (x, y) = tooltip_pos.get();
-                                format!(
-                                    "position: fixed; left:{}px; top:{}px; transform:{};",
-                                    x,
-                                    y,
-                                    transform,
-                                )
+                                format!("position: fixed; left:{}px; top:{}px; ", x, y)
                             }
                         >
                             <div class="
