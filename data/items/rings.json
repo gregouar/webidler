@@ -227,7 +227,7 @@
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Increased",
+        "modifier": "More",
         "value": -1e300,
         "ignore_quality": true
       },
@@ -271,7 +271,7 @@
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Increased",
+        "modifier": "More",
         "value": -1e300,
         "ignore_quality": true
       },

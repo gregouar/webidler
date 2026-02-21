@@ -418,7 +418,7 @@
             "stat": {
               "CritChance": null
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -1e300
           },
           {
@@ -1966,9 +1966,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -1988,9 +1986,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -2139,9 +2135,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -2161,9 +2155,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -2395,9 +2387,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -2417,9 +2407,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -2727,7 +2715,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -1e300
           },
           {
@@ -3908,9 +3896,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -3930,9 +3916,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -4043,9 +4027,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -4065,9 +4047,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -4478,9 +4458,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -4500,9 +4478,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -6081,9 +6057,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -6103,9 +6077,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -6245,9 +6217,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -6267,9 +6237,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -6343,9 +6311,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -6365,9 +6331,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -6636,9 +6600,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "LowLife"
-                ]
+                "conditions": ["LowLife"]
               }
             },
             "modifier": "More",
@@ -6663,9 +6625,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "LowLife"
-                ]
+                "conditions": ["LowLife"]
               }
             },
             "modifier": "More",
@@ -9035,9 +8995,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -9057,9 +9015,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -9416,9 +9372,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -9438,9 +9392,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -9756,9 +9708,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -9778,9 +9728,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -10428,9 +10376,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -10450,9 +10396,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -11198,9 +11142,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -11220,9 +11162,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -11412,9 +11352,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -11434,9 +11372,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -12779,9 +12715,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -12801,9 +12735,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ]
+                "conditions": ["MaximumMana"]
               }
             },
             "modifier": "More",
@@ -13182,9 +13114,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Increased",
@@ -13201,9 +13131,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -13220,9 +13148,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Increased",
@@ -13239,9 +13165,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -13416,9 +13340,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -13438,9 +13360,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -13576,9 +13496,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",
@@ -13598,9 +13516,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ]
+                "conditions": ["ThreatLevel"]
               }
             },
             "modifier": "More",

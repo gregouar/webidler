@@ -127,7 +127,7 @@
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
-        "modifier": "Increased",
+        "modifier": "More",
         "value": -1e300,
         "ignore_quality": true
       },
@@ -186,7 +186,7 @@
       {
         "scope": "Global",
         "stat": "LifeRegen",
-        "modifier": "Increased",
+        "modifier": "More",
         "value": -1e300,
         "ignore_quality": true
       },
