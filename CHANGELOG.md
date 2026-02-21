@@ -36,4 +36,4 @@ Balance Changes:
 Fixes:
 
 - Fix some input fields not getting updated after manually changing value (like in Market).
-- Minor visual improvements to the interface.
+- Various improvements to the interface.
