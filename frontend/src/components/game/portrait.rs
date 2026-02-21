@@ -97,141 +97,36 @@ pub fn CharacterPortrait(
             .unwrap_or_default()
     };
 
+    // let (border_class, shimmer_effect) = match rarity {
+    //     MonsterRarity::Normal => ("border-6 xl:border-8 border-double border-stone-500", ""),
+    //     MonsterRarity::Champion => (
+    //         "border-6 xl:border-8 border-double border-indigo-700",
+    //         "champion-shimmer",
+    //     ),
+    //     MonsterRarity::Boss => (
+    //         "border-8 xl:border-12 border-double border-red-700",
+    //         "boss-shimmer",
+    //     ),
+    // };
+
     let (border_class, shimmer_effect) = match rarity {
-        MonsterRarity::Normal => ("border-6 xl:border-8 border-double border-stone-500", ""),
+        MonsterRarity::Normal => (
+            "shadow-[0_0_0_3px_#1c1917,0_0_0_6px_#78716c] xl:shadow-[0_0_0_4px_#1c1917,0_0_0_8px_#78716c]",
+            "",
+        ),
+
         MonsterRarity::Champion => (
-            "border-6 xl:border-8 border-double border-indigo-700",
+            "shadow-[0_0_0_3px_#1e1b4b,0_0_0_6px_#4338ca,0_0_18px_rgba(99,102,241,0.6)] xl:shadow-[0_0_0_4px_#1e1b4b,0_0_0_8px_#4338ca,0_0_24px_rgba(99,102,241,0.7)]",
             "champion-shimmer",
         ),
+
         MonsterRarity::Boss => (
-            "border-8 xl:border-12 border-double border-red-700",
+            "shadow-[0_0_0_4px_#2b0a0a,0_0_0_10px_#b91c1c,0_0_30px_rgba(220,38,38,0.75)] xl:shadow-[0_0_0_5px_#2b0a0a,0_0_0_12px_#b91c1c,0_0_40px_rgba(220,38,38,0.85)]",
             "boss-shimmer",
         ),
     };
 
     view! {
-        <style>
-            "
-            .champion-shimmer {
-                background: linear-gradient(
-                    130deg,
-                    rgba(255,255,255,0) 40%,
-                    rgba(6,182,212,0.35) 50%,
-                    rgba(59,130,246,0.35) 60%,
-                    rgba(255,255,255,0) 70%
-                );
-                background-size: 500% 100%;
-                background-repeat: repeat;
-                animation: shimmerMove 8s infinite linear;
-                pointer-events: none;
-            }
-            
-            .boss-shimmer {
-                background: linear-gradient(
-                    130deg,
-                    rgba(255,255,255,0) 40%,
-                    rgba(255,50,50,0.4) 50%,
-                    rgba(139,0,0,0.4) 60%,
-                    rgba(255,255,255,0) 70%
-                );
-                background-size: 500% 100%;
-                background-repeat: repeat;
-                animation: shimmerMove 12s infinite linear;
-                pointer-events: none;
-            }
-            
-            @keyframes shimmerMove {
-                0%   { background-position: -100% 0; }
-                100% { background-position: 400% 0; }
-            }        
-            
-            @keyframes shake {
-                0%, 100% { transform: translate(0, 0) rotate(0); }
-                25% { transform: translate(-4px, 2px) rotate(-2deg); }
-                50% { transform: translate(4px, -2px) rotate(2deg); }
-                75% { transform: translate(-3px, 1px) rotate(-1deg); }
-            }
-            
-            @keyframes shield_flash {
-                0% { opacity: 0; transform: scale(0.35) translateY(60%); }
-                50% { opacity: 0.8; transform: scale(.55) translateY(40%); }
-                100% { opacity: 0; transform: scale(.65) translateY(60%); }
-            }
-            
-            @keyframes evade_flash {
-                0% {
-                    opacity: 0;
-                    transform: translate3d(-30%, -60%, 0) scale(0.75) rotate(-60deg);
-                }
-                50% {
-                    opacity: 0.5;
-                    transform: translate3d(0%, -60%, 0) scale(0.85);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translate3d(30%, -60%, 0) scale(0.75) rotate(60deg);
-                }
-            }
-            
-            /* --- BLEED OVERLAY --- */
-            .status-bleed {
-                background:
-                    linear-gradient(
-                        to bottom,
-                        rgba(150, 0, 0, 0.8) 0%,
-                        rgba(150, 0, 0, 0.4) 15%,
-                        rgba(150, 0, 0, 0) 40%
-                    );
-                animation: bleedPulse 2.5s ease-in-out infinite;
-            }
-            
-            /* subtle pulsing of intensity */
-            @keyframes bleedPulse {
-                0%, 100% {
-                    opacity: 0.5;
-                }
-                50% {
-                    opacity: 1.0;
-                }
-            }
-            
-            /* --- BURN OVERLAY --- */
-            .status-burn {
-                background:
-                linear-gradient(
-                to right,
-                rgba(255, 90, 0, 0.7) 0%,
-                rgba(255, 90, 0, 0) 25%,
-                rgba(255, 90, 0, 0) 75%,
-                rgba(255, 90, 0, 0.7) 100%
-                );
-                animation: burnFlicker 1.4s ease-in-out infinite;
-            }
-            
-            @keyframes burnFlicker {
-                0%   { opacity: 0.7; }
-                45%  { opacity: 1.0; }
-                100% { opacity: 0.7; }
-            }
-            
-            /* --- POISON OVERLAY --- */
-            .status-poison {
-                background:
-                    linear-gradient(
-                        to top,
-                        rgba(64, 120, 0, 0.85) 0%,
-                        rgba(28, 120, 0, 0.35) 20%,
-                        rgba(0, 120, 0, 0) 45%
-                    );
-                animation: poisonPulse 2.8s ease-in-out infinite;
-            }
-            
-            @keyframes poisonPulse {
-                0%, 100% { opacity: 0.4; }
-                50%      { opacity: 0.6;   }
-            }
-            "
-        </style>
         <div class=move || {
             format!(
                 "flex items-center justify-center h-full w-full relative overflow-hidden {}",

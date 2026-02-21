@@ -19,8 +19,8 @@ use crate::components::{
     },
 };
 
-use super::GameContext;
 use super::portrait::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -367,83 +367,6 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
 
     view! {
-        <style>
-            "
-            .gold-text {
-                font-weight: bold;
-                text-shadow: 0 0 8px rgba(255, 223, 0, 0.9);
-            }
-            
-            .gems-text {
-                font-weight: bold;
-                text-shadow: 0 0 8px rgba(0, 200, 255, 0.9);
-            }
-            
-            .reward-float {
-                animation: rewardFloat 2.5s ease-out forwards;
-                position: absolute;
-            }
-            
-            @keyframes rewardFloat {
-                0% {
-                    opacity: 0;
-                    transform: translateY(0) scale(0.9);
-                }
-                20% {
-                    opacity: 1;
-                    transform: translateY(-12px) scale(1.1);
-                }
-                40% {
-                    opacity: 1;
-                    transform: translateY(-24px) scale(1.1);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translateY(-64px) scale(1);
-                }
-            }
-            
-            .champion-title {                
-                font-weight: bold;
-                color: #06b6d4;
-            }
-            
-            .boss-title {
-                font-weight: bold;
-                color: #facc15;
-            }
-            
-            
-            @keyframes damage-float {
-                0% {
-                    opacity: 0;
-                    transform: translate(var(--x-offset-start), 0) scale(calc(var(--scale-start) * 0.7)) rotate(0deg);
-                }
-                10% {
-                    opacity: 1;
-                    transform: translate(var(--x-offset-start), -5px) scale(var(--scale-start)) rotate(0deg);
-                }
-                60% {
-                    opacity: 1;
-                    transform: translate(calc(var(--x-offset-start) + var(--x-offset) * 0.6), calc(var(--y-offset) * 0.6))
-                            scale(var(--scale-end))
-                            rotate(calc(var(--rotate) * 0.6));
-                }
-                100% {
-                    opacity: 0;
-                    transform: translate(calc(var(--x-offset-start) + var(--x-offset)), var(--y-offset))
-                            scale(calc(var(--scale-end) * 1.1))
-                            rotate(var(--rotate));
-                }
-            }
-            
-            .animate-damage-float {
-                animation: damage-float var(--duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
-                will-change: transform, opacity;
-                filter: saturate(--scale-end);
-            }
-            "
-        </style>
         <div
             class="grid grid-cols-4 h-full
             bg-zinc-800 xl:shadow-lg/30 rounded-md ring-1 ring-zinc-700

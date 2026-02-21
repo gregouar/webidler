@@ -243,21 +243,6 @@ pub fn PlayerCard() -> impl IntoView {
     });
 
     view! {
-        <style>
-            "
-            @keyframes player-fade-in {
-             0% { transform: translateX(-100%); opacity: 0; }
-             65% { transform: translateX(0%); opacity: 1; }
-             80% { transform: translateX(-5%); }
-             100% { transform: translateX(0%); }
-            }
-            
-            @keyframes player-fade-out {
-             from { opacity: 1; transform: translateY(0%); }
-             to { opacity: 0; transform: translateY(100%); }
-            }
-            "
-        </style>
         <Card class="w-1/3">
             // <div class="max-h-full w-1/3
             // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2

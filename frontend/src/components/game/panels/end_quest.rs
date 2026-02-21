@@ -173,35 +173,6 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
     // TODO: Make responsive on mobile
 
     view! {
-        <style>
-            ".perspective {
-                perspective: 1000px;
-            }
-            
-            .transform-style-3d {
-                transform-style: preserve-3d;
-            }
-            
-            .backface-hidden {
-                backface-visibility: hidden;
-            }
-            
-            @keyframes reward-reveal {
-                0% {
-                    transform: rotateY(180deg);
-                }
-                100% {
-                    transform: rotateY(0deg);
-                }
-            }
-            
-            .reward-flip {
-                transform: rotateY(180deg);
-                animation: reward-reveal 0.6s ease-out forwards;
-            }
-            "
-        </style>
-
         <div class="w-full h-full flex flex-col gap-2 items-center justify-center">
 
             <div class="w-full flex justify-between px-4">

@@ -22,23 +22,6 @@ where
     };
 
     view! {
-        <style>
-            ".dropdown-transition {
-            opacity: 0;
-            transform: scaleY(0.5);
-            transform-origin: top;
-            transition: all 150ms ease-out;
-            pointer-events: none;
-            }
-            
-            .dropdown-transition.open {
-            opacity: 1;
-            transform: scaleY(1);
-            pointer-events: auto;
-            }
-            "
-        </style>
-
         <div class="relative w-60 text-sm xl:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle
@@ -143,27 +126,6 @@ where
     });
 
     view! {
-        <style>
-            ".dropdown-transition {
-                opacity: 0;
-                transform: scaleY(0.5);
-                transform-origin: top;
-                transition: all 150ms ease-out;
-                pointer-events: none;
-            }
-            .dropdown-transition.open {
-                opacity: 1;
-                transform: scaleY(1);
-                pointer-events: auto;
-            }
-            ul::-webkit-scrollbar { width: 8px; }
-            ul::-webkit-scrollbar-track { background: #1f1f1f; border-radius: 4px; }
-            ul::-webkit-scrollbar-thumb { background-color: #525252; border-radius: 4px; border: 2px solid #1f1f1f; }
-            ul { scrollbar-width: thin; scrollbar-color: #525252 #1f1f1f; }
-            ul::-webkit-scrollbar-thumb:hover { background-color: #737373; }
-            "
-        </style>
-
         <div class="relative w-60 text-sm xl:text-base text-white" node_ref=node_ref>
             <button
                 on:click=toggle

@@ -52,23 +52,6 @@ pub fn HorizontalProgressBar(
     });
 
     view! {
-        <style>
-            "
-            @keyframes horizontal-progress-bar-fade-out {
-                0% {
-                    opacity: 1;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-                50% {
-                    filter: drop-shadow( 0 0 25px oklch(92.4% 0.12 95.746));  
-                }
-                100% {
-                    opacity: 0;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-            }
-            "
-        </style>
         <div class=format!(
             "
             relative flex w-full
@@ -115,7 +98,11 @@ pub fn VerticalProgressBar(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let set_value = move || {
-        if reset.get() { 0.0 } else { value.get() }
+        if reset.get() {
+            0.0
+        } else {
+            value.get()
+        }
     };
 
     // Trick to reset animation by removing it when ended
@@ -134,24 +121,6 @@ pub fn VerticalProgressBar(
     });
 
     view! {
-        <style>
-            "
-            @keyframes vertical-progress-bar-fade-out {
-                0% {
-                    opacity: 1;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-                50% {
-                    filter: drop-shadow( 0 0 25px oklch(92.4% 0.12 95.746));  
-                }
-                100% {
-                    opacity: 0;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-            }
-            "
-        </style>
-
         <div class="
         relative flex flex-col justify-end h-full
         rounded-lg 
@@ -265,26 +234,6 @@ pub fn CircularProgressBar(
 
     view! {
         <div class="circular-progress-bar">
-            <style>
-                "
-                @keyframes circular-progress-bar-fade-out {
-                 0% { opacity: 1; }
-                 100% { opacity: 0; }
-                }
-                @keyframes circular-progress-bar-glow {
-                 50% { 
-                    transform: scale(1.2); 
-                 }
-                }
-
-
-                @property --progress {
-                    syntax: '<percentage>';
-                    inherits: false;
-                    initial-value: 0%;
-                }
-                "
-            </style>
             <div class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden" style="contain: strict;">
 
                 <div

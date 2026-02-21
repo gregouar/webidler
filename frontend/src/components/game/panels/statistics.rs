@@ -634,13 +634,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     view! {
-        <style>
-            "
-            .stat-list > div:nth-child(odd) {
-            background-color: rgba(63, 63, 70, 0.2);
-            }
-            "
-        </style>
         <CardInset pad=false>
             <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
                 {title}

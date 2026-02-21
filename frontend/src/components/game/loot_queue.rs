@@ -90,36 +90,6 @@ pub fn LootQueue() -> impl IntoView {
 
     view! {
         <div class="relative w-full z-0 pr-4">
-            <style>
-                "
-                @keyframes loot-drop {
-                    0% { transform: translateY(-100px); opacity: 0; }
-                    100% { transform: translateY(0px); opacity: 1; }
-                }
-                @keyframes loot-float {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-4%); }
-                }
-                @keyframes loot-pickup {
-                    99% {
-                        opacity: 0;
-                        transform: scale(1.5) translateY(-200%);
-                    }
-                    100% {
-                        opacity: 0;
-                        transform: scale(1.5) translateY(-200%);
-                        visibility: hidden;
-                    }
-                }
-                @keyframes loot-vibrate {
-                0%, 100% { transform: translate(0, 0); }
-                20% { transform: translate(-1px, 1px); }
-                40% { transform: translate(1px, -1px); }
-                60% { transform: translate(-1px, -1px); }
-                80% { transform: translate(1px, 1px); }
-                }
-                "
-            </style>
             <For
                 each=move || game_context.queued_loot.get().into_iter()
                 key=|loot| loot.identifier
