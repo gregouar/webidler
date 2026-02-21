@@ -17,7 +17,8 @@ pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
 pub const MAX_PLAYER_STAMINA: Duration = Duration::from_hours(24);
 
 pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
-pub const MONSTER_INCREASE_FACTOR: f64 = 0.12;
+pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07765;
+pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.12;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
 pub const XP_INCREASE_FACTOR: f64 = 0.39;
 pub const ARMOR_FACTOR: f64 = 100.0;

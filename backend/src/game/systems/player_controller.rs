@@ -3,7 +3,7 @@ use anyhow::Result;
 use shared::{
     computations,
     constants::{
-        MONSTER_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR,
+         MONSTER_REWARD_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR
     },
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
@@ -285,7 +285,7 @@ pub fn sell_item(
                     .modifiers
                     .level
                     .saturating_sub(area_specs.starting_level + area_specs.item_level_modifier - 1),
-                MONSTER_INCREASE_FACTOR,
+                MONSTER_REWARD_INCREASE_FACTOR,
             );
 
     player_resources.gold += gold_reward;

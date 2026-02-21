@@ -207,7 +207,7 @@ impl<'a> GameInstance<'a> {
             self.game_data.player_resources.read().gold_total
                 * computations::exponential(
                     self.game_data.area_specs.item_level_modifier,
-                    constants::MONSTER_INCREASE_FACTOR,
+                    constants::MONSTER_REWARD_INCREASE_FACTOR,
                 ),
         )
         .await?;
