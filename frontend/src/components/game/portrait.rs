@@ -111,17 +111,26 @@ pub fn CharacterPortrait(
 
     let (border_class, shimmer_effect) = match rarity {
         MonsterRarity::Normal => (
-            "shadow-[0_0_0_3px_#1c1917,0_0_0_6px_#78716c] xl:shadow-[0_0_0_4px_#1c1917,0_0_0_8px_#78716c]",
+            "
+            shadow-[0_0_0_3px_#1c1917,0_0_0_6px_#78716c] 
+            xl:shadow-[0_0_0_4px_#1c1917,0_0_0_8px_#78716c]
+            ",
             "",
         ),
 
         MonsterRarity::Champion => (
-            "shadow-[0_0_0_3px_#1e1b4b,0_0_0_6px_#4338ca,0_0_18px_rgba(99,102,241,0.6)] xl:shadow-[0_0_0_4px_#1e1b4b,0_0_0_8px_#4338ca,0_0_24px_rgba(99,102,241,0.7)]",
+            "
+            shadow-[0_0_0_3px_#1e1b4b,0_0_0_6px_#4338ca,0_0_18px_rgba(99,102,241,0.6)] 
+            xl:shadow-[0_0_0_4px_#1e1b4b,0_0_0_8px_#4338ca,0_0_24px_rgba(99,102,241,0.7)]
+            ",
             "champion-shimmer",
         ),
 
         MonsterRarity::Boss => (
-            "shadow-[0_0_0_4px_#2b0a0a,0_0_0_10px_#b91c1c,0_0_30px_rgba(220,38,38,0.75)] xl:shadow-[0_0_0_5px_#2b0a0a,0_0_0_12px_#b91c1c,0_0_40px_rgba(220,38,38,0.85)]",
+            "
+            shadow-[0_0_0_4px_#2b0a0a,0_0_0_10px_#b91c1c,0_0_30px_rgba(220,38,38,0.75)] 
+            xl:shadow-[0_0_0_5px_#2b0a0a,0_0_0_12px_#b91c1c,0_0_40px_rgba(220,38,38,0.85)]
+            ",
             "boss-shimmer",
         ),
     };
@@ -129,13 +138,13 @@ pub fn CharacterPortrait(
     view! {
         <div class=move || {
             format!(
-                "flex items-center justify-center h-full w-full relative overflow-hidden {}",
+                "flex items-center justify-center h-full w-full relative p-1 xl:p-2 {}",
                 is_dead_img_effect(),
             )
         }>
             <div class=format!("h-full w-full {}", border_class) style=crit_animation_style>
                 <div
-                    class="h-full w-full"
+                    class="h-full w-full relative"
                     style=format!(
                         "background-image: url('{}');",
                         img_asset("ui/paper_background.webp"),
@@ -153,6 +162,29 @@ pub fn CharacterPortrait(
                         }
                     />
 
+                    <div class="absolute inset-0 flex place-items-start">
+                        <For each=move || active_statuses.get() key=|k| k.clone() let(k)>
+                            <StatusIcon
+                                status_id=k.clone()
+                                stack=Signal::derive(move || status_stack(k.clone()))
+                            />
+                        </For>
+                    </div>
+                </div>
+
+                <div
+                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply"
+                    class:opacity-100=move || {
+                        active_statuses
+                            .read()
+                            .contains(
+                                &StatusId::DamageOverTime {
+                                    damage_type: DamageType::Physical,
+                                },
+                            )
+                    }
+                >
+                    <div class="absolute inset-0 status-bleed"></div>
                 </div>
 
                 <div
@@ -183,30 +215,6 @@ pub fn CharacterPortrait(
                     }
                 >
                     <div class="absolute inset-0 status-poison"></div>
-                </div>
-
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply"
-                    class:opacity-100=move || {
-                        active_statuses
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Physical,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-bleed"></div>
-                </div>
-
-                <div class="absolute inset-0 flex place-items-start p-1 xl:p-2">
-                    <For each=move || active_statuses.get() key=|k| k.clone() let(k)>
-                        <StatusIcon
-                            status_id=k.clone()
-                            stack=Signal::derive(move || status_stack(k.clone()))
-                        />
-                    </For>
                 </div>
 
                 {move || {
