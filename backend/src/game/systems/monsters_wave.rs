@@ -65,13 +65,18 @@ fn generate_monsters_wave_specs(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
+    let area_relative_level = area_state
+        .area_level
+        .saturating_sub(area_specs.starting_level)
+        + 1;
+
     // Can only fight boss once per level
     if area_state.max_area_level < area_state.area_level {
         let available_bosses: Vec<_> = bosses
             .iter()
             .filter(|b| {
-                area_state.area_level >= b.level
-                    && (area_state.area_level - b.level)
+                area_relative_level >= b.level
+                    && (area_relative_level - b.level)
                         .is_multiple_of(b.interval.unwrap_or(AreaLevel::MAX))
             })
             .collect();
@@ -92,8 +97,8 @@ fn generate_monsters_wave_specs(
     let available_waves: Vec<_> = waves
         .iter()
         .filter(|wave| {
-            area_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
-                && area_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
+            area_relative_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
+                && area_relative_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
         })
         .collect();
 

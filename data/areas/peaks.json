@@ -4,7 +4,7 @@
     "description": "[Boss Area] The peaks do not weather storms. They are shaped by the wings and wrath of their masters.",
     "starting_level": 51,
     "required_level": 250,
-    "item_level_modifier": 190,
+    "item_level_modifier": 100,
     "header_background": "areas/peaks_header.webp",
     "footer_background": "areas/peaks_footer.webp"
   },
@@ -20,7 +20,7 @@
   ],
   "bosses": [
     {
-      "level": 80,
+      "level": 30,
       "interval": 2,
       "spawns": [
         {
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "level": 81,
+      "level": 31,
       "interval": 2,
       "spawns": [
         {
@@ -77,7 +77,7 @@
       ]
     },
     {
-      "min_level": 60,
+      "min_level": 10,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -112,7 +112,7 @@
       ]
     },
     {
-      "min_level": 70,
+      "min_level": 20,
       "max_level": null,
       "weight": 1000,
       "spawns": [

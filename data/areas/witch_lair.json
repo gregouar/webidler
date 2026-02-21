@@ -4,7 +4,7 @@
     "description": "[Boss Area] This is no mere nest, but a lair woven of silk, curses, and whispered bargains. Every step draws you deeper into the Spider Witch's web.",
     "starting_level": 21,
     "required_level": 100,
-    "item_level_modifier": 70,
+    "item_level_modifier": 40,
     "header_background": "areas/witch_header.webp",
     "footer_background": "areas/witch_footer.webp"
   },
@@ -20,7 +20,7 @@
   ],
   "bosses": [
     {
-      "level": 50,
+      "level": 30,
       "interval": 1,
       "spawns": [
         {
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "min_level": 30,
+      "min_level": 10,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -98,7 +98,7 @@
       ]
     },
     {
-      "min_level": 40,
+      "min_level": 20,
       "max_level": null,
       "weight": 1000,
       "spawns": [
