@@ -2,9 +2,9 @@ use anyhow::Result;
 
 use axum::{
     extract::{
-        State,
         connect_info::ConnectInfo,
         ws::{WebSocket, WebSocketUpgrade},
+        State,
     },
     response::IntoResponse,
 };
@@ -27,9 +27,9 @@ use crate::{
     auth,
     db::{self},
     game::{
-        GameInstance,
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
+        GameInstance,
     },
     rest::AppError,
     websocket::WebSocketConnection,
@@ -117,7 +117,7 @@ async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) 
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
-                return handle_connect(app_state, msg).await;
+                return handle_connect(app_state, *msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));

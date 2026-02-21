@@ -85,10 +85,10 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
     match message {
         ServerMessage::Connect(_) => {}
         ServerMessage::InitGame(m) => {
-            init_game(game_context, m);
+            init_game(game_context, *m);
         }
         ServerMessage::UpdateGame(m) => {
-            sync_game(game_context, m);
+            sync_game(game_context, *m);
         }
         ServerMessage::Error(error_message) => {
             let toaster = expect_context::<Toasts>();
