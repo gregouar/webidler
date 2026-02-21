@@ -12,7 +12,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [5, 7]
       }
     ]
@@ -30,7 +30,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 10]
       }
     ]
@@ -48,7 +48,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [11, 13]
       }
     ]
@@ -66,7 +66,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [14, 16]
       }
     ]
@@ -84,7 +84,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [17, 19]
       }
     ]
@@ -102,7 +102,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 22]
       }
     ]
@@ -120,7 +120,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [23, 25]
       }
     ]
@@ -138,7 +138,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [26, 28]
       }
     ]
@@ -156,7 +156,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [29, 31]
       }
     ]
@@ -174,7 +174,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [32, 34]
       }
     ]
@@ -193,8 +193,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [20, 29]
+        "modifier": "Increased",
+        "value": [20, 25]
       }
     ]
   },
@@ -211,8 +211,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [30, 39]
+        "modifier": "Increased",
+        "value": [30, 35]
       }
     ]
   },
@@ -229,8 +229,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [40, 49]
+        "modifier": "Increased",
+        "value": [40, 45]
       }
     ]
   },
@@ -247,8 +247,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [50, 59]
+        "modifier": "Increased",
+        "value": [50, 55]
       }
     ]
   },
@@ -265,8 +265,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [60, 69]
+        "modifier": "Increased",
+        "value": [60, 65]
       }
     ]
   },
@@ -283,8 +283,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [70, 79]
+        "modifier": "Increased",
+        "value": [70, 75]
       }
     ]
   },
@@ -301,8 +301,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [80, 89]
+        "modifier": "Increased",
+        "value": [80, 85]
       }
     ]
   },
@@ -319,8 +319,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [90, 99]
+        "modifier": "Increased",
+        "value": [90, 95]
       }
     ]
   },
@@ -337,8 +337,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [100, 109]
+        "modifier": "Increased",
+        "value": [100, 105]
       }
     ]
   },
@@ -355,8 +355,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
-        "value": [110, 119]
+        "modifier": "Increased",
+        "value": [110, 120]
       }
     ]
   }

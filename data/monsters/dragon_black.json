@@ -7,6 +7,13 @@
   "power_factor": 20,
   "initiative": 2,
   "armor": { "Poison": 100, "Storm": 100 },
+  "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 66
+    }
+  ],
   "skills": [
     {
       "name": "Tempest Talon",

@@ -58,7 +58,7 @@
         "stat": {
           "CritDamage": null
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       },
       {
@@ -66,7 +66,7 @@
         "stat": {
           "CritChance": null
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [15, 30]
       },
       {
@@ -74,16 +74,13 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       },
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": {
-            "is_hurt": true,
-            "skill_type": "Attack"
-          }
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [4, 8]
@@ -93,7 +90,7 @@
       {
         "trigger_id": "bloodspiller",
         "OnKill": {
-          "is_damaged_over_time": "Physical"
+          "conditions": [{ "HasStatus": { "DamageOverTime": "Physical" } }]
         },
         "target": "Me",
         "effects": [
@@ -167,8 +164,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Physical"
+          "Damage": {
+            "damage_type": "Physical",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -177,8 +175,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Physical"
+          "Damage": {
+            "damage_type": "Physical",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -187,8 +186,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Storm"
+          "Damage": {
+            "damage_type": "Storm",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -201,7 +201,7 @@
             "damage_type": "Storm"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [50, 100]
       },
       {
@@ -211,13 +211,13 @@
             "skill_type": "Spell"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [180, 240]
       },
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
@@ -246,18 +246,6 @@
             "ignore_stat_effects": [
               {
                 "Damage": {
-                  "skill_type": null,
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": null,
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "MaxDamage": {
                   "skill_type": null,
                   "damage_type": "Storm"
                 }
@@ -299,6 +287,95 @@
     },
     "min_area_level": 190
   },
+  "treasure_gun": {
+    "name": "Pistol of the Damned",
+    "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
+    "icon": "items/treasure_gun.webp",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [19, 23]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": {
+          "Description": "Can be wielded One Handed"
+        },
+        "modifier": "Flat",
+        "value": 1
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Min"
+          }
+        },
+        "modifier": "Flat",
+        "value": [10, 13],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Max"
+          }
+        },
+        "modifier": "Flat",
+        "value": [14, 16],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Damage": {}
+        },
+        "modifier": "Increased",
+        "value": [100, 120],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "Speed": "Attack"
+        },
+        "modifier": "Increased",
+        "value": [20, 30],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": {
+          "CritChance": null
+        },
+        "modifier": "Increased",
+        "value": [40, 60],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": [50, 100],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "min_area_level": 200
+  },
   "compound_bow": {
     "name": "Compound Bow",
     "icon": "items/compound_bow.webp",
@@ -315,7 +392,7 @@
       "crit_chance": 10,
       "crit_damage": 100
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
@@ -339,8 +416,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Fire"
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -350,8 +428,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Fire"
+          "Damage": {
+            "damage_type": "Fire",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -363,7 +442,7 @@
         "stat": {
           "Damage": {}
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [150, 200],
         "ignore_quality": true
       },
@@ -416,18 +495,6 @@
                   "skill_type": "Attack",
                   "damage_type": "Fire"
                 }
-              },
-              {
-                "MinDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Fire"
-                }
-              },
-              {
-                "MaxDamage": {
-                  "skill_type": "Attack",
-                  "damage_type": "Fire"
-                }
               }
             ]
           }
@@ -446,6 +513,24 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "weapon_ranged_7": {
+    "name": "Crossbow",
+    "icon": "items/crossbow.webp",
+    "slot": "Weapon",
+    "extra_slots": ["Shield"],
+    "categories": ["AttackWeapon", "RangedWeapon"],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [27, 31]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "min_area_level": 320
   }
 }

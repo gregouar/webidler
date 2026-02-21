@@ -1,9 +1,10 @@
 {
   "specs": {
     "name": "Enchanted Castle",
+    "description": "Once a place of splendor, the castle still stands, its halls alive with magic, servants, and a court that never learned to die.",
     "starting_level": 31,
     "required_level": 150,
-    "item_level_modifier": 110,
+    "item_level_modifier": 60,
     "header_background": "areas/castle_header.webp",
     "footer_background": "areas/castle_footer.webp"
   },
@@ -13,11 +14,12 @@
     "tier_3.json",
     "tier_4.json",
     "tier_5.json",
-    "tier_6.json"
+    "tier_6.json",
+    "tier_7.json"
   ],
   "bosses": [
     {
-      "level": 80,
+      "level": 50,
       "interval": 50,
       "spawns": [
         {
@@ -68,7 +70,7 @@
       ]
     },
     {
-      "min_level": 40,
+      "min_level": 10,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -107,7 +109,7 @@
       ]
     },
     {
-      "min_level": 50,
+      "min_level": 20,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -134,7 +136,7 @@
       ]
     },
     {
-      "min_level": 60,
+      "min_level": 30,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -169,7 +171,7 @@
       ]
     },
     {
-      "min_level": 70,
+      "min_level": 40,
       "max_level": null,
       "weight": 1000,
       "spawns": [

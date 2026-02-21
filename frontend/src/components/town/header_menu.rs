@@ -2,7 +2,10 @@ use leptos::{html::*, prelude::*};
 
 use crate::components::{
     events::{EventsContext, Key},
-    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
+    shared::{
+        inventory::InventoryEquipFilter,
+        resources::{GemsCounter, GoldCounter, ShardsCounter},
+    },
     town::TownContext,
     ui::{buttons::MenuButton, fullscreen::FullscreenButton, wiki::WikiButton},
 };
@@ -31,6 +34,7 @@ pub fn HeaderMenu() -> impl IntoView {
             .set(!town_context.open_inventory.get_untracked());
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
+        town_context.equip_filter.set(InventoryEquipFilter::Slot);
     };
 
     Effect::new(move || {
@@ -85,7 +89,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Character('f')) {
+        if events_context.key_pressed(Key::Character('r')) {
             open_forge()
         }
     });
@@ -102,7 +106,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     Effect::new(move || {
-        if events_context.key_pressed(Key::Character('a')) {
+        if events_context.key_pressed(Key::Character('p')) {
             open_ascend()
         }
     });
@@ -125,11 +129,12 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 shadow-md h-auto">
+        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
+        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
             <div class="flex justify-around w-full items-center">
-                <GoldCounter value=gold />
-                <GemsCounter value=gems />
-                <ShardsCounter value=shards />
+                <GoldCounter value=gold w_full=true />
+                <GemsCounter value=gems w_full=true />
+                <ShardsCounter value=shards w_full=true />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
@@ -151,7 +156,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     "Forge"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                    "Ascend"
+                    "Passives"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
                     "Temple"

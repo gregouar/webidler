@@ -12,8 +12,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [10, 19]
+        "modifier": "Increased",
+        "value": [10, 15]
       }
     ]
   },
@@ -30,8 +30,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [20, 29]
+        "modifier": "Increased",
+        "value": [20, 25]
       }
     ]
   },
@@ -48,8 +48,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [30, 39]
+        "modifier": "Increased",
+        "value": [30, 35]
       }
     ]
   },
@@ -66,8 +66,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [40, 49]
+        "modifier": "Increased",
+        "value": [40, 45]
       }
     ]
   },
@@ -84,8 +84,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [50, 59]
+        "modifier": "Increased",
+        "value": [50, 55]
       }
     ]
   },
@@ -102,8 +102,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [60, 69]
+        "modifier": "Increased",
+        "value": [60, 65]
       }
     ]
   },
@@ -120,8 +120,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [70, 79]
+        "modifier": "Increased",
+        "value": [70, 75]
       }
     ]
   },
@@ -138,8 +138,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [80, 89]
+        "modifier": "Increased",
+        "value": [80, 85]
       }
     ]
   },
@@ -156,8 +156,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [90, 99]
+        "modifier": "Increased",
+        "value": [90, 95]
       }
     ]
   },
@@ -174,8 +174,8 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
-        "value": [100, 109]
+        "modifier": "Increased",
+        "value": [100, 105]
       }
     ]
   }

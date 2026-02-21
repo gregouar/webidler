@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-shared = { path = "../shared" }
+shared = { path = "../shared", features=[] }
 
 anyhow = "1.0.97"
 leptos = { version = "0.7.7", features = ["csr"] }
@@ -24,7 +24,7 @@ leptos_toaster = "0.2.0"
 web-sys = { version = "0.3", features = ["Performance"] }
 
 console_error_panic_hook = "0.1.7"
-reqwest = { version = "0.12.22", features = ["json"] }
+reqwest = { version = "0.13.2", features = ["json"] }
 url = "2.5.4"
 
 serde = { version = "1.0.219", features = ["derive"] }

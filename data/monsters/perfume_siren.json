@@ -5,6 +5,12 @@
   "power_factor": 1.5,
   "initiative": [1, 2.5],
   "armor": { "Poison": 50, "Storm": 50 },
+  "evade": {
+    "Physical": 30,
+    "Fire": 30,
+    "Storm": 30,
+    "Poison": 30
+  },
   "skills": [
     {
       "name": "Scent of Death",

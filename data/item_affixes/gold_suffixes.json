@@ -12,8 +12,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [25, 49]
+        "modifier": "More",
+        "value": [25, 45]
       }
     ]
   },
@@ -30,8 +30,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [50, 74]
+        "modifier": "More",
+        "value": [55, 70]
       }
     ]
   },
@@ -48,8 +48,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [75, 99]
+        "modifier": "More",
+        "value": [80, 95]
       }
     ]
   },
@@ -66,8 +66,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [100, 124]
+        "modifier": "More",
+        "value": [105, 120]
       }
     ]
   },
@@ -84,8 +84,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [125, 149]
+        "modifier": "More",
+        "value": [130, 145]
       }
     ]
   },
@@ -102,8 +102,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [150, 174]
+        "modifier": "More",
+        "value": [155, 170]
       }
     ]
   },
@@ -120,8 +120,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [175, 199]
+        "modifier": "More",
+        "value": [180, 195]
       }
     ]
   },
@@ -138,8 +138,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [200, 224]
+        "modifier": "More",
+        "value": [205, 220]
       }
     ]
   },
@@ -156,8 +156,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [225, 249]
+        "modifier": "More",
+        "value": [230, 250]
       }
     ]
   },
@@ -174,8 +174,8 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
-        "value": [250, 274]
+        "modifier": "More",
+        "value": [260, 300]
       }
     ]
   }

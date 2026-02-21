@@ -1,14 +1,18 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
+use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
-use crate::data::{stat_effect::EffectsMap, trigger::TriggerSpecs};
+use crate::data::{
+    item::ItemSpecs,
+    stat_effect::{EffectsMap, StatEffect},
+    trigger::TriggerSpecs,
+};
 
-pub use super::stat_effect::StatEffect;
+pub type PassiveNodeId = uuid::Uuid;
 
-pub type PassiveNodeId = String;
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, Hash, PartialEq, Eq, EnumIter)]
 pub enum PassiveNodeType {
     Attack,
     Life,
@@ -22,6 +26,7 @@ pub enum PassiveNodeType {
     Fire,
     Storm,
     Status,
+    #[default]
     Utility,
 }
 
@@ -34,15 +39,19 @@ pub struct PassivesTreeSpecs {
 #[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassivesTreeAscension {
     pub ascended_nodes: HashMap<PassiveNodeId, u8>,
+    #[serde(default)]
+    pub socketed_nodes: HashMap<PassiveNodeId, ItemSpecs>,
 }
+
+pub type PurchasedNodes = IndexSet<PassiveNodeId>;
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct PassivesTreeState {
-    pub purchased_nodes: HashSet<PassiveNodeId>,
+    pub purchased_nodes: PurchasedNodes,
     pub ascension: PassivesTreeAscension,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassiveNodeSpecs {
     pub name: String,
     pub icon: String,
@@ -53,7 +62,7 @@ pub struct PassiveNodeSpecs {
     pub size: u8,
 
     #[serde(default)]
-    pub initial_node: bool,
+    pub root_node: bool,
 
     // TODO: Replace by Asset uri?
     pub node_type: PassiveNodeType,
@@ -70,6 +79,8 @@ pub struct PassiveNodeSpecs {
     #[serde(default)]
     pub max_upgrade_level: Option<u8>,
     // TODO: unlocked & ascend costs?
+    #[serde(default)]
+    pub socket: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -86,7 +97,7 @@ impl PassiveNodeSpecs {
                 .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
                     *effects_map
                         .0
-                        .entry((effect.stat.clone(), effect.modifier))
+                        .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
                         .or_default() += effect.value;
                     effects_map
                 });
@@ -102,7 +113,7 @@ impl PassiveNodeSpecs {
             .fold(effects_map, |mut effects_map, effect| {
                 *effects_map
                     .0
-                    .entry((effect.stat.clone(), effect.modifier))
+                    .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
                     .or_default() += effect.value * level as f64;
                 effects_map
             })

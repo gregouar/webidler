@@ -5,14 +5,16 @@ use shared::data::{
     character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::AffixEffectScope,
+    modifier::Modifier,
     skill::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{ApplyStatModifier, LuckyRollType, Modifier, StatEffect, StatType},
+    stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
+    values::NonNegative,
 };
 
-use crate::game::{data::items_store::ItemsStore, utils::rng::Rollable};
+use crate::game::data::items_store::ItemsStore;
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
 
@@ -26,13 +28,12 @@ pub fn init_item_specs_from_store(
 }
 
 pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: bool) -> ItemSpecs {
-    let mut effects: Vec<StatEffect> =
-        (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
+    let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
 
-    effects.sort_by_key(|e| match e.modifier {
-        Modifier::Flat => 0,
-        Modifier::Multiplier => 1,
-    });
+    // effects.sort_by_key(|e| match e.modifier {
+    //     Modifier::Flat => 0,
+    //     Modifier::Multiplier => 1,
+    // });
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
@@ -66,8 +67,8 @@ fn compute_weapon_specs(
     effects: &[StatEffect],
 ) -> WeaponSpecs {
     weapon_specs.damage.values_mut().for_each(|value| {
-        value.min *= 1.0 + quality as f64 * 0.01;
-        value.max *= 1.0 + quality as f64 * 0.01;
+        value.min.apply_modifier(quality as f64, Modifier::More);
+        value.max.apply_modifier(quality as f64, Modifier::More);
     });
 
     for effect in effects {
@@ -78,51 +79,28 @@ fn compute_weapon_specs(
             StatType::Damage {
                 skill_type: Some(SkillType::Attack) | None,
                 damage_type,
+                min_max,
             } => match damage_type {
                 Some(damage_type) => {
                     let value = weapon_specs.damage.entry(damage_type).or_default();
-                    value.min.apply_effect(effect);
-                    value.max.apply_effect(effect);
+                    if let Some(MinMax::Min) | None = min_max {
+                        value.min.apply_effect(effect);
+                    }
+                    if let Some(MinMax::Max) | None = min_max {
+                        value.max.apply_effect(effect);
+                    }
                 }
                 None => {
                     for value in weapon_specs.damage.values_mut() {
-                        value.min.apply_effect(effect);
-                        value.max.apply_effect(effect);
-                    }
-                }
-            },
-            StatType::MinDamage {
-                skill_type: Some(SkillType::Attack) | None,
-                damage_type,
-            } => {
-                match damage_type {
-                    Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(damage_type).or_default();
-                        value.min.apply_effect(effect);
-                    }
-                    None => {
-                        for value in weapon_specs.damage.values_mut() {
+                        if let Some(MinMax::Min) | None = min_max {
                             value.min.apply_effect(effect);
                         }
-                    }
-                };
-            }
-            StatType::MaxDamage {
-                skill_type: Some(SkillType::Attack) | None,
-                damage_type,
-            } => {
-                match damage_type {
-                    Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(damage_type).or_default();
-                        value.max.apply_effect(effect);
-                    }
-                    None => {
-                        for value in weapon_specs.damage.values_mut() {
+                        if let Some(MinMax::Max) | None = min_max {
                             value.max.apply_effect(effect);
                         }
                     }
-                };
-            }
+                }
+            },
             StatType::CritChance(Some(SkillType::Attack) | None) => {
                 weapon_specs.crit_chance.value.apply_effect(effect)
             }
@@ -154,15 +132,13 @@ fn compute_weapon_specs(
         }
     }
 
-    weapon_specs.cooldown = weapon_specs.cooldown.max(0.0);
-    weapon_specs.crit_chance.clamp();
-    weapon_specs.damage.retain(|_, value| {
-        value.max = value.max.max(0.0);
-        value.min = value.min.max(0.0);
-        value.clamp();
+    // weapon_specs.damage.retain(|_, value| {
+    //     value.max = value.max.evaluate().max(0.0).into();
+    //     value.min = value.min.evaluate().max(0.0).into();
+    //     value.clamp();
 
-        value.max > 0.0
-    });
+    //     value.max.evaluate() > 0.0
+    // });
 
     weapon_specs
 }
@@ -172,17 +148,18 @@ fn compute_armor_specs(
     quality: f32,
     effects: &[StatEffect],
 ) -> ArmorSpecs {
-    armor_specs.armor *= 1.0 + quality as f64 * 0.01;
+    armor_specs
+        .armor
+        .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
             StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
-            StatType::Block => {
+            StatType::Block(Some(SkillType::Attack) | None) => {
                 armor_specs.block.apply_effect(effect);
             }
             _ => {}
         }
     }
-    armor_specs.block = armor_specs.block.clamp(0.0, 100.0);
 
     armor_specs
 }
@@ -198,24 +175,23 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 .collect(),
             crit_chance: weapon_specs.crit_chance,
             crit_damage: weapon_specs.crit_damage,
-            ignore_armor: false,
         },
         success_chance: Chance::new_sure(),
         ignore_stat_effects: Default::default(),
+        conditional_modifiers: Vec::new(),
     }];
 
     if let Some(&value) = weapon_specs.damage.get(&DamageType::Poison) {
         effects.push(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
                 duration: ChanceRange {
-                    min: WEAPON_POISON_DAMAGE_DURATION,
-                    max: WEAPON_POISON_DAMAGE_DURATION,
-                    lucky_chance: 0.0,
+                    min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+                    max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+                    lucky_chance: Default::default(),
                 },
                 statuses: vec![ApplyStatusEffect {
                     status_type: StatusSpecs::DamageOverTime {
                         damage_type: DamageType::Poison,
-                        ignore_armor: false,
                     },
                     value,
                     cumulate: false,
@@ -224,6 +200,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
         });
     }
 
@@ -232,19 +209,20 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),
         skill_type: SkillType::Attack,
-        cooldown: weapon_specs.cooldown,
-        mana_cost: 0.0,
+        cooldown: *weapon_specs.cooldown,
+        mana_cost: Default::default(),
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
         upgrade_effects: vec![StatEffect {
             stat: StatType::Damage {
                 skill_type: None,
                 damage_type: None,
+                min_max: None,
             },
-            modifier: Modifier::Multiplier,
-            value: 50.0,
+            modifier: Modifier::More,
+            value: 30.0,
             bypass_ignore: true,
         }],
-        modifier_effects: vec![],
+        modifier_effects: Default::default(),
         targets: vec![SkillTargetsGroup {
             range: weapon_specs.range,
             target_type: TargetType::Enemy,
@@ -253,6 +231,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             repeat: Default::default(),
             effects,
         }],
-        triggers: vec![],
+        triggers: Default::default(),
+        auto_use_conditions: Default::default(),
     }
 }

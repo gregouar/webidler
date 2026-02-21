@@ -85,10 +85,9 @@
             "source": {
               "Damage": { "damage_type": "Storm" }
             },
-            "target_stat": {
+            "stat": {
               "Damage": { "damage_type": "Fire" }
-            },
-            "target_modifier": "Flat"
+            }
           }
         },
         "modifier": "Flat",
@@ -98,7 +97,7 @@
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 100]
       },
       {
@@ -116,7 +115,7 @@
       {
         "scope": "Global",
         "stat": { "Speed": null },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [8, 12],
         "ignore_quality": true
       }
@@ -206,29 +205,31 @@
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 50,
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [30, 50],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Poison" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 120]
       },
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60],
         "ignore_quality": true
       }
@@ -287,6 +288,33 @@
         "value": 125
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "cloak_7": {
+    "name": "Elven Cape",
+    "icon": "items/elven_cape.webp",
+    "slot": "Accessory",
+    "categories": ["Accessory", "Cloak"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 150
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 150
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 150
+      }
+    ],
+    "min_area_level": 320
   }
 }

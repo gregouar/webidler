@@ -3,10 +3,10 @@ use anyhow::Result;
 use shared::{
     computations,
     constants::{
-        MONSTER_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR,
+         MONSTER_REWARD_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR
     },
     data::{
-        area::{AreaSpecs, AreaState},
+        area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
         item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
@@ -17,8 +17,8 @@ use shared::{
 
 use crate::{
     game::{
-        data::{event::EventsQueue, master_store::SkillsStore, DataInit},
-        systems::inventory_controller,
+        data::{DataInit, event::EventsQueue, master_store::SkillsStore},
+        systems::{characters_controller, inventory_controller, stats_updater},
     },
     rest::AppError,
 };
@@ -48,6 +48,7 @@ impl PlayerController {
     pub fn control_player<'a>(
         &mut self,
         events_queue: &mut EventsQueue,
+        area_threat: &AreaThreat,
         player_specs: &'a PlayerSpecs,
         player_state: &'a mut PlayerState,
         monsters: &mut [Target<'a>],
@@ -56,7 +57,29 @@ impl PlayerController {
             return;
         }
 
-        let mut mana_available = player_state.character_state.mana;
+        let no_auto_use: Vec<_> = player_specs
+            .skills_specs
+            .iter()
+            .map(|skill_specs| {
+                skill_specs
+                    .base
+                    .auto_use_conditions
+                    .iter()
+                    .any(|condition| {
+                        stats_updater::check_condition(
+                            area_threat,
+                            &player_specs.character_specs,
+                            &player_state.character_state,
+                            condition,
+                        ) == 0.0
+                    })
+            })
+            .collect();
+
+        let mut mana_available = characters_controller::mana_available(
+            &player_specs.character_specs,
+            &player_state.character_state,
+        );
 
         let mut player = (
             CharacterId::Player,
@@ -68,29 +91,41 @@ impl PlayerController {
 
         let mut friends = vec![];
 
-        let min_mana_needed = if player_specs.character_specs.take_from_mana_before_life > 0.0 {
+        let min_mana_needed = if player_specs
+            .character_specs
+            .take_from_mana_before_life
+            .get()
+            > 0.0
+            || player_specs
+                .character_specs
+                .take_from_life_before_mana
+                .get()
+                > 0.0
+        {
             0.0
         } else {
             player_specs
                 .skills_specs
                 .iter()
                 .take(player_specs.max_skills as usize)
-                .map(|s| s.mana_cost)
+                .map(|s| s.mana_cost.get())
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         };
 
-        for (i, (skill_specs, skill_state)) in player_specs
+        for (i, ((skill_specs, skill_state), no_auto_use)) in player_specs
             .skills_specs
             .iter()
             .zip(player_state.skills_states.iter_mut())
+            .zip(no_auto_use.into_iter())
             .take(player_specs.max_skills as usize)
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
             if (!player_specs.auto_skills.get(i).unwrap_or(&false)
-                || (skill_specs.mana_cost > 0.0
-                    && mana_available < min_mana_needed + skill_specs.mana_cost))
+                || no_auto_use
+                || (skill_specs.mana_cost.get() > 0.0
+                    && mana_available.get() < min_mana_needed + skill_specs.mana_cost.get()))
                 && !self.use_skills.contains(&i)
             {
                 continue;
@@ -117,10 +152,13 @@ pub fn reward_player(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> (f64, f64) {
-    let gold_reward = (monster_specs.reward_factor * player_specs.gold_find * 0.01).round();
+    let gold_reward = (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
-        ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0).floor()
+        ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0
+            * *area_specs.gems_find
+            * 0.01)
+            .floor()
     } else {
         0.0
     };
@@ -158,7 +196,7 @@ pub fn level_up_no_cost(
     player_resources.passive_points += 1;
     player_specs.experience_needed = computations::player_level_up_cost(player_specs);
 
-    player_state.character_state.life += PLAYER_LIFE_PER_LEVEL;
+    player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
 }
 
 pub fn equip_item_from_bag(
@@ -173,15 +211,19 @@ pub fn equip_item_from_bag(
         item_index,
     )?;
 
-    if let Some(old_item) = old_item {
-        unequip_weapon(player_specs, player_state, old_item.base.slot);
+    if let Some(old_item) = old_item
+        && let Some(slot) = old_item.base.slot
+    {
+        unequip_weapon(player_specs, player_state, slot);
     }
 
-    if let Some(ref weapon_specs) = new_item.weapon_specs {
+    if let Some(ref weapon_specs) = new_item.weapon_specs
+        && let Some(slot) = new_item.base.slot
+    {
         equip_weapon(
             player_specs,
             player_state,
-            new_item.base.slot,
+            slot,
             new_item.modifiers.level,
             weapon_specs,
         );
@@ -236,14 +278,14 @@ pub fn sell_item(
             ItemRarity::Rare => 4.0,
             ItemRarity::Unique => 8.0,
             ItemRarity::Masterwork => 8.0,
-        } * player_specs.gold_find
+        } * player_specs.gold_find.get()
             * 0.01
             * computations::exponential(
                 item_specs
                     .modifiers
                     .level
                     .saturating_sub(area_specs.starting_level + area_specs.item_level_modifier - 1),
-                MONSTER_INCREASE_FACTOR,
+                MONSTER_REWARD_INCREASE_FACTOR,
             );
 
     player_resources.gold += gold_reward;

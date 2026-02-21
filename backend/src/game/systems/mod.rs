@@ -13,6 +13,7 @@ pub mod monsters_wave;
 pub mod passives_controller;
 pub mod player_controller;
 pub mod player_updater;
+pub mod quests_controller;
 pub mod sessions_controller;
 pub mod skills_controller;
 pub mod skills_updater;

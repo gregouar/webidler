@@ -10,7 +10,10 @@ use shared::{
         area::AreaSpecs,
         user::{User, UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
     },
-    http::{client::{CreateCharacterRequest, UpdateCharacterRequest}, server::NewsEntry},
+    http::{
+        client::{CreateCharacterRequest, UpdateCharacterRequest},
+        server::NewsEntry,
+    },
     types::{AssetName, Username},
 };
 
@@ -23,6 +26,7 @@ use crate::{
         shared::{player_count::PlayerCount, settings::SettingsModal},
         ui::{
             buttons::{MenuButton, MenuButtonRed},
+            card::{Card, CardInset, CardTitle},
             confirm::ConfirmContext,
             input::ValidatedInput,
             menu_panel::MenuPanel,
@@ -98,13 +102,13 @@ pub fn UserDashboardPage() -> impl IntoView {
     let open_settings = RwSignal::new(false);
     let open_character_panel = RwSignal::new(false);
 
-    let selected_character_id  = RwSignal::new(None);
+    let selected_character_id = RwSignal::new(None);
     let selected_character_name = RwSignal::new(None);
     let selected_character_portrait = RwSignal::new(None);
 
     view! {
         <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
-            <DiscordInviteBanner />
+            <DiscordInviteBanner class:hidden class:xl:inline />
             <PlayerCount />
             <SettingsModal open=open_settings />
 
@@ -126,11 +130,11 @@ pub fn UserDashboardPage() -> impl IntoView {
                                 selected_character_portrait
                             />
                             <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
-                                <h1 class="mb-2 text-shadow-lg shadow-gray-950 text-amber-200 text-2xl xl:text-4xl font-extrabold leading-none tracking-tight">
+                                <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
                                     "Welcome, " {user.username.clone()}"!"
                                 </h1>
 
-                                <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 xl:gap-4">
+                                <div class="w-full grid grid-cols-2 gap-2 xl:gap-4">
                                     <NewsPanel />
                                     <CharactersSelection
                                         areas=areas.clone()
@@ -144,32 +148,33 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     />
                                 </div>
 
-                                <div class="w-full bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl
-                                flex items-center justify-between gap-2 text-gray-400 p-2 xl:p-4">
-                                    <div class="flex gap-2">
-                                        <MenuButton on:click=move |_| {
-                                            open_settings.set(true)
-                                        }>"Game Settings"</MenuButton>
-                                        <a href="account">
-                                            <MenuButton>"Account Settings"</MenuButton>
-                                        </a>
+                                <Card class="w-full ">
+                                    <div class="flex items-center justify-between gap-2 text-gray-400">
+                                        <div class="flex gap-2">
+                                            <MenuButton on:click=move |_| {
+                                                open_settings.set(true)
+                                            }>"Game Settings"</MenuButton>
+                                            <a href="account">
+                                                <MenuButton>"Account Settings"</MenuButton>
+                                            </a>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <a href="leaderboard">
+                                                <MenuButton>"Leaderboard"</MenuButton>
+                                            </a>
+                                            <a
+                                                href="https://webidler.gitbook.io/wiki/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <MenuButton>"Wiki"</MenuButton>
+                                            </a>
+                                        </div>
+                                        <MenuButtonRed on:click=move |_| sign_out()>
+                                            "Sign Out"
+                                        </MenuButtonRed>
                                     </div>
-                                    <div class="flex gap-2">
-                                        <a href="leaderboard">
-                                            <MenuButton>"Leaderboard"</MenuButton>
-                                        </a>
-                                        <a
-                                            href="https://webidler.gitbook.io/wiki/"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <MenuButton>"Wiki"</MenuButton>
-                                        </a>
-                                    </div>
-                                    <MenuButtonRed on:click=move |_| sign_out()>
-                                        "Sign Out"
-                                    </MenuButtonRed>
-                                </div>
+                                </Card>
                             </div>
                         }
                     })
@@ -190,23 +195,19 @@ fn CharactersSelection(
     selected_character_name: RwSignal<Option<Username>>,
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
-
     let characters_len = characters.len();
 
     view! {
-        <div class="flex flex-col h-full min-h-0 bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
-            <div class="flex flex-row justify-between items-center">
-                <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                    "Your Characters"
-                </span>
+        <Card class="h-full">
+            <div class="flex flex-row justify-between items-center px-4">
+                <CardTitle>"Your Characters"</CardTitle>
                 <span class="text-sm text-gray-400 font-medium">
                     {format!("{characters_len} / {}", user.max_characters)}
                 </span>
             </div>
 
-            <div class="w-full aspect-square overflow-y-auto
-            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
-                <div class="h-full flex flex-col p-2 gap-3">
+            <CardInset class="w-full aspect-square">
+                <div class="flex flex-col gap-3">
                     <For
                         each=move || characters.clone()
                         key=|c| c.character_id
@@ -228,24 +229,20 @@ fn CharactersSelection(
                     {if characters_len < user.max_characters as usize {
                         Some(
                             view! {
-                                <CreateCharacterSlot
-                                    class:mb-4
-                                    on:click=move |_| {
-                                        open_character_panel.set(true);
-                                        selected_character_id.set(None);
-                                        selected_character_name.set(None);
-                                        selected_character_portrait.set(None);
-                                    }
-                                />
+                                <CreateCharacterSlot on:click=move |_| {
+                                    open_character_panel.set(true);
+                                    selected_character_id.set(None);
+                                    selected_character_name.set(None);
+                                    selected_character_portrait.set(None);
+                                } />
                             },
                         )
                     } else {
                         None
                     }}
                 </div>
-            </div>
-
-        </div>
+            </CardInset>
+        </Card>
     }
 }
 
@@ -325,8 +322,12 @@ fn CharacterSlot(
 
     let edit_character = {
         let character_id = character.character_id;
-        let name=character.name.clone();
-        let portrait = character.portrait.clone().replace(".webp", "").replace("adventurers/","");
+        let name = character.name.clone();
+        let portrait = character
+            .portrait
+            .clone()
+            .replace(".webp", "")
+            .replace("adventurers/", "");
         move |_| {
             open_character_panel.set(true);
             selected_character_id.set(Some(character_id));
@@ -340,7 +341,7 @@ fn CharacterSlot(
         flex flex-row items-stretch h-full">
 
             <div
-                class="w-28 min-h-0  rounded-l-xl overflow-hidden"
+                class="w-28 min-h-0 rounded-l-xl overflow-hidden"
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
@@ -351,12 +352,12 @@ fn CharacterSlot(
                 />
             </div>
 
-            <div class="flex flex-col justify-between flex-grow p-3 relative h-full">
+            <div class="flex flex-col justify-between flex-grow p-1 xl:p-3 relative h-full">
                 <div class="flex gap-2 absolute top-3 right-3 z-10">
                     <MenuButton on:click=try_delete_character>"❌"</MenuButton>
                 </div>
 
-                <div class="space-y-1 overflow-x-hidden">
+                <div class="space-y-1 overflow-x-hidden text-left">
                     <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate">
                         {character.name.clone()}
                     </div>
@@ -435,8 +436,9 @@ pub fn CreateCharacterPanel(
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let processing = RwSignal::new(false);
-    let disable_submit =
-        Signal::derive(move || selected_character_name.read().is_none() || selected_character_portrait.read().is_none());
+    let disable_submit = Signal::derive(move || {
+        selected_character_name.read().is_none() || selected_character_portrait.read().is_none()
+    });
 
     let on_submit = {
         let auth_context = expect_context::<AuthContext>();
@@ -451,60 +453,58 @@ pub fn CreateCharacterPanel(
             processing.set(true);
             spawn_local({
                 async move {
-                    match selected_character_id.get() 
-                    {
+                    match selected_character_id.get() {
                         Some(character_id) => match backend
-                        .post_update_character(
-                            &auth_context.token(),
-                            &character_id,
-                            &UpdateCharacterRequest {
-                                name: selected_character_name.get().unwrap(),
-                                portrait: selected_character_portrait.get().unwrap(),
-                            },
-                        )
-                        .await
-                    {
-                        Ok(_) => {
-                            open.set(false);
-                            processing.set(false);
-                            refresh_trigger.update(|n| *n += 1);
-                        }
-                        Err(e) => {
-                            show_toast(
-                                toaster,
-                                format!("Character edit error: {e}"),
-                                ToastVariant::Error,
-                            );
-                            processing.set(false);
-                        }
-                    },
-                        None =>  match backend
-                        .post_create_character(
-                            &auth_context.token(),
-                            &user_id,
-                            &CreateCharacterRequest {
-                                name: selected_character_name.get().unwrap(),
-                                portrait: selected_character_portrait.get().unwrap(),
-                            },
-                        )
-                        .await
-                    {
-                        Ok(_) => {
-                            open.set(false);
-                            processing.set(false);
-                            refresh_trigger.update(|n| *n += 1);
-                        }
-                        Err(e) => {
-                            show_toast(
-                                toaster,
-                                format!("Character creation error: {e}"),
-                                ToastVariant::Error,
-                            );
-                            processing.set(false);
-                        }
-                    },
+                            .post_update_character(
+                                &auth_context.token(),
+                                &character_id,
+                                &UpdateCharacterRequest {
+                                    name: selected_character_name.get().unwrap(),
+                                    portrait: selected_character_portrait.get().unwrap(),
+                                },
+                            )
+                            .await
+                        {
+                            Ok(_) => {
+                                open.set(false);
+                                processing.set(false);
+                                refresh_trigger.update(|n| *n += 1);
+                            }
+                            Err(e) => {
+                                show_toast(
+                                    toaster,
+                                    format!("Character edit error: {e}"),
+                                    ToastVariant::Error,
+                                );
+                                processing.set(false);
+                            }
+                        },
+                        None => match backend
+                            .post_create_character(
+                                &auth_context.token(),
+                                &user_id,
+                                &CreateCharacterRequest {
+                                    name: selected_character_name.get().unwrap(),
+                                    portrait: selected_character_portrait.get().unwrap(),
+                                },
+                            )
+                            .await
+                        {
+                            Ok(_) => {
+                                open.set(false);
+                                processing.set(false);
+                                refresh_trigger.update(|n| *n += 1);
+                            }
+                            Err(e) => {
+                                show_toast(
+                                    toaster,
+                                    format!("Character creation error: {e}"),
+                                    ToastVariant::Error,
+                                );
+                                processing.set(false);
+                            }
+                        },
                     }
-                   
                 }
             });
         }
@@ -527,17 +527,23 @@ pub fn CreateCharacterPanel(
         "furry_female_1",
         "blue_male_1",
         "blue_female_1",
+        "insect_male_1",
+        "insect_female_1",
+        "undead_male_1",
+        "undead_female_1",
     ];
 
     view! {
-        <MenuPanel open=open>
-            <div class="flex items-center justify-center p-2 xl:p-4 h-full">
-                <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-4 xl:p-8 space-y-8 w-full max-w-lg mx-auto max-h-full
-                flex flex-col">
-                    <h2 class="text-2xl font-bold text-amber-300 text-center">
-                        "Create Character"
-                    </h2>
+        <MenuPanel open=open w_full=false h_full=false class:items-center>
+            <Card class="w-full max-w-lg xl:max-w-xl mx-auto">
+                <CardTitle>
+                    {move || match selected_character_id.read().is_some() {
+                        true => "Edit Character",
+                        false => "Create Character",
+                    }}
+                </CardTitle>
 
+                <CardInset class="h-fit">
                     <ValidatedInput
                         id="name"
                         label="Character Name"
@@ -545,69 +551,58 @@ pub fn CreateCharacterPanel(
                         bind=selected_character_name
                         placeholder="Enter a name"
                     />
+                </CardInset>
 
-                    <span class="block text-sm font-medium text-gray-400 mb-2">
-                        "Choose a Portrait"
-                    </span>
-                    <div class="flex-1 flex flex-col overflow-y-auto min-h-0">
-                        <div class="grid grid-cols-2 xl:grid-cols-4 p-2 xl:p-4 gap-2 xl:gap-4 h-full">
-                            <For
-                                each=move || portraits
-                                key=|src| src.to_string()
-                                children=move |src| {
-                                    let is_selected = Signal::derive(move || {
-                                        selected_character_portrait
-                                            .get()
-                                            .map(|portrait| portrait.into_inner() == src)
-                                            .unwrap_or_default()
-                                    });
-                                    view! {
-                                        <div
-                                            class="relative rounded-lg overflow-hidden border-2 cursor-pointer transition
-                                            hover:scale-105 active:scale-95"
-                                            style=format!(
-                                                "background-image: url('{}');",
-                                                img_asset("ui/paper_background.webp"),
-                                            )
-                                            class:border-amber-400=move || is_selected.get()
-                                            class:border-transparent=move || !is_selected.get()
-                                            on:click=move |_| {
-                                                selected_character_portrait
-                                                    .set(AssetName::try_new(src).ok());
-                                            }
-                                        >
-                                            <img
-                                                draggable="false"
-                                                src=img_asset(&format!("adventurers/{src}.webp"))
-                                                alt="Portrait"
-                                                class="object-cover w-full h-28 xl:h-32"
-                                            />
-                                            {move || {
-                                                is_selected
-                                                    .get()
-                                                    .then(|| {
-                                                        view! {
-                                                            <div class="absolute inset-0 bg-amber-400/20"></div>
-                                                        }
-                                                    })
-                                            }}
-                                        </div>
-                                    }
+                <CardInset class="flex-1 min-h-0">
+                    <span class="block text-sm font-medium text-gray-400">"Choose a Portrait"</span>
+                    <div class="grid grid-cols-4 gap-1 xl:gap-2">
+                        <For
+                            each=move || portraits
+                            key=|src| src.to_string()
+                            children=move |src| {
+                                let is_selected = Signal::derive(move || {
+                                    selected_character_portrait
+                                        .get()
+                                        .map(|portrait| portrait.into_inner() == src)
+                                        .unwrap_or_default()
+                                });
+                                view! {
+                                    <div
+                                        class="relative aspect-square rounded-lg
+                                        overflow-hidden border-2 cursor-pointer 
+                                        transition hover:scale-105 active:scale-95"
+                                        style=format!(
+                                            "background-image: url('{}');",
+                                            img_asset("ui/paper_background.webp"),
+                                        )
+                                        class:border-amber-400=move || is_selected.get()
+                                        class:border-transparent=move || !is_selected.get()
+                                        class:brightness-30=move || !is_selected.get()
+                                        on:click=move |_| {
+                                            selected_character_portrait
+                                                .set(AssetName::try_new(src).ok());
+                                        }
+                                    >
+                                        <img
+                                            draggable="false"
+                                            src=img_asset(&format!("adventurers/{src}.webp"))
+                                            alt="Portrait"
+                                            class="object-cover"
+                                        />
+                                    </div>
                                 }
-                            />
-                        </div>
+                            }
+                        />
                     </div>
+                </CardInset>
 
-                    <div class="flex justify-around gap-3 pt-4 border-t border-zinc-700">
-                        <MenuButtonRed on:click=move |_| {
-                            open.set(false)
-                        }>"Cancel"</MenuButtonRed>
-                        <MenuButton on:click=on_submit disabled=disable_submit>
-                            "Confirm"
-                        </MenuButton>
-                    </div>
+                <div class="flex justify-between px-4">
+                    <MenuButtonRed on:click=move |_| { open.set(false) }>"Cancel"</MenuButtonRed>
+                    <MenuButton on:click=on_submit disabled=disable_submit>
+                        "Confirm"
+                    </MenuButton>
                 </div>
-            </div>
+            </Card>
         </MenuPanel>
     }
 }
@@ -692,13 +687,12 @@ fn NewsPanel() -> impl IntoView {
     });
 
     view! {
-        <div class="flex flex-col bg-zinc-800 rounded-xl ring-1 ring-zinc-950 shadow-xl p-4 text-left space-y-4">
-            <span class="text-shadow-md shadow-gray-950 text-amber-200 text-xl font-semibold">
-                "News"
-            </span>
+        <Card class="text-left">
+            <div class="px-4">
+                <CardTitle>"News"</CardTitle>
+            </div>
 
-            <div class="w-full aspect-square flex flex-col p-2 gap-3 overflow-y-auto
-            bg-neutral-900 ring-1 ring-neutral-950 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            <CardInset class="w-full aspect-square">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>
@@ -717,8 +711,8 @@ fn NewsPanel() -> impl IntoView {
                         })
                     }}
                 </Transition>
-            </div>
-        </div>
+            </CardInset>
+        </Card>
     }
 }
 

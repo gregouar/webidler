@@ -17,8 +17,9 @@ use crate::{
         shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
-            dropdown::DropdownMenu,
-            menu_panel::{MenuPanel, PanelTitle},
+            card::{Card, CardInset, CardTitle},
+            dropdown::SearchableDropdownMenu,
+            menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
     },
@@ -34,6 +35,14 @@ pub enum SellType {
 }
 
 #[derive(Clone, Default)]
+pub enum InventoryEquipFilter {
+    #[default]
+    Slot,
+    Map(String),
+    Rune,
+}
+
+#[derive(Clone, Default)]
 pub struct InventoryConfig {
     pub player_inventory: RwSignal<PlayerInventory>,
     pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
@@ -42,6 +51,7 @@ pub struct InventoryConfig {
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
     pub sell_type: SellType,
     pub max_item_level: Signal<AreaLevel>,
+    pub equip_filter: Signal<InventoryEquipFilter>,
 }
 
 #[component]
@@ -56,8 +66,8 @@ pub fn Inventory(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoV
     });
 
     view! {
-        <MenuPanel open=open>
-            <div class="relative w-full max-h-full flex justify-between gap-2 xl:gap-4 ">
+        <MenuPanel open=open h_full=false center=false>
+            <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <EquippedItemsCard inventory=inventory.clone() class:justify-self-end />
                 <BagCard inventory=inventory.clone() open=open class:justify-self-start />
             </div>
@@ -80,15 +90,17 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
     ];
 
     view! {
-        <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
+        // <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
+        <Card class="w-[30%] h-full">
 
-            <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
-                <span class="font-bold">"Equipped"</span>
-            </p>
+            // <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
+            // <span class="font-bold">"Equipped"</span>
+            // </p>
+            <CardTitle>"Equipped"</CardTitle>
 
-            <div class="relative min-h-0 flex-1  overflow-y-auto">
-                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 py-1 xl:py-3 px-3 xl:px-6
-                bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+            // <div class="relative min-h-0 flex-1  overflow-y-auto">
+            <CardInset class="relative min-h-0 flex-1">
+                <div class="grid grid-rows-3 grid-cols-3 gap-2 xl:gap-x-4 xl:gap-y-3 px-2 xl:px-3">
                     {EQUIPPED_SLOTS
                         .iter()
                         .map(|(slot, asset, alt)| {
@@ -103,8 +115,8 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
                         })
                         .collect::<Vec<_>>()}
                 </div>
-            </div>
-        </div>
+            </CardInset>
+        </Card>
     }
 }
 
@@ -319,10 +331,11 @@ pub fn EquippedItemContextMenu(
 #[component]
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
     view! {
-        <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+        // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
+        <Card class="h-full w-[70%]">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
-                    <PanelTitle>"Inventory"</PanelTitle>
+                    <CardTitle>"Inventory"</CardTitle>
                     <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!(
@@ -353,10 +366,9 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="relative min-h-0 flex-1  overflow-y-auto">
+            <CardInset class="relative min-h-0 flex-1">
                 <div class="grid grid-cols-8 xl:grid-cols-10
-                gap-1 xl:gap-x-3 xl:gap-y-2 py-1 xl:py-3 px-3 xl:px-6 relative
-                bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                gap-1 xl:gap-x-3 xl:gap-y-2 px-2 xl:px-3 relative">
                     <For
                         each=move || 0..inventory.player_inventory.read().max_bag_size as usize
                         key=|i| *i
@@ -365,9 +377,9 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                         <BagItem inventory=inventory.clone() item_index=i />
                     </For>
                 </div>
-            </div>
+            </CardInset>
 
-        </div>
+        </Card>
     }
 }
 
@@ -375,7 +387,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
 fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let is_being_equipped = RwSignal::new(false);
 
-    let maybe_item = {
+    let maybe_item = Signal::derive({
         let inventory = inventory.clone();
         move || {
             is_being_equipped.set(false);
@@ -387,7 +399,33 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 .cloned()
                 .map(Arc::new)
         }
-    };
+    });
+
+    let can_equip = Signal::derive(move || {
+        maybe_item
+            .get()
+            .map(|item_specs| {
+                inventory
+                    .equip_filter
+                    .with(|equip_filter| match equip_filter {
+                        InventoryEquipFilter::Slot => item_specs.base.slot.is_some(),
+                        InventoryEquipFilter::Map(area_id) => item_specs
+                            .base
+                            .map_specs
+                            .as_ref()
+                            .map(|map_specs| {
+                                map_specs
+                                    .area_id
+                                    .as_ref()
+                                    .map(|map_area_id| *area_id == *map_area_id)
+                                    .unwrap_or(true)
+                            })
+                            .unwrap_or_default(),
+                        InventoryEquipFilter::Rune => item_specs.base.rune_specs.is_some(),
+                    })
+            })
+            .unwrap_or_default()
+    });
 
     let sell_queue = expect_context::<SellQueue>();
     let is_queued_for_sale = move || sell_queue.read().contains(&item_index);
@@ -433,22 +471,31 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     view! {
         <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
             {move || {
-                match maybe_item() {
+                match maybe_item.get() {
                     Some(item_specs) => {
                         let inventory = inventory.clone();
-                        let comparable_item_specs = inventory
-                            .player_inventory
-                            .read()
-                            .equipped
-                            .get(&item_specs.base.slot)
-                            .and_then(|equipped_slot| match equipped_slot {
-                                EquippedSlot::MainSlot(item_specs) => {
-                                    Some(Arc::from(item_specs.clone()))
-                                }
-                                EquippedSlot::ExtraSlot(_) => None,
+                        let comparable_item_specs = item_specs
+                            .base
+                            .slot
+                            .and_then(|slot| {
+                                inventory
+                                    .player_inventory
+                                    .read()
+                                    .equipped
+                                    .get(&slot)
+                                    .and_then(|equipped_slot| match equipped_slot {
+                                        EquippedSlot::MainSlot(item_specs) => {
+                                            Some(Arc::from(item_specs.clone()))
+                                        }
+                                        EquippedSlot::ExtraSlot(_) => None,
+                                    })
                             });
+
                         view! {
-                            <div class="relative w-full h-full overflow-visible">
+                            <div
+                                class="relative w-full h-full overflow-visible"
+                                class:brightness-50=move || !can_equip.get()
+                            >
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     comparable_item_specs=comparable_item_specs.clone()
@@ -492,6 +539,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         item_index=item_index
                                         on_close=Callback::new(move |_| show_menu.set(false))
                                         is_being_equipped=is_being_equipped
+                                        can_equip
                                     />
 
                                     <Portal>
@@ -504,7 +552,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                             }
                                         >
                                             <ItemTooltip
-                                                item_specs=maybe_item().unwrap().clone()
+                                                item_specs=maybe_item.get().unwrap().clone()
                                                 max_item_level=inventory.max_item_level
                                             />
                                         </div>
@@ -528,6 +576,7 @@ pub fn BagItemContextMenu(
     item_index: usize,
     on_close: Callback<()>,
     is_being_equipped: RwSignal<bool>,
+    can_equip: Signal<bool>,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
 
@@ -544,27 +593,33 @@ pub fn BagItemContextMenu(
 
     view! {
         <ContextMenu on_close=on_close>
-            {inventory
-                .on_equip
-                .map(|on_equip| {
-                    view! {
-                        <button
-                            class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
-                            on:click=move |_| {
-                                on_equip(item_index as u8);
-                                sell_queue.write().remove(&item_index);
-                                is_being_equipped.set(true);
-                                set_timeout(
-                                    move || is_being_equipped.set(false),
-                                    Duration::from_millis(1000),
-                                );
-                                on_close.run(());
-                            }
-                        >
-                            "Equip"
-                        </button>
-                    }
-                })}
+            {{
+                inventory
+                    .on_equip
+                    .and_then(|on_equip| {
+                        can_equip
+                            .get()
+                            .then(|| {
+                                view! {
+                                    <button
+                                        class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
+                                        on:click=move |_| {
+                                            on_equip(item_index as u8);
+                                            sell_queue.write().remove(&item_index);
+                                            is_being_equipped.set(true);
+                                            set_timeout(
+                                                move || is_being_equipped.set(false),
+                                                Duration::from_millis(1000),
+                                            );
+                                            on_close.run(());
+                                        }
+                                    >
+                                        "Equip"
+                                    </button>
+                                }
+                            })
+                    })
+            }}
             {(inventory.on_sell.is_some())
                 .then(|| {
                     view! {
@@ -617,14 +672,6 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
     });
 
     view! {
-        <style>
-            "
-            @keyframes fade-in {
-                from { opacity: 0; transform: scale(0.95); }
-                to { opacity: 1; transform: scale(1); }
-            }
-            "
-        </style>
         <div
             node_ref=node_ref
             class="
@@ -681,30 +728,33 @@ pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> im
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
-    view! { <DropdownMenu options chosen_option=loot_preference /> }
+    view! { <SearchableDropdownMenu options chosen_option=loot_preference /> }
 }
 
 pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
+    use ItemCategory::*;
     match opt {
         Some(item_category) => match item_category {
-            ItemCategory::Armor => "Any Armor",
-            ItemCategory::AttackWeapon => "Any Attack Weapon",
-            ItemCategory::SpellWeapon => "Any Spell Weapon",
-            ItemCategory::MeleeWeapon => "Any Melee Weapon",
-            ItemCategory::Jewelry => "Any Jewelry",
-            ItemCategory::Accessory => "Any Accessory",
-            ItemCategory::MeleeWeapon1H => "One-Handed Melee Weapon",
-            ItemCategory::MeleeWeapon2H => "Two-Handed Melee Weapon",
-            ItemCategory::RangedWeapon => "Ranged Weapon",
-            ItemCategory::Shield => "Shield",
-            ItemCategory::Focus => "Magical Focus",
-            ItemCategory::Amulet => "Amulet",
-            ItemCategory::Body => "Body Armor",
-            ItemCategory::Boots => "Boots",
-            ItemCategory::Cloak => "Cloak",
-            ItemCategory::Gloves => "Gloves",
-            ItemCategory::Helmet => "Helmet",
-            ItemCategory::Ring => "Ring",
+            Armor => "Any Armor",
+            AttackWeapon => "Any Attack Weapon",
+            SpellWeapon => "Any Spell Weapon",
+            MeleeWeapon => "Any Melee Weapon",
+            Jewelry => "Any Jewelry",
+            Accessory => "Any Accessory",
+            MeleeWeapon1H => "One-Handed Melee Weapon",
+            MeleeWeapon2H => "Two-Handed Melee Weapon",
+            RangedWeapon => "Ranged Weapon",
+            Shield => "Shield",
+            Focus => "Magical Focus",
+            Amulet => "Amulet",
+            Body => "Body Armor",
+            Boots => "Boots",
+            Cloak => "Cloak",
+            Gloves => "Gloves",
+            Helmet => "Helmet",
+            Ring => "Ring",
+            Map => "Edict",
+            Rune => "Rune",
         },
         None => "Any Item",
     }

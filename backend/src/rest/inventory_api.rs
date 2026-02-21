@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
+use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     data::area::AreaLevel,
@@ -129,7 +129,7 @@ pub async fn post_delete_items(
     let mut item_indexes = payload.item_indexes;
     item_indexes.sort_by_key(|&i| i);
     for &item_index in item_indexes.iter().rev() {
-        inventory_controller::delete_item_from_bag(&mut inventory, item_index)?;
+        inventory_controller::remove_item_from_bag(&mut inventory, item_index)?;
     }
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)

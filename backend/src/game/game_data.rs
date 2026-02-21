@@ -1,29 +1,35 @@
 use anyhow::Result;
-use shared::data::temple::PlayerBenedictions;
+use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-use crate::game::data::master_store;
-use crate::game::systems::{benedictions_controller, passives_controller, player_updater};
-
-use super::data::DataInit;
-use super::systems::player_controller::PlayerController;
-use super::{data::area::AreaBlueprint, utils::LazySyncer};
-
-use serde::{Deserialize, Serialize};
-use shared::data::area::{AreaLevel, AreaThreat};
-use shared::data::game_stats::GameStats;
-use shared::data::passive::{PassivesTreeSpecs, PassivesTreeState};
 use shared::data::{
-    area::AreaState,
+    area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
+    game_stats::GameStats,
+    item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    quest::QuestRewards,
+    temple::PlayerBenedictions,
+};
+
+use crate::game::{
+    data::{DataInit, area::AreaBlueprint, master_store},
+    systems::{
+        area_controller, benedictions_controller, passives_controller,
+        player_controller::PlayerController, player_updater,
+    },
+    utils::LazySyncer,
 };
 
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
     pub area_id: String,
+    pub map_item: Option<ItemSpecs>,
+
     pub area_blueprint: AreaBlueprint,
+    pub area_specs: AreaSpecs,
     pub area_state: LazySyncer<AreaState>,
     pub area_threat: AreaThreat,
 
@@ -53,55 +59,117 @@ pub struct GameInstanceData {
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
+
+    pub end_quest: bool, // Initiate end, generate rewards
+    pub quest_rewards: LazySyncer<Option<QuestRewards>>,
+    pub terminate_quest: bool, // Actually close the quest
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SavedGameData {
-    pub area_id: String,
-    pub area_level: AreaLevel,
-    pub max_area_level_ever: AreaLevel,
-    pub passives_tree_id: String,
-    pub passives_tree_state: PassivesTreeState,
-    pub player_resources: PlayerResources,
-    pub player_specs: PlayerSpecs,
-    pub player_inventory: PlayerInventory,
-    pub queued_loot: Vec<QueuedLoot>,
-    pub game_stats: GameStats,
-    pub last_champion_spawn: AreaLevel,
-    pub auto_progress: bool,
+    area_id: String,
+    map_item: Option<ItemSpecs>,
+    area_level: AreaLevel,
+    max_area_level_completed: AreaLevel,
+    passives_tree_id: String,
+    passives_tree_state: PassivesTreeState,
+    player_resources: PlayerResources,
+    player_specs: PlayerSpecs,
+    player_inventory: PlayerInventory,
+    queued_loot: Vec<QueuedLoot>,
+    game_stats: GameStats,
+    last_champion_spawn: AreaLevel,
+    auto_progress: bool,
     #[serde(default)] // For compatibility
-    pub max_area_level: AreaLevel,
+    max_area_level: AreaLevel,
     #[serde(default)] // For compatibility
-    pub player_benedictions: PlayerBenedictions,
+    player_benedictions: PlayerBenedictions,
     #[serde(default)]
     player_stamina: Duration,
+
+    #[serde(default)]
+    end_quest: bool,
+    #[serde(default)]
+    quest_rewards: Option<QuestRewards>,
+}
+
+impl std::ops::Deref for SavedGameData {
+    type Target = GameStats;
+
+    fn deref(&self) -> &Self::Target {
+        &self.game_stats
+    }
 }
 
 impl GameInstanceData {
     #[allow(clippy::too_many_arguments)]
-    pub fn new(
-        area_id: String,
-        area_blueprint: AreaBlueprint,
+    pub fn init_from_store(
+        master_store: &master_store::MasterStore,
+        area_id: &str,
+        map_item: Option<ItemSpecs>,
         max_area_level_completed: AreaLevel,
-        passives_tree_id: String,
-        passives_tree_specs: PassivesTreeSpecs,
-        passives_tree_state: PassivesTreeState,
+        passives_tree_id: &str,
+        mut passives_tree_state: PassivesTreeState,
         player_benedictions: PlayerBenedictions,
-        player_resources: PlayerResources,
-        player_specs: PlayerSpecs,
+        mut player_resources: PlayerResources,
+        mut player_specs: PlayerSpecs,
         player_inventory: PlayerInventory,
         player_stamina: Duration,
-    ) -> Self {
-        let mut area_state = AreaState::init(&area_blueprint.specs);
+    ) -> Result<Self> {
+        let mut area_blueprint = master_store
+            .area_blueprints_store
+            .get(area_id)
+            .cloned()
+            .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
+
+        let area_specs = area_controller::init_area_specs(
+            &master_store.loot_tables_store,
+            &mut area_blueprint,
+            &map_item,
+        );
+
+        let mut area_state = AreaState::init(&area_specs);
         area_state.max_area_level_ever = max_area_level_completed;
 
-        Self {
-            area_id,
+        let mut passives_tree_specs = master_store
+            .passives_store
+            .get(passives_tree_id)
+            .cloned()
+            .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
+        passives_controller::compute_passives_tree_specs(
+            &mut passives_tree_specs,
+            &passives_tree_state.ascension,
+        );
+
+        let player_state = PlayerState::init(&player_specs);
+        passives_controller::refund_missing(
+            &passives_tree_specs,
+            &mut passives_tree_state,
+            &mut player_resources,
+        );
+
+        player_updater::update_player_specs(
+            &mut player_specs,
+            &player_state,
+            &player_inventory,
+            &passives_tree_specs,
+            &passives_tree_state,
+            &benedictions_controller::generate_effects_map_from_benedictions(
+                &master_store.benedictions_store,
+                &player_benedictions,
+            ),
+            &AreaThreat::default(),
+        );
+
+        Ok(Self {
+            area_id: area_id.to_string(),
+            map_item,
+            area_specs,
             area_state: LazySyncer::new(area_state),
             area_blueprint,
             area_threat: AreaThreat::default(),
 
-            passives_tree_id,
+            passives_tree_id: passives_tree_id.to_string(),
             passives_tree_specs,
             passives_tree_state: LazySyncer::new(passives_tree_state),
 
@@ -124,75 +192,20 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
-        }
-    }
 
-    #[allow(clippy::too_many_arguments)]
-    pub fn init_from_store(
-        master_store: &master_store::MasterStore,
-        area_id: &str,
-        max_area_level_completed: AreaLevel,
-        passives_tree_id: &str,
-        mut passives_tree_state: PassivesTreeState,
-        player_benedictions: PlayerBenedictions,
-        mut player_resources: PlayerResources,
-        mut player_specs: PlayerSpecs,
-        player_inventory: PlayerInventory,
-        player_stamina: Duration,
-    ) -> Result<Self> {
-        let area_blueprint = master_store
-            .area_blueprints_store
-            .get(area_id)
-            .cloned()
-            .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
-
-        let passives_tree_specs: PassivesTreeSpecs = master_store
-            .passives_store
-            .get(passives_tree_id)
-            .cloned()
-            .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
-
-        let player_state = PlayerState::init(&player_specs);
-        passives_controller::refund_missing(
-            &passives_tree_specs,
-            &mut passives_tree_state,
-            &mut player_resources,
-        );
-
-        player_updater::update_player_specs(
-            &mut player_specs,
-            &player_state,
-            &player_inventory,
-            &passives_tree_specs,
-            &passives_tree_state,
-            &benedictions_controller::generate_effects_map_from_benedictions(
-                &master_store.benedictions_store,
-                &player_benedictions,
-            ),
-            &AreaThreat::default(),
-        );
-
-        Ok(Self::new(
-            area_id.to_string(),
-            area_blueprint,
-            max_area_level_completed,
-            passives_tree_id.to_string(),
-            passives_tree_specs,
-            passives_tree_state,
-            player_benedictions,
-            player_resources,
-            player_specs,
-            player_inventory,
-            player_stamina,
-        ))
+            end_quest: false,
+            quest_rewards: LazySyncer::new(None),
+            terminate_quest: false,
+        })
     }
 
     pub fn to_bytes(self) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(&SavedGameData {
             area_id: self.area_id,
+            map_item: self.map_item,
             area_level: self.area_state.read().area_level,
             max_area_level: self.area_state.read().max_area_level,
-            max_area_level_ever: self.area_state.read().max_area_level_ever,
+            max_area_level_completed: self.area_state.read().max_area_level_ever,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_benedictions: self.player_benedictions,
@@ -204,15 +217,18 @@ impl GameInstanceData {
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
             auto_progress: self.area_state.read().auto_progress,
+            end_quest: self.end_quest,
+            quest_rewards: self.quest_rewards.read().clone(),
         })?)
     }
 
     pub fn from_bytes(master_store: &master_store::MasterStore, bytes: &[u8]) -> Result<Self> {
         let SavedGameData {
             area_id,
+            map_item,
             area_level,
             max_area_level,
-            max_area_level_ever,
+            max_area_level_completed,
             passives_tree_id,
             passives_tree_state,
             player_benedictions,
@@ -224,12 +240,15 @@ impl GameInstanceData {
             game_stats,
             last_champion_spawn,
             auto_progress,
+            end_quest,
+            quest_rewards,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
         let mut s = Self::init_from_store(
             master_store,
             &area_id,
-            max_area_level_ever,
+            map_item,
+            max_area_level_completed,
             &passives_tree_id,
             passives_tree_state,
             player_benedictions,
@@ -245,6 +264,8 @@ impl GameInstanceData {
         s.area_state.mutate().auto_progress = auto_progress;
         s.queued_loot.mutate().extend(queued_loot);
         s.game_stats = game_stats;
+        s.end_quest = end_quest;
+        *s.quest_rewards.mutate() = quest_rewards;
 
         Ok(s)
     }
@@ -257,5 +278,6 @@ impl GameInstanceData {
         self.player_inventory.mutate();
         self.monster_base_specs.mutate();
         self.queued_loot.mutate();
+        self.quest_rewards.mutate();
     }
 }

@@ -4,8 +4,8 @@ use crate::data::{area::AreaLevel, stash::StashPrice};
 
 // TODO: put in some game config file
 pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
-pub const PLAYER_LIFE_PER_LEVEL: f64 = 3.0;
-pub const DEFAULT_MAX_LEVEL: u8 = 50;
+pub const PLAYER_LIFE_PER_LEVEL: f64 = 2.0;
+pub const DEFAULT_MAX_LEVEL: u8 = 70;
 pub const SKILL_BASE_COST: f64 = 100.0;
 pub const SKILL_COST_FACTOR: f64 = 1_000.0;
 pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;
@@ -17,17 +17,27 @@ pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
 pub const MAX_PLAYER_STAMINA: Duration = Duration::from_hours(24);
 
 pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
-pub const MONSTER_INCREASE_FACTOR: f64 = 0.12;
+// pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.12;
+pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07765;
+pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.12;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
 pub const XP_INCREASE_FACTOR: f64 = 0.39;
 pub const ARMOR_FACTOR: f64 = 100.0;
+pub const MAX_BLOCK: f32 = 80.0;
+pub const MAX_EVADE: f32 = 80.0;
 
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
 pub const MAX_ITEM_QUALITY: f32 = 25.0;
 
-pub const THREAT_COOLDOWN: f32 = 20.0;
-pub const THREAT_BOSS_COOLDOWN: f32 = 60.0;
+pub const THREAT_COOLDOWN: f64 = 20.0;
+pub const THREAT_BOSS_COOLDOWN: f64 = 60.0;
 pub const THREAT_EFFECT: f64 = 0.5;
+
+pub const ITEM_REWARD_MIN_SLOTS: u8 = 2;
+pub const ITEM_REWARD_MIN_PICKS: u8 = 1;
+pub const ITEM_REWARDS_MIN_LEVEL: u16 = 50;
+pub const ITEM_REWARDS_MAP_MIN_LEVEL: u16 = 100;
+pub const ITEM_REWARDS_RARE_ADD: f64 = 500.0;
 
 pub const STASH_USER_PRICE: StashPrice = StashPrice {
     start_price: 1e5,

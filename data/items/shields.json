@@ -40,8 +40,8 @@
       },
       {
         "scope": "Local",
-        "stat": "Block",
-        "modifier": "Multiplier",
+        "stat": { "Block": null },
+        "modifier": "Increased",
         "value": [20, 40]
       },
       {
@@ -49,7 +49,7 @@
         "stat": {
           "Armor": "Physical"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60]
       }
     ],
@@ -113,20 +113,19 @@
       {
         "scope": "Global",
         "stat": {
-          "StatConverter": {
-            "source": "ThreatLevel",
-            "target_stat": { "Damage": {} },
-            "target_modifier": "Multiplier"
+          "StatConditionalModifier": {
+            "conditions": ["ThreatLevel"],
+            "stat": { "Damage": {} }
           }
         },
-        "modifier": "Flat",
+        "modifier": "More",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "ThreatGain",
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [40, 60],
         "ignore_quality": true
       },
@@ -141,7 +140,7 @@
         "stat": {
           "Armor": "Physical"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 120]
       },
       {
@@ -175,7 +174,7 @@
       "armor": 150,
       "block": 25
     },
-    "min_area_level": 240
+    "min_area_level": 250
   },
   "kite_shield_unique": {
     "name": "Oath of the Cursed King",
@@ -204,7 +203,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 120]
       },
       {
@@ -218,9 +217,8 @@
     "triggers": [
       {
         "trigger_id": "kite_shield_unique",
-        "description": "Stacks 30% More Damage and -0.3% Life Regeneration per second, for the duration of the Curse.",
         "OnApplyStatus": {
-          "status_type": { "StatModifier": { "debuff": true } },
+          "skill_type": "Curse",
           "is_triggered": false
         },
         "target": "Me",
@@ -239,22 +237,7 @@
                   },
                   "value": 30,
                   "cumulate": true
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusDuration": null
-              },
-              {
-                "StatusPower": null
-              }
-            ]
-          },
-          {
-            "ApplyStatus": {
-              "duration": 0,
-              "statuses": [
+                },
                 {
                   "status_type": {
                     "StatModifier": {
@@ -270,10 +253,10 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": null
+                "StatusDuration": {}
               },
               {
-                "StatusPower": null
+                "StatusPower": {}
               }
             ]
           }
@@ -281,7 +264,7 @@
         "modifiers": [
           {
             "stat": {
-              "StatusDuration": null
+              "StatusDuration": {}
             },
             "modifier": "Flat",
             "factor": 1.0,
@@ -292,6 +275,17 @@
         ]
       }
     ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "shield_7": {
+    "name": "Pavise",
+    "icon": "items/pavise.webp",
+    "slot": "Shield",
+    "categories": ["Shield"],
+    "armor_specs": {
+      "armor": 175,
+      "block": 27
+    },
+    "min_area_level": 320
   }
 }

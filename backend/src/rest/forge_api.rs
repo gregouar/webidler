@@ -1,10 +1,10 @@
 use anyhow::Result;
 
-use axum::{extract::State, middleware, routing::post, Extension, Json, Router};
+use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     data::{
-        forge::{affix_price, PREFIX_PRICE_FACTOR, SUFFIX_PRICE_FACTOR},
+        forge::{PREFIX_PRICE_FACTOR, SUFFIX_PRICE_FACTOR, affix_price},
         item_affix::AffixType,
         player::EquippedSlot,
     },

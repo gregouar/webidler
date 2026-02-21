@@ -16,6 +16,7 @@ use crate::{
         shared::tooltips::SkillTooltip,
         ui::{
             buttons::{FancyButton, Toggle},
+            card::Card,
             number::format_number,
             progress_bars::{
                 predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
@@ -36,35 +37,57 @@ use super::{portrait::CharacterPortrait, GameContext};
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let max_life = Memo::new(move |_| game_context.player_specs.read().character_specs.max_life);
-    let life = Signal::derive(move || game_context.player_state.read().character_state.life);
+    let max_life = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .max_life
+            .get()
+    });
+    let life = Signal::derive(move || game_context.player_state.read().character_state.life.get());
 
     let life_tooltip = move || {
         view! {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(game_context.player_specs.read().character_specs.max_life)}
+            {format_number(game_context.player_specs.read().character_specs.max_life.get())}
         }
     };
 
     let life_percent = Signal::derive(move || {
         let max_life = max_life.get();
         if max_life > 0.0 {
-            (life.get() / max_life) as f32
+            life.get() / max_life
         } else {
             0.0
         }
     });
 
-    let max_mana = Memo::new(move |_| game_context.player_specs.read().character_specs.max_mana);
+    let max_mana = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .max_mana
+            .get()
+    });
     let reserved_mana = Memo::new(move |_| {
         if game_context
             .player_specs
             .read()
             .character_specs
             .take_from_mana_before_life
+            .get()
             > 0.0
+            || game_context
+                .player_specs
+                .read()
+                .character_specs
+                .take_from_life_before_mana
+                .get()
+                > 0.0
         {
             0.0
         } else {
@@ -73,12 +96,12 @@ pub fn PlayerCard() -> impl IntoView {
                 .read()
                 .skills_specs
                 .iter()
-                .map(|s| s.mana_cost)
+                .map(|s| s.mana_cost.get())
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         }
     });
-    let mana = Signal::derive(move || game_context.player_state.read().character_state.mana);
+    let mana = Signal::derive(move || game_context.player_state.read().character_state.mana.get());
 
     let mana_tooltip = move || {
         view! {
@@ -92,7 +115,7 @@ pub fn PlayerCard() -> impl IntoView {
     let mana_percent = Signal::derive(move || {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (mana.get() / max_mana) as f32
+            mana.get() / max_mana
         } else {
             0.0
         }
@@ -100,7 +123,7 @@ pub fn PlayerCard() -> impl IntoView {
     let reserved_mana_percent = Memo::new(move |_| {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            (reserved_mana.get() / max_mana) as f32
+            reserved_mana.get() / max_mana
         } else {
             0.0
         }
@@ -122,6 +145,8 @@ pub fn PlayerCard() -> impl IntoView {
             .character_state
             .just_blocked
     });
+    let just_evaded =
+        Memo::new(move |_| game_context.player_state.read().character_state.just_evaded);
 
     let statuses = Signal::derive(move || {
         game_context
@@ -188,22 +213,6 @@ pub fn PlayerCard() -> impl IntoView {
             || max_level()
     });
 
-    let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
-
-    let disable_buy_skill =
-        Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
-
-    let buy_skill_cost_tooltip = move || {
-        view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
-                <span class="font-semibold text-white">{"Upgrade Cost"}</span>
-                <span class="text-zinc-300">
-                    {format!("{} Gold", format_number(buy_skill_cost.get()))}
-                </span>
-            </div>
-        }
-    };
-
     Effect::new({
         let toaster = expect_context::<Toasts>();
         move || {
@@ -218,26 +227,11 @@ pub fn PlayerCard() -> impl IntoView {
     });
 
     view! {
-        <style>
-            "
-            @keyframes player-fade-in {
-             0% { transform: translateX(-100%); opacity: 0; }
-             65% { transform: translateX(0%); opacity: 1; }
-             80% { transform: translateX(-5%); }
-             100% { transform: translateX(0%); }
-            }
-            
-            @keyframes player-fade-out {
-             from { opacity: 1; transform: translateY(0%); }
-             to { opacity: 0; transform: translateY(100%); }
-            }
-            "
-        </style>
-        <div class="max-h-full w-1/3
-        flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
-        bg-zinc-800 ring-1 ring-zinc-950
-        rounded-md shadow-xl/30
-        ">
+        <Card class="w-1/3">
+            // <div class="max-h-full w-1/3
+            // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
+            // bg-zinc-800 ring-1 ring-zinc-950
+            // rounded-md shadow-xl/30">
 
             <PlayerName />
 
@@ -263,6 +257,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_hurt=just_hurt
                             just_hurt_crit=just_hurt_crit
                             just_blocked=just_blocked
+                            just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
                         />
@@ -281,24 +276,35 @@ pub fn PlayerCard() -> impl IntoView {
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
                     >
-                        <StaticTooltip
-                            position=StaticTooltipPosition::Left
-                            tooltip=move || {
-                                format!(
-                                    "{} Mana Reserved for Manual Skill Use. This amount of Mana will never be used for Auto Skill Use.",
-                                    reserved_mana.get(),
-                                )
+                        <div
+                            class="h-full w-full origin-bottom"
+                            style=move || {
+                                format!("transform: scaleY({});", reserved_mana_percent.get())
                             }
-                            class:h-full
-                            class:w-full
                         >
-                            <div
-                                class="w-full h-full origin-bottom bg-blue-950 opacity-50 "
-                                style=move || {
-                                    format!("transform: scaleY({});", reserved_mana_percent.get())
+                            <StaticTooltip
+                                position=StaticTooltipPosition::Bottom
+                                tooltip=move || {
+                                    view! {
+                                        <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                                            <span class="font-semibold text-white">
+                                                {"Mana Reserved"}
+                                            </span>
+                                            <span class="text-zinc-300 text-wrap">
+                                                {format!(
+                                                    "{} Mana Reserved for Manual Skill Use. This amount of Mana will never be used for Auto Skill Use.",
+                                                    reserved_mana.get(),
+                                                )}
+                                            </span>
+                                        </div>
+                                    }
                                 }
-                            ></div>
-                        </StaticTooltip>
+                                class:w-full
+                                class:h-full
+                            >
+                                <div class="w-full h-full bg-blue-950 opacity-50 "></div>
+                            </StaticTooltip>
+                        </div>
                     </VerticalProgressBar>
                 </StaticTooltip>
             </div>
@@ -334,23 +340,10 @@ pub fn PlayerCard() -> impl IntoView {
                     game_context.player_specs.read().skills_specs.len()
                         < game_context.player_specs.read().max_skills as usize
                 }>
-                    <div class="flex flex-col items-center justify-center">
-                        <StaticTooltip
-                            tooltip=buy_skill_cost_tooltip
-                            position=StaticTooltipPosition::Top
-                        >
-                            <FancyButton
-                                class:aspect-square
-                                on:click=move |_| game_context.open_skills.set(true)
-                                disabled=disable_buy_skill
-                            >
-                                "Buy Skill"
-                            </FancyButton>
-                        </StaticTooltip>
-                    </div>
+                    <BuySkillButton />
                 </Show>
             </div>
-        </div>
+        </Card>
     }
 }
 
@@ -373,6 +366,93 @@ pub fn PlayerName() -> impl IntoView {
                 {player_name} " — " {move || game_context.player_specs.read().level}
             </span>
         </p>
+    }
+}
+
+#[component]
+fn BuySkillButton() -> impl IntoView {
+    let game_context: GameContext = expect_context();
+
+    let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
+
+    let disable_buy_skill =
+        Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
+
+    let buy_skill_cost_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                <span class="font-semibold text-white">{"Buy Cost"}</span>
+                <span class="text-zinc-300">
+                    {format!("{} Gold", format_number(buy_skill_cost.get()))}
+                </span>
+            </div>
+        }
+    };
+
+    view! {
+        <div class="flex flex-col">
+            // <div class="flex flex-col items-center justify-center">
+            // <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
+            // <FancyButton
+            // class:aspect-square
+            // on:click=move |_| game_context.open_skills.set(true)
+            // disabled=disable_buy_skill
+            // >
+            // "Buy Skill"
+            // </FancyButton>
+            // </StaticTooltip>
+            // </div>
+
+            <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
+                <button
+                    class="btn p-1 w-full h-full
+                    hover:brightness-125
+                    active:brightness-50 active:sepia active:translate-y-[2px]
+                    disabled:brightness-75 disabled:saturate-10 disabled:opacity-40
+                    "
+                    on:click=move |_| game_context.open_skills.set(true)
+                    disabled=disable_buy_skill
+                >
+                    <CircularProgressBar
+                        bar_color="oklch(55.5% 0.163 48.998)"
+                        value=Signal::derive(|| 0.0)
+                        bar_width=4
+                    >
+                        <svg
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] text-zinc-300"
+                        >
+                            <path
+                                d="M12 5V19"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                            <path
+                                d="M5 12H19"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </CircularProgressBar>
+                </button>
+            </StaticTooltip>
+
+            <div class="flex justify-around invisible">
+                <Toggle toggle_callback=|_| {} disabled=Signal::derive(|| true)>
+                    <span class="inline xl:hidden">"A"</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Auto"</span>
+                </Toggle>
+                <FancyButton disabled=Signal::derive(|| true)>
+                    <span class="text-base xl:text-2xl">"+"</span>
+                </FancyButton>
+            </div>
+        </div>
     }
 }
 
@@ -406,14 +486,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .read()
             .skills_states
             .get(index)
-            .map(|x| x.elapsed_cooldown)
-            .unwrap_or_default()) as f32)
+            .map(|x| x.elapsed_cooldown.get())
+            .unwrap_or_default()))
             * game_context
                 .player_specs
                 .read()
                 .skills_specs
                 .get(index)
-                .map(|x| x.cooldown)
+                .map(|x| x.cooldown.get())
                 .unwrap_or_default()
     });
 
@@ -541,7 +621,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .read()
             .skills_specs
             .get(index)
-            .map(|x| x.cooldown)
+            .map(|x| x.cooldown.get())
             .unwrap_or_default()
             == 0.0
     });

@@ -8,7 +8,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 20
       }
     ]
@@ -22,7 +22,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 40
       }
     ],
@@ -39,7 +39,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 40
       },
       {
@@ -88,7 +88,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Lucky": { "roll_type": "SuccessChance" } },
+        "stat": { "Lucky": { "roll_type": { "SuccessChance": {} } } },
         "modifier": "Flat",
         "value": [-40, 40]
       }
@@ -104,7 +104,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 60
       }
     ],
@@ -119,7 +119,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 80
       }
     ],
@@ -136,19 +136,19 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 80
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 120]
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [100, 140]
       },
       {
@@ -166,7 +166,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [100, 140]
       }
     ],
@@ -197,7 +197,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 100
       }
     ],
@@ -214,27 +214,27 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 100
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
-        "modifier": "Multiplier",
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
+        "modifier": "Increased",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
-        "modifier": "Multiplier",
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
+        "modifier": "More",
         "value": -1e300,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": { "StatModifier": { "debuff": false } } },
-        "modifier": "Multiplier",
+        "stat": { "StatusDuration": { "skill_type": "Blessing" } },
+        "modifier": "Increased",
         "value": [20, 40],
         "ignore_quality": true
       },
@@ -258,27 +258,27 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 100
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": true } } },
-        "modifier": "Multiplier",
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
+        "modifier": "Increased",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusPower": { "StatModifier": { "debuff": false } } },
-        "modifier": "Multiplier",
+        "stat": { "StatusPower": { "skill_type": "Blessing" } },
+        "modifier": "More",
         "value": -1e300,
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": { "StatModifier": { "debuff": true } } },
-        "modifier": "Multiplier",
+        "stat": { "StatusDuration": { "skill_type": "Curse" } },
+        "modifier": "Increased",
         "value": [20, 40],
         "ignore_quality": true
       },
@@ -300,10 +300,25 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "ring_7": {
+    "name": "Runic Ring",
+    "icon": "items/runic_ring.webp",
+    "slot": "Ring",
+    "categories": ["Jewelry", "Ring"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

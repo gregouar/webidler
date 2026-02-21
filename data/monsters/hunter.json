@@ -10,6 +10,13 @@
     "Physical": 50,
     "Poison": 100
   },
+  "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 50
+    }
+  ],
   "skills": [
     {
       "name": "Piercing Shot",
@@ -35,7 +42,7 @@
                         "damage_type": "Physical"
                       }
                     },
-                    "value": [1,2]
+                    "value": [1, 2]
                   }
                 ]
               }
@@ -96,7 +103,7 @@
               "Restore": {
                 "restore_type": "Life",
                 "value": 100,
-                "modifier": "Multiplier"
+                "modifier": "Percent"
               }
             },
             {

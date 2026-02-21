@@ -1,9 +1,10 @@
 {
   "specs": {
     "name": "Dark Forest",
+    "description": "The forest grows thick and restless, its roots tangled with rot, embers, and old bones. Few paths remain, and fewer are safe.",
     "starting_level": 11,
     "required_level": 50,
-    "item_level_modifier": 30,
+    "item_level_modifier": 20,
     "header_background": "areas/forest_header.webp",
     "footer_background": "areas/forest_footer.webp"
   },
@@ -13,11 +14,12 @@
     "tier_3.json",
     "tier_4.json",
     "tier_5.json",
-    "tier_6.json"
+    "tier_6.json",
+    "tier_7.json"
   ],
   "bosses": [
     {
-      "level": 60,
+      "level": 50,
       "interval": 50,
       "spawns": [
         {
@@ -56,7 +58,7 @@
       ]
     },
     {
-      "min_level": 20,
+      "min_level": 10,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -83,7 +85,7 @@
       ]
     },
     {
-      "min_level": 30,
+      "min_level": 20,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -110,7 +112,7 @@
       ]
     },
     {
-      "min_level": 40,
+      "min_level": 30,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -137,7 +139,7 @@
       ]
     },
     {
-      "min_level": 50,
+      "min_level": 40,
       "max_level": null,
       "weight": 1000,
       "spawns": [

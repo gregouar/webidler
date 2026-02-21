@@ -1,16 +1,15 @@
 use std::time::{Duration, Instant};
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 use chrono::Utc;
 use shared::{
     constants::MAX_PLAYER_STAMINA,
     data::{
-        area::AreaLevel,
-        character::CharacterSize,
+        area::{AreaLevel, StartAreaConfig},
         item::ItemRarity,
         passive::PassivesTreeState,
-        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
+        player::{PlayerInventory, PlayerResources, PlayerSpecs},
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
     },
@@ -20,11 +19,12 @@ use crate::{
     db::{self, characters::CharacterEntry},
     game::{
         data::{
-            inventory_data::inventory_data_to_player_inventory, master_store::MasterStore, DataInit,
+            DataInit, inventory_data::inventory_data_to_player_inventory,
+            master_store::MasterStore, passives::ascension_data_to_passives_tree_ascension,
         },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
-        systems::{benedictions_controller, inventory_controller},
+        systems::{benedictions_controller, inventory_controller, player_updater},
     },
     rest::AppError,
 };
@@ -36,7 +36,7 @@ pub async fn create_session(
     sessions_store: &SessionsStore,
     master_store: &MasterStore,
     character: CharacterEntry,
-    area_id: &Option<String>,
+    area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
     tracing::debug!("create new session for player '{character_id}'...");
@@ -76,8 +76,8 @@ pub async fn create_session(
     let game_instance_data = match load_game_instance(db_pool, master_store, &character_id).await {
         Some(saved_instance) => saved_instance,
         None => {
-            let area_id = area_id.as_ref().ok_or(anyhow::anyhow!("missing area id"))?;
-            new_game_instance(db_pool, master_store, character, area_id).await?
+            let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
+            new_game_instance(db_pool, master_store, character, area_config).await?
         }
     };
 
@@ -93,13 +93,7 @@ async fn load_game_instance(
     master_store: &MasterStore,
     character_id: &UserCharacterId,
 ) -> Option<GameInstanceData> {
-    let saved_game_instance = match db::game_instances::load_game_instance_data(
-        db_pool,
-        master_store,
-        character_id,
-    )
-    .await
-    {
+    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id).await {
         Ok(Some((mut game_instance, saved_at))) => {
             // Maybe move this somewhere else
             game_instance.player_stamina += Duration::from_secs(
@@ -120,29 +114,20 @@ async fn load_game_instance(
             );
             None
         }
-    };
-
-    saved_game_instance
+    }
 }
 
 async fn new_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character: CharacterEntry,
-    area_id: &str,
+    area_config: StartAreaConfig,
 ) -> Result<GameInstanceData> {
-    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
-        name: character.character_name.clone(),
-        portrait: character.portrait.clone(),
-        size: CharacterSize::Small,
-        position_x: 0,
-        position_y: 0,
-        max_life: 100.0,
-        life_regen: 10.0,
-        max_mana: 100.0,
-        mana_regen: 10.0,
-        ..Default::default()
-    });
+    let mut player_specs = PlayerSpecs::init(player_updater::base_player_character_specs(
+        character.character_name.clone(),
+        character.portrait.clone(),
+        1,
+    ));
     player_specs.max_area_level = character.max_area_level as AreaLevel;
 
     let player_resources = PlayerResources::default();
@@ -150,16 +135,22 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let area_level_completed =
-        db::characters::read_character_area_completed(db_pool, &character.character_id, area_id)
-            .await?
-            .map(|area_completed| area_completed.max_area_level)
-            .unwrap_or_default();
+    let area_level_completed = db::characters::read_character_area_completed(
+        db_pool,
+        &character.character_id,
+        &area_config.area_id,
+    )
+    .await?
+    .map(|area_completed| area_completed.max_area_level)
+    .unwrap_or_default();
 
-    let (player_inventory, passives_tree_state, player_benedictions) = match character_data {
-        Some((inventory_data, ascension, player_benedictions)) => (
+    let (mut player_inventory, passives_tree_state, player_benedictions) = match character_data {
+        Some((inventory_data, ascension_data, player_benedictions)) => (
             inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
-            PassivesTreeState::init(ascension),
+            PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
+                &master_store.items_store,
+                ascension_data,
+            )),
             player_benedictions,
         ),
         None => {
@@ -192,9 +183,37 @@ async fn new_game_instance(
         }
     };
 
+    let area_map = match area_config.map_item_index {
+        Some(map_item_index) => {
+            if (map_item_index as usize) < player_inventory.bag.len() {
+                let map_item = player_inventory.bag.remove(map_item_index as usize);
+
+                if let Some(map_specs) = &map_item.base.map_specs {
+                    if let Some(map_area_id) = &map_specs.area_id
+                        && *map_area_id != area_config.area_id
+                    {
+                        return Err(anyhow::anyhow!("incorrect area"));
+                    }
+                } else {
+                    return Err(anyhow::anyhow!("missing map item"));
+                }
+
+                if map_item.required_level > player_specs.max_area_level {
+                    return Err(anyhow::anyhow!("power level too low"));
+                }
+
+                Some(map_item)
+            } else {
+                return Err(anyhow::anyhow!("missing map item"));
+            }
+        }
+        None => None,
+    };
+
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        area_id,
+        &area_config.area_id,
+        area_map,
         area_level_completed as AreaLevel,
         "default",
         passives_tree_state,
@@ -205,7 +224,7 @@ async fn new_game_instance(
         Default::default(),
     )?;
 
-    if game_data.area_blueprint.specs.coming_soon {
+    if game_data.area_specs.coming_soon {
         return Err(anyhow!("forbidden area"));
     }
 
@@ -220,10 +239,8 @@ async fn new_game_instance(
     }
 
     // Only the delta is saved in db, so we adjust by starting_level
-    game_data.area_state.mutate().max_area_level_ever +=
-        game_data.area_blueprint.specs.starting_level - 1;
-    game_data.area_state.mutate().last_champion_spawn +=
-        game_data.area_blueprint.specs.starting_level - 1;
+    game_data.area_state.mutate().max_area_level_ever += game_data.area_specs.starting_level - 1;
+    game_data.area_state.mutate().last_champion_spawn += game_data.area_specs.starting_level - 1;
 
     game_data.player_resources.mutate().gold += benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,

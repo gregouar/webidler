@@ -1,0 +1,218 @@
+[
+  {
+    "name": "of Hurry",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 20
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 20
+      }
+    ]
+  },
+  {
+    "name": "of Velocity",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 40
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 40
+      }
+    ]
+  },
+  {
+    "name": "of Urgency",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 60
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 60
+      }
+    ]
+  },
+  {
+    "name": "of Acceleration",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 80
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 80
+      }
+    ]
+  },
+  {
+    "name": "of Haste",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 100
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 100
+      }
+    ]
+  },
+  {
+    "name": "of Frenzy",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Map"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 120
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 120
+      }
+    ]
+  },
+  {
+    "name": "of Tantrum",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Map"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 140
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 140
+      }
+    ]
+  },
+  {
+    "name": "of Craze",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Map"],
+    "item_level": 800,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 160
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 160
+      }
+    ]
+  },
+  {
+    "name": "of Madness",
+    "family": "inc_speed",
+    "tags": ["Speed"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 500,
+    "restrictions": ["Map"],
+    "item_level": 900,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": { "Speed": null },
+        "modifier": "Increased",
+        "value": 200
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 200
+      }
+    ]
+  }
+]

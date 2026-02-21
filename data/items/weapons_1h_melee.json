@@ -34,13 +34,13 @@
       {
         "scope": "Local",
         "stat": { "Speed": "Attack" },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": 100,
         "ignore_quality": true
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [8, 10]
       }
@@ -81,13 +81,13 @@
     "affixes": [
       {
         "scope": "Local",
-        "stat": { "MinDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
         "value": [2, 4]
       },
       {
         "scope": "Local",
-        "stat": { "MaxDamage": { "damage_type": "Physical" } },
+        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
         "value": [5, 7]
       },
@@ -124,7 +124,7 @@
                       "stat": {
                         "Armor": "Physical"
                       },
-                      "modifier": "Multiplier",
+                      "modifier": "Increased",
                       "debuff": true
                     }
                   },
@@ -182,8 +182,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MinDamage": {
-            "damage_type": "Poison"
+          "Damage": {
+            "damage_type": "Poison",
+            "min_max": "Min"
           }
         },
         "modifier": "Flat",
@@ -193,8 +194,9 @@
       {
         "scope": "Local",
         "stat": {
-          "MaxDamage": {
-            "damage_type": "Poison"
+          "Damage": {
+            "damage_type": "Poison",
+            "min_max": "Max"
           }
         },
         "modifier": "Flat",
@@ -208,7 +210,7 @@
             "damage_type": "Physical"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [-100, -100],
         "ignore_quality": true
       },
@@ -219,13 +221,13 @@
             "damage_type": "Poison"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [80, 120]
       },
       {
         "scope": "Global",
         "stat": {
-          "ManaOnHit": { "is_hurt": true, "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [2, 4]
@@ -233,15 +235,17 @@
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Poison" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 20]
       },
       {
         "scope": "Global",
         "stat": {
-          "LifeOnHit": { "is_hurt": true, "skill_type": "Attack" }
+          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
         "value": [4, 6]
@@ -251,7 +255,7 @@
         "stat": {
           "Speed": "Attack"
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [10, 20]
       }
     ],
@@ -303,6 +307,120 @@
       "crit_chance": 5,
       "crit_damage": 100
     },
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "treasure_cutlass": {
+    "name": "Cutlass of Greed",
+    "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
+    "icon": "items/treasure_cutlass.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [12, 19]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Local",
+        "stat": { "CritChance": null },
+        "modifier": "Flat",
+        "value": 5,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Local",
+        "stat": { "Damage": {} },
+        "modifier": "Increased",
+        "value": [100, 140],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "StatusPower": { "skill_type": "Curse" } },
+        "modifier": "Increased",
+        "value": [40, 60]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "DamageOverTime": {
+                "damage_type": "Physical"
+              }
+            },
+            "skill_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "value": [80, 120]
+      }
+    ],
+    "triggers": [
+      {
+        "trigger_id": "treasure_cutlass",
+        "OnKill": {},
+        "target": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "GoldFind",
+                      "modifier": "More"
+                    }
+                  },
+                  "value": 20.0,
+                  "cumulate": true
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 5.0,
+                  "cumulate": true
+                }
+              ],
+              "duration": 60
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 250
+  },
+  "weapon_1h_7": {
+    "name": "Battleaxe",
+    "icon": "items/battleaxe.webp",
+    "slot": "Weapon",
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "weapon_specs": {
+      "range": "Melee",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [14, 22]
+      },
+      "crit_chance": 5,
+      "crit_damage": 100
+    },
+    "min_area_level": 320
   }
 }

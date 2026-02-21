@@ -25,19 +25,19 @@ pub struct LootTableEntry {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RarityWeights {
-    pub normal: usize,
-    pub magic: usize,
-    pub rare: usize,
-    pub unique: usize,
+    pub normal: f64,
+    pub magic: f64,
+    pub rare: f64,
+    pub unique: f64,
 }
 
 impl Default for RarityWeights {
     fn default() -> Self {
         RarityWeights {
-            normal: 20_000,
-            magic: 16_000,
-            rare: 4_000,
-            unique: 100,
+            normal: 200.0,
+            magic: 160.0,
+            rare: 40.0,
+            unique: 1.0,
         }
     }
 }

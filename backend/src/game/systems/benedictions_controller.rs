@@ -31,7 +31,7 @@ pub fn generate_effects_map_from_benedictions(
         .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
             *effects_map
                 .0
-                .entry((effect.stat.clone(), effect.modifier))
+                .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
                 .or_default() += effect.value;
             effects_map
         })

@@ -1,31 +1,36 @@
-use codee::string::JsonSerdeCodec;
 use leptos::prelude::*;
-// use leptos_router::hooks::use_params_map;
-use leptos_use::storage;
-use shared::data::user::UserCharacterId;
+use leptos_router::hooks::use_navigate;
 
-use crate::components::backend_client;
-use crate::components::game::game_instance::GameInstance;
-use crate::components::websocket::Websocket;
+use crate::components::{
+    backend_client::BackendClient, data_context::DataContext, game::game_instance::GameInstance,
+    websocket::Websocket,
+};
 
 #[component]
 pub fn GamePage() -> impl IntoView {
-    // let params = use_params_map();
-    let backend_client = expect_context::<backend_client::BackendClient>();
+    let backend: BackendClient = expect_context();
+    let data_context: DataContext = expect_context();
 
-    // let character_id = {
-    //     params
-    //         .read()
-    //         .get_str("characterid")
-    //         .and_then(|character_id| uuid::Uuid::parse_str(character_id).ok())
-    // };
-
-    let (get_character_id_storage, _, _) =
-        storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+    let data_load = LocalResource::new({
+        move || async move {
+            if data_context.load_data(backend).await.is_err() {
+                use_navigate()("/", Default::default());
+            }
+        }
+    });
 
     view! {
-        <Websocket url=backend_client.get_game_ws_url()>
-            <GameInstance character_id=get_character_id_storage.get_untracked() />
-        </Websocket>
+        <Transition fallback=move || {
+            view! { <p class="text-gray-400">"Loading..."</p> }
+        }>
+            {move || Suspend::new(async move {
+                data_load.await;
+                view! {
+                    <Websocket url=backend.get_game_ws_url()>
+                        <GameInstance />
+                    </Websocket>
+                }
+            })}
+        </Transition>
     }
 }

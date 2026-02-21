@@ -10,9 +10,9 @@ use crate::game::systems::benedictions_controller;
 
 use super::{
     data::{
+        DataInit,
         event::{EventsQueue, GameEvent},
         master_store::MasterStore,
-        DataInit,
     },
     game_data::GameInstanceData,
     systems::{
@@ -25,6 +25,10 @@ use super::{
 const PLAYER_RESPAWN_PERIOD: Duration = Duration::from_secs(5);
 
 pub async fn reset_entities(game_data: &mut GameInstanceData) {
+    if game_data.end_quest {
+        return;
+    }
+
     player_updater::reset_player(&mut game_data.player_state);
     monsters_updater::reset_monsters(&mut game_data.monster_states);
 }
@@ -35,6 +39,10 @@ pub async fn tick(
     master_store: &MasterStore,
     elapsed_time: Duration,
 ) -> Result<()> {
+    if game_data.end_quest {
+        return Ok(());
+    }
+
     update_threat(events_queue, game_data, elapsed_time);
 
     if game_data.area_state.read().rush_mode {
@@ -105,9 +113,9 @@ async fn control_entities(
     master_store: &MasterStore,
 ) -> Result<()> {
     if !game_data.player_state.character_state.is_alive {
-        game_data.area_threat.cooldown = 0.0;
+        game_data.area_threat.cooldown = Default::default();
         game_data.monster_wave_delay =
-            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
 
         if game_data.player_respawn_delay.is_zero() {
             respawn_player(master_store, game_data);
@@ -134,6 +142,7 @@ async fn control_entities(
 
     game_data.player_controller.control_player(
         events_queue,
+        &game_data.area_threat,
         game_data.player_specs.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,
@@ -141,7 +150,7 @@ async fn control_entities(
 
     let wave_completed = monsters_still_alive.is_empty();
     if wave_completed || game_data.area_state.read().going_back > 0 {
-        game_data.area_threat.cooldown = 0.0;
+        game_data.area_threat.cooldown = Default::default();
         if wave_completed
             && !game_data.wave_completed
             && monsters_exist
@@ -157,19 +166,16 @@ async fn control_entities(
             if game_data.area_state.read().going_back > 0 {
                 let area_state = game_data.area_state.mutate();
                 let amount = area_state.going_back;
-                area_controller::decrease_area_level(
-                    &game_data.area_blueprint.specs,
-                    area_state,
-                    amount,
-                );
+                area_controller::decrease_area_level(&game_data.area_specs, area_state, amount);
                 area_state.going_back = 0;
             }
 
             let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
-                &game_data.area_blueprint,
-                game_data.area_state.mutate(),
-                &game_data.area_threat,
                 &master_store.monster_specs_store,
+                &game_data.area_blueprint.waves,
+                &game_data.area_blueprint.bosses,
+                &game_data.area_specs,
+                game_data.area_state.mutate(),
             )?;
             game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
             game_data.monster_specs = monster_specs;
@@ -178,11 +184,11 @@ async fn control_entities(
             game_data.area_threat = AreaThreat {
                 threat_level: 0,
                 cooldown: if game_data.area_state.read().is_boss {
-                    THREAT_BOSS_COOLDOWN
+                    THREAT_BOSS_COOLDOWN.into()
                 } else {
-                    THREAT_COOLDOWN
+                    THREAT_COOLDOWN.into()
                 },
-                elapsed_cooldown: 0.0,
+                elapsed_cooldown: Default::default(),
                 just_increased: false,
             };
 
@@ -190,7 +196,7 @@ async fn control_entities(
         }
     } else {
         game_data.monster_wave_delay =
-            Duration::from_secs_f32(game_data.player_specs.read().movement_cooldown);
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
         monsters_controller::control_monsters(
             events_queue,
             &game_data.monster_specs,
@@ -209,12 +215,13 @@ pub fn update_threat(
     elapsed_time: Duration,
 ) {
     game_data.area_threat.just_increased = false;
-    if game_data.area_threat.cooldown > 0.0 {
+    if game_data.area_threat.cooldown.get() > 0.0 {
         game_data.area_threat.elapsed_cooldown +=
-            elapsed_time.as_secs_f32() * game_data.player_specs.read().threat_gain * 0.01
-                / game_data.area_threat.cooldown;
-        if game_data.area_threat.elapsed_cooldown >= 1.0 {
-            game_data.area_threat.elapsed_cooldown -= 1.0;
+            (elapsed_time.as_secs_f64() * game_data.player_specs.read().threat_gain.get() * 0.01
+                / game_data.area_threat.cooldown.get())
+            .into();
+        if game_data.area_threat.elapsed_cooldown.get() >= 1.0 {
+            game_data.area_threat.elapsed_cooldown -= 1.0.into();
             game_data.area_threat.threat_level =
                 game_data.area_threat.threat_level.saturating_add(1);
             game_data.area_threat.just_increased = true;
@@ -244,12 +251,14 @@ async fn update_entities(
         elapsed_time,
         game_data.player_specs.read(),
         &mut game_data.player_state,
+        &game_data.area_threat,
     );
     monsters_updater::update_monster_states(
         events_queue,
         elapsed_time,
         &game_data.monster_specs,
         &mut game_data.monster_states,
+        &game_data.area_threat,
     );
 }
 
@@ -278,7 +287,7 @@ fn respawn_player(master_store: &MasterStore, game_data: &mut GameInstanceData) 
 
     if game_data.area_state.read().auto_progress {
         area_controller::decrease_area_level(
-            &game_data.area_blueprint.specs,
+            &game_data.area_specs,
             game_data.area_state.mutate(),
             1,
         );

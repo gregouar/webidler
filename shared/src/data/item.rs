@@ -3,7 +3,13 @@ use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{chance::Chance, item_affix::AffixType, trigger::TriggerSpecs};
+use crate::data::{
+    chance::Chance,
+    item_affix::AffixType,
+    modifier::ModifiableValue,
+    trigger::TriggerSpecs,
+    values::{NonNegative, Percent},
+};
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
@@ -108,16 +114,20 @@ pub enum ItemCategory {
     Gloves,
     Helmet,
     Ring,
+    // Other categories:
+    Map,
+    Rune,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemBase {
     pub name: String,
     pub icon: String,
     #[serde(default)]
     pub description: Option<String>,
 
-    pub slot: ItemSlot,
+    #[serde(default)]
+    pub slot: Option<ItemSlot>,
     #[serde(default)]
     pub extra_slots: HashSet<ItemSlot>,
     pub categories: HashSet<ItemCategory>,
@@ -135,9 +145,16 @@ pub struct ItemBase {
     pub weapon_specs: Option<WeaponSpecs>,
     #[serde(default)]
     pub armor_specs: Option<ArmorSpecs>,
+    #[serde(default)]
+    pub rune_specs: Option<RuneSpecs>,
+    #[serde(default)]
+    pub map_specs: Option<MapSpecs>,
+
+    #[serde(default)]
+    pub ignore_quality: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemModifiers {
     pub base_item_id: String,
     pub name: String,
@@ -151,7 +168,7 @@ pub struct ItemModifiers {
     pub quality: f32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemSpecs {
     pub base: ItemBase,
     pub modifiers: ItemModifiers,
@@ -173,21 +190,38 @@ pub struct WeaponSpecs {
     #[serde(default)]
     pub shape: SkillShape,
 
-    pub cooldown: f32,
+    pub cooldown: ModifiableValue<NonNegative>,
 
     // #[serde(rename_all = "snake_case")]
     pub damage: DamageMap,
 
     pub crit_chance: Chance,
-    pub crit_damage: f64,
+    pub crit_damage: ModifiableValue<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct ArmorSpecs {
     #[serde(default)]
-    pub armor: f64,
+    pub armor: ModifiableValue<f64>,
     #[serde(default)]
-    pub block: f32,
+    pub block: ModifiableValue<Percent>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct RuneSpecs {
+    #[serde(default)]
+    pub root_node: bool,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct MapSpecs {
+    #[serde(default)]
+    pub area_id: Option<String>,
+    #[serde(default)]
+    pub reward_picks: u8,
+    #[serde(default)]
+    pub reward_slots: u8,
+    #[serde(default)]
+    pub loot_tables: Vec<String>,
 }
 
 impl ItemModifiers {
@@ -199,7 +233,11 @@ impl ItemModifiers {
             .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
                 *effects_map
                     .0
-                    .entry((effect.stat_effect.stat.clone(), effect.stat_effect.modifier))
+                    .entry((
+                        effect.stat_effect.stat.clone(),
+                        effect.stat_effect.modifier,
+                        effect.stat_effect.bypass_ignore,
+                    ))
                     .or_default() += effect.stat_effect.value;
                 effects_map
             })

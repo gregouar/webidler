@@ -1,0 +1,326 @@
+[
+  {
+    "name": "of Sickness",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 1,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 100,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 40
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 20
+      }
+    ]
+  },
+  {
+    "name": "of Infection",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 2,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 200,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 80
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 40
+      }
+    ]
+  },
+  {
+    "name": "of Contagion",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 3,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 300,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 120
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 60
+      }
+    ]
+  },
+  {
+    "name": "of Toxicity",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 4,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 400,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 160
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 80
+      }
+    ]
+  },
+  {
+    "name": "of Venom",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 5,
+    "weight": 1000,
+    "restrictions": ["Map"],
+    "item_level": 500,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 200
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 100
+      }
+    ]
+  },
+  {
+    "name": "of Pestilence",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 6,
+    "weight": 900,
+    "restrictions": ["Map"],
+    "item_level": 600,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 240
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 120
+      }
+    ]
+  },
+  {
+    "name": "of Corruption",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 7,
+    "weight": 800,
+    "restrictions": ["Map"],
+    "item_level": 700,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 280
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 140
+      }
+    ]
+  },
+  {
+    "name": "of Putrefaction",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 8,
+    "weight": 700,
+    "restrictions": ["Map"],
+    "item_level": 800,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 320
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 160
+      }
+    ]
+  },
+  {
+    "name": "of Necrosis",
+    "family": "extra_poison_damage",
+    "tags": ["Poison"],
+    "affix_type": "Suffix",
+    "tier": 9,
+    "weight": 500,
+    "restrictions": ["Map"],
+    "item_level": 900,
+    "effects": [
+      {
+        "scope": "Local",
+        "stat": {
+          "StatConverter": {
+            "source": { "DamageOverTime": {} },
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": { "damage_type": "Poison" }
+                }
+              }
+            },
+            "is_extra": true
+          }
+        },
+        "modifier": "Flat",
+        "value": 400
+      },
+      {
+        "scope": "Local",
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "value": 200
+      }
+    ]
+  }
+]

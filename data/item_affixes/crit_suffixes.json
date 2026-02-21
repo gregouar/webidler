@@ -12,8 +12,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [15, 24]
+        "modifier": "Increased",
+        "value": [15, 25]
       }
     ]
   },
@@ -30,8 +30,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [25, 39]
+        "modifier": "Increased",
+        "value": [30, 40]
       }
     ]
   },
@@ -48,8 +48,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [40, 54]
+        "modifier": "Increased",
+        "value": [45, 55]
       }
     ]
   },
@@ -66,8 +66,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [55, 69]
+        "modifier": "Increased",
+        "value": [60, 70]
       }
     ]
   },
@@ -84,8 +84,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [70, 84]
+        "modifier": "Increased",
+        "value": [75, 85]
       }
     ]
   },
@@ -102,8 +102,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [85, 99]
+        "modifier": "Increased",
+        "value": [90, 100]
       }
     ]
   },
@@ -120,8 +120,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [100, 114]
+        "modifier": "Increased",
+        "value": [105, 115]
       }
     ]
   },
@@ -138,8 +138,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [115, 129]
+        "modifier": "Increased",
+        "value": [120, 130]
       }
     ]
   },
@@ -156,8 +156,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [130, 144]
+        "modifier": "Increased",
+        "value": [135, 150]
       }
     ]
   },
@@ -174,8 +174,8 @@
       {
         "scope": "Global",
         "stat": { "CritChance": null },
-        "modifier": "Multiplier",
-        "value": [145, 159]
+        "modifier": "Increased",
+        "value": [155, 175]
       }
     ]
   }

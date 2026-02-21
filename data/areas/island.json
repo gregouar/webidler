@@ -1,9 +1,10 @@
 {
   "specs": {
     "name": "Treasure Island",
+    "description": "An island of glittering promise, where greed has armed the dead and taught treasure how to bite.",
     "starting_level": 41,
     "required_level": 200,
-    "item_level_modifier": 150,
+    "item_level_modifier": 80,
     "header_background": "areas/island_header.webp",
     "footer_background": "areas/island_footer.webp"
   },
@@ -13,11 +14,12 @@
     "tier_3.json",
     "tier_4.json",
     "tier_5.json",
-    "tier_6.json"
+    "tier_6.json",
+    "tier_7.json"
   ],
   "bosses": [
     {
-      "level": 90,
+      "level": 50,
       "interval": 50,
       "spawns": [
         {
@@ -76,7 +78,7 @@
       ]
     },
     {
-      "min_level": 50,
+      "min_level": 10,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -99,7 +101,7 @@
       ]
     },
     {
-      "min_level": 60,
+      "min_level": 20,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -142,7 +144,7 @@
       ]
     },
     {
-      "min_level": 70,
+      "min_level": 30,
       "max_level": null,
       "weight": 1000,
       "spawns": [
@@ -173,7 +175,7 @@
       ]
     },
     {
-      "min_level": 80,
+      "min_level": 40,
       "max_level": null,
       "weight": 1000,
       "spawns": [

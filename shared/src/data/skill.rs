@@ -1,17 +1,19 @@
 use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use crate::data::{
     chance::{Chance, ChanceRange},
-    stat_effect::{Modifier, StatType},
+    conditional_modifier::{Condition, ConditionalModifier},
+    modifier::ModifiableValue,
+    stat_effect::{MinMax, StatConverterSource, StatEffect, StatType},
     trigger::TriggerSpecs,
+    values::{Cooldown, NonNegative},
 };
 
 pub use super::stat_effect::DamageType;
-use super::{
-    character_status::StatusSpecs, item::ItemSlot, passive::StatEffect, stat_effect::DamageMap,
-};
+use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseSkillSpecs {
@@ -22,9 +24,9 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub skill_type: SkillType,
 
-    pub cooldown: f32,
+    pub cooldown: NonNegative,
     #[serde(default)]
-    pub mana_cost: f64,
+    pub mana_cost: NonNegative,
 
     #[serde(default)]
     pub upgrade_cost: f64,
@@ -38,15 +40,17 @@ pub struct BaseSkillSpecs {
     pub targets: Vec<SkillTargetsGroup>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
-    // TODO: special upgrades at some levels?
+
+    #[serde(default)]
+    pub auto_use_conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SkillSpecs {
     pub base: BaseSkillSpecs,
 
-    pub cooldown: f32,
-    pub mana_cost: f64,
+    pub cooldown: ModifiableValue<NonNegative>,
+    pub mana_cost: ModifiableValue<NonNegative>,
 
     pub upgrade_level: u16,
     pub next_upgrade_cost: f64,
@@ -62,25 +66,33 @@ pub struct SkillSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SkillState {
-    pub elapsed_cooldown: f32,
+    pub elapsed_cooldown: Cooldown,
 
     pub is_ready: bool,
     pub just_triggered: bool,
 }
 
 #[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash, PartialOrd, Ord,
+    Serialize,
+    Deserialize,
+    Debug,
+    Clone,
+    Copy,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    PartialOrd,
+    Ord,
+    EnumIter,
 )]
 pub enum SkillType {
     #[default]
     Attack,
     Spell,
-}
-
-impl SkillType {
-    pub fn iter() -> impl Iterator<Item = SkillType> {
-        [SkillType::Attack, SkillType::Spell].into_iter()
-    }
+    Curse,
+    Blessing,
+    Other,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -88,23 +100,33 @@ pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
     pub source: ModifierEffectSource,
     pub factor: f64,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ModifierEffectSource {
     ItemStats {
         slot: Option<ItemSlot>,
         item_stats: ItemStatsSource,
     },
-    PlaceHolder,
+    CharacterStats(StatConverterSource),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum ItemStatsSource {
-    Damage(Option<DamageType>), // TODO: split in min and max
     Armor,
-    MinDamage(Option<DamageType>),
-    MaxDamage(Option<DamageType>),
+    Cooldown,
+    CritChance,
+    CritDamage,
+    Damage {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
+    },
+    Range,
+    Shape,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -135,7 +157,7 @@ impl Default for SkillRepeat {
             value: ChanceRange {
                 min: 1,
                 max: 1,
-                lucky_chance: 0.0,
+                lucky_chance: Default::default(),
             },
             target: SkillRepeatTarget::Any,
         }
@@ -159,6 +181,9 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+
+    #[serde(default)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -168,27 +193,31 @@ pub enum SkillEffectType {
         #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]
-        crit_damage: f64,
-        #[serde(default, skip_serializing)]
-        ignore_armor: bool, // TODO: Remove
+        crit_damage: ModifiableValue<f64>,
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,
-        duration: ChanceRange<f64>,
+        duration: ChanceRange<ModifiableValue<NonNegative>>,
     },
     Restore {
         restore_type: RestoreType,
-        value: ChanceRange<f64>,
-        modifier: Modifier,
+        value: ChanceRange<ModifiableValue<f64>>,
+        modifier: RestoreModifier,
     },
     Resurrect,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RestoreModifier {
+    Flat,
+    Percent,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ApplyStatusEffect {
     pub status_type: StatusSpecs,
     #[serde(default)]
-    pub value: ChanceRange<f64>,
+    pub value: ChanceRange<ModifiableValue<NonNegative>>,
     #[serde(default)]
     pub cumulate: bool,
     #[serde(default)]
@@ -213,7 +242,9 @@ pub enum SkillRange {
     Any,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash, PartialOrd, Ord,
+)]
 pub enum SkillShape {
     #[default]
     Single,

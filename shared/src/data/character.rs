@@ -1,13 +1,16 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    chance::Chance,
+    chance::BoundedChance,
     character_status::StatusId,
+    conditional_modifier::{Condition, ConditionalModifier},
+    modifier::ModifiableValue,
     skill::{DamageType, SkillType},
-    stat_effect::EffectsMap,
+    stat_effect::{EffectsMap, StatStatusType},
     trigger::TriggeredEffect,
+    values::{AtLeastOne, NonNegative, Percent},
 };
 
 use super::character_status::StatusMap;
@@ -57,41 +60,58 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub position_y: u8,
 
-    pub max_life: f64,
+    // TODO: All the above: move elsewhere ^^^
+    // TODO: Remove ModifiableValue and have a separate backend only struct to handle those
+    //
+    pub max_life: ModifiableValue<AtLeastOne>,
     #[serde(default)]
-    pub life_regen: f64,
+    pub life_regen: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub max_mana: f64,
+    pub max_mana: ModifiableValue<NonNegative>,
     #[serde(default)]
-    pub mana_regen: f64,
+    pub mana_regen: ModifiableValue<f64>,
 
     #[serde(default)]
-    pub take_from_mana_before_life: f32,
+    pub take_from_mana_before_life: ModifiableValue<Percent>,
+    #[serde(default)]
+    pub take_from_life_before_mana: ModifiableValue<Percent>,
 
     #[serde(default)]
-    pub armor: HashMap<DamageType, f64>,
-    #[serde(default)]
-    pub block: Chance,
-    #[serde(default)]
-    pub block_spell: Chance, // chance to block spell are applied on top of block chance
-    #[serde(default)]
-    pub block_damage: f32,
+    pub armor: HashMap<DamageType, ModifiableValue<f64>>,
 
     #[serde(default)]
-    pub damage_resistance: HashMap<(SkillType, DamageType), f64>,
+    pub block: HashMap<SkillType, BoundedChance>,
+    #[serde(default)]
+    pub block_damage: ModifiableValue<Percent>,
+
+    #[serde(default)]
+    pub evade: HashMap<DamageType, BoundedChance>,
+    #[serde(default)]
+    pub evade_damage: ModifiableValue<Percent>,
+
+    #[serde(default)]
+    pub status_resistances: HashMap<(SkillType, Option<StatStatusType>), ModifiableValue<f64>>,
+    #[serde(default)]
+    pub stun_lockout: ModifiableValue<NonNegative>,
+
+    #[serde(default)]
+    pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
 
     // TODO: Should have CharacterComputed
     #[serde(default)]
     pub triggers: Vec<TriggeredEffect>,
-    #[serde(default)] // for retro compatibility
+    #[serde(default)]
     pub effects: EffectsMap,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterState {
-    pub life: f64,
-    pub mana: f64,
+    pub life: NonNegative,
+    pub mana: NonNegative,
 
     pub statuses: StatusMap,
     // This feels dirty
@@ -102,10 +122,19 @@ pub struct CharacterState {
     pub just_hurt: bool,
     pub just_hurt_crit: bool,
     pub just_blocked: bool,
+    pub just_evaded: bool,
+
+    // This feels dirty
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub monitored_conditions: HashMap<Condition, f64>,
 }
 
 impl CharacterState {
     pub fn is_stunned(&self) -> bool {
-        self.statuses.unique_statuses.contains_key(&StatusId::Stun)
+        // TODO: Also iter over non unique?
+        self.statuses
+            .unique_statuses
+            .iter()
+            .any(|((status_id, _), _)| *status_id == StatusId::Stun)
     }
 }

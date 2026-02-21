@@ -13,6 +13,10 @@
       "weight": 1000
     },
     {
+      "item_id": "padded_tunic_unique",
+      "weight": 1
+    },
+    {
       "item_id": "cloth_wraps",
       "weight": 1000
     },

@@ -8,13 +8,13 @@ macro_rules! impl_into_message{
     } => {
         #[derive($($attr,)*)]
         $vis enum $name {
-            $($variant$(($variant_type))*,)*
+            $($variant$((Box<$variant_type>))*,)*
         }
 
         $($(
             impl From<$variant_type> for $name {
                 fn from(value: $variant_type) -> $name {
-                    $name::$variant(value)
+                    $name::$variant(Box::new(value))
                 }
             }
         )*)*

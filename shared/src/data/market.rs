@@ -6,7 +6,7 @@ use crate::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
-        passive::StatEffect,
+        stat_effect::StatEffect,
         user::UserCharacterId,
     },
     types::{ItemName, ItemPrice},

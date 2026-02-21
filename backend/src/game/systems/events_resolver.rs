@@ -1,11 +1,11 @@
-use std::{collections::HashSet, iter};
+use std::iter;
 
+use itertools::all;
 use shared::{
     constants::WAVES_PER_AREA_LEVEL,
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
-        character_status::StatusSpecs,
         skill::TargetType,
         trigger::EventTrigger,
     },
@@ -17,7 +17,7 @@ use crate::game::{
         master_store::MasterStore,
     },
     game_data::GameInstanceData,
-    systems::triggers_controller,
+    systems::{stats_updater::check_condition, triggers_controller},
 };
 
 use super::{
@@ -83,14 +83,9 @@ fn handle_hit_event<'a>(
 
     for (character_id, character_specs) in characters {
         for triggered_effects in character_specs.triggers.iter() {
-            match triggered_effects.trigger {
-                EventTrigger::OnHit(_) if hit_event.source == character_id => {}
-                EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
-                _ => continue,
-            };
-
             let hit_trigger = match triggered_effects.trigger {
-                EventTrigger::OnHit(ht) | EventTrigger::OnTakeHit(ht) => ht,
+                EventTrigger::OnHit(ht) if hit_event.source == character_id => ht,
+                EventTrigger::OnTakeHit(ht) if hit_event.target == character_id => ht,
                 _ => continue,
             };
 
@@ -99,19 +94,22 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
                 && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
-                && hit_trigger.is_triggered.unwrap_or(hit_event.is_triggered)
-                    == hit_event.is_triggered
+                && hit_trigger
+                    .is_triggered
+                    .unwrap_or(hit_event.trigger_id.is_some())
+                    == hit_event.trigger_id.is_some()
                 && hit_trigger
                     .damage_type
                     .map(|damage_type| {
                         hit_event
                             .damage
                             .get(&damage_type)
-                            .copied()
+                            .map(|d| d.get())
                             .unwrap_or_default()
                             > 0.0
                     })
                     .unwrap_or(true)
+                && hit_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
@@ -153,7 +151,7 @@ fn handle_status_event<'a>(
                 _ => continue,
             };
 
-            let status_trigger = match triggered_effects.trigger {
+            let status_trigger = match &triggered_effects.trigger {
                 EventTrigger::OnApplyStatus(trigger)
                 // | EventTrigger::OnTakeHit(ht) 
                 => trigger,
@@ -164,12 +162,14 @@ fn handle_status_event<'a>(
                 == status_event.skill_type
                 && status_trigger
                     .is_triggered
-                    .unwrap_or(status_event.is_triggered)
-                    == status_event.is_triggered
+                    .unwrap_or(status_event.trigger_id.is_some())
+                    == status_event.trigger_id.is_some()
                 && status_trigger
                     .status_type
-                    .map(|status_type| status_event.status_type.is_match(&status_type))
+                    .as_ref()
+                    .map(|status_type| status_event.status_type.is_match(status_type))
                     .unwrap_or(true)
+                && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
@@ -198,30 +198,12 @@ fn handle_kill_event(
                     game_data.player_resources.mutate(),
                     game_data.player_specs.read(),
                     monster_specs,
-                    &game_data.area_blueprint.specs,
+                    &game_data.area_specs,
                     game_data.area_state.mutate(),
                 );
                 if let Some(monster_state) = game_data.monster_states.get_mut(monster_index) {
                     monster_state.gold_reward = gold_reward;
                     monster_state.gems_reward = gems_reward;
-
-                    let mut is_debuffed = false;
-                    let mut is_stunned = false;
-                    let mut is_damaged_over_time = HashSet::new();
-                    for (status_specs, _) in monster_state.character_state.statuses.iter() {
-                        match status_specs {
-                            StatusSpecs::Stun => {
-                                is_stunned = true;
-                            }
-                            StatusSpecs::DamageOverTime { damage_type, .. } => {
-                                is_damaged_over_time.insert(damage_type);
-                            }
-                            StatusSpecs::StatModifier { debuff: true, .. } => {
-                                is_debuffed = true;
-                            }
-                            _ => {}
-                        }
-                    }
 
                     for triggered_effects in game_data
                         .player_specs
@@ -230,22 +212,24 @@ fn handle_kill_event(
                         .triggers
                         .iter()
                     {
-                        if let EventTrigger::OnKill(kill_trigger) = triggered_effects.trigger {
-                            if kill_trigger.is_stunned.unwrap_or(is_stunned) == is_stunned
-                                && kill_trigger.is_debuffed.unwrap_or(is_debuffed) == is_debuffed
-                                && kill_trigger
-                                    .is_damaged_over_time
-                                    .is_none_or(|dt| is_damaged_over_time.contains(&dt))
-                            {
-                                trigger_contexts.push(TriggerContext {
-                                    trigger: triggered_effects.clone(),
-                                    source: CharacterId::Player,
-                                    target,
-                                    hit_context: None,
-                                    status_context: None,
-                                    level: game_data.area_state.read().area_level as usize,
-                                });
-                            }
+                        if let EventTrigger::OnKill(kill_trigger) = &triggered_effects.trigger
+                            && all(kill_trigger.conditions.iter(), |condition| {
+                                check_condition(
+                                    &game_data.area_threat,
+                                    &monster_specs.character_specs,
+                                    &monster_state.character_state,
+                                    condition,
+                                ) > 0.0
+                            })
+                        {
+                            trigger_contexts.push(TriggerContext {
+                                trigger: triggered_effects.clone(),
+                                source: CharacterId::Player,
+                                target,
+                                hit_context: None,
+                                status_context: None,
+                                level: game_data.area_state.read().area_level as usize,
+                            });
                         }
                     }
 
@@ -266,20 +250,19 @@ fn handle_kill_event(
                             }
                         };
                         for triggered_effects in &monster_specs.character_specs.triggers {
-                            if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger {
-                                if target_type == event_target_type
-                                    && (monster_state.character_state.is_alive
-                                        || target_type == TargetType::Me)
-                                {
-                                    trigger_contexts.push(TriggerContext {
-                                        trigger: triggered_effects.clone(),
-                                        source: CharacterId::Player,
-                                        target,
-                                        hit_context: None,
-                                        status_context: None,
-                                        level: game_data.area_state.read().area_level as usize,
-                                    });
-                                }
+                            if let EventTrigger::OnDeath(target_type) = triggered_effects.trigger
+                                && target_type == event_target_type
+                                && (monster_state.character_state.is_alive
+                                    || target_type == TargetType::Me)
+                            {
+                                trigger_contexts.push(TriggerContext {
+                                    trigger: triggered_effects.clone(),
+                                    source: CharacterId::Player,
+                                    target,
+                                    hit_context: None,
+                                    status_context: None,
+                                    level: game_data.area_state.read().area_level as usize,
+                                });
                             }
                         }
                     }
@@ -300,9 +283,9 @@ fn handle_area_completed_event(
 ) {
     let area_state = game_data.area_state.mutate();
 
-    if (area_state.area_level > area_state.max_area_level_ever)
-        && (area_state.area_level - game_data.area_blueprint.specs.starting_level + 1)
-            .is_multiple_of(10)
+    if !game_data.area_specs.disable_shards
+        && (area_state.area_level > area_state.max_area_level_ever)
+        && (area_state.area_level - game_data.area_specs.starting_level + 1).is_multiple_of(10)
     {
         game_data.player_resources.mutate().shards += 1.0;
     }
@@ -311,7 +294,7 @@ fn handle_area_completed_event(
         game_data.player_specs.read().max_area_level.max(
             area_state
                 .area_level
-                .saturating_add(game_data.area_blueprint.specs.item_level_modifier),
+                .saturating_add(game_data.area_specs.item_level_modifier),
         );
 
     let new_max = area_state.area_level > area_state.max_area_level;
@@ -323,14 +306,16 @@ fn handle_area_completed_event(
     }
 
     match loot_generator::generate_loot(
-        area_level.saturating_add(game_data.area_blueprint.specs.item_level_modifier),
-        is_boss_level,
         &game_data.area_blueprint.loot_table,
         &master_store.items_store,
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
+        area_level.saturating_add(game_data.area_specs.item_level_modifier),
+        is_boss_level,
         new_max, // Only drop unique when new area completed
+        None,
+        *game_data.area_specs.loot_rarity,
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(
@@ -339,7 +324,7 @@ fn handle_area_completed_event(
                 item_specs,
             ) {
                 player_controller::sell_item(
-                    &game_data.area_blueprint.specs,
+                    &game_data.area_specs,
                     game_data.player_specs.read(),
                     game_data.player_resources.mutate(),
                     &item_specs,
@@ -405,7 +390,7 @@ fn handle_threat_increased_event(
     for monster_state in game_data.monster_states.iter_mut() {
         monster_state.character_state.dirty_specs = true;
     }
-    game_data.player_state.character_state.dirty_specs = true;
+    // game_data.player_state.character_state.dirty_specs = true;
 
     for triggered_effects in game_data
         .player_specs

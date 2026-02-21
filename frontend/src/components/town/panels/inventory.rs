@@ -9,7 +9,7 @@ use shared::http::client::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::inventory::{Inventory, InventoryConfig, SellType},
+    shared::inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
     town::TownContext,
     ui::toast::*,
 };
@@ -26,27 +26,35 @@ pub fn TownInventoryPanel(
 
     let on_equip = move |item_index| {
         let character_id = town_context.character.read_untracked().character_id;
-        spawn_local({
-            async move {
-                match backend
-                    .inventory_equip(
-                        &auth_context.token(),
-                        &InventoryEquipRequest {
-                            character_id,
-                            item_index,
-                        },
-                    )
-                    .await
-                {
-                    Ok(response) => town_context.inventory.set(response.inventory),
-                    Err(e) => show_toast(
-                        toaster,
-                        format!("Failed to equip item: {e}"),
-                        ToastVariant::Error,
-                    ),
+        town_context
+            .equip_filter
+            .with(|equip_filter| match equip_filter {
+                InventoryEquipFilter::Slot => spawn_local({
+                    async move {
+                        match backend
+                            .inventory_equip(
+                                &auth_context.token(),
+                                &InventoryEquipRequest {
+                                    character_id,
+                                    item_index,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => town_context.inventory.set(response.inventory),
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to equip item: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                }),
+                InventoryEquipFilter::Map(_) | InventoryEquipFilter::Rune => {
+                    town_context.selected_item_index.set(Some(item_index));
+                    town_context.open_inventory.set(false);
                 }
-            }
-        })
+            })
     };
 
     let on_unequip = move |item_slot| {
@@ -113,6 +121,7 @@ pub fn TownInventoryPanel(
             on_sell: Some(Arc::new(on_sell)),
             sell_type: SellType::Discard,
             max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
+            equip_filter: town_context.equip_filter.into(),
         }
     };
 

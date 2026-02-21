@@ -4,12 +4,14 @@ use leptos::prelude::*;
 
 use shared::data::{
     game_stats::GrindStats,
-    passive::{PassivesTreeAscension, PassivesTreeSpecs},
+    passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     stash::{Stash, StashType},
     temple::{BenedictionSpecs, PlayerBenedictions},
     user::{UserCharacter, UserGrindArea},
 };
+
+use crate::components::shared::inventory::InventoryEquipFilter;
 
 #[derive(Clone, Copy)]
 pub struct TownContext {
@@ -22,11 +24,15 @@ pub struct TownContext {
 
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    pub passives_tree_build: RwSignal<PurchasedNodes>,
 
     pub benedictions_specs: RwSignal<HashMap<String, BenedictionSpecs>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
 
     pub last_grind: RwSignal<Option<GrindStats>>,
+
+    pub selected_item_index: RwSignal<Option<u8>>,
+    pub equip_filter: RwSignal<InventoryEquipFilter>,
 
     // TODO: Is this really the correct place? Should we have a UI context?
     // TODO: enum ?
@@ -54,9 +60,12 @@ impl Default for TownContext {
             }),
             passives_tree_specs: Default::default(),
             passives_tree_ascension: Default::default(),
+            passives_tree_build: Default::default(),
             benedictions_specs: Default::default(),
             player_benedictions: Default::default(),
             last_grind: Default::default(),
+            selected_item_index: Default::default(),
+            equip_filter: Default::default(),
             open_inventory: Default::default(),
             open_stash: Default::default(),
             open_ascend: Default::default(),

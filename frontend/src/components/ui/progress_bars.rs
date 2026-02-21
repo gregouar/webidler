@@ -52,23 +52,6 @@ pub fn HorizontalProgressBar(
     });
 
     view! {
-        <style>
-            "
-            @keyframes horizontal-progress-bar-fade-out {
-                0% {
-                    opacity: 1;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-                50% {
-                    filter: drop-shadow( 0 0 25px oklch(92.4% 0.12 95.746));  
-                }
-                100% {
-                    opacity: 0;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-            }
-            "
-        </style>
         <div class=format!(
             "
             relative flex w-full
@@ -107,7 +90,7 @@ pub fn HorizontalProgressBar(
 #[component]
 pub fn VerticalProgressBar(
     // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f32>,
+    #[prop(into)] value: Signal<f64>,
     // Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     // Instant reset
@@ -138,24 +121,6 @@ pub fn VerticalProgressBar(
     });
 
     view! {
-        <style>
-            "
-            @keyframes vertical-progress-bar-fade-out {
-                0% {
-                    opacity: 1;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-                50% {
-                    filter: drop-shadow( 0 0 25px oklch(92.4% 0.12 95.746));  
-                }
-                100% {
-                    opacity: 0;
-                    filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));  
-                }
-            }
-            "
-        </style>
-
         <div class="
         relative flex flex-col justify-end h-full
         rounded-lg 
@@ -186,7 +151,7 @@ pub fn VerticalProgressBar(
 #[component]
 pub fn CircularProgressBar(
     // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f32>,
+    #[prop(into)] value: Signal<f64>,
     bar_color: &'static str,
     bar_width: u8,
     // Instant reset
@@ -201,7 +166,7 @@ pub fn CircularProgressBar(
     let enable_transition = RwSignal::new(true);
 
     let in_transition = RwSignal::new(false);
-    let next_value = RwSignal::new(0.0f32);
+    let next_value = RwSignal::new(0.0);
 
     // let right_rotation = RwSignal::new(0.0);
     // let bottom_rotation = RwSignal::new(0.0);
@@ -269,26 +234,6 @@ pub fn CircularProgressBar(
 
     view! {
         <div class="circular-progress-bar">
-            <style>
-                "
-                @keyframes circular-progress-bar-fade-out {
-                 0% { opacity: 1; }
-                 100% { opacity: 0; }
-                }
-                @keyframes circular-progress-bar-glow {
-                 50% { 
-                    transform: scale(1.2); 
-                 }
-                }
-
-
-                @property --progress {
-                    syntax: '<percentage>';
-                    inherits: false;
-                    initial-value: 0%;
-                }
-                "
-            </style>
             <div class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden" style="contain: strict;">
 
                 <div
@@ -399,6 +344,7 @@ pub fn CircularProgressBar(
                 // Icon
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    scale-125
                     will-change-[filter,transform] transition-[filter,transform] duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
@@ -411,17 +357,18 @@ pub fn CircularProgressBar(
 }
 
 pub fn predictive_cooldown(
-    remaining_time: Signal<f32>,
+    remaining_time: Signal<f64>,
     reset: Signal<bool>,
     disabled: Signal<bool>,
-) -> RwSignal<f32> {
-    let progress_value = RwSignal::new(0.0f32);
+) -> RwSignal<f64> {
+    let progress_value = RwSignal::new(0.0);
     let rate = RwSignal::new(0.0);
 
     Effect::new(move || {
         let remaining_time = remaining_time.get();
         if remaining_time > 0.0 {
-            rate.set((1.0 - progress_value.get_untracked()).clamp(0.0, 1.0) / remaining_time);
+            let remaining: f64 = (1.0f64 - progress_value.get_untracked()).clamp(0.0, 1.0);
+            rate.set(remaining / remaining_time);
         }
     });
 

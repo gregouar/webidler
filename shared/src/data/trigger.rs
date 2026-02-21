@@ -1,15 +1,16 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, item::SkillShape, skill::TargetType, stat_effect::StatStatusType,
+    character::CharacterId, conditional_modifier::Condition, item::SkillShape, modifier::Modifier,
+    skill::TargetType, stat_effect::StatStatusType,
 };
 
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
-    stat_effect::{Modifier, StatType},
+    stat_effect::StatType,
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum EventTrigger {
     OnHit(HitTrigger),
     OnTakeHit(HitTrigger),
@@ -43,9 +44,7 @@ pub struct HitTrigger {
     // TODO: Track skill id?
 }
 
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
-)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct StatusTrigger {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
@@ -54,22 +53,14 @@ pub struct StatusTrigger {
     #[serde(default)]
     pub is_triggered: Option<bool>,
 }
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
-)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct KillTrigger {
     #[serde(default)]
-    pub is_stunned: Option<bool>,
-    #[serde(default)]
-    pub is_debuffed: Option<bool>,
-    #[serde(default)]
-    pub is_damaged_over_time: Option<DamageType>,
-    // TODO: more?
+    pub conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
-    pub trigger_id: String,
     #[serde(default)]
     pub description: String,
     #[serde(flatten)]
@@ -78,6 +69,8 @@ pub struct TriggerSpecs {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggeredEffect {
+    pub trigger_id: String,
+
     #[serde(flatten)]
     pub trigger: EventTrigger,
     #[serde(default)]
@@ -94,9 +87,9 @@ pub struct TriggeredEffect {
     #[serde(default)]
     pub skill_shape: SkillShape,
 
-    #[serde(default)] // For retro compatibility
+    #[serde(default)]
     pub owner: Option<CharacterId>,
-    #[serde(default)] // For retro compatibility
+    #[serde(default)]
     pub inherit_modifiers: bool,
 }
 
@@ -108,14 +101,30 @@ pub struct TriggerEffectModifier {
     pub source: TriggerEffectModifierSource,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
-    HitCrit,
     AreaLevel,
-    StatusValue(Option<StatStatusType>),
-    StatusDuration(Option<StatStatusType>),
-    StatusStacks(Option<StatStatusType>),
+    StatusValue {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusDuration {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusStacks {
+        #[serde(default)]
+        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    // TODO: Move to conditional modifiers?
+    HitCrit,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

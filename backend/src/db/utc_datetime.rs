@@ -1,8 +1,8 @@
 use sqlx::decode::Decode;
 use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef};
 use sqlx::sqlite::{Sqlite, SqliteValueRef};
-use sqlx::types::chrono::{DateTime, NaiveDateTime, Utc};
 use sqlx::types::Type;
+use sqlx::types::chrono::{DateTime, NaiveDateTime, Utc};
 use sqlx::{Encode, Postgres};
 use std::error::Error;
 

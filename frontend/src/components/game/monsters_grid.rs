@@ -52,6 +52,7 @@ pub fn MonstersGrid() -> impl IntoView {
     let flee = Memo::new(move |_| {
         !game_context.player_state.read().character_state.is_alive
             || game_context.area_state.read().going_back > 0
+            || game_context.quest_rewards.read().is_some()
     });
 
     view! {
@@ -206,11 +207,20 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
+    let just_evaded = Memo::new(move |_| {
+        game_context
+            .monster_states
+            .read()
+            .get(index)
+            .map(|x| x.character_state.just_evaded)
+            .unwrap_or_default()
+    });
+
     let mut damage_tick_id = 0;
     let damage_ticks = ArcRwSignal::new(Vec::new());
     let dot_tick = ArcRwSignal::new(None);
 
-    let mut old_life = specs.character_specs.max_life;
+    let mut old_life = specs.character_specs.max_life.get();
     let life = RwSignal::new(old_life);
 
     Effect::new({
@@ -220,7 +230,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 .monster_states
                 .read()
                 .get(index)
-                .map(|s| s.character_state.life)
+                .map(|s| s.character_state.life.get())
                 .unwrap_or_default();
 
             let diff = old_life - new_life;
@@ -307,14 +317,14 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(specs.character_specs.max_life)}
+            {format_number(specs.character_specs.max_life.get())}
         }
     };
 
     let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.max_life;
+        let max_life = specs.character_specs.max_life.get();
         if max_life > 0.0 {
-            (life.get() / specs.character_specs.max_life * 100.0) as f32
+            (life.get() / max_life * 100.0) as f32
         } else {
             0.0
         }
@@ -357,86 +367,9 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
 
     view! {
-        <style>
-            "
-            .gold-text {
-                font-weight: bold;
-                text-shadow: 0 0 8px rgba(255, 223, 0, 0.9);
-            }
-            
-            .gems-text {
-                font-weight: bold;
-                text-shadow: 0 0 8px rgba(0, 200, 255, 0.9);
-            }
-            
-            .reward-float {
-                animation: rewardFloat 2.5s ease-out forwards;
-                position: absolute;
-            }
-            
-            @keyframes rewardFloat {
-                0% {
-                    opacity: 0;
-                    transform: translateY(0) scale(0.9);
-                }
-                20% {
-                    opacity: 1;
-                    transform: translateY(-12px) scale(1.1);
-                }
-                40% {
-                    opacity: 1;
-                    transform: translateY(-24px) scale(1.1);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translateY(-64px) scale(1);
-                }
-            }
-            
-            .champion-title {                
-                font-weight: bold;
-                color: #06b6d4;
-            }
-            
-            .boss-title {
-                font-weight: bold;
-                color: #facc15;
-            }
-            
-            
-            @keyframes damage-float {
-                0% {
-                    opacity: 0;
-                    transform: translate(var(--x-offset-start), 0) scale(calc(var(--scale-start) * 0.7)) rotate(0deg);
-                }
-                10% {
-                    opacity: 1;
-                    transform: translate(var(--x-offset-start), -5px) scale(var(--scale-start)) rotate(0deg);
-                }
-                60% {
-                    opacity: 1;
-                    transform: translate(calc(var(--x-offset-start) + var(--x-offset) * 0.6), calc(var(--y-offset) * 0.6))
-                            scale(var(--scale-end))
-                            rotate(calc(var(--rotate) * 0.6));
-                }
-                100% {
-                    opacity: 0;
-                    transform: translate(calc(var(--x-offset-start) + var(--x-offset)), var(--y-offset))
-                            scale(calc(var(--scale-end) * 1.1))
-                            rotate(var(--rotate));
-                }
-            }
-            
-            .animate-damage-float {
-                animation: damage-float var(--duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
-                will-change: transform, opacity;
-                filter: saturate(--scale-end);
-            }
-            "
-        </style>
         <div
             class="grid grid-cols-4 h-full
-            bg-zinc-800 xl:shadow-lg/30 rounded-md ring-1 ring-zinc-950
+            bg-zinc-800 xl:shadow-lg/30 rounded-md ring-1 ring-zinc-700
             gap-1 xl:gap-2 p-1 xl:p-2"
             style="contain: strict;"
         >
@@ -459,6 +392,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         just_hurt=just_hurt
                         just_hurt_crit=just_hurt_crit
                         just_blocked=just_blocked
+                        just_evaded=just_evaded
                         is_dead=is_dead
                         statuses=statuses
                     />
@@ -542,22 +476,22 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             .map(|monster_state| monster_state.character_state.is_stunned())
             .unwrap_or_default()
         {
-            f32::MAX
+            f64::MAX
         } else {
             (1.0 - game_context
                 .monster_states
                 .read()
                 .get(monster_index)
                 .and_then(|m| m.skill_states.get(index))
-                .map(|s| s.elapsed_cooldown)
-                .unwrap_or(0.0))
+                .map(|s| s.elapsed_cooldown.get())
+                .unwrap_or_default())
                 * game_context
                     .monster_specs
                     .read()
                     .get(monster_index)
                     .and_then(|m| m.skill_specs.get(index))
-                    .map(|s| s.cooldown)
-                    .unwrap_or(0.0) as f32
+                    .map(|s| s.cooldown.get())
+                    .unwrap_or_default()
         }
     });
 

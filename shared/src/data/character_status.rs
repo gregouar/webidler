@@ -1,19 +1,18 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::data::{skill::SkillType, trigger::TriggerSpecs};
-
-use super::{
-    skill::DamageType,
-    stat_effect::{Modifier, StatType},
+use crate::data::{
+    modifier::Modifier, skill::SkillType, trigger::TriggerSpecs, values::NonNegative,
 };
+
+use super::{skill::DamageType, stat_effect::StatType};
 
 // pub type StatusMap = HashMap<StatusSpecs, Vec<StatusState>>;
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct StatusMap {
     // TODO: Do we want to replace this by a map to indexes ?
     // pub unique_statuses: HashMap<StatusId, usize>, // Points to statuses vec
-    pub unique_statuses: HashMap<StatusId, (StatusSpecs, StatusState)>,
+    pub unique_statuses: HashMap<(StatusId, SkillType), (StatusSpecs, StatusState)>,
     pub cumulative_statuses: Vec<(StatusSpecs, StatusState)>,
 }
 
@@ -44,9 +43,6 @@ pub enum StatusSpecs {
     Stun,
     DamageOverTime {
         damage_type: DamageType,
-
-        #[serde(default, skip_serializing)]
-        ignore_armor: bool, // TODO: Remove
     },
     StatModifier {
         stat: StatType,
@@ -75,7 +71,7 @@ impl From<&StatusSpecs> for StatusId {
                 debuff: *debuff,
             },
             StatusSpecs::Trigger(trigger_specs) => {
-                StatusId::Trigger(trigger_specs.trigger_id.clone())
+                StatusId::Trigger(trigger_specs.triggered_effect.trigger_id.clone())
             }
         }
     }
@@ -92,8 +88,8 @@ pub enum StatModifierType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusState {
-    pub value: f64,
-    pub duration: Option<f64>,
+    pub value: NonNegative,
+    pub duration: Option<NonNegative>,
     pub cumulate: bool,
     pub skill_type: SkillType,
 }

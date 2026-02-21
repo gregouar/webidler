@@ -13,12 +13,19 @@ pub fn Input<T>(
 where
     T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
+    let prop_value = RwSignal::new(String::new());
+    Effect::new(move || {
+        if let Some(value) = bind.get() {
+            prop_value.set(serde_plain::to_string(&value).ok().unwrap_or_default())
+        }
+    });
+
     view! {
         <input
             id=id
             type=input_type
             placeholder=placeholder
-            value=move || { bind.get().and_then(|value| serde_plain::to_string(&value).ok()) }
+            prop:value=move || prop_value.get()
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
 
             on:keydown=move |ev| {
@@ -53,15 +60,32 @@ pub fn ValidatedInput<T>(
     id: &'static str,
     #[prop(default = "")] label: &'static str,
     input_type: &'static str,
-    placeholder: &'static str,
+    #[prop(default = "")] placeholder: &'static str,
+    #[prop(default = "any")] step: &'static str,
     bind: RwSignal<Option<T>>,
 ) -> impl IntoView
 where
-    T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
+    T: serde::de::DeserializeOwned
+        + serde::ser::Serialize
+        + std::cmp::PartialEq
+        + Clone
+        + Send
+        + Sync
+        + 'static,
 {
     let node_ref = NodeRef::<leptos::html::Input>::new();
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
+
+    let prop_value = RwSignal::new(String::new());
+    Effect::new(move || {
+        if let Some(value) = bind.get() {
+            validation_error.set(None);
+            prop_value.set(serde_plain::to_string(&value).ok().unwrap_or_default())
+        } else if validation_error.read().is_none() {
+            prop_value.set("".into());
+        }
+    });
 
     view! {
         <div class="flex flex-col">
@@ -94,10 +118,13 @@ where
                     )
                 }
                 placeholder=placeholder
-                value=move || { bind.get().and_then(|value| serde_plain::to_string(&value).ok()) }
+                step=step
+                prop:value=move || prop_value.get()
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
-                        bind.set(Some(v));
+                        if bind.get_untracked().as_ref() != Some(&v) {
+                            bind.set(Some(v));
+                        }
                         validation_error.set(None);
                     }
                     Err(err) => {

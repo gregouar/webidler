@@ -117,7 +117,7 @@ async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) 
     loop {
         match conn.poll_receive() {
             ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
-                return handle_connect(app_state, msg).await;
+                return handle_connect(app_state, *msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
@@ -154,7 +154,7 @@ async fn handle_connect(
         &app_state.sessions_store,
         &app_state.master_store,
         user_character,
-        &msg.area_id,
+        msg.area_config,
     )
     .await?;
 
@@ -162,11 +162,9 @@ async fn handle_connect(
 }
 
 async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session) -> Result<()> {
-    let end_quest = session.game_data.area_state.read().end_quest;
-
     session.last_active = Instant::now();
 
-    if !end_quest {
+    if !session.game_data.terminate_quest {
         sessions_store
             .sessions
             .lock()

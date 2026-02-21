@@ -8,13 +8,13 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 20
       }
     ]
   },
   "medallion": {
-    "name": "Medallion",
+    "name": "Brass Medallion",
     "icon": "items/medallion.webp",
     "slot": "Amulet",
     "categories": ["Jewelry", "Amulet"],
@@ -22,7 +22,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 40
       }
     ],
@@ -37,31 +37,35 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 40
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 100],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": {
-          "StatusPower": { "DamageOverTime": { "damage_type": "Fire" } }
+          "StatusPower": {
+            "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+          }
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [50, 100],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": {
-          "StatusDuration": { "DamageOverTime": { "damage_type": "Fire" } }
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+          }
         },
-        "modifier": "Multiplier",
+        "modifier": "Increased",
         "value": [20, 40],
         "ignore_quality": true
       },
@@ -92,7 +96,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 60
       }
     ],
@@ -109,7 +113,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 60
       },
       {
@@ -132,7 +136,7 @@
             "damage_type": "Storm"
           }
         },
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": [80, 120]
       },
       {
@@ -155,7 +159,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 80
       }
     ],
@@ -170,7 +174,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 100
       }
     ],
@@ -185,10 +189,25 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Multiplier",
+        "modifier": "More",
         "value": 120
       }
     ],
-    "min_area_level": 240
+    "min_area_level": 250
+  },
+  "amulet_7": {
+    "name": "Sacred Talisman",
+    "icon": "items/sacred_talisman.webp",
+    "slot": "Amulet",
+    "categories": ["Jewelry", "Amulet"],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": 140
+      }
+    ],
+    "min_area_level": 320
   }
 }

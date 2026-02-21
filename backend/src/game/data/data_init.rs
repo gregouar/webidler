@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use shared::{
     constants::{DEFAULT_MAX_LEVEL, SKILL_BASE_COST},
     data::{
@@ -10,7 +8,6 @@ use shared::{
         passive::{PassivesTreeAscension, PassivesTreeState},
         player::{PlayerSpecs, PlayerState},
         skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-        stat_effect::EffectsMap,
     },
 };
 
@@ -31,7 +28,6 @@ impl DataInit<&AreaSpecs> for AreaState {
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
-            end_quest: false,
         }
     }
 }
@@ -39,8 +35,8 @@ impl DataInit<&AreaSpecs> for AreaState {
 impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            life: specs.max_life,
-            mana: specs.max_mana,
+            life: specs.max_life.get().into(),
+            mana: specs.max_mana.get().into(),
 
             statuses: StatusMap::default(),
             dirty_specs: true,
@@ -49,6 +45,9 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             just_hurt: false,
             just_hurt_crit: false,
             just_blocked: false,
+            just_evaded: false,
+
+            monitored_conditions: Default::default(),
         }
     }
 }
@@ -62,13 +61,12 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
             auto_skills: vec![],
             max_skills: 4,
             buy_skill_cost: SKILL_BASE_COST,
-            bought_skills: HashSet::new(),
+            bought_skills: Default::default(),
             level: 1,
             experience_needed: 20.0,
-            movement_cooldown: 3.0,
-            gold_find: 100.0,
-            threat_gain: 100.0,
-            effects: EffectsMap::default(),
+            movement_cooldown: 3.0.into(),
+            gold_find: 100.0.into(),
+            threat_gain: 100.0.into(),
             max_level: DEFAULT_MAX_LEVEL,
         }
     }
@@ -98,8 +96,8 @@ impl DataInit<&MonsterSpecs> for MonsterState {
 impl DataInit<BaseSkillSpecs> for SkillSpecs {
     fn init(specs: BaseSkillSpecs) -> Self {
         Self {
-            cooldown: specs.cooldown,
-            mana_cost: specs.mana_cost,
+            cooldown: specs.cooldown.into(),
+            mana_cost: specs.mana_cost.into(),
             upgrade_level: 1,
             next_upgrade_cost: specs.upgrade_cost,
             targets: specs.targets.clone(),
@@ -115,7 +113,7 @@ impl DataInit<&SkillSpecs> for SkillState {
     fn init(specs: &SkillSpecs) -> Self {
         let _ = specs;
         Self {
-            elapsed_cooldown: 0.0,
+            elapsed_cooldown: Default::default(),
             is_ready: false,
             just_triggered: false,
         }

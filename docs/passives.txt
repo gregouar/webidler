@@ -1,0 +1,131 @@
+Passives rework:
+
+Big themes:
+----------
+
+Gold:
+-Minor boost
+-Major boost
+
+Attack:
+-Damage
+-Speed
+
+Spell:
+-Damage
+-Speed
+* Unstable Power (Spell Critical) 
+
+Mana:
+-Max (%? & flat)
+-Regen
+-Cost
+-Damage on Max Mana
+-Mana on Attack Hit
+* Mana Shield
+* Grim Pact
+
+Life:
+-Max (% & flat?)
+-Regen
+-Restore Spell (major)
+-Restore Attack (minor)
+-Life on Attack Hit
+* Blood Magic
+* Healing Aura
+
+Hybrid Life/Mana:
+-Max
+-Regen
+
+Defense:
+-Armor & Resistances (could split more)
+-Block
+* Spell Block
+* DamageResistance
+
+Fire:
+-Damage
+-Burn (damage, duration, chance) => How to enable burn? Have an easy accessible Blazing Inferno?
+-Penetration
+* Blazing Infero
+* Pyromaniac
+* Bonfire
+
+Poison:
+-Damage
+-Efficacity
+-Duration
+-Penetration
+-Poison Damage on non poisoned enemy
+*Sickening Poison (decrease poison resistance when applying poison)
+
+Storm:
+-Damage
+-Stun (duration, chance)
+-Damage against stunned
+-Penetration
+*Lucky
+*Stunning Attack
+
+Physical:
+-Damage
+-Bleed (damage, duration, chance)
+-Penetration
+*Open Wound
+-Crit chance against bleeding
+
+Critical:
+-Chance
+-Damage
+*Against enemies on full life
+
+Threat:
+-Damage
+-Speed
+
+Curses:
+- Duration
+- Effect
+- Speed
+- Cost
+*Curses never expire
+
+Blessings:
+- Duration
+- Effect
+- Speed
+- Cost
+* Free Blessings
+
+Dot:
+- Damage
+- Duration
+*Spread DoT
+
+Other statuses/effects?
+
+Success chance ?
+
+Other:
+* Remove Dot
+* Convert Crit
+
+
+-Damage when on low life?
+-Max damage?
+
+-Hybrid mana/life
+-Damage per max mana
+-Inc Max Damage
+
+-Stun Chance on Attack Storm Hit
+
+-No Hit Damage?
+
+Runes:
+-----
+-Berserker
+-Massive incrase mana cost, massive increase spell speed? Even remove cooldown? => might be too strong...
+-Massive gold increase (downside?) 
+-Hourglass: way more duration, way less effects

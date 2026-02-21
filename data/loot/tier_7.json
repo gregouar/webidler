@@ -1,0 +1,76 @@
+{
+  "entries": [
+    {
+      "item_id": "weapon_1h_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "helmet_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "body_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "gloves_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "boots_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "weapon_2h_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "weapon_ranged_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "weapon_spell_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "shield_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "focus_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "cloak_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "ring_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "amulet_7",
+      "weight": 64000
+    },
+    {
+      "item_id": "edict",
+      "weight": 3200,
+      "min_area_level": 320
+    },
+    {
+      "item_id": "edict_2",
+      "weight": 3200,
+      "min_area_level": 320
+    },
+    {
+      "item_id": "rune",
+      "weight": 6400,
+      "min_area_level": 320
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 640,
+      "min_area_level": 320
+    }
+  ]
+}

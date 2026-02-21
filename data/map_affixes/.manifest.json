@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "item_affixes": [
+      "armor_prefixes.json",
+      "block_prefixes.json",
+      "crit_suffixes.json",
+      "damage_suffixes.json",
+      "evade_prefixes.json",
+      "fire_suffixes.json",
+      "life_prefixes.json",
+      "life_regen_prefixes.json",
+      "speed_suffixes.json",
+      "storm_suffixes.json"
+    ]
+  }
+}
