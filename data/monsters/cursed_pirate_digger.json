@@ -41,7 +41,7 @@
                     "status_type": {
                       "StatModifier": {
                         "stat": "GoldFind",
-                        "modifier": "Increased",
+                        "modifier": "More",
                         "debuff": true
                       }
                     },
