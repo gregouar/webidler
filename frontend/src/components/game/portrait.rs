@@ -309,9 +309,9 @@ fn StatusIcon(status_id: StatusId, stack: Signal<(usize, f64)>) -> impl IntoView
             } => {
                 if let Some(damage_type) = damage_type {
                     match damage_type {
-                        DamageType::Physical => "passives/physical_damage.svg".into(),
+                        DamageType::Physical => "passives/mace_head.svg".into(),
                         DamageType::Fire => "passives/fire_damage.svg".into(),
-                        DamageType::Poison => "passives/poison_damage.svg".into(),
+                        DamageType::Poison => "passives/scorpion_tail.svg".into(),
                         DamageType::Storm => "passives/storm_damage.svg".into(),
                     }
                 } else if let Some(skill_type) = skill_type {
