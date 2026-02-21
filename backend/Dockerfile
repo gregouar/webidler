@@ -17,7 +17,7 @@ COPY ./.sqlx ./backend/.sqlx
 WORKDIR /app/backend  
 
 ENV SQLX_OFFLINE=true
-RUN cargo build --release --no-default-features --bin backend --features postgres --features modifiable
+RUN cargo build --release --no-default-features --bin backend --features postgres 
 RUN strip ./target/release/backend -o /backend
 
 FROM debian:bookworm-slim
