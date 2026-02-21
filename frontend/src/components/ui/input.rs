@@ -13,12 +13,19 @@ pub fn Input<T>(
 where
     T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
+    let prop_value = RwSignal::new(String::new());
+    Effect::new(move || {
+        if let Some(value) = bind.get() {
+            prop_value.set(serde_plain::to_string(&value).ok().unwrap_or_default())
+        }
+    });
+
     view! {
         <input
             id=id
             type=input_type
             placeholder=placeholder
-            value=move || { bind.get().and_then(|value| serde_plain::to_string(&value).ok()) }
+            prop:value=move || prop_value.get()
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
 
             on:keydown=move |ev| {
@@ -70,6 +77,18 @@ where
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
 
+    let prop_value = RwSignal::new(String::new());
+    Effect::new(move || {
+        if let Some(value) = bind.get() {
+            validation_error.set(None);
+            prop_value.set(serde_plain::to_string(&value).ok().unwrap_or_default())
+        } else {
+            if validation_error.read().is_none() {
+                prop_value.set("".into());
+            }
+        }
+    });
+
     view! {
         <div class="flex flex-col">
             {(!label.is_empty())
@@ -102,12 +121,10 @@ where
                 }
                 placeholder=placeholder
                 step=step
-                prop:value=move || {
-                    bind.get().and_then(|value| serde_plain::to_string(&value).ok())
-                }
+                prop:value=move || prop_value.get()
                 on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
                     Ok(v) => {
-                        if bind.get().as_ref() != Some(&v) {
+                        if bind.get_untracked().as_ref() != Some(&v) {
                             bind.set(Some(v));
                         }
                         validation_error.set(None);

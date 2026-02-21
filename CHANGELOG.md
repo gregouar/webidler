@@ -26,6 +26,7 @@ Content:
 
 Balance Changes:
 
+- Damage & Monster life curve have been smoothed down (1.3 damage increase instead of 1.5 per skill level).
 - Increased max player level to 70.
 - Decreased cost of Starting Level benediction in Temple.
 - Curses & Blessings are now a specific Skill Type instead of being Spells.
