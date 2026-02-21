@@ -297,6 +297,7 @@ fn StatusIcon(status_id: StatusId, stack: Signal<usize>) -> impl IntoView {
             debuff: false,
             ..
         } => match stat {
+            StatType::LifeRegen => "passives/life_regen.svg".into(),
             StatType::Damage {
                 skill_type,
                 damage_type,

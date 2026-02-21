@@ -5,6 +5,12 @@
   "power_factor": 2.0,
   "initiative": [0.0, 0.5],
   "armor": { "Storm": 100 },
+  "evade": {
+    "Physical": 30,
+    "Fire": 30,
+    "Storm": 30,
+    "Poison": 30
+  },
   "skills": [
     {
       "name": "Haunting Zap",

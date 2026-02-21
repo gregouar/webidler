@@ -3,7 +3,13 @@
   "portrait": "monsters/time_spirit.webp",
   "max_life": 5,
   "power_factor": 1,
-  "initiative": [2,3],
+  "initiative": [2, 3],
+  "evade": {
+    "Physical": 30,
+    "Fire": 30,
+    "Storm": 30,
+    "Poison": 30
+  },
   "skills": [
     {
       "name": "Time is Ticking",

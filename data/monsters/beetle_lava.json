@@ -5,6 +5,10 @@
   "power_factor": 1.0,
   "initiative": [0.5, 1.5],
   "armor": { "Fire": 50 },
+  "block": {
+    "Attack": 40,
+    "Spell": 20
+  },
   "skills": [
     {
       "name": "Scratch",

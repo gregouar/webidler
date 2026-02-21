@@ -5,6 +5,10 @@
   "power_factor": 3,
   "initiative": [1, 2],
   "armor": { "Physical": 50 },
+  "block": {
+    "Attack": 40,
+    "Spell": 20
+  },
   "skills": [
     {
       "name": "Melted Slice",
