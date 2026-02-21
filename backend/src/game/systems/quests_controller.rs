@@ -1,5 +1,5 @@
 use shared::{
-    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_ADD},
+    constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
     data::{item::ItemCategory, quest::QuestRewards},
 };
 
@@ -141,7 +141,7 @@ fn generate_end_quest_rewards(
                 true,
                 true,
                 None,
-                *game_data.area_specs.loot_rarity + ITEM_REWARDS_RARE_ADD,
+                *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
             )
         }))
         .collect();
