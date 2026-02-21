@@ -251,14 +251,26 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [60, 80],
+        "value": [100, 150],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": { "Damage": { "skill_type": "Spell" } },
+            "conditions": ["MaximumMana"]
+          }
+        },
+        "modifier": "More",
+        "value": -300,
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "Mana",
-        "modifier": "Increased",
-        "value": -400,
+        "modifier": "More",
+        "value": -300,
         "ignore_quality": true
       }
     ],

@@ -66,7 +66,8 @@ fn generate_end_quest_rewards(
         .area_state
         .read()
         .max_area_level
-        .saturating_sub(game_data.area_specs.starting_level);
+        .saturating_sub(game_data.area_specs.starting_level)
+        + 1;
 
     // Up to 2 rewards are edict, only 1 if only 2 rewards available.
     let rewards_amount = if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
@@ -76,7 +77,11 @@ fn generate_end_quest_rewards(
     };
 
     let amount_map_rewards = if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
-        if rewards_amount > 2 { 2 } else { 1 }
+        if rewards_amount > 2 {
+            2
+        } else {
+            1
+        }
     } else {
         0
     };
