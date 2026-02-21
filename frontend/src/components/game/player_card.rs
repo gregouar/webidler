@@ -213,22 +213,6 @@ pub fn PlayerCard() -> impl IntoView {
             || max_level()
     });
 
-    let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
-
-    let disable_buy_skill =
-        Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
-
-    let buy_skill_cost_tooltip = move || {
-        view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
-                <span class="font-semibold text-white">{"Upgrade Cost"}</span>
-                <span class="text-zinc-300">
-                    {format!("{} Gold", format_number(buy_skill_cost.get()))}
-                </span>
-            </div>
-        }
-    };
-
     Effect::new({
         let toaster = expect_context::<Toasts>();
         move || {
@@ -356,20 +340,7 @@ pub fn PlayerCard() -> impl IntoView {
                     game_context.player_specs.read().skills_specs.len()
                         < game_context.player_specs.read().max_skills as usize
                 }>
-                    <div class="flex flex-col items-center justify-center">
-                        <StaticTooltip
-                            tooltip=buy_skill_cost_tooltip
-                            position=StaticTooltipPosition::Top
-                        >
-                            <FancyButton
-                                class:aspect-square
-                                on:click=move |_| game_context.open_skills.set(true)
-                                disabled=disable_buy_skill
-                            >
-                                "Buy Skill"
-                            </FancyButton>
-                        </StaticTooltip>
-                    </div>
+                    <BuySkillButton />
                 </Show>
             </div>
         </Card>
@@ -395,6 +366,93 @@ pub fn PlayerName() -> impl IntoView {
                 {player_name} " — " {move || game_context.player_specs.read().level}
             </span>
         </p>
+    }
+}
+
+#[component]
+fn BuySkillButton() -> impl IntoView {
+    let game_context: GameContext = expect_context();
+
+    let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
+
+    let disable_buy_skill =
+        Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
+
+    let buy_skill_cost_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                <span class="font-semibold text-white">{"Buy Cost"}</span>
+                <span class="text-zinc-300">
+                    {format!("{} Gold", format_number(buy_skill_cost.get()))}
+                </span>
+            </div>
+        }
+    };
+
+    view! {
+        <div class="flex flex-col">
+            // <div class="flex flex-col items-center justify-center">
+            // <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
+            // <FancyButton
+            // class:aspect-square
+            // on:click=move |_| game_context.open_skills.set(true)
+            // disabled=disable_buy_skill
+            // >
+            // "Buy Skill"
+            // </FancyButton>
+            // </StaticTooltip>
+            // </div>
+
+            <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
+                <button
+                    class="btn p-1 w-full h-full
+                    hover:brightness-125
+                    active:brightness-50 active:sepia active:translate-y-[2px]
+                    disabled:brightness-75 disabled:saturate-10 disabled:opacity-40
+                    "
+                    on:click=move |_| game_context.open_skills.set(true)
+                    disabled=disable_buy_skill
+                >
+                    <CircularProgressBar
+                        bar_color="oklch(55.5% 0.163 48.998)"
+                        value=Signal::derive(|| 0.0)
+                        bar_width=4
+                    >
+                        <svg
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] text-zinc-300"
+                        >
+                            <path
+                                d="M12 5V19"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                            <path
+                                d="M5 12H19"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </CircularProgressBar>
+                </button>
+            </StaticTooltip>
+
+            <div class="flex justify-around invisible">
+                <Toggle toggle_callback=|_| {} disabled=Signal::derive(|| true)>
+                    <span class="inline xl:hidden">"A"</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Auto"</span>
+                </Toggle>
+                <FancyButton disabled=Signal::derive(|| true)>
+                    <span class="text-base xl:text-2xl">"+"</span>
+                </FancyButton>
+            </div>
+        </div>
     }
 }
 

@@ -3,10 +3,9 @@ use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
     character_status::{StatusId, StatusMap},
-    modifier::Modifier,
     monster::MonsterRarity,
     skill::{DamageType, SkillType},
-    stat_effect::{MinMax, StatStatusType, StatType},
+    stat_effect::{MinMax, StatEffect, StatStatusType, StatType},
 };
 
 use crate::{
@@ -74,9 +73,11 @@ pub fn CharacterPortrait(
     let statuses_map = Signal::derive({
         move || {
             statuses.read().iter().fold(
-                HashMap::<StatusId, usize>::new(),
-                |mut acc, (status_specs, _)| {
-                    *acc.entry(status_specs.into()).or_default() += 1;
+                HashMap::<StatusId, (usize, f64)>::new(),
+                |mut acc, (status_specs, status_state)| {
+                    let entry = acc.entry(status_specs.into()).or_default();
+                    entry.0 += 1;
+                    entry.1 += status_state.value.get();
                     acc
                 },
             )
@@ -282,7 +283,7 @@ pub fn CharacterPortrait(
 }
 
 #[component]
-fn StatusIcon(status_id: StatusId, stack: Signal<usize>) -> impl IntoView {
+fn StatusIcon(status_id: StatusId, stack: Signal<(usize, f64)>) -> impl IntoView {
     let icon_uri = match status_id.clone() {
         StatusId::Stun => "statuses/stunned.svg".to_string(),
         StatusId::DamageOverTime { damage_type, .. } => match damage_type {
@@ -348,7 +349,7 @@ fn StatusIcon(status_id: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::Trigger(trigger_id) => trigger_id,
     };
 
-    let description = status_id_str(&status_id);
+    let description = move || status_id_str(&status_id, stack.read().1);
 
     let tooltip = {
         let description = description.clone();
@@ -364,9 +365,9 @@ fn StatusIcon(status_id: StatusId, stack: Signal<usize>) -> impl IntoView {
                     alt=description
                     class="w-full h-full xl:drop-shadow-md invert"
                 />
-                <Show when=move || { stack.get() > 1 }>
+                <Show when=move || { stack.read().0 > 1 }>
                     <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">
-                        {move || stack.get().to_string()}
+                        {move || stack.read().0.to_string()}
                     </div>
                 </Show>
             </div>
@@ -374,7 +375,7 @@ fn StatusIcon(status_id: StatusId, stack: Signal<usize>) -> impl IntoView {
     }
 }
 
-pub fn status_id_str(status_id: &StatusId) -> String {
+pub fn status_id_str(status_id: &StatusId, value: f64) -> String {
     match status_id {
         StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
         StatusId::DamageOverTime { damage_type } => {
@@ -385,23 +386,29 @@ pub fn status_id_str(status_id: &StatusId) -> String {
             modifier,
             debuff,
         } => {
-            format!(
-                "{} {}",
-                factor_str(*modifier, *debuff),
-                effects_tooltip::format_multiplier_stat_name(stat)
-            )
+            // format!(
+            //     "{} {}",
+            //     factor_str(*modifier, *debuff),
+            //     effects_tooltip::format_multiplier_stat_name(stat)
+            // )
+            effects_tooltip::format_stat(&StatEffect {
+                stat: stat.clone(),
+                modifier: *modifier,
+                value: if *debuff { -value } else { value },
+                bypass_ignore: false,
+            })
         }
         StatusId::Trigger(trigger_id) => trigger_id.clone(),
     }
 }
 
-fn factor_str(modifier: Modifier, debuff: bool) -> &'static str {
-    match (modifier, debuff) {
-        (Modifier::Increased, true) => "Decreased",
-        (Modifier::Increased, false) => "Increased",
-        (Modifier::Flat, true) => "Removed",
-        (Modifier::Flat, false) => "Added",
-        (Modifier::More, true) => "Less",
-        (Modifier::More, false) => "More",
-    }
-}
+// fn factor_str(modifier: Modifier, debuff: bool) -> &'static str {
+//     match (modifier, debuff) {
+//         (Modifier::Increased, true) => "Decreased",
+//         (Modifier::Increased, false) => "Increased",
+//         (Modifier::Flat, true) => "Removed",
+//         (Modifier::Flat, false) => "Added",
+//         (Modifier::More, true) => "Less",
+//         (Modifier::More, false) => "More",
+//     }
+// }
