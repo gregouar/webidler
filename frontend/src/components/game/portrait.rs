@@ -5,14 +5,17 @@ use shared::data::{
     character_status::{StatusId, StatusMap},
     monster::MonsterRarity,
     skill::{DamageType, SkillType},
-    stat_effect::{MinMax, StatEffect, StatStatusType, StatType},
+    stat_effect::{MinMax, StatEffect, StatSkillEffectType, StatStatusType, StatType},
 };
 
 use crate::{
     assets::img_asset,
     components::{
         shared::tooltips::{conditions_tooltip, effects_tooltip},
-        ui::tooltip::{StaticTooltip, StaticTooltipPosition},
+        ui::{
+            number::format_number,
+            tooltip::{StaticTooltip, StaticTooltipPosition},
+        },
     },
 };
 
@@ -333,6 +336,21 @@ fn StatusIcon(status_id: StatusId, stack: Signal<(usize, f64)>) -> impl IntoView
                 status_type: Some(StatStatusType::Stun),
                 ..
             } => "statuses/stun_immune.svg".into(),
+            StatType::SuccessChance {
+                skill_type,
+                effect_type,
+            } => match (skill_type, effect_type) {
+                (
+                    _,
+                    Some(StatSkillEffectType::ApplyStatus {
+                        status_type:
+                            Some(StatStatusType::DamageOverTime {
+                                damage_type: Some(DamageType::Fire),
+                            }),
+                    }),
+                ) => "passives/smoking_finger.svg".into(),
+                _ => "passives/success.svg".into(),
+            },
             StatType::GoldFind => "passives/gold.svg".to_string(),
             StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
             _ => "statuses/buff.svg".to_string(),
@@ -379,36 +397,22 @@ pub fn status_id_str(status_id: &StatusId, value: f64) -> String {
     match status_id {
         StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
         StatusId::DamageOverTime { damage_type } => {
-            conditions_tooltip::damaged_over_time_str(Some(*damage_type)).into()
+            format!(
+                "{} for {} Damage per second",
+                conditions_tooltip::damaged_over_time_str(Some(*damage_type)),
+                format_number(value)
+            )
         }
         StatusId::StatModifier {
             stat,
             modifier,
             debuff,
-        } => {
-            // format!(
-            //     "{} {}",
-            //     factor_str(*modifier, *debuff),
-            //     effects_tooltip::format_multiplier_stat_name(stat)
-            // )
-            effects_tooltip::format_stat(&StatEffect {
-                stat: stat.clone(),
-                modifier: *modifier,
-                value: if *debuff { -value } else { value },
-                bypass_ignore: false,
-            })
-        }
+        } => effects_tooltip::format_stat(&StatEffect {
+            stat: stat.clone(),
+            modifier: *modifier,
+            value: if *debuff { -value } else { value },
+            bypass_ignore: false,
+        }),
         StatusId::Trigger(trigger_id) => trigger_id.clone(),
     }
 }
-
-// fn factor_str(modifier: Modifier, debuff: bool) -> &'static str {
-//     match (modifier, debuff) {
-//         (Modifier::Increased, true) => "Decreased",
-//         (Modifier::Increased, false) => "Increased",
-//         (Modifier::Flat, true) => "Removed",
-//         (Modifier::Flat, false) => "Added",
-//         (Modifier::More, true) => "Less",
-//         (Modifier::More, false) => "More",
-//     }
-// }
