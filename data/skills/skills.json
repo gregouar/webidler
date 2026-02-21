@@ -1600,7 +1600,7 @@
   },
   "shield_bash": {
     "name": "Shield Bash",
-    "description": "Slams the target with your shield, dealing damage based on your equipped shield’s Armor.",
+    "description": "Slams the target with your shield, dealing damage based on your equipped shield's Armor.",
     "icon": "skills/shield_bash.svg",
     "skill_type": "Attack",
     "cooldown": 3,
