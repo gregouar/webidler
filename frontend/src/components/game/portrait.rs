@@ -3,6 +3,7 @@ use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
     character_status::{StatusId, StatusMap},
+    modifier::Modifier,
     monster::MonsterRarity,
     skill::{DamageType, SkillType},
     stat_effect::{StatStatusType, StatType},
@@ -450,7 +451,24 @@ pub fn status_id_str(status_id: &StatusId) -> String {
             stat,
             modifier,
             debuff,
-        } => effects_tooltip::format_multiplier_stat_name(stat),
+        } => {
+            format!(
+                "{} {}",
+                factor_str(*modifier, *debuff),
+                effects_tooltip::format_multiplier_stat_name(stat)
+            )
+        }
         StatusId::Trigger(trigger_id) => trigger_id.clone(),
+    }
+}
+
+fn factor_str(modifier: Modifier, debuff: bool) -> &'static str {
+    match (modifier, debuff) {
+        (Modifier::Increased, true) => "Decreased",
+        (Modifier::Increased, false) => "Increased",
+        (Modifier::Flat, true) => "Added",
+        (Modifier::Flat, false) => "Removed",
+        (Modifier::More, true) => "More",
+        (Modifier::More, false) => "Less",
     }
 }
