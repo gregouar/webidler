@@ -147,14 +147,14 @@ pub fn PassivesPanel(
             <div class="w-full h-full">
                 <Card>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
-                        <div class="flex-1 flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 w-xl overflow-hidden">
+                        <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-hidden">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == PassivesTab::Ascend
                                 })
                                 on:click=move |_| { active_tab.set(PassivesTab::Ascend) }
                             >
-                                "Ascend"
+                                <span class="mx-2">"Ascend"</span>
                             </TabButton>
                             <TabButton
                                 is_active=Signal::derive(move || {
@@ -162,13 +162,11 @@ pub fn PassivesPanel(
                                 })
                                 on:click=move |_| { active_tab.set(PassivesTab::Build) }
                             >
-                                "Plan"
+                                <span class="mx-2">"Plan"</span>
                             </TabButton>
                         </div>
 
-                        <div class="flex-1"></div>
-
-                        <div class="flex gap-2 ">
+                        <div class="flex px-2 xl:px-4">
                             <Input
                                 node_ref=search_node_ref
                                 id="search_node"
@@ -363,7 +361,8 @@ fn ConfirmAscendButton(
 
     view! {
         <MenuButton on:click=try_ascend disabled=disabled>
-            "Confirm Ascension"
+            <span class="inline xl:hidden">"Confirm"</span>
+            <span class="hidden xl:inline">"Confirm Ascension"</span>
         </MenuButton>
     }
 }
@@ -419,7 +418,12 @@ fn RefundAscendButton(
         }
     };
 
-    view! { <MenuButton on:click=try_reset>"Refund Ascension"</MenuButton> }
+    view! {
+        <MenuButton on:click=try_reset>
+            <span class="inline xl:hidden">"Refund"</span>
+            <span class="hidden xl:inline">"Refund Ascension"</span>
+        </MenuButton>
+    }
 }
 
 // Build Header
@@ -549,7 +553,8 @@ fn ConfirmBuildButton(
 
     view! {
         <MenuButton on:click=try_save disabled=disabled>
-            "Export Build"
+            <span class="inline xl:hidden">"Export"</span>
+            <span class="hidden xl:inline">"Export Build"</span>
         </MenuButton>
     }
 }
