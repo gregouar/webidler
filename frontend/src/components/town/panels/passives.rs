@@ -59,10 +59,10 @@ pub fn PassivesPanel(
     let tree_connections =
         Memo::new(move |_| town_context.passives_tree_specs.with(compute_connections));
 
-    let reset = move || {
+    Effect::new(move || {
         let mut initial_cost = 0.0;
         passives_tree_ascension.update(|passives_tree_ascension| {
-            *passives_tree_ascension = town_context.passives_tree_ascension.get_untracked();
+            *passives_tree_ascension = town_context.passives_tree_ascension.get();
             passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
                 let keep = town_context
                     .passives_tree_specs
@@ -79,13 +79,6 @@ pub fn PassivesPanel(
         passives_tree_build.set(town_context.passives_tree_build.get());
 
         ascension_cost.set(initial_cost.round());
-    };
-
-    // Reset temporary ascension on opening
-    Effect::new(move || {
-        if open.get() {
-            reset();
-        }
     });
 
     let active_tab = RwSignal::new(PassivesTab::Ascend);
