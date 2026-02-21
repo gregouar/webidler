@@ -30,7 +30,7 @@
         "scope": "Global",
         "stat": { "SkillLevel": null },
         "modifier": "Flat",
-        "value": [1, 5],
+        "value": [1, 10],
         "ignore_quality": true
       }
     ]
