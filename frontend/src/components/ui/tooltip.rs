@@ -1,7 +1,8 @@
 use std::sync::Arc;
 
-use leptos::{ev, html::*, prelude::*, web_sys};
+use leptos::{ev, html::Div, portal::Portal, prelude::*, web_sys};
 use leptos_use::{use_mouse, use_window_size};
+use web_sys::DomRect;
 
 #[derive(Clone, Debug, Copy)]
 pub struct DynamicTooltipContext {
@@ -191,7 +192,6 @@ pub enum StaticTooltipPosition {
 //         </div>
 //     }
 // }
-
 #[component]
 pub fn StaticTooltip<F, IV>(
     children: Children,
@@ -199,19 +199,42 @@ pub fn StaticTooltip<F, IV>(
     tooltip: F,
 ) -> impl IntoView
 where
-    F: Fn() -> IV + Send + Sync + 'static,
+    F: Fn() -> IV + Send + Sync + Clone + 'static,
     IV: IntoView + 'static,
 {
     let is_open = RwSignal::new(false);
 
-    let container_ref = NodeRef::new();
+    let container_ref = NodeRef::<Div>::new();
     let _ = leptos_use::on_click_outside(container_ref, move |_| is_open.set(false));
 
-    let position_classes = match position {
-        StaticTooltipPosition::Top => "bottom-full left-1/2 -translate-x-1/2 mb-2",
-        StaticTooltipPosition::Bottom => "top-full left-1/2 -translate-x-1/2 mt-2",
-        StaticTooltipPosition::Left => "right-full top-1/2 -translate-y-1/2 mr-2",
-        StaticTooltipPosition::Right => "left-full top-1/2 -translate-y-1/2 ml-2",
+    // let tooltip_style = RwSignal::new(String::new());
+    let tooltip_pos = RwSignal::new((200.0, 200.0));
+
+    // Recalculate position when opened
+    Effect::new(move |_| {
+        if is_open.get() {
+            if let Some(el) = container_ref.get() {
+                let rect: DomRect = el.get_bounding_client_rect();
+
+                tooltip_pos.set(match position {
+                    StaticTooltipPosition::Top => (rect.left() + rect.width() / 2.0, rect.top()),
+                    StaticTooltipPosition::Bottom => {
+                        (rect.left() + rect.width() / 2.0, rect.bottom())
+                    }
+                    StaticTooltipPosition::Left => (rect.left(), rect.top() + rect.height() / 2.0),
+                    StaticTooltipPosition::Right => {
+                        (rect.right(), rect.top() + rect.height() / 2.0)
+                    }
+                });
+            }
+        }
+    });
+
+    let transform = match position {
+        StaticTooltipPosition::Top => "translate(-50%, -100%)",
+        StaticTooltipPosition::Bottom => "translate(-50%, 0)",
+        StaticTooltipPosition::Left => "translate(-100%, -50%)",
+        StaticTooltipPosition::Right => "translate(0, -50%)",
     };
 
     let handle = window_event_listener(ev::touchend, {
@@ -226,28 +249,53 @@ where
 
     view! {
         <div
-            class="relative group inline-block"
-            on:touchstart=move |_| { is_open.set(true) }
+            class="inline-block"
+            on:touchstart=move |_| is_open.set(true)
+            on:mouseenter=move |_| is_open.set(true)
+            on:mouseleave=move |_| is_open.set(false)
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
             node_ref=container_ref
         >
             {children()}
-
-            <div class=move || {
-                format!(
-                    "
-                absolute
-                px-2 py-1 xl:px-3 xl:py-1 text-xs xl:text-sm text-white font-normal
-                bg-zinc-900 border border-neutral-200
-                rounded shadow-lg/30 whitespace-nowrap z-50 select-none
-                {} {}
-                ",
-                    position_classes,
-                    if is_open.get() { "block" } else { "hidden group-hover:block" },
-                )
-            }>{move || tooltip()}</div>
         </div>
+
+        <Show when=move || {
+            is_open.get()
+        }>
+            {
+                let tooltip = tooltip.clone();
+                view! {
+                    <Portal>
+                        <div
+                            class="p-2  fixed z-50"
+                            style=move || {
+                                let (x, y) = tooltip_pos.get();
+                                format!(
+                                    "position: fixed; left:{}px; top:{}px; transform:{};",
+                                    x,
+                                    y,
+                                    transform,
+                                )
+                            }
+                        >
+                            <div class="
+                            px-2 py-1 xl:px-3 xl:py-1
+                            text-xs xl:text-sm text-white font-normal
+                            bg-zinc-900 border border-neutral-200
+                            rounded shadow-lg/30 whitespace-nowrap
+                            select-none text-center
+                            ">
+                                {
+                                    let tooltip = tooltip.clone();
+                                    move || tooltip()
+                                }
+                            </div>
+                        </div>
+                    </Portal>
+                }
+            }
+        </Show>
     }
 }

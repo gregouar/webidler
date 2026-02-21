@@ -19,8 +19,8 @@ use crate::{
             card::Card,
             number::format_number,
             progress_bars::{
-                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
-                predictive_cooldown,
+                predictive_cooldown, CircularProgressBar, HorizontalProgressBar,
+                VerticalProgressBar,
             },
             toast::*,
             tooltip::{
@@ -31,7 +31,7 @@ use crate::{
     },
 };
 
-use super::{GameContext, portrait::CharacterPortrait};
+use super::{portrait::CharacterPortrait, GameContext};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
@@ -307,24 +307,35 @@ pub fn PlayerCard() -> impl IntoView {
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
                     >
-                        <StaticTooltip
-                            position=StaticTooltipPosition::Left
-                            tooltip=move || {
-                                format!(
-                                    "{} Mana Reserved for Manual Skill Use. This amount of Mana will never be used for Auto Skill Use.",
-                                    reserved_mana.get(),
-                                )
+                        <div
+                            class="h-full w-full origin-bottom"
+                            style=move || {
+                                format!("transform: scaleY({});", reserved_mana_percent.get())
                             }
-                            class:h-full
-                            class:w-full
                         >
-                            <div
-                                class="w-full h-full origin-bottom bg-blue-950 opacity-50 "
-                                style=move || {
-                                    format!("transform: scaleY({});", reserved_mana_percent.get())
+                            <StaticTooltip
+                                position=StaticTooltipPosition::Bottom
+                                tooltip=move || {
+                                    view! {
+                                        <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                                            <span class="font-semibold text-white">
+                                                {"Mana Reserved"}
+                                            </span>
+                                            <span class="text-zinc-300 text-wrap">
+                                                {format!(
+                                                    "{} Mana Reserved for Manual Skill Use. This amount of Mana will never be used for Auto Skill Use.",
+                                                    reserved_mana.get(),
+                                                )}
+                                            </span>
+                                        </div>
+                                    }
                                 }
-                            ></div>
-                        </StaticTooltip>
+                                class:w-full
+                                class:h-full
+                            >
+                                <div class="w-full h-full bg-blue-950 opacity-50 "></div>
+                            </StaticTooltip>
+                        </div>
                     </VerticalProgressBar>
                 </StaticTooltip>
             </div>

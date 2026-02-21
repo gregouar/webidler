@@ -8,7 +8,13 @@ use shared::data::{
     stat_effect::{StatStatusType, StatType},
 };
 
-use crate::assets::img_asset;
+use crate::{
+    assets::img_asset,
+    components::{
+        shared::tooltips::{conditions_tooltip, effects_tooltip},
+        ui::tooltip::{StaticTooltip, StaticTooltipPosition},
+    },
+};
 
 #[component]
 pub fn CharacterPortrait(
@@ -301,7 +307,7 @@ pub fn CharacterPortrait(
                 <div class="absolute inset-0 flex place-items-start p-1 xl:p-2">
                     <For each=move || active_statuses.get() key=|k| k.clone() let(k)>
                         <StatusIcon
-                            status_type=k.clone()
+                            status_id=k.clone()
                             stack=Signal::derive(move || status_stack(k.clone()))
                         />
                     </For>
@@ -372,8 +378,8 @@ pub fn CharacterPortrait(
 }
 
 #[component]
-fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
-    let (icon_uri, alt) = match status_type {
+fn StatusIcon(status_id: StatusId, stack: Signal<usize>) -> impl IntoView {
+    let (icon_uri, alt) = match status_id.clone() {
         StatusId::Stun => ("statuses/stunned.svg".to_string(), "Stunned"),
         StatusId::DamageOverTime { damage_type, .. } => match damage_type {
             DamageType::Physical => ("statuses/bleed.svg".to_string(), "Bleeding"),
@@ -412,18 +418,39 @@ fn StatusIcon(status_type: StatusId, stack: Signal<usize>) -> impl IntoView {
         StatusId::Trigger(trigger_id) => (trigger_id, "Buffed"),
     };
     view! {
-        <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
-            <img
-                draggable="false"
-                src=img_asset(&icon_uri)
-                alt=alt
-                class="w-full h-full xl:drop-shadow-md invert"
-            />
-            <Show when=move || { stack.get() > 1 }>
-                <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">
-                    {move || stack.get().to_string()}
-                </div>
-            </Show>
-        </div>
+        <StaticTooltip
+            position=StaticTooltipPosition::Bottom
+            tooltip=move || status_id_str(&status_id)
+        >
+
+            <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
+                <img
+                    draggable="false"
+                    src=img_asset(&icon_uri)
+                    alt=alt
+                    class="w-full h-full xl:drop-shadow-md invert"
+                />
+                <Show when=move || { stack.get() > 1 }>
+                    <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">
+                        {move || stack.get().to_string()}
+                    </div>
+                </Show>
+            </div>
+        </StaticTooltip>
+    }
+}
+
+pub fn status_id_str(status_id: &StatusId) -> String {
+    match status_id {
+        StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
+        StatusId::DamageOverTime { damage_type } => {
+            conditions_tooltip::damaged_over_time_str(Some(*damage_type)).into()
+        }
+        StatusId::StatModifier {
+            stat,
+            modifier,
+            debuff,
+        } => effects_tooltip::format_multiplier_stat_name(stat),
+        StatusId::Trigger(trigger_id) => trigger_id.clone(),
     }
 }
