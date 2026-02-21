@@ -32,7 +32,7 @@
       {
         "scope": "Global",
         "stat": "GoldFind",
-        "modifier": "Increased",
+        "modifier": "More",
         "value": [500, 1000]
       }
     ],
