@@ -23,7 +23,10 @@ use crate::{
         accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
-        shared::{account::AccountSettingsPanel, leaderboard::LeaderboardPanel, player_count::PlayerCount, settings::SettingsModal},
+        shared::{
+            account::AccountSettingsPanel, leaderboard::LeaderboardPanel,
+            player_count::PlayerCount, settings::SettingsModal,
+        },
         ui::{
             buttons::{MenuButton, MenuButtonRed},
             card::{Card, CardInset, CardTitle},

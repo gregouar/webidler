@@ -18,7 +18,7 @@ use crate::{
         shared::{
             inventory::InventoryEquipFilter,
             item_card::ItemCard,
-            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
+            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
         },
         town::TownContext,
         ui::{

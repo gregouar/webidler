@@ -73,11 +73,19 @@ pub async fn create_session(
     }
 
     // If not available, try from saved games, otherwise start new game
-    let game_instance_data = match load_game_instance(db_pool, master_store, &character_id).await {
-        Some(saved_instance) => saved_instance,
-        None => {
-            let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
-            new_game_instance(db_pool, master_store, character, area_config).await?
+    let game_instance_data = if let Some(saved_instance) =
+        load_game_instance(db_pool, master_store, &character_id).await
+    {
+        saved_instance
+    } else {
+        let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
+
+        match new_game_instance(db_pool, master_store, character, area_config).await {
+            Ok(instance) => instance,
+            Err(err) => {
+                db::game_sessions::end_session(db_pool, &character_id).await?;
+                return Err(err);
+            }
         }
     };
 
