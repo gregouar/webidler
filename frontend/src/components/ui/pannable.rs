@@ -4,7 +4,7 @@ use leptos::{html::*, prelude::*, web_sys};
 pub fn Pannable(
     children: Children,
     #[prop(default = 1.0)] max_zoom: f64,
-    #[prop(default = 4.0)] max_dezoom: f64,
+    #[prop(default = 6.0)] max_dezoom: f64,
     #[prop(optional, into)] disable_left_click_panning: Option<Signal<bool>>,
     #[prop(optional)] mouse_position: Option<RwSignal<(f64, f64)>>,
 ) -> impl IntoView {

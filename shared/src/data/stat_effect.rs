@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{compute_more_factor, ModifiableValue, Modifier},
+    modifier::{ModifiableValue, Modifier, compute_more_factor},
     skill::{RestoreType, SkillEffectType},
     values::NonNegative,
 };
@@ -409,7 +409,10 @@ impl StatSkillEffectType {
                 ApplyStatus {
                     status_type: status_type_2,
                 },
-            ) => compare_options(status_type, status_type_2),
+            ) => status_type
+                .as_ref()
+                .zip(status_type_2.as_ref())
+                .is_none_or(|(status_type, status_type_2)| status_type.is_match(status_type_2)),
             _ => self == skill_effect_type,
         }
     }

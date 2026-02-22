@@ -3369,6 +3369,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "crushing_blow",
             "OnHit": {
               "skill_type": null,
@@ -5288,6 +5289,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "healing_aura",
             "OnWaveCompleted": null,
             "target": "Me",
@@ -5973,6 +5975,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "pyromaniac",
             "OnApplyStatus": {
               "skill_type": null,
@@ -8206,6 +8209,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "sickening_concoction",
             "OnApplyStatus": {
               "skill_type": null,
@@ -8896,6 +8900,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "blazing_inferno",
             "OnHit": {
               "skill_type": null,
@@ -9835,6 +9840,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "bonfire",
             "OnHit": {
               "skill_type": null,
@@ -10080,7 +10086,8 @@
         "triggers": [
           {
             "description": "20% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
-            "trigger_id": "open_wound",
+            "icon": "",
+            "trigger_id": "open_wound_apply",
             "OnHit": {
               "skill_type": "Attack",
               "range": null,
@@ -10120,8 +10127,9 @@
                     {
                       "status_type": {
                         "Trigger": {
-                          "description": "Takes additional Physical Damage when Hit.",
-                          "trigger_id": "passives/open_wound.svg",
+                          "name": "Open Wound",
+                          "icon": "passives/open_wound.svg",
+                          "trigger_id": "open_wound",
                           "OnTakeHit": {
                             "skill_type": null,
                             "range": null,
@@ -10730,6 +10738,7 @@
         "triggers": [
           {
             "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
+            "icon": "",
             "trigger_id": "dot_spread",
             "OnKill": {
               "conditions": []
@@ -10934,10 +10943,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
+                    "StatusDuration": {
                       "status_type": null,
-                      "skill_type": null,
-                      "min_max": null
+                      "skill_type": null
                     }
                   },
                   {
@@ -10948,9 +10956,10 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusPower": {
                       "status_type": null,
-                      "skill_type": null
+                      "skill_type": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -11775,6 +11784,7 @@
         "triggers": [
           {
             "description": "",
+            "icon": "",
             "trigger_id": "stunning_blow",
             "OnHit": {
               "skill_type": "Attack",

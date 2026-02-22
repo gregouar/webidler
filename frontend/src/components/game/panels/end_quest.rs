@@ -48,7 +48,8 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     let gold_donation_value = Signal::derive(move || {
         game_context.player_resources.read().gold_total
             * computations::exponential(
-                game_context.area_specs.read().item_level_modifier,
+                game_context.area_specs.read().item_level_modifier
+                    + game_context.area_specs.read().power_level,
                 constants::MONSTER_REWARD_INCREASE_FACTOR,
             )
     });
@@ -56,14 +57,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     let gems_value = Signal::derive(move || game_context.player_resources.read().gems);
     let shards_value = Signal::derive(move || game_context.player_resources.read().shards);
 
-    let area_completed = move || {
-        game_context
-            .area_state
-            .read()
-            .max_area_level
-            .saturating_sub(game_context.area_specs.read().starting_level)
-            + 1
-    };
+    let area_completed = move || game_context.area_state.read().max_area_level;
 
     let item_rewards_picked = RwSignal::new(IndexSet::new());
 

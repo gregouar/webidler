@@ -285,7 +285,7 @@ fn handle_area_completed_event(
 
     if !game_data.area_specs.disable_shards
         && (area_state.area_level > area_state.max_area_level_ever)
-        && (area_state.area_level - game_data.area_specs.starting_level + 1).is_multiple_of(10)
+        && (area_state.area_level).is_multiple_of(10)
     {
         game_data.player_resources.mutate().shards += 1.0;
     }
@@ -311,7 +311,9 @@ fn handle_area_completed_event(
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
-        area_level.saturating_add(game_data.area_specs.item_level_modifier),
+        area_level
+            .saturating_add(game_data.area_specs.item_level_modifier)
+            .saturating_add(game_data.area_specs.power_level),
         is_boss_level,
         new_max, // Only drop unique when new area completed
         None,

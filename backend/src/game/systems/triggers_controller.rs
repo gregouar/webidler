@@ -80,6 +80,7 @@ pub fn apply_trigger_effects(
                     }
                 };
 
+            // TODO: Move back to update player/monsters
             let mut source_effects: Vec<_> = if trigger_context.trigger.inherit_modifiers {
                 Vec::new()
             } else {

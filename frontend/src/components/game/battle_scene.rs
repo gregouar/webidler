@@ -153,7 +153,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                     area_state
                                         .area_level
                                         .saturating_sub(area_state.going_back)
-                                        .max(game_context.area_specs.read().starting_level)
+                                        .max(1)
                                 })
                         }}
                     </p>

@@ -151,19 +151,32 @@ async fn read_character_details(
 
     let areas: Vec<UserGrindArea> = master_store
         .area_blueprints_store
-        .iter()
-        .map(|(area_id, available_area)| UserGrindArea {
+        .keys()
+        .map(|area_id| UserGrindArea {
             area_id: area_id.clone(),
             max_level_reached: areas_completed
                 .iter()
                 .find(|area_completed| area_completed.area_id.eq(area_id))
-                .map(|area_completed| {
-                    area_completed.max_area_level as AreaLevel + available_area.specs.starting_level
-                        - 1
-                })
+                .map(|area_completed| area_completed.max_area_level as AreaLevel)
                 .unwrap_or_default(),
         })
         .collect();
+
+    // let areas: Vec<UserGrindArea> = master_store
+    //     .area_blueprints_store
+    //     .iter()
+    //     .map(|(area_id, available_area)| UserGrindArea {
+    //         area_id: area_id.clone(),
+    //         max_level_reached: areas_completed
+    //             .iter()
+    //             .find(|area_completed| area_completed.area_id.eq(area_id))
+    //             .map(|area_completed| {
+    //                 area_completed.max_area_level as AreaLevel + available_area.specs.starting_level
+    //                     - 1
+    //             })
+    //             .unwrap_or_default(),
+    //     })
+    //     .collect();
 
     let inventory = inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
     let ascension =

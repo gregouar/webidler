@@ -3,8 +3,8 @@ use anyhow::Result;
 use shared::{
     computations,
     constants::{
-        CHAMPION_LEVEL_INC, MONSTERS_DEFAULT_DAMAGE_INCREASE, MONSTER_LIFE_INCREASE_FACTOR,
-        MONSTER_REWARD_INCREASE_FACTOR,
+        CHAMPION_LEVEL_INC, MONSTER_LIFE_INCREASE_FACTOR, MONSTER_REWARD_INCREASE_FACTOR,
+        MONSTERS_DEFAULT_DAMAGE_INCREASE,
     },
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
@@ -19,10 +19,10 @@ use shared::{
 
 use crate::game::{
     data::{
+        DataInit,
         area::{BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
         master_store::MonstersSpecsStore,
         monster::BaseMonsterSpecs,
-        DataInit,
     },
     systems::characters_updater,
     utils::rng::{self, RandomWeighted, Rollable},
@@ -65,18 +65,13 @@ fn generate_monsters_wave_specs(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
-    let area_relative_level = area_state
-        .area_level
-        .saturating_sub(area_specs.starting_level)
-        + 1;
-
     // Can only fight boss once per level
     if area_state.max_area_level < area_state.area_level {
         let available_bosses: Vec<_> = bosses
             .iter()
             .filter(|b| {
-                area_relative_level >= b.level
-                    && (area_relative_level - b.level)
+                area_state.area_level >= b.level
+                    && (area_state.area_level - b.level)
                         .is_multiple_of(b.interval.unwrap_or(AreaLevel::MAX))
             })
             .collect();
@@ -97,8 +92,8 @@ fn generate_monsters_wave_specs(
     let available_waves: Vec<_> = waves
         .iter()
         .filter(|wave| {
-            area_relative_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
-                && area_relative_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
+            area_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
+                && area_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
         })
         .collect();
 
@@ -191,7 +186,7 @@ fn generate_monster_specs(
     monster_id: CharacterId,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(base_monster_specs.clone());
-    let mut monster_level = area_state.area_level;
+    let mut monster_level = area_state.area_level + area_specs.power_level;
     monster_specs
         .character_specs
         .triggers
@@ -210,10 +205,8 @@ fn generate_monster_specs(
     };
 
     let life_factor = computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR);
-    let reward_factor = computations::exponential(
-        monster_level.saturating_sub(area_specs.starting_level) + 1,
-        MONSTER_REWARD_INCREASE_FACTOR,
-    );
+    let reward_factor =
+        computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR);
 
     monster_specs.reward_factor *= reward_factor;
     monster_specs

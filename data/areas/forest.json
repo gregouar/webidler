@@ -2,9 +2,9 @@
   "specs": {
     "name": "Dark Forest",
     "description": "The forest grows thick and restless, its roots tangled with rot, embers, and old bones. Few paths remain, and fewer are safe.",
-    "starting_level": 11,
+    "power_level": 15,
+    "item_level_modifier": 15,
     "required_level": 50,
-    "item_level_modifier": 20,
     "header_background": "areas/forest_header.webp",
     "footer_background": "areas/forest_footer.webp"
   },

@@ -20,7 +20,7 @@ pub struct AreaSpecs {
     pub header_background: String,
     pub footer_background: String,
 
-    pub starting_level: AreaLevel,
+    pub power_level: AreaLevel,
     #[serde(default)]
     pub required_level: AreaLevel,
     #[serde(default)]

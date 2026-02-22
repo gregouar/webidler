@@ -238,10 +238,6 @@ async fn new_game_instance(
         game_data.player_specs.mutate().buy_skill_cost = 0.0;
     }
 
-    // Only the delta is saved in db, so we adjust by starting_level
-    game_data.area_state.mutate().max_area_level_ever += game_data.area_specs.starting_level - 1;
-    game_data.area_state.mutate().last_champion_spawn += game_data.area_specs.starting_level - 1;
-
     game_data.player_resources.mutate().gold += benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,
         &game_data.player_benedictions,

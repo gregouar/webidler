@@ -166,7 +166,7 @@ async fn control_entities(
             if game_data.area_state.read().going_back > 0 {
                 let area_state = game_data.area_state.mutate();
                 let amount = area_state.going_back;
-                area_controller::decrease_area_level(&game_data.area_specs, area_state, amount);
+                area_controller::decrease_area_level(area_state, amount);
                 area_state.going_back = 0;
             }
 
@@ -286,11 +286,7 @@ fn respawn_player(master_store: &MasterStore, game_data: &mut GameInstanceData) 
     // }
 
     if game_data.area_state.read().auto_progress {
-        area_controller::decrease_area_level(
-            &game_data.area_specs,
-            game_data.area_state.mutate(),
-            1,
-        );
+        area_controller::decrease_area_level(game_data.area_state.mutate(), 1);
     } else {
         game_data.area_state.mutate().waves_done = 1;
     }

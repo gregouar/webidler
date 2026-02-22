@@ -2,7 +2,7 @@ use leptos::{html::*, prelude::*};
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
-    character_status::{StatusId, StatusMap},
+    character_status::{StatusId, StatusMap, StatusSpecs},
     monster::MonsterRarity,
     skill::{DamageType, SkillType},
     stat_effect::{MinMax, StatEffect, StatSkillEffectType, StatStatusType, StatType},
@@ -11,7 +11,7 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
-        shared::tooltips::{conditions_tooltip, effects_tooltip},
+        shared::tooltips::{conditions_tooltip, effects_tooltip, trigger_tooltip},
         ui::{
             number::format_number,
             tooltip::{StaticTooltip, StaticTooltipPosition},
@@ -76,11 +76,12 @@ pub fn CharacterPortrait(
     let statuses_map = Signal::derive({
         move || {
             statuses.read().iter().fold(
-                HashMap::<StatusId, (usize, f64)>::new(),
+                HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
                 |mut acc, (status_specs, status_state)| {
                     let entry = acc.entry(status_specs.into()).or_default();
                     entry.0 += 1;
                     entry.1 += status_state.value.get();
+                    entry.2 = Some(status_specs.clone());
                     acc
                 },
             )
@@ -286,92 +287,113 @@ pub fn CharacterPortrait(
 }
 
 #[component]
-fn StatusIcon(status_id: StatusId, stack: Signal<(usize, f64)>) -> impl IntoView {
-    let icon_uri = match status_id.clone() {
-        StatusId::Stun => "statuses/stunned.svg".to_string(),
-        StatusId::DamageOverTime { damage_type, .. } => match damage_type {
-            DamageType::Physical => "statuses/bleed.svg".to_string(),
-            DamageType::Fire => "statuses/burning.svg".to_string(),
-            DamageType::Poison => "statuses/poison.svg".to_string(),
-            DamageType::Storm => "statuses/storm.svg".to_string(),
-        },
-        // TODO: More buff types
-        StatusId::StatModifier {
-            stat,
-            debuff: false,
-            ..
-        } => match stat {
-            StatType::LifeRegen => "passives/life_regen.svg".into(),
-            StatType::Damage {
-                skill_type,
-                damage_type,
-                min_max,
-            } => {
-                if let Some(damage_type) = damage_type {
-                    match damage_type {
-                        DamageType::Physical => "passives/mace_head.svg".into(),
-                        DamageType::Fire => "passives/fire_damage.svg".into(),
-                        DamageType::Poison => "passives/scorpion_tail.svg".into(),
-                        DamageType::Storm => "passives/storm_damage.svg".into(),
+fn StatusIcon(
+    status_id: StatusId,
+    stack: Signal<(usize, f64, Option<StatusSpecs>)>,
+) -> impl IntoView {
+    let icon_uri = {
+        let status_id = status_id.clone();
+        move || {
+            match status_id.clone() {
+                StatusId::Stun => "statuses/stunned.svg".to_string(),
+                StatusId::DamageOverTime { damage_type, .. } => match damage_type {
+                    DamageType::Physical => "statuses/bleed.svg".to_string(),
+                    DamageType::Fire => "statuses/burning.svg".to_string(),
+                    DamageType::Poison => "statuses/poison.svg".to_string(),
+                    DamageType::Storm => "statuses/storm.svg".to_string(),
+                },
+                // TODO: More buff types
+                StatusId::StatModifier {
+                    stat,
+                    debuff: false,
+                    ..
+                } => match stat {
+                    StatType::LifeRegen => "passives/life_regen.svg".into(),
+                    StatType::Damage {
+                        skill_type,
+                        damage_type,
+                        min_max,
+                    } => {
+                        if let Some(damage_type) = damage_type {
+                            match damage_type {
+                                DamageType::Physical => "passives/mace_head.svg".into(),
+                                DamageType::Fire => "passives/fire_damage.svg".into(),
+                                DamageType::Poison => "passives/scorpion_tail.svg".into(),
+                                DamageType::Storm => "passives/storm_damage.svg".into(),
+                            }
+                        } else if let Some(skill_type) = skill_type {
+                            match skill_type {
+                                SkillType::Attack => "passives/attack.svg".into(),
+                                SkillType::Spell => "passives/spell.svg".into(),
+                                _ => "statuses/buff.svg".into(),
+                            }
+                        } else if let Some(min_max) = min_max {
+                            match min_max {
+                                MinMax::Min => "statuses/buff.svg".into(),
+                                MinMax::Max => "passives/thrust.svg".into(),
+                            }
+                        } else {
+                            "statuses/buff.svg".into()
+                        }
                     }
-                } else if let Some(skill_type) = skill_type {
-                    match skill_type {
-                        SkillType::Attack => "passives/attack.svg".into(),
-                        SkillType::Spell => "passives/spell.svg".into(),
-                        _ => "statuses/buff.svg".into(),
-                    }
-                } else if let Some(min_max) = min_max {
-                    match min_max {
-                        MinMax::Min => "statuses/buff.svg".into(),
-                        MinMax::Max => "passives/thrust.svg".into(),
-                    }
-                } else {
-                    "statuses/buff.svg".into()
-                }
-            }
-            StatType::CritChance(_) => "passives/critical_chance.svg".into(),
-            StatType::CritDamage(_) => "passives/critical_damage.svg".into(),
-            StatType::Speed(_) => "passives/sprint.svg".into(),
-            StatType::StatusResistance {
-                status_type: Some(StatStatusType::Stun),
-                ..
-            } => "statuses/stun_immune.svg".into(),
-            StatType::SuccessChance {
-                skill_type,
-                effect_type,
-            } => match (skill_type, effect_type) {
-                (
-                    _,
-                    Some(StatSkillEffectType::ApplyStatus {
-                        status_type:
-                            Some(StatStatusType::DamageOverTime {
-                                damage_type: Some(DamageType::Fire),
+                    StatType::CritChance(_) => "passives/critical_chance.svg".into(),
+                    StatType::CritDamage(_) => "passives/critical_damage.svg".into(),
+                    StatType::Speed(_) => "passives/sprint.svg".into(),
+                    StatType::StatusResistance {
+                        status_type: Some(StatStatusType::Stun),
+                        ..
+                    } => "statuses/stun_immune.svg".into(),
+                    StatType::SuccessChance {
+                        skill_type,
+                        effect_type,
+                    } => match (skill_type, effect_type) {
+                        (
+                            _,
+                            Some(StatSkillEffectType::ApplyStatus {
+                                status_type:
+                                    Some(StatStatusType::DamageOverTime {
+                                        damage_type: Some(DamageType::Fire),
+                                    }),
                             }),
-                    }),
-                ) => "passives/smoking_finger.svg".into(),
-                _ => "passives/success.svg".into(),
-            },
-            StatType::GoldFind => "passives/gold.svg".to_string(),
-            StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
-            _ => "statuses/buff.svg".to_string(),
-        },
-        StatusId::StatModifier {
-            stat, debuff: true, ..
-        } => match stat {
-            StatType::Armor(_) | StatType::DamageResistance { .. } => {
-                "statuses/debuff_armor.svg".to_string()
+                        ) => "passives/smoking_finger.svg".into(),
+                        _ => "passives/success.svg".into(),
+                    },
+                    StatType::GoldFind => "passives/gold.svg".to_string(),
+                    StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
+                    _ => "statuses/buff.svg".to_string(),
+                },
+                StatusId::StatModifier {
+                    stat, debuff: true, ..
+                } => match stat {
+                    StatType::Armor(_) | StatType::DamageResistance { .. } => {
+                        "statuses/debuff_armor.svg".to_string()
+                    }
+                    StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
+                    StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
+                    _ => "statuses/debuff.svg".to_string(),
+                },
+                StatusId::Trigger(_) => stack
+                    .read()
+                    .2
+                    .as_ref()
+                    .and_then(|status_specs| {
+                        if let StatusSpecs::Trigger(trigger_specs) = status_specs {
+                            trigger_specs.icon.clone()
+                        } else {
+                            None
+                        }
+                    })
+                    .unwrap_or("statuses/debuff.svg".into()),
             }
-            StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
-            _ => "statuses/debuff.svg".to_string(),
-        },
-        StatusId::Trigger(trigger_id) => trigger_id,
+        }
     };
 
-    let description = move || status_id_str(&status_id, stack.read().1);
+    let description =
+        move || status_description(&status_id.clone(), stack.read().1, stack.read().2.clone());
 
     let tooltip = {
         let description = description.clone();
-        move || description.clone()
+        move || view! { <span class="max-w-xl">{description.clone()}</span> }
     };
 
     view! {
@@ -379,7 +401,7 @@ fn StatusIcon(status_id: StatusId, stack: Signal<(usize, f64)>) -> impl IntoView
             <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
                 <img
                     draggable="false"
-                    src=img_asset(&icon_uri)
+                    src=move || img_asset(&icon_uri())
                     alt=description
                     class="w-full h-full xl:drop-shadow-md invert"
                 />
@@ -393,7 +415,11 @@ fn StatusIcon(status_id: StatusId, stack: Signal<(usize, f64)>) -> impl IntoView
     }
 }
 
-pub fn status_id_str(status_id: &StatusId, value: f64) -> String {
+pub fn status_description(
+    status_id: &StatusId,
+    value: f64,
+    status_specs: Option<StatusSpecs>,
+) -> String {
     match status_id {
         StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
         StatusId::DamageOverTime { damage_type } => {
@@ -413,6 +439,17 @@ pub fn status_id_str(status_id: &StatusId, value: f64) -> String {
             value: if *debuff { -value } else { value },
             bypass_ignore: false,
         }),
-        StatusId::Trigger(_) => "Special Effect".into(),
+        StatusId::Trigger(_) => {
+            if let Some(StatusSpecs::Trigger(trigger_specs)) = status_specs {
+                trigger_specs.name.clone().unwrap_or(
+                    trigger_specs
+                        .description
+                        .clone()
+                        .unwrap_or(trigger_tooltip::trigger_text(*trigger_specs.clone())),
+                )
+            } else {
+                "Special Effect".into()
+            }
+        }
     }
 }

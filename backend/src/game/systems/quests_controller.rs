@@ -62,32 +62,27 @@ fn generate_end_quest_rewards(
     master_store: &MasterStore,
     game_data: &GameInstanceData,
 ) -> QuestRewards {
-    let delta_area_level = game_data
-        .area_state
-        .read()
-        .max_area_level
-        .saturating_sub(game_data.area_specs.starting_level)
-        + 1;
+    let area_level = game_data.area_state.read().max_area_level;
 
     // Up to 2 rewards are edict, only 1 if only 2 rewards available.
-    let rewards_amount = if delta_area_level >= ITEM_REWARDS_MIN_LEVEL {
+    let rewards_amount = if area_level >= ITEM_REWARDS_MIN_LEVEL {
         game_data.area_specs.reward_slots
     } else {
         0
     };
 
-    let amount_map_rewards = if delta_area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
-        if rewards_amount > 2 {
-            2
-        } else {
-            1
-        }
+    let amount_map_rewards = if area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
+        if rewards_amount > 2 { 2 } else { 1 }
     } else {
         0
     };
 
     let amount_normal_rewards = (2 - amount_map_rewards).min(rewards_amount);
     let amount_rare_rewards = rewards_amount - amount_normal_rewards - amount_map_rewards;
+
+    let item_level = area_level
+        .saturating_add(game_data.area_specs.item_level_modifier)
+        .saturating_add(game_data.area_specs.power_level);
 
     let item_rewards = (0..amount_map_rewards)
         .flat_map(|_| {
@@ -97,11 +92,7 @@ fn generate_end_quest_rewards(
                 &master_store.item_affixes_table,
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
-                game_data
-                    .area_state
-                    .read()
-                    .max_area_level
-                    .saturating_add(game_data.area_specs.item_level_modifier),
+                item_level,
                 false,
                 true,
                 Some(ItemCategory::Map),
@@ -115,11 +106,7 @@ fn generate_end_quest_rewards(
                 &master_store.item_affixes_table,
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
-                game_data
-                    .area_state
-                    .read()
-                    .max_area_level
-                    .saturating_add(game_data.area_specs.item_level_modifier),
+                item_level,
                 false,
                 true,
                 None,
@@ -133,11 +120,7 @@ fn generate_end_quest_rewards(
                 &master_store.item_affixes_table,
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
-                game_data
-                    .area_state
-                    .read()
-                    .max_area_level
-                    .saturating_add(game_data.area_specs.item_level_modifier),
+                item_level,
                 true,
                 true,
                 None,
