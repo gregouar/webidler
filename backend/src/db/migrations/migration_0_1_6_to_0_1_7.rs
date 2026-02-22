@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{Transaction, types::JsonValue};
+use sqlx::{types::JsonValue, Transaction};
 
 use shared::data::{
     area::AreaLevel,
@@ -24,7 +24,7 @@ use crate::{
     constants::DATA_VERSION,
     db::{
         self,
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{upsert_character_inventory_data, CharacterDataEntry},
         pool::{Database, DbExecutor, DbPool},
     },
     game::{data::inventory_data::InventoryData, systems::passives_controller},
@@ -65,7 +65,7 @@ async fn migrate_character_data(
             created_at,
             updated_at
          FROM characters_data
-         WHERE data_version = '0.1.6'
+         WHERE data_version <= '0.1.6'
          "#,
     )
     .fetch_all(&mut **executor)
@@ -107,7 +107,7 @@ async fn migrate_stash_items(executor: &mut Transaction<'static, Database>) -> a
             stash_item_id,
             item_data as "item_data: JsonValue"
         FROM stash_items
-        WHERE data_version = '0.1.6'
+        WHERE data_version <= '0.1.6'
         "#
     )
     .fetch_all(&mut **executor)

@@ -67,6 +67,16 @@ pub async fn store_stash_item<'c>(
 }
 
 pub fn into_stash_item(items_store: &ItemsStore, item_entry: StashItemEntry) -> Option<StashItem> {
+    let item_modifiers = serde_json::from_value(item_entry.item_data);
+
+    let item_modifiers = match item_modifiers {
+        Ok(x) => x,
+        Err(e) => {
+            tracing::warn!("invalid item in stash {:?}", e);
+            return None;
+        }
+    };
+
     Some(StashItem {
         stash_id: item_entry.stash_id,
         stash_item_id: item_entry.stash_item_id as usize,
@@ -75,10 +85,7 @@ pub fn into_stash_item(items_store: &ItemsStore, item_entry: StashItemEntry) -> 
         character_id: item_entry.character_id,
         character_name: item_entry.character_name,
 
-        item_specs: items_controller::init_item_specs_from_store(
-            items_store,
-            serde_json::from_value(item_entry.item_data).ok()?,
-        )?,
+        item_specs: items_controller::init_item_specs_from_store(items_store, item_modifiers)?,
 
         created_at: item_entry.created_at.into(),
     })
