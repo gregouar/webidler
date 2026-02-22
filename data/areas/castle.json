@@ -2,7 +2,7 @@
   "specs": {
     "name": "Enchanted Castle",
     "description": "Once a place of splendor, the castle still stands, its halls alive with magic, servants, and a court that never learned to die.",
-    "starting_level": 31,
+    "power_level": 30,
     "required_level": 150,
     "item_level_modifier": 60,
     "header_background": "areas/castle_header.webp",

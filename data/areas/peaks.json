@@ -2,7 +2,7 @@
   "specs": {
     "name": "Wyrm's Peaks",
     "description": "[Boss Area] The peaks do not weather storms. They are shaped by the wings and wrath of their masters.",
-    "starting_level": 51,
+    "power_level": 50,
     "required_level": 250,
     "item_level_modifier": 100,
     "header_background": "areas/peaks_header.webp",

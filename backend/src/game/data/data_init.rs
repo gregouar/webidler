@@ -17,9 +17,9 @@ pub trait DataInit<Specs> {
 }
 
 impl DataInit<&AreaSpecs> for AreaState {
-    fn init(specs: &AreaSpecs) -> Self {
+    fn init(_: &AreaSpecs) -> Self {
         AreaState {
-            area_level: specs.starting_level,
+            area_level: 1,
             is_boss: false,
             waves_done: 1,
             max_area_level: 0,

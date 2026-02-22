@@ -1,12 +1,12 @@
 use std::net::SocketAddr;
 
 use axum::{
-    Router,
     routing::{any, get},
+    Router,
 };
 use http::{
-    HeaderValue, Method,
     header::{AUTHORIZATION, CONTENT_TYPE},
+    HeaderValue, Method,
 };
 use tokio::signal;
 use tower_http::{
@@ -131,6 +131,7 @@ async fn main() {
 
 async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
     db::migrations::migration_0_1_6_to_0_1_7::migrate(db_pool, master_store).await?;
+    db::migrations::migration_0_1_7_to_0_1_8::migrate(db_pool).await?;
     Ok(())
 }
 

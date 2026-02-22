@@ -7,12 +7,8 @@ use shared::data::{
 
 use crate::game::data::{area::AreaBlueprint, master_store::LootTablesStore};
 
-pub fn decrease_area_level(area_specs: &AreaSpecs, area_state: &mut AreaState, amount: AreaLevel) {
-    area_state.area_level = area_state
-        .area_level
-        .saturating_sub(amount)
-        .max(1)
-        .max(area_specs.starting_level);
+pub fn decrease_area_level(area_state: &mut AreaState, amount: AreaLevel) {
+    area_state.area_level = area_state.area_level.saturating_sub(amount).max(1);
     area_state.waves_done = 1;
 }
 

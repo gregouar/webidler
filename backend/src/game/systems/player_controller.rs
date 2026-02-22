@@ -155,7 +155,7 @@ pub fn reward_player(
     let gold_reward = (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
-        ((area_state.area_level + area_specs.item_level_modifier) as f64 / 5.0
+        ((area_state.area_level + area_specs.item_level_modifier + area_specs.power_level) as f64 / 5.0
             * *area_specs.gems_find
             * 0.01)
             .floor()
@@ -284,7 +284,7 @@ pub fn sell_item(
                 item_specs
                     .modifiers
                     .level
-                    .saturating_sub(area_specs.starting_level + area_specs.item_level_modifier - 1),
+                    .saturating_sub(area_specs.power_level + area_specs.item_level_modifier),
                 MONSTER_REWARD_INCREASE_FACTOR,
             );
 

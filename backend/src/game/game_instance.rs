@@ -219,10 +219,7 @@ impl<'a> GameInstance<'a> {
         )
         .await?;
 
-        let delta_area_level = self.game_data.area_state.read().max_area_level_ever as i32
-            - self.game_data.area_specs.starting_level as i32
-            + 1;
-
+        let delta_area_level = self.game_data.area_state.read().max_area_level_ever as i32;
         if delta_area_level > 0 {
             db::characters::update_character_area_progress(
                 &mut tx,

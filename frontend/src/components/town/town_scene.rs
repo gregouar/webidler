@@ -18,7 +18,7 @@ use crate::{
         shared::{
             inventory::InventoryEquipFilter,
             item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
         },
         town::TownContext,
         ui::{
@@ -333,17 +333,22 @@ fn GrindingAreaCard(
                 </div>
 
                 <div class="text-xs xl:text-sm text-gray-400">
-                    "Starting Level: " {area_specs.read().starting_level}
-                    {(area_specs.read().item_level_modifier > 0)
-                        .then(|| format!(" (+{})", area_specs.read().item_level_modifier))}
-                </div>
-
-                <div class="text-xs xl:text-sm text-gray-400">
                     {if area.max_level_reached > 0 {
                         format!("Level Reached: {}", area.max_level_reached)
                     } else {
                         "New Grind!".to_string()
                     }}
+                </div>
+
+                <div class="text-xs xl:text-sm text-gray-400">
+                    {
+                        let modifier = area_specs.read().power_level
+                            + area_specs.read().item_level_modifier;
+                        {
+                            (area_specs.read().item_level_modifier > 0)
+                                .then(|| format!("Power level: +{}", modifier))
+                        }
+                    }
                 </div>
             </div>
 
@@ -511,15 +516,10 @@ pub fn StartGrindPanel(
 
                                     <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
                                         <li class="leading-snug ">
-                                            "Starting Level: "
+                                            "Power Level Modifier: "
                                             <span class="font-semibold text-white">
-                                                {area_specs.starting_level}
-                                            </span>
-                                        </li>
-                                        <li class="leading-snug ">
-                                            "Item Level Modifier: "
-                                            <span class="font-semibold text-white">
-                                                "+" {area_specs.item_level_modifier}
+                                                "+"
+                                                {area_specs.power_level + area_specs.item_level_modifier}
                                             </span>
                                         </li>
                                     </ul>
