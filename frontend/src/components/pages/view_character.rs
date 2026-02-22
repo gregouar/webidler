@@ -7,14 +7,18 @@ use leptos_router::{
 use shared::http::server::GetCharacterDetailsResponse;
 
 use crate::components::{
-    backend_client::BackendClient, data_context::DataContext, shared::{
+    backend_client::BackendClient,
+    data_context::DataContext,
+    shared::{
         player_count::PlayerCount,
         resources::{GemsCounter, ShardsCounter},
-    }, town::{
+    },
+    town::{
         TownContext,
         panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
         town_scene::TownScene,
-    }, ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip}
+    },
+    ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
 };
 
 #[derive(Clone, Params, PartialEq)]
@@ -26,7 +30,7 @@ struct CharacterParams {
 pub fn ViewCharacterPage() -> impl IntoView {
     let town_context = TownContext::default();
     provide_context(town_context);
-    
+
     let data_context: DataContext = expect_context();
     let backend = expect_context::<BackendClient>();
 
@@ -53,7 +57,6 @@ pub fn ViewCharacterPage() -> impl IntoView {
                 .unwrap_or_default()
         }
     });
-    
 
     let data_load = LocalResource::new({
         move || async move {
@@ -82,12 +85,15 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         ascension,
                         benedictions,
                         last_grind,
-                        ..
+                        passives_build,
+                        user_stash: _,
+                        market_stash: _,
                     }) => {
                         town_context.character.set(character);
                         town_context.areas.set(areas);
                         town_context.inventory.set(inventory);
                         town_context.passives_tree_ascension.set(ascension);
+                        town_context.passives_tree_build.set(passives_build);
                         town_context.player_benedictions.set(benedictions);
                         town_context.last_grind.set(last_grind);
                     }

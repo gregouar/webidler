@@ -322,14 +322,14 @@ fn GrindingAreaCard(
             <div class="h-10 xl:h-16 w-full relative">
                 <img
                     draggable="false"
-                    src=img_asset(&area_specs.read().header_background)
+                    src=move || img_asset(&area_specs.read().header_background)
                     class="object-cover w-full h-full"
                 />
             </div>
 
             <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
                 <div class="text-base xl:text-lg font-semibold text-amber-200">
-                    {area_specs.read().name.clone()}
+                    {move || area_specs.read().name.clone()}
                 </div>
 
                 <div class="text-xs xl:text-sm text-gray-400">
@@ -353,7 +353,7 @@ fn GrindingAreaCard(
             <div class="h-10 xl:h-16 w-full relative">
                 <img
                     draggable="false"
-                    src=img_asset(&area_specs.read().footer_background)
+                    src=move || img_asset(&area_specs.read().footer_background)
                     class="object-cover w-full h-full"
                 />
             </div>
