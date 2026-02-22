@@ -5,7 +5,7 @@
   "power_factor": 2.0,
   "initiative": [1.0, 2.0],
   "block": {
-    "Attack": 40,
+    "Attack": 30,
     "Spell": 20
   },
   "skills": [

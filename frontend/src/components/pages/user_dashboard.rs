@@ -40,6 +40,8 @@ use crate::{
 pub fn UserDashboardPage() -> impl IntoView {
     let refresh_trigger = RwSignal::new(0u64);
 
+    let username = RwSignal::new(String::new());
+
     let async_data = LocalResource::new({
         let backend = expect_context::<BackendClient>();
         let auth_context = expect_context::<AuthContext>();
@@ -65,6 +67,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
+                    username.set(user.username.clone());
                     Some((areas, user, characters))
                 }
                 None => None,
@@ -109,7 +112,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     let selected_character_portrait = RwSignal::new(None);
 
     view! {
-        <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
+        <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
             bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
                 <div class="flex gap-2">
@@ -118,8 +121,6 @@ pub fn UserDashboardPage() -> impl IntoView {
                         open_leaderboard.set(false);
                         open_account.set(false);
                     }>"Game Settings"</MenuButton>
-                    // </div>
-                    // <div class="flex gap-2">
                     <MenuButton on:click=move |_| {
                         open_leaderboard.set(!open_leaderboard.get_untracked());
                         open_settings.set(false);
@@ -133,6 +134,11 @@ pub fn UserDashboardPage() -> impl IntoView {
                         <MenuButton>"Wiki"</MenuButton>
                     </a>
                 </div>
+
+                <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
+                    "Welcome, " {move || username.get()}"!"
+                </h1>
+
                 <div class="flex gap-2">
                     <MenuButton on:click=move |_| {
                         open_account.set(!open_account.get_untracked());
@@ -151,45 +157,47 @@ pub fn UserDashboardPage() -> impl IntoView {
                 <LeaderboardPanel open=open_leaderboard />
                 <AccountSettingsPanel open=open_account refresh_trigger />
 
-                <Transition fallback=move || {
-                    view! { <p class="text-gray-400">"Loading..."</p> }
-                }>
-                    {move || {
-                        Suspend::new(async move {
-                            let (areas, user, characters) = async_data.await.unwrap_or_default();
-                            let areas = Arc::new(areas);
-                            view! {
-                                <CreateCharacterPanel
-                                    open=open_character_panel
-                                    user_id=user.user_id
-                                    refresh_trigger=refresh_trigger
-                                    selected_character_id
-                                    selected_character_name
-                                    selected_character_portrait
-                                />
-                                <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
-                                    <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
-                                        "Welcome, " {user.username.clone()}"!"
-                                    </h1>
+                <div class="absolute inset-0 p-1 xl:p-4">
+                    <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
 
-                                    <div class="w-full grid grid-cols-2 gap-2 xl:gap-4">
-                                        <NewsPanel />
-                                        <CharactersSelection
-                                            areas=areas.clone()
-                                            characters
-                                            user
-                                            refresh_trigger
-                                            open_character_panel
+                        <Transition fallback=move || {
+                            view! { <p class="text-gray-400">"Loading..."</p> }
+                        }>
+                            {move || {
+                                Suspend::new(async move {
+                                    let (areas, user, characters) = async_data
+                                        .await
+                                        .unwrap_or_default();
+                                    let areas = Arc::new(areas);
+                                    view! {
+                                        <CreateCharacterPanel
+                                            open=open_character_panel
+                                            user_id=user.user_id
+                                            refresh_trigger=refresh_trigger
                                             selected_character_id
                                             selected_character_name
                                             selected_character_portrait
                                         />
-                                    </div>
-                                </div>
-                            }
-                        })
-                    }}
-                </Transition>
+
+                                        <div class="w-full min-h-0 flex justify-center gap-2 xl:gap-4">
+                                            <NewsPanel />
+                                            <CharactersSelection
+                                                areas=areas.clone()
+                                                characters
+                                                user
+                                                refresh_trigger
+                                                open_character_panel
+                                                selected_character_id
+                                                selected_character_name
+                                                selected_character_portrait
+                                            />
+                                        </div>
+                                    }
+                                })
+                            }}
+                        </Transition>
+                    </div>
+                </div>
             </div>
         </main>
     }
@@ -209,7 +217,7 @@ fn CharactersSelection(
     let characters_len = characters.len();
 
     view! {
-        <Card class="h-full">
+        <Card class="h-full w-2xl">
             <div class="flex flex-row justify-between items-center px-4">
                 <CardTitle>"Your Characters"</CardTitle>
                 <span class="text-sm text-gray-400 font-medium">
@@ -217,7 +225,7 @@ fn CharactersSelection(
                 </span>
             </div>
 
-            <CardInset class="w-full aspect-square">
+            <CardInset class="w-full h-full">
                 <div class="flex flex-col gap-3">
                     <For
                         each=move || characters.clone()
@@ -699,12 +707,12 @@ fn NewsPanel() -> impl IntoView {
     });
 
     view! {
-        <Card class="text-left">
+        <Card class="text-left max-w-3xl">
             <div class="px-4">
                 <CardTitle>"News"</CardTitle>
             </div>
 
-            <CardInset class="w-full aspect-square">
+            <CardInset class="w-full gap-3">
                 <Transition fallback=move || {
                     view! { <p class="text-gray-400">"Loading..."</p> }
                 }>

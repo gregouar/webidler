@@ -5,10 +5,10 @@
   "power_factor": 1,
   "initiative": [2, 3],
   "evade": {
-    "Physical": 30,
-    "Fire": 30,
-    "Storm": 30,
-    "Poison": 30
+    "Physical": 20,
+    "Fire": 20,
+    "Storm": 20,
+    "Poison": 20
   },
   "skills": [
     {

@@ -6,7 +6,7 @@
   "initiative": [0.5, 1.5],
   "armor": { "Fire": 50 },
   "block": {
-    "Attack": 40,
+    "Attack": 30,
     "Spell": 20
   },
   "skills": [

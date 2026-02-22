@@ -7,8 +7,8 @@
   "initiative": [1.0, 2.0],
   "armor": { "Physical": 100, "Storm": 50 },
   "block": {
-    "Attack": 40,
-    "Spell": 20
+    "Attack": 30,
+    "Spell": 30
   },
   "skills": [
     {
