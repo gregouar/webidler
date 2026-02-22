@@ -12,23 +12,18 @@ use crate::components::{
     backend_client::BackendClient,
     ui::{
         buttons::{MenuButton, MenuButtonRed},
+        card::{Card, CardHeader, CardInset},
         input::{Input, ValidatedInput},
+        menu_panel::MenuPanel,
         toast::*,
     },
 };
 
 #[component]
-pub fn AccountSettingsPage() -> impl IntoView {
+pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>) -> impl IntoView {
     let toaster = expect_context::<Toasts>();
     let backend = expect_context::<BackendClient>();
     let auth_context = expect_context::<AuthContext>();
-
-    let navigate_to_dashboard = {
-        let navigate = use_navigate();
-        move |_| {
-            navigate("/user-dashboard", Default::default());
-        }
-    };
 
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
@@ -79,6 +74,7 @@ pub fn AccountSettingsPage() -> impl IntoView {
                             }
                             set_username_storage.set(username.get_untracked());
                             init_username.set(username.get_untracked());
+                            *refresh_trigger.write() += 1;
 
                             show_toast(
                                 toaster,
@@ -211,86 +207,82 @@ pub fn AccountSettingsPage() -> impl IntoView {
     });
 
     view! {
-        <main class="my-0 mx-auto max-w-2xl text-center flex flex-col justify-center p-6">
+        <ConfirmAccountDeletionModal open=show_delete_modal user_id />
+        <MenuPanel w_full=false h_full=false open>
+            <Card class="max-w-4xl">
+                <CardHeader title="Account Settings" on_close=move || open.set(false) />
 
-            <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Account Settings"</h1>
+                <div class="space-y-6 text-right text-white  mb-6">
+                    <CardInset>
+                        <ValidatedInput
+                            label="Username"
+                            id="username"
+                            input_type="text"
+                            placeholder="Enter your username"
+                            bind=username
+                        />
+                        <MenuButton on:click=on_update_username disabled=disable_username_submit>
+                            "Change Username"
+                        </MenuButton>
+                    </CardInset>
 
-            <div class="space-y-6 text-right text-white  mb-6">
-                <div class="border-t border-zinc-700 pt-4 mt-4 space-y-2">
-                    <ValidatedInput
-                        label="Username"
-                        id="username"
-                        input_type="text"
-                        placeholder="Enter your username"
-                        bind=username
-                    />
-                    <MenuButton on:click=on_update_username disabled=disable_username_submit>
-                        "Change Username"
-                    </MenuButton>
+                    <CardInset>
+                        <ValidatedInput
+                            label="Email"
+                            id="email"
+                            input_type="text"
+                            placeholder="Optionally enter your email for password recovery"
+                            bind=email
+                        />
+                        <MenuButton on:click=on_update_email disabled=disable_email_submit>
+                            "Change Email"
+                        </MenuButton>
+                    </CardInset>
+
+                    <CardInset>
+                        <ValidatedInput
+                            label="Old Password"
+                            id="old-password"
+                            input_type="password"
+                            placeholder="Enter your old password"
+                            bind=old_password
+                        />
+                        <ValidatedInput
+                            label="New Password"
+                            id="password"
+                            input_type="password"
+                            placeholder="Enter your new password"
+                            bind=password
+                        />
+
+                        <Input
+                            id="confirm-password"
+                            input_type="password"
+                            placeholder="Confirm your new password"
+                            bind=confirm_password
+                            invalid=passwords_mismatch
+                        />
+                        <MenuButton
+                            class:justify-self-end
+                            on:click=on_update_password
+                            disabled=disable_password_submit
+                        >
+                            "Change Password"
+                        </MenuButton>
+                    </CardInset>
+
+                    <CardInset>
+                        <p class="text-sm text-red-400">
+                            "Deleting your account is irreversible. All game progress will be lost."
+                        </p>
+                        <MenuButtonRed on:click=move |_| {
+                            show_delete_modal.set(true)
+                        }>"Delete Account"</MenuButtonRed>
+                    </CardInset>
                 </div>
 
-                <div class="border-t border-zinc-700 pt-4 mt-4 space-y-2">
-                    <ValidatedInput
-                        label="Email"
-                        id="email"
-                        input_type="text"
-                        placeholder="Optionally enter your email for password recovery"
-                        bind=email
-                    />
-                    <MenuButton on:click=on_update_email disabled=disable_email_submit>
-                        "Change Email"
-                    </MenuButton>
-                </div>
-
-                <div class="border-t border-zinc-700 pt-4 mt-4 space-y-2">
-                    <ValidatedInput
-                        label="Old Password"
-                        id="old-password"
-                        input_type="password"
-                        placeholder="Enter your old password"
-                        bind=old_password
-                    />
-                    <ValidatedInput
-                        label="New Password"
-                        id="password"
-                        input_type="password"
-                        placeholder="Enter your new password"
-                        bind=password
-                    />
-
-                    <Input
-                        id="confirm-password"
-                        input_type="password"
-                        placeholder="Confirm your new password"
-                        bind=confirm_password
-                        invalid=passwords_mismatch
-                    />
-                    <MenuButton
-                        class:justify-self-end
-                        on:click=on_update_password
-                        disabled=disable_password_submit
-                    >
-                        "Change Password"
-                    </MenuButton>
-                </div>
-
-                <div class="border-t border-zinc-700 pt-4 mt-4 space-y-2">
-                    <p class="text-sm text-red-400">
-                        "Deleting your account is irreversible. All game progress will be lost."
-                    </p>
-                    <MenuButtonRed on:click=move |_| {
-                        show_delete_modal.set(true)
-                    }>"Delete Account"</MenuButtonRed>
-                </div>
-
-            </div>
-
-            <div>
-                <MenuButton on:click=navigate_to_dashboard>"Back"</MenuButton>
-            </div>
-
-            <ConfirmAccountDeletionModal open=show_delete_modal user_id />
-        </main>
+            </Card>
+        </MenuPanel>
     }
 }
 

@@ -23,7 +23,7 @@ use crate::{
         accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
-        shared::{leaderboard::LeaderboardPanel, player_count::PlayerCount, settings::SettingsModal},
+        shared::{account::AccountSettingsPanel, leaderboard::LeaderboardPanel, player_count::PlayerCount, settings::SettingsModal},
         ui::{
             buttons::{MenuButton, MenuButtonRed},
             card::{Card, CardInset, CardTitle},
@@ -100,6 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     let open_settings = RwSignal::new(false);
+    let open_account = RwSignal::new(false);
     let open_leaderboard = RwSignal::new(false);
     let open_character_panel = RwSignal::new(false);
 
@@ -109,79 +110,87 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full max-h-screen text-center overflow-x-hidden flex flex-col">
-            <DiscordInviteBanner class:hidden class:xl:inline />
+            <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
+            bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
+                <div class="flex gap-2">
+                    <MenuButton on:click=move |_| {
+                        open_settings.set(!open_settings.get_untracked());
+                        open_leaderboard.set(false);
+                        open_account.set(false);
+                    }>"Game Settings"</MenuButton>
+                    // </div>
+                    // <div class="flex gap-2">
+                    <MenuButton on:click=move |_| {
+                        open_leaderboard.set(!open_leaderboard.get_untracked());
+                        open_settings.set(false);
+                        open_account.set(false);
+                    }>"Leaderboard"</MenuButton>
+                    <a
+                        href="https://webidler.gitbook.io/wiki/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <MenuButton>"Wiki"</MenuButton>
+                    </a>
+                </div>
+                <div class="flex gap-2">
+                    <MenuButton on:click=move |_| {
+                        open_account.set(!open_account.get_untracked());
+                        open_leaderboard.set(false);
+                        open_settings.set(false);
+                    }>"Account Settings"</MenuButton>
+                    <MenuButtonRed on:click=move |_| sign_out()>"Sign Out"</MenuButtonRed>
+                </div>
+            </div>
+
             <PlayerCount />
-            <SettingsModal open=open_settings />
-            <LeaderboardPanel open=open_leaderboard />
+            <DiscordInviteBanner />
 
-            <Transition fallback=move || {
-                view! { <p class="text-gray-400">"Loading..."</p> }
-            }>
-                {move || {
-                    let sign_out = sign_out.clone();
-                    Suspend::new(async move {
-                        let (areas, user, characters) = async_data.await.unwrap_or_default();
-                        let areas = Arc::new(areas);
-                        view! {
-                            <CreateCharacterPanel
-                                open=open_character_panel
-                                user_id=user.user_id
-                                refresh_trigger=refresh_trigger
-                                selected_character_id
-                                selected_character_name
-                                selected_character_portrait
-                            />
-                            <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
-                                <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
-                                    "Welcome, " {user.username.clone()}"!"
-                                </h1>
+            <div class="relative flex-1">
+                <SettingsModal open=open_settings />
+                <LeaderboardPanel open=open_leaderboard />
+                <AccountSettingsPanel open=open_account refresh_trigger />
 
-                                <div class="w-full grid grid-cols-2 gap-2 xl:gap-4">
-                                    <NewsPanel />
-                                    <CharactersSelection
-                                        areas=areas.clone()
-                                        characters
-                                        user
-                                        refresh_trigger
-                                        open_character_panel
-                                        selected_character_id
-                                        selected_character_name
-                                        selected_character_portrait
-                                    />
-                                </div>
+                <Transition fallback=move || {
+                    view! { <p class="text-gray-400">"Loading..."</p> }
+                }>
+                    {move || {
+                        Suspend::new(async move {
+                            let (areas, user, characters) = async_data.await.unwrap_or_default();
+                            let areas = Arc::new(areas);
+                            view! {
+                                <CreateCharacterPanel
+                                    open=open_character_panel
+                                    user_id=user.user_id
+                                    refresh_trigger=refresh_trigger
+                                    selected_character_id
+                                    selected_character_name
+                                    selected_character_portrait
+                                />
+                                <div class="relative flex-1 max-w-6xl w-full mx-auto p-2 xl:p-4 gap-2 xl:gap-4 flex flex-col ">
+                                    <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
+                                        "Welcome, " {user.username.clone()}"!"
+                                    </h1>
 
-                                <Card class="w-full ">
-                                    <div class="flex items-center justify-between gap-2 text-gray-400">
-                                        <div class="flex gap-2">
-                                            <MenuButton on:click=move |_| {
-                                                open_settings.set(true)
-                                            }>"Game Settings"</MenuButton>
-                                            <a href="account">
-                                                <MenuButton>"Account Settings"</MenuButton>
-                                            </a>
-                                        </div>
-                                        <div class="flex gap-2">
-                                            <MenuButton on:click=move |_| {
-                                                open_leaderboard.set(true)
-                                            }>"Leaderboard"</MenuButton>
-                                            <a
-                                                href="https://webidler.gitbook.io/wiki/"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                <MenuButton>"Wiki"</MenuButton>
-                                            </a>
-                                        </div>
-                                        <MenuButtonRed on:click=move |_| sign_out()>
-                                            "Sign Out"
-                                        </MenuButtonRed>
+                                    <div class="w-full grid grid-cols-2 gap-2 xl:gap-4">
+                                        <NewsPanel />
+                                        <CharactersSelection
+                                            areas=areas.clone()
+                                            characters
+                                            user
+                                            refresh_trigger
+                                            open_character_panel
+                                            selected_character_id
+                                            selected_character_name
+                                            selected_character_portrait
+                                        />
                                     </div>
-                                </Card>
-                            </div>
-                        }
-                    })
-                }}
-            </Transition>
+                                </div>
+                            }
+                        })
+                    }}
+                </Transition>
+            </div>
         </main>
     }
 }
@@ -640,16 +649,17 @@ fn DiscordInviteBanner() -> impl IntoView {
     view! {
         <div class="
         sticky left-0 top-0 z-20
+        items-center justify-between
+        hidden xl:flex
         w-full px-4 py-2
         bg-slate-800/90 backdrop-blur
         border-b border-slate-700
-        flex items-center justify-between
         gap-4
         text-sm
         ">
-            <span class="text-slate-300">
+            <div class="text-slate-300">
                 "Help shape the future of the game and join our community on Discord to give feedback, suggest new features, and access early information."
-            </span>
+            </div>
 
             {move || match invite_url.get() {
                 Some(url) => {

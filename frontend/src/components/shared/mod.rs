@@ -1,3 +1,4 @@
+pub mod account;
 pub mod inventory;
 pub mod item_card;
 pub mod leaderboard;

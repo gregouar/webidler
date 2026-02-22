@@ -17,11 +17,7 @@ pub fn LeaderboardPanel(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open>
             <Card>
                 <CardHeader title="Leaderboard" on_close=move || open.set(false) />
-                <div class="flex flex-col space-y-2">
-                    <div class="w-full mx-auto mb-6 justify-center">
-                        <LeaderboardContent />
-                    </div>
-                </div>
+                <LeaderboardContent />
             </Card>
         </MenuPanel>
     }
@@ -71,7 +67,7 @@ fn LeaderboardContent() -> impl IntoView {
                         });
 
                     view! {
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                        <div class="min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                             {leaderboard_per_area
                                 .into_iter()
                                 .rev()

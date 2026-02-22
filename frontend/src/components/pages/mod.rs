@@ -1,4 +1,3 @@
-mod account;
 mod game;
 mod main_menu;
 pub mod privacy;
@@ -9,7 +8,6 @@ mod town;
 mod user_dashboard;
 mod view_character;
 
-pub use account::AccountSettingsPage;
 pub use game::GamePage;
 pub use main_menu::MainMenuPage;
 pub use reset_password::ResetPasswordPage;
