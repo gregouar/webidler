@@ -333,22 +333,20 @@ fn GrindingAreaCard(
                 </div>
 
                 <div class="text-xs xl:text-sm text-gray-400">
+                    {move || {
+                        format!(
+                            "Power level: +{}",
+                            area_specs.read().power_level + area_specs.read().item_level_modifier,
+                        )
+                    }}
+                </div>
+
+                <div class="text-xs xl:text-sm text-gray-400">
                     {if area.max_level_reached > 0 {
                         format!("Level Reached: {}", area.max_level_reached)
                     } else {
                         "New Grind!".to_string()
                     }}
-                </div>
-
-                <div class="text-xs xl:text-sm text-gray-400">
-                    {
-                        let modifier = area_specs.read().power_level
-                            + area_specs.read().item_level_modifier;
-                        {
-                            (area_specs.read().item_level_modifier > 0)
-                                .then(|| format!("Power level: +{}", modifier))
-                        }
-                    }
                 </div>
             </div>
 
