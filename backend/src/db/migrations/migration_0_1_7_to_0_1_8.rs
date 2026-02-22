@@ -20,9 +20,7 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
     Ok(())
 }
 
-async fn migrate_leaderboard<'c>(
-    executor: &mut Transaction<'static, Database>,
-) -> anyhow::Result<()> {
+async fn migrate_leaderboard(executor: &mut Transaction<'static, Database>) -> anyhow::Result<()> {
     sqlx::query!(
         "UPDATE game_stats
         SET
