@@ -82,8 +82,9 @@ pub fn TownInventoryPanel(
         })
     };
 
-    let on_sell = move |item_indexes| {
+    let on_sell = move |item_indexes: Vec<u8>| {
         let character_id = town_context.character.read_untracked().character_id;
+
         spawn_local({
             async move {
                 match backend
@@ -91,12 +92,27 @@ pub fn TownInventoryPanel(
                         &auth_context.token(),
                         &InventoryDeleteRequest {
                             character_id,
-                            item_indexes,
+                            item_indexes: item_indexes.clone(),
                         },
                     )
                     .await
                 {
-                    Ok(response) => town_context.inventory.set(response.inventory),
+                    Ok(response) => {
+                        town_context
+                            .selected_item_index
+                            .update(|selected_item_index| {
+                                if let Some(selected_item_index) = selected_item_index {
+                                    *selected_item_index = selected_item_index.saturating_sub(
+                                        item_indexes
+                                            .into_iter()
+                                            .filter(|index| *index < *selected_item_index)
+                                            .count() as u8,
+                                    );
+                                }
+                            });
+
+                        town_context.inventory.set(response.inventory);
+                    }
                     Err(e) => show_toast(
                         toaster,
                         format!("Failed to discard items: {e}"),
