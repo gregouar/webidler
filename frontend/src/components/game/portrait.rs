@@ -378,7 +378,7 @@ fn StatusIcon(
                     .as_ref()
                     .and_then(|status_specs| {
                         if let StatusSpecs::Trigger(trigger_specs) = status_specs {
-                            Some(trigger_specs.icon.clone())
+                            trigger_specs.icon.clone()
                         } else {
                             None
                         }
@@ -441,11 +441,12 @@ pub fn status_description(
         }),
         StatusId::Trigger(_) => {
             if let Some(StatusSpecs::Trigger(trigger_specs)) = status_specs {
-                if trigger_specs.description.is_empty() {
-                    trigger_tooltip::trigger_text(*trigger_specs.clone())
-                } else {
-                    trigger_specs.description.clone()
-                }
+                trigger_specs.name.clone().unwrap_or(
+                    trigger_specs
+                        .description
+                        .clone()
+                        .unwrap_or(trigger_tooltip::trigger_text(*trigger_specs.clone())),
+                )
             } else {
                 "Special Effect".into()
             }

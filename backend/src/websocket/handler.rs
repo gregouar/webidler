@@ -2,9 +2,9 @@ use anyhow::Result;
 
 use axum::{
     extract::{
+        State,
         connect_info::ConnectInfo,
         ws::{WebSocket, WebSocketUpgrade},
-        State,
     },
     response::IntoResponse,
 };
@@ -27,9 +27,9 @@ use crate::{
     auth,
     db::{self},
     game::{
+        GameInstance,
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
-        GameInstance,
     },
     rest::AppError,
     websocket::WebSocketConnection,

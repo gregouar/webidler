@@ -62,9 +62,11 @@ pub struct KillTrigger {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
     #[serde(default)]
-    pub description: String,
+    pub name: Option<String>,
     #[serde(default)]
-    pub icon: String,
+    pub icon: Option<String>,
+    #[serde(default)]
+    pub description: Option<String>,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,
 }

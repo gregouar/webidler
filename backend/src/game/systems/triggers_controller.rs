@@ -1,6 +1,6 @@
 use shared::data::{
     character::CharacterId,
-    stat_effect::{compare_options, StatEffect},
+    stat_effect::{StatEffect, compare_options},
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
 };
 

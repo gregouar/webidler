@@ -15,7 +15,7 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
@@ -36,11 +36,10 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         <EffectLi class:mt-2>
             {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}{shape_infos}":"
         </EffectLi>
-        {if trigger.description.is_empty() {
-            view! { {effects} }.into_any()
-        } else {
-            view! { <EffectLi>{trigger.description}</EffectLi> }.into_any()
-        }}
+        {trigger
+            .description
+            .map(|description| view! { <EffectLi>{description}</EffectLi> }.into_any())
+            .unwrap_or(view! { {effects} }.into_any())}
     }
 }
 
@@ -245,7 +244,7 @@ pub fn trigger_text(trigger: TriggerSpecs) -> String {
     format!(
         "{} {} {}",
         format_trigger_event(&trigger.triggered_effect.trigger),
-        trigger.description,
+        trigger.description.unwrap_or_default(),
         trigger
             .triggered_effect
             .effects

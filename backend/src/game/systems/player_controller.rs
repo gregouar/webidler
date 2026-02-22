@@ -3,7 +3,7 @@ use anyhow::Result;
 use shared::{
     computations,
     constants::{
-         MONSTER_REWARD_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR
+        MONSTER_REWARD_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR,
     },
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
@@ -155,7 +155,8 @@ pub fn reward_player(
     let gold_reward = (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
-        ((area_state.area_level + area_specs.item_level_modifier + area_specs.power_level) as f64 / 5.0
+        ((area_state.area_level + area_specs.item_level_modifier + area_specs.power_level) as f64
+            / 5.0
             * *area_specs.gems_find
             * 0.01)
             .floor()

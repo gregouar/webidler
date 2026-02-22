@@ -498,6 +498,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "curse_frailty",
+                      "name": "Curse of Frailty",
                       "icon": "skills/curse_frailty.svg",
                       "OnTakeHit": {
                         "is_crit": true,
@@ -586,6 +587,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "curse_conductivity",
+                      "name": "Curse of Conductivity",
                       "icon": "skills/curse_conductivity.svg",
                       "OnTakeHit": {
                         "damage_type": "Storm",
@@ -634,6 +636,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "curse_conductivity",
+                      "name": "Curse of Conductivity",
                       "icon": "skills/curse_conductivity.svg",
                       "OnTakeHit": {
                         "is_crit": true,
@@ -730,6 +733,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "curse_putridity",
+                      "name": "Curse of Putridity",
                       "icon": "skills/curse_putridity.svg",
                       "OnTakeHit": {
                         "is_triggered": false
@@ -827,6 +831,7 @@
                   "status_type": {
                     "Trigger": {
                       "trigger_id": "curse_flammability",
+                      "name": "Curse of Flammability",
                       "icon": "skills/curse_flammability.svg",
                       "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each Stack of Burn present on the target.",
                       "OnTakeHit": {
