@@ -3368,7 +3368,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "crushing_blow",
             "OnHit": {
@@ -5288,7 +5288,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "healing_aura",
             "OnWaveCompleted": null,
@@ -5974,7 +5974,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "pyromaniac",
             "OnApplyStatus": {
@@ -8208,7 +8208,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "sickening_concoction",
             "OnApplyStatus": {
@@ -8899,7 +8899,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "blazing_inferno",
             "OnHit": {
@@ -9839,7 +9839,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "bonfire",
             "OnHit": {
@@ -11783,7 +11783,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "",
+            "description": null,
             "icon": "",
             "trigger_id": "stunning_blow",
             "OnHit": {
