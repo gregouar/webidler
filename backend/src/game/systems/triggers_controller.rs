@@ -1,6 +1,6 @@
 use shared::data::{
     character::CharacterId,
-    stat_effect::{StatEffect, compare_options},
+    stat_effect::{compare_options, StatEffect},
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
 };
 
@@ -80,6 +80,7 @@ pub fn apply_trigger_effects(
                     }
                 };
 
+            // TODO: Move back to update player/monsters
             let mut source_effects: Vec<_> = if trigger_context.trigger.inherit_modifiers {
                 Vec::new()
             } else {

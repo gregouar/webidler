@@ -63,6 +63,8 @@ pub struct KillTrigger {
 pub struct TriggerSpecs {
     #[serde(default)]
     pub description: String,
+    #[serde(default)]
+    pub icon: String,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,
 }

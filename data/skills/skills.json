@@ -497,7 +497,8 @@
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "skills/curse_frailty.svg",
+                      "trigger_id": "curse_frailty",
+                      "icon": "skills/curse_frailty.svg",
                       "OnTakeHit": {
                         "is_crit": true,
                         "is_triggered": false
@@ -584,8 +585,10 @@
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "skills/curse_conductivity.svg",
+                      "trigger_id": "curse_conductivity",
+                      "icon": "skills/curse_conductivity.svg",
                       "OnTakeHit": {
+                        "damage_type": "Storm",
                         "is_triggered": false
                       },
                       "target": "SameTarget",
@@ -630,9 +633,11 @@
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "skills/curse_conductivity.svg",
+                      "trigger_id": "curse_conductivity",
+                      "icon": "skills/curse_conductivity.svg",
                       "OnTakeHit": {
                         "is_crit": true,
+                        "damage_type": "Storm",
                         "is_triggered": false
                       },
                       "target": "SameTarget",
@@ -724,7 +729,8 @@
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "skills/curse_putridity.svg",
+                      "trigger_id": "curse_putridity",
+                      "icon": "skills/curse_putridity.svg",
                       "OnTakeHit": {
                         "is_triggered": false
                       },
@@ -820,7 +826,8 @@
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "skills/curse_flammability.svg",
+                      "trigger_id": "curse_flammability",
+                      "icon": "skills/curse_flammability.svg",
                       "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each Stack of Burn present on the target.",
                       "OnTakeHit": {
                         "is_triggered": false
@@ -1109,7 +1116,8 @@
     ],
     "triggers": [
       {
-        "trigger_id": "skills/poison_coating.svg",
+        "trigger_id": "poison_coating",
+        "icon": "skills/poison_coating.svg",
         "OnHit": {
           "skill_type": "Attack",
           "is_hurt": true
@@ -1340,7 +1348,8 @@
                   "replace_on_value_only": true,
                   "status_type": {
                     "Trigger": {
-                      "trigger_id": "skills/sharpen_weapon.svg",
+                      "trigger_id": "sharpen_weapon",
+                      "icon": "skills/sharpen_weapon.svg",
                       "target": "SameTarget",
                       "skill_type": "Attack",
                       "OnHit": {

@@ -703,14 +703,16 @@ pub fn skill_effect_text(
                     StatusSpecs::StatModifier {
                         stat,
                         modifier,
-                        debuff: _,
+                        debuff,
                     } => {
                         format!(
                             "Status {}",
                             effects_tooltip::format_stat(&StatEffect {
                                 stat,
                                 modifier,
-                                value: 1.0,
+                                value: (if debuff { -1.0 } else { 1.0 })
+                                    * ((status.value.min.get() + status.value.max.get()) / 2.0)
+                                        .min(1.0),
                                 bypass_ignore: false
                             })
                         )
