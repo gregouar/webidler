@@ -23,7 +23,7 @@ use crate::{
         accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
-        shared::{player_count::PlayerCount, settings::SettingsModal},
+        shared::{leaderboard::LeaderboardPanel, player_count::PlayerCount, settings::SettingsModal},
         ui::{
             buttons::{MenuButton, MenuButtonRed},
             card::{Card, CardInset, CardTitle},
@@ -100,6 +100,7 @@ pub fn UserDashboardPage() -> impl IntoView {
     });
 
     let open_settings = RwSignal::new(false);
+    let open_leaderboard = RwSignal::new(false);
     let open_character_panel = RwSignal::new(false);
 
     let selected_character_id = RwSignal::new(None);
@@ -111,6 +112,7 @@ pub fn UserDashboardPage() -> impl IntoView {
             <DiscordInviteBanner class:hidden class:xl:inline />
             <PlayerCount />
             <SettingsModal open=open_settings />
+            <LeaderboardPanel open=open_leaderboard />
 
             <Transition fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
@@ -159,9 +161,9 @@ pub fn UserDashboardPage() -> impl IntoView {
                                             </a>
                                         </div>
                                         <div class="flex gap-2">
-                                            <a href="leaderboard">
-                                                <MenuButton>"Leaderboard"</MenuButton>
-                                            </a>
+                                            <MenuButton on:click=move |_| {
+                                                open_leaderboard.set(true)
+                                            }>"Leaderboard"</MenuButton>
                                             <a
                                                 href="https://webidler.gitbook.io/wiki/"
                                                 target="_blank"
@@ -642,6 +644,7 @@ fn DiscordInviteBanner() -> impl IntoView {
         bg-slate-800/90 backdrop-blur
         border-b border-slate-700
         flex items-center justify-between
+        gap-4
         text-sm
         ">
             <span class="text-slate-300">
@@ -662,7 +665,6 @@ fn DiscordInviteBanner() -> impl IntoView {
                         .into_any()
                 }
                 None => {
-
                     view! {
                         <button
                             on:click=fetch_invite

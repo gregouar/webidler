@@ -2,7 +2,7 @@ use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
-use rand::{Rng, distr::Alphanumeric};
+use rand::{distr::Alphanumeric, Rng};
 
 use shared::{
     http::client::{ForgotPasswordRequest, SignInRequest, SignUpRequest},
@@ -13,7 +13,7 @@ use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
     captcha::*,
-    shared::player_count::PlayerCount,
+    shared::{leaderboard::LeaderboardPanel, player_count::PlayerCount},
     ui::{
         buttons::MenuButton,
         input::{Input, ValidatedInput},
@@ -113,13 +113,6 @@ fn MainMenu() -> impl IntoView {
         _ => show_guest_modal.set(true),
     };
 
-    let navigate_to_leaderboard = {
-        let navigate = use_navigate();
-        move |_| {
-            navigate("leaderboard", Default::default());
-        }
-    };
-
     let navigate_to_signup = {
         let navigate = use_navigate();
         move |_| {
@@ -129,10 +122,12 @@ fn MainMenu() -> impl IntoView {
     let password_ref = NodeRef::<leptos::html::Input>::new();
 
     let show_forgot_password_modal = RwSignal::new(false);
+    let open_leaderboard = RwSignal::new(false);
 
     view! {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <PlayerCount />
+            <LeaderboardPanel open=open_leaderboard />
             <div>
                 <Logo />
                 <div class="flex flex-col space-y-2">
@@ -188,7 +183,9 @@ fn MainMenu() -> impl IntoView {
                         "Play as Guest"
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
-                    <MenuButton on:click=navigate_to_leaderboard>"Leaderboard"</MenuButton>
+                    <MenuButton on:click=move |_| {
+                        open_leaderboard.set(true)
+                    }>"Leaderboard"</MenuButton>
 
                     <ForgotPasswordModal open=show_forgot_password_modal />
                     <GuestModal open=show_guest_modal captcha_token />
