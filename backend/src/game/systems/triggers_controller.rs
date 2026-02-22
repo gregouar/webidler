@@ -1,6 +1,6 @@
 use shared::data::{
     character::CharacterId,
-    stat_effect::{StatEffect, compare_options},
+    stat_effect::{compare_options, StatEffect},
     trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
 };
 
@@ -174,6 +174,7 @@ pub fn apply_trigger_effects(
                                     .unwrap_or_default(),
                                 TriggerEffectModifierSource::AreaLevel => {
                                     trigger_context.level as f64
+                                        + game_data.area_specs.power_level as f64
                                 }
                                 TriggerEffectModifierSource::StatusValue {
                                     status_type,
