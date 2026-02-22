@@ -28,8 +28,8 @@ use crate::components::{
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
-        TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        TownContext,
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
@@ -1379,6 +1379,8 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
             Modifier::Flat,
         ),
         (StatType::SkillLevel(None), Modifier::Flat),
+        (StatType::ItemRarity, Modifier::Increased),
+        (StatType::GemsFind, Modifier::Increased),
     ];
 
     let options = available_stats
