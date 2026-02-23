@@ -356,9 +356,16 @@ pub fn Connection(
     view! {
         {move || {
             if let (Some(from), Some(to)) = (from_node(), to_node()) {
-                let from_status = move || node_meta_status(node_levels.get().0, from.locked);
-                let to_status = move || node_meta_status(node_levels.get().1, to.locked);
-                let purchase_status = move || match amount_connections.get() {
+                let from_status = move || node_meta_status(
+                    node_levels.try_get().unwrap_or_default().0,
+                    from.locked,
+                );
+                let to_status = move || node_meta_status(
+                    node_levels.try_get().unwrap_or_default().1,
+                    to.locked,
+                );
+                let purchase_status = move || match amount_connections.try_get().unwrap_or_default()
+                {
                     2 => PurchaseStatus::Purchased,
                     1 => PurchaseStatus::Purchaseable,
                     _ => PurchaseStatus::Inactive,
@@ -371,8 +378,16 @@ pub fn Connection(
                 };
                 let from_color = move || { color(from_status()) };
                 let to_color = move || { color(to_status()) };
-                let dasharray = move || if amount_connections.get() == 2 { "none" } else { "4 3" };
-                let width = move || if amount_connections.get() == 2 { "3" } else { "2" };
+                let dasharray = move || {
+                    if amount_connections.try_get().unwrap_or_default() == 2 {
+                        "none"
+                    } else {
+                        "4 3"
+                    }
+                };
+                let width = move || {
+                    if amount_connections.try_get().unwrap_or_default() == 2 { "3" } else { "2" }
+                };
                 let gradient_id = format!("{}-{}", connection.from, connection.to);
                 Some(
                     // from.max_upgrade_level,

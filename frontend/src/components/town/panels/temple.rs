@@ -202,10 +202,13 @@ fn BenedictionRow(
         let benediction_id = benediction_id.clone();
         move |_| {
             player_benedictions
-                .read()
-                .purchased_benedictions
-                .get(&benediction_id)
-                .map(|benediction_state| benediction_state.upgrade_level)
+                .try_with(|player_benedictions| {
+                    player_benedictions
+                        .purchased_benedictions
+                        .get(&benediction_id)
+                        .map(|benediction_state| benediction_state.upgrade_level)
+                        .unwrap_or_default()
+                })
                 .unwrap_or_default()
         }
     });

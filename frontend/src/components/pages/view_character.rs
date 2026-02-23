@@ -112,7 +112,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
             <DynamicTooltip />
             <PlayerCount />
 
-            <Transition fallback=move || {
+            <Suspense fallback=move || {
                 view! { <p class="text-gray-400">"Loading..."</p> }
             }>
                 {move || Suspend::new(async move {
@@ -130,7 +130,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         </div>
                     }
                 })}
-            </Transition>
+            </Suspense>
 
         </main>
     }
