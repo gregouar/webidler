@@ -13,7 +13,7 @@ pub fn MenuPanel(
     let panel_ref = NodeRef::<Div>::new();
 
     Effect::new(move |_| {
-        if open.get()
+        if open.try_get().unwrap_or_default()
             && let Some(el) = panel_ref.get_untracked()
         {
             _ = el.focus();
@@ -28,11 +28,11 @@ pub fn MenuPanel(
 
     let (is_visible, set_is_visible) = signal(false);
     Effect::new(move |_| {
-        if open.get() {
+        if open.try_get().unwrap_or_default() {
             set_is_visible.set(true);
         } else {
             set_timeout(
-                move || set_is_visible.set(open.get_untracked()),
+                move || set_is_visible.set(open.try_get_untracked().unwrap_or_default()),
                 Duration::from_millis(300),
             );
         }
@@ -64,7 +64,7 @@ pub fn MenuPanel(
         <div
             class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center will-change-opacity"
             style=move || {
-                if open.get() {
+                if open.try_get().unwrap_or_default() {
                     "animation: fadeIn 0.3s ease-out forwards;"
                 } else {
                     "animation: fadeOut 0.3s ease-out forwards;"
@@ -83,7 +83,7 @@ pub fn MenuPanel(
                 class:h-full=h_full
                 class:my-auto=center
                 style=move || {
-                    if open.get() {
+                    if open.try_get().unwrap_or_default() {
                         "animation: dropDown 0.3s ease-out forwards;"
                     } else {
                         "animation: pullUp 0.3s ease-out forwards;"
