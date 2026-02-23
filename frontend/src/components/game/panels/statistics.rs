@@ -271,7 +271,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Blocked Damage Taken"
+                                            label="Blocked Damage Taken (max 80%)"
                                             value=move || format!("{:.0}%", block_damage)
                                         />
                                     }
@@ -361,6 +361,36 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         // }
                         // })
                         // }}
+                        {move || {
+                            DamageType::iter()
+                                .filter_map(|damage_type| {
+                                    let value = game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .evade
+                                        .get(&damage_type)
+                                        .copied()
+                                        .unwrap_or_default()
+                                        .value
+                                        .get() as f64;
+                                    (value != 0.0)
+                                        .then(|| {
+                                            view! {
+                                                <Stat
+                                                    label=format!(
+                                                        "{} Evade Chance",
+                                                        effects_tooltip::damage_over_time_type_str(
+                                                            Some(damage_type),
+                                                        ),
+                                                    )
+                                                    value=move || format_effect_value(value)
+                                                />
+                                            }
+                                        })
+                                })
+                                .collect::<Vec<_>>()
+                        }}
                         {move || {
                             DamageType::iter()
                                 .filter_map(|damage_type| {

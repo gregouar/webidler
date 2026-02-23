@@ -1,0 +1,62 @@
+{
+  "specs": {
+    "name": "Spirit Garden",
+    "description": "An abandoned garden where spirits linger among lantern light and falling petals. Not all who wander here wear their true face.",
+    "power_level": 70,
+    "required_level": 300,
+    "item_level_modifier": 110,
+    "header_background": "areas/yokai_header.webp",
+    "footer_background": "areas/yokai_footer.webp",
+    "coming_soon": true
+  },
+  "loot_tables": [
+    "tier_1.json",
+    "tier_2.json",
+    "tier_3.json",
+    "tier_4.json",
+    "tier_5.json",
+    "tier_6.json",
+    "tier_7.json"
+  ],
+  "bosses": [
+    {
+      "level": 50,
+      "interval": 50,
+      "spawns": [
+        {
+          "monster": "treasure_idol.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "waves": [
+    {
+      "min_level": 1,
+      "max_level": null,
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": [1, 2]
+        },
+        {
+          "monster": "pirate_lookout.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_pistol.json",
+          "quantity": 1
+        },
+        {
+          "monster": "pirate_deckhand.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}

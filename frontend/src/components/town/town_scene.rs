@@ -18,7 +18,7 @@ use crate::{
         shared::{
             inventory::InventoryEquipFilter,
             item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
         },
         town::TownContext,
         ui::{
@@ -82,7 +82,10 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                                 .areas_specs
                                                 .read()
                                                 .get(&area.area_id)
-                                                .map(|area_specs| area_specs.required_level)
+                                                .map(|area_specs| (
+                                                    area_specs.coming_soon,
+                                                    area_specs.required_level,
+                                                ))
                                                 .unwrap_or_default()
                                         });
                                     areas

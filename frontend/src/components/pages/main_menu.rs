@@ -1,8 +1,11 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
-use leptos_router::{components::Redirect, hooks::use_navigate};
+use leptos_router::{
+    components::{Redirect, A},
+    hooks::use_navigate,
+};
 use leptos_use::storage;
-use rand::{Rng, distr::Alphanumeric};
+use rand::{distr::Alphanumeric, Rng};
 
 use shared::{
     http::client::{ForgotPasswordRequest, SignInRequest, SignUpRequest},
@@ -167,7 +170,7 @@ fn MainMenu() -> impl IntoView {
                     </div>
                     <div class="text-right -mt-4 mb-2">
                         <button
-                            class="text-amber-300 text-sm underline hover:text-amber-200"
+                            class="btn text-amber-300 text-sm underline hover:text-amber-200"
                             on:click=move |_| show_forgot_password_modal.set(true)
                         >
                             "I forgot my password"
@@ -208,13 +211,9 @@ fn MainMenu() -> impl IntoView {
                     </p>
                 </div>
 
-                <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700">
-                    <a href="terms" class="text-amber-300 underline hover:text-amber-200">
-                        "Terms & Conditions"
-                    </a>
-                    <a href="privacy" class="text-amber-300 underline hover:text-amber-200">
-                        "Privacy Notice"
-                    </a>
+                <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700 text-amber-300 underline hover:text-amber-200">
+                    <A href="/terms">"Terms & Conditions"</A>
+                    <A href="/privacy">"Privacy Notice"</A>
                 </div>
             </div>
 
@@ -516,23 +515,17 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                                 />
                                 <label for="terms" class="text-sm text-gray-400">
                                     "I agree to the "
-                                    <a
-                                        href="terms"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="text-amber-300 underline hover:text-amber-200"
-                                    >
-                                        "Terms & Conditions"
-                                    </a>
+                                    <span class="text-amber-300 underline hover:text-amber-200">
+                                        <A href="/terms" target="_blank">
+                                            "Terms & Conditions"
+                                        </A>
+                                    </span>
                                     " and I have read the "
-                                    <a
-                                        href="privacy"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="text-amber-300 underline hover:text-amber-200"
-                                    >
-                                        "Privacy Notice"
-                                    </a>
+                                    <span class="text-amber-300 underline hover:text-amber-200">
+                                        <A href="/privacy" target="_blank">
+                                            "Privacy Notice"
+                                        </A>
+                                    </span>
                                     "."
                                 </label>
                             </div>

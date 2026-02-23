@@ -1,4 +1,6 @@
 use leptos::{html::*, prelude::*};
+use leptos_router::components::A;
+
 #[component]
 pub fn PrivacyPage() -> impl IntoView {
     view! {
@@ -11,10 +13,8 @@ pub fn PrivacyPage() -> impl IntoView {
                 <PrivacyContent />
             </div>
 
-            <div class="p-4 border-t border-zinc-700 flex-shrink-0">
-                <a href="" class="text-amber-400">
-                    "Back to Home"
-                </a>
+            <div class="p-4 border-t border-zinc-700 flex-shrink-0 text-amber-300 underline hover:text-amber-200">
+                <A href="/">"Back to Home"</A>
             </div>
         </main>
     }

@@ -1,4 +1,5 @@
 use leptos::{html::*, prelude::*};
+use leptos_router::components::A;
 
 #[component]
 pub fn TermsPage() -> impl IntoView {
@@ -12,10 +13,8 @@ pub fn TermsPage() -> impl IntoView {
                 <TermsContent />
             </div>
 
-            <div class="p-4 border-t border-zinc-700 flex-shrink-0">
-                <a href="" class="text-amber-400">
-                    "Back to Home"
-                </a>
+            <div class="p-4 border-t border-zinc-700 flex-shrink-0 text-amber-300 underline hover:text-amber-200">
+                <A href="/">"Back to Home"</A>
             </div>
         </main>
     }
@@ -82,9 +81,9 @@ pub fn TermsContent() -> impl IntoView {
             <ul>
                 <li>
                     "Personal data is processed in accordance with our "
-                    <a href="privacy" class="text-amber-400 underline">
-                        "Privacy Notice"
-                    </a>"."
+                    <span class="text-amber-300 underline hover:text-amber-200">
+                        <A href="/privacy">"Privacy Notice"</A>
+                    </span>"."
                 </li>
                 <li>"No personal data is required to use the service."</li>
                 <li>"An email address may optionally be provided for account recovery."</li>

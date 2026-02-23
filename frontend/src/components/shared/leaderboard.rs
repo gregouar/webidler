@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use leptos::{html::*, prelude::*};
+use leptos_router::components::A;
 
 use crate::components::{
     backend_client::BackendClient,
@@ -96,10 +97,10 @@ fn LeaderboardContent() -> impl IntoView {
                                                                         #{i + 1}
                                                                     </div>
                                                                     <div class="text-white font-semibold text-lg">
-                                                                        <a href=format!(
-                                                                            "view-character/{}",
+                                                                        <A href=format!(
+                                                                            "/view-character/{}",
                                                                             &entry.character_name,
-                                                                        )>{entry.character_name.clone()}</a>
+                                                                        )>{entry.character_name.clone()}</A>
                                                                     </div>
                                                                 </div>
                                                                 <div class="text-sm text-gray-400">{entry.username}</div>
