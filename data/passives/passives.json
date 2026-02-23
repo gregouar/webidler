@@ -10093,7 +10093,7 @@
               "range": null,
               "is_crit": null,
               "is_blocked": null,
-              "is_hurt": null,
+              "is_hurt": true,
               "is_triggered": false,
               "damage_type": null
             },

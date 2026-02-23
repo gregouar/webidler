@@ -4,6 +4,7 @@ rustflags = ["-C", "opt-level=0"]
 # Clean cargo output which can help with rebuilds
 clean-dist = true
 release = false
+# public_url = "./"
 
 [watch]
 cooldown_ms = 500

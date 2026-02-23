@@ -96,7 +96,9 @@ fn AutoButton() -> impl IntoView {
         view! {
             <div class="flex flex-col space-y-1 text-sm max-w-xs">
                 <span class="text-white">"Assign points following previously saved build."</span>
-                <span class="text-xs italic text-gray-400">"Hold CTRL: +10"</span>
+                <span class="text-xs italic text-gray-400">
+                    "Hold CTRL: +"{10.min(game_context.player_resources.read().passive_points)}
+                </span>
             </div>
         }
     };
@@ -106,7 +108,7 @@ fn AutoButton() -> impl IntoView {
         let events_context: EventsContext = expect_context();
         move |_| {
             let mut amount = if events_context.key_pressed(Key::Ctrl) {
-                10
+                10.min(game_context.player_resources.read().passive_points)
             } else {
                 1
             };

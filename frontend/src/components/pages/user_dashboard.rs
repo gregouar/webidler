@@ -710,7 +710,7 @@ fn NewsPanel() -> impl IntoView {
     });
 
     view! {
-        <Card class="text-left max-w-3xl">
+        <Card class="text-left min-w-0 max-w-3xl">
             <div class="px-4">
                 <CardTitle>"News"</CardTitle>
             </div>

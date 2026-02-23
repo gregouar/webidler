@@ -1,12 +1,12 @@
 use std::net::SocketAddr;
 
 use axum::{
-    Router,
     routing::{any, get},
+    Router,
 };
 use http::{
-    HeaderValue, Method,
     header::{AUTHORIZATION, CONTENT_TYPE},
+    HeaderValue, Method,
 };
 use tokio::signal;
 use tower_http::{
@@ -71,11 +71,14 @@ async fn main() {
     let tracer_layer =
         TraceLayer::new_for_http().make_span_with(DefaultMakeSpan::default().include_headers(true));
 
+    let cors_origins = std::env::var("CORS_ORIGINS")
+        .expect("missing 'CORS_ORIGINS'")
+        .split(',')
+        .map(|s| s.trim().parse::<HeaderValue>().unwrap())
+        .collect::<Vec<_>>();
+
     let cors_layer = CorsLayer::new()
-        .allow_origin([std::env::var("CORS_FRONTEND_URL")
-            .expect("missing 'CORS_FRONTEND_URL' setting")
-            .parse::<HeaderValue>()
-            .unwrap()])
+        .allow_origin(cors_origins)
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
@@ -132,6 +135,7 @@ async fn main() {
 async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
     db::migrations::migration_0_1_6_to_0_1_7::migrate(db_pool, master_store).await?;
     db::migrations::migration_0_1_7_to_0_1_8::migrate(db_pool).await?;
+    db::migrations::migration_0_1_8_to_0_1_9::migrate(db_pool, master_store).await?;
     Ok(())
 }
 

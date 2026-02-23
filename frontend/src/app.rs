@@ -5,7 +5,6 @@ use leptos_router::{
     path,
 };
 use leptos_toaster::*;
-use url::Url;
 
 use crate::components::{
     accessibility::provide_accessibility_context,
@@ -15,7 +14,7 @@ use crate::components::{
     events::provide_events_context,
     pages,
     settings::provide_settings_context,
-    ui::confirm::{ConfirmationModal, provide_confirm_context},
+    ui::confirm::{provide_confirm_context, ConfirmationModal},
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates
@@ -24,13 +23,7 @@ use crate::components::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
-    let base_uri = document()
-        .base_uri()
-        .ok()
-        .flatten()
-        .and_then(|base| Url::parse(&base).ok())
-        .map(|url| url.path().to_string())
-        .unwrap_or_else(|| "/".to_string());
+    let base_uri = compute_base();
 
     provide_context(BackendClient::new(
         option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),
@@ -65,4 +58,15 @@ pub fn App() -> impl IntoView {
             </Routes>
         </Router>
     }
+}
+
+fn compute_base() -> String {
+    let location = window().location();
+    let path = location.pathname().unwrap_or_else(|_| "/".into());
+
+    // if !path.ends_with('/') {
+    //     path.push('/');
+    // }
+
+    path
 }
