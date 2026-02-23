@@ -81,20 +81,20 @@ pub fn apply_trigger_effects(
                 };
 
             // TODO: Move back to update player/monsters
-            let mut source_effects: Vec<_> = if trigger_context.trigger.inherit_modifiers {
-                Vec::new()
-            } else {
-                match trigger_context.trigger.owner.unwrap_or(CharacterId::Player) {
-                    CharacterId::Player => {
-                        (&game_data.player_specs.read().character_specs.effects).into()
-                    }
-                    CharacterId::Monster(index) => game_data
-                        .monster_specs
-                        .get(index)
-                        .map(|monster_specs| (&monster_specs.character_specs.effects).into())
-                        .unwrap_or_default(),
-                }
-            };
+            // let mut source_effects: Vec<_> = if trigger_context.trigger.inherit_modifiers {
+            //     Vec::new()
+            // } else {
+            //     match trigger_context.trigger.owner.unwrap_or(CharacterId::Player) {
+            //         CharacterId::Player => {
+            //             (&game_data.player_specs.read().character_specs.effects).into()
+            //         }
+            //         CharacterId::Monster(index) => game_data
+            //             .monster_specs
+            //             .get(index)
+            //             .map(|monster_specs| (&monster_specs.character_specs.effects).into())
+            //             .unwrap_or_default(),
+            //     }
+            // };
 
             let mut player_target = (
                 CharacterId::Player,
@@ -143,7 +143,7 @@ pub fn apply_trigger_effects(
                 }
             };
 
-            source_effects.extend(
+            let source_effects: Vec<_> = 
                 // let mut effects_modifiers: Vec<_> =
                 trigger_context
                     .trigger
@@ -227,8 +227,8 @@ pub fn apply_trigger_effects(
                                     .count() as f64,
                             },
                         bypass_ignore: true,
-                    }),
-            );
+                    }).collect()
+            ;
             // .collect();
 
             // stats_updater::sort_stat_effects(&mut effects_modifiers);

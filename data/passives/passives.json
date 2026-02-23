@@ -10119,7 +10119,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 50.0,
+                  "value": 20.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -10157,7 +10157,21 @@
                                 },
                                 "crit_damage": 0.0
                               },
-                              "ignore_stat_effects": [],
+                              "ignore_stat_effects": [
+                                {
+                                  "CritChance": null
+                                },
+                                {
+                                  "CritDamage": null
+                                },
+                                {
+                                  "Damage": {
+                                    "skill_type": null,
+                                    "damage_type": null,
+                                    "min_max": null
+                                  }
+                                }
+                              ],
                               "conditional_modifiers": []
                             }
                           ],
@@ -10181,22 +10195,6 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
-                    }
-                  }
-                ],
                 "conditional_modifiers": []
               }
             ],

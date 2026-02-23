@@ -149,6 +149,10 @@ pub fn update_player_specs(
         .value
         .apply_modifier(total_block as f64, Modifier::Flat);
 
+    let mut effects: Vec<_> = (&effects_map).into();
+
+    compute_player_specs(player_specs, player_inventory, &mut effects);
+
     player_specs.character_specs.triggers = passives_tree_state
         .purchased_nodes
         .iter()
@@ -179,22 +183,33 @@ pub fn update_player_specs(
         )
         .collect();
 
-    compute_player_specs(player_specs, player_inventory, effects_map);
+    for trigger_specs in player_specs.character_specs.triggers.iter_mut() {
+        for trigger_effect in trigger_specs.effects.iter_mut() {
+            skills_updater::compute_skill_specs_effect(
+                trigger_specs.skill_type,
+                trigger_effect,
+                effects.iter(),
+            );
+        }
+    }
+
+    player_specs.character_specs.effects = effects.into();
 }
 
 fn compute_player_specs(
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
-    effects_map: EffectsMap,
+    effects: &mut Vec<StatEffect>,
+    // effects_map: EffectsMap,
 ) {
-    let mut effects: Vec<_> = (&effects_map).into();
+    // let mut effects: Vec<_> = (&effects_map).into();
 
     let (character_specs, converted_effects) =
-        characters_updater::update_character_specs(&player_specs.character_specs, &effects);
+        characters_updater::update_character_specs(&player_specs.character_specs, effects);
     player_specs.character_specs = character_specs;
-    player_specs.character_specs.effects = EffectsMap::combine_all(
-        iter::once(effects_map).chain(iter::once(converted_effects.clone().into())),
-    );
+    // player_specs.character_specs.effects = EffectsMap::combine_all(
+    //     iter::once(effects_map).chain(iter::once(converted_effects.clone().into())),
+    // );
     effects.extend(converted_effects);
 
     let ModifiablePlayerSpecs {
@@ -209,7 +224,7 @@ fn compute_player_specs(
             threat_gain: player_specs.threat_gain.into(),
             restore_on_hit: Default::default(),
         },
-        &effects,
+        effects,
     );
 
     player_specs.movement_cooldown = *movement_cooldown;
@@ -255,7 +270,7 @@ fn compute_player_specs(
     for skill_specs in player_specs.skills_specs.iter_mut() {
         skills_updater::update_skill_specs(
             skill_specs,
-            &effects,
+            effects,
             &player_specs.character_specs,
             Some(player_inventory),
         );

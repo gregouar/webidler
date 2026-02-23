@@ -62,11 +62,11 @@ pub fn App() -> impl IntoView {
 
 fn compute_base() -> String {
     let location = window().location();
-    let path = location.pathname().unwrap_or_else(|_| "/".into());
+    
 
     // if !path.ends_with('/') {
     //     path.push('/');
     // }
 
-    path
+    location.pathname().unwrap_or_else(|_| "/".into())
 }
