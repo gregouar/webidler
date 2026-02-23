@@ -1,4 +1,4 @@
-name: Frontend
+name: FrontendItchIO
 
 on:
   push:
@@ -51,6 +51,6 @@ jobs:
           ./trunk build --release --config "./Trunk-release.toml" --public-url "./"
 
       - name: Upload to itch.io
-        run: butler push dist gregouar/grind-to-rust:html5
+        run: ./butler push ./frontend/dist gregouar/grind-to-rust:web
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
