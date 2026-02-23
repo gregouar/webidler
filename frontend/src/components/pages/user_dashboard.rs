@@ -475,14 +475,14 @@ pub fn CreateCharacterPanel(
             processing.set(true);
             spawn_local({
                 async move {
-                    match selected_character_id.get() {
+                    match selected_character_id.get_untracked() {
                         Some(character_id) => match backend
                             .post_update_character(
                                 &auth_context.token(),
                                 &character_id,
                                 &UpdateCharacterRequest {
-                                    name: selected_character_name.get().unwrap(),
-                                    portrait: selected_character_portrait.get().unwrap(),
+                                    name: selected_character_name.get_untracked().unwrap(),
+                                    portrait: selected_character_portrait.get_untracked().unwrap(),
                                 },
                             )
                             .await
@@ -506,8 +506,8 @@ pub fn CreateCharacterPanel(
                                 &auth_context.token(),
                                 &user_id,
                                 &CreateCharacterRequest {
-                                    name: selected_character_name.get().unwrap(),
-                                    portrait: selected_character_portrait.get().unwrap(),
+                                    name: selected_character_name.get_untracked().unwrap(),
+                                    portrait: selected_character_portrait.get_untracked().unwrap(),
                                 },
                             )
                             .await
