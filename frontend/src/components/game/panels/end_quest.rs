@@ -18,7 +18,11 @@ use crate::components::{
     },
     websocket::WebsocketContext,
 };
-use shared::{computations, constants, messages::client::TerminateQuestMessage};
+use shared::{
+    computations,
+    constants::{self, ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL},
+    messages::client::TerminateQuestMessage,
+};
 
 #[component]
 pub fn EndQuestPanel() -> impl IntoView {
@@ -176,11 +180,21 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
 
                 <span class="text-center text-sm xl:text-base text-gray-400 ">
                     {move || {
-                        format!(
-                            "({:0}/{:0})",
-                            item_rewards_picked.read().len(),
-                            game_context.area_specs.read_untracked().reward_picks,
-                        )
+                        (game_context
+                            .quest_rewards
+                            .with(|quest_rewards| {
+                                quest_rewards
+                                    .as_ref()
+                                    .map(|quest_rewards| !quest_rewards.item_rewards.is_empty())
+                                    .unwrap_or_default()
+                            }))
+                            .then(|| {
+                                format!(
+                                    "({:0}/{:0})",
+                                    item_rewards_picked.read().len(),
+                                    game_context.area_specs.read_untracked().reward_picks,
+                                )
+                            })
                     }}
                 </span>
             </div>
@@ -200,7 +214,11 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                     .then(|| {
                                         view! {
                                             <div class="flex-1 text-gray-400">
-                                                "Complete more Areas to get an Item Reward"
+                                                {format!(
+                                                    "Complete at least {} Areas to get an Item Reward, and at least {} to get a guaranteed Edict Item drop.",
+                                                    ITEM_REWARDS_MIN_LEVEL,
+                                                    ITEM_REWARDS_MAP_MIN_LEVEL,
+                                                )}
                                             </div>
                                         }
                                     })}
