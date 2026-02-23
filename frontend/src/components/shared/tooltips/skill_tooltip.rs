@@ -111,7 +111,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     .then(|| {
                         view! {
                             " | Mana Cost: "
-                            <span class="text-white">{skill_specs.mana_cost.get()}</span>
+                            <span class="text-white">{skill_specs.mana_cost.get().round()}</span>
                         }
                     })}
             </p>
