@@ -1,4 +1,4 @@
-use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{
     components::{Route, Router, Routes},
@@ -24,9 +24,7 @@ use crate::components::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
-    // let base_uri = compute_base();
-
-    let base_uri = document()
+    let mut base_uri = document()
         .base_uri()
         .ok()
         .flatten()
@@ -34,7 +32,9 @@ pub fn App() -> impl IntoView {
         .map(|url| url.path().to_string())
         .unwrap_or_else(|| "/".to_string());
 
-    console_log(&base_uri);
+    if base_uri.starts_with("/html") {
+        base_uri.push_str("index.html");
+    }
 
     provide_context(BackendClient::new(
         option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),
