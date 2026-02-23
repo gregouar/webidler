@@ -1,9 +1,6 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
-use leptos_router::{
-    components::{Redirect, A},
-    hooks::use_navigate,
-};
+use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
 use rand::{distr::Alphanumeric, Rng};
 
@@ -21,6 +18,7 @@ use crate::components::{
         buttons::MenuButton,
         input::{Input, ValidatedInput},
         toast::*,
+        ALink,
     },
 };
 
@@ -211,9 +209,9 @@ fn MainMenu() -> impl IntoView {
                     </p>
                 </div>
 
-                <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700 text-amber-300 underline hover:text-amber-200">
-                    <A href="/terms">"Terms & Conditions"</A>
-                    <A href="/privacy">"Privacy Notice"</A>
+                <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700">
+                    <ALink href="/terms">"Terms & Conditions"</ALink>
+                    <ALink href="/privacy">"Privacy Notice"</ALink>
                 </div>
             </div>
 
@@ -516,15 +514,11 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                                 <label for="terms" class="text-sm text-gray-400">
                                     "I agree to the "
                                     <span class="text-amber-300 underline hover:text-amber-200">
-                                        <A href="/terms" target="_blank">
-                                            "Terms & Conditions"
-                                        </A>
+                                        <ALink href="/terms">"Terms & Conditions"</ALink>
                                     </span>
                                     " and I have read the "
                                     <span class="text-amber-300 underline hover:text-amber-200">
-                                        <A href="/privacy" target="_blank">
-                                            "Privacy Notice"
-                                        </A>
+                                        <ALink href="/privacy">"Privacy Notice"</ALink>
                                     </span>
                                     "."
                                 </label>

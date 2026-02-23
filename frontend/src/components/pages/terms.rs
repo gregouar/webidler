@@ -1,5 +1,6 @@
 use leptos::{html::*, prelude::*};
-use leptos_router::components::A;
+
+use crate::components::ui::ALink;
 
 #[component]
 pub fn TermsPage() -> impl IntoView {
@@ -14,7 +15,7 @@ pub fn TermsPage() -> impl IntoView {
             </div>
 
             <div class="p-4 border-t border-zinc-700 flex-shrink-0 text-amber-300 underline hover:text-amber-200">
-                <A href="/">"Back to Home"</A>
+                <ALink href="/">"Back to Home"</ALink>
             </div>
         </main>
     }
@@ -82,7 +83,7 @@ pub fn TermsContent() -> impl IntoView {
                 <li>
                     "Personal data is processed in accordance with our "
                     <span class="text-amber-300 underline hover:text-amber-200">
-                        <A href="/privacy">"Privacy Notice"</A>
+                        <ALink href="/privacy">"Privacy Notice"</ALink>
                     </span>"."
                 </li>
                 <li>"No personal data is required to use the service."</li>

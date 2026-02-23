@@ -1,7 +1,8 @@
 use leptos::{html::*, prelude::*};
-use leptos_router::components::A;
 
-use crate::components::{accessibility::AccessibilityContext, backend_client::BackendClient};
+use crate::components::{
+    accessibility::AccessibilityContext, backend_client::BackendClient, ui::ALink,
+};
 
 #[component]
 pub fn PlayerCount() -> impl IntoView {
@@ -79,15 +80,15 @@ pub fn PlayerCount() -> impl IntoView {
                                                 .into_iter()
                                                 .map(|entry| {
                                                     view! {
-                                                        <A href=format!(
-                                                            "/view-character/{}",
-                                                            &entry.character_name,
-                                                        )>
-                                                            <p class="">
+                                                        <ALink
+                                                            href=format!("/view-character/{}", &entry.character_name)
+                                                            underline=false
+                                                        >
+                                                            <p class="text-white">
                                                                 {entry.character_name.clone()} <br /> "(" {entry.username}
                                                                 ")"
                                                             </p>
-                                                        </A>
+                                                        </ALink>
                                                         <p class="text-amber-400">
                                                             {areas
                                                                 .get(&entry.area_id)

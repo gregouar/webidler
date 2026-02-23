@@ -1,5 +1,6 @@
 use leptos::{html::*, prelude::*};
-use leptos_router::components::A;
+
+use crate::components::ui::ALink;
 
 #[component]
 pub fn PrivacyPage() -> impl IntoView {
@@ -14,7 +15,7 @@ pub fn PrivacyPage() -> impl IntoView {
             </div>
 
             <div class="p-4 border-t border-zinc-700 flex-shrink-0 text-amber-300 underline hover:text-amber-200">
-                <A href="/">"Back to Home"</A>
+                <ALink href="/">"Back to Home"</ALink>
             </div>
         </main>
     }

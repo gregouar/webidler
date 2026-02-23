@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use leptos::{html::*, prelude::*};
-use leptos_router::components::A;
 
 use crate::components::{
     backend_client::BackendClient,
@@ -9,6 +8,7 @@ use crate::components::{
         card::{Card, CardHeader, CardInset},
         menu_panel::MenuPanel,
         number::{format_datetime, format_duration},
+        ALink,
     },
 };
 
@@ -96,12 +96,14 @@ fn LeaderboardContent() -> impl IntoView {
                                                                     <div class="text-2xl font-bold text-amber-300">
                                                                         #{i + 1}
                                                                     </div>
-                                                                    <div class="text-white font-semibold text-lg">
-                                                                        <A href=format!(
-                                                                            "/view-character/{}",
-                                                                            &entry.character_name,
-                                                                        )>{entry.character_name.clone()}</A>
-                                                                    </div>
+                                                                    <ALink
+                                                                        href=format!("/view-character/{}", &entry.character_name)
+                                                                        underline=false
+                                                                    >
+                                                                        <span class="text-white font-semibold text-lg">
+                                                                            {entry.character_name.clone()}
+                                                                        </span>
+                                                                    </ALink>
                                                                 </div>
                                                                 <div class="text-sm text-gray-400">{entry.username}</div>
                                                             </div>
