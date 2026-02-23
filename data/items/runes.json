@@ -62,7 +62,6 @@
     "triggers": [
       {
         "trigger_id": "rune_berserker",
-        "description": "",
         "OnTakeHit": {
           "skill_type": null,
           "range": null,
