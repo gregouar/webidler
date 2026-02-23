@@ -14,13 +14,13 @@ use crate::components::{
     data_context::DataContext,
     shared::player_count::PlayerCount,
     town::{
+        TownContext,
         header_menu::HeaderMenu,
         panels::{
             forge::ForgePanel, inventory::TownInventoryPanel, market::MarketPanel,
             passives::PassivesPanel, stash::StashPanel, temple::TemplePanel,
         },
         town_scene::TownScene,
-        TownContext,
     },
     ui::tooltip::DynamicTooltip,
 };

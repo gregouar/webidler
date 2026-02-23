@@ -1,4 +1,4 @@
-use sqlx::{types::JsonValue, Transaction};
+use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
     item::ItemModifiers,
