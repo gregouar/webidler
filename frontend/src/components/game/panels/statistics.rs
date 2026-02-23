@@ -226,7 +226,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             }
                         />
                         <Stat
-                            label="Attack Block Chance"
+                            label="Attack Block Chance (max 80%)"
                             value=move || {
                                 format!(
                                     "{:.0}%",
@@ -254,7 +254,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Spell Block Chance"
+                                            label="Spell Block Chance (max 80%)"
                                             value=move || format!("{:.0}%", block_spell)
                                         />
                                     }
@@ -271,7 +271,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .then(move || {
                                     view! {
                                         <Stat
-                                            label="Blocked Damage Taken (max 80%)"
+                                            label="Blocked Damage Taken"
                                             value=move || format!("{:.0}%", block_damage)
                                         />
                                     }
@@ -328,39 +328,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 })
                         }}
-                        // TODO: CHance to EVADE
-                        // {move || {
-                        // game_context
-                        // .player_specs
-                        // .with(|player_specs| {
-                        // view! {
-                        // {itertools::iproduct!(
-                        // DamageType::iter(),SkillType::iter().collect::<Vec::<_>>()
-                        // )
-                        // .filter_map(|(damage_type, skill_type)| {
-                        // player_specs
-                        // .character_specs
-                        // .damage_resistance
-                        // .get(&(skill_type, damage_type))
-                        // .cloned()
-                        // .map(|value| {
-                        // view! {
-                        // <Stat
-                        // label=format_multiplier_stat_name(
-                        // &StatType::DamageResistance {
-                        // skill_type: Some(skill_type),
-                        // damage_type: Some(damage_type),
-                        // },
-                        // )
-                        // value=move || format!("{:.0}%", value)
-                        // />
-                        // }
-                        // })
-                        // })
-                        // .collect::<Vec<_>>()}
-                        // }
-                        // })
-                        // }}
                         {move || {
                             DamageType::iter()
                                 .filter_map(|damage_type| {
@@ -374,12 +341,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .unwrap_or_default()
                                         .value
                                         .get() as f64;
-                                    (value != 0.0)
+                                    (value != 0.0 && damage_type != DamageType::Storm)
                                         .then(|| {
                                             view! {
                                                 <Stat
                                                     label=format!(
-                                                        "{} Evade Chance",
+                                                        "{} Evade Chance (max 80%)",
                                                         effects_tooltip::damage_over_time_type_str(
                                                             Some(damage_type),
                                                         ),
