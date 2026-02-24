@@ -8299,7 +8299,7 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [],
+                "ignore_stat_effects": [{ "StatusDuration": {} }],
                 "conditional_modifiers": []
               }
             ],
