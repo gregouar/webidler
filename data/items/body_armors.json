@@ -295,6 +295,7 @@
           "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
         },
         "target": "Me",
+        "skill_type": "Other",
         "effects": [
           {
             "Restore": {

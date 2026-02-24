@@ -10,6 +10,7 @@
       "name": "Mommy's Slap",
       "icon": "skills/claw.svg",
       "cooldown": 5.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [
@@ -41,6 +42,7 @@
       "name": "Birth",
       "icon": "skills/heal.svg",
       "cooldown": 10.0,
+      "skill_type": "Other",
       "targets": [
         {
           "target_type": "Friend",

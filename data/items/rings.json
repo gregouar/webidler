@@ -175,6 +175,7 @@
         "trigger_id": "signet_ring_unique",
         "OnTakeHit": { "is_blocked": true },
         "target": "SameTarget",
+        "skill_type": "Other",
         "effects": [
           {
             "Restore": {

@@ -5,10 +5,10 @@ use leptos::{html::*, prelude::*};
 use crate::components::{
     backend_client::BackendClient,
     ui::{
+        ALink,
         card::{Card, CardHeader, CardInset},
         menu_panel::MenuPanel,
         number::{format_datetime, format_duration},
-        ALink,
     },
 };
 

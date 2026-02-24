@@ -10,6 +10,7 @@
       "name": "Shoot",
       "icon": "skills/fireball.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

@@ -10,6 +10,7 @@
       "name": "Nasty Bite",
       "icon": "skills/poison_coating.svg",
       "cooldown": 4.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

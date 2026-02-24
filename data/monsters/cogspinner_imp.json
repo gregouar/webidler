@@ -10,6 +10,7 @@
       "name": "Tick Tack",
       "icon": "skills/attack.svg",
       "cooldown": 1.5,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

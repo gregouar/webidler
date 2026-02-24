@@ -10,6 +10,7 @@
       "name": "Shrub Slam",
       "icon": "skills/attack.svg",
       "cooldown": 5.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [
@@ -28,6 +29,7 @@
       "name": "Topiary Cut",
       "icon": "skills/claw.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

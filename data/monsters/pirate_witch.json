@@ -10,6 +10,7 @@
       "name": "Call of the Sea",
       "icon": "skills/chain_lightning.svg",
       "cooldown": 7.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "effects": [

@@ -9,6 +9,7 @@
       "name": "Mermaid's Kiss",
       "icon": "skills/bite.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

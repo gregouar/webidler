@@ -11,6 +11,7 @@
       "name": "Abominable Slam",
       "icon": "skills/attack.svg",
       "cooldown": 5.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

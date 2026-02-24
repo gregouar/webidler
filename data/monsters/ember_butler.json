@@ -10,6 +10,7 @@
       "name": "Careful, it's Hot!",
       "icon": "skills/burning_ray.svg",
       "cooldown": 2.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "effects": [

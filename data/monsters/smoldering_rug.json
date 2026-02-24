@@ -10,6 +10,7 @@
       "name": "Fiery Embrace",
       "icon": "skills/fireball.svg",
       "cooldown": 5.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

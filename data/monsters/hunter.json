@@ -22,6 +22,7 @@
       "name": "Piercing Shot",
       "icon": "skills/attack.svg",
       "cooldown": 2.5,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

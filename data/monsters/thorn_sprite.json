@@ -10,6 +10,7 @@
       "name": "Spiked Slap",
       "icon": "skills/claw.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

@@ -18,6 +18,7 @@
       "name": "Dagon's Revenge",
       "icon": "skills/magic_missile.svg",
       "cooldown": 4.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "repeat": {

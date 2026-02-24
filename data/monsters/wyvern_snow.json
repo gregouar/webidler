@@ -11,6 +11,7 @@
       "name": "Terror Strike",
       "icon": "skills/claw.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [
@@ -29,6 +30,7 @@
       "name": "Thunder Bite",
       "icon": "skills/bite.svg",
       "cooldown": 5.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

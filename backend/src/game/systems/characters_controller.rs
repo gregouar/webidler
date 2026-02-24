@@ -30,15 +30,16 @@ pub fn attack_character(
     skill_type: SkillType,
     range: SkillRange,
     is_crit: bool,
+    unblockable: bool,
     trigger_id: Option<&str>,
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
-    let is_blocked = target_specs
+    let is_blocked = if unblockable { false} else {target_specs
         .block
         .get(&skill_type)
         .map(|block| block.roll())
-        .unwrap_or_default();
+        .unwrap_or_default()};
 
     let is_hurt = damage_character(
         target_specs,
@@ -60,12 +61,23 @@ pub fn attack_character(
         }
     }
 
+    // Couldn't find how to do this better
+    let event_damage = if is_blocked {
+        let block_factor = target_specs.block_damage.get() as f64 * 0.01;
+        damage
+            .into_iter()
+            .map(|(damage_type, amount)| (damage_type, amount * block_factor))
+            .collect()
+    } else {
+        damage
+    };
+
     events_queue.register_event(GameEvent::Hit(HitEvent {
         source: attacker,
         target: *target_id,
         skill_type,
         range,
-        damage,
+        damage: event_damage,
         is_crit,
         is_blocked,
         is_hurt,
@@ -261,6 +273,7 @@ pub fn apply_status(
     value: NonNegative,
     duration: Option<NonNegative>,
     cumulate: bool,
+    unavoidable: bool,
     trigger_id: Option<&str>,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
@@ -290,7 +303,7 @@ pub fn apply_status(
         return false;
     }
 
-    let is_evaded = if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
+    let is_evaded = if !unavoidable && let StatusSpecs::DamageOverTime { damage_type } = status_specs {
         target_specs
             .evade
             .get(damage_type)
@@ -412,6 +425,7 @@ pub fn apply_status(
             100.0.into(),
             duration.map(|d| d + stun_lockout),
             false,
+             true,
             Some("stun_lockout"),
         );
     }

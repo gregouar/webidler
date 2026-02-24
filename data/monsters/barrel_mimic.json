@@ -10,6 +10,7 @@
       "name": "Hungry Kiss",
       "icon": "skills/bite.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [
@@ -28,6 +29,7 @@
       "name": "Splintered Caress",
       "icon": "skills/claw.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

@@ -9,6 +9,7 @@
       "name": "Scratch",
       "icon": "skills/claw.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

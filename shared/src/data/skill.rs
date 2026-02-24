@@ -21,7 +21,6 @@ pub struct BaseSkillSpecs {
     pub icon: String,
     #[serde(default)]
     pub description: String,
-    #[serde(default)]
     pub skill_type: SkillType,
 
     pub cooldown: NonNegative,
@@ -73,21 +72,9 @@ pub struct SkillState {
 }
 
 #[derive(
-    Serialize,
-    Deserialize,
-    Debug,
-    Clone,
-    Copy,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    PartialOrd,
-    Ord,
-    EnumIter,
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, EnumIter,
 )]
 pub enum SkillType {
-    #[default]
     Attack,
     Spell,
     Curse,
@@ -194,6 +181,8 @@ pub enum SkillEffectType {
         crit_chance: Chance,
         #[serde(default)]
         crit_damage: ModifiableValue<f64>,
+        #[serde(default)]
+        unblockable: bool,
     },
     ApplyStatus {
         statuses: Vec<ApplyStatusEffect>,
@@ -222,6 +211,8 @@ pub struct ApplyStatusEffect {
     pub cumulate: bool,
     #[serde(default)]
     pub replace_on_value_only: bool,
+    #[serde(default)]
+    pub unavoidable: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]

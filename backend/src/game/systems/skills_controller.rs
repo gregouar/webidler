@@ -20,8 +20,8 @@ use crate::game::{
     data::event::EventsQueue,
     systems::{skills_updater, stats_updater},
     utils::{
+        rng::{self, flip_coin, RngSeed, Rollable},
         AnyAll,
-        rng::{self, RngSeed, Rollable, flip_coin},
     },
 };
 
@@ -36,8 +36,8 @@ pub fn use_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> NonNegative {
-    if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
-        return me.1.1.mana;
+    if !skill_state.is_ready || me.1 .1.mana.get() < skill_specs.mana_cost.get() {
+        return me.1 .1.mana;
     }
 
     let mut applied = false;
@@ -53,13 +53,13 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        characters_controller::spend_mana(me.1.0, me.1.1, *skill_specs.mana_cost);
+        characters_controller::spend_mana(me.1 .0, me.1 .1, *skill_specs.mana_cost);
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = Default::default();
     }
 
-    characters_controller::mana_available(me.1.0, me.1.1)
+    characters_controller::mana_available(me.1 .0, me.1 .1)
 }
 
 fn apply_skill_on_targets<'a>(
@@ -107,13 +107,13 @@ fn apply_repeated_skill_on_targets<'a>(
         match targets_group.target_type {
             TargetType::Enemy => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (me.1 .0.position_x, me.1 .0.position_y),
                 enemies,
                 already_hit,
             ),
             TargetType::Friend => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (me.1 .0.position_x, me.1 .0.position_y),
                 friends,
                 already_hit,
             ),
@@ -320,8 +320,8 @@ fn apply_conditional_modifiers(
         &mut new_skill_effect,
         stats_updater::compute_conditional_modifiers(
             &Default::default(),
-            target.1.0,
-            target.1.1,
+            target.1 .0,
+            target.1 .1,
             &skill_effect.conditional_modifiers,
         )
         .iter(),
@@ -350,6 +350,7 @@ fn apply_skill_effect_on_target(
             damage,
             crit_chance,
             crit_damage,
+            unblockable,
         } => {
             let is_crit = crit_chance.roll_with_seed(seed);
 
@@ -376,6 +377,7 @@ fn apply_skill_effect_on_target(
                 skill_type,
                 range,
                 is_crit,
+                *unblockable,
                 trigger_id,
             );
 
@@ -420,6 +422,7 @@ fn apply_skill_effect_on_target(
                         *value,
                         duration,
                         status_effect.cumulate,
+                        status_effect.unavoidable,
                         trigger_id,
                     )
                 });

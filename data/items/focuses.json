@@ -68,6 +68,7 @@
           "conditions": [{ "HasStatus": { "skill_type": "Curse" } }]
         },
         "target": "Me",
+        "skill_type": "Other",
         "effects": [
           {
             "ApplyStatus": {

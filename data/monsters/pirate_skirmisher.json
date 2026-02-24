@@ -10,6 +10,7 @@
       "name": "Scimitar Left",
       "icon": "skills/attack.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [
@@ -28,6 +29,7 @@
       "name": "Scimitar Right",
       "icon": "skills/attack.svg",
       "cooldown": 2.5,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

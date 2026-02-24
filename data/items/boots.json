@@ -61,6 +61,7 @@
         "trigger_id": "pathwalker_remains",
         "OnWaveCompleted": {},
         "target": "Me",
+        "skill_type": "Other",
         "effects": [
           {
             "Restore": {
@@ -165,6 +166,7 @@
           "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
         },
         "target": "Me",
+        "skill_type": "Other",
         "effects": [
           {
             "ApplyStatus": {

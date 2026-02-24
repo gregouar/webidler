@@ -178,6 +178,7 @@
         "OnApplyStatus": {
           "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
         },
+        "skill_type": "Other",
         "effects": [
           {
             "ApplyStatus": {
@@ -192,7 +193,18 @@
                   "value": 0
                 }
               ]
-            }
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusDuration": {}
+              },
+              {
+                "StatusPower": {}
+              },
+              {
+                "Damage": {}
+              }
+            ]
           }
         ],
         "modifiers": [

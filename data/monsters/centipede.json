@@ -11,6 +11,7 @@
       "name": "Venom Lash",
       "icon": "skills/claw.svg",
       "cooldown": 4.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

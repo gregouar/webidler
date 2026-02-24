@@ -2,7 +2,7 @@ use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
 use leptos_use::storage;
-use rand::{distr::Alphanumeric, Rng};
+use rand::{Rng, distr::Alphanumeric};
 
 use shared::{
     http::client::{ForgotPasswordRequest, SignInRequest, SignUpRequest},
@@ -15,10 +15,10 @@ use crate::components::{
     captcha::*,
     shared::{leaderboard::LeaderboardPanel, player_count::PlayerCount},
     ui::{
+        ALink,
         buttons::MenuButton,
         input::{Input, ValidatedInput},
         toast::*,
-        ALink,
     },
 };
 

@@ -1137,6 +1137,7 @@
           "skill_type": "Attack",
           "is_hurt": true
         },
+        "skill_type": "Attack",
         "inherit_modifiers": true,
         "effects": [
           {

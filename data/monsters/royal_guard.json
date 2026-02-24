@@ -14,6 +14,7 @@
       "name": "Royal Smite",
       "icon": "skills/attack.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

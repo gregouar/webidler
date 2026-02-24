@@ -30,6 +30,7 @@
       "name": "Lookout!",
       "icon": "skills/blessing_crit.svg",
       "cooldown": 8.0,
+      "skill_type": "Blessing",
       "targets": [
         {
           "target_type": "Friend",

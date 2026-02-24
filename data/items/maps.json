@@ -81,6 +81,7 @@
       {
         "trigger_id": "edict_treasure_map",
         "OnHit": { "is_triggered": false, "is_hurt": true },
+        "skill_type": "Curse",
         "effects": [
           {
             "ApplyStatus": {

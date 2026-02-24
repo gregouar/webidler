@@ -19,8 +19,8 @@
               "FlatDamage": {
                 "damage": {
                   "Physical": [4, 6],
-                  "Fire": [4,6],
-                  "Poison": [4,6],
+                  "Fire": [4, 6],
+                  "Poison": [4, 6],
                   "Storm": [0, 15]
                 }
               }
@@ -33,6 +33,7 @@
       "name": "Entrancing Song",
       "icon": "skills/haste.svg",
       "cooldown": 10.0,
+      "skill_type": "Blessing",
       "targets": [
         {
           "target_type": "Friend",

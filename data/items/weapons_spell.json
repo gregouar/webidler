@@ -87,6 +87,7 @@
           "skill_type": "Spell",
           "damage_type": "Fire"
         },
+        "skill_type": "Other",
         "effects": [
           {
             "ApplyStatus": {

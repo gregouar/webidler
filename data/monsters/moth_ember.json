@@ -10,6 +10,7 @@
       "name": "Fire Touch",
       "icon": "skills/bite.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

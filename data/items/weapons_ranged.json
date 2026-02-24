@@ -92,6 +92,7 @@
         "OnKill": {
           "conditions": [{ "HasStatus": { "DamageOverTime": "Physical" } }]
         },
+        "skill_type": "Other",
         "target": "Me",
         "effects": [
           {
@@ -227,6 +228,7 @@
       {
         "trigger_id": "voltrach_bite",
         "OnHit": {},
+        "skill_type": "Other",
         "effects": [
           {
             "success_chance": 30,
@@ -473,6 +475,7 @@
           "is_crit": true,
           "is_triggered": false
         },
+        "skill_type": "Attack",
         "effects": [
           {
             "ApplyStatus": {

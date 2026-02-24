@@ -3376,7 +3376,7 @@
               "range": null,
               "is_crit": true,
               "is_blocked": null,
-              "is_hurt": null,
+              "is_hurt": true,
               "is_triggered": null,
               "damage_type": "Physical"
             },
@@ -10155,7 +10155,8 @@
                                   "value": 0.0,
                                   "lucky_chance": 0.0
                                 },
-                                "crit_damage": 0.0
+                                "crit_damage": 0.0,
+                                "unblockable": true
                               },
                               "ignore_stat_effects": [
                                 {

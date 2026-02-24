@@ -9,6 +9,7 @@
       "name": "Clumsy Serving",
       "icon": "skills/attack.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

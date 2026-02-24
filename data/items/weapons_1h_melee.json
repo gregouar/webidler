@@ -103,7 +103,12 @@
     "triggers": [
       {
         "trigger_id": "broken_trophy",
-        "OnHit": { "skill_type": "Attack", "is_triggered": false },
+        "OnHit": {
+          "skill_type": "Attack",
+          "is_hurt": true,
+          "is_triggered": false
+        },
+        "skill_type": "Other",
         "effects": [
           {
             "success_chance": 25,
@@ -368,6 +373,7 @@
         "trigger_id": "treasure_cutlass",
         "OnKill": {},
         "target": "Me",
+        "skill_type": "Curse",
         "effects": [
           {
             "ApplyStatus": {

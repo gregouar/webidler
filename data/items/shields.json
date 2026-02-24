@@ -58,6 +58,7 @@
         "trigger_id": "stunning_block",
         "OnTakeHit": { "is_blocked": true },
         "target": "Source",
+        "skill_type": "Other",
         "effects": [
           {
             "success_chance": 50,
@@ -222,6 +223,7 @@
           "is_triggered": false
         },
         "target": "Me",
+        "skill_type": "Curse",
         "effects": [
           {
             "ApplyStatus": {

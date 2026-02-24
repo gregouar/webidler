@@ -11,6 +11,7 @@
       "name": "Uncontrollable Growth",
       "icon": "skills/heal.svg",
       "cooldown": 10.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "target_type": "Friend",
@@ -27,6 +28,7 @@
       "name": "Ouch!",
       "icon": "skills/claw.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

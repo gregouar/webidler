@@ -9,6 +9,7 @@
       "name": "Child's Play",
       "icon": "skills/skull.svg",
       "cooldown": 3.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "effects": [

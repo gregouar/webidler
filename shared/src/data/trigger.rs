@@ -84,7 +84,6 @@ pub struct TriggeredEffect {
 
     #[serde(default)]
     pub skill_range: SkillRange,
-    #[serde(default)]
     pub skill_type: SkillType,
     pub effects: Vec<SkillEffect>,
 

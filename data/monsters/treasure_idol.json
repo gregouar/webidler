@@ -18,6 +18,7 @@
       "name": "Dangerous Incantation",
       "icon": "skills/poison_cloud.svg",
       "cooldown": 5.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "effects": [

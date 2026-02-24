@@ -115,6 +115,7 @@
           "skill_type": "Attack",
           "is_triggered": false
         },
+        "skill_type": "Attack",
         "effects": [
           {
             "success_chance": 50,
@@ -271,7 +272,7 @@
         "target": "SameTarget",
         "skill_range": "Any",
         "skill_shape": "All",
-        "skill_type": "Spell",
+        "skill_type": "Other",
         "effects": [
           {
             "FlatDamage": {
@@ -288,6 +289,9 @@
               },
               {
                 "CritChance": null
+              },
+              {
+                "CritDamage": null
               }
             ]
           }

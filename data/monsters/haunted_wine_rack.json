@@ -19,6 +19,7 @@
       "name": "Corkscrew Crush",
       "icon": "skills/claw.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [
@@ -83,6 +84,7 @@
       "name": "Summon Oathbound Bottles",
       "icon": "skills/heal.svg",
       "cooldown": 10.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "target_type": "Friend",

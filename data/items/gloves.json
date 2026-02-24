@@ -120,8 +120,13 @@
     "triggers": [
       {
         "trigger_id": "fangbreaker",
-        "OnHit": { "skill_type": "Attack", "is_triggered": false },
+        "OnHit": {
+          "skill_type": "Attack",
+          "is_hurt": true,
+          "is_triggered": false
+        },
         "target": "Source",
+        "skill_type": "Other",
         "effects": [
           {
             "ApplyStatus": {
@@ -261,10 +266,12 @@
           "is_triggered": false
         },
         "target": "SameTarget",
+        "skill_type": "Other",
         "effects": [
           {
             "FlatDamage": {
-              "damage": {}
+              "damage": {},
+              "unblockable": true
             },
             "ignore_stat_effects": [
               {

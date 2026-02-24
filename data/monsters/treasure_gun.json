@@ -18,6 +18,7 @@
       "name": "Explosive Round",
       "icon": "skills/burning_ray.svg",
       "cooldown": 3.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

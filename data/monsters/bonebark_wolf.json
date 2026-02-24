@@ -8,6 +8,7 @@
     {
       "name": "Haunting Bite",
       "icon": "skills/bite.svg",
+      "skill_type": "Attack",
       "cooldown": 3.0,
       "targets": [
         {
@@ -26,6 +27,7 @@
     {
       "name": "Call of the Pack",
       "icon": "skills/haste.svg",
+      "skill_type": "Blessing",
       "cooldown": 8.0,
       "targets": [
         {

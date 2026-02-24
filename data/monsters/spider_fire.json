@@ -10,6 +10,7 @@
       "name": "Burning Bite",
       "icon": "skills/fireball.svg",
       "cooldown": 2.0,
+      "skill_type": "Attack",
       "targets": [
         {
           "effects": [

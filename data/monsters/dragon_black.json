@@ -72,6 +72,7 @@
       "name": "Evil Eye",
       "icon": "skills/blessing_crit.svg",
       "cooldown": 15.0,
+      "skill_type": "Blessing",
       "targets": [
         {
           "target_type": "Me",
