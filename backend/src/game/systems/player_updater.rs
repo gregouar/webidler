@@ -170,18 +170,11 @@ pub fn update_player_specs(
                     }),
             )
             .chain(
-                player_specs
-                    .skills_specs
-                    .iter()
-                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
-            )
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone())
-            .chain(
                 player_inventory
                     .equipped_items()
-                    .flat_map(|(_, item_specs)| item_specs.base.triggers.iter())
-                    .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-            ),
+                    .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
+            )
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
     for trigger_specs in player_specs.character_specs.triggers.iter_mut() {
@@ -193,6 +186,14 @@ pub fn update_player_specs(
             );
         }
     }
+
+    player_specs.character_specs.triggers.extend(
+        player_specs
+            .skills_specs
+            .iter()
+            .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    );
 
     player_specs.character_specs.effects = effects.into();
 }

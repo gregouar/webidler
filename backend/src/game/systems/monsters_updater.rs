@@ -130,20 +130,14 @@ pub fn update_monster_specs(
     }
 
     monster_specs.character_specs.triggers.extend(
-        monster_specs
-            .skill_specs
+        monster_state
+            .character_state
+            .statuses
             .iter()
-            .flat_map(|skill_specs| skill_specs.triggers.iter())
-            .chain(
-                monster_state
-                    .character_state
-                    .statuses
-                    .iter()
-                    .filter_map(|(status_specs, _)| match status_specs {
-                        StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
-                        _ => None,
-                    }),
-            )
+            .filter_map(|(status_specs, _)| match status_specs {
+                StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                _ => None,
+            })
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
@@ -156,4 +150,12 @@ pub fn update_monster_specs(
             );
         }
     }
+
+    monster_specs.character_specs.triggers.extend(
+        monster_specs
+            .skill_specs
+            .iter()
+            .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    );
 }

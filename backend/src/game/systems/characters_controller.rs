@@ -35,11 +35,15 @@ pub fn attack_character(
 ) {
     let (target_id, (target_specs, target_state)) = target;
 
-    let is_blocked = if unblockable { false} else {target_specs
-        .block
-        .get(&skill_type)
-        .map(|block| block.roll())
-        .unwrap_or_default()};
+    let is_blocked = if unblockable {
+        false
+    } else {
+        target_specs
+            .block
+            .get(&skill_type)
+            .map(|block| block.roll())
+            .unwrap_or_default()
+    };
 
     let is_hurt = damage_character(
         target_specs,
@@ -303,15 +307,16 @@ pub fn apply_status(
         return false;
     }
 
-    let is_evaded = if !unavoidable && let StatusSpecs::DamageOverTime { damage_type } = status_specs {
-        target_specs
-            .evade
-            .get(damage_type)
-            .map(|evade| evade.roll())
-            .unwrap_or_default()
-    } else {
-        false
-    };
+    let is_evaded =
+        if !unavoidable && let StatusSpecs::DamageOverTime { damage_type } = status_specs {
+            target_specs
+                .evade
+                .get(damage_type)
+                .map(|evade| evade.roll())
+                .unwrap_or_default()
+        } else {
+            false
+        };
 
     if is_evaded {
         target_state.just_evaded = true;
@@ -425,7 +430,7 @@ pub fn apply_status(
             100.0.into(),
             duration.map(|d| d + stun_lockout),
             false,
-             true,
+            true,
             Some("stun_lockout"),
         );
     }
