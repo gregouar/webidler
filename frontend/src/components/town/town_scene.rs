@@ -551,7 +551,8 @@ pub fn StartGrindPanel(
                                             <MenuButton
                                                 on:click={
                                                     let navigate = use_navigate();
-                                                    move |_| {
+                                                    move |e| {
+                                                        e.stop_propagation();
                                                         if let Some(selected_area) = selected_area.get_untracked() {
                                                             set_area_config_storage
                                                                 .set(
