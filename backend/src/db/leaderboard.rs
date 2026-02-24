@@ -33,7 +33,7 @@ pub async fn get_leaderboard(
                     ORDER BY gs.area_level DESC, gs.elapsed_time ASC, gs.created_at ASC
                 ) AS best_rank
             FROM game_stats gs
-            WHERE gs.data_version >= '0.1.8'
+            WHERE gs.data_version >= '0.1.9' OR gs.data_version = '0.1.8'
         ),
         leaderboard AS (
             SELECT

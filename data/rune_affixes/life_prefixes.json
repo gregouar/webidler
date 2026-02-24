@@ -43,7 +43,7 @@
     "tier": 3,
     "weight": 1000,
     "restrictions": ["Rune"],
-    "item_level": 100,
+    "item_level": 200,
     "effects": [
       {
         "scope": "Global",
