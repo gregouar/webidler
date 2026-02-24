@@ -393,7 +393,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
             is_being_equipped.set(false);
             inventory
                 .player_inventory
-                .read_untracked()
+                .read()
                 .bag
                 .get(item_index)
                 .cloned()
