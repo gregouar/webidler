@@ -61,24 +61,35 @@ pub fn PassivesPanel(
 
     Effect::new(move || {
         let mut initial_cost = 0.0;
-        passives_tree_ascension.update(|passives_tree_ascension| {
-            *passives_tree_ascension = town_context.passives_tree_ascension.get();
-            passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
-                let keep = town_context
-                    .passives_tree_specs
-                    .read_untracked()
-                    .nodes
-                    .contains_key(node_id);
-                if !keep {
-                    initial_cost -= *v as f64;
-                }
-                keep
+
+        let temp = town_context.passives_tree_ascension.get();
+        if passives_tree_ascension
+            .read_untracked()
+            .ascended_nodes
+            .is_empty()
+            && passives_tree_ascension
+                .read_untracked()
+                .socketed_nodes
+                .is_empty()
+        {
+            passives_tree_ascension.update(|passives_tree_ascension| {
+                *passives_tree_ascension = temp;
+                passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
+                    let keep = town_context
+                        .passives_tree_specs
+                        .read_untracked()
+                        .nodes
+                        .contains_key(node_id);
+                    if !keep {
+                        initial_cost -= *v as f64;
+                    }
+                    keep
+                });
             });
-        });
+            ascension_cost.set(initial_cost.round());
+        }
 
         passives_tree_build.set(town_context.passives_tree_build.get());
-
-        ascension_cost.set(initial_cost.round());
     });
 
     let active_tab = RwSignal::new(PassivesTab::Ascend);
@@ -648,7 +659,7 @@ fn PassiveSkillTree(
                         Ok(response) => {
                             passives_tree_ascension.write().socketed_nodes =
                                 response.ascension.socketed_nodes.clone();
-                            town_context.passives_tree_ascension.set(response.ascension);
+                            // town_context.passives_tree_ascension.set(response.ascension);
                             town_context.inventory.set(response.inventory);
                         }
                         Err(e) => show_toast(
