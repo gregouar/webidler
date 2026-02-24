@@ -1,12 +1,21 @@
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
 use rand::Rng;
 use shared::data::monster::MonsterRarity;
+use shared::data::player::CharacterSpecs;
+use shared::data::skill::{DamageType, SkillType};
+use shared::data::stat_effect::StatStatusType;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
+use strum::IntoEnumIterator;
 
 use crate::assets::img_asset;
+use crate::components::shared::tooltips::effects_tooltip::{
+    damage_over_time_type_str, damage_type_str, status_type_str,
+};
+use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
 use crate::components::ui::progress_bars::predictive_cooldown;
 use crate::components::{
     shared::tooltips::SkillTooltip,
@@ -19,8 +28,8 @@ use crate::components::{
     },
 };
 
-use super::GameContext;
 use super::portrait::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -147,7 +156,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
         <div
             class="absolute left-1/2 top-1 -translate-x-1/2 z-30
             text-red-500 text-shadow-sm font-extrabold text-sm xl:text-lg
-            animate-damage-float select-none font-number"
+            animate-damage-float select-none font-number pointer-events-none"
             style=style
         >
             {move || {
@@ -435,8 +444,9 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 </Show>
             </div>
 
-            <div class="w-full flex justify-center">
-                <div class=format!("flex flex-col justify-evenly {skill_size}")>
+            <div class="w-full flex flex-col justify-center">
+                <MonsterTags specs=specs.character_specs />
+                <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For
                         each=move || { specs.skill_specs.clone().into_iter().enumerate() }
                         key=|(i, _)| *i
@@ -446,6 +456,312 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     </For>
                 </div>
             </div>
+        </div>
+    }
+}
+
+#[component]
+fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
+    let is_armored = specs.armor.iter().any(|(_, value)| **value > 0.0);
+    let armored_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+                <span class="font-semibold text-white">{"Armored"}</span>
+                {DamageType::iter()
+                    .filter_map(|damage_type| {
+                        let value = *specs.armor.get(&damage_type).copied().unwrap_or_default();
+                        (value > 0.0)
+                            .then(|| {
+                                view! {
+                                    <span>
+                                        <span class="font-semibold">{format!("{:.0}", value)}</span>
+                                        {format!(" {}Armor", damage_type_str(Some(damage_type)))}
+                                    </span>
+                                }
+                            })
+                    })
+                    .collect::<Vec<_>>()}
+            </div>
+        }
+    };
+
+    let is_shielded = specs
+        .block
+        .iter()
+        .any(|(_, chance)| chance.value.get() > 0.0);
+    let shielded_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+                <span class="font-semibold text-white">{"Shielded"}</span>
+                {SkillType::iter()
+                    .filter_map(|skill_type| {
+                        let value = specs
+                            .block
+                            .get(&skill_type)
+                            .copied()
+                            .unwrap_or_default()
+                            .value
+                            .get();
+                        (value > 0.0)
+                            .then(|| {
+                                view! {
+                                    <span>
+                                        <span class="font-semibold">
+                                            {format!("{:.0}%", value)}
+                                        </span>
+                                        {format!(
+                                            " {} Block Chance",
+                                            skill_type_str(Some(skill_type)),
+                                        )}
+                                    </span>
+                                }
+                            })
+                    })
+                    .collect::<Vec<_>>()}
+                {(specs.block_damage.get() > 0.0)
+                    .then(|| {
+                        view! {
+                            <span>
+                                <span class="font-semibold">
+                                    {format!("{:.0}%", specs.block_damage.get())}
+                                </span>
+                                " Blocked Damage Taken"
+                            </span>
+                        }
+                    })}
+            </div>
+        }
+    };
+
+    let is_evasive = specs
+        .evade
+        .iter()
+        .any(|(_, chance)| chance.value.get() > 0.0);
+    let evasive_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+                <span class="font-semibold text-white">{"Evasive"}</span>
+                {DamageType::iter()
+                    .filter_map(|damage_type| {
+                        let value = specs
+                            .evade
+                            .get(&damage_type)
+                            .copied()
+                            .unwrap_or_default()
+                            .value
+                            .get();
+                        (value > 0.0 && damage_type != DamageType::Storm)
+                            .then(|| {
+                                view! {
+                                    <span>
+                                        <span class="font-semibold">
+                                            {format!("{:.0}%", value)}
+                                        </span>
+                                        {format!(
+                                            " {} Evade Chance",
+                                            damage_over_time_type_str(Some(damage_type)),
+                                        )}
+                                    </span>
+                                }
+                            })
+                    })
+                    .collect::<Vec<_>>()}
+                {(specs.evade_damage.get() > 0.0)
+                    .then(|| {
+                        view! {
+                            <span>
+                                <span class="font-semibold">
+                                    {format!("{:.0}%", specs.evade_damage.get())}
+                                </span>
+                                " Evaded Damage Taken"
+                            </span>
+                        }
+                    })}
+            </div>
+        }
+    };
+
+    let is_resilient = specs
+        .status_resistances
+        .iter()
+        .any(|(_, value)| **value > 0.0);
+    let resilient_tooltip = move || {
+        let mut grouped: HashMap<Option<StatStatusType>, Vec<(SkillType, f64)>> = HashMap::new();
+
+        for ((skill_type, status_type), value) in specs.status_resistances.iter() {
+            grouped
+                .entry(status_type.clone())
+                .or_default()
+                .push((*skill_type, **value));
+        }
+
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+                <span class="font-semibold text-white">{"Resilient"}</span>
+
+                {grouped
+                    .into_iter()
+                    .map(|(status_type, entries)| {
+                        if entries.len() == SkillType::iter().count()
+                            && entries
+                                .iter()
+                                .map(|(_, v)| *v)
+                                .collect::<Vec<_>>()
+                                .windows(2)
+                                .all(|w| w[0] == w[1])
+                        {
+                            let value = entries[0].1;
+
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                    {format!(
+                                        " {} Resilience",
+                                        status_type_str(status_type.as_ref()),
+                                    )}
+                                </span>
+                            }
+                                .into_any()
+                        } else {
+                            view! {
+                                {entries
+                                    .into_iter()
+                                    .map(|(skill_type, value)| {
+                                        view! {
+                                            <span>
+                                                <span class="font-semibold">
+                                                    {format!("{:.0}%", value)}
+                                                </span>
+                                                {format!(
+                                                    " {}{} Resilience",
+                                                    skill_type_str(Some(skill_type)),
+                                                    status_type_str(status_type.as_ref()),
+                                                )}
+                                            </span>
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()}
+                            }
+                                .into_any()
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </div>
+        }
+    };
+
+    let is_regenerating = *specs.life_regen > 0.0;
+    let regenerating_tooltip = move || {
+        view! {
+            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+                <span class="font-semibold text-white">{"Regenerating"}</span>
+                <span>
+                    <span class="font-semibold">{format!("{:.1}%", *specs.life_regen * 0.1)}</span>
+                    " Life Regenerated per second"
+                </span>
+            </div>
+        }
+    };
+
+    let grid_size = match specs.size {
+        CharacterSize::Small | CharacterSize::Tall => "grid-cols-3",
+        CharacterSize::Large | CharacterSize::Huge | CharacterSize::Gargantuan => "grid-cols-6",
+    };
+
+    view! {
+        <div class=format!(
+            "h-5 xl:h-8 grid {grid_size}",
+        )>
+            {(is_armored)
+                .then(|| {
+                    view! {
+                        <StaticTooltip
+                            tooltip=armored_tooltip
+                            position=StaticTooltipPosition::Bottom
+                        >
+                            <div class="aspect-square">
+                                <img
+                                    draggable="false"
+                                    src=move || img_asset("passives/armor.svg")
+                                    alt="Armored"
+                                    class="w-full h-full xl:drop-shadow-md/50 invert"
+                                />
+                            </div>
+                        </StaticTooltip>
+                    }
+                })}
+            {(is_shielded)
+                .then(|| {
+                    view! {
+                        <StaticTooltip
+                            tooltip=shielded_tooltip
+                            position=StaticTooltipPosition::Bottom
+                        >
+                            <div class="aspect-square">
+                                <img
+                                    draggable="false"
+                                    src=move || img_asset("passives/block.svg")
+                                    alt="Shielded"
+                                    class="w-full h-full xl:drop-shadow-md/50 invert"
+                                />
+                            </div>
+                        </StaticTooltip>
+                    }
+                })}
+            {(is_evasive)
+                .then(|| {
+                    view! {
+                        <StaticTooltip
+                            tooltip=evasive_tooltip
+                            position=StaticTooltipPosition::Bottom
+                        >
+                            <div class="aspect-square">
+                                <img
+                                    draggable="false"
+                                    src=move || img_asset("passives/curled_leaf.svg")
+                                    alt="Evasive"
+                                    class="w-full h-full xl:drop-shadow-md/50 invert"
+                                />
+                            </div>
+                        </StaticTooltip>
+                    }
+                })}
+            {(is_resilient)
+                .then(|| {
+                    view! {
+                        <StaticTooltip
+                            tooltip=resilient_tooltip
+                            position=StaticTooltipPosition::Bottom
+                        >
+                            <div class="aspect-square">
+                                <img
+                                    draggable="false"
+                                    src=move || img_asset("passives/breaking_chain.svg")
+                                    alt="Resilient"
+                                    class="w-full h-full xl:drop-shadow-md/50 invert"
+                                />
+                            </div>
+                        </StaticTooltip>
+                    }
+                })}
+            {(is_regenerating)
+                .then(|| {
+                    view! {
+                        <StaticTooltip
+                            tooltip=regenerating_tooltip
+                            position=StaticTooltipPosition::Bottom
+                        >
+                            <div class="aspect-square">
+                                <img
+                                    draggable="false"
+                                    src=move || img_asset("passives/life_regen.svg")
+                                    alt="Regenerating"
+                                    class="w-full h-full xl:drop-shadow-md/50 invert"
+                                />
+                            </div>
+                        </StaticTooltip>
+                    }
+                })}
         </div>
     }
 }

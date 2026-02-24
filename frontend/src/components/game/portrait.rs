@@ -88,8 +88,30 @@ pub fn CharacterPortrait(
         }
     });
 
-    let active_statuses = Memo::new(move |_| {
-        let mut active_statuses: Vec<_> = statuses_map.read().keys().cloned().collect();
+    // let active_statuses = Memo::new(move |_| {
+    //     let mut active_statuses: Vec<_> = statuses_map.read().keys().cloned().collect();
+    //     active_statuses.sort();
+    //     active_statuses
+    // });
+
+    let active_debuffs = Memo::new(move |_| {
+        let mut active_statuses: Vec<_> = statuses_map
+            .read()
+            .iter()
+            .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
+            .cloned()
+            .collect();
+        active_statuses.sort();
+        active_statuses
+    });
+
+    let active_buffs = Memo::new(move |_| {
+        let mut active_statuses: Vec<_> = statuses_map
+            .read()
+            .iter()
+            .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
+            .cloned()
+            .collect();
         active_statuses.sort();
         active_statuses
     });
@@ -167,11 +189,36 @@ pub fn CharacterPortrait(
                         }
                     />
 
-                    <div class="absolute inset-0 flex place-items-start">
-                        <For each=move || active_statuses.get() key=|k| k.clone() let(k)>
+                    <div class="absolute inset-0 flex flex-wrap items-start justify-items-start pointer-events-none">
+                        <For
+                            each=move || { active_debuffs.get().into_iter() }
+                            key=|k| k.clone()
+                            let(k)
+                        >
                             <StatusIcon
                                 status_id=k.clone()
-                                stack=Signal::derive(move || status_stack(k.clone()))
+                                stack=Signal::derive({
+                                    let k = k.clone();
+                                    move || status_stack(k.clone())
+                                })
+                                tooltip_position=StaticTooltipPosition::Bottom
+                            />
+                        </For>
+                    </div>
+
+                    <div class="absolute inset-0 flex flex-wrap items-end justify-items-start pointer-events-none">
+                        <For
+                            each=move || { active_buffs.get().into_iter() }
+                            key=|k| k.clone()
+                            let(k)
+                        >
+                            <StatusIcon
+                                status_id=k.clone()
+                                stack=Signal::derive({
+                                    let k = k.clone();
+                                    move || status_stack(k.clone())
+                                })
+                                tooltip_position=StaticTooltipPosition::Top
                             />
                         </For>
                     </div>
@@ -180,7 +227,7 @@ pub fn CharacterPortrait(
                 <div
                     class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
                     class:opacity-100=move || {
-                        active_statuses
+                        active_debuffs
                             .read()
                             .contains(
                                 &StatusId::DamageOverTime {
@@ -195,7 +242,7 @@ pub fn CharacterPortrait(
                 <div
                     class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
                     class:opacity-100=move || {
-                        active_statuses
+                        active_debuffs
                             .read()
                             .contains(
                                 &StatusId::DamageOverTime {
@@ -210,7 +257,7 @@ pub fn CharacterPortrait(
                 <div
                     class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
                     class:opacity-100=move || {
-                        active_statuses
+                        active_debuffs
                             .read()
                             .contains(
                                 &StatusId::DamageOverTime {
@@ -286,10 +333,25 @@ pub fn CharacterPortrait(
     }
 }
 
+fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
+    match status_specs {
+        Some(status_specs) => match status_specs {
+            StatusSpecs::Stun => true,
+            StatusSpecs::DamageOverTime { .. } => true,
+            StatusSpecs::StatModifier { debuff, .. } => *debuff,
+            StatusSpecs::Trigger(trigger_specs) => {
+                matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
+            }
+        },
+        None => false,
+    }
+}
+
 #[component]
 fn StatusIcon(
     status_id: StatusId,
     stack: Signal<(usize, f64, Option<StatusSpecs>)>,
+    tooltip_position: StaticTooltipPosition,
 ) -> impl IntoView {
     let icon_uri = {
         let status_id = status_id.clone();
@@ -397,8 +459,8 @@ fn StatusIcon(
     };
 
     view! {
-        <StaticTooltip position=StaticTooltipPosition::Bottom tooltip>
-            <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1">
+        <StaticTooltip position=tooltip_position tooltip>
+            <div class="relative h-6 xl:h-12 aspect-square bg-black/40 p-1 pointer-events-auto">
                 <img
                     draggable="false"
                     src=move || img_asset(&icon_uri())
