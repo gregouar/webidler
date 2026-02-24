@@ -117,7 +117,7 @@ where
     pub fn convert_value(&mut self, percent: f64, is_extra: bool, only_base: bool) -> T {
         let mut percent = percent;
         if !is_extra {
-            percent = percent.max(100.0 - self.converted);
+            percent = percent.min(100.0 - self.converted);
             self.converted += percent;
         }
 
