@@ -9,7 +9,8 @@ pub fn ALink(
 ) -> impl IntoView {
     let navigate = {
         let navigate = use_navigate();
-        move |_| {
+        move |e: web_sys::MouseEvent| {
+            e.stop_propagation();
             if let Some(href) = &href {
                 navigate(href, Default::default());
             }
