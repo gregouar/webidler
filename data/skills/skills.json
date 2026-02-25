@@ -289,7 +289,8 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": 3
+                  "value": 2,
+                  "unavoidable": true
                 }
               ]
             },
@@ -1675,7 +1676,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 1
+            "value": 2
           },
           {
             "stat": {
@@ -1685,7 +1686,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 2
+            "value": 3
           }
         ],
         "source": {
@@ -1695,6 +1696,24 @@
           }
         },
         "factor": 0.1
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "Speed": "Attack"
+            },
+            "modifier": "More",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Shield",
+            "item_stats": "Block"
+          }
+        },
+        "factor": 1
       }
     ],
     "targets": [

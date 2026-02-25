@@ -2,9 +2,9 @@ use anyhow::Result;
 
 use axum::{
     extract::{
-        State,
         connect_info::ConnectInfo,
         ws::{WebSocket, WebSocketUpgrade},
+        State,
     },
     response::IntoResponse,
 };
@@ -27,9 +27,9 @@ use crate::{
     auth,
     db::{self},
     game::{
-        GameInstance,
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
+        GameInstance,
     },
     rest::AppError,
     websocket::WebSocketConnection,
@@ -133,7 +133,7 @@ async fn handle_connect(
     // conn: &mut WebSocketConnection,
     msg: ClientConnectMessage,
 ) -> Result<Session> {
-    tracing::info!("connect: {:?}", msg);
+    tracing::info!("connect: {}", msg.character_id);
 
     let user_id = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
         .ok_or(AppError::Unauthorized("invalid token".to_string()))?;

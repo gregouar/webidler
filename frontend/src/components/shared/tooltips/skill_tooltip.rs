@@ -634,20 +634,21 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 "Per {} {} on equipped {}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
-                    ItemStatsSource::Armor => "Armor".to_string(),
-                    ItemStatsSource::Cooldown => "Cooldown".to_string(),
-                    ItemStatsSource::CritChance => "Critical Hit Chance".to_string(),
-                    ItemStatsSource::CritDamage => "Critical Hit Damage".to_string(),
+                    ItemStatsSource::Armor => " Armor".to_string(),
+                    ItemStatsSource::Block => "% Block".to_string(),
+                    ItemStatsSource::Cooldown => "s Cooldown".to_string(),
+                    ItemStatsSource::CritChance => "% Critical Hit Chance".to_string(),
+                    ItemStatsSource::CritDamage => "% Critical Hit Damage".to_string(),
                     ItemStatsSource::Damage {
                         damage_type,
                         min_max,
                     } => format!(
-                        "{}{}Damage",
+                        " {}{}Damage",
                         min_max_str(min_max),
                         damage_type_str(damage_type)
                     ),
-                    ItemStatsSource::Range => "Range".into(),
-                    ItemStatsSource::Shape => "Shape".into(),
+                    ItemStatsSource::Range => " Range".into(),
+                    ItemStatsSource::Shape => " Shape".into(),
                 },
                 match slot {
                     Some(slot) => match slot {
@@ -666,7 +667,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
             )
         }
         ModifierEffectSource::CharacterStats(stat_converter) => format!(
-            "Per {} {}:",
+            "Per {}{}:",
             format_number(1.0 / skill_modifier.factor),
             effects_tooltip::stat_converter_source_str(stat_converter),
         ),

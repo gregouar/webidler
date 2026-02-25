@@ -103,6 +103,7 @@ pub enum ModifierEffectSource {
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum ItemStatsSource {
     Armor,
+    Block,
     Cooldown,
     CritChance,
     CritDamage,

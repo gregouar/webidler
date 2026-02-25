@@ -1120,7 +1120,7 @@
               "Evade": null
             },
             "modifier": "Increased",
-            "value": 50.0
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -1966,8 +1966,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -1987,8 +1989,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -2137,8 +2141,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -2158,8 +2164,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -2391,7 +2399,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -2411,7 +2422,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -3372,8 +3386,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "crushing_blow",
             "OnHit": {
               "skill_type": null,
@@ -3412,7 +3427,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     },
                     {
                       "status_type": {
@@ -3433,7 +3449,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -3901,7 +3918,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -3921,7 +3941,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -4032,8 +4055,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -4053,8 +4078,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -4465,7 +4492,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -4485,7 +4515,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -5294,8 +5327,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "healing_aura",
             "OnWaveCompleted": null,
             "target": "Me",
@@ -5980,8 +6014,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "pyromaniac",
             "OnApplyStatus": {
               "skill_type": null,
@@ -6024,7 +6059,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -6066,8 +6102,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -6087,8 +6125,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -6228,8 +6268,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -6249,8 +6291,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -6324,7 +6368,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -6344,7 +6391,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -6613,7 +6663,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "More",
@@ -6638,7 +6690,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["LowLife"]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "More",
@@ -8218,8 +8272,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "sickening_concoction",
             "OnApplyStatus": {
               "skill_type": null,
@@ -8279,7 +8334,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     },
                     {
                       "status_type": {
@@ -8300,7 +8356,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -8309,7 +8366,14 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [{ "StatusDuration": {} }],
+                "ignore_stat_effects": [
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  }
+                ],
                 "conditional_modifiers": []
               }
             ],
@@ -8909,8 +8973,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "blazing_inferno",
             "OnHit": {
               "skill_type": null,
@@ -8960,7 +9025,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -9010,8 +9076,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -9031,8 +9099,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -9389,7 +9459,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -9409,7 +9482,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -9725,8 +9801,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -9746,8 +9824,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -9853,8 +9933,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "bonfire",
             "OnHit": {
               "skill_type": null,
@@ -9904,7 +9985,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": false,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -10099,8 +10181,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
+            "name": null,
             "icon": "",
+            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
             "trigger_id": "open_wound_apply",
             "OnHit": {
               "skill_type": "Attack",
@@ -10143,6 +10226,7 @@
                         "Trigger": {
                           "name": "Open Wound",
                           "icon": "passives/open_wound.svg",
+                          "description": null,
                           "trigger_id": "open_wound",
                           "OnTakeHit": {
                             "skill_type": null,
@@ -10174,9 +10258,6 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "CritChance": null
-                                },
-                                {
                                   "CritDamage": null
                                 },
                                 {
@@ -10185,6 +10266,9 @@
                                     "damage_type": null,
                                     "min_max": null
                                   }
+                                },
+                                {
+                                  "CritChance": null
                                 }
                               ],
                               "conditional_modifiers": []
@@ -10201,7 +10285,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": true,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -10210,6 +10295,7 @@
                     "lucky_chance": 0.0
                   }
                 },
+                "ignore_stat_effects": [],
                 "conditional_modifiers": []
               }
             ],
@@ -10397,8 +10483,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -10418,8 +10506,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -10752,8 +10842,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
+            "name": null,
             "icon": "",
+            "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
             "trigger_id": "dot_spread",
             "OnKill": {
               "conditions": []
@@ -10947,7 +11038,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": false,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -10958,6 +11050,13 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
@@ -10967,13 +11066,6 @@
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
                       "min_max": null
                     }
                   }
@@ -10999,7 +11091,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": false,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -11051,7 +11144,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": false,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -11103,7 +11197,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": false,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -11166,8 +11261,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -11187,8 +11284,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -11378,8 +11477,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -11399,8 +11500,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -11802,8 +11905,9 @@
         "effects": [],
         "triggers": [
           {
-            "description": null,
+            "name": null,
             "icon": "",
+            "description": null,
             "trigger_id": "stunning_blow",
             "OnHit": {
               "skill_type": "Attack",
@@ -11834,7 +11938,8 @@
                         "lucky_chance": 0.0
                       },
                       "cumulate": false,
-                      "replace_on_value_only": false
+                      "replace_on_value_only": false,
+                      "unavoidable": false
                     }
                   ],
                   "duration": {
@@ -12744,8 +12849,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -12765,8 +12872,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumMana"]
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -13145,7 +13254,9 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Increased",
@@ -13162,7 +13273,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -13179,7 +13292,9 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Increased",
@@ -13196,7 +13311,9 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
@@ -13371,8 +13488,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -13392,8 +13511,10 @@
                     "min_max": null
                   }
                 },
-                "conditions_duration": 50,
-                "conditions": ["MaximumLife"]
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 50
               }
             },
             "modifier": "More",
@@ -13529,7 +13650,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
@@ -13549,7 +13673,10 @@
                     "min_max": null
                   }
                 },
-                "conditions": ["ThreatLevel"]
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
             "modifier": "More",
