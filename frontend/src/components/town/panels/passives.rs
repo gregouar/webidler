@@ -263,7 +263,7 @@ pub fn AscendPanelHeader(
     let has_changed = Memo::new(move |_| {
         town_context
             .passives_tree_ascension
-            .with(|base_ascension| !passives_tree_ascension.read().eq(base_ascension))
+            .with(|base_ascension| !passives_tree_ascension.read().ascended_nodes.eq(&base_ascension.ascended_nodes))
     });
 
     view! {
@@ -1109,8 +1109,7 @@ fn validate_ascension(
         |mut acc, (node_id, node_level)| {
             if propagated_tree
                 .get(node_id)
-                .map(|max_node_level| node_level > max_node_level)
-                .unwrap_or(true)
+                .copied().unwrap_or_default() < *node_level
             {
                 acc.insert(*node_id);
             }
