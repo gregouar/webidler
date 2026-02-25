@@ -126,7 +126,14 @@ pub struct CharacterState {
 
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
-    pub monitored_conditions: HashMap<Condition, f64>,
+    pub monitored_conditions: HashMap<Condition, MonitoredCondition>,
+}
+
+// This shouldn't be here
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct MonitoredCondition {
+    pub value: f64,
+    pub duration: f64,
 }
 
 impl CharacterState {

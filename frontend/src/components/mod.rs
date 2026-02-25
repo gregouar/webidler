@@ -5,6 +5,7 @@ pub mod captcha;
 pub mod data_context;
 pub mod events;
 pub mod game;
+pub mod icons;
 pub mod pages;
 pub mod settings;
 pub mod shared;

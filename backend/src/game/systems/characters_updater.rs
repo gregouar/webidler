@@ -78,15 +78,38 @@ pub fn update_character_state(
         });
     }
 
-    let new_conditions = stats_updater::compute_conditions(
-        area_threat,
-        character_specs,
-        character_state,
-        &character_specs.conditional_modifiers,
-    );
-    if character_state.monitored_conditions != new_conditions {
-        character_state.monitored_conditions = new_conditions;
-        character_state.dirty_specs = true;
+    for monitored_condition in character_state.monitored_conditions.values_mut() {
+        monitored_condition.duration += elapsed_time_f64;
+    }
+
+    for conditional_modifier in character_specs.conditional_modifiers.iter() {
+        for condition in conditional_modifier.conditions.iter() {
+            let value = stats_updater::check_condition(
+                area_threat,
+                character_specs,
+                character_state,
+                &condition,
+            );
+
+            let monitored_condition = character_state
+                .monitored_conditions
+                .entry(condition.clone())
+                .or_default();
+
+            if monitored_condition.duration - elapsed_time_f64
+                < conditional_modifier.conditions_duration as f64 * 0.1
+                && monitored_condition.duration
+                    >= conditional_modifier.conditions_duration as f64 * 0.1
+            {
+                character_state.dirty_specs = true;
+            }
+
+            if monitored_condition.value != value {
+                monitored_condition.value = value;
+                monitored_condition.duration = 0.0;
+                character_state.dirty_specs = true;
+            }
+        }
     }
 }
 
@@ -285,11 +308,16 @@ fn compute_character_specs(
             StatType::StatConverter(specs) => {
                 stats_converters.push((specs.clone(), effect.modifier, effect.value));
             }
-            StatType::StatConditionalModifier { stat, conditions } => {
+            StatType::StatConditionalModifier {
+                stat,
+                conditions,
+                conditions_duration,
+            } => {
                 character_specs
                     .conditional_modifiers
                     .push(ConditionalModifier {
                         conditions: conditions.clone(),
+                        conditions_duration: *conditions_duration,
                         effects: [StatEffect {
                             stat: *(*stat).clone(),
                             modifier: effect.modifier,

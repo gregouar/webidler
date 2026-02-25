@@ -145,8 +145,9 @@ pub enum StatType {
     },
     StatConditionalModifier {
         stat: Box<StatType>,
-        #[serde(default)]
         conditions: Vec<Condition>,
+        #[serde(default)]
+        conditions_duration: u32,
     },
     StatConverter(StatConverterSpecs),
     GoldFind,

@@ -33,7 +33,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [500, 1000]
+        "value": [400, 600]
       }
     ],
     "min_area_level": 50

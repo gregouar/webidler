@@ -356,6 +356,7 @@ pub fn compute_skill_specs_effect<'a>(
                 .conditional_modifiers
                 .push(ConditionalModifier {
                     conditions: conditions.clone(),
+                    conditions_duration: 0,
                     effects: [StatEffect {
                         stat: *(stat.clone()),
                         modifier: effect.modifier,

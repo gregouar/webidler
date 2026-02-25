@@ -1966,6 +1966,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -1986,6 +1987,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -2135,6 +2137,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -2155,6 +2158,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -4028,6 +4032,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -4048,6 +4053,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -6060,6 +6066,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -6080,6 +6087,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -6220,6 +6228,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -6240,6 +6249,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -9000,6 +9010,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -9020,6 +9031,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -9713,6 +9725,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -9733,6 +9746,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -10085,7 +10099,7 @@
         "effects": [],
         "triggers": [
           {
-            "description": "20% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
+            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
             "icon": "",
             "trigger_id": "open_wound_apply",
             "OnHit": {
@@ -10119,7 +10133,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 20.0,
+                  "value": 25.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -10383,6 +10397,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -10403,6 +10418,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -11150,6 +11166,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -11170,6 +11187,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -11360,6 +11378,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -11380,6 +11399,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -12724,6 +12744,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -12744,6 +12765,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumMana"]
               }
             },
@@ -13349,6 +13371,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },
@@ -13369,6 +13392,7 @@
                     "min_max": null
                   }
                 },
+                "conditions_duration": 50,
                 "conditions": ["MaximumLife"]
               }
             },

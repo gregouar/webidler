@@ -12,6 +12,9 @@ use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::Skill
 use strum::IntoEnumIterator;
 
 use crate::assets::img_asset;
+use crate::components::icons::monster_tags::{
+    ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
+};
 use crate::components::shared::tooltips::effects_tooltip::{
     damage_over_time_type_str, damage_type_str, status_type_str,
 };
@@ -444,7 +447,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 </Show>
             </div>
 
-            <div class="w-full flex flex-col justify-center">
+            <div class="w-full flex flex-col justify-center gap-1">
                 <MonsterTags specs=specs.character_specs />
                 <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For
@@ -670,7 +673,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
 
     view! {
         <div class=format!(
-            "h-5 xl:h-8 grid {grid_size}",
+            "h-5 xl:h-8 grid {grid_size} text-zinc-300",
         )>
             {(is_armored)
                 .then(|| {
@@ -679,14 +682,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             tooltip=armored_tooltip
                             position=StaticTooltipPosition::Bottom
                         >
-                            <div class="aspect-square">
-                                <img
-                                    draggable="false"
-                                    src=move || img_asset("passives/armor.svg")
-                                    alt="Armored"
-                                    class="w-full h-full xl:drop-shadow-md/50 invert"
-                                />
-                            </div>
+                            <ArmorIcon />
                         </StaticTooltip>
                     }
                 })}
@@ -697,14 +693,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             tooltip=shielded_tooltip
                             position=StaticTooltipPosition::Bottom
                         >
-                            <div class="aspect-square">
-                                <img
-                                    draggable="false"
-                                    src=move || img_asset("passives/block.svg")
-                                    alt="Shielded"
-                                    class="w-full h-full xl:drop-shadow-md/50 invert"
-                                />
-                            </div>
+                            <ShieldIcon />
                         </StaticTooltip>
                     }
                 })}
@@ -715,14 +704,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             tooltip=evasive_tooltip
                             position=StaticTooltipPosition::Bottom
                         >
-                            <div class="aspect-square">
-                                <img
-                                    draggable="false"
-                                    src=move || img_asset("passives/curled_leaf.svg")
-                                    alt="Evasive"
-                                    class="w-full h-full xl:drop-shadow-md/50 invert"
-                                />
-                            </div>
+                            <EvadeIcon />
                         </StaticTooltip>
                     }
                 })}
@@ -733,14 +715,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             tooltip=resilient_tooltip
                             position=StaticTooltipPosition::Bottom
                         >
-                            <div class="aspect-square">
-                                <img
-                                    draggable="false"
-                                    src=move || img_asset("passives/breaking_chain.svg")
-                                    alt="Resilient"
-                                    class="w-full h-full xl:drop-shadow-md/50 invert"
-                                />
-                            </div>
+                            <ResilientIcon />
                         </StaticTooltip>
                     }
                 })}
@@ -751,14 +726,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             tooltip=regenerating_tooltip
                             position=StaticTooltipPosition::Bottom
                         >
-                            <div class="aspect-square">
-                                <img
-                                    draggable="false"
-                                    src=move || img_asset("passives/life_regen.svg")
-                                    alt="Regenerating"
-                                    class="w-full h-full xl:drop-shadow-md/50 invert"
-                                />
-                            </div>
+                            <LifeRegenIcon />
                         </StaticTooltip>
                     }
                 })}

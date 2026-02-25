@@ -438,6 +438,7 @@ impl From<OldStatType> for StatType {
                     StatConditionalModifier {
                         stat: Box::new((*stat_converter_specs.target_stat).into()),
                         conditions: vec![Condition::ThreatLevel],
+                        conditions_duration: 0,
                     }
                 } else {
                     StatConverter(stat_converter_specs.into())
@@ -446,6 +447,7 @@ impl From<OldStatType> for StatType {
             OldStatType::StatConditionalModifier { stat, conditions } => StatConditionalModifier {
                 stat: Box::new((*stat).into()),
                 conditions,
+                conditions_duration: 0,
             },
             OldStatType::SuccessChance {
                 skill_type,

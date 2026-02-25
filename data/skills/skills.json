@@ -1112,8 +1112,8 @@
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
     "icon": "skills/poison_coating.svg",
     "skill_type": "Attack",
-    "cooldown": 0,
-    "mana_cost": 0,
+    "cooldown": 5,
+    "mana_cost": 5,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -1124,33 +1124,57 @@
         "value": 30
       },
       {
-        "stat": { "StatusDuration": {} },
+        "stat": {
+          "StatusDuration": {
+            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          }
+        },
         "modifier": "Increased",
         "value": 1
       }
     ],
-    "triggers": [
+    "targets": [
       {
-        "trigger_id": "poison_coating",
-        "icon": "skills/poison_coating.svg",
-        "OnHit": {
-          "skill_type": "Attack",
-          "is_hurt": true
-        },
-        "skill_type": "Attack",
-        "inherit_modifiers": true,
+        "target_type": "Me",
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 5,
               "statuses": [
                 {
+                  "replace_on_value_only": true,
                   "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
+                    "Trigger": {
+                      "trigger_id": "poison_coating",
+                      "icon": "skills/poison_coating.svg",
+                      "target": "SameTarget",
+                      "skill_type": "Attack",
+                      "OnHit": {
+                        "skill_type": "Attack",
+                        "is_hurt": true,
+                        "is_triggered": false
+                      },
+                      "effects": [
+                        {
+                          "ApplyStatus": {
+                            "duration": 2,
+                            "statuses": [
+                              {
+                                "status_type": {
+                                  "DamageOverTime": {
+                                    "damage_type": "Poison"
+                                  }
+                                },
+                                "value": [3, 6]
+                              }
+                            ]
+                          },
+                          "ignore_stat_effects": []
+                        }
+                      ],
+                      "inherit_modifiers": true
                     }
-                  },
-                  "value": [4, 8]
+                  }
                 }
               ]
             }

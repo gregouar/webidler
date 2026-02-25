@@ -543,6 +543,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     min_max: None,
                                 }),
                                 conditions: vec![Condition::ThreatLevel],
+                                conditions_duration: 0,
                             },
                             Modifier::More,
                             0.0,

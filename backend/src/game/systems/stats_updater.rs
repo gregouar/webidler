@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use shared::data::{
     area::AreaThreat,
     conditional_modifier::{Condition, ConditionalModifier},
@@ -42,14 +40,33 @@ pub fn compute_conditional_modifiers(
 ) -> Vec<StatEffect> {
     conditional_modifiers
         .iter()
-        .flat_map(|conditional_modifier| {
+        .filter_map(|conditional_modifier| {
             let factor: f64 = conditional_modifier
                 .conditions
                 .iter()
                 .map(|condition| {
-                    check_condition(area_threat, character_specs, character_state, condition)
+                    if let Some(monitored_condition) =
+                        character_state.monitored_conditions.get(condition)
+                        && monitored_condition.duration
+                            >= conditional_modifier.conditions_duration as f64 * 0.1
+                    {
+                        monitored_condition.value
+                    } else if conditional_modifier.conditions_duration == 0 {
+                        // Last minute check, useful for skill modifiers that are not tracked
+                        check_condition(area_threat, character_specs, character_state, condition)
+                    } else {
+                        0.0
+                    }
                 })
                 .product();
+
+            if factor == 0.0 {
+                None
+            } else {
+                Some((conditional_modifier, factor))
+            }
+        })
+        .flat_map(|(conditional_modifier, factor)| {
             conditional_modifier
                 .effects
                 .iter()
@@ -95,10 +112,10 @@ pub fn check_condition(
             })
             .count() as f64,
         Condition::MaximumLife => {
-            (character_state.life.get() >= character_specs.max_life.get() * 0.99) as usize as f64
+            (character_state.life.get() >= character_specs.max_life.get() * 0.9999) as usize as f64
         }
         Condition::MaximumMana => {
-            (character_state.mana.get() >= character_specs.max_mana.get() * 0.99) as usize as f64
+            (character_state.mana.get() >= character_specs.max_mana.get() * 0.9999) as usize as f64
         }
         Condition::LowLife => {
             (character_state.life.get() <= character_specs.max_life.get() * 0.5) as usize as f64
@@ -108,25 +125,4 @@ pub fn check_condition(
         }
         Condition::ThreatLevel => area_threat.threat_level as f64,
     }
-}
-
-pub fn compute_conditions(
-    area_threat: &AreaThreat,
-    character_specs: &CharacterSpecs,
-    character_state: &CharacterState,
-    conditional_modifiers: &[ConditionalModifier],
-) -> HashMap<Condition, f64> {
-    conditional_modifiers
-        .iter()
-        .fold(HashMap::new(), |mut acc, value| {
-            for condition in &value.conditions {
-                acc.entry(condition.clone()).or_insert(check_condition(
-                    area_threat,
-                    character_specs,
-                    character_state,
-                    condition,
-                ));
-            }
-            acc
-        })
 }
