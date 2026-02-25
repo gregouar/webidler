@@ -15,7 +15,7 @@ use shared::data::{
 use crate::components::shared::tooltips::{
     conditions_tooltip,
     effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    skill_tooltip::{self, shape_str, skill_type_str, EffectLi},
 };
 
 pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
@@ -23,7 +23,13 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         .triggered_effect
         .effects
         .into_iter()
-        .map(|x| skill_tooltip::format_skill_effect(x, Some(&trigger.triggered_effect.modifiers)))
+        .map(|x| {
+            skill_tooltip::format_skill_effect(
+                x,
+                Some(&trigger.triggered_effect.modifiers),
+                trigger.triggered_effect.skill_type,
+            )
+        })
         .collect::<Vec<_>>();
 
     let target_infos = (trigger.triggered_effect.target != TriggerTarget::SameTarget)

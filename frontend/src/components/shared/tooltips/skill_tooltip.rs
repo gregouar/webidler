@@ -60,7 +60,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .targets
         .clone()
         .into_iter()
-        .map(format_target)
+        .map(|target| format_target(target, skill_specs.base.skill_type))
         .collect::<Vec<_>>();
 
     let trigger_lines = skill_specs
@@ -192,7 +192,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
     }
 }
 
-fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
+fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> impl IntoView {
     let shape = shape_str(targets_group.shape);
 
     let range = match targets_group.range {
@@ -227,7 +227,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let effects = targets_group
         .effects
         .into_iter()
-        .map(|x| format_skill_effect(x, None))
+        .map(|x| format_skill_effect(x, None, skill_type))
         .collect::<Vec<_>>();
 
     view! {
@@ -262,6 +262,7 @@ fn find_trigger_modifier(
 pub fn format_skill_effect(
     effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
+    skill_type: SkillType,
 ) -> impl IntoView + use<> {
     let success_chance = if effect.success_chance.value.get() < 100.0 {
         Some(view! {
@@ -473,9 +474,14 @@ pub fn format_skill_effect(
                             true => "Stack",
                             false => "Apply",
                         };
+                        let status_skill_type = match skill_type {
+                            SkillType::Curse => "Curse",
+                            SkillType::Blessing => "Blessing",
+                            _ => "Status"
+                        };
                     view! {
                         <EffectLi>
-                            {success_chance}{apply_str}" the following Status "
+                            {success_chance}{apply_str}" the following "{status_skill_type}" "
                             {format_duration(duration)} {trigger_modifier_duration_str} ":"
                             {(!stat_effects.is_empty())
                                 .then(|| {
