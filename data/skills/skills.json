@@ -506,7 +506,7 @@
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
-                      "skill_type": "Spell",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "ApplyStatus": {
@@ -740,7 +740,7 @@
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
-                      "skill_type": "Other",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "FlatDamage": {
