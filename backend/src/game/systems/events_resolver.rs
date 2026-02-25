@@ -294,6 +294,7 @@ fn handle_area_completed_event(
         game_data.player_specs.read().max_area_level.max(
             area_state
                 .area_level
+                .saturating_add(game_data.area_specs.power_level)
                 .saturating_add(game_data.area_specs.item_level_modifier),
         );
 

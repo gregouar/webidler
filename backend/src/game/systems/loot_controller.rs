@@ -1,5 +1,6 @@
 use shared::data::{
     item::{ItemCategory, ItemRarity, ItemSpecs},
+    item_affix::AffixType,
     loot::{LootState, QueuedLoot},
     player::PlayerInventory,
 };
@@ -177,6 +178,7 @@ fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
         .affixes
         .iter()
         // .map(|a| a.tier.pow(2) as usize)
+        .filter(|a| a.affix_type != AffixType::Unique)
         .map(|a| (100 + a.item_level as usize).pow(2))
         .sum::<usize>();
     // * 10_000;
