@@ -11,7 +11,7 @@ use shared::data::{
         SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        EffectsMap, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatType,
+        EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
         compare_options,
     },
 };
@@ -184,7 +184,9 @@ fn compute_skill_modifier_effects<'a>(
                             &item_specs.armor_specs,
                         ) {
                             (ItemStatsSource::Armor, _, Some(armor_specs)) => *armor_specs.armor,
-                            (ItemStatsSource::Block, _, Some(armor_specs)) => armor_specs.block.get() as f64,
+                            (ItemStatsSource::Block, _, Some(armor_specs)) => {
+                                armor_specs.block.get() as f64
+                            }
                             (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
                                 weapon_specs.cooldown.get()
                             }

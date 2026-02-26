@@ -7,7 +7,7 @@ use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
-    stat_effect::{MinMax, StatConverterSource, StatEffect, StatType},
+    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatType},
     trigger::TriggerSpecs,
     values::{Cooldown, NonNegative},
 };
@@ -80,6 +80,12 @@ pub enum SkillType {
     Curse,
     Blessing,
     Other,
+}
+
+impl Matchable for SkillType {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -252,4 +258,10 @@ pub enum SkillShape {
 pub enum RestoreType {
     Life,
     Mana,
+}
+
+impl Matchable for RestoreType {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
 }

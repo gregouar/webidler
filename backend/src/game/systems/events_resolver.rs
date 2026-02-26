@@ -7,6 +7,7 @@ use shared::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
         skill::TargetType,
+        stat_effect::compare_options,
         trigger::EventTrigger,
     },
 };
@@ -158,17 +159,28 @@ fn handle_status_event<'a>(
                 _ => continue,
             };
 
-            if status_trigger.skill_type.unwrap_or(status_event.skill_type)
-                == status_event.skill_type
-                && status_trigger
-                    .is_triggered
-                    .unwrap_or(status_event.trigger_id.is_some())
-                    == status_event.trigger_id.is_some()
-                && status_trigger
-                    .status_type
-                    .as_ref()
-                    .map(|status_type| status_event.status_type.is_match(status_type))
-                    .unwrap_or(true)
+            // if status_trigger.skill_type.unwrap_or(status_event.skill_type)
+            //     == status_event.skill_type
+            //     && status_trigger
+            //         .is_triggered
+            //         .unwrap_or(status_event.trigger_id.is_some())
+            //         == status_event.trigger_id.is_some()
+            //     && status_trigger
+            //         .status_type
+            //         .as_ref()
+            //         .map(|status_type| status_event.status_type.is_match(status_type))
+            //         .unwrap_or(true)
+            //     && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
+
+            if compare_options(&status_trigger.skill_type, &Some(status_event.skill_type))
+                && compare_options(
+                    &status_trigger.is_triggered,
+                    &Some(status_event.trigger_id.is_some()),
+                )
+                && compare_options(
+                    &status_trigger.status_type.as_ref(),
+                    &Some(&status_event.status_type),
+                )
                 && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {

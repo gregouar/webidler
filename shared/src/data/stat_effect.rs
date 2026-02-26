@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
+    modifier::{compute_more_factor, ModifiableValue, Modifier},
     skill::{RestoreType, SkillEffectType},
     values::NonNegative,
 };
@@ -37,12 +37,24 @@ pub enum DamageType {
     Storm,
 }
 
+impl Matchable for DamageType {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
+}
+
 pub type DamageMap = HashMap<DamageType, ChanceRange<ModifiableValue<NonNegative>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {
     Min,
     Max,
+}
+
+impl Matchable for MinMax {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -154,12 +166,8 @@ pub enum StatType {
     Description2(String),
 }
 
-pub fn compare_options<T: PartialEq>(first: &Option<T>, second: &Option<T>) -> bool {
-    first.is_none() || second.is_none() || first == second
-}
-
-impl StatType {
-    pub fn is_match(&self, stat_type: &StatType) -> bool {
+impl Matchable for StatType {
+    fn is_match(&self, stat_type: &StatType) -> bool {
         use StatType::*;
         match (self, stat_type) {
             (
@@ -212,9 +220,7 @@ impl StatType {
                 },
             ) => {
                 compare_options(skill_type, skill_type_2)
-                    && effect_type.as_ref().zip(effect_type_2.as_ref()).is_none_or(
-                        |(effect_type, effect_type_2)| effect_type.is_match(effect_type_2),
-                    )
+                    && compare_options(effect_type, effect_type_2)
             }
             (
                 ManaCost { skill_type },
@@ -330,8 +336,8 @@ pub enum StatStatusType {
     },
 }
 
-impl StatStatusType {
-    pub fn is_match(&self, status_type: &StatStatusType) -> bool {
+impl Matchable for StatStatusType {
+    fn is_match(&self, status_type: &StatStatusType) -> bool {
         if self == status_type {
             return true;
         }
@@ -395,8 +401,8 @@ pub enum StatSkillEffectType {
     Resurrect,
 }
 
-impl StatSkillEffectType {
-    pub fn is_match(&self, skill_effect_type: &StatSkillEffectType) -> bool {
+impl Matchable for StatSkillEffectType {
+    fn is_match(&self, skill_effect_type: &StatSkillEffectType) -> bool {
         use StatSkillEffectType::*;
         match (self, skill_effect_type) {
             (
@@ -410,10 +416,7 @@ impl StatSkillEffectType {
                 ApplyStatus {
                     status_type: status_type_2,
                 },
-            ) => status_type
-                .as_ref()
-                .zip(status_type_2.as_ref())
-                .is_none_or(|(status_type, status_type_2)| status_type.is_match(status_type_2)),
+            ) => compare_options(status_type, status_type_2),
             _ => self == skill_effect_type,
         }
     }
@@ -455,8 +458,8 @@ pub enum LuckyRollType {
     // TODO: could add others
 }
 
-impl LuckyRollType {
-    pub fn is_match(&self, lucky_roll_type: &LuckyRollType) -> bool {
+impl Matchable for LuckyRollType {
+    fn is_match(&self, lucky_roll_type: &LuckyRollType) -> bool {
         if self == lucky_roll_type {
             return true;
         }
@@ -605,5 +608,34 @@ impl EffectsMap {
                 value: *value,
                 bypass_ignore: *bypass_ignore,
             })
+    }
+}
+
+pub trait Matchable {
+    fn is_match(&self, other: &Self) -> bool;
+}
+
+impl<T: Matchable> Matchable for &T {
+    fn is_match(&self, other: &Self) -> bool {
+        (*self).is_match(*other)
+    }
+}
+
+impl Matchable for bool {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
+}
+
+impl Matchable for String {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
+}
+
+pub fn compare_options<T: Matchable>(first: &Option<T>, second: &Option<T>) -> bool {
+    match (first, second) {
+        (None, _) | (_, None) => true,
+        (Some(a), Some(b)) => a.is_match(b),
     }
 }

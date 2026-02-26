@@ -503,6 +503,7 @@
                       "icon": "skills/curse_frailty.svg",
                       "OnTakeHit": {
                         "is_crit": true,
+                        "is_hurt": true,
                         "is_triggered": false
                       },
                       "target": "SameTarget",
@@ -737,6 +738,7 @@
                       "name": "Curse of Putridity",
                       "icon": "skills/curse_putridity.svg",
                       "OnTakeHit": {
+                        "is_hurt": true,
                         "is_triggered": false
                       },
                       "target": "SameTarget",
@@ -841,6 +843,8 @@
                       "icon": "skills/curse_flammability.svg",
                       "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each Stack of Burn present on the target.",
                       "OnTakeHit": {
+                        "is_hurt": true,
+                        "damage_type": "Fire",
                         "is_triggered": false
                       },
                       "target": "SameTarget",
@@ -1395,6 +1399,7 @@
                       "skill_type": "Attack",
                       "OnHit": {
                         "skill_type": "Attack",
+                        "is_hurt": true,
                         "is_triggered": false
                       },
                       "effects": [
@@ -1454,7 +1459,8 @@
                             "HitCrit": null
                           }
                         }
-                      ]
+                      ],
+                      "inherit_modifiers": true
                     }
                   }
                 }

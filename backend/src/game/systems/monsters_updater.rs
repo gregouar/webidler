@@ -138,6 +138,12 @@ pub fn update_monster_specs(
                 StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
                 _ => None,
             })
+            .chain(
+                monster_specs
+                    .skill_specs
+                    .iter()
+                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
+            )
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
@@ -150,12 +156,4 @@ pub fn update_monster_specs(
             );
         }
     }
-
-    monster_specs.character_specs.triggers.extend(
-        monster_specs
-            .skill_specs
-            .iter()
-            .flat_map(|skill_specs| skill_specs.triggers.iter())
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-    );
 }

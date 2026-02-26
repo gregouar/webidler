@@ -13,7 +13,7 @@ use shared::data::{
         RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{StatEffect, StatSkillEffectType, StatStatusType, StatType},
+    stat_effect::{Matchable, StatEffect, StatSkillEffectType, StatStatusType, StatType},
     trigger::TriggerEffectModifier,
 };
 use strum::IntoEnumIterator;

@@ -174,6 +174,13 @@ pub fn update_player_specs(
                     .equipped_items()
                     .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
             )
+            .chain(
+                player_specs
+                    .skills_specs
+                    .iter()
+                    .flat_map(|skill_specs| skill_specs.triggers.iter())
+                    .filter(|trigger_specs| !trigger_specs.triggered_effect.inherit_modifiers),
+            )
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
@@ -192,6 +199,7 @@ pub fn update_player_specs(
             .skills_specs
             .iter()
             .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .filter(|trigger_specs| trigger_specs.triggered_effect.inherit_modifiers)
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 

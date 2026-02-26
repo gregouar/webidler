@@ -88,7 +88,7 @@ pub fn update_character_state(
                 area_threat,
                 character_specs,
                 character_state,
-                &condition,
+                condition,
             );
 
             let monitored_condition = character_state

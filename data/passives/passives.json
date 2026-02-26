@@ -10788,7 +10788,7 @@
           {
             "name": null,
             "icon": "",
-            "description": "Bleed spread to nearby Enemies, for its remaining Duration.",
+            "description": "Bleed spreads to nearby Enemies, for its remaining Duration.",
             "trigger_id": "bleed_spread",
             "OnKill": {
               "conditions": [
@@ -10909,7 +10909,7 @@
           {
             "name": null,
             "icon": "",
-            "description": "Burn stacks spread to nearby Enemies, for half their remaining Duration.",
+            "description": "Burn spreads to nearby Enemies, for its remaining Duration.",
             "trigger_id": "burn_spread",
             "OnKill": {
               "conditions": [
@@ -10953,7 +10953,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 1.0,
                 "source": {
                   "StatusDuration": {
                     "status_type": {
@@ -11030,7 +11030,7 @@
           {
             "name": null,
             "icon": "",
-            "description": "Poison spread to nearby Enemies, for its remaining Duration.",
+            "description": "Poison spreads to nearby Enemies, for its remaining Duration.",
             "trigger_id": "poison_spread",
             "OnKill": {
               "conditions": [
