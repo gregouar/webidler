@@ -15,24 +15,15 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use backend::{
+use backend_chat::{
     app_state::{AppSettings, AppState},
-    db::{self, pool},
-    email::EmailService,
-    game::{
-        data::master_store::MasterStore, sessions::SessionsStore, systems::sessions_controller,
-    },
-    integration::discord::DiscordState,
-    rest, tasks, websocket,
+    db::pool,
+    websocket,
 };
 
 #[tokio::main]
 async fn main() {
     let _ = dotenvy::dotenv();
-
-    let master_store = MasterStore::load_from_folder("data")
-        .await
-        .expect("couldn't load master game data");
 
     // TODO: depending on environment, only install necessary
     sqlx::any::install_default_drivers();
@@ -41,18 +32,6 @@ async fn main() {
         pool::create_pool(&std::env::var("DATABASE_URL").expect("missing 'DATABASE_URL' setting"))
             .await
             .expect("failed to connect to database");
-
-    pool::migrate(&db_pool)
-        .await
-        .expect("failed to migrate database");
-
-    migrate_data(&db_pool, &master_store)
-        .await
-        .expect("failed to migrate data");
-
-    db::game_sessions::clean_all_sessions(&db_pool)
-        .await
-        .expect("couldn't clean game sessions");
 
     let default_level = if cfg!(debug_assertions) {
         format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME"))
@@ -82,33 +61,19 @@ async fn main() {
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
-    let sessions_store = SessionsStore::new();
-
-    let purge_sessions_handle = tokio::spawn(tasks::purge_sessions(
-        db_pool.clone(),
-        sessions_store.clone(),
-    ));
-
     let app_state = AppState {
         app_settings: AppSettings::from_env(),
         db_pool: db_pool.clone(),
-        email_service: EmailService::from_env(),
-        master_store,
-        sessions_store: sessions_store.clone(),
-        discord_state: DiscordState::new(
-            std::env::var("DISCORD_BOT_TOKEN").expect("DISCORD_BOT_TOKEN must be set"),
-        ),
     };
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
-        .merge(rest::routes(app_state.clone()))
-        .route("/ws", any(websocket::handler))
+        .route("/chatws", any(websocket::handler))
         .with_state(app_state.clone())
         .layer(tracer_layer)
         .layer(cors_layer);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:4200").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:4242").await.unwrap();
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
     let server = axum::serve(
         listener,
@@ -122,29 +87,5 @@ async fn main() {
         }
     }
 
-    purge_sessions_handle.abort();
-
-    // Note that this only save the sessions that were not active but in the store...
-    if let Err(e) = sessions_controller::save_all_sessions(&db_pool, &sessions_store).await {
-        tracing::error!("failed to save all sessions: {}", e);
-    }
-
     tracing::debug!("server has been shut down");
-}
-
-async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
-    db::migrations::migration_0_1_6_to_0_1_7::migrate(db_pool, master_store).await?;
-    db::migrations::migration_0_1_7_to_0_1_8::migrate(db_pool).await?;
-    db::migrations::migration_0_1_8_to_0_1_9::migrate(db_pool, master_store).await?;
-    Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_master_store() {
-        MasterStore::load_from_folder("../data").await.unwrap();
-    }
 }

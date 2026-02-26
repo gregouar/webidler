@@ -1,20 +1,14 @@
 use std::collections::HashSet;
 
-use leptos::ev::mousemove;
-use leptos::ev::mouseup;
+use leptos::ev::{mousemove, mouseup};
 use leptos::prelude::*;
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash)]
-enum Channel {
-    Global,
-    Trade,
-    System,
-}
+use shared::messages::chat::ChatChannel;
 
 #[derive(Clone)]
 struct ChatMessage {
     id: u64,
-    channel: Channel,
+    channel: ChatChannel,
     author: String,
     content: String,
 }
@@ -69,8 +63,8 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
 
     let selected_channels = RwSignal::new({
         let mut set = HashSet::new();
-        set.insert(Channel::Global);
-        set.insert(Channel::System);
+        set.insert(ChatChannel::Global);
+        set.insert(ChatChannel::System);
         set
     });
 
@@ -79,19 +73,19 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     let messages = RwSignal::new(vec![
         ChatMessage {
             id: 1,
-            channel: Channel::System,
+            channel: ChatChannel::System,
             author: "System".into(),
             content: "World event starting in 2 minutes.".into(),
         },
         ChatMessage {
             id: 2,
-            channel: Channel::Global,
+            channel: ChatChannel::Global,
             author: "Nyx".into(),
             content: "Anyone pushing wave 200?".into(),
         },
         ChatMessage {
             id: 3,
-            channel: Channel::Trade,
+            channel: ChatChannel::Trade,
             author: "Valen".into(),
             content: "WTS Infernal Blade 12k".into(),
         },
@@ -115,7 +109,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
-    let toggle_channel = move |channel: Channel| {
+    let toggle_channel = move |channel: ChatChannel| {
         selected_channels.update(|set| {
             if set.contains(&channel) {
                 set.remove(&channel);
@@ -136,7 +130,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         messages.update(|list| {
             list.push(ChatMessage {
                 id: new_id,
-                channel: Channel::Global,
+                channel: ChatChannel::Global,
                 author: "You".into(),
                 content,
             })
@@ -171,9 +165,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                             type="checkbox"
                                             class="accent-amber-500"
                                             prop:checked=move || {
-                                                selected_channels.get().contains(&Channel::Global)
+                                                selected_channels.get().contains(&ChatChannel::Global)
                                             }
-                                            on:change=move |_| toggle_channel(Channel::Global)
+                                            on:change=move |_| toggle_channel(ChatChannel::Global)
                                         />
                                         "Global"
                                     </label>
@@ -183,9 +177,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                             type="checkbox"
                                             class="accent-amber-500"
                                             prop:checked=move || {
-                                                selected_channels.get().contains(&Channel::Trade)
+                                                selected_channels.get().contains(&ChatChannel::Trade)
                                             }
-                                            on:change=move |_| toggle_channel(Channel::Trade)
+                                            on:change=move |_| toggle_channel(ChatChannel::Trade)
                                         />
                                         "Trade"
                                     </label>
@@ -195,9 +189,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                             type="checkbox"
                                             class="accent-amber-500"
                                             prop:checked=move || {
-                                                selected_channels.get().contains(&Channel::System)
+                                                selected_channels.get().contains(&ChatChannel::System)
                                             }
-                                            on:change=move |_| toggle_channel(Channel::System)
+                                            on:change=move |_| toggle_channel(ChatChannel::System)
                                         />
                                         "System"
                                     </label>
@@ -250,9 +244,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                         <div class="text-[13px] leading-snug">
                                                             <span class=move || {
                                                                 match msg.channel {
-                                                                    Channel::System => "text-amber-400",
-                                                                    Channel::Trade => "text-emerald-400",
-                                                                    Channel::Global => "text-amber-400",
+                                                                    ChatChannel::System => "text-amber-400",
+                                                                    ChatChannel::Trade => "text-emerald-400",
+                                                                    ChatChannel::Global => "text-amber-400",
                                                                 }
                                                             }>{msg.author.clone()}</span>
                                                             <span class="text-gray-500">": "</span>

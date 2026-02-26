@@ -10,15 +10,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-COPY ./backend ./backend
+COPY ./backend_chat ./backend_chat
 COPY ./shared ./shared
-COPY ./.sqlx ./backend/.sqlx
+COPY ./.sqlx ./backend_chat/.sqlx
 
-WORKDIR /app/backend  
+WORKDIR /app/backend_chat  
 
 ENV SQLX_OFFLINE=true
-RUN cargo build --release --no-default-features --bin backend --features postgres 
-RUN strip ./target/release/backend -o /backend
+RUN cargo build --release --no-default-features --bin backend_chat --features postgres 
+RUN strip ./target/release/backend_chat -o /backend_chat
 
 FROM debian:bookworm-slim
 
@@ -29,14 +29,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
  && rm -rf /var/lib/apt/lists/*
  
-COPY --from=builder /backend /
-COPY ./migrations ./migrations
+COPY --from=builder /backend_chat /
 
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
-RUN chown appuser:appgroup /backend -R
+RUN chown appuser:appgroup /backend_chat -R
 
 EXPOSE 4200
 
 USER appuser
 
-CMD [ "/backend" ]
+CMD [ "/backend_chat" ]
