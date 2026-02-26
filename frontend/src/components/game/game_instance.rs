@@ -13,11 +13,12 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     game::{
-        GameContext,
         battle_scene::BattleScene,
         header_menu::HeaderMenu,
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
+        GameContext,
     },
+    shared::chat::ChatPanel,
     ui::{toast::*, tooltip::DynamicTooltip},
     websocket::WebsocketContext,
 };
@@ -77,6 +78,7 @@ pub fn GameInstance() -> impl IntoView {
                     <EndQuestPanel />
                 </div>
             </Show>
+            <ChatPanel open=game_context.open_chat />
         </main>
     }
 }

@@ -108,6 +108,15 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
                 <WikiButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        game_context.open_chat.set(!game_context.open_chat.get_untracked())
+                    }
+                >
+                    "Chat"
+                </MenuButton>
                 <MenuButton on:click=move |_| open_inventory()>
                     <span class="inline xl:hidden">"Inv."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
