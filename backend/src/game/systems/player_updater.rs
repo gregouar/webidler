@@ -153,6 +153,7 @@ pub fn update_player_specs(
 
     compute_player_specs(player_specs, player_inventory, &mut effects);
 
+    // First we add the ones that did not inherit modifiers yet
     player_specs.character_specs.triggers.extend(
         passives_tree_state
             .purchased_nodes
@@ -178,12 +179,13 @@ pub fn update_player_specs(
                 player_specs
                     .skills_specs
                     .iter()
-                    .flat_map(|skill_specs| skill_specs.triggers.iter())
-                    .filter(|trigger_specs| !trigger_specs.triggered_effect.inherit_modifiers),
+                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
             )
+            .filter(|trigger_specs| !trigger_specs.triggered_effect.inherit_modifiers)
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
+    // Apply modifiers on them
     for trigger_specs in player_specs.character_specs.triggers.iter_mut() {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
@@ -194,11 +196,34 @@ pub fn update_player_specs(
         }
     }
 
+    // Then add the ones that were already modified
     player_specs.character_specs.triggers.extend(
-        player_specs
-            .skills_specs
+        passives_tree_state
+            .purchased_nodes
             .iter()
-            .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
+            .flat_map(|node| node.triggers.iter())
+            .chain(
+                player_state
+                    .character_state
+                    .statuses
+                    .iter()
+                    .filter_map(|(status_specs, _)| match status_specs {
+                        StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                        _ => None,
+                    }),
+            )
+            .chain(
+                player_inventory
+                    .equipped_items()
+                    .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
+            )
+            .chain(
+                player_specs
+                    .skills_specs
+                    .iter()
+                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
+            )
             .filter(|trigger_specs| trigger_specs.triggered_effect.inherit_modifiers)
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
