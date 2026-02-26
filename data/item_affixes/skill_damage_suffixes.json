@@ -200,7 +200,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -5
+        "value": -10
       }
     ]
   },
@@ -224,7 +224,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -10
+        "value": -20
       }
     ]
   },
@@ -248,7 +248,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -15
+        "value": -30
       }
     ]
   },
@@ -272,7 +272,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -20
+        "value": -40
       }
     ]
   },
@@ -296,7 +296,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -25
+        "value": -50
       }
     ]
   },
@@ -320,7 +320,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -30
+        "value": -60
       }
     ]
   },
@@ -344,7 +344,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -35
+        "value": -70
       }
     ]
   },
@@ -368,7 +368,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -40
+        "value": -80
       }
     ]
   },
@@ -392,7 +392,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -45
+        "value": -90
       }
     ]
   },
@@ -416,7 +416,7 @@
         "scope": "Global",
         "stat": { "Speed": "Attack" },
         "modifier": "Increased",
-        "value": -50
+        "value": -100
       }
     ]
   },

@@ -21,6 +21,7 @@ use crate::game::{
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
 
+/// Return whether the target was hurt
 #[allow(clippy::too_many_arguments)]
 pub fn attack_character(
     events_queue: &mut EventsQueue,
@@ -32,7 +33,7 @@ pub fn attack_character(
     is_crit: bool,
     unblockable: bool,
     trigger_id: Option<&str>,
-) {
+) -> bool {
     let (target_id, (target_specs, target_state)) = target;
 
     let is_blocked = if unblockable {
@@ -87,6 +88,8 @@ pub fn attack_character(
         is_hurt,
         trigger_id: trigger_id.map(String::from),
     }));
+
+    is_hurt
 }
 
 pub fn damage_character(
