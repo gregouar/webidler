@@ -299,7 +299,7 @@ pub fn apply_skill_effects(
     let seed = rng::roll_seed();
 
     targets.iter_mut().any_all(|target| {
-        let mut target_applicable = true;
+        let mut target_applicable = false;
         for skill_effect in skill_effects.iter() {
             let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
                 skill_effect
