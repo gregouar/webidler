@@ -1966,9 +1966,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -1989,9 +1987,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -2141,9 +2137,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -2164,9 +2158,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -2399,9 +2391,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -2422,9 +2412,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -3918,9 +3906,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -3941,9 +3927,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -4055,9 +4039,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -4078,9 +4060,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -4492,9 +4472,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -4515,9 +4493,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -6102,9 +6078,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -6125,9 +6099,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -6268,9 +6240,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -6291,9 +6261,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -6368,9 +6336,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -6391,9 +6357,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -6663,9 +6627,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "LowLife"
-                ]
+                "conditions": ["LowLife"]
               }
             },
             "modifier": "More",
@@ -6690,9 +6652,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "LowLife"
-                ]
+                "conditions": ["LowLife"]
               }
             },
             "modifier": "More",
@@ -9076,9 +9036,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -9099,9 +9057,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -9459,9 +9415,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -9482,9 +9436,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -9801,9 +9753,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -9824,9 +9774,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -10483,9 +10431,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -10506,9 +10452,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -10844,10 +10788,18 @@
           {
             "name": null,
             "icon": "",
-            "description": "Damage over Time effects spread to nearby Enemies, for their remaining Duration.",
-            "trigger_id": "dot_spread",
+            "description": "Bleed spread to nearby Enemies, for its remaining Duration.",
+            "trigger_id": "bleed_spread",
             "OnKill": {
-              "conditions": []
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Physical" }
+                    }
+                  }
+                }
+              ]
             },
             "target": "SameTarget",
             "modifiers": [
@@ -10891,133 +10843,10 @@
                     "skill_type": null
                   }
                 }
-              },
-              {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": "Fire",
-                    "min_max": null
-                  }
-                },
-                "modifier": "Flat",
-                "factor": 1.0,
-                "source": {
-                  "StatusValue": {
-                    "status_type": null,
-                    "skill_type": null
-                  }
-                }
-              },
-              {
-                "stat": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
-                    "skill_type": null
-                  }
-                },
-                "modifier": "Flat",
-                "factor": 1.0,
-                "source": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
-                    "skill_type": null
-                  }
-                }
-              },
-              {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": "Poison",
-                    "min_max": null
-                  }
-                },
-                "modifier": "Flat",
-                "factor": 1.0,
-                "source": {
-                  "StatusValue": {
-                    "status_type": null,
-                    "skill_type": null
-                  }
-                }
-              },
-              {
-                "stat": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "skill_type": null
-                  }
-                },
-                "modifier": "Flat",
-                "factor": 1.0,
-                "source": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "skill_type": null
-                  }
-                }
-              },
-              {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": "Storm",
-                    "min_max": null
-                  }
-                },
-                "modifier": "Flat",
-                "factor": 1.0,
-                "source": {
-                  "StatusValue": {
-                    "status_type": null,
-                    "skill_type": null
-                  }
-                }
-              },
-              {
-                "stat": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Storm"
-                      }
-                    },
-                    "skill_type": null
-                  }
-                },
-                "modifier": "Flat",
-                "factor": 1.0,
-                "source": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Storm"
-                      }
-                    },
-                    "skill_type": null
-                  }
-                }
               }
             ],
             "skill_range": "Any",
-            "skill_type": "Attack",
+            "skill_type": "Other",
             "effects": [
               {
                 "success_chance": {
@@ -11071,7 +10900,75 @@
                   }
                 ],
                 "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Contact",
+            "owner": null,
+            "inherit_modifiers": false
+          },
+          {
+            "name": null,
+            "icon": "",
+            "description": "Burn stacks spread to nearby Enemies, for half their remaining Duration.",
+            "trigger_id": "burn_spread",
+            "OnKill": {
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Fire" }
+                    }
+                  }
+                }
+              ]
+            },
+            "target": "SameTarget",
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Fire",
+                    "min_max": null
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "status_type": null,
+                    "skill_type": null
+                  }
+                }
               },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    },
+                    "skill_type": null
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 0.5,
+                "source": {
+                  "StatusDuration": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    },
+                    "skill_type": null
+                  }
+                }
+              }
+            ],
+            "skill_range": "Any",
+            "skill_type": "Other",
+            "effects": [
               {
                 "success_chance": {
                   "value": 100.0,
@@ -11090,7 +10987,7 @@
                         "max": 0.0,
                         "lucky_chance": 0.0
                       },
-                      "cumulate": false,
+                      "cumulate": true,
                       "replace_on_value_only": false,
                       "unavoidable": false
                     }
@@ -11103,6 +11000,13 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
@@ -11114,17 +11018,78 @@
                       "damage_type": null,
                       "min_max": null
                     }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "min_max": null
-                    }
                   }
                 ],
                 "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Contact",
+            "owner": null,
+            "inherit_modifiers": false
+          },
+          {
+            "name": null,
+            "icon": "",
+            "description": "Poison spread to nearby Enemies, for its remaining Duration.",
+            "trigger_id": "poison_spread",
+            "OnKill": {
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    }
+                  }
+                }
+              ]
+            },
+            "target": "SameTarget",
+            "modifiers": [
+              {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": "Poison",
+                    "min_max": null
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusValue": {
+                    "status_type": null,
+                    "skill_type": null
+                  }
+                }
               },
+              {
+                "stat": {
+                  "StatusDuration": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    },
+                    "skill_type": null
+                  }
+                },
+                "modifier": "Flat",
+                "factor": 1.0,
+                "source": {
+                  "StatusDuration": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    },
+                    "skill_type": null
+                  }
+                }
+              }
+            ],
+            "skill_range": "Any",
+            "skill_type": "Other",
+            "effects": [
               {
                 "success_chance": {
                   "value": 100.0,
@@ -11156,66 +11121,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "min_max": null
-                    }
-                  }
-                ],
-                "conditional_modifiers": []
-              },
-              {
-                "success_chance": {
-                  "value": 100.0,
-                  "lucky_chance": 0.0
-                },
-                "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Storm"
-                        }
-                      },
-                      "value": {
-                        "min": 0.0,
-                        "max": 0.0,
-                        "lucky_chance": 0.0
-                      },
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false
-                    }
-                  ],
-                  "duration": {
-                    "min": 0.0,
-                    "max": 0.0,
-                    "lucky_chance": 0.0
-                  }
-                },
-                "ignore_stat_effects": [
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -11226,6 +11131,13 @@
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -11261,9 +11173,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -11284,9 +11194,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -11477,9 +11385,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -11500,9 +11406,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -12849,9 +12753,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -12872,9 +12774,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumMana"
-                ],
+                "conditions": ["MaximumMana"],
                 "conditions_duration": 50
               }
             },
@@ -13254,9 +13154,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Increased",
@@ -13273,9 +13171,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -13292,9 +13188,7 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "Increased",
@@ -13311,9 +13205,7 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [
-                  "MaximumLife"
-                ]
+                "conditions": ["MaximumLife"]
               }
             },
             "modifier": "More",
@@ -13488,9 +13380,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -13511,9 +13401,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "MaximumLife"
-                ],
+                "conditions": ["MaximumLife"],
                 "conditions_duration": 50
               }
             },
@@ -13650,9 +13538,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
@@ -13673,9 +13559,7 @@
                     "min_max": null
                   }
                 },
-                "conditions": [
-                  "ThreatLevel"
-                ],
+                "conditions": ["ThreatLevel"],
                 "conditions_duration": 0
               }
             },
