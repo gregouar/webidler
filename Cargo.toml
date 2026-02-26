@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "backend",
+    "backend_chat",
     "frontend", 
     "tools", 
     "shared"

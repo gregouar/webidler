@@ -24,35 +24,45 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     let minimized = RwSignal::new(false);
 
     // Drag state
-    let position = RwSignal::new((40i32, 40i32)); // bottom, right offsets
     let dragging = RwSignal::new(false);
-    let drag_origin = RwSignal::new((0i32, 0i32));
+    let position = RwSignal::new((200i32, 200i32)); // top, left
+    let drag_start_mouse = RwSignal::new((0i32, 0i32));
+    let drag_start_position = RwSignal::new((0i32, 0i32));
     let start_drag = move |ev: leptos::ev::MouseEvent| {
         dragging.set(true);
-        drag_origin.set((ev.client_x(), ev.client_y()));
+
+        drag_start_mouse.set((ev.screen_x(), ev.screen_y()));
+        drag_start_position.set(position.get());
 
         let move_listener = window_event_listener(mousemove, move |ev| {
-            if dragging.get() {
-                let (ox, oy) = drag_origin.get();
-                let dx = ev.client_x() - ox;
-                let dy = ev.client_y() - oy;
-
-                position.update(|(b, r)| {
-                    let win = window();
-                    let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
-                    let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
-
-                    *b = (*b - dy).clamp(0, height - 100);
-                    *r = (*r - dx).clamp(0, width - 200);
-                });
-
-                drag_origin.set((ev.client_x(), ev.client_y()));
+            if !dragging.get() {
+                return;
             }
+
+            let (start_mx, start_my) = drag_start_mouse.get();
+            let (start_top, start_left) = drag_start_position.get();
+
+            let dx = ev.screen_x() - start_mx;
+            let dy = ev.screen_y() - start_my;
+
+            let new_top = start_top + dy;
+            let new_left = start_left + dx;
+
+            // Clamp AFTER computing absolute value
+            let win = window();
+            let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
+            let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
+
+            let clamped_top = new_top.clamp(0, height - 100);
+            let clamped_left = new_left.clamp(0, width - 200);
+
+            position.set((clamped_top, clamped_left));
         });
 
         let up_listener = window_event_listener(mouseup, move |_| {
             dragging.set(false);
         });
+
         drop(move_listener);
         drop(up_listener);
     };
@@ -140,12 +150,12 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             if !open.get() {
                 ().into_any()
             } else {
-                let (bottom, right) = position.get();
+                let (top, left) = position.get();
 
                 view! {
                     <div
                         class="fixed z-50 select-none text-left"
-                        style=format!("bottom:{}px; right:{}px;", bottom, right)
+                        style=format!("top:{}px; left:{}px;", top, left)
                     >
                         <div class="w-[420px] bg-zinc-900/80 backdrop-blur border border-zinc-700 text-sm text-gray-200 flex flex-col shadow-xl">
 

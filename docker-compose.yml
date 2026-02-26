@@ -42,6 +42,32 @@ services:
     networks:
       - backend_net
 
+  backend_chat:
+    image: backend_chat:latest
+    container_name: backend_chat
+    build:
+      context: ./
+      dockerfile: ./backend_chat/Dockerfile
+    volumes:
+      - ./data:/data
+    restart: always
+    healthcheck:
+      test: curl --fail http://backend_chat:4200 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    environment:
+      TURNSTILE_SECRET: ${TURNSTILE_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+      AES_KEY: ${AES_KEY}
+      HASH_KEY: ${HASH_KEY}
+      DATABASE_URL: postgres://webidler_user:${POSTGRES_PASSWORD}@database/webidler
+      CORS_ORIGINS: https://gregouar.github.io,https://html-classic.itch.zone
+      FRONTEND_URL: https://gregouar.github.io/webidler
+      RUST_LOG: INFO
+    networks:
+      - backend_net
+
   database:
     image: postgres:15
     container_name: database
