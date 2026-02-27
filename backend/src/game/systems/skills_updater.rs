@@ -79,7 +79,6 @@ pub fn update_skill_specs(
     ))
         .into();
 
-
     apply_effects_to_skill_specs(skill_specs, local_effects.iter().chain(effects));
 }
 

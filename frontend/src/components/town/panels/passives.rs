@@ -6,6 +6,7 @@ use std::{
 };
 
 use shared::{
+    constants::DEFAULT_MAX_LEVEL,
     data::{
         item_affix::AffixEffectScope,
         passive::{
@@ -481,6 +482,8 @@ pub fn BuildPanelHeader(
                                     <span class="text-white font-semibold ml-2">
                                         {move || passives_tree_build.read().len() + 1}
                                     </span>
+                                    "/"
+                                    {DEFAULT_MAX_LEVEL}
                                 }
                                     .into_any()
                             }
@@ -817,7 +820,9 @@ fn AscendNode(
                 }
             }
             PassivesTab::Build => {
-                if derived_node_specs.read().locked && node_level.get() == 0 {
+                if (derived_node_specs.read().locked && node_level.get() == 0)
+                    || (passives_tree_build.read().len() + 1 >= DEFAULT_MAX_LEVEL as usize)
+                {
                     0
                 } else if derived_node_specs.read().root_node {
                     1

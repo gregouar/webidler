@@ -21,7 +21,7 @@ pub struct MonsterSpecs {
     pub rarity: MonsterRarity,
     pub initiative: ChanceRange<f32>,
     pub power_factor: f64,
-    pub reward_factor: f64,
+    pub reward_factor: f64, // gold_factor?
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
