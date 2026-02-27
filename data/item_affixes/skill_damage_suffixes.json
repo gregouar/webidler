@@ -616,7 +616,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [50, 90]
+        "value": [40, 65]
       },
       {
         "scope": "Global",
@@ -640,7 +640,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [110, 140]
+        "value": [75, 105]
       },
       {
         "scope": "Global",
@@ -664,7 +664,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [160, 190]
+        "value": [120, 145]
       },
       {
         "scope": "Global",
@@ -688,7 +688,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [210, 240]
+        "value": [155, 180]
       },
       {
         "scope": "Global",
@@ -712,7 +712,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [260, 290]
+        "value": [190, 215]
       },
       {
         "scope": "Global",
@@ -736,7 +736,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [310, 340]
+        "value": [230, 255]
       },
       {
         "scope": "Global",
@@ -760,7 +760,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [360, 390]
+        "value": [270, 295]
       },
       {
         "scope": "Global",
@@ -784,7 +784,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [410, 440]
+        "value": [305, 330]
       },
       {
         "scope": "Global",
@@ -808,7 +808,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [460, 500]
+        "value": [345, 360]
       },
       {
         "scope": "Global",
@@ -832,7 +832,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [520, 600]
+        "value": [390, 450]
       },
       {
         "scope": "Global",

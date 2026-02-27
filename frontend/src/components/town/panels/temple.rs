@@ -249,7 +249,7 @@ fn BenedictionRow(
     let benediction_title = format_benediction_title(&benediction_specs.effect);
 
     view! {
-        <div class="p-4 rounded-lg bg-zinc-800 border border-zinc-700
+        <div class="p-4 rounded-lg bg-neutral-800 border border-zinc-700
         shadow-inner flex flex-row gap-6 items-start
         transition-colors">
 

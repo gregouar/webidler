@@ -205,7 +205,10 @@ fn generate_monster_specs(
     };
 
     let life_factor = computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR);
-    let power_factor = computations::exponential(monster_level, MONSTER_REWARD_INCREASE_FACTOR);
+    let power_factor = computations::exponential(
+        area_state.area_level + area_specs.power_level / 2,
+        MONSTER_REWARD_INCREASE_FACTOR,
+    );
     let reward_factor =
         computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR);
 

@@ -299,10 +299,12 @@
         "modifiers": [
           {
             "stat": {
-              "Damage": {}
+              "Damage": {
+                "damage_type": "Storm"
+              }
             },
             "modifier": "Flat",
-            "factor": 0.1,
+            "factor": 0.3,
             "source": {
               "HitDamage": "Physical"
             }
