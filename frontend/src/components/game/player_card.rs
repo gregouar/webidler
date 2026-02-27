@@ -13,6 +13,7 @@ use crate::{
     assets::img_asset,
     components::{
         events::{EventsContext, Key},
+        game::websocket::WebsocketContext,
         shared::tooltips::SkillTooltip,
         ui::{
             buttons::{FancyButton, Toggle},
@@ -27,7 +28,6 @@ use crate::{
                 DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
             },
         },
-        websocket::WebsocketContext,
     },
 };
 

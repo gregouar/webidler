@@ -42,6 +42,8 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             let new_top = start_top + dy;
             let new_left = start_left + dx;
 
+            // TODO: Compute actual size of chat panel
+
             // Clamp AFTER computing absolute value
             let win = window();
             let height = win.inner_height().unwrap().as_f64().unwrap() as i32;

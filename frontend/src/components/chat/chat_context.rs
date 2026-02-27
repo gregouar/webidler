@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use shared::messages::chat::ChatMessage;
 
-use crate::components::chat::ring_buffer::RingBuffer;
+use crate::components::chat::{ring_buffer::RingBuffer, websocket::Websocket};
 
 #[derive(Clone)]
 pub struct ChatService {
@@ -10,19 +10,21 @@ pub struct ChatService {
 }
 
 #[component]
-pub fn ChatProvider(chat_url: &'static str) -> impl IntoView {
+pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     let messages = RwSignal::new(RingBuffer::new(100));
 
-    // Create websocket here ONCE
-    Effect::new(move |_| {
-        // connect websocket
-        // register handlers
-        // push messages into `messages`
-    });
+    // // Create websocket here ONCE
+    // Effect::new(move |_| {
+    //     // connect websocket
+    //     // register handlers
+    //     // push messages into `messages`
+    // });
 
     let send = Callback::new(move |msg: String| {
         // send through websocket
     });
 
     provide_context(ChatService { messages, send });
+
+    view! { <Websocket url>{children()}</Websocket> }
 }

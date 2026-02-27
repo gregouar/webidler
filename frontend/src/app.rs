@@ -53,24 +53,26 @@ pub fn App() -> impl IntoView {
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <ConfirmationModal state=confirm_state />
-        <ChatProvider chat_url=option_env!("BACKEND_CHAT_WS_URL")
-            .unwrap_or("ws://localhost:4242") />
-        <Router base=base_uri>
-            <Routes fallback=|| "Page not found.">
-                <Route path=path!("/") view=pages::MainMenuPage />
-                <Route path=path!("/terms") view=pages::terms::TermsPage />
-                <Route path=path!("/privacy") view=pages::privacy::PrivacyPage />
-                <Route path=path!("/game") view=pages::GamePage />
-                <Route path=path!("/signup") view=pages::SignUpPage />
-                <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
-                <Route path=path!("/reset-password") view=pages::ResetPasswordPage />
-                <Route path=path!("/town") view=pages::TownPage />
-                <Route
-                    path=path!("/view-character/:character_name")
-                    view=pages::ViewCharacterPage
-                />
-            </Routes>
-        </Router>
+        <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
+            .unwrap_or("ws://localhost:4242")
+            .into()>
+            <Router base=base_uri>
+                <Routes fallback=|| "Page not found.">
+                    <Route path=path!("/") view=pages::MainMenuPage />
+                    <Route path=path!("/terms") view=pages::terms::TermsPage />
+                    <Route path=path!("/privacy") view=pages::privacy::PrivacyPage />
+                    <Route path=path!("/game") view=pages::GamePage />
+                    <Route path=path!("/signup") view=pages::SignUpPage />
+                    <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
+                    <Route path=path!("/reset-password") view=pages::ResetPasswordPage />
+                    <Route path=path!("/town") view=pages::TownPage />
+                    <Route
+                        path=path!("/view-character/:character_name")
+                        view=pages::ViewCharacterPage
+                    />
+                </Routes>
+            </Router>
+        </ChatProvider>
     }
 }
 

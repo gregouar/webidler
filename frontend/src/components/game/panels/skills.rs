@@ -12,7 +12,7 @@ use crate::{
     assets::img_asset,
     components::{
         backend_client::BackendClient,
-        game::game_context::GameContext,
+        game::{game_context::GameContext, websocket::WebsocketContext},
         shared::{resources::GoldCounter, tooltips::SkillTooltip},
         ui::{
             buttons::FancyButton,
@@ -20,7 +20,6 @@ use crate::{
             menu_panel::MenuPanel,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
-        websocket::WebsocketContext,
     },
 };
 

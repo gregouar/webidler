@@ -12,7 +12,7 @@ use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
     events::{EventsContext, Key},
-    game::game_context::GameContext,
+    game::{game_context::GameContext, websocket::WebsocketContext},
     shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
     },
@@ -25,7 +25,6 @@ use crate::components::{
         toast::*,
         tooltip::{StaticTooltip, StaticTooltipPosition},
     },
-    websocket::WebsocketContext,
 };
 
 #[component]

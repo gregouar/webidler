@@ -15,7 +15,8 @@ pub enum ChatChannel {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatMessage {
     pub channel: ChatChannel,
-    pub user_name: Username,
+    pub user_id: Option<UserId>,
+    pub user_name: Option<Username>,
     pub content: String,
     pub sent_at: DateTime<Utc>,
 }
@@ -66,7 +67,10 @@ impl_into_message! {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ServerConnectMessage {}
+pub struct ServerConnectMessage {
+    // TODO:
+    // pub history: Vec<ChatMessage>,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerDisconnectMessage {
@@ -75,9 +79,5 @@ pub struct ServerDisconnectMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerBroadcastMessage {
-    pub user_id: UserId,
-    pub user_name: Username,
-
-    pub channel: ChatChannel,
-    pub content: String,
+    pub chat_message: ChatMessage,
 }

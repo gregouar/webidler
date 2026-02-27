@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use leptos::prelude::*;
-use leptos::web_sys::CloseEvent;
+use leptos::{prelude::*, web_sys::CloseEvent};
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
@@ -9,26 +8,23 @@ use leptos_use::{
 
 use codee::binary::MsgpackSerdeCodec;
 
-use shared::messages::client::ClientMessage;
-use shared::messages::server::ServerMessage;
+use shared::messages::chat::{ClientChatMessage, ServerChatMessage};
 
-use crate::components::ui::toast::*;
+use crate::components::{auth::AuthContext, ui::toast::*};
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
 
 #[derive(Clone)]
 pub struct WebsocketContext {
     pub connected: Memo<bool>,
-    pub message: Signal<Option<ServerMessage>>,
-    // open: Arc<dyn Fn() + Send + Sync>,
-    send: Arc<dyn Fn(&ClientMessage) + Send + Sync>,
-    // close: Arc<dyn Fn() + Send + Sync>,
+    pub message: Signal<Option<ServerChatMessage>>,
+    send: Arc<dyn Fn(&ClientChatMessage) + Send + Sync>,
 }
 
 impl WebsocketContext {
     // create a method to avoid having to use parantheses around the field
     #[inline(always)]
-    pub fn send(&self, message: &ClientMessage) {
+    pub fn send(&self, message: &ClientChatMessage) {
         // TODO: Add constraint/limit rates?
         (self.send)(message)
     }
@@ -41,7 +37,7 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
         move |e: UseWebSocketError<_, _>| {
             show_toast(
                 toaster,
-                format!("Connection error: {e:?}"),
+                format!("Chat connection error: {e:?}"),
                 ToastVariant::Error,
             )
         }
@@ -54,7 +50,7 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
             if !e.was_clean() {
                 show_toast(
                     toaster,
-                    "Disconnected, trying to reconnect...",
+                    "Chat disconnected, trying to reconnect...",
                     ToastVariant::Info,
                 )
             }
@@ -68,18 +64,33 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
         open,
         close,
         ..
-    } = use_websocket_with_options::<ClientMessage, ServerMessage, MsgpackSerdeCodec, _, _>(
+    } = use_websocket_with_options::<ClientChatMessage, ServerChatMessage, MsgpackSerdeCodec, _, _>(
         &url,
         UseWebSocketOptions::default()
-            // .immediate(false)
+            .immediate(false)
             .reconnect_limit(ReconnectLimit::Infinite)
             .on_error(on_error_callback)
             .on_close(on_close_callback)
-            .heartbeat::<ClientMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
+            .heartbeat::<ClientChatMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
-    let _ = open;
-    let _ = close;
+    let auth: AuthContext = expect_context();
+    Effect::new(move || {
+        let is_auth = auth.is_authenticated();
+        let state = ready_state.get_untracked();
+
+        if is_auth
+            && state != ConnectionReadyState::Open
+            && state != ConnectionReadyState::Connecting
+        {
+            open();
+        }
+
+        if !is_auth && state == ConnectionReadyState::Open {
+            close();
+        }
+    });
+
     provide_context(WebsocketContext {
         connected: Memo::new(move |_| ready_state.get() == ConnectionReadyState::Open),
         message,

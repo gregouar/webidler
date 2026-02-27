@@ -6,6 +6,7 @@ use shared::messages::client::ClientMessage;
 
 use crate::components::{
     events::{EventsContext, Key},
+    game::websocket::WebsocketContext,
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
@@ -13,7 +14,6 @@ use crate::components::{
         fullscreen::FullscreenButton,
         wiki::WikiButton,
     },
-    websocket::WebsocketContext,
 };
 
 use super::GameContext;

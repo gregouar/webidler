@@ -3,7 +3,7 @@ use leptos_router::hooks::use_navigate;
 
 use crate::components::{
     backend_client::BackendClient, data_context::DataContext, game::game_instance::GameInstance,
-    websocket::Websocket,
+    game::websocket::Websocket,
 };
 
 #[component]

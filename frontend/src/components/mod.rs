@@ -12,4 +12,3 @@ pub mod settings;
 pub mod shared;
 pub mod town;
 pub mod ui;
-pub mod websocket;

@@ -1,21 +1,27 @@
 use leptos::{html::*, prelude::*};
 
-use shared::computations;
-use shared::constants::WAVES_PER_AREA_LEVEL;
-use shared::messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage};
+use shared::{
+    computations,
+    constants::WAVES_PER_AREA_LEVEL,
+    messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage},
+};
 
-use crate::assets::img_asset;
-use crate::components::icons::battle_scene::{EdictIcon, ThreatIcon};
-use crate::components::ui::card::Card;
-use crate::components::ui::number::format_duration;
-use crate::components::ui::progress_bars::{VerticalProgressBar, predictive_cooldown};
-use crate::components::ui::tooltip::{StaticTooltip, StaticTooltipPosition};
-use crate::components::websocket::WebsocketContext;
-
-use super::GameContext;
-use super::loot_queue::LootQueue;
-use super::monsters_grid::MonstersGrid;
-use super::player_card::PlayerCard;
+use crate::{
+    assets::img_asset,
+    components::{
+        game::{
+            GameContext, loot_queue::LootQueue, monsters_grid::MonstersGrid,
+            player_card::PlayerCard, websocket::WebsocketContext,
+        },
+        icons::battle_scene::{EdictIcon, ThreatIcon},
+        ui::{
+            card::Card,
+            number::format_duration,
+            progress_bars::{VerticalProgressBar, predictive_cooldown},
+            tooltip::{StaticTooltip, StaticTooltipPosition},
+        },
+    },
+};
 
 #[component]
 pub fn BattleScene() -> impl IntoView {

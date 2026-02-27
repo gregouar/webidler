@@ -18,9 +18,9 @@ use crate::components::{
         battle_scene::BattleScene,
         header_menu::HeaderMenu,
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
+        websocket::WebsocketContext,
     },
     ui::{toast::*, tooltip::DynamicTooltip},
-    websocket::WebsocketContext,
 };
 
 #[component]
