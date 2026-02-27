@@ -179,7 +179,17 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                     <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
                                         <input
                                             type="checkbox"
-                                            class="accent-amber-500"
+                                            class="appearance-none w-4 h-4 rounded-sm
+                                            border border-zinc-500 bg-zinc-700 
+                                            checked:bg-amber-500 checked:border-amber-500 
+                                            checked:[&:after]:content-['✓']
+                                            checked:[&:after]:text-black
+                                            checked:[&:after]:text-[12px]
+                                            checked:[&:after]:flex
+                                            checked:[&:after]:items-center
+                                            checked:[&:after]:justify-center
+                                            flex items-center justify-center
+                                            hover:outline-none hover:ring-1 hover:ring-amber-500"
                                             prop:checked=move || {
                                                 selected_channels.get().contains(&ChatChannel::Trade)
                                             }
@@ -247,7 +257,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                     view! {
                                                         <div class="text-[13px] leading-snug">
                                                             <span class=move || channel_color(
-                                                                write_channel.get(),
+                                                                msg.channel,
                                                             )>{msg.author.clone()}</span>
                                                             <span class="text-gray-500">": "</span>
                                                             <span class="text-gray-200">{msg.content.clone()}</span>
@@ -258,24 +268,6 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                         </div>
 
                                         // Input
-                                        // <div class="border-t border-zinc-700 bg-zinc-900/80 ">
-                                        // <textarea
-                                        // class="w-full resize-none px-3 py-2 text-gray-200 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
-                                        // rows="2"
-                                        // prop:value=move || input_value.get()
-                                        // on:input=move |ev| {
-                                        // input_value.set(event_target_value(&ev));
-                                        // }
-                                        // on:keydown=move |ev| {
-                                        // if ev.key() == "Enter" && !ev.shift_key() {
-                                        // ev.prevent_default();
-                                        // send_message();
-                                        // }
-                                        // }
-                                        // placeholder="Type message..."
-                                        // />
-                                        // </div>
-
                                         <div class="border-t border-zinc-700 bg-zinc-900/80">
                                             <div class="flex items-stretch">
 
@@ -337,7 +329,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 <textarea
                                                     class="flex-1 resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
                                                     rows="2"
-                                                    maxlength="10"
+                                                    maxlength="200"
                                                     prop:value=move || input_value.get()
                                                     on:input=move |ev| {
                                                         input_value.set(event_target_value(&ev));
@@ -370,6 +362,6 @@ fn channel_color(channel: ChatChannel) -> &'static str {
     match channel {
         ChatChannel::Global => "text-amber-400",
         ChatChannel::Trade => "text-emerald-400",
-        ChatChannel::System => "text-gray-500",
+        ChatChannel::System => "text-fuchsia-400",
     }
 }
