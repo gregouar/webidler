@@ -31,8 +31,8 @@ use crate::components::{
     },
 };
 
-use super::GameContext;
 use super::portrait::CharacterPortrait;
+use super::GameContext;
 
 #[component]
 pub fn MonstersGrid() -> impl IntoView {
@@ -381,7 +381,9 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     view! {
         <div
             class="grid grid-cols-4 h-full
-            bg-zinc-800 xl:shadow-lg/30 rounded-md ring-1 ring-zinc-700
+            rounded-md bg-zinc-800
+            ring-1 ring-zinc-900/80
+            shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
             gap-1 xl:gap-2 p-1 xl:p-2"
             style="contain: strict;"
         >

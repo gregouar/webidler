@@ -18,7 +18,7 @@ use crate::{
         shared::{
             inventory::InventoryEquipFilter,
             item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            tooltips::{item_tooltip::ItemTooltipContent, SkillTooltip},
         },
         town::TownContext,
         ui::{
@@ -312,11 +312,11 @@ fn GrindingAreaCard(
                 format!(
                     "relative flex flex-col rounded-xl border overflow-hidden shadow-md transition {}",
                     if locked() {
-                        "bg-zinc-900 border-zinc-800 opacity-60"
+                        "bg-neutral-900 border-zinc-800 opacity-60"
                     } else if view_only {
-                        "bg-zinc-800 border-zinc-700"
+                        "bg-neutral-800 border-zinc-700"
                     } else {
-                        "bg-zinc-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
+                        "bg-neutral-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
                     },
                 )
             }

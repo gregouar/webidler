@@ -426,7 +426,7 @@ fn CharacterSlot(
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
     view! {
-        <div class="bg-zinc-800 rounded-xl border border-zinc-700 shadow-md
+        <div class="bg-neutral-800 rounded-xl border border-zinc-700 shadow-md
         flex flex-row items-center gap-4 p-4 cursor-pointer
         hover:border-amber-400 hover:shadow-lg transition active:scale-95">
 
