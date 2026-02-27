@@ -179,16 +179,18 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                     <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
                                         <input
                                             type="checkbox"
-                                            class="appearance-none w-4 h-4 rounded-sm
+                                            class="appearance-none w-4 h-4 rounded-xs
                                             border border-zinc-500 bg-zinc-700 
                                             checked:bg-amber-500 checked:border-amber-500 
                                             checked:[&:after]:content-['✓']
-                                            checked:[&:after]:text-black
+                                            checked:[&:after]:text-zinc-950
+                                            checked:[&:after]:font-bold
                                             checked:[&:after]:text-[12px]
                                             checked:[&:after]:flex
                                             checked:[&:after]:items-center
                                             checked:[&:after]:justify-center
                                             flex items-center justify-center
+                                            active:bg-amber-600
                                             hover:outline-none hover:ring-1 hover:ring-amber-500"
                                             prop:checked=move || {
                                                 selected_channels.get().contains(&ChatChannel::Trade)
@@ -249,7 +251,8 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                 } else {
                                     view! {
                                         // Messages
-                                        <div class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]">
+                                        <div class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
+                                        text-wrap wrap-break-word">
                                             <For
                                                 each=filtered_messages
                                                 key=|msg| msg.id
@@ -286,7 +289,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                                 ChatChannel::System => "System",
                                                             }}
                                                         </span>
-                                                        <span class="text-gray-500">"▾"</span>
+                                                    // <span class="text-gray-500">"▾"</span>
                                                     </button>
 
                                                     {move || {
