@@ -25,14 +25,6 @@ use backend_chat::{
 async fn main() {
     let _ = dotenvy::dotenv();
 
-    // TODO: depending on environment, only install necessary
-    sqlx::any::install_default_drivers();
-
-    let db_pool =
-        pool::create_pool(&std::env::var("DATABASE_URL").expect("missing 'DATABASE_URL' setting"))
-            .await
-            .expect("failed to connect to database");
-
     let default_level = if cfg!(debug_assertions) {
         format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME"))
     } else {
@@ -63,7 +55,6 @@ async fn main() {
 
     let app_state = AppState {
         app_settings: AppSettings::from_env(),
-        db_pool: db_pool.clone(),
     };
 
     let app = Router::new()

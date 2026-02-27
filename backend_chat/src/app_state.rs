@@ -7,23 +7,18 @@ pub use crate::db::pool::DbPool;
 #[derive(Clone)]
 pub struct AppState {
     pub app_settings: AppSettings,
-    pub db_pool: DbPool,
     // TODO: Banned, Muted, SpamBucket in some Moderation thingy?
 }
 
 #[derive(Clone)]
 pub struct AppSettings {
-    pub jwt_encoding_key: EncodingKey,
-    pub jwt_decoding_key: DecodingKey,
+    pub backend_url: String,
 }
 
 impl AppSettings {
     pub fn from_env() -> Self {
-        let jwt_secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
-
         Self {
-            jwt_encoding_key: EncodingKey::from_secret(jwt_secret.as_ref()),
-            jwt_decoding_key: DecodingKey::from_secret(jwt_secret.as_ref()),
+            backend_url: env::var("BACKEND_URL").expect("BACKEND_URL must be set"),
         }
     }
 }
@@ -31,10 +26,5 @@ impl AppSettings {
 impl FromRef<AppState> for AppSettings {
     fn from_ref(app_state: &AppState) -> AppSettings {
         app_state.app_settings.clone()
-    }
-}
-impl FromRef<AppState> for DbPool {
-    fn from_ref(app_state: &AppState) -> DbPool {
-        app_state.db_pool.clone()
     }
 }
