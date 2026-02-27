@@ -166,7 +166,7 @@ pub fn reward_player(
     player_resources.gold += gold_reward;
     player_resources.gold_total += gold_reward;
     player_resources.gems += gems_reward;
-    player_resources.experience += monster_specs.reward_factor.round();
+    player_resources.experience += monster_specs.power_factor.round();
 
     (gold_reward, gems_reward)
 }

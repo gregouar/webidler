@@ -8,7 +8,7 @@ use crate::data::{
     character_status::StatusSpecs,
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
-    modifier::{compute_more_factor, ModifiableValue, Modifier},
+    modifier::{ModifiableValue, Modifier, compute_more_factor},
     skill::{RestoreType, SkillEffectType},
     values::NonNegative,
 };

@@ -147,7 +147,13 @@ pub fn update_monster_specs(
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
-    for trigger_specs in monster_specs.character_specs.triggers.iter_mut() {
+    // Apply modifiers on triggers that did not inherit modifiers from skill
+    for trigger_specs in monster_specs
+        .character_specs
+        .triggers
+        .iter_mut()
+        .filter(|trigger_specs| !trigger_specs.inherit_modifiers)
+    {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
                 trigger_specs.skill_type,

@@ -1363,7 +1363,7 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         ),
         (StatType::Speed(Some(SkillType::Spell)), Modifier::Increased),
         (StatType::MovementSpeed, Modifier::Increased),
-        (StatType::GoldFind, Modifier::Increased),
+        (StatType::GoldFind, Modifier::More),
         (
             StatType::RestoreOnHit {
                 restore_type: RestoreType::Life,

@@ -145,7 +145,7 @@
         ]
       }
     ],
-    "min_area_level": 120
+    "min_area_level": 100
   },
   "mail_coif": {
     "name": "Mail Coif",
