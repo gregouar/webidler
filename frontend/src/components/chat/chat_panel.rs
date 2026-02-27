@@ -29,7 +29,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         drag_start_position.set(position.get());
 
         let move_listener = window_event_listener(mousemove, move |ev| {
-            if !dragging.get() {
+            if !dragging.try_get().unwrap_or_default() {
                 return;
             }
 
@@ -49,8 +49,8 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
             let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
 
-            let clamped_top = new_top.clamp(0, height - 100);
-            let clamped_left = new_left.clamp(0, width - 200);
+            let clamped_top = new_top.clamp(0, height - 50);
+            let clamped_left = new_left.clamp(0, width - 300);
 
             position.set((clamped_top, clamped_left));
         });
@@ -76,7 +76,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         ChatMessage {
             id: 1,
             channel: ChatChannel::System,
-            author: "System".into(),
+            author: "[System]".into(),
             content: "World event starting in 2 minutes.".into(),
         },
         ChatMessage {
@@ -120,6 +120,8 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             }
         });
     };
+    let write_channel = RwSignal::new(ChatChannel::Global);
+    let dropdown_open = RwSignal::new(false);
 
     let send_message = move || {
         let content = input_value.get();
@@ -132,7 +134,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         messages.update(|list| {
             list.push(ChatMessage {
                 id: new_id,
-                channel: ChatChannel::Global,
+                channel: write_channel.get_untracked(),
                 author: "You".into(),
                 content,
             })
@@ -244,13 +246,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 children=move |msg| {
                                                     view! {
                                                         <div class="text-[13px] leading-snug">
-                                                            <span class=move || {
-                                                                match msg.channel {
-                                                                    ChatChannel::System => "text-amber-400",
-                                                                    ChatChannel::Trade => "text-emerald-400",
-                                                                    ChatChannel::Global => "text-amber-400",
-                                                                }
-                                                            }>{msg.author.clone()}</span>
+                                                            <span class=move || channel_color(
+                                                                write_channel.get(),
+                                                            )>{msg.author.clone()}</span>
                                                             <span class="text-gray-500">": "</span>
                                                             <span class="text-gray-200">{msg.content.clone()}</span>
                                                         </div>
@@ -260,23 +258,99 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                         </div>
 
                                         // Input
-                                        // <div class="border-t border-zinc-700 bg-zinc-800/70 px-3 py-2">
-                                        <div class="border-t border-zinc-700 bg-zinc-900/80 ">
-                                            <textarea
-                                                class="w-full resize-none px-3 py-2 text-gray-200 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
-                                                rows="2"
-                                                prop:value=move || input_value.get()
-                                                on:input=move |ev| {
-                                                    input_value.set(event_target_value(&ev));
-                                                }
-                                                on:keydown=move |ev| {
-                                                    if ev.key() == "Enter" && !ev.shift_key() {
-                                                        ev.prevent_default();
-                                                        send_message();
+                                        // <div class="border-t border-zinc-700 bg-zinc-900/80 ">
+                                        // <textarea
+                                        // class="w-full resize-none px-3 py-2 text-gray-200 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                                        // rows="2"
+                                        // prop:value=move || input_value.get()
+                                        // on:input=move |ev| {
+                                        // input_value.set(event_target_value(&ev));
+                                        // }
+                                        // on:keydown=move |ev| {
+                                        // if ev.key() == "Enter" && !ev.shift_key() {
+                                        // ev.prevent_default();
+                                        // send_message();
+                                        // }
+                                        // }
+                                        // placeholder="Type message..."
+                                        // />
+                                        // </div>
+
+                                        <div class="border-t border-zinc-700 bg-zinc-900/80">
+                                            <div class="flex items-stretch">
+
+                                                // Channel selector
+                                                <div class="relative">
+                                                    <button
+                                                        class="h-full px-3 text-sm border-r border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700/80 flex items-center gap-2"
+                                                        on:click=move |_| dropdown_open.update(|o| *o = !*o)
+                                                    >
+                                                        <span class=move || channel_color(
+                                                            write_channel.get(),
+                                                        )>
+                                                            {move || match write_channel.get() {
+                                                                ChatChannel::Global => "Global",
+                                                                ChatChannel::Trade => "Trade",
+                                                                ChatChannel::System => "System",
+                                                            }}
+                                                        </span>
+                                                        <span class="text-gray-500">"▾"</span>
+                                                    </button>
+
+                                                    {move || {
+                                                        if dropdown_open.get() {
+                                                            view! {
+                                                                <div class="absolute bottom-full left-0 w-28 bg-zinc-900 border border-zinc-700 shadow-lg text-sm">
+
+                                                                    <button
+                                                                        class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-amber-400"
+                                                                        on:click=move |_| {
+                                                                            write_channel.set(ChatChannel::Global);
+                                                                            selected_channels.write().insert(ChatChannel::Global);
+                                                                            dropdown_open.set(false);
+                                                                        }
+                                                                    >
+                                                                        "Global"
+                                                                    </button>
+
+                                                                    <button
+                                                                        class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-emerald-400"
+                                                                        on:click=move |_| {
+                                                                            write_channel.set(ChatChannel::Trade);
+                                                                            selected_channels.write().insert(ChatChannel::Trade);
+                                                                            dropdown_open.set(false);
+                                                                        }
+                                                                    >
+                                                                        "Trade"
+                                                                    </button>
+
+                                                                </div>
+                                                            }
+                                                                .into_any()
+                                                        } else {
+                                                            ().into_any()
+                                                        }
+                                                    }}
+                                                </div>
+
+                                                // Textarea
+                                                <textarea
+                                                    class="flex-1 resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
+                                                    rows="2"
+                                                    maxlength="10"
+                                                    prop:value=move || input_value.get()
+                                                    on:input=move |ev| {
+                                                        input_value.set(event_target_value(&ev));
                                                     }
-                                                }
-                                                placeholder="Type message..."
-                                            />
+                                                    on:keydown=move |ev| {
+                                                        if ev.key() == "Enter" && !ev.shift_key() {
+                                                            ev.prevent_default();
+                                                            send_message();
+                                                        }
+                                                    }
+                                                    placeholder="Type message..."
+                                                />
+                                            </div>
                                         </div>
                                     }
                                         .into_any()
@@ -289,5 +363,13 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                     .into_any()
             }
         }}
+    }
+}
+
+fn channel_color(channel: ChatChannel) -> &'static str {
+    match channel {
+        ChatChannel::Global => "text-amber-400",
+        ChatChannel::Trade => "text-emerald-400",
+        ChatChannel::System => "text-gray-500",
     }
 }
