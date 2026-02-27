@@ -1,5 +1,4 @@
 pub mod account;
-pub mod chat;
 pub mod inventory;
 pub mod item_card;
 pub mod leaderboard;

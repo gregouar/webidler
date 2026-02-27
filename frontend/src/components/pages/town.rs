@@ -11,6 +11,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
+    chat::chat_panel::ChatPanel,
     data_context::DataContext,
     shared::player_count::PlayerCount,
     town::{
@@ -131,6 +132,7 @@ pub fn TownPage() -> impl IntoView {
                             <ForgePanel open=town_context.open_forge />
                             <TownInventoryPanel open=town_context.open_inventory />
                         </div>
+                        <ChatPanel open=town_context.open_chat />
                     }
                 })}
             </Transition>

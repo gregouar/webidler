@@ -17,7 +17,6 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend_chat::{
     app_state::{AppSettings, AppState},
-    db::pool,
     websocket,
 };
 

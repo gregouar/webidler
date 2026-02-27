@@ -3,7 +3,7 @@ use std::ops::ControlFlow;
 use anyhow::Result;
 
 use shared::{
-    data::user::UserId,
+    data::user::User,
     messages::{
         chat::{ClientChatMessage, ServerDisconnectMessage},
         server::{ErrorMessage, ErrorType},
@@ -15,16 +15,13 @@ use crate::websocket::WebSocketConnection;
 
 pub struct ChatSession<'a> {
     client_conn: &'a mut WebSocketConnection,
-    user_id: UserId,
+    user: User,
     // TODO: ConnectedAt, other?
 }
 
 impl<'a> ChatSession<'a> {
-    pub fn new(client_conn: &'a mut WebSocketConnection, user_id: UserId) -> Self {
-        Self {
-            client_conn,
-            user_id,
-        }
+    pub fn new(client_conn: &'a mut WebSocketConnection, user: User) -> Self {
+        Self { client_conn, user }
     }
 
     pub async fn run(&mut self) -> Result<()> {
@@ -44,7 +41,7 @@ impl<'a> ChatSession<'a> {
             .await
             .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
 
-        tracing::debug!("chat session '{}' ended ", self.user_id);
+        tracing::debug!("chat session '{}' ended ", self.user.user_id);
         Ok(())
     }
 

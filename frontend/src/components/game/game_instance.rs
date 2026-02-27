@@ -12,13 +12,13 @@ use shared::{
 
 use crate::components::{
     auth::AuthContext,
+    chat::chat_panel::ChatPanel,
     game::{
+        GameContext,
         battle_scene::BattleScene,
         header_menu::HeaderMenu,
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
-        GameContext,
     },
-    shared::chat::ChatPanel,
     ui::{toast::*, tooltip::DynamicTooltip},
     websocket::WebsocketContext,
 };

@@ -14,13 +14,19 @@ use tokio::time::timeout;
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::messages::{
-    chat::{ClientChatMessage, ClientConnectMessage},
-    server::{ErrorMessage, ErrorType},
+use shared::{
+    data::user::User,
+    http::server::GetUserDetailsResponse,
+    messages::{
+        chat::{ClientChatMessage, ClientConnectMessage},
+        server::{ErrorMessage, ErrorType},
+    },
 };
 
 use crate::{
-    app_state::AppState, auth, chat::chat_session::ChatSession, websocket::WebSocketConnection,
+    app_state::{AppSettings, AppState},
+    chat::chat_session::ChatSession,
+    websocket::WebSocketConnection,
 };
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
@@ -114,21 +120,30 @@ async fn handle_connect<'a>(
     msg: ClientConnectMessage,
 ) -> Result<ChatSession<'a>> {
     tracing::info!("connect: {}", msg.user_id);
-
-    let user_id =
-        auth::authorize_jwt(&app_state.app_settings, &msg.jwt).ok_or(anyhow!("invalid token"))?;
-
-    // let user_character = db::characters::read_character(&app_state.db_pool, &msg.character_id)
-    //     .await?
-    //     .ok_or(AppError::NotFound)?;
-
-    // if user_character.user_id != user_id {
-    //     return Err(AppError::NotFound.into());
-    // }
-
-    Ok(ChatSession::new(conn, user_id))
+    let user = authorize_jwt(&app_state.app_settings, &msg.jwt).await?;
+    Ok(ChatSession::new(conn, user))
 }
 
 async fn handle_disconnect<'a>(session: ChatSession<'a>) -> Result<()> {
     Ok(())
+}
+
+async fn authorize_jwt(app_settings: &AppSettings, token: &str) -> anyhow::Result<User> {
+    let res = reqwest::Client::new()
+        .get(format!("{}/account/me", app_settings.backend_url))
+        .header("Authorization", format!("Bearer {}", token))
+        .header("Content-Type", "application/json")
+        .send()
+        .await?;
+
+    if !res.status().is_success() {
+        let err = res.text().await?;
+        anyhow::bail!("Server API error: {}", err);
+    }
+
+    Ok(res
+        .json::<GetUserDetailsResponse>()
+        .await?
+        .user_details
+        .user)
 }

@@ -2,6 +2,7 @@ pub mod accessibility;
 pub mod auth;
 pub mod backend_client;
 pub mod captcha;
+pub mod chat;
 pub mod data_context;
 pub mod events;
 pub mod game;

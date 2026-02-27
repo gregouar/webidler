@@ -1,8 +1,5 @@
 use axum::extract::FromRef;
-use jsonwebtoken::{DecodingKey, EncodingKey};
 use std::env;
-
-pub use crate::db::pool::DbPool;
 
 #[derive(Clone)]
 pub struct AppState {

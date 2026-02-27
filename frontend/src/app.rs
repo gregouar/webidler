@@ -11,6 +11,7 @@ use crate::components::{
     accessibility::provide_accessibility_context,
     auth::provide_auth_context,
     backend_client::BackendClient,
+    chat::chat_context::ChatProvider,
     data_context::provide_data_context,
     events::provide_events_context,
     pages,
@@ -52,6 +53,8 @@ pub fn App() -> impl IntoView {
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <ConfirmationModal state=confirm_state />
+        <ChatProvider chat_url=option_env!("BACKEND_CHAT_WS_URL")
+            .unwrap_or("ws://localhost:4242") />
         <Router base=base_uri>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::MainMenuPage />

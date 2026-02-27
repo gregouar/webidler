@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::{data::user::UserId, messages::server::ErrorMessage, types::Username};
@@ -9,6 +10,14 @@ pub enum ChatChannel {
     System,
     Global,
     Trade,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ChatMessage {
+    pub channel: ChatChannel,
+    pub user_name: Username,
+    pub content: String,
+    pub sent_at: DateTime<Utc>,
 }
 
 impl_into_message! {
