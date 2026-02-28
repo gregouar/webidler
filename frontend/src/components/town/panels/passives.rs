@@ -90,7 +90,9 @@ pub fn PassivesPanel(
             ascension_cost.set(initial_cost.round());
         }
 
-        passives_tree_build.set(town_context.passives_tree_build.get());
+        if passives_tree_build.read_untracked().is_empty(){
+            passives_tree_build.set(town_context.passives_tree_build.get());
+        }
     });
 
     let active_tab = RwSignal::new(PassivesTab::Ascend);
@@ -665,7 +667,7 @@ fn PassiveSkillTree(
                         Ok(response) => {
                             passives_tree_ascension.write().socketed_nodes =
                                 response.ascension.socketed_nodes.clone();
-                            // town_context.passives_tree_ascension.set(response.ascension);
+                            town_context.passives_tree_ascension.set(response.ascension);
                             town_context.inventory.set(response.inventory);
                         }
                         Err(e) => show_toast(
@@ -741,11 +743,19 @@ fn AscendNode(
     let toaster = expect_context::<Toasts>();
 
     let socket = Memo::new(move |_| {
-        passives_tree_ascension
+         match active_tab.get() {
+            PassivesTab::Ascend => passives_tree_ascension
             .read()
             .socketed_nodes
             .get(&node_id)
-            .cloned()
+            .cloned(),
+            PassivesTab::Build =>  town_context.passives_tree_ascension
+            .read()
+            .socketed_nodes
+            .get(&node_id)
+            .cloned(),
+                 }
+       
     });
 
     let derived_node_specs = Memo::new({
