@@ -42,6 +42,7 @@ pub struct ErrorMessage {
 pub enum ErrorType {
     Server,
     Game,
+    Chat,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

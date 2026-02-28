@@ -1,4 +1,4 @@
-use anyhow::{Result, anyhow};
+use anyhow::Result;
 
 use axum::{
     extract::{
@@ -26,7 +26,7 @@ use shared::{
 use crate::{
     app_state::{AppSettings, AppState},
     chat::chat_session::ChatSession,
-    websocket::WebSocketConnection,
+    websocket::{self, WebSocketReceiver},
 };
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
@@ -48,12 +48,13 @@ pub async fn handler(
 }
 
 async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState) {
-    let mut conn = WebSocketConnection::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
+    let (mut ws_sender, mut ws_receiver) =
+        websocket::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    let mut session = match timeout(
+    let session = match timeout(
         Duration::from_secs(30),
-        wait_for_connect(&app_state, &mut conn),
+        wait_for_connect(&app_state, &mut ws_receiver),
     )
     .await
     {
@@ -63,30 +64,33 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
         }
         Ok(Err(e)) => {
             tracing::error!("unable to connect: {}", e);
-            conn.send(
-                &ErrorMessage {
-                    error_type: ErrorType::Server,
-                    message: e.to_string(),
-                    must_disconnect: true,
-                }
-                .into(),
-            )
-            .await
-            .unwrap_or_else(|e| tracing::error!("failed to send error message: {}", e));
+            ws_sender
+                .send(
+                    &ErrorMessage {
+                        error_type: ErrorType::Server,
+                        message: e.to_string(),
+                        must_disconnect: true,
+                    }
+                    .into(),
+                )
+                .await
+                .unwrap_or_else(|e| tracing::error!("failed to send error message: {}", e));
             return;
         }
         Ok(Ok(p)) => p,
     };
     tracing::debug!("client connected");
 
-    match session.run().await {
+    match session.run(ws_sender, ws_receiver).await {
         Ok(()) => {
-            if let Err(e) = handle_disconnect(session).await {
-                tracing::error!("error handling disconnect for '{addr}': {e}")
-            }
+            // if let Err(e) = handle_disconnect(session).await {
+            //     tracing::error!("error handling disconnect for '{addr}': {e}")
+            // }
         }
         Err(e) => tracing::error!("error running game: {e}"),
     }
+
+    // app_state.chat_state.reply_map.remove(&session_id);
 
     // db::game_sessions::end_session(&app_state.db_pool, &character_id)
     //     .await
@@ -96,37 +100,35 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
     tracing::info!("websocket context '{addr}' destroyed");
 }
 
-async fn wait_for_connect<'a>(
+async fn wait_for_connect(
     app_state: &AppState,
-    conn: &'a mut WebSocketConnection,
-) -> Result<ChatSession<'a>> {
+    ws_receiver: &mut WebSocketReceiver,
+) -> Result<ChatSession> {
     loop {
-        match conn.poll_receive() {
-            ControlFlow::Continue(Some(ClientChatMessage::Connect(msg))) => {
-                return handle_connect(app_state, conn, *msg).await;
+        match ws_receiver.block_receive().await {
+            ControlFlow::Continue(ClientChatMessage::Connect(msg)) => {
+                return handle_connect(app_state, *msg).await;
             }
             ControlFlow::Break(_) => {
                 return Err(anyhow::format_err!("disconnected"));
             }
             _ => {}
         }
-        tokio::time::sleep(Duration::from_millis(100)).await;
     }
 }
 
 async fn handle_connect<'a>(
     app_state: &AppState,
-    conn: &'a mut WebSocketConnection,
     msg: ClientConnectMessage,
-) -> Result<ChatSession<'a>> {
+) -> Result<ChatSession> {
     tracing::info!("connect: {}", msg.user_id);
     let user = authorize_jwt(&app_state.app_settings, &msg.jwt).await?;
-    Ok(ChatSession::new(conn, user))
+    Ok(ChatSession::new(app_state.chat_state.clone(), user))
 }
 
-async fn handle_disconnect<'a>(session: ChatSession<'a>) -> Result<()> {
-    Ok(())
-}
+// async fn handle_disconnect<'a>(session: ChatSession<'a>) -> Result<()> {
+//     Ok(())
+// }
 
 async fn authorize_jwt(app_settings: &AppSettings, token: &str) -> anyhow::Result<User> {
     let res = reqwest::Client::new()

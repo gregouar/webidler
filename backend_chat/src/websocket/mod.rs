@@ -1,5 +1,5 @@
 mod connection;
 mod handler;
 
-pub use connection::WebSocketConnection;
+pub use connection::{WebSocketReceiver, WebSocketSender, establish};
 pub use handler::handler;

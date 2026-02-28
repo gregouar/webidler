@@ -1,10 +1,12 @@
 use axum::extract::FromRef;
 use std::env;
 
+use crate::chat::chat_state::ChatState;
+
 #[derive(Clone)]
 pub struct AppState {
     pub app_settings: AppSettings,
-    // TODO: Banned, Muted, SpamBucket in some Moderation thingy?
+    pub chat_state: ChatState,
 }
 
 #[derive(Clone)]

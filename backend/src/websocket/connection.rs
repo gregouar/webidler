@@ -76,6 +76,13 @@ impl WebSocketConnection {
             Err(mpsc::error::TryRecvError::Disconnected) => ControlFlow::Break(()),
         }
     }
+
+    pub async fn block_receive(&mut self) -> ControlFlow<(), ClientMessage> {
+        match self.receiver_rx.recv().await {
+            Some(m) => ControlFlow::Continue(m),
+            None => ControlFlow::Break(()),
+        }
+    }
 }
 
 fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<ClientMessage>> {

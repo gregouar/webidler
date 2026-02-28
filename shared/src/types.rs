@@ -120,3 +120,9 @@ pub struct ItemName(String);
     default = 20
 )]
 pub struct PaginationLimit(i64);
+
+#[nutype(
+    validate(not_empty, len_char_max = 200),
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+)]
+pub struct ChatContent(String);

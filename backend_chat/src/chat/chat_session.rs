@@ -2,38 +2,90 @@ use std::ops::ControlFlow;
 
 use anyhow::Result;
 
+use chrono::Utc;
 use shared::{
     data::user::User,
     messages::{
-        chat::{ClientChatMessage, ServerDisconnectMessage},
+        chat::{
+            ChatMessage, ClientChatMessage, ClientPostMessage, ServerBroadcastMessage,
+            ServerDisconnectMessage,
+        },
         server::{ErrorMessage, ErrorType},
     },
 };
-use tokio::task::yield_now;
+use tokio::sync::mpsc;
+use uuid::Uuid;
 
-use crate::websocket::WebSocketConnection;
+use crate::{
+    chat::chat_state::ChatState,
+    websocket::{WebSocketReceiver, WebSocketSender},
+};
 
-pub struct ChatSession<'a> {
-    client_conn: &'a mut WebSocketConnection,
+pub struct ChatSession {
+    session_id: Uuid,
+    chat_state: ChatState,
     user: User,
     // TODO: ConnectedAt, other?
 }
 
-impl<'a> ChatSession<'a> {
-    pub fn new(client_conn: &'a mut WebSocketConnection, user: User) -> Self {
-        Self { client_conn, user }
+impl ChatSession {
+    pub fn new(chat_state: ChatState, user: User) -> Self {
+        Self {
+            session_id: Uuid::new_v4(),
+            chat_state,
+            user,
+        }
     }
 
-    pub async fn run(&mut self) -> Result<()> {
+    pub async fn run(
+        &self,
+        mut ws_sender: WebSocketSender,
+        mut ws_receiver: WebSocketReceiver,
+    ) -> Result<()> {
+        // Maybe this should be handler outside of this:
+        let (direct_tx, mut direct_rx) = mpsc::channel(32);
+        self.chat_state
+            .reply_map
+            .insert(self.session_id, direct_tx.clone());
+
+        let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
+        ///////////////////////////////
+
+        let write_task = tokio::spawn(async move {
+            loop {
+                tokio::select! {
+                    Ok(msg) = broadcast_rx.recv() => {
+                       if let Err(err)=  ws_sender.send(&ServerBroadcastMessage{chat_message:msg}.into()).await {
+                         tracing::warn!("failed to send message: {}",err);
+                       }
+
+                    }
+                    Some(msg) = direct_rx.recv() => {
+                       if let Err(err)=  ws_sender.send(&msg).await {
+                         tracing::warn!("failed to send message: {}",err);
+                       }
+                    }
+                    else => break,
+                }
+            }
+        });
+
         loop {
-            if self.handle_client_inputs().await.is_break() {
-                break;
+            match ws_receiver.block_receive().await {
+                ControlFlow::Continue(m) => {
+                    if let Some(error_message) = self.handle_client_message(m).await
+                        && let Err(e) = direct_tx.send(error_message.into()).await
+                    {
+                        tracing::warn!("failed to send error to client: {}", e)
+                    }
+                }
+                ControlFlow::Break(_) => break,
             }
         }
 
-        self.client_conn
+        direct_tx
             .send(
-                &ServerDisconnectMessage {
+                ServerDisconnectMessage {
                     reason: "session end".into(),
                 }
                 .into(),
@@ -41,31 +93,16 @@ impl<'a> ChatSession<'a> {
             .await
             .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
 
+        write_task.abort();
+
+        // Maybe this should be handler outside of this:
+        self.chat_state.reply_map.remove(&self.session_id);
+
         tracing::debug!("chat session '{}' ended ", self.user.user_id);
         Ok(())
     }
 
-    // TODO:  rework this as blocking, polling doesn't make sense for chat
-    async fn handle_client_inputs(&mut self) -> ControlFlow<(), ()> {
-        // We limit the amount of events we handle in one loop
-        for _ in 1..10 {
-            match self.client_conn.poll_receive() {
-                ControlFlow::Continue(Some(m)) => {
-                    if let Some(error_message) = self.handle_client_message(m)
-                        && let Err(e) = self.client_conn.send(&error_message.into()).await
-                    {
-                        tracing::warn!("failed to send error to client: {}", e)
-                    }
-                }
-                ControlFlow::Continue(None) => return ControlFlow::Continue(()), // No more messages
-                ControlFlow::Break(_) => return ControlFlow::Break(()), // Connection closed
-            }
-            yield_now().await;
-        }
-        ControlFlow::Continue(())
-    }
-
-    fn handle_client_message(&self, msg: ClientChatMessage) -> Option<ErrorMessage> {
+    async fn handle_client_message(&self, msg: ClientChatMessage) -> Option<ErrorMessage> {
         match msg {
             ClientChatMessage::Heartbeat => {}
             ClientChatMessage::Connect(_) => {
@@ -76,9 +113,35 @@ impl<'a> ChatSession<'a> {
                     must_disconnect: true,
                 });
             }
-            ClientChatMessage::Disconnect(m) => {}
-            ClientChatMessage::PostMessage(client_post_message) => todo!(),
+            // ClientChatMessage::Disconnect(m) => {}
+            ClientChatMessage::PostMessage(m) => {
+                if let Err(err) = self.handle_chat_message(*m).await {
+                    return Some(ErrorMessage {
+                        error_type: ErrorType::Chat,
+                        message: err.to_string(),
+                        must_disconnect: true,
+                    });
+                }
+            }
         }
         None
+    }
+
+    async fn handle_chat_message(&self, msg: ClientPostMessage) -> Result<()> {
+        self.chat_state
+            .inbound_tx
+            .send((
+                self.session_id,
+                ChatMessage {
+                    channel: msg.channel,
+                    user_id: Some(self.user.user_id),
+                    user_name: Some(self.user.username.clone()),
+                    content: msg.content,
+                    sent_at: Utc::now(),
+                },
+            ))
+            .await?;
+
+        Ok(())
     }
 }

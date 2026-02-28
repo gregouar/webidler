@@ -17,6 +17,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend_chat::{
     app_state::{AppSettings, AppState},
+    chat::messages_processor::MessagesProcessor,
     websocket,
 };
 
@@ -52,9 +53,14 @@ async fn main() {
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
+    let messages_processor = MessagesProcessor::new();
+
     let app_state = AppState {
         app_settings: AppSettings::from_env(),
+        chat_state: messages_processor.get_chat_state(),
     };
+
+    let messages_processor_handle = tokio::spawn(MessagesProcessor::run(messages_processor));
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))

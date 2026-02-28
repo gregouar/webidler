@@ -1,7 +1,9 @@
+use std::sync::Arc;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::{data::user::UserId, messages::server::ErrorMessage, types::Username};
+use crate::{data::user::UserId, messages::server::ErrorMessage, types::ChatContent};
 
 use super::macros::impl_into_message;
 
@@ -16,8 +18,8 @@ pub enum ChatChannel {
 pub struct ChatMessage {
     pub channel: ChatChannel,
     pub user_id: Option<UserId>,
-    pub user_name: Option<Username>,
-    pub content: String,
+    pub user_name: Option<String>,
+    pub content: ChatContent,
     pub sent_at: DateTime<Utc>,
 }
 
@@ -27,7 +29,7 @@ impl_into_message! {
         Heartbeat,
 
         Connect(ClientConnectMessage),
-        Disconnect(ClientDisconnectMessage),
+        // Disconnect(ClientDisconnectMessage),
         PostMessage(ClientPostMessage),
     }
 }
@@ -52,7 +54,7 @@ pub struct ClientDisconnectMessage {}
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientPostMessage {
     pub channel: ChatChannel,
-    pub content: String,
+    pub content: ChatContent,
 }
 
 impl_into_message! {
@@ -79,5 +81,5 @@ pub struct ServerDisconnectMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerBroadcastMessage {
-    pub chat_message: ChatMessage,
+    pub chat_message: Arc<ChatMessage>,
 }
