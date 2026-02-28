@@ -78,8 +78,6 @@ pub async fn create_session(
     {
         saved_instance
     } else {
-        let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
-
         match new_game_instance(db_pool, master_store, character, area_config).await {
             Ok(instance) => instance,
             Err(err) => {
@@ -129,8 +127,10 @@ async fn new_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character: CharacterEntry,
-    area_config: StartAreaConfig,
+    area_config: Option<StartAreaConfig>,
 ) -> Result<GameInstanceData> {
+    let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
+
     let mut player_specs = PlayerSpecs::init(player_updater::base_player_character_specs(
         character.character_name.clone(),
         character.portrait.clone(),
