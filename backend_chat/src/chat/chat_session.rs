@@ -55,7 +55,7 @@ impl ChatSession {
             loop {
                 tokio::select! {
                     Ok(msg) = broadcast_rx.recv() => {
-                       if let Err(err)=  ws_sender.send(&ServerBroadcastMessage{chat_message:msg}.into()).await {
+                       if let Err(err)=  ws_sender.send(&msg).await {
                          tracing::warn!("failed to send message: {}",err);
                        }
 
@@ -65,21 +65,31 @@ impl ChatSession {
                          tracing::warn!("failed to send message: {}",err);
                        }
                     }
-                    else => break,
+                    else => break, // This disconnect...
                 }
             }
         });
 
+        tokio::pin!(write_task);
+
         loop {
-            match ws_receiver.block_receive().await {
-                ControlFlow::Continue(m) => {
-                    if let Some(error_message) = self.handle_client_message(m).await
-                        && let Err(e) = direct_tx.send(error_message.into()).await
-                    {
-                        tracing::warn!("failed to send error to client: {}", e)
+            tokio::select! {
+                res = &mut write_task => {
+                    if let Err(e) = res {
+                        tracing::warn!("writer task failed: {}", e);
                     }
+                    break;
                 }
-                ControlFlow::Break(_) => break,
+                m = ws_receiver.block_receive() => match m {
+                    ControlFlow::Continue(m) => {
+                        if let Some(error_message) = self.handle_client_message(m).await
+                            && let Err(e) = direct_tx.send(error_message.into()).await
+                        {
+                            tracing::warn!("failed to send error to client: {}", e)
+                        }
+                    }
+                    ControlFlow::Break(_) => break,
+                }
             }
         }
 

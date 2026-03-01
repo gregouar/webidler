@@ -81,5 +81,5 @@ pub struct ServerDisconnectMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerBroadcastMessage {
-    pub chat_message: Arc<ChatMessage>,
+    pub chat_message: ChatMessage,
 }

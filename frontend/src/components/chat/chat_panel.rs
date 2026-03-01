@@ -5,6 +5,8 @@ use leptos::prelude::*;
 
 use shared::messages::chat::ChatChannel;
 
+use crate::components::chat::chat_context::ChatContext;
+
 #[derive(Clone)]
 struct ChatMessage {
     id: u64,
@@ -15,6 +17,8 @@ struct ChatMessage {
 
 #[component]
 pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
+    let chat_context: ChatContext = expect_context();
+
     let minimized = RwSignal::new(false);
 
     // Drag state
@@ -129,16 +133,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             return;
         }
 
-        let new_id = messages.get().len() as u64 + 1;
-
-        messages.update(|list| {
-            list.push(ChatMessage {
-                id: new_id,
-                channel: write_channel.get_untracked(),
-                author: "You".into(),
-                content,
-            })
-        });
+        chat_context.send.run(content);
 
         input_value.set(String::new());
     };

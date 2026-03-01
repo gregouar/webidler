@@ -4,7 +4,7 @@ use tokio::sync::{broadcast, mpsc};
 
 use shared::{
     messages::{
-        chat::{ChatChannel, ChatMessage},
+        chat::{ChatChannel, ChatMessage, ServerBroadcastMessage},
         server::{ErrorMessage, ErrorType},
     },
     types::ChatContent,
@@ -79,7 +79,12 @@ impl MessagesProcessor {
             let filtered = profanity_filter(&msg.content);
 
             if let Ok(content) = ChatContent::try_new(filtered) {
-                let server_msg = Arc::new(ChatMessage { content, ..msg });
+                let server_msg = Arc::new(
+                    ServerBroadcastMessage {
+                        chat_message: ChatMessage { content, ..msg },
+                    }
+                    .into(),
+                );
                 let _ = self.chat_state.outbound_tx.send(server_msg);
             }
         }

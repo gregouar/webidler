@@ -1,7 +1,7 @@
 use anyhow::Result;
 
-use tokio::sync::mpsc;
 use tokio::time;
+use tokio::{sync::mpsc, time::timeout};
 
 use axum::{
     body::Bytes,
@@ -68,7 +68,11 @@ pub fn establish(
 
 impl WebSocketSender {
     pub async fn send(&mut self, msg: &ServerChatMessage) -> Result<()> {
-        self.ws_sender.send(into_ws_msg(msg)?).await?;
+        timeout(
+            Duration::from_secs(5),
+            self.ws_sender.send(into_ws_msg(msg)?),
+        )
+        .await??;
         Ok(())
     }
 }
