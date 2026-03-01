@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -45,7 +43,6 @@ impl Default for ClientChatMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientConnectMessage {
     pub jwt: String,
-    pub user_id: UserId,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

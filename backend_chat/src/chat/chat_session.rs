@@ -6,10 +6,7 @@ use chrono::Utc;
 use shared::{
     data::user::User,
     messages::{
-        chat::{
-            ChatMessage, ClientChatMessage, ClientPostMessage, ServerBroadcastMessage,
-            ServerDisconnectMessage,
-        },
+        chat::{ChatMessage, ClientChatMessage, ClientPostMessage, ServerDisconnectMessage},
         server::{ErrorMessage, ErrorType},
     },
 };

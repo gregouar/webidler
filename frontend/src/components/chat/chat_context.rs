@@ -1,3 +1,5 @@
+use std::ops::ControlFlow;
+
 use codee::binary::MsgpackSerdeCodec;
 use leptos::prelude::*;
 use leptos_use::{
@@ -6,7 +8,10 @@ use leptos_use::{
 };
 use shared::{
     messages::{
-        chat::{ChatChannel, ChatMessage, ClientChatMessage, ClientPostMessage, ServerChatMessage},
+        chat::{
+            ChatChannel, ChatMessage, ClientChatMessage, ClientConnectMessage, ClientPostMessage,
+            ServerChatMessage,
+        },
         server::ErrorType,
     },
     types::ChatContent,
@@ -68,19 +73,31 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     );
 
     let auth: AuthContext = expect_context();
-    Effect::new(move || {
-        let is_auth = auth.is_authenticated();
-        let state = ready_state.get_untracked();
+    Effect::new({
+        let close = close.clone();
+        move || {
+            let is_auth = auth.is_authenticated();
+            let state = ready_state.get_untracked();
 
-        if is_auth
-            && state != ConnectionReadyState::Open
-            && state != ConnectionReadyState::Connecting
-        {
-            open();
+            if is_auth
+                && state != ConnectionReadyState::Open
+                && state != ConnectionReadyState::Connecting
+            {
+                open();
+            }
+
+            if !is_auth && state == ConnectionReadyState::Open {
+                close();
+            }
         }
+    });
 
-        if !is_auth && state == ConnectionReadyState::Open {
-            close();
+    Effect::new({
+        let send = send.clone();
+        move || {
+            if auth.is_authenticated() && ready_state.get() == ConnectionReadyState::Open {
+                send(&ClientConnectMessage { jwt: auth.token() }.into())
+            }
         }
     });
 
@@ -105,7 +122,10 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         let chat_context = chat_context.clone();
         move |_| {
             if let Some(message) = message.get() {
-                handle_message(&chat_context, message);
+                match handle_message(&chat_context, message) {
+                    ControlFlow::Continue(_) => {}
+                    ControlFlow::Break(_) => close(),
+                }
             }
         }
     });
@@ -115,10 +135,19 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     view! { {children()} }
 }
 
-fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) {
+fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> ControlFlow<()> {
     match message {
         ServerChatMessage::Connect(_) => {}
-        ServerChatMessage::Disconnect(_) => {}
+        ServerChatMessage::Disconnect(_) => {
+            return ControlFlow::Break(());
+        }
+        // chat_context.messages.write().push(ChatMessage {
+        //     channel: ChatChannel::System,
+        //     user_id: None,
+        //     user_name: None,
+        //     content: "disconnected".into(),
+        //     sent_at: Utc::now(),
+        // }),
         ServerChatMessage::Error(error_message) => {
             let toaster: Toasts = expect_context();
             show_toast(
@@ -131,10 +160,11 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) {
                 },
             );
             if error_message.must_disconnect {
-                let navigate = leptos_router::hooks::use_navigate();
-                navigate("/", Default::default());
+                // let navigate = leptos_router::hooks::use_navigate();
+                // navigate("/", Default::default());
             }
         }
         ServerChatMessage::Broadcast(m) => chat_context.messages.write().push(m.chat_message),
     }
+    return ControlFlow::Continue(());
 }

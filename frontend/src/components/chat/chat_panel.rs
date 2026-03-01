@@ -7,14 +7,6 @@ use shared::messages::chat::ChatChannel;
 
 use crate::components::chat::chat_context::ChatContext;
 
-#[derive(Clone)]
-struct ChatMessage {
-    id: u64,
-    channel: ChatChannel,
-    author: String,
-    content: String,
-}
-
 #[component]
 pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
@@ -46,7 +38,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             let new_top = start_top + dy;
             let new_left = start_left + dx;
 
-            // TODO: Compute actual size of chat panel
+            // TODO: Compute actual size of chat panel?
 
             // Clamp AFTER computing absolute value
             let win = window();
@@ -76,42 +68,46 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
 
     let input_value = RwSignal::new(String::new());
 
-    let messages = RwSignal::new(vec![
-        ChatMessage {
-            id: 1,
-            channel: ChatChannel::System,
-            author: "[System]".into(),
-            content: "World event starting in 2 minutes.".into(),
-        },
-        ChatMessage {
-            id: 2,
-            channel: ChatChannel::Global,
-            author: "Nyx".into(),
-            content: "Anyone pushing wave 200?".into(),
-        },
-        ChatMessage {
-            id: 3,
-            channel: ChatChannel::Trade,
-            author: "Valen".into(),
-            content: "WTS Infernal Blade 12k".into(),
-        },
-    ]);
+    // let messages = RwSignal::new(vec![
+    //     ChatMessage {
+    //         id: 1,
+    //         channel: ChatChannel::System,
+    //         author: "[System]".into(),
+    //         content: "World event starting in 2 minutes.".into(),
+    //     },
+    //     ChatMessage {
+    //         id: 2,
+    //         channel: ChatChannel::Global,
+    //         author: "Nyx".into(),
+    //         content: "Anyone pushing wave 200?".into(),
+    //     },
+    //     ChatMessage {
+    //         id: 3,
+    //         channel: ChatChannel::Trade,
+    //         author: "Valen".into(),
+    //         content: "WTS Infernal Blade 12k".into(),
+    //     },
+    // ]);
 
     let last_visible_message = move || {
         let selected = selected_channels.get();
-        messages
-            .get()
-            .into_iter()
-            .rev()
+        chat_context
+            .messages
+            .read()
+            .iter_rev()
             .find(|m| selected.contains(&m.channel))
+            .cloned()
     };
 
+    // TODO: Do better than that...
     let filtered_messages = move || {
         let selected = selected_channels.get();
-        messages
-            .get()
-            .into_iter()
+        chat_context
+            .messages
+            .read()
+            .iter()
             .filter(|m| selected.contains(&m.channel))
+            .cloned()
             .collect::<Vec<_>>()
     };
 
@@ -138,6 +134,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         input_value.set(String::new());
     };
 
+    // TODO: Split in components
     view! {
         {move || {
             if !open.get() {
@@ -235,7 +232,11 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                         >
                                             {move || {
                                                 if let Some(msg) = last_visible_message() {
-                                                    format!("{}: {}", msg.author, msg.content)
+                                                    format!(
+                                                        "{}: {}",
+                                                        msg.user_name.unwrap_or_default(),
+                                                        msg.content.into_inner(),
+                                                    )
                                                 } else {
                                                     "No messages".into()
                                                 }
@@ -250,15 +251,17 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                         text-wrap wrap-break-word">
                                             <For
                                                 each=filtered_messages
-                                                key=|msg| msg.id
+                                                key=|msg| (msg.sent_at, msg.user_id)
                                                 children=move |msg| {
                                                     view! {
                                                         <div class="text-[13px] leading-snug">
                                                             <span class=move || channel_color(
                                                                 msg.channel,
-                                                            )>{msg.author.clone()}</span>
+                                                            )>{msg.user_name.clone()}</span>
                                                             <span class="text-gray-500">": "</span>
-                                                            <span class="text-gray-200">{msg.content.clone()}</span>
+                                                            <span class="text-gray-200">
+                                                                {msg.content.into_inner()}
+                                                            </span>
                                                         </div>
                                                     }
                                                 }

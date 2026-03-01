@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 
+#[derive(Debug, Clone)]
 pub struct RingBuffer<T> {
     buf: VecDeque<T>,
     capacity: usize,
@@ -22,6 +23,10 @@ impl<T> RingBuffer<T> {
 
     pub fn iter(&self) -> impl Iterator<Item = &T> {
         self.buf.iter()
+    }
+
+    pub fn iter_rev(&self) -> impl Iterator<Item = &T> {
+        self.buf.iter().rev()
     }
 
     pub fn len(&self) -> usize {

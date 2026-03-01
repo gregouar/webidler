@@ -64,7 +64,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
-        .route("/chatws", any(websocket::handler))
+        .route("/ws", any(websocket::handler))
         .with_state(app_state.clone())
         .layer(tracer_layer)
         .layer(cors_layer);
@@ -82,6 +82,8 @@ async fn main() {
             println!("Received shutdown signal");
         }
     }
+
+    messages_processor_handle.abort();
 
     tracing::debug!("server has been shut down");
 }

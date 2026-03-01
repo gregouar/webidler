@@ -54,7 +54,7 @@ pub fn App() -> impl IntoView {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <ConfirmationModal state=confirm_state />
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
-            .unwrap_or("ws://localhost:4242")
+            .unwrap_or("ws://localhost:4242/ws")
             .into()>
             <Router base=base_uri>
                 <Routes fallback=|| "Page not found.">
