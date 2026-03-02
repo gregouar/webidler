@@ -70,8 +70,8 @@ impl ChatSession {
             .insert(self.session_id);
         self.chat_state
             .usernames_map
-            .entry(self.user.username.clone())
-            .or_insert(self.user.user_id);
+            .entry(self.user.username.to_ascii_lowercase())
+            .or_insert((self.user.user_id, self.user.username.clone()));
         let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
         ///////////////////////////////
 

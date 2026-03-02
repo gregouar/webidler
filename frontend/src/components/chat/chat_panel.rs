@@ -118,12 +118,17 @@ pub fn ChatPanel() -> impl IntoView {
 
     let text_area_ref: NodeRef<leptos::html::Textarea> = NodeRef::new();
     Effect::new(move || {
-        if events_context.key_pressed(Key::Enter) {
-            chat_context.opened.set(true);
-            chat_context.minimized.set(false);
+        if chat_context.opened.get() {
             if let Some(text_area) = text_area_ref.get() {
                 text_area.focus().unwrap();
             }
+        }
+    });
+
+    Effect::new(move || {
+        if events_context.key_pressed(Key::Enter) {
+            chat_context.opened.set(true);
+            chat_context.minimized.set(false);
         }
     });
 

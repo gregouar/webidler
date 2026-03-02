@@ -19,7 +19,7 @@ pub struct ChatState {
 
     pub reply_map: Arc<DashMap<Uuid, mpsc::Sender<ServerChatMessage>>>,
     pub users_map: Arc<DashMap<UserId, HashSet<Uuid>>>,
-    pub usernames_map: Arc<DashMap<String, UserId>>,
+    pub usernames_map: Arc<DashMap<String, (UserId, String)>>,
 
     pub history: Arc<Mutex<RingBuffer<Arc<ChatMessage>>>>,
 }

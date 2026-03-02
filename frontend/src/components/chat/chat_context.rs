@@ -177,7 +177,6 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
         ServerChatMessage::Broadcast(m) => push_message(chat_context, *m),
         ServerChatMessage::WhisperFeedback(m) => {
             // TODO: Local users map
-            chat_context.messages.write().push(m.chat_message);
             if let Some(username) = m.target_username {
                 if !chat_context
                     .users_map
@@ -190,6 +189,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                         .insert(m.target_user_id, username);
                 }
             }
+            chat_context.messages.write().push(m.chat_message);
             chat_context
                 .write_channel
                 .set(ChatChannel::Whisper(m.target_user_id));

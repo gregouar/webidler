@@ -67,22 +67,28 @@ impl MessagesProcessor {
                 }
             }
 
-            let (content, channel) =
+            let (content, channel, target_username) =
                 if let Some((username, message)) = parse_whisper_message(&msg.content) {
-                    match self.chat_state.usernames_map.get(&username) {
-                        Some(user_id) => (message, ChatChannel::Whisper(*user_id)),
-                        None => {
-                            send_direct_error(
-                                &self.chat_state,
-                                session_id,
-                                "unknown user or not connected",
-                            )
-                            .await;
-                            continue;
-                        }
+                    if let Some(entry) = self.chat_state.usernames_map.get(&username) {
+                        let (user_id, target_username) = entry.value();
+
+                        (
+                            message,
+                            ChatChannel::Whisper(*user_id),
+                            Some(target_username.clone()),
+                        )
+                    } else {
+                        send_direct_error(
+                            &self.chat_state,
+                            session_id,
+                            "unknown user or not connected",
+                        )
+                        .await;
+
+                        continue;
                     }
                 } else {
-                    (msg.content, msg.channel)
+                    (msg.content, msg.channel, None)
                 };
 
             let content = if self.profanities_checker.contains_profanities(&content) {
@@ -115,7 +121,7 @@ impl MessagesProcessor {
                             &self.chat_state,
                             session_id,
                             ServerWhisperFeedbackMessage {
-                                target_username: None, //TODO
+                                target_username,
                                 target_user_id: user_id,
                                 chat_message,
                             }
@@ -144,6 +150,9 @@ impl MessagesProcessor {
             }
         }
     }
+
+    async fn handle_broadcast() {}
+    async fn handle_whisper() {}
 }
 
 async fn send_direct_error(chat_state: &ChatState, session_id: Uuid, msg: &str) {
@@ -180,5 +189,8 @@ fn parse_whisper_message(content: &str) -> Option<(String, ChatContent)> {
         return None;
     }
 
-    Some((username, ChatContent::try_new(message).ok()?))
+    Some((
+        username.to_ascii_lowercase(),
+        ChatContent::try_new(message).ok()?,
+    ))
 }
