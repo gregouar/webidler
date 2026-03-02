@@ -1,23 +1,25 @@
-use std::ops::ControlFlow;
-
 use codee::binary::MsgpackSerdeCodec;
 use leptos::prelude::*;
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
+use std::ops::ControlFlow;
+use web_sys::CloseEvent;
+
 use shared_chat::{
     messages::{
         client::{ClientChatMessage, ClientConnectMessage, ClientPostMessage},
         server::{ErrorType, ServerChatMessage},
     },
+    ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
-use web_sys::CloseEvent;
 
-use crate::components::{auth::AuthContext, chat::ring_buffer::RingBuffer, ui::toast::*};
+use crate::components::{auth::AuthContext, ui::toast::*};
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
+
 #[derive(Clone)]
 pub struct ChatContext {
     pub messages: RwSignal<RingBuffer<ChatMessage>>,
@@ -135,10 +137,12 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
 
 fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> ControlFlow<()> {
     match message {
-        ServerChatMessage::Connect(_) => {}
-        ServerChatMessage::Disconnect(_) => {
-            return ControlFlow::Break(());
+        ServerChatMessage::Connect(m) => {
+            chat_context.messages.write().extend(m.history.into_iter());
         }
+        // ServerChatMessage::Disconnect(_) => {
+        //     return ControlFlow::Break(());
+        // }
         // chat_context.messages.write().push(ChatMessage {
         //     channel: ChatChannel::System,
         //     user_id: None,
@@ -161,7 +165,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                 // navigate("/", Default::default());
             }
         }
-        ServerChatMessage::Broadcast(m) => chat_context.messages.write().push(m.chat_message),
+        ServerChatMessage::Broadcast(m) => chat_context.messages.write().push(*m),
     }
     return ControlFlow::Continue(());
 }

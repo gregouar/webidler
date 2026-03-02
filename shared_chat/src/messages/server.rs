@@ -8,10 +8,10 @@ impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
     pub enum ServerChatMessage {
         Connect(ServerConnectMessage),
-        Disconnect(ServerDisconnectMessage),
+        // Disconnect(ServerDisconnectMessage),
         Error(ErrorMessage),
 
-        Broadcast(ServerBroadcastMessage),
+        Broadcast(ChatMessage),
     }
 }
 
@@ -30,16 +30,10 @@ pub enum ErrorType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerConnectMessage {
-    // TODO:
-    // pub history: Vec<ChatMessage>,
+    pub history: Vec<ChatMessage>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ServerDisconnectMessage {
-    pub reason: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ServerBroadcastMessage {
-    pub chat_message: ChatMessage,
-}
+// #[derive(Serialize, Deserialize, Debug, Clone)]
+// pub struct ServerDisconnectMessage {
+//     pub reason: String,
+// }

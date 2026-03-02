@@ -13,6 +13,7 @@ use futures::{
     stream::{SplitSink, StreamExt},
 };
 use std::ops::ControlFlow;
+use std::sync::Arc;
 use std::{net::SocketAddr, time::Duration};
 
 use shared_chat::messages::client::ClientChatMessage;
@@ -72,6 +73,15 @@ impl WebSocketSender {
         timeout(
             Duration::from_secs(5),
             self.ws_sender.send(into_ws_msg(msg)?),
+        )
+        .await??;
+        Ok(())
+    }
+
+    pub async fn send_raw(&mut self, bytes: Arc<Bytes>) -> Result<()> {
+        timeout(
+            Duration::from_secs(5),
+            self.ws_sender.send(Message::Binary(bytes.as_ref().clone())),
         )
         .await??;
         Ok(())

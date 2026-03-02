@@ -8,7 +8,7 @@ use shared_chat::{
     http::users::User,
     messages::{
         client::{ClientChatMessage, ClientPostMessage},
-        server::{ErrorMessage, ErrorType, ServerDisconnectMessage},
+        server::{ErrorMessage, ErrorType, ServerConnectMessage},
     },
     types::ChatMessage,
 };
@@ -39,12 +39,29 @@ impl ChatSession {
         mut ws_sender: WebSocketSender,
         mut ws_receiver: WebSocketReceiver,
     ) -> Result<()> {
+        let history = ServerConnectMessage {
+            history: self
+                .chat_state
+                .history
+                .lock()
+                .unwrap()
+                .iter_rev()
+                .take(20)
+                .map(|m| (**m).clone())
+                .collect(),
+        }
+        .into();
+
+        ws_sender
+            .send(&history)
+            .await
+            .unwrap_or_else(|_| tracing::warn!("failed to send connection message"));
+
         // Maybe this should be handler outside of this:
         let (direct_tx, mut direct_rx) = mpsc::channel(32);
         self.chat_state
             .reply_map
             .insert(self.session_id, direct_tx.clone());
-
         let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
         ///////////////////////////////
 
@@ -52,14 +69,16 @@ impl ChatSession {
             loop {
                 tokio::select! {
                     Ok(msg) = broadcast_rx.recv() => {
-                       if let Err(err)=  ws_sender.send(&msg).await {
+                       if let Err(err)=  ws_sender.send_raw(msg).await {
                          tracing::warn!("failed to send message: {}",err);
+                         break;
                        }
 
                     }
                     Some(msg) = direct_rx.recv() => {
                        if let Err(err)=  ws_sender.send(&msg).await {
                          tracing::warn!("failed to send message: {}",err);
+                         break;
                        }
                     }
                     else => break, // This disconnect...
@@ -90,15 +109,15 @@ impl ChatSession {
             }
         }
 
-        direct_tx
-            .send(
-                ServerDisconnectMessage {
-                    reason: "session end".into(),
-                }
-                .into(),
-            )
-            .await
-            .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
+        // direct_tx
+        //     .send(
+        //         ServerDisconnectMessage {
+        //             reason: "session end".into(),
+        //         }
+        //         .into(),
+        //     )
+        //     .await
+        //     .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
 
         write_task.abort();
 

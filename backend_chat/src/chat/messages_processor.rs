@@ -1,12 +1,13 @@
-use std::sync::Arc;
-
+use axum::body::Bytes;
+use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
+use uuid::Uuid;
 
 use shared_chat::{
-    messages::server::{ErrorMessage, ErrorType, ServerBroadcastMessage},
+    messages::server::{ErrorMessage, ErrorType, ServerChatMessage},
+    ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
-use uuid::Uuid;
 
 use crate::chat::chat_state::ChatState;
 
@@ -27,6 +28,7 @@ impl MessagesProcessor {
                 inbound_tx,
                 outbound_tx,
                 reply_map: Default::default(),
+                history: Arc::new(Mutex::new(RingBuffer::new(100))),
             },
         }
     }
@@ -76,13 +78,27 @@ impl MessagesProcessor {
             let filtered = profanity_filter(&msg.content);
 
             if let Ok(content) = ChatContent::try_new(filtered) {
-                let server_msg = Arc::new(
-                    ServerBroadcastMessage {
-                        chat_message: ChatMessage { content, ..msg },
-                    }
-                    .into(),
-                );
-                let _ = self.chat_state.outbound_tx.send(server_msg);
+                let chat_message = ChatMessage { content, ..msg };
+                self.chat_state
+                    .history
+                    .lock()
+                    .unwrap()
+                    .push(Arc::new(chat_message.clone()));
+                if let Ok(ser_message) =
+                    rmp_serde::to_vec(&ServerChatMessage::Broadcast(chat_message.into()))
+                {
+                    let message = Arc::new(Bytes::from(ser_message));
+                    let _ = self.chat_state.outbound_tx.send(message);
+                }
+
+                // let message: Arc<ServerChatMessage> =
+                //     Arc::new(ServerChatMessage::Broadcast(chat_message.into()));
+                // self.chat_state
+                //     .history
+                //     .lock()
+                //     .unwrap()
+                //     .push(message.clone());
+                // let _ = self.chat_state.outbound_tx.send(message);
             }
         }
     }

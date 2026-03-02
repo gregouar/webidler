@@ -21,6 +21,15 @@ impl<T> RingBuffer<T> {
         self.buf.push_back(value);
     }
 
+    pub fn extend<'a>(&mut self, iterator: impl Iterator<Item = T>)
+    where
+        T: 'a,
+    {
+        for iter in iterator {
+            self.push(iter);
+        }
+    }
+
     pub fn iter(&self) -> impl Iterator<Item = &T> {
         self.buf.iter()
     }
