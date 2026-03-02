@@ -21,7 +21,15 @@ pub struct ChatMessage {
 }
 
 #[nutype(
+    sanitize(with=strip_control_chars),
     validate(not_empty, len_char_max = 200),
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
 )]
 pub struct ChatContent(String);
+
+pub fn strip_control_chars(input: String) -> String {
+    input
+        .chars()
+        .filter(|c| !c.is_control() || *c == '\n')
+        .collect()
+}

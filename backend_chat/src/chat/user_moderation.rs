@@ -24,8 +24,8 @@ impl UserModerationState {
     pub fn refill(&mut self) {
         let now = Instant::now();
         let elapsed = now.duration_since(self.last_refill).as_secs();
-        if elapsed > 0 {
-            self.tokens = (self.tokens + elapsed as u32).min(5);
+        if elapsed > 5 {
+            self.tokens = (self.tokens + elapsed as u32 / 5).min(5);
             self.last_refill = now;
         }
     }

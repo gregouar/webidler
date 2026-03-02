@@ -1,5 +1,5 @@
 use codee::binary::MsgpackSerdeCodec;
-use leptos::prelude::*;
+use leptos::{leptos_dom::logging::console_log, prelude::*};
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
@@ -23,7 +23,7 @@ const HEARTBEAT_PERIOD: u64 = 10_000;
 #[derive(Clone)]
 pub struct ChatContext {
     pub messages: RwSignal<RingBuffer<ChatMessage>>,
-    pub send: Callback<String>,
+    pub send: Callback<(ChatChannel, String)>,
 }
 
 #[component]
@@ -101,15 +101,9 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     });
 
     // Chat
-    let send = Callback::new(move |msg: String| {
+    let send = Callback::new(move |(channel, msg)| {
         if let Ok(content) = ChatContent::try_new(msg) {
-            send(
-                &ClientPostMessage {
-                    channel: ChatChannel::Global,
-                    content,
-                }
-                .into(),
-            );
+            send(&ClientPostMessage { channel, content }.into());
         }
     });
 
@@ -151,6 +145,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
         //     sent_at: Utc::now(),
         // }),
         ServerChatMessage::Error(error_message) => {
+            console_log(&format!("{:?}", error_message));
             let toaster: Toasts = expect_context();
             show_toast(
                 toaster,

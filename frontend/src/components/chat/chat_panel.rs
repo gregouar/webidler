@@ -93,15 +93,6 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
-    let toggle_channel = move |channel: ChatChannel| {
-        selected_channels.update(|set| {
-            if set.contains(&channel) {
-                set.remove(&channel);
-            } else {
-                set.insert(channel);
-            }
-        });
-    };
     let write_channel = RwSignal::new(ChatChannel::Global);
     let dropdown_open = RwSignal::new(false);
 
@@ -111,7 +102,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             return;
         }
 
-        chat_context.send.run(content);
+        chat_context
+            .send
+            .run((write_channel.get_untracked(), content));
 
         input_value.set(String::new());
     };
@@ -135,7 +128,6 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                 ().into_any()
             } else {
                 let (top, left) = position.get();
-
                 view! {
                     <div
                         class="fixed z-50 select-none text-left"
@@ -149,57 +141,26 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                 on:mousedown=start_drag
                             >
                                 <div class="flex gap-4 items-center">
-
-                                    <Checkbox
-                                        label="Global"
-                                        on_change=move |value| {
-                                            if value {
-                                                selected_channels.write().insert(ChatChannel::Global);
-                                            } else {
-                                                selected_channels.write().remove(&ChatChannel::Global);
+                                    {[ChatChannel::Global, ChatChannel::Trade, ChatChannel::System]
+                                        .into_iter()
+                                        .map(move |channel| {
+                                            view! {
+                                                <Checkbox
+                                                    label=channel_str(channel)
+                                                    on_change=move |value| {
+                                                        if value {
+                                                            selected_channels.write().insert(channel);
+                                                        } else {
+                                                            selected_channels.write().remove(&channel);
+                                                        }
+                                                    }
+                                                    checked=Signal::derive(move || {
+                                                        selected_channels.get().contains(&channel)
+                                                    })
+                                                />
                                             }
-                                        }
-                                        checked=Signal::derive(move || {
-                                            selected_channels.get().contains(&ChatChannel::Global)
                                         })
-                                    />
-
-                                    <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            class="appearance-none w-4 h-4 rounded-xs
-                                            border border-zinc-500 bg-zinc-700 
-                                            checked:bg-amber-500 checked:border-amber-500 
-                                            checked:[&:after]:content-['✓']
-                                            checked:[&:after]:text-zinc-950
-                                            checked:[&:after]:font-bold
-                                            checked:[&:after]:text-[12px]
-                                            checked:[&:after]:flex
-                                            checked:[&:after]:items-center
-                                            checked:[&:after]:justify-center
-                                            flex items-center justify-center
-                                            active:bg-amber-600
-                                            hover:outline-none hover:ring-1 hover:ring-amber-500"
-                                            prop:checked=move || {
-                                                selected_channels.get().contains(&ChatChannel::Trade)
-                                            }
-                                            on:change=move |_| toggle_channel(ChatChannel::Trade)
-                                        />
-                                        "Trade"
-                                    </label>
-
-                                    <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            class="accent-amber-500"
-                                            prop:checked=move || {
-                                                selected_channels.get().contains(&ChatChannel::System)
-                                            }
-                                            on:change=move |_| toggle_channel(ChatChannel::System)
-                                        />
-                                        "System"
-                                    </label>
-
+                                        .collect::<Vec<_>>()}
                                 </div>
 
                                 <div class="flex gap-3 text-gray-400">
@@ -207,7 +168,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                         class="hover:text-white"
                                         on:click=move |_| minimized.update(|m| *m = !*m)
                                     >
-                                        {move || if minimized.get() { "▲" } else { "—" }}
+                                        {move || if minimized.get() { "▼" } else { "—" }}
                                     </button>
 
                                     <button
@@ -279,13 +240,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                     >
                                                         <span class=move || channel_color(
                                                             write_channel.get(),
-                                                        )>
-                                                            {move || match write_channel.get() {
-                                                                ChatChannel::Global => "Global",
-                                                                ChatChannel::Trade => "Trade",
-                                                                ChatChannel::System => "System",
-                                                            }}
-                                                        </span>
+                                                        )>{move || channel_str(write_channel.get())}</span>
                                                     // <span class="text-gray-500">"▾"</span>
                                                     </button>
 
@@ -355,6 +310,14 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                     .into_any()
             }
         }}
+    }
+}
+
+fn channel_str(channel: ChatChannel) -> &'static str {
+    match channel {
+        ChatChannel::System => "System",
+        ChatChannel::Global => "Global",
+        ChatChannel::Trade => "Trade",
     }
 }
 
