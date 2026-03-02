@@ -1,30 +1,46 @@
 use aho_corasick::AhoCorasick;
+use itertools::Itertools;
+use regex::Regex;
 use std::{collections::HashMap, fs};
 use unicode_normalization::UnicodeNormalization;
 
 pub struct ProfanitiesChecker {
     // profanity_list: HashSet<String>,
-    matcher: AhoCorasick,
+    strong_matcher: AhoCorasick,
+    weak_matcher: Regex,
     leet_map: HashMap<char, char>,
 }
 
 impl ProfanitiesChecker {
-    pub fn load_from_file(path: &'static str) -> anyhow::Result<Self> {
-        let content = fs::read_to_string(path)?;
+    pub fn load_from_file(
+        strong_path: &'static str,
+        weak_path: &'static str,
+    ) -> anyhow::Result<Self> {
+        let strong_content = fs::read_to_string(strong_path)?;
+        let weak_content = fs::read_to_string(weak_path)?;
 
         Ok(Self {
-            matcher: AhoCorasick::builder()
+            strong_matcher: AhoCorasick::builder()
                 // .ascii_case_insensitive(true)
                 .build(
-                    content
+                    strong_content
                         .lines()
                         .map(str::trim)
                         .filter(|line| !line.is_empty() && !line.starts_with('#'))
                         .map(|line| line.to_lowercase()),
                 )?,
+            weak_matcher: Regex::new(&format!(
+                r"\b({})\b",
+                weak_content
+                    .lines()
+                    .map(str::trim)
+                    .filter(|line| !line.is_empty() && !line.starts_with('#'))
+                    .map(|line| line.to_lowercase())
+                    .join("|")
+            ))?,
             leet_map: HashMap::from([
                 ('0', 'o'),
-                ('1', 'l'),
+                ('1', 'i'),
                 ('3', 'e'),
                 ('4', 'a'),
                 ('5', 's'),
@@ -32,47 +48,43 @@ impl ProfanitiesChecker {
                 ('@', 'a'),
                 ('$', 's'),
                 ('!', 'i'),
+                ('+', 't'),
             ]),
         })
     }
 
     pub fn contains_profanities(&self, content: &str) -> bool {
-        self.matcher.is_match(&self.normalize(content))
+        let weak_normalized = self.weak_normalize(content);
+        let strong_normalized = self.strong_normalize(&weak_normalized);
+        self.strong_matcher.is_match(&strong_normalized)
+            || self.weak_matcher.is_match(&weak_normalized)
     }
 
-    pub fn normalize(&self, content: &str) -> String {
-        // 1. Lowercase + NFKC normalize + strip diacritics
-        let mut normalized: String = content
-            .nfkc()
-            .flat_map(|c| c.to_lowercase())
-            .filter(|c| c.is_alphanumeric())
-            .map(|c| {
+    pub fn weak_normalize(&self, content: &str) -> String {
+        collapse_repeated_chars(
+            content.nfkc().flat_map(|c| c.to_lowercase()).map(|c| {
                 if let Some(repl) = self.leet_map.get(&c) {
                     *repl
                 } else {
                     c
                 }
-            })
-            .collect();
+            }),
+            content.len(),
+        )
+    }
 
-        // 5. Remove separators and punctuation (keep letters + digits only)
-        normalized.retain(|c| c.is_alphanumeric());
-
-        // 6. Collapse repeated characters (e.g. "fuuck" → "fuck")
-        normalized = collapse_repeated_chars(&normalized);
-
-        normalized
-        // content.to_ascii_lowercase()
+    pub fn strong_normalize(&self, content: &str) -> String {
+        content.chars().filter(|c| c.is_alphanumeric()).collect()
     }
 }
 
-fn collapse_repeated_chars(input: &str) -> String {
-    let mut result = String::with_capacity(input.len());
+fn collapse_repeated_chars(input: impl Iterator<Item = char>, capacity: usize) -> String {
+    let mut result = String::with_capacity(capacity);
 
     let mut prev: Option<char> = None;
     let mut count = 0;
 
-    for c in input.chars() {
+    for c in input {
         match prev {
             Some(p) if p == c => {
                 count += 1;

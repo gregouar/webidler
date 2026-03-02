@@ -54,8 +54,11 @@ async fn main() {
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
     let messages_processor = MessagesProcessor::new(
-        ProfanitiesChecker::load_from_file("data/profanities.txt")
-            .expect("failed to load profanities"),
+        ProfanitiesChecker::load_from_file(
+            "data/profanities/strong_profanities.txt",
+            "data/profanities/weak_profanities.txt",
+        )
+        .expect("failed to load profanities"),
     );
 
     let app_state = AppState {
