@@ -114,7 +114,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     });
 
     let chat_context = ChatContext {
-        messages: RwSignal::new(RingBuffer::new(100)),
+        messages: RwSignal::new(RingBuffer::new(20)),
         send,
     };
 

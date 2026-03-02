@@ -1,5 +1,6 @@
 pub mod buttons;
 pub mod card;
+pub mod checkbox;
 pub mod confirm;
 pub mod dropdown;
 pub mod fullscreen;

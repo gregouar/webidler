@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use nutype::nutype;
 use serde::{Deserialize, Serialize};
 
-use crate::http::users::UserId;
+pub type UserId = uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Hash)]
 pub enum ChatChannel {

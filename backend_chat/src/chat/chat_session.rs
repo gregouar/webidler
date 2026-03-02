@@ -1,11 +1,11 @@
 use anyhow::Result;
+use backend_shared::http::users::User;
 use chrono::Utc;
 use std::ops::ControlFlow;
 use tokio::sync::mpsc;
 use uuid::Uuid;
 
 use shared_chat::{
-    http::users::User,
     messages::{
         client::{ClientChatMessage, ClientPostMessage},
         server::{ErrorMessage, ErrorType, ServerConnectMessage},

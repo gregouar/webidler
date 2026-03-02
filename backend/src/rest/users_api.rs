@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use axum::{
     Extension, Json, Router,
     extract::{Path, State},
@@ -5,6 +7,7 @@ use axum::{
     routing::{delete, get, post},
 };
 
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use chrono::{Duration, Utc};
 
 use shared::{
@@ -55,6 +58,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 async fn post_sign_up(
     State(app_settings): State<AppSettings>,
     State(db_pool): State<db::DbPool>,
+    State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Json(payload): Json<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, AppError> {
     // TODO: middleware?
@@ -72,6 +76,12 @@ async fn post_sign_up(
         }
         None => (None, None),
     };
+
+    if profanities_checker.contains_profanities(&payload.username) {
+        return Err(AppError::UserError(
+            "this name contains inappropriate language, please choose a different name".into(),
+        ));
+    }
 
     match db::users::create_user(
         &db_pool,
@@ -209,6 +219,7 @@ async fn post_update_account(
     Extension(current_user): Extension<CurrentUser>,
     State(app_settings): State<AppSettings>,
     State(db_pool): State<db::DbPool>,
+    State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Json(payload): Json<UpdateAccountRequest>,
 ) -> Result<Json<UpdateAccountResponse>, AppError> {
     let (email_crypt, email_hash) = if let Some(email) = payload.email {
@@ -247,6 +258,13 @@ async fn post_update_account(
             .and_then(|password| auth::hash_password(&password).ok()),
     };
 
+    if let Some(username) = user_update.username.as_ref()
+        && profanities_checker.contains_profanities(&username)
+    {
+        return Err(AppError::UserError(
+            "this name contains inappropriate language, please choose a different name".into(),
+        ));
+    }
     let mut tx = db_pool.begin().await?;
 
     let r = match db::users::update_user(

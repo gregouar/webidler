@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 shared_chat = { path = "../shared_chat", features=[] }
+backend_shared = { path = "../backend_shared", features=[] }
 
 anyhow = "1.0.97"
 dotenvy = "0.15.7"
@@ -45,9 +46,6 @@ regex = "1.11.1"
 itertools = "0.14.0"
 indexmap = { version = "2.11.0", features = ["serde"] }
 dashmap = "6.1.0"
-
-aho-corasick = "1.1.4"
-unicode-normalization = "0.1.25"
 
 [features]
 default = ["sqlite"]

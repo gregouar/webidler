@@ -4,6 +4,7 @@ use axum::{
     Router,
     routing::{any, get},
 };
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use http::{
     HeaderValue, Method,
     header::{AUTHORIZATION, CONTENT_TYPE},
@@ -17,7 +18,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend_chat::{
     app_state::{AppSettings, AppState},
-    chat::{messages_processor::MessagesProcessor, profanities_checker::ProfanitiesChecker},
+    chat::messages_processor::MessagesProcessor,
     websocket,
 };
 

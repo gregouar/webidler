@@ -2,9 +2,12 @@ use aes_gcm::{Aes256Gcm, KeyInit};
 use axum::extract::FromRef;
 use base64::prelude::*;
 use jsonwebtoken::{DecodingKey, EncodingKey};
-use std::env;
+use std::{env, sync::Arc};
+
+use backend_shared::profanities_checker::ProfanitiesChecker;
 
 use crate::integration::discord::DiscordState;
+
 pub use crate::{
     db::pool::DbPool,
     email::EmailService,
@@ -19,6 +22,7 @@ pub struct AppState {
     pub master_store: MasterStore,
     pub sessions_store: SessionsStore,
     pub discord_state: DiscordState,
+    pub profanities_checker: Arc<ProfanitiesChecker>,
 }
 
 #[derive(Clone)]
@@ -81,5 +85,11 @@ impl FromRef<AppState> for SessionsStore {
 impl FromRef<AppState> for DiscordState {
     fn from_ref(app_state: &AppState) -> DiscordState {
         app_state.discord_state.clone()
+    }
+}
+
+impl FromRef<AppState> for Arc<ProfanitiesChecker> {
+    fn from_ref(app_state: &AppState) -> Arc<ProfanitiesChecker> {
+        app_state.profanities_checker.clone()
     }
 }

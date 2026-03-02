@@ -1,20 +1,17 @@
 use axum::body::Bytes;
+use backend_shared::{http::users::UserId, profanities_checker::ProfanitiesChecker};
 use dashmap::DashMap;
 use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
 
 use shared_chat::{
-    http::users::UserId,
     messages::server::{ErrorMessage, ErrorType, ServerChatMessage},
     ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
 
-use crate::chat::{
-    chat_state::ChatState, profanities_checker::ProfanitiesChecker,
-    user_moderation::UserModerationState,
-};
+use crate::chat::{chat_state::ChatState, user_moderation::UserModerationState};
 
 pub struct MessagesProcessor {
     inbound_rx: mpsc::Receiver<(Uuid, ChatMessage)>,

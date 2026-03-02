@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 shared = { path = "../shared", features=["modifiable"] }
+backend_shared = { path = "../backend_shared", features=[] }
 
 anyhow = "1.0.97"
 dotenvy = "0.15.7"

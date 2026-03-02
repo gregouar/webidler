@@ -9,12 +9,10 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
-use shared_chat::{
-    http::users::{GetUserDetailsResponse, User},
-    messages::{
-        client::{ClientChatMessage, ClientConnectMessage},
-        server::{ErrorMessage, ErrorType},
-    },
+use backend_shared::http::users::{GetUserDetailsResponse, User};
+use shared_chat::messages::{
+    client::{ClientChatMessage, ClientConnectMessage},
+    server::{ErrorMessage, ErrorType},
 };
 use tokio::time::timeout;
 

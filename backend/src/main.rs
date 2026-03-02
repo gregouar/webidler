@@ -1,9 +1,10 @@
-use std::net::SocketAddr;
+use std::{net::SocketAddr, sync::Arc};
 
 use axum::{
     Router,
     routing::{any, get},
 };
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use http::{
     HeaderValue, Method,
     header::{AUTHORIZATION, CONTENT_TYPE},
@@ -97,6 +98,13 @@ async fn main() {
         sessions_store: sessions_store.clone(),
         discord_state: DiscordState::new(
             std::env::var("DISCORD_BOT_TOKEN").expect("DISCORD_BOT_TOKEN must be set"),
+        ),
+        profanities_checker: Arc::new(
+            ProfanitiesChecker::load_from_file(
+                "data/profanities/strong_profanities.txt",
+                "data/profanities/weak_profanities.txt",
+            )
+            .expect("failed to load profanities"),
         ),
     };
 

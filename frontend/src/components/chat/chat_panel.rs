@@ -1,11 +1,14 @@
 use std::collections::HashSet;
 
-use leptos::ev::{mousemove, mouseup};
-use leptos::prelude::*;
+use leptos::{
+    ev::{mousemove, mouseup},
+    prelude::*,
+    web_sys::wasm_bindgen::JsCast,
+};
 
 use shared_chat::types::ChatChannel;
 
-use crate::components::chat::chat_context::ChatContext;
+use crate::components::{chat::chat_context::ChatContext, ui::checkbox::Checkbox};
 
 #[component]
 pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
@@ -113,6 +116,18 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         input_value.set(String::new());
     };
 
+    let messages_node = NodeRef::<leptos::html::Div>::new();
+    Effect::new(move || {
+        let _ = chat_context.messages.read();
+        if let Some(el) = messages_node.get() {
+            if let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>() {
+                if is_near_bottom(&html_el) {
+                    html_el.set_scroll_top(html_el.scroll_height());
+                }
+            }
+        }
+    });
+
     // TODO: Split in components
     view! {
         {move || {
@@ -135,17 +150,19 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                             >
                                 <div class="flex gap-4 items-center">
 
-                                    <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            class="accent-amber-500"
-                                            prop:checked=move || {
-                                                selected_channels.get().contains(&ChatChannel::Global)
+                                    <Checkbox
+                                        label="Global"
+                                        on_change=move |value| {
+                                            if value {
+                                                selected_channels.write().insert(ChatChannel::Global);
+                                            } else {
+                                                selected_channels.write().remove(&ChatChannel::Global);
                                             }
-                                            on:change=move |_| toggle_channel(ChatChannel::Global)
-                                        />
-                                        "Global"
-                                    </label>
+                                        }
+                                        checked=Signal::derive(move || {
+                                            selected_channels.get().contains(&ChatChannel::Global)
+                                        })
+                                    />
 
                                     <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
                                         <input
@@ -226,8 +243,11 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                 } else {
                                     view! {
                                         // Messages
-                                        <div class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
-                                        text-wrap wrap-break-word">
+                                        <div
+                                            class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
+                                            text-wrap wrap-break-word"
+                                            node_ref=messages_node
+                                        >
                                             <For
                                                 each=filtered_messages
                                                 key=|msg| (msg.sent_at, msg.user_id)
@@ -344,4 +364,12 @@ fn channel_color(channel: ChatChannel) -> &'static str {
         ChatChannel::Trade => "text-emerald-400",
         ChatChannel::System => "text-fuchsia-400",
     }
+}
+
+fn is_near_bottom(el: &web_sys::HtmlElement) -> bool {
+    let scroll_height = el.scroll_height() as f64;
+    let scroll_top = el.scroll_top() as f64;
+    let client_height = el.client_height() as f64;
+
+    (scroll_height - scroll_top - client_height) < 80.0
 }
