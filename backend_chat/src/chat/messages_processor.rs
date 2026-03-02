@@ -1,25 +1,31 @@
 use axum::body::Bytes;
+use dashmap::DashMap;
 use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
 
 use shared_chat::{
+    http::users::UserId,
     messages::server::{ErrorMessage, ErrorType, ServerChatMessage},
     ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
 
-use crate::chat::chat_state::ChatState;
+use crate::chat::{
+    chat_state::ChatState, profanities_checker::ProfanitiesChecker,
+    user_moderation::UserModerationState,
+};
 
 pub struct MessagesProcessor {
     inbound_rx: mpsc::Receiver<(Uuid, ChatMessage)>,
 
     chat_state: ChatState,
+    profanities_checker: ProfanitiesChecker,
     // TODO: Banned, Muted, SpamBucket in some Moderation thingy?
 }
 
 impl MessagesProcessor {
-    pub fn new() -> Self {
+    pub fn new(profanities_checker: ProfanitiesChecker) -> Self {
         let (inbound_tx, inbound_rx) = mpsc::channel(1000);
         let (outbound_tx, _) = broadcast::channel(500);
         Self {
@@ -30,6 +36,7 @@ impl MessagesProcessor {
                 reply_map: Default::default(),
                 history: Arc::new(Mutex::new(RingBuffer::new(100))),
             },
+            profanities_checker,
         }
     }
 
@@ -42,42 +49,36 @@ impl MessagesProcessor {
 
     pub async fn run(mut self) {
         // tokio::spawn(async move {
-        // let user_states: DashMap<UserId, UserModerationState> = DashMap::new();
+        let user_states: DashMap<UserId, UserModerationState> = DashMap::new();
 
         while let Some((session_id, msg)) = self.inbound_rx.recv().await {
             if msg.channel == ChatChannel::System {
-                if let Some(reply_queue) = self.chat_state.reply_map.get(&session_id) {
-                    let _ = reply_queue
-                        .send(
-                            ErrorMessage {
-                                error_type: ErrorType::Chat,
-                                message: "cannot send to that channel".into(),
-                                must_disconnect: false,
-                            }
-                            .into(),
-                        )
-                        .await;
-                }
+                send_direct_error(&self.chat_state, session_id, "Cannot send to that channel.")
+                    .await;
                 continue;
             }
 
-            // let mut entry = user_states
-            //     .entry(msg.user_id)
-            //     .or_insert_with(UserModerationState::new);
+            if let Some(user_id) = msg.user_id {
+                let mut user_moderation = user_states.entry(user_id).or_default();
 
-            // if entry.is_muted() {
-            //     send_direct_error(&state, msg.user_id, "You are muted.");
-            //     continue;
-            // }
+                if user_moderation.is_muted() {
+                    send_direct_error(&self.chat_state, session_id, "You are muted.").await;
+                    continue;
+                }
 
-            // if !entry.allow_message() {
-            //     send_direct_error(&state, msg.user_id, "Rate limited.");
-            //     continue;
-            // }
+                if !user_moderation.allow_message() {
+                    send_direct_error(&self.chat_state, session_id, "Rate limited.").await;
+                    continue;
+                }
+            }
 
-            let filtered = profanity_filter(&msg.content);
+            let content = if self.profanities_checker.contains_profanities(&msg.content) {
+                "***"
+            } else {
+                &msg.content
+            };
 
-            if let Ok(content) = ChatContent::try_new(filtered) {
+            if let Ok(content) = ChatContent::try_new(content) {
                 let chat_message = ChatMessage { content, ..msg };
                 self.chat_state
                     .history
@@ -106,6 +107,17 @@ impl MessagesProcessor {
     // }
 }
 
-fn profanity_filter(input: &str) -> String {
-    input.replace("pou", "***")
+async fn send_direct_error(chat_state: &ChatState, session_id: Uuid, msg: &str) {
+    if let Some(reply_queue) = chat_state.reply_map.get(&session_id) {
+        let _ = reply_queue
+            .send(
+                ErrorMessage {
+                    error_type: ErrorType::Chat,
+                    message: msg.into(),
+                    must_disconnect: false,
+                }
+                .into(),
+            )
+            .await;
+    }
 }

@@ -106,12 +106,11 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                 let navigate = leptos_router::hooks::use_navigate();
                 navigate("/", Default::default());
             }
-        }
-        ServerMessage::Disconnect(_) => {
-            let navigate = leptos_router::hooks::use_navigate();
-            // TODO: Bring to summary page on end_quest...
-            navigate("/town", Default::default());
-        }
+        } // ServerMessage::Disconnect(_) => {
+          //     let navigate = leptos_router::hooks::use_navigate();
+          //     // TODO: Bring to summary page on end_quest...
+          //     navigate("/town", Default::default());
+          // }
     }
 }
 

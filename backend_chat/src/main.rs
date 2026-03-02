@@ -17,7 +17,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend_chat::{
     app_state::{AppSettings, AppState},
-    chat::messages_processor::MessagesProcessor,
+    chat::{messages_processor::MessagesProcessor, profanities_checker::ProfanitiesChecker},
     websocket,
 };
 
@@ -53,7 +53,10 @@ async fn main() {
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
         .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
 
-    let messages_processor = MessagesProcessor::new();
+    let messages_processor = MessagesProcessor::new(
+        ProfanitiesChecker::load_from_file("data/profanities.txt")
+            .expect("failed to load profanities"),
+    );
 
     let app_state = AppState {
         app_settings: AppSettings::from_env(),

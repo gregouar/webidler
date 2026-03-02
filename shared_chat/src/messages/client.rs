@@ -28,8 +28,8 @@ pub struct ClientConnectMessage {
     pub jwt: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ClientDisconnectMessage {}
+// #[derive(Serialize, Deserialize, Debug, Clone)]
+// pub struct ClientDisconnectMessage {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ClientPostMessage {

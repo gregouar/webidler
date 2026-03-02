@@ -161,8 +161,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                 },
             );
             if error_message.must_disconnect {
-                // let navigate = leptos_router::hooks::use_navigate();
-                // navigate("/", Default::default());
+                return ControlFlow::Break(());
             }
         }
         ServerChatMessage::Broadcast(m) => chat_context.messages.write().push(*m),
