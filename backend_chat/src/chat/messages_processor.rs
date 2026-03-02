@@ -32,6 +32,7 @@ impl MessagesProcessor {
                 outbound_tx,
                 reply_map: Default::default(),
                 users_map: Default::default(),
+                usernames_map: Default::default(),
                 history: Arc::new(Mutex::new(RingBuffer::new(100))),
             },
             profanities_checker,
@@ -66,17 +67,39 @@ impl MessagesProcessor {
                 }
             }
 
-            let content = if self.profanities_checker.contains_profanities(&msg.content) {
+            let (content, channel) =
+                if let Some((username, message)) = parse_whisper_message(&msg.content) {
+                    match self.chat_state.usernames_map.get(&username) {
+                        Some(user_id) => (message, ChatChannel::Whisper(*user_id)),
+                        None => {
+                            send_direct_error(
+                                &self.chat_state,
+                                session_id,
+                                "unknown user or not connected",
+                            )
+                            .await;
+                            continue;
+                        }
+                    }
+                } else {
+                    (msg.content, msg.channel)
+                };
+
+            let content = if self.profanities_checker.contains_profanities(&content) {
                 "***"
             } else {
-                &msg.content
+                &content
             };
 
             if let Ok(content) = ChatContent::try_new(content) {
-                let chat_message = ChatMessage { content, ..msg };
+                let chat_message = ChatMessage {
+                    content,
+                    channel,
+                    ..msg
+                };
                 let server_chat_message = ServerChatMessage::Broadcast(chat_message.clone().into());
 
-                if let ChatChannel::Whisper(user_id) = msg.channel {
+                if let ChatChannel::Whisper(user_id) = channel {
                     if let Some(targets) = self.chat_state.users_map.get(&user_id)
                         && !targets.is_empty()
                     {
@@ -141,4 +164,21 @@ async fn send_direct_message(chat_state: &ChatState, session_id: Uuid, msg: Serv
     if let Some(reply_queue) = chat_state.reply_map.get(&session_id) {
         let _ = reply_queue.send(msg).await;
     }
+}
+
+fn parse_whisper_message(content: &str) -> Option<(String, ChatContent)> {
+    if !content.starts_with('@') {
+        return None;
+    }
+
+    let mut parts = content[1..].splitn(2, ' ');
+
+    let username = parts.next()?.trim().to_string();
+    let message = parts.next()?.trim().to_string();
+
+    if username.is_empty() || message.is_empty() {
+        return None;
+    }
+
+    Some((username, ChatContent::try_new(message).ok()?))
 }

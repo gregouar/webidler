@@ -190,6 +190,9 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                         .insert(m.target_user_id, username);
                 }
             }
+            chat_context
+                .write_channel
+                .set(ChatChannel::Whisper(m.target_user_id));
         }
     }
     return ControlFlow::Continue(());

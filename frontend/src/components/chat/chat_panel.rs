@@ -4,13 +4,18 @@ use leptos::{
     web_sys::wasm_bindgen::JsCast,
 };
 
-use shared_chat::types::ChatChannel;
+use shared_chat::types::{ChatChannel, ChatMessage};
 
-use crate::components::{chat::chat_context::ChatContext, ui::checkbox::Checkbox};
+use crate::components::{
+    chat::chat_context::ChatContext,
+    events::{EventsContext, Key},
+    ui::checkbox::Checkbox,
+};
 
 #[component]
 pub fn ChatPanel() -> impl IntoView {
     let chat_context: ChatContext = expect_context();
+    let events_context: EventsContext = expect_context();
 
     // Drag state
     let dragging = RwSignal::new(false);
@@ -111,6 +116,17 @@ pub fn ChatPanel() -> impl IntoView {
         }
     });
 
+    let text_area_ref: NodeRef<leptos::html::Textarea> = NodeRef::new();
+    Effect::new(move || {
+        if events_context.key_pressed(Key::Enter) {
+            chat_context.opened.set(true);
+            chat_context.minimized.set(false);
+            if let Some(text_area) = text_area_ref.get() {
+                text_area.focus().unwrap();
+            }
+        }
+    });
+
     // TODO: Split in components
     view! {
         {move || {
@@ -186,7 +202,7 @@ pub fn ChatPanel() -> impl IntoView {
                                                     view! {
                                                         <span class=move || {
                                                             format!("{}", channel_color(msg.channel))
-                                                        }>{msg.username.clone()}</span>
+                                                        }>{author_str(&msg)}</span>
                                                         ": "
                                                         {msg.content.into_inner()}
                                                     }
@@ -217,20 +233,18 @@ pub fn ChatPanel() -> impl IntoView {
                                                                     format!("cursor-pointer {}", channel_color(msg.channel))
                                                                 }
                                                                 on:click=move |_| {
-                                                                    if let Some(user_id) = msg.user_id {
+                                                                    if let ChatChannel::Whisper(_) = msg.channel
+                                                                        && msg.user_id == chat_context.user_id.get()
+                                                                    {
+                                                                        chat_context.write_channel.set(msg.channel)
+                                                                    } else if let Some(user_id) = msg.user_id {
                                                                         chat_context
                                                                             .write_channel
                                                                             .set(ChatChannel::Whisper(user_id))
                                                                     }
                                                                 }
                                                             >
-                                                                {if let ChatChannel::Whisper(_) = msg.channel
-                                                                    && msg.user_id == chat_context.user_id.get()
-                                                                {
-                                                                    channel_str(msg.channel)
-                                                                } else {
-                                                                    msg.username.clone().unwrap_or_default()
-                                                                }}
+                                                                {author_str(&msg)}
                                                             </span>
                                                             <span class="text-gray-500">": "</span>
                                                             <span class="text-gray-200 select-text">
@@ -318,6 +332,7 @@ pub fn ChatPanel() -> impl IntoView {
                                                         }
                                                     }
                                                     placeholder="Type message..."
+                                                    node_ref=text_area_ref
                                                 />
                                             </div>
                                         </div>
@@ -332,6 +347,18 @@ pub fn ChatPanel() -> impl IntoView {
                     .into_any()
             }
         }}
+    }
+}
+
+fn author_str(msg: &ChatMessage) -> String {
+    let chat_context: ChatContext = expect_context();
+
+    if let ChatChannel::Whisper(_) = msg.channel
+        && msg.user_id == chat_context.user_id.get()
+    {
+        channel_str(msg.channel)
+    } else {
+        msg.username.clone().unwrap_or_default()
     }
 }
 

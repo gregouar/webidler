@@ -68,10 +68,10 @@ impl ChatSession {
             .entry(self.user.user_id)
             .or_default()
             .insert(self.session_id);
-        // self.chat_state
-        //     .usernames_map
-        //     .entry(self.user.username)
-        //     .or_insert(self.user.user_id);
+        self.chat_state
+            .usernames_map
+            .entry(self.user.username.clone())
+            .or_insert(self.user.user_id);
         let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
         ///////////////////////////////
 
