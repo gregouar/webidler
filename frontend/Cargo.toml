@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 shared = { path = "../shared", features=[] }
+shared_chat = { path = "../shared_chat", features=[] }
 
 anyhow = "1.0.97"
 leptos = { version = "0.7.7", features = ["csr"] }

@@ -1,17 +1,17 @@
-use std::ops::ControlFlow;
-
 use anyhow::Result;
-
 use chrono::Utc;
-use shared::{
-    data::user::User,
-    messages::{
-        chat::{ChatMessage, ClientChatMessage, ClientPostMessage, ServerDisconnectMessage},
-        server::{ErrorMessage, ErrorType},
-    },
-};
+use std::ops::ControlFlow;
 use tokio::sync::mpsc;
 use uuid::Uuid;
+
+use shared_chat::{
+    http::users::User,
+    messages::{
+        client::{ClientChatMessage, ClientPostMessage},
+        server::{ErrorMessage, ErrorType, ServerDisconnectMessage},
+    },
+    types::ChatMessage,
+};
 
 use crate::{
     chat::chat_state::ChatState,

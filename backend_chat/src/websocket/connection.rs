@@ -1,5 +1,6 @@
 use anyhow::Result;
 
+use shared_chat::messages::server::ServerChatMessage;
 use tokio::time;
 use tokio::{sync::mpsc, time::timeout};
 
@@ -14,7 +15,7 @@ use futures::{
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::messages::chat::{ClientChatMessage, ServerChatMessage};
+use shared_chat::messages::client::ClientChatMessage;
 
 pub struct WebSocketSender {
     ws_sender: SplitSink<WebSocket, Message>,

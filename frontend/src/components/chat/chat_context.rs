@@ -6,15 +6,12 @@ use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
-use shared::{
+use shared_chat::{
     messages::{
-        chat::{
-            ChatChannel, ChatMessage, ClientChatMessage, ClientConnectMessage, ClientPostMessage,
-            ServerChatMessage,
-        },
-        server::ErrorType,
+        client::{ClientChatMessage, ClientConnectMessage, ClientPostMessage},
+        server::{ErrorType, ServerChatMessage},
     },
-    types::ChatContent,
+    types::{ChatChannel, ChatContent, ChatMessage},
 };
 use web_sys::CloseEvent;
 
@@ -102,8 +99,6 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     });
 
     // Chat
-    let messages = RwSignal::new(RingBuffer::new(100));
-
     let send = Callback::new(move |msg: String| {
         if let Ok(content) = ChatContent::try_new(msg) {
             send(
@@ -116,7 +111,10 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         }
     });
 
-    let chat_context = ChatContext { messages, send };
+    let chat_context = ChatContext {
+        messages: RwSignal::new(RingBuffer::new(100)),
+        send,
+    };
 
     Effect::new({
         let chat_context = chat_context.clone();
@@ -155,7 +153,6 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                 error_message.message,
                 match error_message.error_type {
                     ErrorType::Server => ToastVariant::Error,
-                    ErrorType::Game => ToastVariant::Warning,
                     ErrorType::Chat => ToastVariant::Warning,
                 },
             );

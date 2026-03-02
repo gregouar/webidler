@@ -100,7 +100,6 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                 match error_message.error_type {
                     ErrorType::Server => ToastVariant::Error,
                     ErrorType::Game => ToastVariant::Warning,
-                    ErrorType::Chat => ToastVariant::Warning,
                 },
             );
             if error_message.must_disconnect {

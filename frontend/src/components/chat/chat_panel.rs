@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use leptos::ev::{mousemove, mouseup};
 use leptos::prelude::*;
 
-use shared::messages::chat::ChatChannel;
+use shared_chat::types::ChatChannel;
 
 use crate::components::chat::chat_context::ChatContext;
 
@@ -67,27 +67,6 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     });
 
     let input_value = RwSignal::new(String::new());
-
-    // let messages = RwSignal::new(vec![
-    //     ChatMessage {
-    //         id: 1,
-    //         channel: ChatChannel::System,
-    //         author: "[System]".into(),
-    //         content: "World event starting in 2 minutes.".into(),
-    //     },
-    //     ChatMessage {
-    //         id: 2,
-    //         channel: ChatChannel::Global,
-    //         author: "Nyx".into(),
-    //         content: "Anyone pushing wave 200?".into(),
-    //     },
-    //     ChatMessage {
-    //         id: 3,
-    //         channel: ChatChannel::Trade,
-    //         author: "Valen".into(),
-    //         content: "WTS Infernal Blade 12k".into(),
-    //     },
-    // ]);
 
     let last_visible_message = move || {
         let selected = selected_channels.get();

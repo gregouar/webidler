@@ -1,10 +1,9 @@
-use std::sync::Arc;
-
 use dashmap::DashMap;
+use std::sync::Arc;
 use tokio::sync::{broadcast, mpsc};
-
-use shared::messages::chat::{ChatMessage, ServerChatMessage};
 use uuid::Uuid;
+
+use shared_chat::{messages::server::ServerChatMessage, types::ChatMessage};
 
 #[derive(Debug, Clone)]
 pub struct ChatState {

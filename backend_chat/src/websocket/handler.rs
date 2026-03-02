@@ -9,19 +9,17 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
+use shared_chat::{
+    http::users::{GetUserDetailsResponse, User},
+    messages::{
+        client::{ClientChatMessage, ClientConnectMessage},
+        server::{ErrorMessage, ErrorType},
+    },
+};
 use tokio::time::timeout;
 
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
-
-use shared::{
-    data::user::User,
-    http::server::GetUserDetailsResponse,
-    messages::{
-        chat::{ClientChatMessage, ClientConnectMessage},
-        server::{ErrorMessage, ErrorType},
-    },
-};
 
 use crate::{
     app_state::{AppSettings, AppState},

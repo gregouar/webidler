@@ -2,12 +2,9 @@ use std::sync::Arc;
 
 use tokio::sync::{broadcast, mpsc};
 
-use shared::{
-    messages::{
-        chat::{ChatChannel, ChatMessage, ServerBroadcastMessage},
-        server::{ErrorMessage, ErrorType},
-    },
-    types::ChatContent,
+use shared_chat::{
+    messages::server::{ErrorMessage, ErrorType, ServerBroadcastMessage},
+    types::{ChatChannel, ChatContent, ChatMessage},
 };
 use uuid::Uuid;
 
