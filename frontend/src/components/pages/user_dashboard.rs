@@ -23,6 +23,7 @@ use crate::{
         accessibility::AccessibilityContext,
         auth::AuthContext,
         backend_client::BackendClient,
+        chat::{chat_context::ChatContext, chat_panel::ChatPanel},
         shared::{
             account::AccountSettingsPanel, leaderboard::LeaderboardPanel,
             player_count::PlayerCount, settings::SettingsModal,
@@ -114,6 +115,8 @@ pub fn UserDashboardPage() -> impl IntoView {
     let selected_character_name = RwSignal::new(None);
     let selected_character_portrait = RwSignal::new(None);
 
+    let chat_context: ChatContext = expect_context();
+
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
@@ -129,6 +132,15 @@ pub fn UserDashboardPage() -> impl IntoView {
                         open_settings.set(false);
                         open_account.set(false);
                     }>"Leaderboard"</MenuButton>
+                    <MenuButton
+                        class:hidden
+                        class:xl:inline
+                        on:click=move |_| {
+                            chat_context.opened.set(!chat_context.opened.get_untracked())
+                        }
+                    >
+                        "Chat"
+                    </MenuButton>
                     <a
                         href="https://webidler.gitbook.io/wiki/"
                         target="_blank"
@@ -154,6 +166,7 @@ pub fn UserDashboardPage() -> impl IntoView {
 
             <PlayerCount />
             <DiscordInviteBanner />
+            <ChatPanel />
 
             <div class="relative flex-1">
                 <SettingsModal open=open_settings />

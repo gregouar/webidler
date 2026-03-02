@@ -40,6 +40,7 @@ impl ChatSession {
         mut ws_receiver: WebSocketReceiver,
     ) -> Result<()> {
         let history = ServerConnectMessage {
+            user_id: self.user.user_id,
             history: self
                 .chat_state
                 .history

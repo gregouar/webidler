@@ -2,7 +2,7 @@ use leptos::{html::*, prelude::*};
 
 #[component]
 pub fn Checkbox(
-    label: &'static str,
+    label: String,
     mut on_change: impl FnMut(bool) + 'static,
     #[prop(into)] checked: Signal<bool>,
 ) -> impl IntoView {

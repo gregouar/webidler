@@ -101,8 +101,8 @@ async fn main() {
         ),
         profanities_checker: Arc::new(
             ProfanitiesChecker::load_from_file(
-                "data/profanities/strong_profanities.txt",
-                "data/profanities/weak_profanities.txt",
+                "profanities/strong_profanities.txt",
+                "profanities/weak_profanities.txt",
             )
             .expect("failed to load profanities"),
         ),

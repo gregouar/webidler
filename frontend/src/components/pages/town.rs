@@ -125,7 +125,7 @@ pub fn TownPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
-                            <ChatPanel open=town_context.open_chat />
+                            <ChatPanel />
                             <TemplePanel open=town_context.open_temple />
                             <MarketPanel open=town_context.open_market />
                             <StashPanel open=town_context.open_stash />

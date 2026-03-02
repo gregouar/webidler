@@ -42,7 +42,6 @@ pub struct TownContext {
     pub open_market: RwSignal<bool>,
     pub open_forge: RwSignal<bool>,
     pub open_temple: RwSignal<bool>,
-    pub open_chat: RwSignal<bool>,
 }
 
 impl Default for TownContext {
@@ -73,7 +72,6 @@ impl Default for TownContext {
             open_market: Default::default(),
             open_forge: Default::default(),
             open_temple: Default::default(),
-            open_chat: Default::default(),
         }
     }
 }

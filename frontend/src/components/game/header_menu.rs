@@ -5,6 +5,7 @@ use leptos::{html::*, prelude::*};
 use shared::messages::client::ClientMessage;
 
 use crate::components::{
+    chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -21,6 +22,7 @@ use super::GameContext;
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
+    let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
     let do_abandon_quest = Arc::new({
@@ -112,7 +114,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     class:hidden
                     class:xl:inline
                     on:click=move |_| {
-                        game_context.open_chat.set(!game_context.open_chat.get_untracked())
+                        chat_context.opened.set(!chat_context.opened.get_untracked())
                     }
                 >
                     "Chat"

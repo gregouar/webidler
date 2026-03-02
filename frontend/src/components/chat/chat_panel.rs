@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use leptos::{
     ev::{mousemove, mouseup},
     prelude::*,
@@ -11,15 +9,12 @@ use shared_chat::types::ChatChannel;
 use crate::components::{chat::chat_context::ChatContext, ui::checkbox::Checkbox};
 
 #[component]
-pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
+pub fn ChatPanel() -> impl IntoView {
     let chat_context: ChatContext = expect_context();
-
-    // TODO: Move to context?
-    let minimized = RwSignal::new(false);
 
     // Drag state
     let dragging = RwSignal::new(false);
-    let position = RwSignal::new((200i32, 200i32)); // top, left
+    let position = RwSignal::new((50i32, 50i32)); // bottom, left
     let drag_start_mouse = RwSignal::new((0i32, 0i32));
     let drag_start_position = RwSignal::new((0i32, 0i32));
     let start_drag = move |ev: leptos::ev::MouseEvent| {
@@ -34,12 +29,12 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             }
 
             let (start_mx, start_my) = drag_start_mouse.get();
-            let (start_top, start_left) = drag_start_position.get();
+            let (start_bottom, start_left) = drag_start_position.get();
 
             let dx = ev.screen_x() - start_mx;
             let dy = ev.screen_y() - start_my;
 
-            let new_top = start_top + dy;
+            let new_top = start_bottom - dy;
             let new_left = start_left + dx;
 
             // TODO: Compute actual size of chat panel?
@@ -49,10 +44,10 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
             let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
 
-            let clamped_top = new_top.clamp(0, height - 50);
+            let clamped_bottom = new_top.clamp(0, height - 50);
             let clamped_left = new_left.clamp(0, width - 300);
 
-            position.set((clamped_top, clamped_left));
+            position.set((clamped_bottom, clamped_left));
         });
 
         let up_listener = window_event_listener(mouseup, move |_| {
@@ -63,29 +58,21 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         drop(up_listener);
     };
 
-    // TODO: Move to context?
-    let selected_channels = RwSignal::new({
-        let mut set = HashSet::new();
-        set.insert(ChatChannel::Global);
-        set.insert(ChatChannel::System);
-        set
-    });
-
     let input_value = RwSignal::new(String::new());
 
     let last_visible_message = move || {
-        let selected = selected_channels.get();
+        let selected = chat_context.selected_channels.get();
         chat_context
             .messages
             .read()
             .iter_rev()
-            .find(|m| selected.contains(&m.channel))
+            .find(|m| matches!(m.channel, ChatChannel::Whisper(_)) || selected.contains(&m.channel))
             .cloned()
     };
 
     // TODO: Do better than that...
     let filtered_messages = move || {
-        let selected = selected_channels.get();
+        let selected = chat_context.selected_channels.get();
         chat_context
             .messages
             .read()
@@ -97,7 +84,6 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             .collect::<Vec<_>>()
     };
 
-    let write_channel = RwSignal::new(ChatChannel::Global);
     let dropdown_open = RwSignal::new(false);
 
     let send_message = move || {
@@ -108,7 +94,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
 
         chat_context
             .send
-            .run((write_channel.get_untracked(), content));
+            .run((chat_context.write_channel.get_untracked(), content));
 
         input_value.set(String::new());
     };
@@ -128,14 +114,14 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     // TODO: Split in components
     view! {
         {move || {
-            if !open.get() {
+            if !chat_context.opened.get() {
                 ().into_any()
             } else {
-                let (top, left) = position.get();
+                let (bottom, left) = position.get();
                 view! {
                     <div
                         class="fixed z-50 select-none text-left"
-                        style=format!("top:{}px; left:{}px;", top, left)
+                        style=format!("bottom:{}px; left:{}px;", bottom, left)
                     >
                         <div class="w-[420px] bg-zinc-900/80 backdrop-blur border border-zinc-700 text-sm text-gray-200 flex flex-col shadow-xl">
 
@@ -153,13 +139,13 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                     label=channel_str(channel)
                                                     on_change=move |value| {
                                                         if value {
-                                                            selected_channels.write().insert(channel);
+                                                            chat_context.selected_channels.write().insert(channel);
                                                         } else {
-                                                            selected_channels.write().remove(&channel);
+                                                            chat_context.selected_channels.write().remove(&channel);
                                                         }
                                                     }
                                                     checked=Signal::derive(move || {
-                                                        selected_channels.get().contains(&channel)
+                                                        chat_context.selected_channels.get().contains(&channel)
                                                     })
                                                 />
                                             }
@@ -170,14 +156,18 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                 <div class="flex gap-3 text-gray-400">
                                     <button
                                         class="hover:text-white"
-                                        on:click=move |_| minimized.update(|m| *m = !*m)
+                                        on:click=move |_| {
+                                            chat_context.minimized.update(|m| *m = !*m)
+                                        }
                                     >
-                                        {move || if minimized.get() { "▼" } else { "—" }}
+                                        {move || {
+                                            if chat_context.minimized.get() { "▼" } else { "—" }
+                                        }}
                                     </button>
 
                                     <button
                                         class="hover:text-red-400"
-                                        on:click=move |_| open.set(false)
+                                        on:click=move |_| chat_context.opened.set(false)
                                     >
                                         "✕"
                                     </button>
@@ -185,11 +175,11 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                             </div>
 
                             {move || {
-                                if minimized.get() {
+                                if chat_context.minimized.get() {
                                     view! {
                                         <div
                                             class="px-4 py-2 bg-zinc-900/70 text-[13px] text-gray-400 truncate cursor-pointer"
-                                            on:click=move |_| minimized.set(false)
+                                            on:click=move |_| chat_context.minimized.set(false)
                                         >
                                             {move || {
                                                 if let Some(msg) = last_visible_message() {
@@ -228,11 +218,19 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                                 }
                                                                 on:click=move |_| {
                                                                     if let Some(user_id) = msg.user_id {
-                                                                        write_channel.set(ChatChannel::Whisper(user_id))
+                                                                        chat_context
+                                                                            .write_channel
+                                                                            .set(ChatChannel::Whisper(user_id))
                                                                     }
                                                                 }
                                                             >
-                                                                {msg.username.clone()}
+                                                                {if let ChatChannel::Whisper(_) = msg.channel
+                                                                    && msg.user_id == chat_context.user_id.get()
+                                                                {
+                                                                    channel_str(msg.channel)
+                                                                } else {
+                                                                    msg.username.clone().unwrap_or_default()
+                                                                }}
                                                             </span>
                                                             <span class="text-gray-500">": "</span>
                                                             <span class="text-gray-200 select-text">
@@ -255,8 +253,10 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                         on:click=move |_| dropdown_open.update(|o| *o = !*o)
                                                     >
                                                         <span class=move || channel_color(
-                                                            write_channel.get(),
-                                                        )>{move || channel_str(write_channel.get())}</span>
+                                                            chat_context.write_channel.get(),
+                                                        )>
+                                                            {move || channel_str(chat_context.write_channel.get())}
+                                                        </span>
                                                     // <span class="text-gray-500">"▾"</span>
                                                     </button>
 
@@ -268,23 +268,29 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                                     <button
                                                                         class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-amber-400"
                                                                         on:click=move |_| {
-                                                                            write_channel.set(ChatChannel::Global);
-                                                                            selected_channels.write().insert(ChatChannel::Global);
+                                                                            chat_context.write_channel.set(ChatChannel::Global);
+                                                                            chat_context
+                                                                                .selected_channels
+                                                                                .write()
+                                                                                .insert(ChatChannel::Global);
                                                                             dropdown_open.set(false);
                                                                         }
                                                                     >
-                                                                        "Global"
+                                                                        {channel_str(ChatChannel::Global)}
                                                                     </button>
 
                                                                     <button
                                                                         class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-emerald-400"
                                                                         on:click=move |_| {
-                                                                            write_channel.set(ChatChannel::Trade);
-                                                                            selected_channels.write().insert(ChatChannel::Trade);
+                                                                            chat_context.write_channel.set(ChatChannel::Trade);
+                                                                            chat_context
+                                                                                .selected_channels
+                                                                                .write()
+                                                                                .insert(ChatChannel::Trade);
                                                                             dropdown_open.set(false);
                                                                         }
                                                                     >
-                                                                        "Trade"
+                                                                        {channel_str(ChatChannel::Trade)}
                                                                     </button>
 
                                                                 </div>
@@ -329,13 +335,20 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     }
 }
 
-fn channel_str(channel: ChatChannel) -> &'static str {
+fn channel_str(channel: ChatChannel) -> String {
+    let chat_context: ChatContext = expect_context();
+
     match channel {
-        ChatChannel::System => "System",
-        ChatChannel::Global => "Global",
-        ChatChannel::Trade => "Trade",
+        ChatChannel::System => "System".into(),
+        ChatChannel::Global => "Global".into(),
+        ChatChannel::Trade => "Trade".into(),
         // TODO: Add username from local users map?
-        ChatChannel::Whisper(_) => "Whisper",
+        ChatChannel::Whisper(user_id) => chat_context
+            .users_map
+            .read_untracked()
+            .get(&user_id)
+            .map(|username| format!("@{username}"))
+            .unwrap_or("Whisper".into()),
     }
 }
 

@@ -78,7 +78,7 @@ pub fn GameInstance() -> impl IntoView {
                     <EndQuestPanel />
                 </div>
             </Show>
-            <ChatPanel open=game_context.open_chat />
+            <ChatPanel />
         </main>
     }
 }

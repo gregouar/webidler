@@ -4,7 +4,10 @@ use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
-use std::{collections::HashMap, ops::ControlFlow};
+use std::{
+    collections::{HashMap, HashSet},
+    ops::ControlFlow,
+};
 use web_sys::CloseEvent;
 
 use shared_chat::{
@@ -22,9 +25,16 @@ const HEARTBEAT_PERIOD: u64 = 10_000;
 
 #[derive(Clone)]
 pub struct ChatContext {
+    pub user_id: RwSignal<Option<UserId>>,
+
+    pub users_map: RwSignal<HashMap<UserId, String>>,
     pub messages: RwSignal<RingBuffer<ChatMessage>>,
     pub send: Callback<(ChatChannel, String)>,
-    pub users_map: RwSignal<HashMap<UserId, String>>,
+
+    pub minimized: RwSignal<bool>,
+    pub opened: RwSignal<bool>,
+    pub selected_channels: RwSignal<HashSet<ChatChannel>>,
+    pub write_channel: RwSignal<ChatChannel>,
 }
 
 #[component]
@@ -109,9 +119,19 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     });
 
     let chat_context = ChatContext {
-        messages: RwSignal::new(RingBuffer::new(20)),
+        user_id: RwSignal::new(None),
         send,
         users_map: Default::default(),
+        messages: RwSignal::new(RingBuffer::new(20)),
+        // TODO: Store in storage
+        minimized: RwSignal::new(true),
+        opened: RwSignal::new(true),
+        selected_channels: RwSignal::new(HashSet::from([
+            ChatChannel::Global,
+            ChatChannel::Trade,
+            ChatChannel::System,
+        ])),
+        write_channel: RwSignal::new(ChatChannel::Global),
     };
 
     Effect::new({
@@ -134,6 +154,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
 fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> ControlFlow<()> {
     match message {
         ServerChatMessage::Connect(m) => {
+            chat_context.user_id.set(Some(m.user_id));
             for message in m.history.into_iter() {
                 push_message(chat_context, message)
             }

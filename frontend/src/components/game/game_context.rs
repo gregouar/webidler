@@ -58,7 +58,6 @@ pub struct GameContext {
     pub open_statistics: RwSignal<bool>,
     pub open_skills: RwSignal<bool>,
     pub open_end_quest: RwSignal<bool>,
-    pub open_chat: RwSignal<bool>,
 
     pub loot_preference: RwSignal<Option<ItemCategory>>,
     pub last_skills_bought: RwSignal<IndexSet<String>>,
@@ -106,7 +105,6 @@ impl GameContext {
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
             open_end_quest: RwSignal::new(false),
-            open_chat: RwSignal::new(true),
 
             loot_preference: RwSignal::new(None),
             last_skills_bought: RwSignal::new(Default::default()),

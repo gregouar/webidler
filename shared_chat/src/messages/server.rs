@@ -31,6 +31,7 @@ pub enum ErrorType {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ServerConnectMessage {
+    pub user_id: UserId,
     pub history: Vec<ChatMessage>,
 }
 
