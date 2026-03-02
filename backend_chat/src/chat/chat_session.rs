@@ -62,6 +62,15 @@ impl ChatSession {
         self.chat_state
             .reply_map
             .insert(self.session_id, direct_tx.clone());
+        self.chat_state
+            .users_map
+            .entry(self.user.user_id)
+            .or_default()
+            .insert(self.session_id);
+        // self.chat_state
+        //     .usernames_map
+        //     .entry(self.user.username)
+        //     .or_insert(self.user.user_id);
         let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
         ///////////////////////////////
 
@@ -122,6 +131,11 @@ impl ChatSession {
         write_task.abort();
 
         // Maybe this should be handler outside of this:
+        self.chat_state
+            .users_map
+            .entry(self.user.user_id)
+            .or_default()
+            .remove(&self.session_id);
         self.chat_state.reply_map.remove(&self.session_id);
 
         tracing::debug!("chat session '{}' ended ", self.user.user_id);
@@ -161,7 +175,7 @@ impl ChatSession {
                 ChatMessage {
                     channel: msg.channel,
                     user_id: Some(self.user.user_id),
-                    user_name: Some(self.user.username.clone()),
+                    username: Some(self.user.username.clone()),
                     content: msg.content,
                     sent_at: Utc::now(),
                 },

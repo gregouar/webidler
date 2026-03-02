@@ -9,13 +9,14 @@ pub enum ChatChannel {
     System,
     Global,
     Trade,
+    Whisper(UserId),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatMessage {
     pub channel: ChatChannel,
     pub user_id: Option<UserId>,
-    pub user_name: Option<String>,
+    pub username: Option<String>,
     pub content: ChatContent,
     pub sent_at: DateTime<Utc>,
 }

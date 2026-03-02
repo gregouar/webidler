@@ -14,6 +14,7 @@ use crate::components::{chat::chat_context::ChatContext, ui::checkbox::Checkbox}
 pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
 
+    // TODO: Move to context?
     let minimized = RwSignal::new(false);
 
     // Drag state
@@ -62,6 +63,7 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
         drop(up_listener);
     };
 
+    // TODO: Move to context?
     let selected_channels = RwSignal::new({
         let mut set = HashSet::new();
         set.insert(ChatChannel::Global);
@@ -88,7 +90,9 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
             .messages
             .read()
             .iter()
-            .filter(|m| selected.contains(&m.channel))
+            .filter(|m| {
+                matches!(m.channel, ChatChannel::Whisper(_)) || selected.contains(&m.channel)
+            })
             .cloned()
             .collect::<Vec<_>>()
     };
@@ -189,13 +193,16 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                         >
                                             {move || {
                                                 if let Some(msg) = last_visible_message() {
-                                                    format!(
-                                                        "{}: {}",
-                                                        msg.user_name.unwrap_or_default(),
-                                                        msg.content.into_inner(),
-                                                    )
+                                                    view! {
+                                                        <span class=move || {
+                                                            format!("{}", channel_color(msg.channel))
+                                                        }>{msg.username.clone()}</span>
+                                                        ": "
+                                                        {msg.content.into_inner()}
+                                                    }
+                                                        .into_any()
                                                 } else {
-                                                    "No messages".into()
+                                                    "No messages".into_any()
                                                 }
                                             }}
                                         </div>
@@ -215,11 +222,20 @@ pub fn ChatPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 children=move |msg| {
                                                     view! {
                                                         <div class="text-[13px] leading-snug">
-                                                            <span class=move || channel_color(
-                                                                msg.channel,
-                                                            )>{msg.user_name.clone()}</span>
+                                                            <span
+                                                                class=move || {
+                                                                    format!("cursor-pointer {}", channel_color(msg.channel))
+                                                                }
+                                                                on:click=move |_| {
+                                                                    if let Some(user_id) = msg.user_id {
+                                                                        write_channel.set(ChatChannel::Whisper(user_id))
+                                                                    }
+                                                                }
+                                                            >
+                                                                {msg.username.clone()}
+                                                            </span>
                                                             <span class="text-gray-500">": "</span>
-                                                            <span class="text-gray-200">
+                                                            <span class="text-gray-200 select-text">
                                                                 {msg.content.into_inner()}
                                                             </span>
                                                         </div>
@@ -318,6 +334,8 @@ fn channel_str(channel: ChatChannel) -> &'static str {
         ChatChannel::System => "System",
         ChatChannel::Global => "Global",
         ChatChannel::Trade => "Trade",
+        // TODO: Add username from local users map?
+        ChatChannel::Whisper(_) => "Whisper",
     }
 }
 
@@ -326,6 +344,7 @@ fn channel_color(channel: ChatChannel) -> &'static str {
         ChatChannel::Global => "text-amber-400",
         ChatChannel::Trade => "text-emerald-400",
         ChatChannel::System => "text-fuchsia-400",
+        ChatChannel::Whisper(_) => "text-cyan-400",
     }
 }
 

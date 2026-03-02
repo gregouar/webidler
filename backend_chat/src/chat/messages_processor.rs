@@ -6,7 +6,7 @@ use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
 
 use shared_chat::{
-    messages::server::{ErrorMessage, ErrorType, ServerChatMessage},
+    messages::server::{ErrorMessage, ErrorType, ServerChatMessage, ServerWhisperFeedbackMessage},
     ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
@@ -31,6 +31,7 @@ impl MessagesProcessor {
                 inbound_tx,
                 outbound_tx,
                 reply_map: Default::default(),
+                users_map: Default::default(),
                 history: Arc::new(Mutex::new(RingBuffer::new(100))),
             },
             profanities_checker,
@@ -40,17 +41,13 @@ impl MessagesProcessor {
     pub fn get_chat_state(&self) -> ChatState {
         self.chat_state.clone()
     }
-    // pub fn get_sender(&self) -> mpsc::Sender<ChatMessage> {
-    //     self.input_tx.clone()
-    // }
 
     pub async fn run(mut self) {
-        // tokio::spawn(async move {
         let user_states: DashMap<UserId, UserModerationState> = DashMap::new();
 
         while let Some((session_id, msg)) = self.inbound_rx.recv().await {
             if msg.channel == ChatChannel::System {
-                send_direct_error(&self.chat_state, session_id, "Cannot send to that channel.")
+                send_direct_error(&self.chat_state, session_id, "cannot send to that channel")
                     .await;
                 continue;
             }
@@ -59,12 +56,12 @@ impl MessagesProcessor {
                 let mut user_moderation = user_states.entry(user_id).or_default();
 
                 if user_moderation.is_muted() {
-                    send_direct_error(&self.chat_state, session_id, "You are muted.").await;
+                    send_direct_error(&self.chat_state, session_id, "you are muted").await;
                     continue;
                 }
 
                 if !user_moderation.allow_message() {
-                    send_direct_error(&self.chat_state, session_id, "Rate limited.").await;
+                    send_direct_error(&self.chat_state, session_id, "rate limited").await;
                     continue;
                 }
             }
@@ -77,44 +74,71 @@ impl MessagesProcessor {
 
             if let Ok(content) = ChatContent::try_new(content) {
                 let chat_message = ChatMessage { content, ..msg };
-                self.chat_state
-                    .history
-                    .lock()
-                    .unwrap()
-                    .push(Arc::new(chat_message.clone()));
-                if let Ok(ser_message) =
-                    rmp_serde::to_vec(&ServerChatMessage::Broadcast(chat_message.into()))
-                {
-                    let message = Arc::new(Bytes::from(ser_message));
-                    let _ = self.chat_state.outbound_tx.send(message);
-                }
+                let server_chat_message = ServerChatMessage::Broadcast(chat_message.clone().into());
 
-                // let message: Arc<ServerChatMessage> =
-                //     Arc::new(ServerChatMessage::Broadcast(chat_message.into()));
-                // self.chat_state
-                //     .history
-                //     .lock()
-                //     .unwrap()
-                //     .push(message.clone());
-                // let _ = self.chat_state.outbound_tx.send(message);
+                if let ChatChannel::Whisper(user_id) = msg.channel {
+                    if let Some(targets) = self.chat_state.users_map.get(&user_id)
+                        && !targets.is_empty()
+                    {
+                        for target_session_id in targets.iter() {
+                            send_direct_message(
+                                &self.chat_state,
+                                *target_session_id,
+                                server_chat_message.clone(),
+                            )
+                            .await;
+                        }
+                        send_direct_message(
+                            &self.chat_state,
+                            session_id,
+                            ServerWhisperFeedbackMessage {
+                                target_username: None, //TODO
+                                target_user_id: user_id,
+                                chat_message,
+                            }
+                            .into(),
+                        )
+                        .await;
+                    } else {
+                        send_direct_error(
+                            &self.chat_state,
+                            session_id,
+                            "whisper target user not connected",
+                        )
+                        .await;
+                    }
+                } else {
+                    self.chat_state
+                        .history
+                        .lock()
+                        .unwrap()
+                        .push(Arc::new(chat_message));
+                    if let Ok(ser_message) = rmp_serde::to_vec(&server_chat_message) {
+                        let message = Arc::new(Bytes::from(ser_message));
+                        let _ = self.chat_state.outbound_tx.send(message);
+                    }
+                }
             }
         }
     }
-    //);
-    // }
 }
 
 async fn send_direct_error(chat_state: &ChatState, session_id: Uuid, msg: &str) {
+    send_direct_message(
+        chat_state,
+        session_id,
+        ErrorMessage {
+            error_type: ErrorType::Chat,
+            message: msg.into(),
+            must_disconnect: false,
+        }
+        .into(),
+    )
+    .await;
+}
+
+async fn send_direct_message(chat_state: &ChatState, session_id: Uuid, msg: ServerChatMessage) {
     if let Some(reply_queue) = chat_state.reply_map.get(&session_id) {
-        let _ = reply_queue
-            .send(
-                ErrorMessage {
-                    error_type: ErrorType::Chat,
-                    message: msg.into(),
-                    must_disconnect: false,
-                }
-                .into(),
-            )
-            .await;
+        let _ = reply_queue.send(msg).await;
     }
 }

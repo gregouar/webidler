@@ -4,7 +4,7 @@ use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
-use std::ops::ControlFlow;
+use std::{collections::HashMap, ops::ControlFlow};
 use web_sys::CloseEvent;
 
 use shared_chat::{
@@ -13,7 +13,7 @@ use shared_chat::{
         server::{ErrorType, ServerChatMessage},
     },
     ring_buffer::RingBuffer,
-    types::{ChatChannel, ChatContent, ChatMessage},
+    types::{ChatChannel, ChatContent, ChatMessage, UserId},
 };
 
 use crate::components::{auth::AuthContext, ui::toast::*};
@@ -24,6 +24,7 @@ const HEARTBEAT_PERIOD: u64 = 10_000;
 pub struct ChatContext {
     pub messages: RwSignal<RingBuffer<ChatMessage>>,
     pub send: Callback<(ChatChannel, String)>,
+    pub users_map: RwSignal<HashMap<UserId, String>>,
 }
 
 #[component]
@@ -110,6 +111,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     let chat_context = ChatContext {
         messages: RwSignal::new(RingBuffer::new(20)),
         send,
+        users_map: Default::default(),
     };
 
     Effect::new({
@@ -132,24 +134,16 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
 fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> ControlFlow<()> {
     match message {
         ServerChatMessage::Connect(m) => {
-            chat_context.messages.write().extend(m.history.into_iter());
+            for message in m.history.into_iter() {
+                push_message(chat_context, message)
+            }
         }
-        // ServerChatMessage::Disconnect(_) => {
-        //     return ControlFlow::Break(());
-        // }
-        // chat_context.messages.write().push(ChatMessage {
-        //     channel: ChatChannel::System,
-        //     user_id: None,
-        //     user_name: None,
-        //     content: "disconnected".into(),
-        //     sent_at: Utc::now(),
-        // }),
         ServerChatMessage::Error(error_message) => {
             console_log(&format!("{:?}", error_message));
             let toaster: Toasts = expect_context();
             show_toast(
                 toaster,
-                error_message.message,
+                format!("Chat: {}", error_message.message),
                 match error_message.error_type {
                     ErrorType::Server => ToastVariant::Error,
                     ErrorType::Chat => ToastVariant::Warning,
@@ -159,7 +153,36 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                 return ControlFlow::Break(());
             }
         }
-        ServerChatMessage::Broadcast(m) => chat_context.messages.write().push(*m),
+        ServerChatMessage::Broadcast(m) => push_message(chat_context, *m),
+        ServerChatMessage::WhisperFeedback(m) => {
+            // TODO: Local users map
+            chat_context.messages.write().push(m.chat_message);
+            if let Some(username) = m.target_username {
+                if !chat_context
+                    .users_map
+                    .read_untracked()
+                    .contains_key(&m.target_user_id)
+                {
+                    chat_context
+                        .users_map
+                        .write()
+                        .insert(m.target_user_id, username);
+                }
+            }
+        }
     }
     return ControlFlow::Continue(());
+}
+
+fn push_message(chat_context: &ChatContext, message: ChatMessage) {
+    if let Some((user_id, username)) = message.user_id.zip(message.username.clone()) {
+        if !chat_context
+            .users_map
+            .read_untracked()
+            .contains_key(&user_id)
+        {
+            chat_context.users_map.write().insert(user_id, username);
+        }
+    }
+    chat_context.messages.write().push(message);
 }

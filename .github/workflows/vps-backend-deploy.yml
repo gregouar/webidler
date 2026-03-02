@@ -7,9 +7,11 @@ on:
       [
         "docker-compose.yml",
         "backend/**",
+        "backend_shared/**",
         "shared/**",
         "nginx/**",
         "data/**",
+        "profanities/**",
         "migrations/**",
         ".github/workflows/vps-backend-deploy.yml",
       ]
@@ -92,7 +94,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: "docker-compose.yml,./nginx/,backend.tar,./data/"
+          source: "docker-compose.yml,./nginx/,backend.tar,./data/,./profanities/"
           target: "/webidler/tmp"
 
       - name: Deploy to VPS
@@ -119,6 +121,11 @@ jobs:
             docker exec database pg_dump -U webidler_user webidler > $BACKUP_FILE
             echo "Backup created at: $BACKUP_FILE"
 
-            docker compose -f /webidler/tmp/docker-compose.yml stop
-            docker compose -f /webidler/tmp/docker-compose.yml down
-            docker compose -f /webidler/tmp/docker-compose.yml up -d
+            MAX_BACKUPS=10
+            ls -1t $BACKUP_DIR/db_backup_*.sql | tail -n +$((MAX_BACKUPS + 1)) | xargs -r rm -f
+
+            docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend
+
+            # docker compose -f /webidler/tmp/docker-compose.yml stop
+            # docker compose -f /webidler/tmp/docker-compose.yml down
+            # docker compose -f /webidler/tmp/docker-compose.yml up -d

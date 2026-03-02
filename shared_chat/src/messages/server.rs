@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::types::ChatMessage;
+use crate::types::{ChatMessage, UserId};
 
 use super::macros::impl_into_message;
 
@@ -12,6 +12,7 @@ impl_into_message! {
         Error(ErrorMessage),
 
         Broadcast(ChatMessage),
+        WhisperFeedback(ServerWhisperFeedbackMessage),
     }
 }
 
@@ -37,3 +38,10 @@ pub struct ServerConnectMessage {
 // pub struct ServerDisconnectMessage {
 //     pub reason: String,
 // }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ServerWhisperFeedbackMessage {
+    pub target_username: Option<String>,
+    pub target_user_id: UserId,
+    pub chat_message: ChatMessage,
+}

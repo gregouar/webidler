@@ -1,0 +1,57 @@
+name: Backend
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      [
+        "docker-compose.yml",
+        "backend_chat/**",
+        "backend_shared/**",
+        "shared_chat/**",
+        "profanities/**",
+        ".github/workflows/vps-backend_chat-deploy.yml",
+      ]
+
+jobs:
+  Pre-Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+  Backend_Chat-Build-and-deploy-to-VPS:
+    needs: Pre-Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: |
+          docker build -t backend_chat:latest -f ./backend_chat/Dockerfile .
+          docker save backend_chat:latest > backend_chat.tar
+          chmod 664 backend_chat.tar
+
+      - name: Transfer Configuration and Images to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
+          source: "docker-compose.yml,backend_chat.tar,./profanities/"
+          target: "/webidler/tmp"
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            docker load < /webidler/tmp/backend_chat.tar
+            docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend_chat

@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 COPY ./backend_chat ./backend_chat
-COPY ./shared ./shared
+COPY ./backend_shared ./backend_shared
+COPY ./shared_chat ./shared_chat
 COPY ./.sqlx ./backend_chat/.sqlx
 
 WORKDIR /app/backend_chat  
@@ -34,7 +35,7 @@ COPY --from=builder /backend_chat /
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 RUN chown appuser:appgroup /backend_chat -R
 
-EXPOSE 4200
+EXPOSE 4242
 
 USER appuser
 
