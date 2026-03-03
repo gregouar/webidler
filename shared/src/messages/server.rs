@@ -24,7 +24,7 @@ impl_into_message! {
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
-        // Disconnect(DisconnectMessage),
+        Disconnect,
     }
 }
 

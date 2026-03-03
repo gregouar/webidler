@@ -4,7 +4,7 @@ use shared::{
     computations,
     constants::{self, RUSH_MODE_SPEED_MULTIPLIER},
     data::user::UserCharacterId,
-    messages::server::{ErrorMessage, ErrorType},
+    messages::server::{ErrorMessage, ErrorType, ServerMessage},
 };
 
 use super::{
@@ -148,10 +148,10 @@ impl<'a> GameInstance<'a> {
             self.terminate_quest().await?;
         }
 
-        // self.client_conn
-        //     .send(&DisconnectMessage {}.into())
-        //     .await
-        //     .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
+        self.client_conn
+            .send(&ServerMessage::Disconnect)
+            .await
+            .unwrap_or_else(|_| tracing::warn!("failed to send disconnection message"));
 
         tracing::debug!("game session '{}' ended ", self.character_id);
         Ok(())
