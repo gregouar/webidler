@@ -18,7 +18,7 @@ use crate::components::{
         panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
         town_scene::TownScene,
     },
-    ui::{buttons::MenuButton, fullscreen::FullscreenButton, tooltip::DynamicTooltip},
+    ui::{buttons::MenuButton, fullscreen::FullscreenButton},
 };
 
 #[derive(Clone, Params, PartialEq)]
@@ -109,7 +109,6 @@ pub fn ViewCharacterPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <DynamicTooltip />
             <PlayerCount />
 
             <Suspense fallback=move || {

@@ -7,10 +7,9 @@ use shared::{
 };
 
 use crate::components::{
-    game::game_context::GameContext,
+    game::{game_context::GameContext, websocket::WebsocketContext},
     shared::inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
     ui::confirm::ConfirmContext,
-    websocket::WebsocketContext,
 };
 
 #[component]

@@ -24,7 +24,7 @@ impl_into_message! {
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
-        Disconnect(DisconnectMessage),
+        Disconnect,
     }
 }
 
@@ -76,7 +76,7 @@ pub struct SyncGameStateMessage {
     pub quest_rewards: Option<Option<QuestRewards>>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DisconnectMessage {
-    // pub end_quest: bool,
-}
+// #[derive(Serialize, Deserialize, Debug, Clone)]
+// pub struct DisconnectMessage {
+//     // pub end_quest: bool,
+// }

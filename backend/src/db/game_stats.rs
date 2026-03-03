@@ -34,7 +34,7 @@ pub async fn save_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     game_instance_data: &GameInstanceData,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<bool> {
     Ok(insert_game_stats(
         executor,
         character_id,
@@ -63,12 +63,23 @@ async fn insert_game_stats<'c>(
     items_data: JsonValue,
     passives_data: JsonValue,
     skills_data: JsonValue,
-) -> Result<(), sqlx::Error> {
-    sqlx::query!(
-        "INSERT INTO game_stats 
-            (character_id, area_id, area_level, elapsed_time, data_version, stats_data, items_data, passives_data, skills_data) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        ",
+) -> Result<bool, sqlx::Error> {
+    let record = sqlx::query!(
+        r#"
+        INSERT INTO game_stats
+            (character_id, area_id, area_level, elapsed_time, data_version,
+             stats_data, items_data, passives_data, skills_data)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        RETURNING
+        1 = (
+        SELECT COUNT(*)
+        FROM game_stats gs
+        WHERE gs.area_id = $2
+            AND gs.data_version = $5
+            AND gs.area_level >= $3
+        )
+        AS "is_highscore!: bool"
+        "#,
         character_id,
         area_id,
         area_level,
@@ -79,11 +90,42 @@ async fn insert_game_stats<'c>(
         passives_data,
         skills_data,
     )
-    .execute(executor)
+    .fetch_one(executor)
     .await?;
 
-    Ok(())
+    Ok(record.is_highscore)
 }
+// async fn insert_game_stats<'c>(
+//     executor: impl DbExecutor<'c>,
+//     character_id: &UserCharacterId,
+//     area_id: &str,
+//     area_level: i32,
+//     elapsed_time: f64,
+//     stats_data: JsonValue,
+//     items_data: JsonValue,
+//     passives_data: JsonValue,
+//     skills_data: JsonValue,
+// ) -> Result<(), sqlx::Error> {
+//     sqlx::query!(
+//         "INSERT INTO game_stats
+//             (character_id, area_id, area_level, elapsed_time, data_version, stats_data, items_data, passives_data, skills_data)
+//             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+//         ",
+//         character_id,
+//         area_id,
+//         area_level,
+//         elapsed_time,
+//         DATA_VERSION,
+//         stats_data,
+//         items_data,
+//         passives_data,
+//         skills_data,
+//     )
+//     .execute(executor)
+//     .await?;
+
+//     Ok(())
+// }
 
 pub async fn load_last_game_stats<'c>(
     executor: impl DbExecutor<'c>,

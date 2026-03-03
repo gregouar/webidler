@@ -12,14 +12,15 @@ use shared::{
 
 use crate::components::{
     auth::AuthContext,
+    chat::chat_panel::ChatPanel,
     game::{
         GameContext,
         battle_scene::BattleScene,
         header_menu::HeaderMenu,
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
+        websocket::WebsocketContext,
     },
-    ui::{toast::*, tooltip::DynamicTooltip},
-    websocket::WebsocketContext,
+    ui::toast::*,
 };
 
 #[component]
@@ -62,7 +63,6 @@ pub fn GameInstance() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <DynamicTooltip />
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }
@@ -77,6 +77,7 @@ pub fn GameInstance() -> impl IntoView {
                     <EndQuestPanel />
                 </div>
             </Show>
+            <ChatPanel />
         </main>
     }
 }
@@ -105,9 +106,8 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
                 navigate("/", Default::default());
             }
         }
-        ServerMessage::Disconnect(_) => {
+        ServerMessage::Disconnect => {
             let navigate = leptos_router::hooks::use_navigate();
-            // TODO: Bring to summary page on end_quest...
             navigate("/town", Default::default());
         }
     }

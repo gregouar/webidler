@@ -20,6 +20,10 @@ impl AuthContext {
     pub fn sign_out(&self) {
         self.set_jwt.set("".into());
     }
+
+    pub fn is_authenticated(&self) -> bool {
+        !self.get_jwt.get().is_empty()
+    }
 }
 
 pub fn provide_auth_context() {

@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 COPY ./backend ./backend
+COPY ./backend_shared ./backend_shared
 COPY ./shared ./shared
 COPY ./.sqlx ./backend/.sqlx
 

@@ -7,7 +7,10 @@ on:
       [
         "docker-compose.yml",
         "backend/**",
+        "backend_chat/**",
+        "backend_shared/**",
         "shared/**",
+        "shared_chat/**",
         "nginx/**",
         "data/**",
         "migrations/**",

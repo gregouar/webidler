@@ -29,7 +29,7 @@ pub fn ItemTooltip(
     item_specs: Arc<ItemSpecs>,
     #[prop(default = false)] show_affixes: bool,
     #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
-    max_item_level: Signal<AreaLevel>,
+    #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
     let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {

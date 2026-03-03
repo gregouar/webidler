@@ -5,19 +5,22 @@ use std::{
 
 use chrono::{DateTime, Duration, Utc};
 use serde::Serialize;
+
 use shared::{data::user::UserId, http::server::NewsEntry};
 
 #[derive(Clone)]
-pub struct DiscordState {
+pub struct DiscordIntegration {
     discord_bot_token: Arc<String>,
     invites_cache: Arc<Mutex<HashMap<UserId, Arc<tokio::sync::Mutex<InviteCache>>>>>,
     news_cache: Arc<tokio::sync::Mutex<NewsCache>>,
 }
 
-impl DiscordState {
-    pub fn new(discord_bot_token: String) -> Self {
+impl DiscordIntegration {
+    pub fn from_env() -> Self {
         Self {
-            discord_bot_token: Arc::new(discord_bot_token),
+            discord_bot_token: Arc::new(
+                std::env::var("DISCORD_BOT_TOKEN").expect("DISCORD_BOT_TOKEN must be set"),
+            ),
             invites_cache: Default::default(),
             news_cache: Default::default(),
         }

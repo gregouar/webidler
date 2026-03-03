@@ -11,6 +11,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::{BackendClient, BackendError},
+    chat::chat_panel::ChatPanel,
     data_context::DataContext,
     shared::player_count::PlayerCount,
     town::{
@@ -22,7 +23,6 @@ use crate::components::{
         },
         town_scene::TownScene,
     },
-    ui::tooltip::DynamicTooltip,
 };
 
 #[component]
@@ -109,7 +109,6 @@ pub fn TownPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <DynamicTooltip />
             <PlayerCount />
 
             <Transition fallback=move || {
@@ -124,6 +123,7 @@ pub fn TownPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
+                            <ChatPanel />
                             <TemplePanel open=town_context.open_temple />
                             <MarketPanel open=town_context.open_market />
                             <StashPanel open=town_context.open_stash />

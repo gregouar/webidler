@@ -90,7 +90,7 @@ pub fn PassivesPanel(
             ascension_cost.set(initial_cost.round());
         }
 
-        if passives_tree_build.read_untracked().is_empty(){
+        if passives_tree_build.read_untracked().is_empty() {
             passives_tree_build.set(town_context.passives_tree_build.get());
         }
     });
@@ -742,20 +742,18 @@ fn AscendNode(
     let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
-    let socket = Memo::new(move |_| {
-         match active_tab.get() {
-            PassivesTab::Ascend => passives_tree_ascension
+    let socket = Memo::new(move |_| match active_tab.get() {
+        PassivesTab::Ascend => passives_tree_ascension
             .read()
             .socketed_nodes
             .get(&node_id)
             .cloned(),
-            PassivesTab::Build =>  town_context.passives_tree_ascension
+        PassivesTab::Build => town_context
+            .passives_tree_ascension
             .read()
             .socketed_nodes
             .get(&node_id)
             .cloned(),
-                 }
-       
     });
 
     let derived_node_specs = Memo::new({

@@ -4,7 +4,7 @@ use indexmap::IndexSet;
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
-    game::GameContext,
+    game::{GameContext, websocket::WebsocketContext},
     shared::{
         item_card::ItemCard,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -16,7 +16,6 @@ use crate::components::{
         menu_panel::MenuPanel,
         number::format_duration,
     },
-    websocket::WebsocketContext,
 };
 use shared::{
     computations,

@@ -1,9 +1,12 @@
 [workspace]
 members = [
     "backend",
+    "backend_chat",
+    "backend_shared",
     "frontend", 
     "tools", 
-    "shared"
+    "shared",
+    "shared_chat"
 ]
 
 resolver = "3"

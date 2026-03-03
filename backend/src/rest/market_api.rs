@@ -24,6 +24,7 @@ use crate::{
         data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
         systems::{inventory_controller, items_controller, stashes_controller},
     },
+    integration::chat::ChatIntegration,
     rest::utils::{verify_character_in_town, verify_character_user},
 };
 
@@ -73,6 +74,7 @@ pub async fn post_browse_market(
 pub async fn post_buy_market_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
+    State(chat_integration): State<ChatIntegration>,
     Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<BuyMarketItemRequest>,
 ) -> Result<Json<BuyMarketItemResponse>, AppError> {
@@ -136,6 +138,21 @@ pub async fn post_buy_market_item(
 
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    if character.user_id != item_bought.user_id
+        && let Err(err) = chat_integration
+            .send_private_message(
+                item_bought.user_id,
+                format!(
+                    "Sold to {} for {:.0} Gems.",
+                    current_user.user_details.user.username, price
+                ),
+                Some(&item_bought.item_specs),
+            )
+            .await
+        {
+            tracing::warn!("failed to send chat message: {err}");
+        }
 
     inventory_controller::store_item_to_bag(&mut inventory, item_bought.item_specs)?;
 

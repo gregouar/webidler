@@ -8,8 +8,10 @@ use shared::{
 };
 
 use crate::components::{
-    accessibility::AccessibilityContext, game::GameContext, shared::item_card::ItemCard,
-    ui::tooltip::DynamicTooltipPosition, websocket::WebsocketContext,
+    accessibility::AccessibilityContext,
+    game::{GameContext, websocket::WebsocketContext},
+    shared::item_card::ItemCard,
+    ui::tooltip::DynamicTooltipPosition,
 };
 
 #[component]

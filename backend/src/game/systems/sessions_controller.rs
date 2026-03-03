@@ -49,11 +49,7 @@ pub async fn create_session(
             Some(_) => break,
             None => {
                 if first_try {
-                    sessions_store
-                        .sessions_stealing
-                        .lock()
-                        .unwrap()
-                        .insert(character_id);
+                    sessions_store.sessions_stealing.insert(character_id);
                 }
                 first_try = false;
                 tokio::time::sleep(Duration::from_millis(200)).await;
@@ -65,10 +61,7 @@ pub async fn create_session(
     }
 
     // First try to get session from memory
-    if let Some(session) = {
-        let mut sessions_store = sessions_store.sessions.lock().unwrap();
-        sessions_store.remove(&character_id)
-    } {
+    if let Some((_, session)) = sessions_store.sessions.remove(&character_id) {
         return Ok(session);
     }
 
@@ -278,13 +271,12 @@ async fn new_game_instance(
 pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsStore) -> Result<()> {
     let sessions = sessions_store
         .sessions
-        .lock()
-        .unwrap()
-        .drain()
+        .iter()
+        .map(|entry| entry.value().clone())
         .collect::<Vec<_>>();
 
     // TODO: Trace errors
-    futures::future::join_all(sessions.into_iter().map(|(_, session)| {
+    let futures = sessions.into_iter().map(|session| {
         let db_pool = db_pool.clone();
         tokio::spawn(async move {
             db::game_instances::save_game_instance_data(
@@ -294,8 +286,33 @@ pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsSt
             )
             .await
         })
-    }))
-    .await;
+    });
+
+    for result in futures::future::join_all(futures).await {
+        match result {
+            Ok(result) => {
+                if let Err(err) = result {
+                    tracing::warn!("failed to save session: {}", err);
+                }
+            }
+            Err(err) => {
+                tracing::warn!("failed to save session: {}", err);
+            }
+        }
+    }
+
+    // futures::future::join_all(sessions.into_iter().map(|session| {
+    //     let db_pool = db_pool.clone();
+    //     tokio::spawn(async move {
+    //         db::game_instances::save_game_instance_data(
+    //             &db_pool,
+    //             &session.character_id,
+    //             *session.game_data,
+    //         )
+    //         .await
+    //     })
+    // }))
+    // .await;
 
     Ok(())
 }

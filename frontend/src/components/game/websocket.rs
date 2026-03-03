@@ -41,7 +41,7 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
         move |e: UseWebSocketError<_, _>| {
             show_toast(
                 toaster,
-                format!("Connection error: {e:?}"),
+                format!("Game connection error: {e:?}"),
                 ToastVariant::Error,
             )
         }
@@ -54,7 +54,7 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
             if !e.was_clean() {
                 show_toast(
                     toaster,
-                    "Disconnected, trying to reconnect...",
+                    "Game disconnected, trying to reconnect...",
                     ToastVariant::Info,
                 )
             }

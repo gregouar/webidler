@@ -1,9 +1,12 @@
+use std::sync::Arc;
+
 use axum::{
     Extension, Json, Router,
     extract::{Path, State},
     middleware,
     routing::{delete, get, post},
 };
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use shared::{
     data::{
         area::AreaLevel,
@@ -61,6 +64,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 
 async fn post_create_character(
     State(db_pool): State<db::DbPool>,
+    State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Path(user_id): Path<UserId>,
     Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<CreateCharacterRequest>,
@@ -68,6 +72,12 @@ async fn post_create_character(
     // TODO: better access management
     if current_user.user_details.user.user_id != user_id {
         return Err(AppError::Forbidden);
+    }
+
+    if profanities_checker.contains_profanities(&payload.name) {
+        return Err(AppError::UserError(
+            "this name contains inappropriate language, please choose a different name".into(),
+        ));
     }
 
     match db::characters::create_character(
@@ -231,6 +241,7 @@ async fn read_character_details(
 
 async fn post_update_character(
     State(db_pool): State<db::DbPool>,
+    State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Path(character_id): Path<UserCharacterId>,
     Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<UpdateCharacterRequest>,
@@ -241,6 +252,12 @@ async fn post_update_character(
 
     if current_user.user_details.user.user_id != character.user_id {
         return Err(AppError::Forbidden);
+    }
+
+    if profanities_checker.contains_profanities(&payload.name) {
+        return Err(AppError::UserError(
+            "this name contains inappropriate language, please choose a different name".into(),
+        ));
     }
 
     match db::characters::update_character(

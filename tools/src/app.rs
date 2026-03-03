@@ -2,7 +2,10 @@ use frontend::components::{
     accessibility::provide_accessibility_context,
     events::provide_events_context,
     settings::provide_settings_context,
-    ui::confirm::{ConfirmationModal, provide_confirm_context},
+    ui::{
+        confirm::{ConfirmationModal, provide_confirm_context},
+        tooltip::DynamicTooltip,
+    },
 };
 use leptos::prelude::*;
 use leptos_meta::*;
@@ -27,6 +30,7 @@ pub fn App() -> impl IntoView {
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <ConfirmationModal state=confirm_state />
+        <DynamicTooltip />
         <Router>
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::HomePage />

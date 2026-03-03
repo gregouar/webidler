@@ -1,6 +1,7 @@
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
+    chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     shared::{
         inventory::InventoryEquipFilter,
@@ -13,6 +14,7 @@ use crate::components::{
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
     let town_context: TownContext = expect_context();
+    let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
     let gold = Signal::derive(move || town_context.character.read().resource_gold);
@@ -139,6 +141,15 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />
                 <WikiButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        chat_context.opened.set(!chat_context.opened.get_untracked())
+                    }
+                >
+                    "Chat"
+                </MenuButton>
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
                     "Inventory"
                 </MenuButton>

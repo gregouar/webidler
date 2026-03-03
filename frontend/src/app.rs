@@ -11,11 +11,15 @@ use crate::components::{
     accessibility::provide_accessibility_context,
     auth::provide_auth_context,
     backend_client::BackendClient,
+    chat::chat_context::ChatProvider,
     data_context::provide_data_context,
     events::provide_events_context,
     pages,
     settings::provide_settings_context,
-    ui::confirm::{ConfirmationModal, provide_confirm_context},
+    ui::{
+        confirm::{ConfirmationModal, provide_confirm_context},
+        tooltip::DynamicTooltip,
+    },
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates
@@ -52,22 +56,27 @@ pub fn App() -> impl IntoView {
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <ConfirmationModal state=confirm_state />
-        <Router base=base_uri>
-            <Routes fallback=|| "Page not found.">
-                <Route path=path!("/") view=pages::MainMenuPage />
-                <Route path=path!("/terms") view=pages::terms::TermsPage />
-                <Route path=path!("/privacy") view=pages::privacy::PrivacyPage />
-                <Route path=path!("/game") view=pages::GamePage />
-                <Route path=path!("/signup") view=pages::SignUpPage />
-                <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
-                <Route path=path!("/reset-password") view=pages::ResetPasswordPage />
-                <Route path=path!("/town") view=pages::TownPage />
-                <Route
-                    path=path!("/view-character/:character_name")
-                    view=pages::ViewCharacterPage
-                />
-            </Routes>
-        </Router>
+        <DynamicTooltip />
+        <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
+            .unwrap_or("ws://localhost:4242/ws")
+            .into()>
+            <Router base=base_uri>
+                <Routes fallback=|| "Page not found.">
+                    <Route path=path!("/") view=pages::MainMenuPage />
+                    <Route path=path!("/terms") view=pages::terms::TermsPage />
+                    <Route path=path!("/privacy") view=pages::privacy::PrivacyPage />
+                    <Route path=path!("/game") view=pages::GamePage />
+                    <Route path=path!("/signup") view=pages::SignUpPage />
+                    <Route path=path!("/user-dashboard") view=pages::UserDashboardPage />
+                    <Route path=path!("/reset-password") view=pages::ResetPasswordPage />
+                    <Route path=path!("/town") view=pages::TownPage />
+                    <Route
+                        path=path!("/view-character/:character_name")
+                        view=pages::ViewCharacterPage
+                    />
+                </Routes>
+            </Router>
+        </ChatProvider>
     }
 }
 

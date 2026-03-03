@@ -10,21 +10,20 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
         let mut dropped_sessions = Vec::new();
 
         {
-            let mut sessions = sessions_store.sessions.lock().unwrap();
-            let sessions_to_drop: Vec<_> = sessions
+            let sessions_to_drop: Vec<_> = sessions_store
+                .sessions
                 .iter()
-                .filter_map(|(character_id, session)| {
-                    if session.last_active < purge_before {
-                        Some(character_id)
+                .filter_map(|entry| {
+                    if entry.value().last_active < purge_before {
+                        Some(*entry.key())
                     } else {
                         None
                     }
                 })
-                .cloned()
                 .collect();
 
             for character_id in sessions_to_drop {
-                if let Some(session) = sessions.remove(&character_id) {
+                if let Some((_, session)) = sessions_store.sessions.remove(&character_id) {
                     dropped_sessions.push((character_id, session));
                 }
             }

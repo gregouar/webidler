@@ -12,7 +12,7 @@ use shared::{
 use crate::{
     app_state::{AppState, DbPool},
     db,
-    integration::discord::DiscordState,
+    integration::discord::DiscordIntegration,
 };
 
 use super::AppError;
@@ -24,7 +24,9 @@ pub fn routes() -> Router<AppState> {
         .route("/news", get(get_news))
 }
 
-async fn get_news(State(discord): State<DiscordState>) -> Result<Json<NewsResponse>, AppError> {
+async fn get_news(
+    State(discord): State<DiscordIntegration>,
+) -> Result<Json<NewsResponse>, AppError> {
     Ok(Json(NewsResponse {
         entries: discord.get_news().await?,
     }))

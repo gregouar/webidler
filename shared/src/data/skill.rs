@@ -15,7 +15,7 @@ use crate::data::{
 pub use super::stat_effect::DamageType;
 use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseSkillSpecs {
     pub name: String,
     pub icon: String,
@@ -44,7 +44,7 @@ pub struct BaseSkillSpecs {
     pub auto_use_conditions: Vec<Condition>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillSpecs {
     pub base: BaseSkillSpecs,
 
@@ -88,7 +88,7 @@ impl Matchable for SkillType {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
     pub source: ModifierEffectSource,
@@ -97,7 +97,7 @@ pub struct ModifierEffect {
     pub hidden: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ModifierEffectSource {
     ItemStats {
         slot: Option<ItemSlot>,
@@ -106,7 +106,7 @@ pub enum ModifierEffectSource {
     CharacterStats(StatConverterSource),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum ItemStatsSource {
     Armor,
     Block,
@@ -123,7 +123,7 @@ pub enum ItemStatsSource {
     Shape,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillTargetsGroup {
     #[serde(default)]
     pub range: SkillRange,
@@ -139,7 +139,7 @@ pub struct SkillTargetsGroup {
     pub effects: Vec<SkillEffect>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillRepeat {
     pub value: ChanceRange<u8>,
     pub target: SkillRepeatTarget,
@@ -158,7 +158,7 @@ impl Default for SkillRepeat {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum SkillRepeatTarget {
     Any,
     Same,

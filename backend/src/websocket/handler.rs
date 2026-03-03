@@ -90,6 +90,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
         &session.character_id,
         &mut session.game_data,
         app_state.db_pool.clone(),
+        app_state.chat_integration.clone(),
         app_state.master_store,
         app_state.sessions_store.clone(),
     );
@@ -115,8 +116,8 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
 
 async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) -> Result<Session> {
     loop {
-        match conn.poll_receive() {
-            ControlFlow::Continue(Some(ClientMessage::Connect(msg))) => {
+        match conn.block_receive().await {
+            ControlFlow::Continue(ClientMessage::Connect(msg)) => {
                 return handle_connect(app_state, *msg).await;
             }
             ControlFlow::Break(_) => {
@@ -167,8 +168,6 @@ async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session)
     if !session.game_data.terminate_quest {
         sessions_store
             .sessions
-            .lock()
-            .unwrap()
             .insert(session.character_id, session);
     }
 

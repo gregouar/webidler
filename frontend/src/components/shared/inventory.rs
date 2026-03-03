@@ -14,6 +14,8 @@ use crate::{
     assets::img_asset,
     components::{
         accessibility::AccessibilityContext,
+        chat::chat_context::ChatContext,
+        events::{EventsContext, Key},
         shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
@@ -204,13 +206,24 @@ fn EquippedItemEquippedSlot(
     show_menu: RwSignal<bool>,
 ) -> impl IntoView {
     let item_ref = NodeRef::new();
+    let chat_context: ChatContext = expect_context();
+    let events_context: EventsContext = expect_context();
 
     let is_being_unequipped = RwSignal::new(false);
     view! {
         <div node_ref=item_ref class="relative w-full h-full overflow-visible">
             <ItemCard
                 item_specs=item_specs.clone()
-                on:click=move |_| show_menu.set(true)
+                on:click={
+                    let item_specs = item_specs.clone();
+                    move |_| {
+                        if events_context.key_pressed(Key::Shift) {
+                            chat_context.linked_item.set(Some(item_specs.clone()));
+                        } else {
+                            show_menu.set(true);
+                        }
+                    }
+                }
                 tooltip_position=DynamicTooltipPosition::Auto
                 max_item_level=inventory.max_item_level
             />
@@ -385,6 +398,9 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
+    let events_context: EventsContext = expect_context();
+    let chat_context: ChatContext = expect_context();
+
     let is_being_equipped = RwSignal::new(false);
 
     let maybe_item = Signal::derive({
@@ -499,7 +515,13 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     comparable_item_specs=comparable_item_specs.clone()
-                                    on:click=move |_| show_menu.set(true)
+                                    on:click=move |_| {
+                                        if events_context.key_pressed(Key::Shift) {
+                                            chat_context.linked_item.set(Some(item_specs.clone()));
+                                        } else {
+                                            show_menu.set(true);
+                                        }
+                                    }
                                     // Ignore if Mobile:
                                     on:contextmenu={
                                         let accessibility: AccessibilityContext = expect_context();

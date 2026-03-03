@@ -1,4 +1,4 @@
-use std::net::SocketAddr;
+use std::{net::SocketAddr, sync::Arc};
 
 use axum::{
     Router,
@@ -15,6 +15,8 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+use backend_shared::profanities_checker::ProfanitiesChecker;
+
 use backend::{
     app_state::{AppSettings, AppState},
     db::{self, pool},
@@ -22,7 +24,7 @@ use backend::{
     game::{
         data::master_store::MasterStore, sessions::SessionsStore, systems::sessions_controller,
     },
-    integration::discord::DiscordState,
+    integration::{chat::ChatIntegration, discord::DiscordIntegration},
     rest, tasks, websocket,
 };
 
@@ -95,8 +97,14 @@ async fn main() {
         email_service: EmailService::from_env(),
         master_store,
         sessions_store: sessions_store.clone(),
-        discord_state: DiscordState::new(
-            std::env::var("DISCORD_BOT_TOKEN").expect("DISCORD_BOT_TOKEN must be set"),
+        discord_integration: DiscordIntegration::from_env(),
+        chat_integration: ChatIntegration::from_env(),
+        profanities_checker: Arc::new(
+            ProfanitiesChecker::load_from_file(
+                "profanities/strong_profanities.txt",
+                "profanities/weak_profanities.txt",
+            )
+            .expect("failed to load profanities"),
         ),
     };
 
