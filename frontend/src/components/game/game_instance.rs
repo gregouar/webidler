@@ -20,7 +20,7 @@ use crate::components::{
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
-    ui::{toast::*, tooltip::DynamicTooltip},
+    ui::toast::*,
 };
 
 #[component]
@@ -63,7 +63,6 @@ pub fn GameInstance() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <DynamicTooltip />
             <Show
                 when=move || game_context.started.get()
                 fallback=move || view! { <p>"Connecting..."</p> }

@@ -557,6 +557,14 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                 chat_context.minimized.set(false);
                                 chat_context.users_map.write().insert(seller_id(), seller_name());
                                 chat_context.write_channel.set(ChatChannel::Whisper(seller_id()));
+                                selected_item
+                                    .with(|selected_item| {
+                                        if let SelectedItem::InMarket(selected_item) = selected_item {
+                                            chat_context
+                                                .linked_item
+                                                .set(Some(selected_item.item_specs.clone()));
+                                        }
+                                    });
                             }
                         >
                             {move || seller_name()}

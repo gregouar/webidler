@@ -3,7 +3,6 @@ use std::sync::Arc;
 use leptos::{
     ev,
     html::{Div, Span},
-    leptos_dom::logging::console_log,
     portal::Portal,
     prelude::*,
     web_sys,
@@ -196,7 +195,6 @@ pub fn DynamicTooltipTarget(
     Effect::new({
         let hide_tooltip = hide_tooltip.clone();
         move || {
-            console_log(&format!("{}", is_outside.get()));
             if is_outside.get() {
                 if is_displayed.get_untracked() {
                     hide_tooltip();

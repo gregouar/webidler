@@ -90,6 +90,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
         &session.character_id,
         &mut session.game_data,
         app_state.db_pool.clone(),
+        app_state.chat_integration.clone(),
         app_state.master_store,
         app_state.sessions_store.clone(),
     );

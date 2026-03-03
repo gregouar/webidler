@@ -17,12 +17,14 @@ use super::{
 use crate::{
     app_state::SessionsStore,
     db::{self, DbPool},
+    integration::chat::ChatIntegration,
     websocket::WebSocketConnection,
 };
 
 pub struct GameInstance<'a> {
     client_conn: &'a mut WebSocketConnection,
     db_pool: DbPool,
+    chat_integration: ChatIntegration,
     master_store: MasterStore,
     sessions_store: SessionsStore,
     character_id: &'a UserCharacterId,
@@ -36,6 +38,7 @@ impl<'a> GameInstance<'a> {
         character_id: &'a UserCharacterId,
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
+        chat_integration: ChatIntegration,
         master_store: MasterStore,
         sessions_store: SessionsStore,
     ) -> Self {
@@ -43,6 +46,7 @@ impl<'a> GameInstance<'a> {
             client_conn,
             character_id,
             db_pool,
+            chat_integration,
             master_store,
             sessions_store,
             game_data,
@@ -231,11 +235,31 @@ impl<'a> GameInstance<'a> {
         }
         db::game_instances::delete_game_instance_data(&mut *tx, self.character_id).await?;
 
-        if self.game_data.area_state.read().max_area_level > 0
-            && let Err(e) =
-                db::game_stats::save_game_stats(&mut *tx, self.character_id, self.game_data).await
-        {
-            tracing::error!("failed to save game stats '{}': {}", self.character_id, e)
+        if self.game_data.area_state.read().max_area_level > 0 {
+            match db::game_stats::save_game_stats(&mut *tx, self.character_id, self.game_data).await
+            {
+                Ok(true) => {
+                    if let Err(err) = self
+                        .chat_integration
+                        .broadcast_message(
+                            format!(
+                                "{} is the first to reach Area Level {:0} in {}!",
+                                self.game_data.player_specs.read().character_specs.name,
+                                self.game_data.area_state.read().max_area_level,
+                                self.game_data.area_specs.name,
+                            ),
+                            None,
+                        )
+                        .await
+                    {
+                        tracing::error!("failed to broadcast highscore: {}", err);
+                    }
+                }
+                Err(err) => {
+                    tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
+                }
+                _ => {}
+            }
         }
 
         tx.commit().await?;

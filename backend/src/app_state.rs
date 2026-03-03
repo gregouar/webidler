@@ -6,7 +6,7 @@ use std::{env, sync::Arc};
 
 use backend_shared::profanities_checker::ProfanitiesChecker;
 
-use crate::integration::discord::DiscordState;
+use crate::integration::{chat::ChatIntegration, discord::DiscordIntegration};
 
 pub use crate::{
     db::pool::DbPool,
@@ -21,7 +21,8 @@ pub struct AppState {
     pub email_service: EmailService,
     pub master_store: MasterStore,
     pub sessions_store: SessionsStore,
-    pub discord_state: DiscordState,
+    pub discord_integration: DiscordIntegration,
+    pub chat_integration: ChatIntegration,
     pub profanities_checker: Arc<ProfanitiesChecker>,
 }
 
@@ -32,7 +33,6 @@ pub struct AppSettings {
     pub aes_key: Aes256Gcm,
     pub hash_key: String,
     pub frontend_url: String,
-    pub chat_url: String,
 }
 
 impl AppSettings {
@@ -54,7 +54,6 @@ impl AppSettings {
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
             hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
             frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
-            chat_url: env::var("CHAT_URL").expect("CHAT_URL must be set"),
         }
     }
 }
@@ -84,12 +83,16 @@ impl FromRef<AppState> for SessionsStore {
         app_state.sessions_store.clone()
     }
 }
-impl FromRef<AppState> for DiscordState {
-    fn from_ref(app_state: &AppState) -> DiscordState {
-        app_state.discord_state.clone()
+impl FromRef<AppState> for DiscordIntegration {
+    fn from_ref(app_state: &AppState) -> DiscordIntegration {
+        app_state.discord_integration.clone()
     }
 }
-
+impl FromRef<AppState> for ChatIntegration {
+    fn from_ref(app_state: &AppState) -> ChatIntegration {
+        app_state.chat_integration.clone()
+    }
+}
 impl FromRef<AppState> for Arc<ProfanitiesChecker> {
     fn from_ref(app_state: &AppState) -> Arc<ProfanitiesChecker> {
         app_state.profanities_checker.clone()

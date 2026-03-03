@@ -15,7 +15,6 @@ use frontend::components::{
         dropdown::SearchableDropdownMenu,
         input::{Input, ValidatedInput},
         pannable::Pannable,
-        tooltip::DynamicTooltip,
     },
 };
 use leptos::{html::*, prelude::*};
@@ -162,7 +161,6 @@ pub fn PassivesPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <DynamicTooltip />
             <input
                 node_ref=file_input
                 type="file"

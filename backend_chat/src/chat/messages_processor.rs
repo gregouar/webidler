@@ -47,7 +47,7 @@ impl MessagesProcessor {
         let user_states: DashMap<UserId, UserModerationState> = DashMap::new();
 
         while let Some((session_id, msg)) = self.inbound_rx.recv().await {
-            if msg.channel == ChatChannel::System {
+            if msg.channel == ChatChannel::System && session_id != Uuid::default() {
                 send_direct_error(&self.chat_state, session_id, "cannot send to that channel")
                     .await;
                 continue;

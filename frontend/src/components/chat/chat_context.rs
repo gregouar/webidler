@@ -1,5 +1,5 @@
 use codee::{Encoder, binary::MsgpackSerdeCodec};
-use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos::prelude::*;
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
@@ -179,7 +179,6 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
             }
         }
         ServerChatMessage::Error(error_message) => {
-            console_log(&format!("{:?}", error_message));
             let toaster: Toasts = expect_context();
             show_toast(
                 toaster,

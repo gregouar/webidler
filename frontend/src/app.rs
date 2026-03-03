@@ -16,7 +16,10 @@ use crate::components::{
     events::provide_events_context,
     pages,
     settings::provide_settings_context,
-    ui::confirm::{ConfirmationModal, provide_confirm_context},
+    ui::{
+        confirm::{ConfirmationModal, provide_confirm_context},
+        tooltip::DynamicTooltip,
+    },
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates
@@ -53,6 +56,7 @@ pub fn App() -> impl IntoView {
     view! {
         <Toaster position=ToasterPosition::BottomCenter></Toaster>
         <ConfirmationModal state=confirm_state />
+        <DynamicTooltip />
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
             .unwrap_or("ws://localhost:4242/ws")
             .into()>
