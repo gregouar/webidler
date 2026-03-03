@@ -131,12 +131,18 @@ impl ChatSession {
 
         write_task.abort();
 
-        // Maybe this should be handler outside of this:
-        self.chat_state
+        // Maybe this should be handled outside of this:
+        let mut user_entry = self
+            .chat_state
             .users_map
             .entry(self.user.user_id)
-            .or_default()
-            .remove(&self.session_id);
+            .or_default();
+        user_entry.remove(&self.session_id);
+        if user_entry.is_empty() {
+            self.chat_state
+                .usernames_map
+                .remove(&self.user.username.to_ascii_lowercase());
+        }
         self.chat_state.reply_map.remove(&self.session_id);
 
         tracing::debug!("chat session '{}' ended ", self.user.user_id);

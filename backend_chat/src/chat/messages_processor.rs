@@ -71,7 +71,6 @@ impl MessagesProcessor {
                 if let Some((username, message)) = parse_whisper_message(&msg.content) {
                     if let Some(entry) = self.chat_state.usernames_map.get(&username) {
                         let (user_id, target_username) = entry.value();
-
                         (
                             message,
                             ChatChannel::Whisper(*user_id),
@@ -92,67 +91,62 @@ impl MessagesProcessor {
                 };
 
             let content = if self.profanities_checker.contains_profanities(&content) {
-                "***"
+                ChatContent::try_new("***").unwrap_or_default()
             } else {
-                &content
+                content
             };
 
-            if let Ok(content) = ChatContent::try_new(content) {
-                let chat_message = ChatMessage {
-                    content,
-                    channel,
-                    ..msg
-                };
-                let server_chat_message = ServerChatMessage::Broadcast(chat_message.clone().into());
+            let chat_message = ChatMessage {
+                content,
+                channel,
+                ..msg
+            };
+            let server_chat_message = ServerChatMessage::Broadcast(chat_message.clone().into());
 
-                if let ChatChannel::Whisper(user_id) = channel {
-                    if let Some(targets) = self.chat_state.users_map.get(&user_id)
-                        && !targets.is_empty()
-                    {
-                        for target_session_id in targets.iter() {
-                            send_direct_message(
-                                &self.chat_state,
-                                *target_session_id,
-                                server_chat_message.clone(),
-                            )
-                            .await;
-                        }
+            if let ChatChannel::Whisper(user_id) = channel {
+                if let Some(targets) = self.chat_state.users_map.get(&user_id)
+                    && !targets.is_empty()
+                {
+                    for target_session_id in targets.iter() {
                         send_direct_message(
                             &self.chat_state,
-                            session_id,
-                            ServerWhisperFeedbackMessage {
-                                target_username,
-                                target_user_id: user_id,
-                                chat_message,
-                            }
-                            .into(),
-                        )
-                        .await;
-                    } else {
-                        send_direct_error(
-                            &self.chat_state,
-                            session_id,
-                            "whisper target user not connected",
+                            *target_session_id,
+                            server_chat_message.clone(),
                         )
                         .await;
                     }
+                    send_direct_message(
+                        &self.chat_state,
+                        session_id,
+                        ServerWhisperFeedbackMessage {
+                            target_username,
+                            target_user_id: user_id,
+                            chat_message,
+                        }
+                        .into(),
+                    )
+                    .await;
                 } else {
-                    self.chat_state
-                        .history
-                        .lock()
-                        .unwrap()
-                        .push(Arc::new(chat_message));
-                    if let Ok(ser_message) = rmp_serde::to_vec(&server_chat_message) {
-                        let message = Arc::new(Bytes::from(ser_message));
-                        let _ = self.chat_state.outbound_tx.send(message);
-                    }
+                    send_direct_error(
+                        &self.chat_state,
+                        session_id,
+                        "whisper target user not connected",
+                    )
+                    .await;
+                }
+            } else {
+                self.chat_state
+                    .history
+                    .lock()
+                    .unwrap()
+                    .push(Arc::new(chat_message));
+                if let Ok(ser_message) = rmp_serde::to_vec(&server_chat_message) {
+                    let message = Arc::new(Bytes::from(ser_message));
+                    let _ = self.chat_state.outbound_tx.send(message);
                 }
             }
         }
     }
-
-    async fn handle_broadcast() {}
-    async fn handle_whisper() {}
 }
 
 async fn send_direct_error(chat_state: &ChatState, session_id: Uuid, msg: &str) {

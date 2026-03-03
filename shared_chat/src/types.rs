@@ -24,7 +24,8 @@ pub struct ChatMessage {
 #[nutype(
     sanitize(with=strip_control_chars),
     validate(not_empty, len_char_max = 200),
-    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+    default="***",
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref, Default)
 )]
 pub struct ChatContent(String);
 

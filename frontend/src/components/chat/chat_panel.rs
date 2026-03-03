@@ -121,6 +121,7 @@ pub fn ChatPanel() -> impl IntoView {
         if chat_context.opened.get() {
             if let Some(text_area) = text_area_ref.get() {
                 text_area.focus().unwrap();
+                text_area.select();
             }
         }
     });
