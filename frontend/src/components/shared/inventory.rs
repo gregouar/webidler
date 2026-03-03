@@ -214,11 +214,14 @@ fn EquippedItemEquippedSlot(
         <div node_ref=item_ref class="relative w-full h-full overflow-visible">
             <ItemCard
                 item_specs=item_specs.clone()
-                on:click=move |_| {
-                    if events_context.key_pressed(Key::Shift) {
-                        chat_context.linked_item.set(Some(item_specs.clone()));
-                    } else {
-                        show_menu.set(true);
+                on:click={
+                    let item_specs = item_specs.clone();
+                    move |_| {
+                        if events_context.key_pressed(Key::Shift) {
+                            chat_context.linked_item.set(Some(item_specs.clone()));
+                        } else {
+                            show_menu.set(true);
+                        }
                     }
                 }
                 tooltip_position=DynamicTooltipPosition::Auto
