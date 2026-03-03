@@ -22,6 +22,7 @@ services:
       dockerfile: ./backend/Dockerfile
     volumes:
       - ./data:/data
+      - ./profanities:/profanities
     restart: always
     healthcheck:
       test: curl --fail http://backend:4200 || exit 1
@@ -50,7 +51,7 @@ services:
       context: ./
       dockerfile: ./backend_chat/Dockerfile
     volumes:
-      - ./data:/data
+      - ./profanities:/profanities
     restart: always
     healthcheck:
       test: curl --fail http://backend_chat:4242 || exit 1
