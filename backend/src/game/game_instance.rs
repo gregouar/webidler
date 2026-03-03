@@ -123,9 +123,7 @@ impl<'a> GameInstance<'a> {
             if self
                 .sessions_store
                 .sessions_stealing
-                .lock()
-                .unwrap()
-                .take(self.character_id)
+                .remove(self.character_id)
                 .is_some()
             {
                 self.client_conn

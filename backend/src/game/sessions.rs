@@ -1,8 +1,5 @@
-use std::{
-    collections::{HashMap, HashSet},
-    sync::{Arc, Mutex},
-    time::Instant,
-};
+use dashmap::{DashMap, DashSet};
+use std::{sync::Arc, time::Instant};
 
 pub use shared::data::user::UserCharacterId;
 
@@ -10,8 +7,10 @@ use super::game_data::GameInstanceData;
 
 #[derive(Debug, Clone)]
 pub struct SessionsStore {
-    pub sessions: Arc<Mutex<HashMap<UserCharacterId, Session>>>,
-    pub sessions_stealing: Arc<Mutex<HashSet<UserCharacterId>>>,
+    pub sessions: Arc<DashMap<UserCharacterId, Session>>,
+    pub sessions_stealing: Arc<DashSet<UserCharacterId>>,
+    // pub sessions: Arc<Mutex<HashMap<UserCharacterId, Session>>>,
+    // pub sessions_stealing: Arc<Mutex<HashSet<UserCharacterId>>>,
 }
 
 #[derive(Debug, Clone)]
@@ -31,7 +30,7 @@ impl Default for SessionsStore {
 impl SessionsStore {
     pub fn new() -> Self {
         Self {
-            sessions: Arc::new(Mutex::new(HashMap::new())),
+            sessions: Default::default(),
             sessions_stealing: Default::default(),
         }
     }

@@ -167,8 +167,6 @@ async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session)
     if !session.game_data.terminate_quest {
         sessions_store
             .sessions
-            .lock()
-            .unwrap()
             .insert(session.character_id, session);
     }
 
