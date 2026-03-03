@@ -78,7 +78,7 @@ async fn insert_game_stats<'c>(
             AND gs.data_version = $5
             AND gs.area_level >= $3
         )
-        AS is_highscore
+        AS "is_highscore:bool"
         "#,
         character_id,
         area_id,
@@ -93,7 +93,7 @@ async fn insert_game_stats<'c>(
     .fetch_one(executor)
     .await?;
 
-    Ok(record.is_highscore > 0)
+    Ok(record.is_highscore)
 }
 // async fn insert_game_stats<'c>(
 //     executor: impl DbExecutor<'c>,
