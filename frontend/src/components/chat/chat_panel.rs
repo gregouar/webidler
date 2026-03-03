@@ -22,6 +22,8 @@ pub fn ChatPanel() -> impl IntoView {
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
+    let panel_ref = NodeRef::new();
+
     // Drag state
     let dragging = RwSignal::new(false);
     let position = RwSignal::new((50i32, 50i32)); // bottom, left
@@ -44,18 +46,17 @@ pub fn ChatPanel() -> impl IntoView {
             let dx = ev.screen_x() - start_mx;
             let dy = ev.screen_y() - start_my;
 
-            let new_top = start_bottom - dy;
-            let new_left = start_left + dx;
-
-            // TODO: Compute actual size of chat panel?
-
-            // Clamp AFTER computing absolute value
             let win = window();
             let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
             let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
 
-            let clamped_bottom = new_top.clamp(0, height - 50);
-            let clamped_left = new_left.clamp(0, width - 300);
+            let panel: web_sys::HtmlDivElement = panel_ref.get().unwrap();
+            let rect = panel.get_bounding_client_rect();
+            let panel_width = rect.width() as i32;
+            let panel_height = rect.height() as i32;
+
+            let clamped_bottom = (start_bottom - dy).clamp(0, (height - panel_height).max(0));
+            let clamped_left = (start_left + dx).clamp(0, (width - panel_width).max(0));
 
             position.set((clamped_bottom, clamped_left));
         });
@@ -118,6 +119,16 @@ pub fn ChatPanel() -> impl IntoView {
         }
     });
 
+    Effect::new(move || {
+        if !chat_context.minimized.get() && chat_context.opened.get() {
+            if let Some(el) = messages_node.get()
+                && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
+            {
+                html_el.set_scroll_top(html_el.scroll_height());
+            }
+        }
+    });
+
     let text_area_ref: NodeRef<leptos::html::Textarea> = NodeRef::new();
     // Effect::new(move || {
     //     if chat_context.opened.get()
@@ -150,6 +161,7 @@ pub fn ChatPanel() -> impl IntoView {
                     <div
                         class="fixed z-50 select-none text-left"
                         style=format!("bottom:{}px; left:{}px;", bottom, left)
+                        node_ref=panel_ref
                     >
                         <div class="w-[420px] bg-zinc-900/80 backdrop-blur border border-zinc-700 text-sm text-gray-200 flex flex-col shadow-xl">
 
