@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY ./backend_chat ./backend_chat
 COPY ./backend_shared ./backend_shared
 COPY ./shared_chat ./shared_chat
-COPY ./.sqlx ./backend_chat/.sqlx
 
 WORKDIR /app/backend_chat  
 
