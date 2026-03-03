@@ -207,6 +207,7 @@ fn EquippedItemEquippedSlot(
 ) -> impl IntoView {
     let item_ref = NodeRef::new();
     let chat_context: ChatContext = expect_context();
+    let events_context: EventsContext = expect_context();
 
     let is_being_unequipped = RwSignal::new(false);
     view! {

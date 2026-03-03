@@ -113,10 +113,7 @@ async fn wait_for_connect(
     }
 }
 
-async fn handle_connect<'a>(
-    app_state: &AppState,
-    msg: ClientConnectMessage,
-) -> Result<ChatSession> {
+async fn handle_connect(app_state: &AppState, msg: ClientConnectMessage) -> Result<ChatSession> {
     let user = authorize_jwt(&app_state.app_settings, &msg.jwt).await?;
     tracing::info!("connect: {}", user.user_id);
     Ok(ChatSession::new(app_state.chat_state.clone(), user))
