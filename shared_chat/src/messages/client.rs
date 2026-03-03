@@ -35,4 +35,5 @@ pub struct ClientConnectMessage {
 pub struct ClientPostMessage {
     pub channel: ChatChannel,
     pub content: ChatContent,
+    pub linked_item: Option<Vec<u8>>,
 }

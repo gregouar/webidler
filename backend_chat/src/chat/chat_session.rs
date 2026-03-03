@@ -184,6 +184,7 @@ impl ChatSession {
                     user_id: Some(self.user.user_id),
                     username: Some(self.user.username.clone()),
                     content: msg.content,
+                    linked_item: msg.linked_item,
                     sent_at: Utc::now(),
                 },
             ))

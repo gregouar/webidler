@@ -41,4 +41,8 @@ impl<T> RingBuffer<T> {
     pub fn len(&self) -> usize {
         self.buf.len()
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
 }

@@ -1,12 +1,14 @@
-use codee::binary::MsgpackSerdeCodec;
+use codee::{Encoder, binary::MsgpackSerdeCodec};
 use leptos::{leptos_dom::logging::console_log, prelude::*};
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
 };
+use shared::data::item::ItemSpecs;
 use std::{
     collections::{HashMap, HashSet},
     ops::ControlFlow,
+    sync::Arc,
 };
 use web_sys::CloseEvent;
 
@@ -28,13 +30,15 @@ pub struct ChatContext {
     pub user_id: RwSignal<Option<UserId>>,
 
     pub users_map: RwSignal<HashMap<UserId, String>>,
+    // TODO: Split in multiple buckets to keep longer system message than global
     pub messages: RwSignal<RingBuffer<ChatMessage>>,
-    pub send: Callback<(ChatChannel, String)>,
+    pub send: Callback<String>,
 
     pub minimized: RwSignal<bool>,
     pub opened: RwSignal<bool>,
     pub selected_channels: RwSignal<HashSet<ChatChannel>>,
     pub write_channel: RwSignal<ChatChannel>,
+    pub linked_item: RwSignal<Option<Arc<ItemSpecs>>>,
 }
 
 #[component]
@@ -112,9 +116,23 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     });
 
     // Chat
-    let send = Callback::new(move |(channel, msg)| {
+    let write_channel = RwSignal::new(ChatChannel::Global);
+    let linked_item = RwSignal::new(None);
+
+    let send = Callback::new(move |msg| {
         if let Ok(content) = ChatContent::try_new(msg) {
-            send(&ClientPostMessage { channel, content }.into());
+            send(
+                &ClientPostMessage {
+                    channel: write_channel.get_untracked(),
+                    content,
+                    linked_item: linked_item
+                        .read_untracked()
+                        .as_ref()
+                        .and_then(|linked_item| MsgpackSerdeCodec::encode(linked_item).ok()),
+                }
+                .into(),
+            );
+            linked_item.set(None);
         }
     });
 
@@ -131,7 +149,8 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
             ChatChannel::Trade,
             ChatChannel::System,
         ])),
-        write_channel: RwSignal::new(ChatChannel::Global),
+        write_channel,
+        linked_item,
     };
 
     Effect::new({
@@ -182,12 +201,12 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                     .users_map
                     .read_untracked()
                     .contains_key(&m.target_user_id)
-                {
-                    chat_context
-                        .users_map
-                        .write()
-                        .insert(m.target_user_id, username);
-                }
+            {
+                chat_context
+                    .users_map
+                    .write()
+                    .insert(m.target_user_id, username);
+            }
             chat_context.messages.write().push(m.chat_message);
             chat_context
                 .write_channel
@@ -203,8 +222,8 @@ fn push_message(chat_context: &ChatContext, message: ChatMessage) {
             .users_map
             .read_untracked()
             .contains_key(&user_id)
-        {
-            chat_context.users_map.write().insert(user_id, username);
-        }
+    {
+        chat_context.users_map.write().insert(user_id, username);
+    }
     chat_context.messages.write().push(message);
 }

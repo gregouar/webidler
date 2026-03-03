@@ -1,15 +1,23 @@
+use std::sync::Arc;
+
+use codee::{Decoder, binary::MsgpackSerdeCodec};
 use leptos::{
     ev::{mousemove, mouseup},
     prelude::*,
     web_sys::wasm_bindgen::JsCast,
 };
 
+use shared::data::item::ItemSpecs;
 use shared_chat::types::{ChatChannel, ChatMessage};
 
 use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
-    ui::checkbox::Checkbox,
+    shared::tooltips::{ItemTooltip, item_tooltip},
+    ui::{
+        checkbox::Checkbox,
+        tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+    },
 };
 
 #[component]
@@ -97,9 +105,7 @@ pub fn ChatPanel() -> impl IntoView {
             return;
         }
 
-        chat_context
-            .send
-            .run((chat_context.write_channel.get_untracked(), content));
+        chat_context.send.run(content);
 
         input_value.set(String::new());
     };
@@ -208,14 +214,7 @@ pub fn ChatPanel() -> impl IntoView {
                                         >
                                             {move || {
                                                 if let Some(msg) = last_visible_message() {
-                                                    view! {
-                                                        <span class=move || {
-                                                            channel_color(msg.channel).to_string()
-                                                        }>{author_str(&msg)}</span>
-                                                        ": "
-                                                        {msg.content.into_inner()}
-                                                    }
-                                                        .into_any()
+                                                    view! { <ChatMessageRow msg /> }.into_any()
                                                 } else {
                                                     "No messages".into_any()
                                                 }
@@ -235,32 +234,7 @@ pub fn ChatPanel() -> impl IntoView {
                                                 each=filtered_messages
                                                 key=|msg| (msg.sent_at, msg.user_id)
                                                 children=move |msg| {
-                                                    view! {
-                                                        <div class="text-[13px] leading-snug">
-                                                            <span
-                                                                class=move || {
-                                                                    format!("cursor-pointer {}", channel_color(msg.channel))
-                                                                }
-                                                                on:click=move |_| {
-                                                                    if let ChatChannel::Whisper(_) = msg.channel
-                                                                        && msg.user_id == chat_context.user_id.get()
-                                                                    {
-                                                                        chat_context.write_channel.set(msg.channel)
-                                                                    } else if let Some(user_id) = msg.user_id {
-                                                                        chat_context
-                                                                            .write_channel
-                                                                            .set(ChatChannel::Whisper(user_id))
-                                                                    }
-                                                                }
-                                                            >
-                                                                {author_str(&msg)}
-                                                            </span>
-                                                            <span class="text-gray-500">": "</span>
-                                                            <span class="text-gray-200 select-text">
-                                                                {msg.content.into_inner()}
-                                                            </span>
-                                                        </div>
-                                                    }
+                                                    view! { <ChatMessageRow msg /> }
                                                 }
                                             />
                                         </div>
@@ -325,24 +299,32 @@ pub fn ChatPanel() -> impl IntoView {
                                                     }}
                                                 </div>
 
-                                                // Textarea
-                                                <textarea
-                                                    class="flex-1 resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
-                                                    rows="2"
-                                                    maxlength="200"
-                                                    prop:value=move || input_value.get()
-                                                    on:input=move |ev| {
-                                                        input_value.set(event_target_value(&ev));
-                                                    }
-                                                    on:keydown=move |ev| {
-                                                        if ev.key() == "Enter" && !ev.shift_key() {
-                                                            ev.prevent_default();
-                                                            send_message();
+                                                <div class="flex-1 flex flex-col">
+                                                    // Textarea
+                                                    {chat_context
+                                                        .linked_item
+                                                        .get()
+                                                        .map(|item_specs| {
+                                                            view! { <ChatItem item_specs /> }
+                                                        })}
+                                                    <textarea
+                                                        class=" resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
+                                                        rows="2"
+                                                        maxlength="200"
+                                                        prop:value=move || input_value.get()
+                                                        on:input=move |ev| {
+                                                            input_value.set(event_target_value(&ev));
                                                         }
-                                                    }
-                                                    placeholder="Type message..."
-                                                    node_ref=text_area_ref
-                                                />
+                                                        on:keydown=move |ev| {
+                                                            if ev.key() == "Enter" && !ev.shift_key() {
+                                                                ev.prevent_default();
+                                                                send_message();
+                                                            }
+                                                        }
+                                                        placeholder="Type message..."
+                                                        node_ref=text_area_ref
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     }
@@ -356,6 +338,79 @@ pub fn ChatPanel() -> impl IntoView {
                     .into_any()
             }
         }}
+    }
+}
+
+#[component]
+fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
+    let chat_context: ChatContext = expect_context();
+    view! {
+        <div class="text-[13px] leading-snug">
+            <span
+                class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
+                on:click=move |_| {
+                    if let ChatChannel::Whisper(_) = msg.channel
+                        && msg.user_id == chat_context.user_id.get()
+                    {
+                        chat_context.write_channel.set(msg.channel)
+                    } else if let Some(user_id) = msg.user_id {
+                        chat_context.write_channel.set(ChatChannel::Whisper(user_id))
+                    }
+                }
+            >
+                {author_str(&msg)}
+            </span>
+            <span class="text-gray-500">": "</span>
+            {msg
+                .linked_item
+                .and_then(|item_data| MsgpackSerdeCodec::decode(&item_data).ok())
+                .map(|item_specs: ItemSpecs| {
+                    view! { <ChatItem item_specs=Arc::new(item_specs) /> }
+                })}
+            <span class="text-gray-200 select-text">{msg.content.into_inner()}</span>
+        </div>
+    }
+}
+
+#[component]
+fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    let tooltip_context: DynamicTooltipContext = expect_context();
+
+    let show_tooltip = {
+        let item_specs = item_specs.clone();
+        move || {
+            let item_specs = item_specs.clone();
+            tooltip_context.set_content(
+                move || {
+                    let item_specs = item_specs.clone();
+                    // TODO: Compare? Max Item Level?
+                    view! {
+                        <div class="flex gap-1 xl:gap-2">
+                            <ItemTooltip item_specs />
+                        </div>
+                    }
+                    .into_any()
+                },
+                DynamicTooltipPosition::Auto,
+            );
+        }
+    };
+
+    let hide_tooltip = { move || tooltip_context.hide() };
+
+    view! {
+        <span
+            class=format!(
+                "font-bold {}",
+                item_tooltip::name_color_rarity(item_specs.modifiers.rarity),
+            )
+            on:mouseenter=move |_| show_tooltip()
+            on:mouseleave=move |_| hide_tooltip()
+        >
+            "<"
+            {item_specs.modifiers.name.clone()}
+            "> "
+        </span>
     }
 }
 

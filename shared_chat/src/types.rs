@@ -15,10 +15,13 @@ pub enum ChatChannel {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatMessage {
     pub channel: ChatChannel,
+    pub sent_at: DateTime<Utc>,
+
     pub user_id: Option<UserId>,
     pub username: Option<String>,
+
     pub content: ChatContent,
-    pub sent_at: DateTime<Utc>,
+    pub linked_item: Option<Vec<u8>>,
 }
 
 #[nutype(
