@@ -46,7 +46,7 @@ pub fn ItemTooltip(
 
     view! {
         <div class=format!(
-            "max-w-xs p-2 xl:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black",
+            "max-w-xs p-2 xl:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black text-center",
             border_color,
             ring_color,
             shadow_color,
