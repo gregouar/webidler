@@ -177,8 +177,8 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
         ServerChatMessage::Broadcast(m) => push_message(chat_context, *m),
         ServerChatMessage::WhisperFeedback(m) => {
             // TODO: Local users map
-            if let Some(username) = m.target_username {
-                if !chat_context
+            if let Some(username) = m.target_username
+                && !chat_context
                     .users_map
                     .read_untracked()
                     .contains_key(&m.target_user_id)
@@ -188,25 +188,23 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                         .write()
                         .insert(m.target_user_id, username);
                 }
-            }
             chat_context.messages.write().push(m.chat_message);
             chat_context
                 .write_channel
                 .set(ChatChannel::Whisper(m.target_user_id));
         }
     }
-    return ControlFlow::Continue(());
+    ControlFlow::Continue(())
 }
 
 fn push_message(chat_context: &ChatContext, message: ChatMessage) {
-    if let Some((user_id, username)) = message.user_id.zip(message.username.clone()) {
-        if !chat_context
+    if let Some((user_id, username)) = message.user_id.zip(message.username.clone())
+        && !chat_context
             .users_map
             .read_untracked()
             .contains_key(&user_id)
         {
             chat_context.users_map.write().insert(user_id, username);
         }
-    }
     chat_context.messages.write().push(message);
 }

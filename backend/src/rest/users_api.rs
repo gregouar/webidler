@@ -259,7 +259,7 @@ async fn post_update_account(
     };
 
     if let Some(username) = user_update.username.as_ref()
-        && profanities_checker.contains_profanities(&username)
+        && profanities_checker.contains_profanities(username)
     {
         return Err(AppError::UserError(
             "this name contains inappropriate language, please choose a different name".into(),

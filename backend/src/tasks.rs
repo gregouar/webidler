@@ -15,7 +15,7 @@ pub async fn purge_sessions(db_pool: db::DbPool, sessions_store: SessionsStore) 
                 .iter()
                 .filter_map(|entry| {
                     if entry.value().last_active < purge_before {
-                        Some(entry.key().clone())
+                        Some(*entry.key())
                     } else {
                         None
                     }

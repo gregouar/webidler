@@ -107,23 +107,20 @@ pub fn ChatPanel() -> impl IntoView {
     let messages_node = NodeRef::<leptos::html::Div>::new();
     Effect::new(move || {
         let _ = chat_context.messages.read();
-        if let Some(el) = messages_node.get() {
-            if let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>() {
-                if is_near_bottom(&html_el) {
+        if let Some(el) = messages_node.get()
+            && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
+                && is_near_bottom(&html_el) {
                     html_el.set_scroll_top(html_el.scroll_height());
                 }
-            }
-        }
     });
 
     let text_area_ref: NodeRef<leptos::html::Textarea> = NodeRef::new();
     Effect::new(move || {
-        if chat_context.opened.get() {
-            if let Some(text_area) = text_area_ref.get() {
+        if chat_context.opened.get()
+            && let Some(text_area) = text_area_ref.get() {
                 text_area.focus().unwrap();
                 text_area.select();
             }
-        }
     });
 
     Effect::new(move || {
@@ -207,7 +204,7 @@ pub fn ChatPanel() -> impl IntoView {
                                                 if let Some(msg) = last_visible_message() {
                                                     view! {
                                                         <span class=move || {
-                                                            format!("{}", channel_color(msg.channel))
+                                                            channel_color(msg.channel).to_string()
                                                         }>{author_str(&msg)}</span>
                                                         ": "
                                                         {msg.content.into_inner()}
