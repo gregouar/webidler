@@ -58,7 +58,7 @@ pub fn App() -> impl IntoView {
         <ConfirmationModal state=confirm_state />
         <DynamicTooltip />
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
-            .unwrap_or("ws://localhost:4242/ws")
+            .unwrap_or("ws://localhost:4242/chatws")
             .into()>
             <Router base=base_uri>
                 <Routes fallback=|| "Page not found.">

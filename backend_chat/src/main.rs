@@ -72,7 +72,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
         .merge(rest::routes())
-        .route("/ws", any(websocket::handler))
+        .route("/chatws", any(websocket::handler))
         .with_state(app_state.clone())
         .layer(tracer_layer)
         .layer(cors_layer);

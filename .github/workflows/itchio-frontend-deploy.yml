@@ -47,6 +47,7 @@ jobs:
         env:
           BACKEND_HTTP_URL: "https://webidler.gregoirenaisse.be"
           BACKEND_WS_URL: "wss://webidler.gregoirenaisse.be"
+          BACKEND_CHAT_WS_URL: "wss://webidler.gregoirenaisse.be/chatws"
         run: |
           ./trunk build --release --config "./Trunk-release.toml" --public-url "./"
 
