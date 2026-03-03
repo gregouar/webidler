@@ -13,6 +13,7 @@ use shared::data::{
     stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
     values::NonNegative,
 };
+use strum::IntoEnumIterator;
 
 use crate::game::data::items_store::ItemsStore;
 
@@ -91,7 +92,8 @@ fn compute_weapon_specs(
                     }
                 }
                 None => {
-                    for value in weapon_specs.damage.values_mut() {
+                    for damage_type in DamageType::iter() {
+                        let value = weapon_specs.damage.entry(damage_type).or_default();
                         if let Some(MinMax::Min) | None = min_max {
                             value.min.apply_effect(effect);
                         }
