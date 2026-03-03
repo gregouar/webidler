@@ -5,6 +5,7 @@ use std::{
 
 use chrono::{DateTime, Duration, Utc};
 use serde::Serialize;
+
 use shared::{data::user::UserId, http::server::NewsEntry};
 
 #[derive(Clone)]

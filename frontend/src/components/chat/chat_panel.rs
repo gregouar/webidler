@@ -408,7 +408,9 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 fn author_str(msg: &ChatMessage) -> String {
     let chat_context: ChatContext = expect_context();
 
-    if let ChatChannel::Whisper(_) = msg.channel
+    if let ChatChannel::System = msg.channel {
+        "[System]".into()
+    } else if let ChatChannel::Whisper(_) = msg.channel
         && msg.user_id == chat_context.user_id.get()
     {
         channel_str(msg.channel)

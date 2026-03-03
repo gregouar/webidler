@@ -27,3 +27,9 @@ impl FromRef<AppState> for AppSettings {
         app_state.app_settings.clone()
     }
 }
+
+impl FromRef<AppState> for ChatState {
+    fn from_ref(app_state: &AppState) -> ChatState {
+        app_state.chat_state.clone()
+    }
+}

@@ -19,7 +19,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use backend_chat::{
     app_state::{AppSettings, AppState},
     chat::messages_processor::MessagesProcessor,
-    websocket,
+    rest, websocket,
 };
 
 #[tokio::main]
@@ -71,6 +71,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async { "OK" }))
+        .merge(rest::routes())
         .route("/ws", any(websocket::handler))
         .with_state(app_state.clone())
         .layer(tracer_layer)

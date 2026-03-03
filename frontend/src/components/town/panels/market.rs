@@ -1,5 +1,6 @@
 use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
+use shared_chat::types::ChatChannel;
 use std::sync::Arc;
 use strum::IntoEnumIterator;
 
@@ -22,6 +23,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
+    chat::chat_context::ChatContext,
     shared::{
         inventory::loot_filter_category_to_str,
         resources::{GemsCounter, GemsIcon},
@@ -409,6 +411,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
     let auth_context = expect_context::<AuthContext>();
+    let chat_context: ChatContext = expect_context();
     let toaster = expect_context::<Toasts>();
 
     let own_item = move || {
@@ -453,6 +456,15 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 selected_item.owner_name.clone().unwrap_or_default()
             }
             _ => "".into(),
+        })
+    };
+
+    let seller_id = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(selected_item) => {
+                selected_item.owner_id.clone().unwrap_or_default()
+            }
+            _ => Default::default(),
         })
     };
 
@@ -536,7 +548,20 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </span>
                 <ItemDetails selected_item show_affixes=true />
                 <div class="flex justify-between items-center text-xs xl:text-sm text-gray-400 p-2">
-                    <span>"Listed by: "{move || seller_name()}</span>
+                    <span>
+                        "Listed by: "
+                        <span
+                            class="cursor-pointer"
+                            on:click=move |_| {
+                                chat_context.opened.set(true);
+                                chat_context.minimized.set(false);
+                                chat_context.users_map.write().insert(seller_id(), seller_name());
+                                chat_context.write_channel.set(ChatChannel::Whisper(seller_id()));
+                            }
+                        >
+                            {move || seller_name()}
+                        </span>
+                    </span>
                     <span>{move || listed_at().map(format_datetime)}</span>
                 </div>
             </div>
@@ -826,7 +851,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </span>
                 <ItemDetails selected_item show_affixes=true />
                 <div class="flex justify-between items-center text-sm text-gray-400 p-2">
-                    <span>"Listed by: "{move || seller_name()}</span>
+                    <span>"Listed by: " {move || seller_name()}</span>
                     <span>{move || listed_at().map(format_datetime)}</span>
                 </div>
             </div>

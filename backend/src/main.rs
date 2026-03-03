@@ -4,7 +4,6 @@ use axum::{
     Router,
     routing::{any, get},
 };
-use backend_shared::profanities_checker::ProfanitiesChecker;
 use http::{
     HeaderValue, Method,
     header::{AUTHORIZATION, CONTENT_TYPE},
@@ -15,6 +14,8 @@ use tower_http::{
     trace::{DefaultMakeSpan, TraceLayer},
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+use backend_shared::profanities_checker::ProfanitiesChecker;
 
 use backend::{
     app_state::{AppSettings, AppState},

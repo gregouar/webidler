@@ -8,6 +8,7 @@ on:
         "docker-compose.yml",
         "backend/**",
         "shared/**",
+        "shared_chat/**",
         "nginx/**",
         "data/**",
         "migrations/**",
