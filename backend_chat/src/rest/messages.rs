@@ -45,7 +45,7 @@ async fn post_private_message(
     );
 
     for session_id in user_sessions.iter() {
-        if let Some(reply_queue) = chat_state.reply_map.get(&session_id) {
+        if let Some(reply_queue) = chat_state.reply_map.get(session_id) {
             let _ = reply_queue.send(server_chat_message.clone()).await;
         }
     }

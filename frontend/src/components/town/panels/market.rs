@@ -462,7 +462,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let seller_id = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(selected_item) => {
-                selected_item.owner_id.clone().unwrap_or_default()
+                selected_item.owner_id.unwrap_or_default()
             }
             _ => Default::default(),
         })

@@ -193,7 +193,6 @@ pub fn DynamicTooltipTarget(
     };
 
     Effect::new({
-        let hide_tooltip = hide_tooltip.clone();
         move || {
             if is_outside.get() {
                 if is_displayed.get_untracked() {

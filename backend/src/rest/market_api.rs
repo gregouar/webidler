@@ -139,8 +139,8 @@ pub async fn post_buy_market_item(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    if character.user_id != item_bought.user_id {
-        if let Err(err) = chat_integration
+    if character.user_id != item_bought.user_id
+        && let Err(err) = chat_integration
             .send_private_message(
                 item_bought.user_id,
                 format!(
@@ -153,7 +153,6 @@ pub async fn post_buy_market_item(
         {
             tracing::warn!("failed to send chat message: {err}");
         }
-    }
 
     inventory_controller::store_item_to_bag(&mut inventory, item_bought.item_specs)?;
 

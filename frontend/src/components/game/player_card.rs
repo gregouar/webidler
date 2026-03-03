@@ -667,7 +667,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     });
 
     let tooltip = {
-        let skill_specs = skill_specs.clone();
         move || {
             view! {
                 {skill_specs
