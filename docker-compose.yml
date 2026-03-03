@@ -60,7 +60,7 @@ services:
       retries: 5
     environment:
       CORS_ORIGINS: https://gregouar.github.io,https://html-classic.itch.zone
-      BACKEND_URL: http://backend
+      BACKEND_URL: http://backend:4200
       RUST_LOG: INFO
     networks:
       - backend_net

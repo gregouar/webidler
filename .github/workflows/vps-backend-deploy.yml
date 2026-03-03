@@ -105,6 +105,15 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            docker run --rm --network container:backend_chat curlimages/curl:latest \
+            -X POST http://backend_chat:4242/message \
+            -H "Content-Type: application/json" \
+            -d '{
+              "channel": "System",
+              "content": "The game servers are currently restarting due to an update. If you encounter errors or experience connection issues, please refresh your browser and try again shortly.",
+              "linked_item": null
+            }'
+
             echo "POSTGRES_PASSWORD=${{ secrets.VPS_DB_PASSWORD }}" > /webidler/tmp/.env
             echo "TURNSTILE_SECRET=${{ secrets.TURNSTILE_SECRET }}" >> /webidler/tmp/.env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /webidler/tmp/.env
