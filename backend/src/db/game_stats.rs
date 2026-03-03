@@ -78,7 +78,7 @@ async fn insert_game_stats<'c>(
             AND gs.data_version = $5
             AND gs.area_level >= $3
         )
-        AS "is_highscore:bool"
+        AS "is_highscore!: bool"
         "#,
         character_id,
         area_id,
