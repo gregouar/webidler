@@ -71,17 +71,14 @@ async fn insert_game_stats<'c>(
              stats_data, items_data, passives_data, skills_data)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING
-            area_level >
-            COALESCE(
-                (
-                    SELECT MAX(gs.area_level)
-                    FROM game_stats gs
-                    WHERE gs.area_id = $2
-                      AND gs.data_version = $5
-                      AND gs.rowid != game_stats.rowid
-                ),
-                -1
-            ) AS is_highscore
+        1 = (
+        SELECT COUNT(*)
+        FROM game_stats gs
+        WHERE gs.area_id = $2
+            AND gs.data_version = $5
+            AND gs.area_level >= $3
+        )
+        AS is_highscore
         "#,
         character_id,
         area_id,
