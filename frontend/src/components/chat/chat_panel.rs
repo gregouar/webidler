@@ -14,10 +14,7 @@ use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     shared::tooltips::{ItemTooltip, item_tooltip},
-    ui::{
-        checkbox::Checkbox,
-        tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
-    },
+    ui::{checkbox::Checkbox, tooltip::DynamicTooltipTarget},
 };
 
 #[component]
@@ -305,7 +302,17 @@ pub fn ChatPanel() -> impl IntoView {
                                                         .linked_item
                                                         .get()
                                                         .map(|item_specs| {
-                                                            view! { <ChatItem item_specs /> }
+                                                            view! {
+                                                                <span class="flex px-3 gap-1">
+                                                                    <button
+                                                                        class="hover:text-red-400"
+                                                                        on:click=move |_| chat_context.linked_item.set(None)
+                                                                    >
+                                                                        "✕"
+                                                                    </button>
+                                                                    <ChatItem item_specs />
+                                                                </span>
+                                                            }
                                                         })}
                                                     <textarea
                                                         class=" resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
@@ -374,43 +381,27 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
 
 #[component]
 fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    let tooltip_context: DynamicTooltipContext = expect_context();
-
-    let show_tooltip = {
+    let tooltip = {
         let item_specs = item_specs.clone();
         move || {
             let item_specs = item_specs.clone();
-            tooltip_context.set_content(
-                move || {
-                    let item_specs = item_specs.clone();
-                    // TODO: Compare? Max Item Level?
-                    view! {
-                        <div class="flex gap-1 xl:gap-2">
-                            <ItemTooltip item_specs />
-                        </div>
-                    }
-                    .into_any()
-                },
-                DynamicTooltipPosition::Auto,
-            );
+            // TODO: Compare? Max Item Level?
+            view! {
+                <div class="flex gap-1 xl:gap-2">
+                    <ItemTooltip item_specs />
+                </div>
+            }
+            .into_any()
         }
     };
 
-    let hide_tooltip = { move || tooltip_context.hide() };
-
     view! {
-        <span
-            class=format!(
+        <DynamicTooltipTarget content=tooltip>
+            <span class=format!(
                 "font-bold {}",
                 item_tooltip::name_color_rarity(item_specs.modifiers.rarity),
-            )
-            on:mouseenter=move |_| show_tooltip()
-            on:mouseleave=move |_| hide_tooltip()
-        >
-            "<"
-            {item_specs.modifiers.name.clone()}
-            "> "
-        </span>
+            )>"<" {item_specs.modifiers.name.clone()} "> "</span>
+        </DynamicTooltipTarget>
     }
 }
 

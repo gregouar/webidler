@@ -1,7 +1,14 @@
 use std::sync::Arc;
 
-use leptos::{ev, html::Div, portal::Portal, prelude::*, web_sys};
-use leptos_use::{use_mouse, use_window_size};
+use leptos::{
+    ev,
+    html::{Div, Span},
+    leptos_dom::logging::console_log,
+    portal::Portal,
+    prelude::*,
+    web_sys,
+};
+use leptos_use::{UseMouseInElementReturn, use_mouse, use_mouse_in_element, use_window_size};
 
 #[derive(Clone, Debug, Copy)]
 pub struct DynamicTooltipContext {
@@ -155,6 +162,93 @@ pub fn DynamicTooltip() -> impl IntoView {
                 }
             }}
         </Show>
+    }
+}
+
+#[component]
+pub fn DynamicTooltipTarget(
+    children: ChildrenFn,
+    content: impl Fn() -> AnyView + Send + Sync + Clone + 'static,
+    #[prop(default = DynamicTooltipPosition::Auto)] position: DynamicTooltipPosition,
+) -> impl IntoView {
+    let tooltip_context: DynamicTooltipContext = expect_context();
+    let node_ref = NodeRef::<Span>::new();
+
+    let is_displayed = RwSignal::new(false);
+
+    let UseMouseInElementReturn { is_outside, .. } = use_mouse_in_element(node_ref);
+
+    let show_tooltip = {
+        let content = content.clone();
+        move || {
+            is_displayed.set(true);
+            tooltip_context.set_content(content.clone(), position);
+        }
+    };
+
+    let hide_tooltip = {
+        move || {
+            tooltip_context.hide();
+            is_displayed.set(false);
+        }
+    };
+
+    Effect::new({
+        let hide_tooltip = hide_tooltip.clone();
+        move || {
+            console_log(&format!("{}", is_outside.get()));
+            if is_outside.get() {
+                if is_displayed.get_untracked() {
+                    hide_tooltip();
+                }
+            } else {
+                // if !is_displayed.get_untracked() {
+                //     show_tooltip();
+                // }
+            }
+        }
+    });
+
+    // let mouse = use_mouse();
+
+    // Effect::new({
+    //     let show_tooltip = show_tooltip.clone();
+    //     move |_| {
+    //         if let Some(el) = node_ref.get() {
+    //             let document = window().document().unwrap();
+
+    //             if let Some(top) =
+    //                 document.element_from_point(mouse.x.get() as f32, mouse.y.get() as f32)
+    //             {
+    //                 let is_top = el.contains(Some(&top)) || el.is_same_node(Some(&top));
+
+    //                 if is_top {
+    //                     show_tooltip();
+    //                 } else {
+    //                     hide_tooltip();
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
+
+    let children = StoredValue::new(children);
+    view! {
+        <span
+            node_ref=node_ref
+            on:touchstart={
+                let show_tooltip = show_tooltip.clone();
+                move |_| { show_tooltip() }
+            }
+            on:contextmenu=move |ev| {
+                ev.prevent_default();
+            }
+            on:mouseenter=move |_| show_tooltip()
+            on:mouseleave=move |_| hide_tooltip()
+            on:click=move |_| hide_tooltip()
+        >
+            {children.read_value()()}
+        </span>
     }
 }
 
