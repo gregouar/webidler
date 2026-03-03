@@ -80,7 +80,7 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
 
         Ok(Self {
             base_item_id: value.modifiers.base_item_id.clone(),
-            item_name: value.base.name.clone(),
+            item_name: format!("{} {}", value.modifiers.name, value.base.name),
             item_rarity: serde_plain::to_string(&value.modifiers.rarity)?,
             item_level: value.required_level as i32,
             item_armor: value

@@ -206,13 +206,20 @@ fn EquippedItemEquippedSlot(
     show_menu: RwSignal<bool>,
 ) -> impl IntoView {
     let item_ref = NodeRef::new();
+    let chat_context: ChatContext = expect_context();
 
     let is_being_unequipped = RwSignal::new(false);
     view! {
         <div node_ref=item_ref class="relative w-full h-full overflow-visible">
             <ItemCard
                 item_specs=item_specs.clone()
-                on:click=move |_| show_menu.set(true)
+                on:click=move |_| {
+                    if events_context.key_pressed(Key::Shift) {
+                        chat_context.linked_item.set(Some(item_specs.clone()));
+                    } else {
+                        show_menu.set(true);
+                    }
+                }
                 tooltip_position=DynamicTooltipPosition::Auto
                 max_item_level=inventory.max_item_level
             />
