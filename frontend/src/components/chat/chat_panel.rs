@@ -222,7 +222,7 @@ pub fn ChatPanel() -> impl IntoView {
                     if chat_context.minimized.get() {
                         view! {
                             <div
-                                class="px-4 py-2 bg-zinc-900/70 text-[13px] text-gray-400 truncate cursor-pointer"
+                                class="px-4 py-2 bg-zinc-900/70 text-[13px] text-gray-400 text-ellipsis cursor-pointer"
                                 on:click=move |_| chat_context.minimized.set(false)
                             >
                                 {move || {

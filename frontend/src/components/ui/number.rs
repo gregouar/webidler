@@ -6,15 +6,17 @@ use leptos::{prelude::*, wasm_bindgen::JsValue, web_sys::js_sys::Date};
 use crate::components::settings::SettingsContext;
 
 #[component]
-pub fn Number(value: Signal<f64>) -> impl IntoView {
+pub fn Number(#[prop(into)] value: Signal<f64>) -> impl IntoView {
     let settings_context: SettingsContext = expect_context();
     view! {
-        {move || {
-            format_number_without_context(
-                value.get(),
-                settings_context.read_settings().scientific_notation,
-            )
-        }}
+        <span>
+            {move || {
+                format_number_without_context(
+                    value.get(),
+                    settings_context.read_settings().scientific_notation,
+                )
+            }}
+        </span>
     }
 }
 

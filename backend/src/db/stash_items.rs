@@ -135,6 +135,12 @@ pub async fn store_item<'c>(
             .aggregate_effects(AffixEffectScope::Global)
             .0
             .into_iter()
+            .chain(
+                item.modifiers
+                    .aggregate_effects(AffixEffectScope::Local)
+                    .0
+                    .into_iter(),
+            )
             .filter_map(|((stat_type, modifier, _), stat_value)| {
                 Some((
                     serde_json::to_value(stat_type).ok()?,
