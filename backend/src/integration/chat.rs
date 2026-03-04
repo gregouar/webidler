@@ -3,7 +3,7 @@ use std::{env, sync::Arc};
 use shared::data::item::ItemSpecs;
 use shared_chat::{
     messages::client::ClientPostMessage,
-    types::{ChatChannel, ChatContent, UserId},
+    types::{ChatChannel, ChatContent, LinkedItemBytes, UserId},
 };
 
 #[derive(Clone)]
@@ -30,7 +30,9 @@ impl ChatIntegration {
             .json(&ClientPostMessage {
                 channel: ChatChannel::System,
                 content: ChatContent::try_new(content)?,
-                linked_item: linked_item.and_then(|item_specs| rmp_serde::to_vec(item_specs).ok()),
+                linked_item: linked_item
+                    .and_then(|item_specs| rmp_serde::to_vec(item_specs).ok())
+                    .and_then(|serialized_item| LinkedItemBytes::try_new(serialized_item).ok()),
             })
             .send()
             .await?;
@@ -54,7 +56,9 @@ impl ChatIntegration {
             .json(&ClientPostMessage {
                 channel: ChatChannel::System,
                 content: ChatContent::try_new(content)?,
-                linked_item: linked_item.and_then(|item_specs| rmp_serde::to_vec(item_specs).ok()),
+                linked_item: linked_item
+                    .and_then(|item_specs| rmp_serde::to_vec(item_specs).ok())
+                    .and_then(|serialized_item| LinkedItemBytes::try_new(serialized_item).ok()),
             })
             .send()
             .await?;

@@ -99,7 +99,7 @@ pub fn ChatPanel() -> impl IntoView {
 
     let send_message = move || {
         let content = input_value.get();
-        if content.trim().is_empty() {
+        if content.trim().is_empty() && chat_context.linked_item.read().is_none() {
             return;
         }
 
@@ -382,7 +382,7 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
             <span class="text-gray-500">": "</span>
             {msg
                 .linked_item
-                .and_then(|item_data| MsgpackSerdeCodec::decode(&item_data).ok())
+                .and_then(|item_data| MsgpackSerdeCodec::decode(&item_data.into_inner()).ok())
                 .map(|item_specs: ItemSpecs| {
                     view! { <ChatItem item_specs=Arc::new(item_specs) /> }
                 })}

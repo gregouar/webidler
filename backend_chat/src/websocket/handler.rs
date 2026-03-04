@@ -40,7 +40,11 @@ pub async fn handler(
     };
     tracing::info!("`{user_agent}` at {addr} connected.");
 
-    ws.on_upgrade(move |socket| handle_socket(socket, addr, app_state))
+    ws.max_frame_size(8192)
+        .max_message_size(8192)
+        .write_buffer_size(8192)
+        .max_write_buffer_size(16384)
+        .on_upgrade(move |socket| handle_socket(socket, addr, app_state))
 }
 
 async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState) {

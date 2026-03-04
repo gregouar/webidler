@@ -18,7 +18,7 @@ use shared_chat::{
         server::{ErrorType, ServerChatMessage},
     },
     ring_buffer::RingBuffer,
-    types::{ChatChannel, ChatContent, ChatMessage, UserId},
+    types::{ChatChannel, ChatContent, ChatMessage, LinkedItemBytes, UserId},
 };
 
 use crate::components::{auth::AuthContext, ui::toast::*};
@@ -136,7 +136,8 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
                     linked_item: linked_item
                         .read_untracked()
                         .as_ref()
-                        .and_then(|linked_item| MsgpackSerdeCodec::encode(linked_item).ok()),
+                        .and_then(|linked_item| MsgpackSerdeCodec::encode(linked_item).ok())
+                        .and_then(|serialized_item| LinkedItemBytes::try_new(serialized_item).ok()),
                 }
                 .into(),
             );
@@ -148,7 +149,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         user_id: RwSignal::new(None),
         send,
         users_map: Default::default(),
-        messages: RwSignal::new(RingBuffer::new(20)),
+        messages: RwSignal::new(RingBuffer::new(100)),
         // TODO: Store in storage
         minimized: RwSignal::new(true),
         opened: RwSignal::new(true),

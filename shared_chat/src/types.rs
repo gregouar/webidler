@@ -3,6 +3,7 @@ use nutype::nutype;
 use serde::{Deserialize, Serialize};
 
 pub type UserId = uuid::Uuid;
+const MAX_LINKED_ITEM_SIZE: usize = 4096;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Hash)]
 pub enum ChatChannel {
@@ -21,12 +22,12 @@ pub struct ChatMessage {
     pub username: Option<String>,
 
     pub content: ChatContent,
-    pub linked_item: Option<Vec<u8>>,
+    pub linked_item: Option<LinkedItemBytes>,
 }
 
 #[nutype(
     sanitize(with=strip_control_chars),
-    validate(not_empty, len_char_max = 200),
+    validate(len_char_max = 200),
     default="***",
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref, Default)
 )]
@@ -38,3 +39,11 @@ pub fn strip_control_chars(input: String) -> String {
         .filter(|c| !c.is_control() || *c == '\n')
         .collect()
 }
+
+#[nutype(
+    validate(
+        predicate = |bytes: &Vec<u8>| bytes.len() <= MAX_LINKED_ITEM_SIZE
+    ),
+    derive(Serialize, Deserialize, Debug, Clone)
+)]
+pub struct LinkedItemBytes(Vec<u8>);
