@@ -156,6 +156,7 @@ fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
     (rng::random_range(0..=level.saturating_sub(min_item_level)).unwrap_or_default() as f32
         * MAX_ITEM_QUALITY_PER_LEVEL)
         .min(MAX_ITEM_QUALITY)
+        .round()
 }
 
 fn roll_base_item(

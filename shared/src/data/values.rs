@@ -86,6 +86,10 @@ macro_rules! bounded_value {
             fn is_negative(&self) -> bool {
                 self.0 < 0.0
             }
+
+            fn round(&self) -> Self {
+                Self::new(self.0.round() as $inner)
+            }
         }
     };
 }
@@ -271,5 +275,13 @@ where
 
     fn is_negative(&self) -> bool {
         self.value.is_negative()
+    }
+
+    fn round(&self) -> Self {
+        Self {
+            value: self.value.round(),
+            min: self.min,
+            max: self.max,
+        }
     }
 }

@@ -1,5 +1,5 @@
 use codee::{Encoder, binary::MsgpackSerdeCodec};
-use leptos::prelude::*;
+use leptos::{leptos_dom::logging::console_log, prelude::*};
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, use_websocket_with_options,
@@ -138,13 +138,15 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
                             let mut item_specs = (**linked_item).clone();
                             item_specs.signature = Default::default();
 
-                            Some((
-                                LinkedItemBytes::try_new(
-                                    MsgpackSerdeCodec::encode(&item_specs).ok()?,
-                                )
-                                .ok()?,
-                                linked_item.signature.clone(),
-                            ))
+                            let serialized_item = LinkedItemBytes::try_new(
+                                MsgpackSerdeCodec::encode(&item_specs).ok()?,
+                            )
+                            .ok()?;
+
+                            console_log(&format!("{:?}", serialized_item));
+                            console_log(&format!("{:?}", linked_item.signature));
+
+                            Some((serialized_item, linked_item.signature.clone()))
                         },
                     ),
                 }

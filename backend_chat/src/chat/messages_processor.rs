@@ -213,6 +213,7 @@ fn verify_linked_item(
     linked_item
         .as_ref()
         .map(|linked_item| {
+            tracing::warn!("{:?}", signature::compute_hmac(linked_item.as_ref(), key));
             signature::verify_hmac(
                 linked_item.as_ref(),
                 &item_signature.unwrap_or_default(),
