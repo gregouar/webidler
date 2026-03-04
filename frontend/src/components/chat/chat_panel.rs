@@ -14,7 +14,7 @@ use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     shared::tooltips::{ItemTooltip, item_tooltip},
-    ui::{checkbox::Checkbox, tooltip::DynamicTooltipTarget},
+    ui::{checkbox::Checkbox, number::format_datetime, tooltip::DynamicTooltipTarget},
 };
 
 #[component]
@@ -363,8 +363,12 @@ pub fn ChatPanel() -> impl IntoView {
 #[component]
 fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
+
     view! {
-        <div class="text-[13px] leading-snug">
+        <div
+            class="text-[13px] leading-snug"
+            title=format!("Sent at {}", format_datetime(msg.sent_at))
+        >
             <span
                 class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
                 on:click=move |_| {
