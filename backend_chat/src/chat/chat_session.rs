@@ -175,6 +175,7 @@ impl ChatSession {
     }
 
     async fn handle_chat_message(&self, msg: ClientPostMessage) -> Result<()> {
+        let (linked_item, item_signature) = msg.linked_item.unzip();
         self.chat_state
             .inbound_tx
             .send((
@@ -184,7 +185,8 @@ impl ChatSession {
                     user_id: Some(self.user.user_id),
                     username: Some(self.user.username.clone()),
                     content: msg.content,
-                    linked_item: msg.linked_item,
+                    linked_item,
+                    item_signature,
                     sent_at: Utc::now(),
                 },
             ))

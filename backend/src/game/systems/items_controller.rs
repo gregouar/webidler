@@ -1,5 +1,6 @@
 use std::vec;
 
+use backend_shared::signature::{self, HmacKey};
 use shared::data::{
     chance::{Chance, ChanceRange},
     character_status::StatusSpecs,
@@ -24,21 +25,29 @@ pub fn init_item_specs_from_store(
     item_modifiers: ItemModifiers,
 ) -> Option<ItemSpecs> {
     items_store
+        .content
         .get(&item_modifiers.base_item_id)
-        .map(|base| create_item_specs(base.clone(), item_modifiers, true))
+        .map(|base| {
+            create_item_specs(
+                base.clone(),
+                item_modifiers,
+                true,
+                &items_store.signature_key,
+            )
+        })
 }
 
-pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: bool) -> ItemSpecs {
+pub fn create_item_specs(
+    base: ItemBase,
+    modifiers: ItemModifiers,
+    old_game: bool,
+    signature_key: &HmacKey,
+) -> ItemSpecs {
     let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
-
-    // effects.sort_by_key(|e| match e.modifier {
-    //     Modifier::Flat => 0,
-    //     Modifier::Multiplier => 1,
-    // });
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
 
-    ItemSpecs {
+    let mut item_specs = ItemSpecs {
         required_level: base
             .min_area_level
             .max(
@@ -59,7 +68,14 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers, old_game: boo
         base,
         modifiers,
         old_game,
+        signature: Default::default(),
+    };
+
+    if let Ok(serialized_item_specs) = rmp_serde::to_vec(&item_specs) {
+        item_specs.signature = signature::compute_hmac(&serialized_item_specs, signature_key);
     }
+
+    item_specs
 }
 
 fn compute_weapon_specs(

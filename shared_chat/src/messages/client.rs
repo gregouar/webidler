@@ -35,5 +35,5 @@ pub struct ClientConnectMessage {
 pub struct ClientPostMessage {
     pub channel: ChatChannel,
     pub content: ChatContent,
-    pub linked_item: Option<LinkedItemBytes>,
+    pub linked_item: Option<(LinkedItemBytes, [u8; 32])>,
 }

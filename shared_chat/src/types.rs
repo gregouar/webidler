@@ -23,6 +23,9 @@ pub struct ChatMessage {
 
     pub content: ChatContent,
     pub linked_item: Option<LinkedItemBytes>,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub item_signature: Option<[u8; 32]>,
 }
 
 #[nutype(
@@ -44,6 +47,6 @@ pub fn strip_control_chars(input: String) -> String {
     validate(
         predicate = |bytes: &Vec<u8>| bytes.len() <= MAX_LINKED_ITEM_SIZE
     ),
-    derive(Serialize, Deserialize, Debug, Clone)
+    derive(Serialize, Deserialize, Debug, Clone, AsRef)
 )]
 pub struct LinkedItemBytes(Vec<u8>);

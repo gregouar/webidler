@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
@@ -17,6 +17,8 @@ use super::{
     item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
     stat_effect::{DamageMap, EffectsMap},
 };
+
+pub type ItemSignature = [u8; 32];
 
 #[derive(
     Serialize,
@@ -41,7 +43,9 @@ pub enum ItemRarity {
     Unique,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter, PartialOrd, Ord,
+)]
 pub enum ItemSlot {
     Accessory,
     Helmet,
@@ -91,7 +95,9 @@ impl From<ItemSlot> for usize {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter, PartialOrd, Ord,
+)]
 // TODO: add others
 pub enum ItemCategory {
     // Major categories:
@@ -129,8 +135,8 @@ pub struct ItemBase {
     #[serde(default)]
     pub slot: Option<ItemSlot>,
     #[serde(default)]
-    pub extra_slots: HashSet<ItemSlot>,
-    pub categories: HashSet<ItemCategory>,
+    pub extra_slots: BTreeSet<ItemSlot>,
+    pub categories: BTreeSet<ItemCategory>,
 
     #[serde(default)]
     pub min_area_level: AreaLevel,
@@ -181,6 +187,9 @@ pub struct ItemSpecs {
 
     #[serde(default)]
     pub required_level: AreaLevel,
+
+    #[serde(default)]
+    pub signature: ItemSignature,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

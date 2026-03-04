@@ -133,11 +133,20 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
                 &ClientPostMessage {
                     channel: write_channel.get_untracked(),
                     content,
-                    linked_item: linked_item
-                        .read_untracked()
-                        .as_ref()
-                        .and_then(|linked_item| MsgpackSerdeCodec::encode(linked_item).ok())
-                        .and_then(|serialized_item| LinkedItemBytes::try_new(serialized_item).ok()),
+                    linked_item: linked_item.read_untracked().as_ref().and_then(
+                        |linked_item: &Arc<ItemSpecs>| {
+                            let mut item_specs = (**linked_item).clone();
+                            item_specs.signature = Default::default();
+
+                            Some((
+                                LinkedItemBytes::try_new(
+                                    MsgpackSerdeCodec::encode(&item_specs).ok()?,
+                                )
+                                .ok()?,
+                                linked_item.signature.clone(),
+                            ))
+                        },
+                    ),
                 }
                 .into(),
             );

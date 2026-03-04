@@ -1,5 +1,6 @@
-use std::collections::HashSet;
+use std::collections::{BTreeSet, HashSet};
 
+use backend_shared::signature::HmacSignature;
 use shared::{
     constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
     data::{
@@ -76,6 +77,7 @@ pub fn generate_loot(
             affixes_table,
             adjectives_table,
             nouns_table,
+            &items_store.signature_key,
         )
     })
 }
@@ -101,6 +103,7 @@ pub fn roll_item(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    signature_key: &HmacSignature,
 ) -> ItemSpecs {
     let quality = if base.ignore_quality {
         0.0
@@ -146,7 +149,7 @@ pub fn roll_item(
         );
     }
 
-    items_controller::create_item_specs(base, modifiers, false)
+    items_controller::create_item_specs(base, modifiers, false, signature_key)
 }
 
 fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
@@ -167,7 +170,7 @@ fn roll_base_item(
         .entries
         .iter()
         .filter(|l| {
-            let item_specs = items_store.get(&l.item_id);
+            let item_specs = items_store.content.get(&l.item_id);
             area_level
                 >= l.min_area_level.unwrap_or(
                     item_specs
@@ -191,6 +194,7 @@ fn roll_base_item(
             .iter()
             .filter(|l| {
                 items_store
+                    .content
                     .get(&l.item_id)
                     .map(|base| base.rarity == ItemRarity::Unique)
                     .unwrap_or_default()
@@ -207,6 +211,7 @@ fn roll_base_item(
             .into_iter()
             .filter(|l| {
                 items_store
+                    .content
                     .get(&l.item_id)
                     .map(|base| base.rarity != ItemRarity::Unique)
                     .unwrap_or_default()
@@ -220,6 +225,7 @@ fn roll_base_item(
 
     rng::random_weighted_pick(&items_available).and_then(|loot_entry| {
         items_store
+            .content
             .get(&loot_entry.item_id)
             .cloned()
             .map(|item_base| (loot_entry.item_id.clone(), item_base))
@@ -243,7 +249,7 @@ fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
             ItemAffix {
                 name: "Unique".to_string(),
                 family: base_item.name.clone(),
-                tags: HashSet::new(),
+                tags: BTreeSet::new(),
                 affix_type: AffixType::Unique,
                 tier: 1,
                 item_level: base_item.min_area_level,

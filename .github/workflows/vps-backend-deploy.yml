@@ -119,6 +119,7 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /webidler/tmp/.env
             echo "AES_KEY=${{ secrets.AES_KEY }}" >> /webidler/tmp/.env
             echo "HASH_KEY=${{ secrets.HASH_KEY }}" >> /webidler/tmp/.env
+            echo "HMAC_KEY=${{ secrets.HMAC_KEY }}" >> /webidler/tmp/.env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> /webidler/tmp/.env
             echo "DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }}" >> /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar

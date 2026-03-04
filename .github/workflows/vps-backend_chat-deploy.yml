@@ -53,5 +53,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            echo "HMAC_KEY=${{ secrets.HMAC_KEY }}" >> /webidler/tmp/.env
+
             docker load < /webidler/tmp/backend_chat.tar
             docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend_chat

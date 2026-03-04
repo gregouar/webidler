@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap};
 
 use serde::{Deserialize, Serialize};
 use sqlx::{Transaction, types::JsonValue};
@@ -191,7 +191,7 @@ impl From<OldItemModifiers> for ItemModifiers {
 pub struct OldItemAffix {
     pub name: String,
     pub family: String,
-    pub tags: HashSet<AffixTag>,
+    pub tags: BTreeSet<AffixTag>,
 
     pub affix_type: AffixType,
     pub tier: u8,
