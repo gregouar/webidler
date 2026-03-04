@@ -10131,7 +10131,7 @@
           {
             "name": null,
             "icon": "",
-            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 25% of the initial hit's Physical Damage when the target is Hit again.",
+            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 40% of the initial hit's Physical Damage when the target is Hit again.",
             "trigger_id": "open_wound_apply",
             "OnHit": {
               "skill_type": "Attack",
@@ -10153,7 +10153,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.25,
+                "factor": 0.40,
                 "source": {
                   "HitDamage": "Physical"
                 }
