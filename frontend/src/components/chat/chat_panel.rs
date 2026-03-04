@@ -140,6 +140,15 @@ pub fn ChatPanel() -> impl IntoView {
     // });
 
     Effect::new(move || {
+        if chat_context.linked_item.read().is_some()
+            && let Some(text_area) = text_area_ref.get_untracked()
+        {
+            text_area.focus().unwrap();
+            text_area.select();
+        }
+    });
+
+    Effect::new(move || {
         if events_context.key_pressed(Key::Enter) {
             chat_context.opened.set(true);
             chat_context.minimized.set(false);
@@ -152,211 +161,202 @@ pub fn ChatPanel() -> impl IntoView {
 
     // TODO: Split in components
     view! {
-        {move || {
-            if !chat_context.opened.get() {
-                ().into_any()
-            } else {
+        <div
+            class="fixed z-50 select-none text-left"
+            style=move || {
                 let (bottom, left) = position.get();
-                view! {
-                    <div
-                        class="fixed z-50 select-none text-left"
-                        style=format!("bottom:{}px; left:{}px;", bottom, left)
-                        node_ref=panel_ref
-                    >
-                        <div class="w-[420px] bg-zinc-900/80 backdrop-blur border border-zinc-700 text-sm text-gray-200 flex flex-col shadow-xl">
+                format!("bottom:{}px; left:{}px;", bottom, left)
+            }
+            node_ref=panel_ref
 
-                            // Header (drag handle)
-                            <div
-                                class="flex items-center justify-between px-4 py-2 border-b border-zinc-700 bg-zinc-800/80 cursor-move"
-                                on:mousedown=start_drag
-                            >
-                                <div class="flex gap-4 items-center">
-                                    {[ChatChannel::Global, ChatChannel::Trade, ChatChannel::System]
-                                        .into_iter()
-                                        .map(move |channel| {
-                                            view! {
-                                                <Checkbox
-                                                    label=channel_str(channel)
-                                                    on_change=move |value| {
-                                                        if value {
-                                                            chat_context.selected_channels.write().insert(channel);
-                                                        } else {
-                                                            chat_context.selected_channels.write().remove(&channel);
-                                                        }
-                                                    }
-                                                    checked=Signal::derive(move || {
-                                                        chat_context.selected_channels.get().contains(&channel)
-                                                    })
-                                                />
+            class:hidden=move || !chat_context.opened.get()
+        >
+            <div class="w-[420px] bg-zinc-900/80 backdrop-blur border border-zinc-700 text-sm text-gray-200 flex flex-col shadow-xl">
+
+                // Header (drag handle)
+                <div
+                    class="flex items-center justify-between px-4 py-2 border-b border-zinc-700 bg-zinc-800/80 cursor-move"
+                    on:mousedown=start_drag
+                >
+                    <div class="flex gap-4 items-center">
+                        {[ChatChannel::Global, ChatChannel::Trade, ChatChannel::System]
+                            .into_iter()
+                            .map(move |channel| {
+                                view! {
+                                    <Checkbox
+                                        label=channel_str(channel)
+                                        on_change=move |value| {
+                                            if value {
+                                                chat_context.selected_channels.write().insert(channel);
+                                            } else {
+                                                chat_context.selected_channels.write().remove(&channel);
                                             }
-                                        })
-                                        .collect::<Vec<_>>()}
-                                </div>
-
-                                <div class="flex gap-3 text-gray-400">
-                                    <button
-                                        class="hover:text-white"
-                                        on:click=move |_| {
-                                            chat_context.minimized.update(|m| *m = !*m)
                                         }
-                                    >
-                                        {move || {
-                                            if chat_context.minimized.get() { "▼" } else { "—" }
-                                        }}
-                                    </button>
+                                        checked=Signal::derive(move || {
+                                            chat_context.selected_channels.get().contains(&channel)
+                                        })
+                                    />
+                                }
+                            })
+                            .collect::<Vec<_>>()}
+                    </div>
 
-                                    <button
-                                        class="hover:text-red-400"
-                                        on:click=move |_| chat_context.opened.set(false)
-                                    >
-                                        "✕"
-                                    </button>
-                                </div>
+                    <div class="flex gap-3 text-gray-400">
+                        <button
+                            class="hover:text-white"
+                            on:click=move |_| { chat_context.minimized.update(|m| *m = !*m) }
+                        >
+                            {move || { if chat_context.minimized.get() { "▼" } else { "—" } }}
+                        </button>
+
+                        <button
+                            class="hover:text-red-400"
+                            on:click=move |_| chat_context.opened.set(false)
+                        >
+                            "✕"
+                        </button>
+                    </div>
+                </div>
+
+                {move || {
+                    if chat_context.minimized.get() {
+                        view! {
+                            <div
+                                class="px-4 py-2 bg-zinc-900/70 text-[13px] text-gray-400 truncate cursor-pointer"
+                                on:click=move |_| chat_context.minimized.set(false)
+                            >
+                                {move || {
+                                    if let Some(msg) = last_visible_message() {
+                                        view! { <ChatMessageRow msg /> }.into_any()
+                                    } else {
+                                        "No messages".into_any()
+                                    }
+                                }}
+                            </div>
+                        }
+                            .into_any()
+                    } else {
+                        view! {
+                            // Messages
+                            <div
+                                class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
+                                text-wrap wrap-break-word"
+                                node_ref=messages_node
+                            >
+                                <For
+                                    each=filtered_messages
+                                    key=|msg| (msg.sent_at, msg.user_id)
+                                    children=move |msg| {
+                                        view! { <ChatMessageRow msg /> }
+                                    }
+                                />
                             </div>
 
-                            {move || {
-                                if chat_context.minimized.get() {
-                                    view! {
-                                        <div
-                                            class="px-4 py-2 bg-zinc-900/70 text-[13px] text-gray-400 truncate cursor-pointer"
-                                            on:click=move |_| chat_context.minimized.set(false)
+                            // Input
+                            <div class="border-t border-zinc-700 bg-zinc-900/80">
+                                <div class="flex items-stretch">
+
+                                    // Channel selector
+                                    <div class="relative">
+                                        <button
+                                            class="h-full px-3 text-sm border-r border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700/80 flex items-center gap-2"
+                                            on:click=move |_| dropdown_open.update(|o| *o = !*o)
                                         >
-                                            {move || {
-                                                if let Some(msg) = last_visible_message() {
-                                                    view! { <ChatMessageRow msg /> }.into_any()
-                                                } else {
-                                                    "No messages".into_any()
+                                            <span class=move || channel_color(
+                                                chat_context.write_channel.get(),
+                                            )>
+                                                {move || channel_str(chat_context.write_channel.get())}
+                                            </span>
+                                        // <span class="text-gray-500">"▾"</span>
+                                        </button>
+
+                                        {move || {
+                                            if dropdown_open.get() {
+                                                view! {
+                                                    <div class="absolute bottom-full left-0 w-28 bg-zinc-900 border border-zinc-700 shadow-lg text-sm">
+
+                                                        <button
+                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-amber-400"
+                                                            on:click=move |_| {
+                                                                chat_context.write_channel.set(ChatChannel::Global);
+                                                                chat_context
+                                                                    .selected_channels
+                                                                    .write()
+                                                                    .insert(ChatChannel::Global);
+                                                                dropdown_open.set(false);
+                                                            }
+                                                        >
+                                                            {channel_str(ChatChannel::Global)}
+                                                        </button>
+
+                                                        <button
+                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-emerald-400"
+                                                            on:click=move |_| {
+                                                                chat_context.write_channel.set(ChatChannel::Trade);
+                                                                chat_context
+                                                                    .selected_channels
+                                                                    .write()
+                                                                    .insert(ChatChannel::Trade);
+                                                                dropdown_open.set(false);
+                                                            }
+                                                        >
+                                                            {channel_str(ChatChannel::Trade)}
+                                                        </button>
+
+                                                    </div>
                                                 }
-                                            }}
-                                        </div>
-                                    }
-                                        .into_any()
-                                } else {
-                                    view! {
-                                        // Messages
-                                        <div
-                                            class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
-                                            text-wrap wrap-break-word"
-                                            node_ref=messages_node
-                                        >
-                                            <For
-                                                each=filtered_messages
-                                                key=|msg| (msg.sent_at, msg.user_id)
-                                                children=move |msg| {
-                                                    view! { <ChatMessageRow msg /> }
+                                                    .into_any()
+                                            } else {
+                                                ().into_any()
+                                            }
+                                        }}
+                                    </div>
+
+                                    <div class="flex-1 flex flex-col">
+                                        // Textarea
+                                        {chat_context
+                                            .linked_item
+                                            .get()
+                                            .map(|item_specs| {
+                                                view! {
+                                                    <span class="flex px-3 gap-1">
+                                                        <button
+                                                            class="hover:text-red-400"
+                                                            on:click=move |_| chat_context.linked_item.set(None)
+                                                        >
+                                                            "✕"
+                                                        </button>
+                                                        <ChatItem item_specs />
+                                                    </span>
                                                 }
-                                            />
-                                        </div>
+                                            })}
+                                        <textarea
+                                            class=" resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
+                                            rows="2"
+                                            maxlength="200"
+                                            prop:value=move || input_value.get()
+                                            on:input=move |ev| {
+                                                input_value.set(event_target_value(&ev));
+                                            }
+                                            on:keydown=move |ev| {
+                                                if ev.key() == "Enter" && !ev.shift_key() {
+                                                    ev.prevent_default();
+                                                    send_message();
+                                                }
+                                            }
+                                            placeholder="Type message..."
+                                            node_ref=text_area_ref
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                            .into_any()
+                    }
+                }}
 
-                                        // Input
-                                        <div class="border-t border-zinc-700 bg-zinc-900/80">
-                                            <div class="flex items-stretch">
-
-                                                // Channel selector
-                                                <div class="relative">
-                                                    <button
-                                                        class="h-full px-3 text-sm border-r border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700/80 flex items-center gap-2"
-                                                        on:click=move |_| dropdown_open.update(|o| *o = !*o)
-                                                    >
-                                                        <span class=move || channel_color(
-                                                            chat_context.write_channel.get(),
-                                                        )>
-                                                            {move || channel_str(chat_context.write_channel.get())}
-                                                        </span>
-                                                    // <span class="text-gray-500">"▾"</span>
-                                                    </button>
-
-                                                    {move || {
-                                                        if dropdown_open.get() {
-                                                            view! {
-                                                                <div class="absolute bottom-full left-0 w-28 bg-zinc-900 border border-zinc-700 shadow-lg text-sm">
-
-                                                                    <button
-                                                                        class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-amber-400"
-                                                                        on:click=move |_| {
-                                                                            chat_context.write_channel.set(ChatChannel::Global);
-                                                                            chat_context
-                                                                                .selected_channels
-                                                                                .write()
-                                                                                .insert(ChatChannel::Global);
-                                                                            dropdown_open.set(false);
-                                                                        }
-                                                                    >
-                                                                        {channel_str(ChatChannel::Global)}
-                                                                    </button>
-
-                                                                    <button
-                                                                        class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-emerald-400"
-                                                                        on:click=move |_| {
-                                                                            chat_context.write_channel.set(ChatChannel::Trade);
-                                                                            chat_context
-                                                                                .selected_channels
-                                                                                .write()
-                                                                                .insert(ChatChannel::Trade);
-                                                                            dropdown_open.set(false);
-                                                                        }
-                                                                    >
-                                                                        {channel_str(ChatChannel::Trade)}
-                                                                    </button>
-
-                                                                </div>
-                                                            }
-                                                                .into_any()
-                                                        } else {
-                                                            ().into_any()
-                                                        }
-                                                    }}
-                                                </div>
-
-                                                <div class="flex-1 flex flex-col">
-                                                    // Textarea
-                                                    {chat_context
-                                                        .linked_item
-                                                        .get()
-                                                        .map(|item_specs| {
-                                                            view! {
-                                                                <span class="flex px-3 gap-1">
-                                                                    <button
-                                                                        class="hover:text-red-400"
-                                                                        on:click=move |_| chat_context.linked_item.set(None)
-                                                                    >
-                                                                        "✕"
-                                                                    </button>
-                                                                    <ChatItem item_specs />
-                                                                </span>
-                                                            }
-                                                        })}
-                                                    <textarea
-                                                        class=" resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
-                                                        rows="2"
-                                                        maxlength="200"
-                                                        prop:value=move || input_value.get()
-                                                        on:input=move |ev| {
-                                                            input_value.set(event_target_value(&ev));
-                                                        }
-                                                        on:keydown=move |ev| {
-                                                            if ev.key() == "Enter" && !ev.shift_key() {
-                                                                ev.prevent_default();
-                                                                send_message();
-                                                            }
-                                                        }
-                                                        placeholder="Type message..."
-                                                        node_ref=text_area_ref
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                        .into_any()
-                                }
-                            }}
-
-                        </div>
-                    </div>
-                }
-                    .into_any()
-            }
-        }}
+            </div>
+        </div>
     }
 }
 

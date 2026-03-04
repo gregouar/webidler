@@ -83,6 +83,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         <div class="
         max-w-xs p-4 rounded-xl border border-violet-700 ring-2 ring-violet-500 
         shadow-md shadow-violet-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
+        text-center
         ">
             <strong class="text-base xl:text-lg font-bold text-violet-300">
                 <ul class="list-none space-y-1 mb-2">

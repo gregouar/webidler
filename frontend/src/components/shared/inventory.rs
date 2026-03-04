@@ -218,7 +218,7 @@ fn EquippedItemEquippedSlot(
                     let item_specs = item_specs.clone();
                     move |_| {
                         if events_context.key_pressed(Key::Shift) {
-                            chat_context.linked_item.set(Some(item_specs.clone()));
+                            chat_context.link_item(item_specs.clone());
                         } else {
                             show_menu.set(true);
                         }
@@ -515,11 +515,14 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 <ItemCard
                                     item_specs=item_specs.clone()
                                     comparable_item_specs=comparable_item_specs.clone()
-                                    on:click=move |_| {
-                                        if events_context.key_pressed(Key::Shift) {
-                                            chat_context.linked_item.set(Some(item_specs.clone()));
-                                        } else {
-                                            show_menu.set(true);
+                                    on:click={
+                                        let chat_context = chat_context.clone();
+                                        move |_| {
+                                            if events_context.key_pressed(Key::Shift) {
+                                                chat_context.link_item(item_specs.clone());
+                                            } else {
+                                                show_menu.set(true);
+                                            }
                                         }
                                     }
                                     // Ignore if Mobile:

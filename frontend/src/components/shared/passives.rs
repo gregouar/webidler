@@ -447,6 +447,7 @@ pub fn NodeTooltip(
         <div class="
         max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
         shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
+        text-center
         ">
             <NodeTooltipContent node_specs node_level show_upgrade />
         </div>

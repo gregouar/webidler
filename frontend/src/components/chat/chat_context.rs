@@ -41,6 +41,14 @@ pub struct ChatContext {
     pub linked_item: RwSignal<Option<Arc<ItemSpecs>>>,
 }
 
+impl ChatContext {
+    pub fn link_item(&self, item_specs: Arc<ItemSpecs>) {
+        self.linked_item.set(Some(item_specs.clone()));
+        self.opened.set(true);
+        self.minimized.set(false);
+    }
+}
+
 #[component]
 pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     // Websocket
