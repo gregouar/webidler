@@ -31,3 +31,5 @@ Cargo.lock
 
 # Python
 .venv
+
+logs

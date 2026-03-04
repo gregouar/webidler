@@ -14,7 +14,8 @@ use tower_http::{
     cors::CorsLayer,
     trace::{DefaultMakeSpan, TraceLayer},
 };
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tracing_appender::rolling;
+use tracing_subscriber::{Layer, filter::Targets, layer::SubscriberExt, util::SubscriberInitExt};
 
 use backend_chat::{
     app_state::{AppSettings, AppState},
@@ -27,10 +28,24 @@ async fn main() {
     let _ = dotenvy::dotenv();
 
     let default_level = if cfg!(debug_assertions) {
-        format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME"))
+        format!(
+            "{}=debug,tower_http=debug,chat=info",
+            env!("CARGO_CRATE_NAME")
+        )
     } else {
-        format!("{}=info,tower_http=info", env!("CARGO_CRATE_NAME"))
+        format!(
+            "{}=info,tower_http=info,chat=info",
+            env!("CARGO_CRATE_NAME")
+        )
     };
+
+    let chat_file = rolling::daily("logs", "chat.log");
+    let (chat_writer, _guard) = tracing_appender::non_blocking(chat_file);
+
+    let chat_layer = tracing_subscriber::fmt::layer()
+        .json()
+        .with_writer(chat_writer)
+        .with_filter(Targets::new().with_target("chat", tracing::Level::INFO));
 
     tracing_subscriber::registry()
         .with(
@@ -38,6 +53,7 @@ async fn main() {
                 .unwrap_or_else(|_| default_level.into()),
         )
         .with(tracing_subscriber::fmt::layer())
+        .with(chat_layer)
         .init();
 
     let tracer_layer =

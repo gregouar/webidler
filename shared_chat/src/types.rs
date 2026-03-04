@@ -29,7 +29,7 @@ pub struct ChatMessage {
     sanitize(with=strip_control_chars),
     validate(len_char_max = 200),
     default="***",
-    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref, Default)
+    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref, Default, Display)
 )]
 pub struct ChatContent(String);
 

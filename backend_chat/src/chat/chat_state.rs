@@ -12,6 +12,8 @@ use shared_chat::{
     messages::server::ServerChatMessage, ring_buffer::RingBuffer, types::ChatMessage,
 };
 
+use crate::chat::user_moderation::UserModerationState;
+
 #[derive(Debug, Clone)]
 pub struct ChatState {
     pub inbound_tx: mpsc::Sender<(Uuid, ChatMessage)>,
@@ -22,4 +24,6 @@ pub struct ChatState {
     pub usernames_map: Arc<DashMap<String, (UserId, String)>>,
 
     pub history: Arc<Mutex<RingBuffer<Arc<ChatMessage>>>>,
+
+    pub users_moderation: DashMap<UserId, UserModerationState>,
 }

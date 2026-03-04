@@ -1,17 +1,16 @@
 use axum::body::Bytes;
-use backend_shared::{http::users::UserId, profanities_checker::ProfanitiesChecker};
-use dashmap::DashMap;
 use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
 
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use shared_chat::{
     messages::server::{ErrorMessage, ErrorType, ServerChatMessage, ServerWhisperFeedbackMessage},
     ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
 
-use crate::chat::{chat_state::ChatState, user_moderation::UserModerationState};
+use crate::chat::chat_state::ChatState;
 
 pub struct MessagesProcessor {
     inbound_rx: mpsc::Receiver<(Uuid, ChatMessage)>,
@@ -34,6 +33,7 @@ impl MessagesProcessor {
                 users_map: Default::default(),
                 usernames_map: Default::default(),
                 history: Arc::new(Mutex::new(RingBuffer::new(100))),
+                users_moderation: Default::default(),
             },
             profanities_checker,
         }
@@ -44,8 +44,6 @@ impl MessagesProcessor {
     }
 
     pub async fn run(mut self) {
-        let user_states: DashMap<UserId, UserModerationState> = DashMap::new();
-
         while let Some((session_id, msg)) = self.inbound_rx.recv().await {
             if msg.channel == ChatChannel::System && session_id != Uuid::default() {
                 send_direct_error(&self.chat_state, session_id, "cannot send to that channel")
@@ -54,7 +52,8 @@ impl MessagesProcessor {
             }
 
             if let Some(user_id) = msg.user_id {
-                let mut user_moderation = user_states.entry(user_id).or_default();
+                let mut user_moderation =
+                    self.chat_state.users_moderation.entry(user_id).or_default();
 
                 if user_moderation.is_muted() {
                     send_direct_error(&self.chat_state, session_id, "you are muted").await;
@@ -91,8 +90,10 @@ impl MessagesProcessor {
                 };
 
             let content = if self.profanities_checker.contains_profanities(&content) {
+                tracing::warn!(target: "chat", user_id = %msg.user_id.unwrap_or_default(), content = %&content, "moderated message");
                 ChatContent::try_new("***").unwrap_or_default()
             } else {
+                tracing::info!(target: "chat", user_id = %msg.user_id.unwrap_or_default(), content = %&content, "message");
                 content
             };
 
