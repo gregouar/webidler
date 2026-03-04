@@ -2,11 +2,11 @@
   {
     "name": "of Destruction",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 100,
     "effects": [
       {
@@ -22,7 +22,7 @@
         "value": 10
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 20
@@ -32,11 +32,11 @@
   {
     "name": "of Havoc",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 200,
     "effects": [
       {
@@ -52,7 +52,7 @@
         "value": 12
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 40
@@ -62,11 +62,11 @@
   {
     "name": "of Demolition",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 300,
     "effects": [
       {
@@ -82,7 +82,7 @@
         "value": 14
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 60
@@ -92,11 +92,11 @@
   {
     "name": "of Annihilation",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 400,
     "effects": [
       {
@@ -112,7 +112,7 @@
         "value": 16
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 80
@@ -122,11 +122,11 @@
   {
     "name": "of Obliteration",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 500,
     "effects": [
       {
@@ -142,7 +142,7 @@
         "value": 18
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 100
@@ -152,11 +152,11 @@
   {
     "name": "of Rampage",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 600,
     "effects": [
       {
@@ -172,7 +172,7 @@
         "value": 20
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 120
@@ -182,11 +182,11 @@
   {
     "name": "of Ruination",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 700,
     "effects": [
       {
@@ -202,7 +202,7 @@
         "value": 22
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 140
@@ -212,11 +212,11 @@
   {
     "name": "of Devastation",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 800,
     "effects": [
       {
@@ -232,7 +232,7 @@
         "value": 24
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 160
@@ -242,11 +242,11 @@
   {
     "name": "of Extermination",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 500,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 900,
     "effects": [
       {
@@ -262,7 +262,7 @@
         "value": 30
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 200

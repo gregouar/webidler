@@ -2,11 +2,11 @@
   {
     "name": "Dodging",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 100,
     "effects": [
       {
@@ -22,7 +22,7 @@
         "value": 30
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 20
@@ -32,11 +32,11 @@
   {
     "name": "Evasive",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 200,
     "effects": [
       {
@@ -52,7 +52,7 @@
         "value": 25
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 40
@@ -62,11 +62,11 @@
   {
     "name": "Footwork",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 300,
     "effects": [
       {
@@ -82,7 +82,7 @@
         "value": 20
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 60
@@ -92,11 +92,11 @@
   {
     "name": "Agile",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 400,
     "effects": [
       {
@@ -112,7 +112,7 @@
         "value": 15
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 80
@@ -122,11 +122,11 @@
   {
     "name": "Elusive",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 500,
     "effects": [
       {
@@ -142,7 +142,7 @@
         "value": 10
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 100
@@ -152,11 +152,11 @@
   {
     "name": "Fleet",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 600,
     "effects": [
       {
@@ -172,7 +172,7 @@
         "value": 5
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 120
@@ -182,11 +182,11 @@
   {
     "name": "Phasing",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 700,
     "effects": [
       {
@@ -196,7 +196,7 @@
         "value": 25
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 140
@@ -206,11 +206,11 @@
   {
     "name": "Ghosting",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 800,
     "effects": [
       {
@@ -220,7 +220,7 @@
         "value": 28
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 160
@@ -230,11 +230,11 @@
   {
     "name": "Intangible",
     "family": "add_evade",
-    "tags": ["Armor", "Stealth"],
+    "tags": [ "Armor", "Stealth" ],
     "affix_type": "Prefix",
     "tier": 9,
     "weight": 500,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 900,
     "effects": [
       {
@@ -244,7 +244,7 @@
         "value": 30
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 200
