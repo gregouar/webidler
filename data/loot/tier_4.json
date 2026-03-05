@@ -14,7 +14,7 @@
     },
     {
       "item_id": "scale_vest_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "chain_gloves",
@@ -22,7 +22,7 @@
     },
     {
       "item_id": "chain_gloves_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "mail_boots",
@@ -38,7 +38,7 @@
     },
     {
       "item_id": "composite_bow_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "iron_wand",
@@ -50,7 +50,7 @@
     },
     {
       "item_id": "heater_shield_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "engraved_tablet",
@@ -62,7 +62,7 @@
     },
     {
       "item_id": "fur_cloak_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "signet_ring",
@@ -70,7 +70,7 @@
     },
     {
       "item_id": "signet_ring_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "gold_pendant",
