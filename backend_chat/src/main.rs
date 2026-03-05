@@ -39,7 +39,7 @@ async fn main() {
         )
     };
 
-    let chat_file = rolling::daily("logs", "chat.log");
+    let chat_file = rolling::daily("/logs", "chat.log");
     let (chat_writer, _guard) = tracing_appender::non_blocking(chat_file);
 
     let chat_layer = tracing_subscriber::fmt::layer()
