@@ -307,7 +307,7 @@ fn handle_area_completed_event(
             area_state
                 .area_level
                 .saturating_add(game_data.area_specs.power_level)
-                .saturating_add(game_data.area_specs.item_level_modifier),
+                .saturating_add(*game_data.area_specs.item_level_modifier),
         );
 
     let new_max = area_state.area_level > area_state.max_area_level;
@@ -325,7 +325,7 @@ fn handle_area_completed_event(
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
         area_level
-            .saturating_add(game_data.area_specs.item_level_modifier)
+            .saturating_add(*game_data.area_specs.item_level_modifier)
             .saturating_add(game_data.area_specs.power_level),
         is_boss_level,
         new_max, // Only drop unique when new area completed

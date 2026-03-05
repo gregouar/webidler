@@ -3,7 +3,7 @@
     "name": "Cloth Hood",
     "icon": "items/cloth_hood.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 15
     }
@@ -12,7 +12,7 @@
     "name": "Leather Cap",
     "icon": "items/leather_cap.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 30
     },
@@ -23,7 +23,7 @@
     "description": "In the wild, to show your kills is to invite a fight, and to prove you're ready for it.",
     "icon": "items/skullcap.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "rarity": "Unique",
     "armor_specs": {
       "armor": 30
@@ -35,20 +35,20 @@
           "Armor": "Physical"
         },
         "modifier": "Increased",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [50, 50],
+        "value": [ 50, 50 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
@@ -56,7 +56,7 @@
           "Armor": "Poison"
         },
         "modifier": "Flat",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
@@ -64,7 +64,7 @@
           "Armor": "Storm"
         },
         "modifier": "Flat",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       }
     ],
     "min_area_level": 50
@@ -73,7 +73,7 @@
     "name": "Iron Cap",
     "icon": "items/iron_cap.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 45
     },
@@ -84,7 +84,7 @@
     "description": "No spellbook could teach what she learned from her own undoing.",
     "icon": "items/witch_hat.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "rarity": "Unique",
     "armor_specs": {
       "armor": 45
@@ -96,25 +96,25 @@
           "Armor": "Poison"
         },
         "modifier": "Flat",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       },
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Increased",
-        "value": [20, 40]
+        "value": [ 20, 40 ]
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [8, 12]
+        "value": [ 8, 12 ]
       },
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [20, 30]
+        "value": [ 20, 30 ]
       }
     ],
     "triggers": [
@@ -133,7 +133,7 @@
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "SuccessChance": {} },
+                      "stat": { "SuccessChance": { } },
                       "debuff": true
                     }
                   },
@@ -151,7 +151,7 @@
     "name": "Mail Coif",
     "icon": "items/mail_coif.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 60
     },
@@ -161,7 +161,7 @@
     "name": "Nasal Helm",
     "icon": "items/nasal_helm.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 75
     },
@@ -171,7 +171,7 @@
     "name": "Bascinet",
     "icon": "items/bascinet.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 90
     },
@@ -182,7 +182,7 @@
     "description": "What crowns you is not the ocean... but what sleeps beneath it.",
     "icon": "items/treasure_crown.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 90
     },
@@ -193,7 +193,7 @@
         "stat": {
           "StatConverter": {
             "source": {
-              "Damage": {}
+              "Damage": { }
             },
             "stat": {
               "Damage": { "damage_type": "Storm", "min_max": "Max" }
@@ -212,20 +212,20 @@
             "effect_type": { "ApplyStatus": { "status_type": "Stun" } }
           }
         },
-        "modifier": "Increased",
-        "value": [16, 24]
+        "modifier": "More",
+        "value": [ 16, 24 ]
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Storm" } },
         "modifier": "More",
-        "value": [20, 40]
+        "value": [ 40, 80 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Storm" },
         "modifier": "Flat",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       }
     ],
     "min_area_level": 260
@@ -234,7 +234,7 @@
     "name": "Barbute",
     "icon": "items/barbute.webp",
     "slot": "Helmet",
-    "categories": ["Armor", "Helmet"],
+    "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
       "armor": 105
     },

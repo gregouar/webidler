@@ -259,6 +259,24 @@ impl BaseModifiableValue for f32 {
     }
 }
 
+impl BaseModifiableValue for u16 {
+    fn multiply_value(&self, value: f64) -> u16 {
+        self * value as u16
+    }
+
+    fn add_value(&self, value: f64) -> u16 {
+        self + value as u16
+    }
+
+    fn is_negative(&self) -> bool {
+        false
+    }
+
+    fn round(&self) -> u16 {
+        *self
+    }
+}
+
 pub fn compute_more_factor(value: f64) -> f64 {
     if value >= 0.0 {
         value

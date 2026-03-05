@@ -3,7 +3,7 @@
     "name": "Gri-Gri",
     "icon": "items/grigri.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",
@@ -17,7 +17,7 @@
     "name": "Spellbook",
     "icon": "items/spellbook.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",
@@ -33,7 +33,7 @@
     "description": "Each cursed name written in its pages rots faster than flesh should.",
     "icon": "items/vile_codex.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -46,26 +46,26 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Poison" } },
         "modifier": "More",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [3, 5]
+        "value": [ 3, 5 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Poison" },
         "modifier": "Flat",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       }
     ],
     "triggers": [
       {
         "trigger_id": "vile_codex",
         "OnKill": {
-          "conditions": [{ "HasStatus": { "skill_type": "Curse" } }]
+          "conditions": [ { "HasStatus": { "skill_type": "Curse" } } ]
         },
         "target": "Me",
         "skill_type": "Other",
@@ -95,7 +95,7 @@
     "name": "Focus Stone",
     "icon": "items/focus_stone.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",
@@ -110,7 +110,7 @@
     "name": "Engraved Tabled",
     "icon": "items/engraved_tablet.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",
@@ -125,7 +125,7 @@
     "name": "Seer's Lens",
     "icon": "items/seer_lens.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",
@@ -141,7 +141,7 @@
     "description": "Her children drank the poison willingly. The wise died quickly.",
     "icon": "items/treasure_idol.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -154,13 +154,13 @@
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Increased",
-        "value": [12, 16]
+        "value": [ 12, 16 ]
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [8, 12]
+        "value": [ 8, 12 ]
       },
       {
         "scope": "Global",
@@ -170,14 +170,14 @@
           }
         },
         "modifier": "Increased",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
         "stat": {
           "StatConditionalModifier": {
             "stat": { "Damage": { "damage_type": "Poison" } },
-            "conditions": ["LowLife"]
+            "conditions": [ "LowLife" ]
           }
         },
         "modifier": "More",
@@ -243,7 +243,7 @@
                       "modifier": "More"
                     }
                   },
-                  "value": 20,
+                  "value": 30,
                   "cumulate": true
                 }
               ],
@@ -251,18 +251,18 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {}
+                "Damage": { }
               },
               {
-                "StatusPower": {}
+                "StatusPower": { }
               }
             ],
             "conditional_modifiers": [
               {
-                "conditions": ["LowLife"],
+                "conditions": [ "LowLife" ],
                 "effects": [
                   {
-                    "stat": { "StatusDuration": {} },
+                    "stat": { "StatusDuration": { } },
                     "modifier": "More",
                     "value": -1e300
                   }
@@ -282,7 +282,7 @@
     "name": "Ritual Orb",
     "icon": "items/ritual_orb.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",
@@ -298,7 +298,7 @@
     "description": "Zael's gaze weighed the sky and found it wanting.",
     "icon": "items/dragon_eye.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -311,28 +311,28 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Storm" } },
         "modifier": "More",
-        "value": [150, 200],
+        "value": [ 150, 200 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Increased",
-        "value": [60, 80],
+        "value": [ 60, 80 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "CritDamage": null },
         "modifier": "More",
-        "value": [150, 200],
+        "value": [ 150, 200 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
-        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": {} } } },
+        "stat": { "SuccessChance": { "effect_type": { "ApplyStatus": { } } } },
         "modifier": "Increased",
-        "value": [20, 40],
+        "value": [ 20, 40 ],
         "ignore_quality": true
       },
       {
@@ -340,7 +340,7 @@
         "stat": {
           "Lucky": {
             "roll_type": {
-              "Damage": {}
+              "Damage": { }
             }
           }
         },
@@ -355,7 +355,7 @@
     "name": "Grimoire",
     "icon": "items/grimoire.webp",
     "slot": "Shield",
-    "categories": ["Focus"],
+    "categories": [ "Focus" ],
     "affixes": [
       {
         "scope": "Global",

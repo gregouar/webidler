@@ -32,6 +32,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 20
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 4
       }
     ]
   },
@@ -68,6 +74,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 40
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 8
       }
     ]
   },
@@ -104,6 +116,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 60
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 12
       }
     ]
   },
@@ -140,6 +158,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 80
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 16
       }
     ]
   },
@@ -176,6 +200,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 100
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 20
       }
     ]
   },
@@ -212,6 +242,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 120
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 24
       }
     ]
   },
@@ -248,6 +284,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 140
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 28
       }
     ]
   },
@@ -284,6 +326,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 160
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 32
       }
     ]
   },
@@ -320,6 +368,12 @@
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 200
+      },
+      {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 40
       }
     ]
   }

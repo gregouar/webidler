@@ -62,6 +62,7 @@ pub enum StatType {
     Description(String),
     GemsFind,
     ItemRarity,
+    ItemLevel,
     SkillLevel(#[serde(default)] Option<SkillType>),
     Armor(Option<DamageType>),
     DamageResistance {

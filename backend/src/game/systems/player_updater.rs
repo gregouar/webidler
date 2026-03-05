@@ -366,6 +366,7 @@ fn modify_player_specs(
             | StatType::SkillConditionalModifier { .. } => {}
             // Other
             StatType::ItemRarity
+            | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::Description(_)
             | StatType::Description2(_) => {}

@@ -339,7 +339,7 @@ fn GrindingAreaCard(
                     {move || {
                         format!(
                             "Power level: +{}",
-                            area_specs.read().power_level + area_specs.read().item_level_modifier,
+                            area_specs.read().power_level + *area_specs.read().item_level_modifier,
                         )
                     }}
                 </div>
@@ -520,7 +520,7 @@ pub fn StartGrindPanel(
                                             "Power Level Modifier: "
                                             <span class="font-semibold text-white">
                                                 "+"
-                                                {area_specs.power_level + area_specs.item_level_modifier}
+                                                {area_specs.power_level + *area_specs.item_level_modifier}
                                             </span>
                                         </li>
                                     </ul>

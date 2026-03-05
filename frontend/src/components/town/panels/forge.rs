@@ -17,6 +17,7 @@ use crate::components::{
     ui::{
         buttons::MenuButton,
         card::{Card, CardHeader, CardInset, CardTitle},
+        confirm::ConfirmContext,
         menu_panel::MenuPanel,
         toast::*,
     },
@@ -97,12 +98,20 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
 #[component]
 pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
-    let backend = expect_context::<BackendClient>();
-    let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
-    let toaster = expect_context::<Toasts>();
+    let backend: BackendClient = expect_context();
+    let town_context: TownContext = expect_context();
+    let auth_context: AuthContext = expect_context();
+    let toaster: Toasts = expect_context();
+    let confirm_context: ConfirmContext = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
+
+    let item_level = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(item) => item.item_specs.modifiers.level,
+            _ => 0,
+        })
+    };
 
     let do_add_affix = {
         let character_id = town_context.character.read_untracked().character_id;
@@ -161,6 +170,23 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         }
                     }
                 });
+            }
+        }
+    };
+
+    let try_add_affix = {
+        let confirm_context = confirm_context.clone();
+        move |affix_type| {
+            let do_add_affix = Arc::new(move || do_add_affix(affix_type));
+            if town_context.character.read_untracked().max_area_level < item_level() {
+                (confirm_context
+                        .confirm)(
+                        "Your Character Power Level is lower than this item's level. Forging an Affix may make it unusable for your character. Continue?"
+                            .to_string(),
+                        do_add_affix.clone(),
+                    );
+            } else {
+                do_add_affix();
             }
         }
     };
@@ -239,7 +265,10 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
             <div class="flex flex-col gap-1 xl:gap-2">
                 <MenuButton
-                    on:click=move |_| do_add_affix(None)
+                    on:click={
+                        let try_add_affix = try_add_affix.clone();
+                        move |_| try_add_affix(None)
+                    }
                     disabled=Signal::derive({
                         move || affix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
@@ -261,7 +290,10 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     </div>
                 </MenuButton>
                 <MenuButton
-                    on:click=move |_| do_add_affix(Some(AffixType::Prefix))
+                    on:click={
+                        let try_add_affix = try_add_affix.clone();
+                        move |_| try_add_affix(Some(AffixType::Prefix))
+                    }
                     disabled=Signal::derive({
                         move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
@@ -281,7 +313,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     </div>
                 </MenuButton>
                 <MenuButton
-                    on:click=move |_| do_add_affix(Some(AffixType::Suffix))
+                    on:click=move |_| try_add_affix(Some(AffixType::Suffix))
                     disabled=Signal::derive({
                         move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })

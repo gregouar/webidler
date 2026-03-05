@@ -419,7 +419,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
 
     let can_equip = Signal::derive(move || {
         maybe_item
-            .read_untracked()
+            .read()
             .as_ref()
             .map(|item_specs| {
                 inventory
@@ -624,7 +624,7 @@ pub fn BagItemContextMenu(
                     .on_equip
                     .and_then(|on_equip| {
                         can_equip
-                            .get()
+                            .get_untracked()
                             .then(|| {
                                 view! {
                                     <button

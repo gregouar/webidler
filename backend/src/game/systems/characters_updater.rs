@@ -348,6 +348,7 @@ fn compute_character_specs(
             | StatType::SkillTargetModifier { .. } => {}
             // Other
             StatType::ItemRarity
+            | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::Description(_)
             | StatType::Description2(_) => {}

@@ -480,7 +480,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
-        StatType::ItemRarity => "Item Rarity".to_string(),
+        StatType::ItemRarity => "Items Rarity".to_string(),
+        StatType::ItemLevel => "Items Power Level".to_string(),
         StatType::GemsFind => "Gems Find".to_string(),
         StatType::RestoreOnHit {
             restore_type,
@@ -732,7 +733,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             "Adds {} Gems per Champion Kill",
             format_flat_number(value, false)
         ),
-        StatType::ItemRarity => format!("Adds {}% Item Rarity", format_flat_number(value, false)),
+        StatType::ItemRarity => format!("Adds {}% Items Rarity", format_flat_number(value, false)),
+        StatType::ItemLevel => {
+            format!(
+                "+{} Levels to Items Power",
+                format_flat_number(value, false)
+            )
+        }
         StatType::ThreatGain => {
             if value.unwrap_or_default() >= 0.0 {
                 format!("Gain {}% Extra Threat ", format_flat_number(value, false))

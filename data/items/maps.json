@@ -53,6 +53,12 @@
         "value": [ 150, 250 ]
       },
       {
+        "scope": "Global",
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "value": 30
+      },
+      {
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",

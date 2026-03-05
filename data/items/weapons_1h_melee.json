@@ -3,12 +3,12 @@
     "name": "Dagger",
     "icon": "items/dagger.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [2, 4]
+        "Physical": [ 2, 4 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -19,12 +19,12 @@
     "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
     "icon": "items/onions_slicer.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [2, 4]
+        "Physical": [ 2, 4 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -42,7 +42,7 @@
         "scope": "Local",
         "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
-        "value": [8, 10]
+        "value": [ 8, 10 ]
       }
     ]
   },
@@ -50,12 +50,12 @@
     "name": "Shortsword",
     "icon": "items/shortsword.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [4, 7]
+        "Physical": [ 4, 7 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -67,12 +67,12 @@
     "description": "A kind remembrance of a foe you'd rather drink to forget...",
     "icon": "items/broken_trophy.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [4, 7]
+        "Physical": [ 4, 7 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -83,13 +83,13 @@
         "scope": "Local",
         "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
         "modifier": "Flat",
-        "value": [2, 4]
+        "value": [ 2, 4 ]
       },
       {
         "scope": "Local",
         "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
         "modifier": "Flat",
-        "value": [5, 7]
+        "value": [ 5, 7 ]
       },
       {
         "scope": "Local",
@@ -97,7 +97,7 @@
           "CritChance": null
         },
         "modifier": "Flat",
-        "value": [4, 6]
+        "value": [ 4, 6 ]
       }
     ],
     "triggers": [
@@ -141,7 +141,7 @@
         ],
         "modifiers": [
           {
-            "stat": { "Damage": {} },
+            "stat": { "Damage": { } },
             "modifier": "Flat",
             "factor": 0.5,
             "source": { "HitDamage": "Physical" }
@@ -155,12 +155,12 @@
     "name": "Hand Axe",
     "icon": "items/hand_axe.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [6, 10]
+        "Physical": [ 6, 10 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -172,13 +172,13 @@
     "description": "Its edge drips with the venom of a thousand silenced hearts.",
     "icon": "items/hand_axe_spider.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "rarity": "Unique",
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [6, 10]
+        "Physical": [ 6, 10 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -216,7 +216,7 @@
           }
         },
         "modifier": "Increased",
-        "value": [-100, -100],
+        "value": [ -100, -100 ],
         "ignore_quality": true
       },
       {
@@ -227,7 +227,7 @@
           }
         },
         "modifier": "Increased",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       },
       {
         "scope": "Global",
@@ -235,7 +235,7 @@
           "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [1, 2]
+        "value": [ 1, 2 ]
       },
       {
         "scope": "Global",
@@ -245,7 +245,7 @@
           }
         },
         "modifier": "Increased",
-        "value": [10, 20]
+        "value": [ 10, 20 ]
       },
       {
         "scope": "Global",
@@ -253,7 +253,7 @@
           "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [3, 5]
+        "value": [ 3, 5 ]
       }
     ],
     "min_area_level": 100
@@ -262,12 +262,12 @@
     "name": "Militia Sword",
     "icon": "items/longsword.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [8, 13]
+        "Physical": [ 8, 13 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -278,12 +278,12 @@
     "name": "Spiked Mace",
     "icon": "items/spiked_mace.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [10, 16]
+        "Physical": [ 10, 16 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -294,12 +294,12 @@
     "name": "Sabre",
     "icon": "items/sabre.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [12, 19]
+        "Physical": [ 12, 19 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -311,12 +311,12 @@
     "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
     "icon": "items/treasure_cutlass.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [12, 19]
+        "Physical": [ 12, 19 ]
       },
       "crit_chance": 5,
       "crit_damage": 100
@@ -332,16 +332,16 @@
       },
       {
         "scope": "Local",
-        "stat": { "Damage": {} },
+        "stat": { "Damage": { } },
         "modifier": "Increased",
-        "value": [100, 140],
+        "value": [ 180, 240 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
@@ -357,13 +357,13 @@
           }
         },
         "modifier": "More",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       }
     ],
     "triggers": [
       {
         "trigger_id": "treasure_cutlass",
-        "OnKill": {},
+        "OnKill": { },
         "target": "Me",
         "skill_type": "Curse",
         "effects": [
@@ -409,12 +409,12 @@
     "name": "Battleaxe",
     "icon": "items/battleaxe.webp",
     "slot": "Weapon",
-    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
       "range": "Melee",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [14, 22]
+        "Physical": [ 14, 22 ]
       },
       "crit_chance": 5,
       "crit_damage": 100

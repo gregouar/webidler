@@ -24,7 +24,7 @@ pub struct AreaSpecs {
     #[serde(default)]
     pub required_level: AreaLevel,
     #[serde(default)]
-    pub item_level_modifier: AreaLevel,
+    pub item_level_modifier: ModifiableValue<AreaLevel>,
 
     #[serde(default)]
     pub coming_soon: bool,

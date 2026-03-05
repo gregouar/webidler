@@ -3,14 +3,14 @@
     "name": "Shortbow",
     "icon": "items/shortbow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [3, 7]
+        "Physical": [ 3, 7 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -20,14 +20,14 @@
     "name": "Hunting Bow",
     "icon": "items/longbow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [7, 11]
+        "Physical": [ 7, 11 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -39,14 +39,14 @@
     "description": "It drinks deep of crimson under moonlight, never sated, never silent.",
     "icon": "items/bloodspiller.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [7, 11]
+        "Physical": [ 7, 11 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -59,7 +59,7 @@
           "CritDamage": null
         },
         "modifier": "Increased",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Local",
@@ -67,15 +67,15 @@
           "CritChance": null
         },
         "modifier": "Increased",
-        "value": [15, 30]
+        "value": [ 15, 30 ]
       },
       {
         "scope": "Local",
         "stat": {
-          "Damage": {}
+          "Damage": { }
         },
         "modifier": "Increased",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
@@ -83,14 +83,15 @@
           "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [4, 8]
+        "value": [ 4, 8 ],
+        "ignore_quality": true
       }
     ],
     "triggers": [
       {
         "trigger_id": "bloodspiller",
         "OnKill": {
-          "conditions": [{ "HasStatus": { "DamageOverTime": "Physical" } }]
+          "conditions": [ { "HasStatus": { "DamageOverTime": "Physical" } } ]
         },
         "skill_type": "Other",
         "target": "Me",
@@ -98,7 +99,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "value": [20, 40],
+              "value": [ 20, 40 ],
               "modifier": "Flat"
             }
           }
@@ -111,14 +112,14 @@
     "name": "Decorated Bow",
     "icon": "items/decorated_bow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [11, 15]
+        "Physical": [ 11, 15 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -129,14 +130,14 @@
     "name": "Composite Bow",
     "icon": "items/composite_bow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [15, 19]
+        "Physical": [ 15, 19 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -148,15 +149,15 @@
     "description": "Where lightning meets venom, life itself hesitates.",
     "icon": "items/voltrach_bite.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "rarity": "Unique",
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [15, 19]
+        "Physical": [ 15, 19 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -203,7 +204,7 @@
           }
         },
         "modifier": "Increased",
-        "value": [50, 100]
+        "value": [ 80, 140 ]
       },
       {
         "scope": "Global",
@@ -213,7 +214,7 @@
           }
         },
         "modifier": "More",
-        "value": [180, 240]
+        "value": [ 200, 300 ]
       },
       {
         "scope": "Global",
@@ -221,13 +222,13 @@
           "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [2, 4]
+        "value": [ 2, 4 ]
       }
     ],
     "triggers": [
       {
         "trigger_id": "voltrach_bite",
-        "OnHit": {},
+        "OnHit": { },
         "skill_type": "Other",
         "effects": [
           {
@@ -258,10 +259,10 @@
         "modifiers": [
           {
             "stat": {
-              "Damage": {}
+              "Damage": { }
             },
             "modifier": "Flat",
-            "factor": 0.3,
+            "factor": 0.5,
             "source": {
               "HitDamage": "Storm"
             }
@@ -275,14 +276,14 @@
     "name": "Light Crossbow",
     "icon": "items/light_crossbow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [19, 23]
+        "Physical": [ 19, 23 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -294,14 +295,14 @@
     "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
     "icon": "items/treasure_gun.webp",
     "slot": "Weapon",
-    "extra_slots": [],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [19, 23]
+        "Physical": [ 19, 23 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -325,7 +326,7 @@
           }
         },
         "modifier": "Flat",
-        "value": [10, 13],
+        "value": [ 10, 13 ],
         "ignore_quality": true
       },
       {
@@ -337,16 +338,16 @@
           }
         },
         "modifier": "Flat",
-        "value": [14, 16],
+        "value": [ 14, 16 ],
         "ignore_quality": true
       },
       {
         "scope": "Local",
         "stat": {
-          "Damage": {}
+          "Damage": { }
         },
         "modifier": "Increased",
-        "value": [100, 120],
+        "value": [ 120, 160 ],
         "ignore_quality": true
       },
       {
@@ -355,7 +356,7 @@
           "Speed": "Attack"
         },
         "modifier": "Increased",
-        "value": [20, 30],
+        "value": [ 20, 30 ],
         "ignore_quality": true
       },
       {
@@ -364,32 +365,32 @@
           "CritChance": null
         },
         "modifier": "Increased",
-        "value": [40, 60],
+        "value": [ 40, 60 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [50, 100],
+        "value": [ 50, 100 ],
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "min_area_level": 200
   },
   "compound_bow": {
     "name": "Compound Bow",
     "icon": "items/compound_bow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [23, 27]
+        "Physical": [ 23, 27 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -401,14 +402,14 @@
     "icon": "items/dragon_crossbow.webp",
     "description": "Even unloaded, it smells of ash and oil.",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [23, 27]
+        "Physical": [ 23, 27 ]
       },
       "crit_chance": 10,
       "crit_damage": 100
@@ -424,7 +425,7 @@
           }
         },
         "modifier": "Flat",
-        "value": [20, 25],
+        "value": [ 20, 25 ],
         "ignore_quality": true
       },
       {
@@ -436,16 +437,16 @@
           }
         },
         "modifier": "Flat",
-        "value": [26, 30],
+        "value": [ 26, 30 ],
         "ignore_quality": true
       },
       {
         "scope": "Local",
         "stat": {
-          "Damage": {}
+          "Damage": { }
         },
         "modifier": "Increased",
-        "value": [150, 200],
+        "value": [ 150, 200 ],
         "ignore_quality": true
       },
       {
@@ -463,7 +464,7 @@
           "CritDamage": null
         },
         "modifier": "Flat",
-        "value": [100, 200],
+        "value": [ 100, 200 ],
         "ignore_quality": true
       }
     ],
@@ -505,7 +506,7 @@
         "modifiers": [
           {
             "stat": {
-              "Damage": {}
+              "Damage": { }
             },
             "modifier": "Flat",
             "factor": 1.0,
@@ -522,14 +523,14 @@
     "name": "Crossbow",
     "icon": "items/crossbow.webp",
     "slot": "Weapon",
-    "extra_slots": ["Shield"],
-    "categories": ["AttackWeapon", "RangedWeapon"],
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [27, 31]
+        "Physical": [ 27, 31 ]
       },
       "crit_chance": 10,
       "crit_damage": 100

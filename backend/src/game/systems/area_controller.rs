@@ -71,6 +71,7 @@ fn compute_area_specs(area_specs: &mut AreaSpecs) {
     for effect in area_specs.effects.iter() {
         match effect.stat {
             StatType::ItemRarity => area_specs.loot_rarity.apply_effect(&effect),
+            StatType::ItemLevel => area_specs.item_level_modifier.apply_effect(&effect),
             StatType::GemsFind => area_specs.gems_find.apply_effect(&effect),
             _ => {}
         }
