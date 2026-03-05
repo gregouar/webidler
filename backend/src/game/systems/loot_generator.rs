@@ -1,6 +1,5 @@
 use std::collections::{BTreeSet, HashSet};
 
-use backend_shared::signature::HmacSignature;
 use shared::{
     constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
     data::{
@@ -14,15 +13,11 @@ use shared::{
 };
 
 use crate::game::{
-    data::items_store::{ItemAdjectivesTable, ItemNounsTable},
-    utils::rng,
-};
-use crate::game::{
     data::{
-        items_store::{ItemAffixesTable, ItemsStore},
+        items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
-    utils::rng::{RandomWeighted, Rollable},
+    utils::rng::{self, RandomWeighted, Rollable},
 };
 
 use super::items_controller;
@@ -77,7 +72,7 @@ pub fn generate_loot(
             affixes_table,
             adjectives_table,
             nouns_table,
-            &items_store.signature_key,
+            // &items_store.signature_key,
         )
     })
 }
@@ -103,7 +98,7 @@ pub fn roll_item(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
-    signature_key: &HmacSignature,
+    // signature_key: &HmacSignature,
 ) -> ItemSpecs {
     let quality = if base.ignore_quality {
         0.0
@@ -149,7 +144,7 @@ pub fn roll_item(
         );
     }
 
-    items_controller::create_item_specs(base, modifiers, false, signature_key)
+    items_controller::create_item_specs(base, modifiers, false)
 }
 
 fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {

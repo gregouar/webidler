@@ -68,11 +68,11 @@ impl ChatIntegration {
     }
 }
 
-fn to_linked_item_bytes(item_specs: &ItemSpecs) -> Option<(LinkedItemBytes, [u8; 32])> {
-    let mut cloned_item_specs = item_specs.clone();
-    cloned_item_specs.signature = Default::default();
-    Some((
+fn to_linked_item_bytes(item_specs: &ItemSpecs) -> Option<LinkedItemBytes> {
+    // let mut cloned_item_specs = item_specs.clone();
+    // cloned_item_specs.signature = Default::default();
+    Some(
         LinkedItemBytes::try_new(rmp_serde::to_vec(item_specs).ok()?).ok()?,
-        item_specs.signature.clone(),
-    ))
+        // item_specs.signature.clone(),
+    )
 }

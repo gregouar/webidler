@@ -32,7 +32,7 @@ async fn post_private_message(
         .get(&user_id)
         .ok_or(AppError::NotFound)?;
 
-    let (linked_item, item_signature) = payload.linked_item.unzip();
+    // let (linked_item, item_signature) = payload.linked_item.unzip();
     let server_chat_message = ServerChatMessage::Broadcast(
         ChatMessage {
             channel: payload.channel,
@@ -40,8 +40,8 @@ async fn post_private_message(
             user_id: None,
             username: None,
             content: payload.content,
-            linked_item,
-            item_signature,
+            linked_item: payload.linked_item,
+            // item_signature,
         }
         .into(),
     );
@@ -59,7 +59,7 @@ async fn post_broadcast_message(
     State(chat_state): State<ChatState>,
     Json(payload): Json<ClientPostMessage>,
 ) -> Result<Json<()>, AppError> {
-    let (linked_item, item_signature) = payload.linked_item.unzip();
+    // let (linked_item, item_signature) = payload.linked_item.unzip();
     chat_state
         .inbound_tx
         .send((
@@ -70,8 +70,8 @@ async fn post_broadcast_message(
                 user_id: None,
                 username: None,
                 content: payload.content,
-                linked_item,
-                item_signature,
+                linked_item: payload.linked_item,
+                // item_signature,
             },
         ))
         .await

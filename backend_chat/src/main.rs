@@ -4,7 +4,7 @@ use axum::{
     Router,
     routing::{any, get},
 };
-use backend_shared::{profanities_checker::ProfanitiesChecker, signature};
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use http::{
     HeaderValue, Method,
     header::{AUTHORIZATION, CONTENT_TYPE},
@@ -76,7 +76,7 @@ async fn main() {
             "profanities/weak_profanities.txt",
         )
         .expect("failed to load profanities"),
-        signature::load_hmac_key("HMAC_KEY"),
+        // signature::load_hmac_key("HMAC_KEY"),
     );
 
     let app_state = AppState {

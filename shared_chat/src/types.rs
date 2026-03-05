@@ -23,9 +23,8 @@ pub struct ChatMessage {
 
     pub content: ChatContent,
     pub linked_item: Option<LinkedItemBytes>,
-
-    #[serde(default, skip_serializing, skip_deserializing)]
-    pub item_signature: Option<[u8; 32]>,
+    // #[serde(default, skip_serializing, skip_deserializing)]
+    // pub item_signature: Option<[u8; 32]>,
 }
 
 #[nutype(

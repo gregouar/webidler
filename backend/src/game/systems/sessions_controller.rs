@@ -177,7 +177,7 @@ async fn new_game_instance(
                         &master_store.item_affixes_table,
                         &master_store.item_adjectives_table,
                         &master_store.item_nouns_table,
-                        &master_store.items_store.signature_key,
+                        // &master_store.items_store.signature_key,
                     ),
                 );
             }

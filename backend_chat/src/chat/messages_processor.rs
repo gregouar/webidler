@@ -3,14 +3,11 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
 
-use backend_shared::{
-    profanities_checker::ProfanitiesChecker,
-    signature::{self, HmacKey, HmacSignature},
-};
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use shared_chat::{
     messages::server::{ErrorMessage, ErrorType, ServerChatMessage, ServerWhisperFeedbackMessage},
     ring_buffer::RingBuffer,
-    types::{ChatChannel, ChatContent, ChatMessage, LinkedItemBytes},
+    types::{ChatChannel, ChatContent, ChatMessage},
 };
 
 use crate::chat::chat_state::ChatState;
@@ -20,12 +17,14 @@ pub struct MessagesProcessor {
 
     chat_state: ChatState,
     profanities_checker: ProfanitiesChecker,
-    // TODO: Banned, Muted, SpamBucket in some Moderation thingy?
-    item_signature_key: Arc<HmacKey>,
+    // item_signature_key: Arc<HmacKey>,
 }
 
 impl MessagesProcessor {
-    pub fn new(profanities_checker: ProfanitiesChecker, item_signature_key: HmacKey) -> Self {
+    pub fn new(
+        profanities_checker: ProfanitiesChecker,
+        // item_signature_key: HmacKey,
+    ) -> Self {
         let (inbound_tx, inbound_rx) = mpsc::channel(1000);
         let (outbound_tx, _) = broadcast::channel(500);
         Self {
@@ -40,7 +39,7 @@ impl MessagesProcessor {
                 users_moderation: Default::default(),
             },
             profanities_checker,
-            item_signature_key: Arc::new(item_signature_key),
+            // item_signature_key: Arc::new(item_signature_key),
         }
     }
 
@@ -71,14 +70,14 @@ impl MessagesProcessor {
                 }
             }
 
-            if !verify_linked_item(
-                &msg.linked_item,
-                msg.item_signature,
-                &self.item_signature_key,
-            ) {
-                send_direct_error(&self.chat_state, session_id, "invalid item linked").await;
-                // continue;
-            }
+            // if !verify_linked_item(
+            //     &msg.linked_item,
+            //     msg.item_signature,
+            //     &self.item_signature_key,
+            // ) {
+            //     send_direct_error(&self.chat_state, session_id, "invalid item linked").await;
+            //     continue;
+            // }
 
             let (content, channel, target_username) =
                 if let Some((username, message)) = parse_whisper_message(&msg.content) {
@@ -114,7 +113,7 @@ impl MessagesProcessor {
             let chat_message = ChatMessage {
                 content,
                 channel,
-                item_signature: None,
+                // item_signature: None,
                 ..msg
             };
             let server_chat_message = ServerChatMessage::Broadcast(chat_message.clone().into());
@@ -205,20 +204,19 @@ fn parse_whisper_message(content: &str) -> Option<(String, ChatContent)> {
     ))
 }
 
-fn verify_linked_item(
-    linked_item: &Option<LinkedItemBytes>,
-    item_signature: Option<HmacSignature>,
-    key: &HmacKey,
-) -> bool {
-    linked_item
-        .as_ref()
-        .map(|linked_item| {
-            tracing::warn!("{:?}", signature::compute_hmac(linked_item.as_ref(), key));
-            signature::verify_hmac(
-                linked_item.as_ref(),
-                &item_signature.unwrap_or_default(),
-                key,
-            )
-        })
-        .unwrap_or(true)
-}
+// fn verify_linked_item(
+//     linked_item: &Option<LinkedItemBytes>,
+//     item_signature: Option<HmacSignature>,
+//     key: &HmacKey,
+// ) -> bool {
+//     linked_item
+//         .as_ref()
+//         .map(|linked_item| {
+//             signature::verify_hmac(
+//                 linked_item.as_ref(),
+//                 &item_signature.unwrap_or_default(),
+//                 key,
+//             )
+//         })
+//         .unwrap_or(true)
+// }

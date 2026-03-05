@@ -86,6 +86,7 @@ where
     }
 
     fn compute(&mut self) {
+        // TODO: Round? Would need to rescale cooldowns
         self.evaluated = self.evaluate(true);
     }
 

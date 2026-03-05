@@ -18,7 +18,7 @@ use super::{
     stat_effect::{DamageMap, EffectsMap},
 };
 
-pub type ItemSignature = [u8; 32];
+// pub type ItemSignature = [u8; 32];
 
 #[derive(
     Serialize,
@@ -174,6 +174,7 @@ pub struct ItemModifiers {
     pub quality: f32,
 }
 
+// #[cfg(feature = "modifiable")]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemSpecs {
     pub base: ItemBase,
@@ -187,10 +188,30 @@ pub struct ItemSpecs {
 
     #[serde(default)]
     pub required_level: AreaLevel,
-
-    #[serde(default)]
-    pub signature: ItemSignature,
+    // #[serde(default)]
+    // pub signature: ItemSignature,
 }
+
+// #[cfg(not(feature = "modifiable"))]
+// #[derive(Serialize, Debug, Clone, PartialEq)]
+// pub struct ItemSpecs {
+//     pub base: ItemBase,
+//     pub modifiers: ItemModifiers,
+
+//     pub weapon_specs: Option<WeaponSpecs>,
+//     pub armor_specs: Option<ArmorSpecs>,
+
+//     // To indicate it comes from old game and not dropped during current one
+//     pub old_game: bool,
+
+//     #[serde(default)]
+//     pub required_level: AreaLevel,
+
+//     #[serde(default)]
+//     pub signature: ItemSignature,
+//     #[serde(skip)]
+//     pub raw_bytes: Vec<u8>,
+// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct WeaponSpecs {

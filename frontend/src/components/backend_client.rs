@@ -1,3 +1,4 @@
+use codee::{Decoder, binary::MsgpackSerdeCodec};
 use reqwest::StatusCode;
 use std::time::Duration;
 
@@ -388,7 +389,7 @@ impl BackendClient {
     where
         T: serde::de::DeserializeOwned,
     {
-        check_error(reqwest::get(format!("{}/{}", self.http_url, endpoint)).await).await
+        deserialize_response(reqwest::get(format!("{}/{}", self.http_url, endpoint)).await).await
     }
 
     async fn get_auth<T>(&self, endpoint: &str, token: &str) -> Result<T, BackendError>
@@ -398,7 +399,7 @@ impl BackendClient {
         if token.is_empty() {
             return Err(BackendError::Unauthorized("missing token".to_string()));
         }
-        check_error(
+        deserialize_response(
             reqwest::Client::new()
                 .get(format!("{}/{}", self.http_url, endpoint))
                 .timeout(Duration::from_secs(60))
@@ -414,7 +415,7 @@ impl BackendClient {
         T: serde::de::DeserializeOwned,
         P: serde::ser::Serialize,
     {
-        check_error(
+        deserialize_response(
             reqwest::Client::new()
                 .post(format!("{}/{}", self.http_url, endpoint))
                 .timeout(Duration::from_secs(60))
@@ -438,7 +439,7 @@ impl BackendClient {
         if token.is_empty() {
             return Err(BackendError::Unauthorized("missing token".to_string()));
         }
-        check_error(
+        deserialize_response(
             reqwest::Client::new()
                 .post(format!("{}/{}", self.http_url, endpoint))
                 .bearer_auth(token)
@@ -457,7 +458,7 @@ impl BackendClient {
         if token.is_empty() {
             return Err(BackendError::Unauthorized("missing token".to_string()));
         }
-        check_error(
+        deserialize_response(
             reqwest::Client::new()
                 .delete(format!("{}/{}", self.http_url, endpoint))
                 .timeout(Duration::from_secs(60))
@@ -469,35 +470,47 @@ impl BackendClient {
     }
 }
 
-async fn check_error<T>(response: reqwest::Result<reqwest::Response>) -> Result<T, BackendError>
+async fn deserialize_response<T>(
+    response: reqwest::Result<reqwest::Response>,
+) -> Result<T, BackendError>
 where
     T: serde::de::DeserializeOwned,
 {
-    match response {
-        Ok(response) => {
-            let response_status = response.status();
-            match response_status {
-                StatusCode::OK => match response.json().await {
-                    Ok(response) => Ok(response),
-                    Err(_) => Err(BackendError::OtherError),
-                },
-                _ => {
-                    let reason = response
-                        .json::<ErrorResponse>()
-                        .await
-                        .unwrap_or_default()
-                        .error;
-                    Err(match response_status {
-                        StatusCode::NOT_FOUND => BackendError::NotFound,
-                        StatusCode::UNAUTHORIZED => BackendError::Unauthorized(reason),
-                        StatusCode::FORBIDDEN => BackendError::Forbidden,
-                        StatusCode::CONFLICT => BackendError::UserError(reason),
-                        StatusCode::INTERNAL_SERVER_ERROR => BackendError::ServerError(reason),
-                        _ => BackendError::OtherError,
-                    })
-                }
-            }
-        }
-        Err(_) => Err(BackendError::ServerNotResponding),
+    let Ok(response) = response else {
+        return Err(BackendError::ServerNotResponding);
+    };
+
+    let status = response.status();
+    if status != StatusCode::OK {
+        let err = match response.json::<ErrorResponse>().await {
+            Ok(e) => e.error,
+            Err(_) => String::new(),
+        };
+
+        return Err(match status {
+            StatusCode::NOT_FOUND => BackendError::NotFound,
+            StatusCode::UNAUTHORIZED => BackendError::Unauthorized(err),
+            StatusCode::FORBIDDEN => BackendError::Forbidden,
+            StatusCode::CONFLICT => BackendError::UserError(err),
+            StatusCode::INTERNAL_SERVER_ERROR => BackendError::ServerError(err),
+            _ => BackendError::OtherError,
+        });
+    }
+
+    let content_type = response
+        .headers()
+        .get(reqwest::header::CONTENT_TYPE)
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("");
+
+    if content_type.contains("msgpack") {
+        let bytes = response
+            .bytes()
+            .await
+            .map_err(|_| BackendError::OtherError)?;
+
+        MsgpackSerdeCodec::decode(&bytes).map_err(|_| BackendError::OtherError)
+    } else {
+        response.json().await.map_err(|_| BackendError::OtherError)
     }
 }
