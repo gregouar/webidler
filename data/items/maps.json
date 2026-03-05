@@ -50,7 +50,7 @@
         "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
-        "value": [ 150, 250 ]
+        "value": [ 100, 150 ]
       },
       {
         "scope": "Global",
@@ -62,7 +62,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 200
+        "value": 500
       },
       {
         "scope": "Local",
@@ -95,7 +95,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 20.0
+                  "value": 30.0
                 }
               ]
             }

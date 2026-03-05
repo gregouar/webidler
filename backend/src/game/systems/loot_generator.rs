@@ -22,18 +22,6 @@ use crate::game::{
 
 use super::items_controller;
 
-impl rng::RandomWeighted for &ItemAffixBlueprint {
-    fn random_weight(&self) -> u64 {
-        self.weight
-    }
-}
-
-impl RandomWeighted for &LootTableEntry {
-    fn random_weight(&self) -> u64 {
-        self.weight
-    }
-}
-
 #[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
     loot_table: &LootTable,
@@ -340,6 +328,16 @@ pub fn add_affix(
 
     true
 }
+struct TweakedItemAffixBlueprint<'a> {
+    affix_blueprint: &'a ItemAffixBlueprint,
+    weight: u64,
+}
+
+impl<'a> rng::RandomWeighted for TweakedItemAffixBlueprint<'a> {
+    fn random_weight(&self) -> u64 {
+        self.weight
+    }
+}
 
 fn roll_affix(
     base_item: &ItemBase,
@@ -359,20 +357,39 @@ fn roll_affix(
                 && a.affix_type == affix_type
                 && !families_in_use.contains(&a.family)
         })
+        .map(|affix_blueprint| TweakedItemAffixBlueprint {
+            weight: tweak_affix_weight(
+                affix_blueprint.weight,
+                affix_blueprint.item_level,
+                area_level,
+            ),
+            affix_blueprint,
+        })
         .collect();
 
     rng::random_weighted_pick(&available_affixes).map(|a| {
-        families_in_use.insert(a.family.clone());
+        families_in_use.insert(a.affix_blueprint.family.clone());
         ItemAffix {
-            name: a.name.clone(),
-            family: a.family.clone(),
-            tags: a.tags.clone(),
+            name: a.affix_blueprint.name.clone(),
+            family: a.affix_blueprint.family.clone(),
+            tags: a.affix_blueprint.tags.clone(),
             affix_type,
-            tier: a.tier,
-            item_level: a.item_level,
-            effects: a.effects.iter().map(roll_affix_effect).collect(),
+            tier: a.affix_blueprint.tier,
+            item_level: a.affix_blueprint.item_level,
+            effects: a
+                .affix_blueprint
+                .effects
+                .iter()
+                .map(roll_affix_effect)
+                .collect(),
         }
     })
+}
+
+fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaLevel) -> u64 {
+    let delta = area_level.saturating_sub(tier_level) as f64;
+    let factor = 1.0 + delta * tier_level as f64 / 10_000.0;
+    (base_weight as f64 * factor) as u64
 }
 
 fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
@@ -474,4 +491,10 @@ fn generate_rare_name(
             .map(|part| part.text)
             .unwrap_or("Artifact")
     )
+}
+
+impl RandomWeighted for &LootTableEntry {
+    fn random_weight(&self) -> u64 {
+        self.weight
+    }
 }
