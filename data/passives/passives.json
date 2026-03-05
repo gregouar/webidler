@@ -15,10 +15,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 6.0
+            "value": 5.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -26,10 +26,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 3.0
+            "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "01412aff-c3a8-4c91-a390-03a2ba0cb0f0": {
@@ -49,7 +49,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -60,7 +60,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "031e7027-ca37-4d67-8cc3-018658940339": {
@@ -84,7 +84,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -99,7 +99,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "03836189-8913-45b5-bd89-e658b31e79bd": {
@@ -117,7 +117,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -126,7 +126,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0443aea6-75f8-4e67-b4fd-32f82621a7ed": {
@@ -150,7 +150,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -165,7 +165,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "04c74f34-8f5b-4243-b209-ecf2eef4af0d": {
@@ -189,7 +189,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -204,7 +204,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "064dc337-64ff-4a57-bbfc-0174b683e2b6": {
@@ -228,7 +228,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -243,7 +243,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "06b782e0-1d97-4fed-8a7e-8bb673add6c2": {
@@ -261,7 +261,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -270,7 +270,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "07351723-5137-4419-960d-17fba31e21f1": {
@@ -281,10 +281,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -296,10 +296,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -342,7 +342,7 @@
             "value": -25.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -375,7 +375,7 @@
             "value": -10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0909d43b-bd54-4d6d-8e9d-dd41445cd15e": {
@@ -393,7 +393,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -402,7 +402,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0bf01c1a-5a2e-4d84-919a-7e4d1ca16fc8": {
@@ -440,9 +440,9 @@
             "value": 25.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -463,7 +463,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -474,7 +474,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0c4ea6ed-c18a-4a43-808b-8f02aa49bedb": {
@@ -512,7 +512,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -541,7 +541,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0d3e0bf2-3d3a-4444-9765-4fe6955ad0ea": {
@@ -565,7 +565,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -580,7 +580,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0d6529c8-cdf5-450f-ad2d-df93cb2728bc": {
@@ -604,7 +604,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -619,7 +619,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0d8871b2-5eba-4bf5-8a71-e246fad4ffa8": {
@@ -648,10 +648,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 30.0
+            "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -671,10 +671,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0dad8094-ca29-43f8-a26a-3cc334041c1f": {
@@ -694,7 +694,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -705,7 +705,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0ea487a1-1b61-4f57-bc8b-5af626cb4544": {
@@ -725,7 +725,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -736,7 +736,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0f00327e-e227-46e9-8bce-6dbd9827fe06": {
@@ -756,7 +756,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -809,7 +809,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -842,7 +842,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "11879773-4e2a-49b8-8413-fd50a0ca3e0f": {
@@ -866,7 +866,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -881,7 +881,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "12a04baf-3e4e-49ee-8f9e-746eb6602673": {
@@ -908,7 +908,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -926,7 +926,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "140fa424-f0f3-42b3-927e-b13777d1070e": {
@@ -944,7 +944,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -953,7 +953,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "146b8b55-3b98-455b-ad05-f53b6e7c65ef": {
@@ -991,7 +991,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1020,7 +1020,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "14e61d75-f5ff-43fc-8b03-744c75b821a7": {
@@ -1038,7 +1038,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1047,7 +1047,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1608616d-0e2e-4d5a-ba65-c6d889b9d931": {
@@ -1071,7 +1071,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1086,7 +1086,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "17ccb40c-fe56-450b-9723-c12510d0c5c6": {
@@ -1123,9 +1123,9 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -1146,7 +1146,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1157,7 +1157,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1ade2f7a-1c36-413a-82e4-06438b79e1a0": {
@@ -1175,7 +1175,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1184,7 +1184,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1bcd296a-d021-4892-9c9d-d1bc4fbb1482": {
@@ -1207,7 +1207,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -1221,7 +1221,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1bd1f5b3-5d20-488b-ba8c-2b8deca2d2cf": {
@@ -1239,7 +1239,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1248,7 +1248,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1bd221d6-6b67-416c-8269-db62cdbbebab": {
@@ -1266,7 +1266,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1275,7 +1275,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1c1f7d80-6fe1-4ee8-874d-ab524377aefa": {
@@ -1299,7 +1299,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1314,7 +1314,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1cc7cfb0-1ec8-4696-9baa-5a42fac7db31": {
@@ -1334,7 +1334,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1345,7 +1345,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1e6a007d-2c82-4837-9247-d5996411ea62": {
@@ -1369,7 +1369,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1384,7 +1384,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1edc1a3f-dc55-41fa-a8ad-fa90466ddd4a": {
@@ -1407,7 +1407,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1421,7 +1421,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "1ff5ccd8-cdc9-4c39-8233-221b3c391086": {
@@ -1441,7 +1441,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1452,7 +1452,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "201637a1-c430-4dcc-b537-afe68b01a2b6": {
@@ -1470,7 +1470,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1479,7 +1479,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2136383e-ac78-453c-ac64-aabb713cc809": {
@@ -1496,10 +1496,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1507,10 +1507,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "214090ea-2db1-429a-b965-382e8a2e78cb": {
@@ -1551,9 +1551,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -1565,10 +1565,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -1593,7 +1593,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1608,7 +1608,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "23a447a9-d6ec-4334-87c0-490fddfb39e5": {
@@ -1631,7 +1631,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1645,7 +1645,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "24ad01fc-d436-4252-877a-f4dc31586f5c": {
@@ -1663,7 +1663,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1672,7 +1672,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "25c4b2a6-e072-4cfd-bb75-402835c60a05": {
@@ -1699,7 +1699,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1717,7 +1717,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "26651197-4daa-4503-be51-a4e9b14cc89c": {
@@ -1728,10 +1728,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -1752,7 +1752,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1763,7 +1763,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "26eca27a-95a6-4949-bef7-25cf3b79c340": {
@@ -1787,10 +1787,10 @@
               "Armor": null
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1805,10 +1805,10 @@
               "Armor": null
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2723d25a-6a2a-421d-98c4-d7178da3f870": {
@@ -1826,7 +1826,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1835,7 +1835,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "27516530-2e79-4c79-a6a8-dfdf1f05d7ba": {
@@ -1859,7 +1859,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1874,7 +1874,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "284bae26-9348-46f3-b838-9d5f8c8d1ab9": {
@@ -1894,7 +1894,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1905,7 +1905,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "285d7497-315b-4795-9142-fb3dba24cfbb": {
@@ -1929,7 +1929,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1944,7 +1944,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2940c9c0-a73c-428a-9a28-ec5a2e356c52": {
@@ -1966,7 +1966,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -1974,7 +1976,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1987,7 +1989,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -1995,7 +1999,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "29ba21ea-6046-46f2-8b86-29b1580a1710": {
@@ -2013,7 +2017,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2022,7 +2026,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2b156ff8-1cda-4f0d-a1d3-a20c1ed0a589": {
@@ -2040,7 +2044,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2049,7 +2053,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2c872ce5-d750-4a2b-bdc9-ecf51501a7d1": {
@@ -2067,7 +2071,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2076,7 +2080,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2d2394cc-1605-40fe-923b-3e0fd4502fa3": {
@@ -2100,7 +2104,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2115,7 +2119,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2d8c330c-e177-428e-8dae-f139ad3a7a66": {
@@ -2137,7 +2141,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -2145,7 +2151,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2158,7 +2164,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -2166,7 +2174,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2dbe7ac1-e92e-46b7-a9d9-6e99da8face6": {
@@ -2184,7 +2192,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2193,7 +2201,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "2e4adf70-72b2-4270-bc24-ee2a277a49a8": {
@@ -2217,7 +2225,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2232,7 +2240,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "308dfbd3-bb2a-4e29-9ab5-afc6ca7d2344": {
@@ -2252,7 +2260,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2263,7 +2271,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "30c0d9b9-1137-4f95-8c38-6d33efc98822": {
@@ -2283,7 +2291,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2294,7 +2302,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "31456446-3c97-4fb0-9ee8-512a21076f5f": {
@@ -2336,7 +2344,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2369,7 +2377,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "34144151-91b9-48f1-adfe-12d2b502e164": {
@@ -2391,7 +2399,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -2399,7 +2409,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2412,7 +2422,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -2420,7 +2432,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "36aafa33-ac3d-401d-b4d5-2dbe9a82926d": {
@@ -2445,7 +2457,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -2461,7 +2473,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "36d711ca-a888-4315-8cdd-ec21cf7651f8": {
@@ -2479,7 +2491,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2488,7 +2500,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "3911490e-aaa4-4c67-a2e4-6e50e19cfba1": {
@@ -2506,7 +2518,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2515,7 +2527,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "394948cc-bd15-4549-8e26-0e683e8c7b74": {
@@ -2539,7 +2551,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2554,7 +2566,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "396454e1-05d3-4506-b932-e946f337b97d": {
@@ -2574,7 +2586,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2585,7 +2597,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "39b2026c-9b8d-4133-8fd9-1342e2dcd513": {
@@ -2627,7 +2639,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2660,7 +2672,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "39e8a993-9893-42f8-b75a-ff0df25bb6d0": {
@@ -2683,7 +2695,7 @@
             "value": 12.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2697,7 +2709,7 @@
             "value": 6.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "3a4861a5-e8e3-455d-b458-fe23d932b190": {
@@ -2736,9 +2748,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -2757,7 +2769,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2766,7 +2778,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "3c67a2cb-a023-4709-a822-7b1373f00b09": {
@@ -2790,7 +2802,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2805,7 +2817,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "3d3833aa-643d-495b-847f-ebafafe02acb": {
@@ -2833,7 +2845,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2852,7 +2864,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "3de2ebe9-078d-47ba-9a60-22d35f8da8d2": {
@@ -2876,7 +2888,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2891,7 +2903,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "40cd161b-3258-46a1-9a61-ab1a13361312": {
@@ -2915,7 +2927,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
@@ -2925,10 +2937,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2943,7 +2955,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           },
           {
             "stat": {
@@ -2953,10 +2965,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4158fde3-fdf3-4590-9393-9f77db96a6d2": {
@@ -2980,7 +2992,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2995,7 +3007,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "42ebc03a-3e60-470c-b672-d4ca72442c72": {
@@ -3019,10 +3031,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3037,10 +3049,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "44824924-a10a-4a0d-98f5-5b1414d1381b": {
@@ -3060,7 +3072,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3071,7 +3083,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "44f57197-8ef3-4956-9ed7-eb40ba1b951d": {
@@ -3095,7 +3107,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3110,7 +3122,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "453ed12d-79ee-421f-aaca-fc21f58dc2d9": {
@@ -3137,9 +3149,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -3158,7 +3170,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3167,7 +3179,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "45cc1696-8e53-464a-adea-8856c9052c3d": {
@@ -3187,7 +3199,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3198,7 +3210,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "46fbba4d-c6fb-4d80-8d20-383b2f9e36b2": {
@@ -3229,7 +3241,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3251,7 +3263,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "47fae422-2a59-43d7-88bd-93f91ddcb01f": {
@@ -3280,10 +3292,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3303,10 +3315,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4827bf74-8168-422a-8623-58eec1307b73": {
@@ -3324,7 +3336,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3333,7 +3345,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "48348840-47ac-4112-a2a9-699d44fbc8c6": {
@@ -3351,7 +3363,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3360,7 +3372,7 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4993a125-fdbd-4ee2-a85e-d44f2c00e489": {
@@ -3371,7 +3383,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -3388,7 +3400,7 @@
               "damage_type": "Physical"
             },
             "target": "SameTarget",
-            "modifiers": [ ],
+            "modifiers": [],
             "skill_range": "Any",
             "skill_type": "Attack",
             "effects": [
@@ -3447,8 +3459,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [ ],
-                "conditional_modifiers": [ ]
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -3457,7 +3469,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -3482,7 +3494,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3497,7 +3509,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "49ad1637-c721-4666-a393-d454bc49bb30": {
@@ -3521,7 +3533,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3536,7 +3548,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b": {
@@ -3560,7 +3572,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3575,7 +3587,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4c792411-d741-4a1f-817b-9ff41e45b0a4": {
@@ -3599,7 +3611,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3614,7 +3626,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4cc48af3-1288-4ba2-8aff-e82fd623e6cf": {
@@ -3638,10 +3650,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3656,10 +3668,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4efc73a8-7961-4004-b629-cdc02fb81157": {
@@ -3683,7 +3695,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3698,7 +3710,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "4f909ed3-70ee-4e31-9f40-4c617358a0ba": {
@@ -3721,7 +3733,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3735,7 +3747,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4": {
@@ -3777,7 +3789,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3810,7 +3822,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5223c739-dd9e-413d-804a-6b14ea39c1f7": {
@@ -3844,9 +3856,9 @@
             "value": -33.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -3870,7 +3882,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3884,7 +3896,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "545537ae-9f08-46c2-b3fa-6ac7d9eefa04": {
@@ -3906,7 +3918,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -3914,7 +3928,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3927,7 +3941,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -3935,7 +3951,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5505dc30-ed61-47be-8c38-2d34b86631be": {
@@ -3953,7 +3969,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3962,7 +3978,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5513a3d8-87cd-4b81-b2b2-08d0275201e6": {
@@ -3991,10 +4007,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 30.0
+            "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4014,10 +4030,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "563e3226-2387-4147-bed3-914575c77d9a": {
@@ -4039,7 +4055,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -4047,7 +4065,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4060,7 +4078,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -4068,7 +4088,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "56639962-c2b7-4135-868b-07486cbfc109": {
@@ -4086,7 +4106,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -4115,7 +4135,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4126,7 +4146,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "58538882-d58c-4956-bdb3-c8e9d6d0ed89": {
@@ -4148,7 +4168,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4161,7 +4181,7 @@
             "value": -5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "58a42157-4cc3-45ea-b71c-1395663a9b23": {
@@ -4185,7 +4205,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4242,7 +4262,7 @@
             "value": -25.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4275,7 +4295,7 @@
             "value": -10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5aa6c4af-db53-4f03-9c7b-ad6888d6545d": {
@@ -4298,7 +4318,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -4312,7 +4332,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5c016eeb-2325-41ff-baa0-01f5bcc5e434": {
@@ -4336,7 +4356,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4351,7 +4371,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5c94a70e-1b6c-4731-9542-d022dd847a41": {
@@ -4369,7 +4389,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4378,7 +4398,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5d1c04c5-b90f-4190-875f-f45477f7d853": {
@@ -4396,7 +4416,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4405,7 +4425,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5d4d334b-962b-49ea-8968-c289ad08bffd": {
@@ -4429,10 +4449,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4447,10 +4467,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5dcad32d-9043-48ac-9766-757aba9751de": {
@@ -4472,7 +4492,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -4480,7 +4502,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4493,7 +4515,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -4501,7 +4525,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5ee192ea-49d6-4923-a857-0d5a21498f53": {
@@ -4521,7 +4545,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4532,7 +4556,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5f2ac03c-3b5f-4a39-b44e-d9765e81c139": {
@@ -4555,7 +4579,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4569,7 +4593,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
@@ -4596,7 +4620,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4614,7 +4638,7 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "602058b2-ffaf-499a-aa41-02fd8e54da75": {
@@ -4636,7 +4660,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4649,7 +4673,7 @@
             "value": -5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "60884ec3-8267-476e-ac1b-8af601649636": {
@@ -4677,7 +4701,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4696,7 +4720,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "60c17832-46cd-4d7b-adee-d172788bfef7": {
@@ -4714,7 +4738,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4723,7 +4747,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "6334c8c4-d9a4-4a70-921e-cb755fd034ab": {
@@ -4747,7 +4771,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4762,7 +4786,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "63b8eb39-2ec1-4793-9b55-10a8ba3161f7": {
@@ -4780,7 +4804,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4789,7 +4813,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "641ea2e9-be62-40ad-b81a-e2502dbee41d": {
@@ -4828,10 +4852,10 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 25.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4864,7 +4888,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "6477b5d1-88b7-4d6f-bbbf-73fcbb2b6a26": {
@@ -4882,7 +4906,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4891,7 +4915,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "65390d39-8d88-4b4e-b88b-afbfeab3d4e9": {
@@ -4911,7 +4935,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4922,7 +4946,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "661de8f7-f445-4444-b219-ec8168b33f15": {
@@ -4940,7 +4964,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4949,7 +4973,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "665e7afa-d2aa-4075-bd54-278fe4673434": {
@@ -4972,7 +4996,7 @@
             "value": 1.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -5010,7 +5034,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5025,7 +5049,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "675b2ea2-980d-492d-80b3-337f62d37a3d": {
@@ -5049,7 +5073,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5064,7 +5088,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "696014a5-7dd4-45bf-b810-56eed1368bfc": {
@@ -5087,7 +5111,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5101,7 +5125,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "69ec7950-0800-400d-9f45-17a1590a3fe7": {
@@ -5121,7 +5145,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5132,7 +5156,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "6a439ad3-cf6b-45c5-815c-269e888b88b8": {
@@ -5156,7 +5180,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5171,7 +5195,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "6ae43b96-a22f-4862-b351-53859952cf22": {
@@ -5199,7 +5223,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5218,7 +5242,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "6afbaa18-6923-4d9f-af6e-d0edf482b786": {
@@ -5244,12 +5268,12 @@
               }
             },
             "modifier": "Increased",
-            "value": 300.0
+            "value": 200.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -5274,7 +5298,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5289,7 +5313,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "6c91ed30-7f6b-4748-beab-6a64fc58be18": {
@@ -5300,7 +5324,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Life",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -5339,8 +5363,8 @@
                   },
                   "modifier": "Flat"
                 },
-                "ignore_stat_effects": [ ],
-                "conditional_modifiers": [ ]
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -5349,7 +5373,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -5377,9 +5401,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -5398,7 +5422,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5407,7 +5431,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "70aefb0e-0cd2-401e-ae76-1dd385ed899b": {
@@ -5431,7 +5455,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5446,7 +5470,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "711a2d12-e8db-4e02-b8fe-8b531a981d37": {
@@ -5468,7 +5492,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5481,7 +5505,7 @@
             "value": -5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "71d998a2-102b-4707-b28e-ccfca09d0b97": {
@@ -5498,10 +5522,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5509,10 +5533,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "725a5390-2c74-47b9-93ee-80ba57ad29b0": {
@@ -5535,7 +5559,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5549,7 +5573,7 @@
             "value": 4.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7278f137-ce10-4de5-b7f2-9d7e0cbb50ab": {
@@ -5567,7 +5591,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5576,7 +5600,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7325bda9-9ed7-4b78-8518-419d59d1d32a": {
@@ -5600,7 +5624,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5615,7 +5639,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "73809ca0-cd1d-4d0c-ba3d-1455acc68b02": {
@@ -5638,7 +5662,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5652,7 +5676,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "73c40387-2ca1-4169-9033-ec6e4c7d709f": {
@@ -5675,7 +5699,7 @@
             "value": 1.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -5713,7 +5737,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5728,7 +5752,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "748a85fc-319c-46d1-8a71-90f8f71a196a": {
@@ -5748,7 +5772,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5759,7 +5783,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "74fce6a7-b085-49b7-87ed-f42b64654a2a": {
@@ -5796,7 +5820,7 @@
             "value": 2.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5824,7 +5848,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "74fd4dfb-07c7-496e-96f4-4c700e7c8642": {
@@ -5852,7 +5876,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5871,7 +5895,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "75dc5e9e-b94f-4276-bd8f-53f6d9d61b71": {
@@ -5889,7 +5913,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5898,7 +5922,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "760a6236-6afc-4a42-bf6a-b6f2df3fa74f": {
@@ -5922,7 +5946,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5937,7 +5961,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "764be5b2-16e3-4e13-a32a-91c27db1f5b6": {
@@ -5961,7 +5985,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5976,7 +6000,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "765bb65d-4b0e-4904-9e5e-d100e174a2cd": {
@@ -5987,7 +6011,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -6004,7 +6028,7 @@
               "is_triggered": null
             },
             "target": "Me",
-            "modifiers": [ ],
+            "modifiers": [],
             "skill_range": "Melee",
             "skill_type": "Attack",
             "effects": [
@@ -6045,8 +6069,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [ ],
-                "conditional_modifiers": [ ]
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -6055,7 +6079,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -6078,7 +6102,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -6086,7 +6112,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6099,7 +6125,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -6107,7 +6135,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "76c196cc-e6a2-420a-8497-84099116ed2e": {
@@ -6131,10 +6159,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6149,10 +6177,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "76e306d9-46a5-4817-95d5-d143bc507436": {
@@ -6176,7 +6204,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6191,7 +6219,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "777d60db-963c-4822-bd90-ce7019d49a1f": {
@@ -6209,7 +6237,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6218,7 +6246,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "77901266-b305-400b-9741-8e33f8093139": {
@@ -6240,7 +6268,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -6248,7 +6278,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6261,7 +6291,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -6269,7 +6301,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "77d9af74-3e5d-4263-b3e0-1134c10fda2e": {
@@ -6296,7 +6328,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6314,7 +6346,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "78708628-ec55-4977-809e-c97806ab760b": {
@@ -6336,7 +6368,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -6344,7 +6378,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6357,7 +6391,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -6365,7 +6401,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7a24a6c4-5cbf-4923-a083-d323cac68612": {
@@ -6407,7 +6443,7 @@
             "value": -25.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6440,7 +6476,7 @@
             "value": -10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7a5f9ace-f039-44f2-a78b-87f66a938652": {
@@ -6463,7 +6499,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6477,7 +6513,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7a7780b2-b680-4925-ac04-7f93e10a8093": {
@@ -6495,7 +6531,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6504,7 +6540,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7d00ab4e-8727-4ec8-9256-9b6552b468a1": {
@@ -6527,7 +6563,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6541,7 +6577,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7d81dac1-de3c-4a4d-8e96-7f31ff042e5e": {
@@ -6575,7 +6611,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6600,7 +6636,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7e10ea6e-22f5-43f9-8c49-9df5d664e87a": {
@@ -6627,14 +6663,16 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [ "LowLife" ]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "More",
-            "value": 75.0
+            "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6652,14 +6690,16 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [ "LowLife" ]
+                "conditions": [
+                  "LowLife"
+                ]
               }
             },
             "modifier": "More",
-            "value": 25.0
+            "value": 20.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7e9b531a-e784-4ea1-acd1-2bdcc53efcc4": {
@@ -6683,7 +6723,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6698,7 +6738,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7edaa20f-b316-4cd4-ba30-e37c0f5c6fcb": {
@@ -6716,7 +6756,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6725,7 +6765,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "7eeea0ac-0958-49a6-a8e3-30966cb42764": {
@@ -6753,7 +6793,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6772,7 +6812,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8006615c-85c9-4d08-8330-13138fd6e918": {
@@ -6801,10 +6841,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6824,10 +6864,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8006a833-21d3-4055-a4c3-ef2126a5aabc": {
@@ -6845,7 +6885,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6854,7 +6894,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8040b78c-e0fd-4476-97b7-945ed6937913": {
@@ -6878,7 +6918,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6893,7 +6933,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "807a2b14-4ad6-40d3-9480-90618fa5d792": {
@@ -6911,7 +6951,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6920,7 +6960,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "80c3c1c3-633e-44a5-b781-9c8b1dc1a259": {
@@ -6944,7 +6984,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6959,7 +6999,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8102564d-cf99-4d77-a5a4-ece87d1bc136": {
@@ -6983,7 +7023,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6998,7 +7038,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "82dfb07a-7f27-4baf-b505-00ec3fcf0e0e": {
@@ -7022,7 +7062,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7037,7 +7077,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "83f13e93-39b5-400c-9abc-cf1c304f6543": {
@@ -7065,7 +7105,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7084,7 +7124,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "84764c3f-3ec6-4c8a-821b-b56850cbc188": {
@@ -7106,7 +7146,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7119,7 +7159,7 @@
             "value": -5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "853715cd-ce16-4b22-96cb-ba6d2d83e3e7": {
@@ -7137,16 +7177,16 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": "GoldFind",
             "modifier": "More",
-            "value": 25.0
+            "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": null,
         "socket": false
       },
       "85a30382-d493-4bf3-b499-e9bedd9d2b67": {
@@ -7164,7 +7204,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7173,7 +7213,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "85ab0266-027e-4e48-9773-e36362b9fc7b": {
@@ -7193,7 +7233,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7231,7 +7271,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7249,7 +7289,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af": {
@@ -7267,7 +7307,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7276,7 +7316,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "875d806d-10e2-45cd-ac04-5fea19626672": {
@@ -7294,7 +7334,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7303,7 +7343,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8778da9e-df39-4fda-9231-192d587f5e9f": {
@@ -7323,7 +7363,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7334,7 +7374,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "87a9b174-7941-457f-9d24-08212127d7cc": {
@@ -7362,7 +7402,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7381,7 +7421,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8939c1bd-e0aa-4d12-88cd-aa933daba56d": {
@@ -7419,7 +7459,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7448,7 +7488,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8962f1e9-2a29-4c8e-8caa-8d6c97433380": {
@@ -7468,7 +7508,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7479,7 +7519,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "89d940a4-35b2-43bf-bdeb-a173ef5d4fc7": {
@@ -7497,7 +7537,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7506,7 +7546,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8a251c13-3549-4b8e-89c1-afc75f71ac40": {
@@ -7530,7 +7570,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7545,7 +7585,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8adeee38-503d-4ee7-9476-358fd98624fd": {
@@ -7563,7 +7603,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7572,7 +7612,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8b169efe-6a7a-4d34-86a6-7770118f4194": {
@@ -7596,7 +7636,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7611,7 +7651,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8bc8f516-c2c2-4fa0-96da-312cf1f3523d": {
@@ -7635,7 +7675,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7650,7 +7690,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8c431093-95e6-4dce-b21a-9a07edfd57ea": {
@@ -7668,7 +7708,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7677,7 +7717,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8cedf941-92e1-40c8-8370-edf25634573d": {
@@ -7701,7 +7741,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7716,7 +7756,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8ef4fc4f-c74a-4761-8cb9-3c003df5fca4": {
@@ -7733,10 +7773,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7744,10 +7784,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "907e3dc9-8052-4120-ab01-0abf0ee825c0": {
@@ -7774,7 +7814,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7792,7 +7832,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "90e4f19c-7733-4aef-8a0f-430c6a514681": {
@@ -7816,7 +7856,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7831,7 +7871,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "91c8b2cf-977c-48ef-9bae-ffb5b20569a7": {
@@ -7877,9 +7917,9 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -7900,7 +7940,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7911,7 +7951,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "925aa97c-c0fb-4c2b-886e-118e5ebaca55": {
@@ -7939,7 +7979,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7958,7 +7998,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "934a4293-ae54-4b9d-a2d2-1e9396f7854a": {
@@ -7978,7 +8018,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8012,7 +8052,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8026,7 +8066,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "93db4a10-c04f-4343-8f5a-1ecec07314d3": {
@@ -8046,7 +8086,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8086,10 +8126,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8109,10 +8149,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "9addfe39-f177-427a-aefa-4f3ba229c856": {
@@ -8150,7 +8190,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8179,7 +8219,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "9b258aaf-2dbc-428c-a844-e50a402520e1": {
@@ -8203,7 +8243,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8218,7 +8258,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "9d418005-cc92-4524-8b96-ad8a7b7ede57": {
@@ -8229,7 +8269,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Poison",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -8334,7 +8374,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": [ ]
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -8343,7 +8383,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -8362,7 +8402,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8371,7 +8411,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "9e32669b-6e90-4021-8c9a-a5d1d2a03387": {
@@ -8391,7 +8431,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8402,7 +8442,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "9efb4e88-1f34-489a-83f3-cae63f3b5b4e": {
@@ -8413,10 +8453,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -8437,7 +8477,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8448,7 +8488,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a009d872-fa46-498a-af0c-3889e207631b": {
@@ -8482,9 +8522,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -8509,7 +8549,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8524,7 +8564,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df": {
@@ -8562,7 +8602,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -8591,7 +8631,7 @@
             "value": -100.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a45aec91-23fa-4c2e-a9b9-e70bc2916a0f": {
@@ -8615,7 +8655,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8630,7 +8670,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a49e2af1-c0e1-417b-912c-0bf8aae48042": {
@@ -8658,7 +8698,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8677,7 +8717,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a4e0da35-c78a-46fb-a50e-c88b165b9112": {
@@ -8695,7 +8735,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8704,7 +8744,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a50ab5f6-6322-4762-af4b-1913e93c1bad": {
@@ -8724,7 +8764,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8735,7 +8775,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a8c6e35c-bd30-4211-9e6d-65d59ad7e375": {
@@ -8773,7 +8813,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8802,7 +8842,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "aa92babf-963d-4bd0-8f7f-e3b44637f289": {
@@ -8822,7 +8862,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8861,7 +8901,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8880,7 +8920,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "abcc57bb-81b3-4156-aa97-3d023c66eb64": {
@@ -8904,7 +8944,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8919,7 +8959,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "abd16719-d299-423a-a184-8cd233dfe87e": {
@@ -8930,7 +8970,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -9004,7 +9044,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": [ ]
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -9013,7 +9053,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -9036,7 +9076,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -9044,7 +9086,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9057,7 +9099,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -9065,7 +9109,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ad5542fe-6a7f-4f67-b3ba-307a2f46f066": {
@@ -9083,7 +9127,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9092,7 +9136,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ada9e80f-4b7b-4ae7-a2a1-d411345a272b": {
@@ -9119,7 +9163,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9137,7 +9181,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ae845698-b47f-47ca-bd07-8504a5eecf16": {
@@ -9160,7 +9204,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9174,7 +9218,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "b129b655-c02e-42fd-89bd-d1a18660c489": {
@@ -9192,7 +9236,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9201,7 +9245,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "b1f9066f-78df-4ac8-9f8d-010aede4e37a": {
@@ -9221,7 +9265,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9252,7 +9296,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9263,7 +9307,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "b5fce054-f56b-47de-9e4f-d565c54f830c": {
@@ -9286,7 +9330,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9300,7 +9344,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "b6208dda-e38e-4254-afa7-5f1574034c63": {
@@ -9324,7 +9368,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9339,7 +9383,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "b71d21cc-b30f-4f98-9757-f64f3f3f822d": {
@@ -9357,7 +9401,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9366,7 +9410,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "bb9506c3-bdd1-4755-857a-bc0da32f0ce9": {
@@ -9384,7 +9428,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9393,7 +9437,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "bbae8e5d-9e11-4548-b3b9-65682a6e6e9d": {
@@ -9415,7 +9459,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -9423,7 +9469,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9436,7 +9482,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -9444,7 +9492,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
@@ -9467,7 +9515,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9481,7 +9529,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "bdb1c3e6-472f-4e2f-a511-b0c91a62d071": {
@@ -9505,7 +9553,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9520,7 +9568,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "be8c6e3e-bcd2-485f-88ca-a3741196f833": {
@@ -9538,7 +9586,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9547,7 +9595,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "beae2ffb-1adc-4d42-bcb1-dff2fdc35977": {
@@ -9565,7 +9613,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9574,7 +9622,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "becea5a4-8944-49db-8665-2cab32ec0711": {
@@ -9592,7 +9640,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9601,7 +9649,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "bf9f8833-4a43-44c2-a28c-c00d5c39425a": {
@@ -9621,7 +9669,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9650,7 +9698,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9659,7 +9707,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c15cc2fd-ee56-44f4-a658-e727cc8bc155": {
@@ -9681,7 +9729,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9694,7 +9742,7 @@
             "value": -5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c25151c2-f5bd-4992-9626-555178681fd7": {
@@ -9717,7 +9765,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9731,7 +9779,7 @@
             "value": 4.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c28cd9d9-b681-4d72-9803-b3785c9e9dc5": {
@@ -9753,7 +9801,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -9761,7 +9811,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9774,7 +9824,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -9782,7 +9834,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c2d6548d-a75e-4678-8314-fe30bb08ee77": {
@@ -9793,10 +9845,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -9821,7 +9873,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9836,7 +9888,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c3187473-2fe2-4959-b045-4325d79d783e": {
@@ -9856,7 +9908,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9867,7 +9919,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c351443b-35e6-4860-aa43-86eec4c92e51": {
@@ -9878,7 +9930,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -9895,7 +9947,7 @@
               "damage_type": "Fire"
             },
             "target": "Me",
-            "modifiers": [ ],
+            "modifiers": [],
             "skill_range": "Melee",
             "skill_type": "Other",
             "effects": [
@@ -9943,8 +9995,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [ ],
-                "conditional_modifiers": [ ]
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -9953,7 +10005,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -9977,7 +10029,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9991,7 +10043,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c51d32b6-ff99-4589-aac7-cb9cb23f2b86": {
@@ -10015,7 +10067,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10030,7 +10082,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c57f2319-656a-4d1a-a50e-568eee84084b": {
@@ -10048,7 +10100,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10057,7 +10109,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c673deb7-950b-4b12-9c10-888e6cf575c2": {
@@ -10074,10 +10126,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 4.0
+            "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10085,10 +10137,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c685f882-72ed-4b98-b8c9-5ddb7049a386": {
@@ -10106,7 +10158,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -10115,7 +10167,7 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c6d1985a-af8b-4c62-a5f6-8afd826f5457": {
@@ -10126,12 +10178,12 @@
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
             "icon": "",
-            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 40% of the initial hit's Physical Damage when the target is Hit again.",
+            "description": "25% Chance to Apply a stack of Open Wound for 5 seconds. Each stack deals 50% of the initial hit's Physical Damage when the target is Hit again.",
             "trigger_id": "open_wound_apply",
             "OnHit": {
               "skill_type": "Attack",
@@ -10153,7 +10205,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.40,
+                "factor": 0.5,
                 "source": {
                   "HitDamage": "Physical"
                 }
@@ -10186,7 +10238,7 @@
                             "damage_type": null
                           },
                           "target": "SameTarget",
-                          "modifiers": [ ],
+                          "modifiers": [],
                           "skill_range": "Melee",
                           "skill_type": "Other",
                           "effects": [
@@ -10196,7 +10248,7 @@
                                 "lucky_chance": 0.0
                               },
                               "FlatDamage": {
-                                "damage": { },
+                                "damage": {},
                                 "crit_chance": {
                                   "value": 0.0,
                                   "lucky_chance": 0.0
@@ -10206,6 +10258,9 @@
                               },
                               "ignore_stat_effects": [
                                 {
+                                  "CritChance": null
+                                },
+                                {
                                   "CritDamage": null
                                 },
                                 {
@@ -10214,12 +10269,9 @@
                                     "damage_type": null,
                                     "min_max": null
                                   }
-                                },
-                                {
-                                  "CritChance": null
                                 }
                               ],
-                              "conditional_modifiers": [ ]
+                              "conditional_modifiers": []
                             }
                           ],
                           "skill_shape": "Single",
@@ -10243,8 +10295,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [ ],
-                "conditional_modifiers": [ ]
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -10253,7 +10305,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10278,7 +10330,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10293,7 +10345,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c85b224f-526d-4a9f-a2e4-63fd36cba963": {
@@ -10326,9 +10378,9 @@
             "value": -33.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10353,7 +10405,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10368,7 +10420,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c9382d85-ae3d-4efd-9352-79f820fbf726": {
@@ -10393,7 +10445,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10409,7 +10461,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "cb014939-4119-4b9c-bcd9-cb484c9fbdcc": {
@@ -10431,7 +10483,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -10439,7 +10493,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10452,7 +10506,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -10460,7 +10516,7 @@
             "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "cc2ee934-c6ab-462a-9dd2-74b00a3720af": {
@@ -10477,10 +10533,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 6.0
+            "value": 5.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10488,10 +10544,10 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 3.0
+            "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "cd240346-70d1-4e05-8a3b-3ab0179695b9": {
@@ -10511,7 +10567,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10559,7 +10615,7 @@
             "value": 2.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10587,7 +10643,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ce177465-cca9-47d0-86ce-0ec245ea8174": {
@@ -10605,7 +10661,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10614,7 +10670,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "cfad8424-cb66-4aeb-85e7-1186558d4136": {
@@ -10632,7 +10688,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10641,7 +10697,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "cfff8b24-fb03-4a7e-a0b1-0c512a2ec7c4": {
@@ -10671,9 +10727,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10705,7 +10761,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10727,7 +10783,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d1140822-66ab-4fbb-ba98-b1aced236696": {
@@ -10754,9 +10810,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10768,10 +10824,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -10783,7 +10839,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Status",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -10795,8 +10851,12 @@
                 {
                   "HasStatus": {
                     "status_type": {
-                      "DamageOverTime": { "damage_type": "Physical" }
-                    }
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
+                    },
+                    "skill_type": null,
+                    "not": false
                   }
                 }
               ]
@@ -10899,7 +10959,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": [ ]
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Contact",
@@ -10916,8 +10976,12 @@
                 {
                   "HasStatus": {
                     "status_type": {
-                      "DamageOverTime": { "damage_type": "Fire" }
-                    }
+                      "DamageOverTime": {
+                        "damage_type": "Fire"
+                      }
+                    },
+                    "skill_type": null,
+                    "not": false
                   }
                 }
               ]
@@ -11000,16 +11064,16 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   },
                   {
@@ -11020,7 +11084,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": [ ]
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Contact",
@@ -11037,8 +11101,12 @@
                 {
                   "HasStatus": {
                     "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
-                    }
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    },
+                    "skill_type": null,
+                    "not": false
                   }
                 }
               ]
@@ -11121,9 +11189,9 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
@@ -11134,14 +11202,14 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
                 ],
-                "conditional_modifiers": [ ]
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Contact",
@@ -11150,7 +11218,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11173,7 +11241,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -11181,7 +11251,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11194,7 +11264,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -11202,7 +11274,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d4732e9c-3efb-4604-8b67-24a0587166b6": {
@@ -11225,7 +11297,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11239,7 +11311,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d47c084d-d9f2-479a-b1a8-f538845af398": {
@@ -11257,7 +11329,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -11284,7 +11356,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -11293,7 +11365,7 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d5875cc2-1fdf-4b50-95be-7048a03ba1e0": {
@@ -11313,7 +11385,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11324,7 +11396,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d5d610ee-8fa7-49d1-967f-3c0adc33d5a6": {
@@ -11348,7 +11420,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11363,7 +11435,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d671e323-2038-4348-94b2-5b9bb761974c": {
@@ -11385,7 +11457,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -11393,7 +11467,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11406,7 +11480,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -11414,7 +11490,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d6af89ce-d578-44ac-9f1e-acb3df84117b": {
@@ -11448,7 +11524,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11473,7 +11549,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d77b0bd8-b567-4c32-b771-a200e1f0b30c": {
@@ -11497,7 +11573,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11512,7 +11588,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d890af26-7faa-4b9e-bb32-1de1f8d66b10": {
@@ -11532,7 +11608,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11543,7 +11619,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d8a326cd-aa5a-4f5d-b587-25fdc7d95cba": {
@@ -11561,7 +11637,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11570,7 +11646,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d921b9c1-b64e-4b26-8bed-a46a239393b3": {
@@ -11592,7 +11668,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11605,7 +11681,7 @@
             "value": -5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d953476f-b3ff-4ccb-b344-15d57f437f68": {
@@ -11633,7 +11709,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11652,7 +11728,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d95d327a-d5ae-4754-be2d-a8afdeb998bc": {
@@ -11694,7 +11770,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11727,7 +11803,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d98142f0-e404-498a-8167-c33790be738e": {
@@ -11747,7 +11823,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11758,7 +11834,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "da2b4bd7-a844-4270-8c7c-67bc62673e61": {
@@ -11781,7 +11857,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11795,7 +11871,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "db23ff19-242a-4751-b628-e41b698a0788": {
@@ -11806,7 +11882,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Storm",
-        "effects": [ ],
+        "effects": [],
         "triggers": [
           {
             "name": null,
@@ -11823,7 +11899,7 @@
               "damage_type": "Storm"
             },
             "target": "SameTarget",
-            "modifiers": [ ],
+            "modifiers": [],
             "skill_range": "Melee",
             "skill_type": "Attack",
             "effects": [
@@ -11852,8 +11928,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [ ],
-                "conditional_modifiers": [ ]
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
               }
             ],
             "skill_shape": "Single",
@@ -11862,7 +11938,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11887,7 +11963,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11902,7 +11978,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "dbac4357-9e3b-4937-bed0-73891dfedd9f": {
@@ -11920,7 +11996,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11929,7 +12005,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "dc33a293-4dbf-4ecf-a0b7-b2fca942ca38": {
@@ -11953,7 +12029,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11986,7 +12062,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11995,7 +12071,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "dd6a11a9-aa80-40ed-8421-47eb388a3c3a": {
@@ -12033,7 +12109,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12062,7 +12138,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ddb42629-34b3-4202-bc1b-569b3858020b": {
@@ -12085,7 +12161,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12099,7 +12175,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "de4fefa1-145a-4825-8de9-ad5c52140395": {
@@ -12122,7 +12198,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12136,7 +12212,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "df35bf92-e646-421c-a508-c77eb30f144e": {
@@ -12178,7 +12254,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12211,7 +12287,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "df82a320-e565-4f56-a224-64f4d960ec6c": {
@@ -12234,7 +12310,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -12248,7 +12324,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "dfcf089f-d02a-4d98-a751-61e7f67da41b": {
@@ -12266,7 +12342,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -12275,7 +12351,7 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e1517847-586f-4547-868f-ef59c08a00c9": {
@@ -12293,7 +12369,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12302,7 +12378,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e169773c-9bf7-479c-9858-79c8ddfe4341": {
@@ -12329,7 +12405,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12347,7 +12423,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e29bd25b-8f33-447f-9fc2-b3127c8e1c1b": {
@@ -12370,7 +12446,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12384,7 +12460,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e30f5c37-e25e-4c73-a7ab-6f862398745f": {
@@ -12408,7 +12484,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12447,7 +12523,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12462,7 +12538,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e7588aa0-9a06-40a0-9c24-3fd3198faba1": {
@@ -12491,10 +12567,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12514,10 +12590,10 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e805af8c-ef2f-46cf-87bd-933d4e7a706e": {
@@ -12535,7 +12611,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12544,7 +12620,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e8459dcb-3136-4d37-94dd-5a1ccc1a10d4": {
@@ -12568,7 +12644,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12583,7 +12659,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e86ab726-0bef-44a0-9e8f-bfb004fd36f2": {
@@ -12603,7 +12679,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12614,7 +12690,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e8f42ab4-4664-4eec-940f-7dd030c0c45c": {
@@ -12638,7 +12714,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12653,7 +12729,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "e910bdb3-617b-44ae-93eb-9128aaff8055": {
@@ -12677,7 +12753,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12692,7 +12768,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ea811764-421a-48f8-a3c7-aa838a77c478": {
@@ -12716,7 +12792,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12731,7 +12807,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "eae6f794-f83b-4d5e-a17f-e8f02b62906d": {
@@ -12753,7 +12829,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -12761,7 +12839,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12774,7 +12852,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumMana" ],
+                "conditions": [
+                  "MaximumMana"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -12782,7 +12862,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "eb5d66c8-17cc-4812-bcda-c425f0941aea": {
@@ -12845,7 +12925,7 @@
             "value": 40.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12899,7 +12979,7 @@
             "value": 20.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "eb8c6b19-ca8a-4791-be2d-bf649098f40c": {
@@ -12926,7 +13006,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12944,7 +13024,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ec0d4c11-db32-4a0e-8967-0b6f833bb381": {
@@ -12981,7 +13061,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13009,7 +13089,7 @@
             "value": 2.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ee94acac-35a1-44b7-8f03-d8aa9418f3c0": {
@@ -13027,7 +13107,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13036,7 +13116,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ef65ff62-73ba-4611-9465-7b69c14fc1ef": {
@@ -13059,7 +13139,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13073,7 +13153,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f0082e61-4cec-4dc1-af24-b1319fe1e4fc": {
@@ -13093,7 +13173,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13104,7 +13184,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f104716b-c9b7-4200-aeb5-35de355dcfb9": {
@@ -13124,7 +13204,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13135,7 +13215,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
@@ -13154,11 +13234,13 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [ "MaximumLife" ]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Increased",
-            "value": 80.0
+            "value": 50.0
           },
           {
             "stat": {
@@ -13171,14 +13253,16 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [ "MaximumLife" ]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
-            "value": 40.0
+            "value": 25.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13188,11 +13272,13 @@
                   "CritChance": null
                 },
                 "skill_type": null,
-                "conditions": [ "MaximumLife" ]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "Increased",
-            "value": 40.0
+            "value": 30.0
           },
           {
             "stat": {
@@ -13205,14 +13291,16 @@
                   }
                 },
                 "skill_type": null,
-                "conditions": [ "MaximumLife" ]
+                "conditions": [
+                  "MaximumLife"
+                ]
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 15.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f288158b-81e2-4237-ac6e-34bd492e45f4": {
@@ -13234,7 +13322,7 @@
             "value": -20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13247,7 +13335,7 @@
             "value": -10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f3140e7a-1c89-4e41-ae04-05f02d174183": {
@@ -13265,7 +13353,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [
           {
@@ -13274,7 +13362,7 @@
             "value": 25.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f38a9d8c-d649-46e2-bcf5-e5285cc27c96": {
@@ -13294,7 +13382,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13305,7 +13393,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f39c8abe-6388-410c-8b45-416dbfe666ed": {
@@ -13336,7 +13424,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13358,7 +13446,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f4702777-9239-47f1-9f71-f5fa7b10646b": {
@@ -13380,7 +13468,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -13388,7 +13478,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13401,7 +13491,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "MaximumLife" ],
+                "conditions": [
+                  "MaximumLife"
+                ],
                 "conditions_duration": 50
               }
             },
@@ -13409,7 +13501,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f48403d7-7425-4bc2-8056-4e9fe824be15": {
@@ -13433,7 +13525,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13448,7 +13540,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f48dfcb6-4eef-49bc-ae62-5bf211156525": {
@@ -13479,7 +13571,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13501,7 +13593,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "f7dcbf75-2d58-4b4c-822c-4a11343432d9": {
@@ -13512,10 +13604,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [ ],
-        "triggers": [ ],
+        "effects": [],
+        "triggers": [],
         "locked": true,
-        "upgrade_effects": [ ],
+        "upgrade_effects": [],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -13538,7 +13630,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -13546,7 +13640,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13559,7 +13653,9 @@
                     "min_max": null
                   }
                 },
-                "conditions": [ "ThreatLevel" ],
+                "conditions": [
+                  "ThreatLevel"
+                ],
                 "conditions_duration": 0
               }
             },
@@ -13567,7 +13663,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "fd4f4880-52d3-4d41-aaa4-df291390229c": {
@@ -13609,7 +13705,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13642,7 +13738,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "fda3dba6-13f7-4db4-9178-a4aedd10969b": {
@@ -13669,7 +13765,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13687,7 +13783,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "fed5d5fb-f3d1-4680-9e2b-4b2f69ce4cb0": {
@@ -13711,7 +13807,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13726,7 +13822,7 @@
             "value": 5.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ff32f6af-3088-4f9b-963b-d469ea869adb": {
@@ -13744,7 +13840,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13753,7 +13849,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ff796aa2-b773-47aa-9745-622c333e424a": {
@@ -13784,7 +13880,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [ ],
+        "triggers": [],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13806,7 +13902,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 3,
+        "max_upgrade_level": 5,
         "socket": false
       }
     },
