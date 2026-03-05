@@ -34,6 +34,9 @@ COPY --from=builder /backend_chat /
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 RUN chown appuser:appgroup /backend_chat -R
 
+RUN mkdir -p /backend_chat/logs
+RUN chown -R appuser:appgroup /backend_chat/logs
+
 EXPOSE 4242
 
 USER appuser
