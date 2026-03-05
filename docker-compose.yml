@@ -53,7 +53,7 @@ services:
       dockerfile: ./backend_chat/Dockerfile
     volumes:
       - ./profanities:/profanities
-      - ./logs:/backend_chat/logs
+      - ./logs:/logs
     restart: always
     healthcheck:
       test: curl --fail http://backend_chat:4242 || exit 1
