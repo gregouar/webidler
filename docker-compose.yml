@@ -34,6 +34,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       AES_KEY: ${AES_KEY}
       HASH_KEY: ${HASH_KEY}
+      HMAC_KEY: ${HMAC_KEY}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       DATABASE_URL: postgres://webidler_user:${POSTGRES_PASSWORD}@database/webidler
       CORS_ORIGINS: https://gregouar.github.io,https://html-classic.itch.zone
@@ -59,6 +60,7 @@ services:
       timeout: 10s
       retries: 5
     environment:
+      HMAC_KEY: ${HMAC_KEY}
       CORS_ORIGINS: https://gregouar.github.io,https://html-classic.itch.zone
       BACKEND_URL: http://backend:4200
       RUST_LOG: INFO

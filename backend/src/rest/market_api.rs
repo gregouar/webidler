@@ -150,9 +150,9 @@ pub async fn post_buy_market_item(
                 Some(&item_bought.item_specs),
             )
             .await
-        {
-            tracing::warn!("failed to send chat message: {err}");
-        }
+    {
+        tracing::warn!("failed to send chat message: {err}");
+    }
 
     inventory_controller::store_item_to_bag(&mut inventory, item_bought.item_specs)?;
 

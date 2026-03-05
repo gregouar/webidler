@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
@@ -43,7 +43,7 @@ impl Matchable for DamageType {
     }
 }
 
-pub type DamageMap = HashMap<DamageType, ChanceRange<ModifiableValue<NonNegative>>>;
+pub type DamageMap = BTreeMap<DamageType, ChanceRange<ModifiableValue<NonNegative>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {

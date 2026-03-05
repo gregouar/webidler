@@ -38,7 +38,7 @@
     },
     {
       "item_id": "kite_shield_unique",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "ritual_orb",
@@ -67,7 +67,7 @@
     },
     {
       "item_id": "edict_treasure_map",
-      "weight": 50
+      "weight": 500
     },
     {
       "item_id": "rune",

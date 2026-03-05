@@ -161,7 +161,12 @@ async fn new_game_instance(
             };
 
             let base_weapon_id = "dagger".to_string();
-            if let Some(base_weapon) = master_store.items_store.get(&base_weapon_id).cloned() {
+            if let Some(base_weapon) = master_store
+                .items_store
+                .content
+                .get(&base_weapon_id)
+                .cloned()
+            {
                 let _ = inventory_controller::equip_item(
                     &mut player_inventory,
                     loot_generator::roll_item(
@@ -172,6 +177,7 @@ async fn new_game_instance(
                         &master_store.item_affixes_table,
                         &master_store.item_adjectives_table,
                         &master_store.item_nouns_table,
+                        // &master_store.items_store.signature_key,
                     ),
                 );
             }

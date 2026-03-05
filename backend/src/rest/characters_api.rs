@@ -37,6 +37,7 @@ use crate::{
         },
         systems::items_controller,
     },
+    rest::utils::MsgPack,
 };
 
 use super::AppError;
@@ -110,7 +111,7 @@ async fn get_character_details(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     Path(character_id): Path<UserId>,
-) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
+) -> Result<MsgPack<GetCharacterDetailsResponse>, AppError> {
     read_character_details(db_pool, master_store, character_id).await
 }
 
@@ -118,7 +119,7 @@ async fn get_character_by_name(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     Path(character_name): Path<Username>,
-) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
+) -> Result<MsgPack<GetCharacterDetailsResponse>, AppError> {
     let character_id = db::characters::get_character_by_name(&db_pool, &character_name)
         .await?
         .ok_or(AppError::UserError(format!(
@@ -133,7 +134,7 @@ async fn read_character_details(
     db_pool: db::DbPool,
     master_store: MasterStore,
     character_id: UserCharacterId,
-) -> Result<Json<GetCharacterDetailsResponse>, AppError> {
+) -> Result<MsgPack<GetCharacterDetailsResponse>, AppError> {
     let (
         character,
         areas_completed,
@@ -226,7 +227,7 @@ async fn read_character_details(
         GrindStats { skills_specs }
     });
 
-    Ok(Json(GetCharacterDetailsResponse {
+    Ok(MsgPack(GetCharacterDetailsResponse {
         character,
         areas,
         inventory,

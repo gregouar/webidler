@@ -15,7 +15,7 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use backend_shared::profanities_checker::ProfanitiesChecker;
+use backend_shared::{profanities_checker::ProfanitiesChecker, signature};
 
 use backend::{
     app_state::{AppSettings, AppState},
@@ -32,7 +32,7 @@ use backend::{
 async fn main() {
     let _ = dotenvy::dotenv();
 
-    let master_store = MasterStore::load_from_folder("data")
+    let master_store = MasterStore::load_from_folder("data", signature::load_hmac_key("HMAC_KEY"))
         .await
         .expect("couldn't load master game data");
 
@@ -153,6 +153,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_master_store() {
-        MasterStore::load_from_folder("../data").await.unwrap();
+        MasterStore::load_from_folder("../data", Default::default())
+            .await
+            .unwrap();
     }
 }

@@ -14,7 +14,7 @@
     },
     {
       "item_id": "padded_tunic_unique",
-      "weight": 1
+      "weight": 5
     },
     {
       "item_id": "cloth_wraps",
@@ -22,7 +22,7 @@
     },
     {
       "item_id": "cloth_wraps_unique",
-      "weight": 50,
+      "weight": 500,
       "min_area_level": 5
     },
     {
@@ -31,7 +31,7 @@
     },
     {
       "item_id": "dagger_unique",
-      "weight": 50,
+      "weight": 500,
       "min_area_level": 5
     },
     {

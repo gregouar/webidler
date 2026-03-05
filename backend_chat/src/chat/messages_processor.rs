@@ -1,28 +1,30 @@
 use axum::body::Bytes;
-use backend_shared::{http::users::UserId, profanities_checker::ProfanitiesChecker};
-use dashmap::DashMap;
 use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
 
+use backend_shared::profanities_checker::ProfanitiesChecker;
 use shared_chat::{
     messages::server::{ErrorMessage, ErrorType, ServerChatMessage, ServerWhisperFeedbackMessage},
     ring_buffer::RingBuffer,
     types::{ChatChannel, ChatContent, ChatMessage},
 };
 
-use crate::chat::{chat_state::ChatState, user_moderation::UserModerationState};
+use crate::chat::chat_state::ChatState;
 
 pub struct MessagesProcessor {
     inbound_rx: mpsc::Receiver<(Uuid, ChatMessage)>,
 
     chat_state: ChatState,
     profanities_checker: ProfanitiesChecker,
-    // TODO: Banned, Muted, SpamBucket in some Moderation thingy?
+    // item_signature_key: Arc<HmacKey>,
 }
 
 impl MessagesProcessor {
-    pub fn new(profanities_checker: ProfanitiesChecker) -> Self {
+    pub fn new(
+        profanities_checker: ProfanitiesChecker,
+        // item_signature_key: HmacKey,
+    ) -> Self {
         let (inbound_tx, inbound_rx) = mpsc::channel(1000);
         let (outbound_tx, _) = broadcast::channel(500);
         Self {
@@ -34,8 +36,10 @@ impl MessagesProcessor {
                 users_map: Default::default(),
                 usernames_map: Default::default(),
                 history: Arc::new(Mutex::new(RingBuffer::new(100))),
+                users_moderation: Default::default(),
             },
             profanities_checker,
+            // item_signature_key: Arc::new(item_signature_key),
         }
     }
 
@@ -44,8 +48,6 @@ impl MessagesProcessor {
     }
 
     pub async fn run(mut self) {
-        let user_states: DashMap<UserId, UserModerationState> = DashMap::new();
-
         while let Some((session_id, msg)) = self.inbound_rx.recv().await {
             if msg.channel == ChatChannel::System && session_id != Uuid::default() {
                 send_direct_error(&self.chat_state, session_id, "cannot send to that channel")
@@ -54,7 +56,8 @@ impl MessagesProcessor {
             }
 
             if let Some(user_id) = msg.user_id {
-                let mut user_moderation = user_states.entry(user_id).or_default();
+                let mut user_moderation =
+                    self.chat_state.users_moderation.entry(user_id).or_default();
 
                 if user_moderation.is_muted() {
                     send_direct_error(&self.chat_state, session_id, "you are muted").await;
@@ -66,6 +69,15 @@ impl MessagesProcessor {
                     continue;
                 }
             }
+
+            // if !verify_linked_item(
+            //     &msg.linked_item,
+            //     msg.item_signature,
+            //     &self.item_signature_key,
+            // ) {
+            //     send_direct_error(&self.chat_state, session_id, "invalid item linked").await;
+            //     continue;
+            // }
 
             let (content, channel, target_username) =
                 if let Some((username, message)) = parse_whisper_message(&msg.content) {
@@ -91,14 +103,17 @@ impl MessagesProcessor {
                 };
 
             let content = if self.profanities_checker.contains_profanities(&content) {
+                tracing::warn!(target: "chat", user_id = %msg.user_id.unwrap_or_default(), content = %&content, "moderated message");
                 ChatContent::try_new("***").unwrap_or_default()
             } else {
+                tracing::info!(target: "chat", user_id = %msg.user_id.unwrap_or_default(), content = %&content, "message");
                 content
             };
 
             let chat_message = ChatMessage {
                 content,
                 channel,
+                // item_signature: None,
                 ..msg
             };
             let server_chat_message = ServerChatMessage::Broadcast(chat_message.clone().into());
@@ -188,3 +203,20 @@ fn parse_whisper_message(content: &str) -> Option<(String, ChatContent)> {
         ChatContent::try_new(message).ok()?,
     ))
 }
+
+// fn verify_linked_item(
+//     linked_item: &Option<LinkedItemBytes>,
+//     item_signature: Option<HmacSignature>,
+//     key: &HmacKey,
+// ) -> bool {
+//     linked_item
+//         .as_ref()
+//         .map(|linked_item| {
+//             signature::verify_hmac(
+//                 linked_item.as_ref(),
+//                 &item_signature.unwrap_or_default(),
+//                 key,
+//             )
+//         })
+//         .unwrap_or(true)
+// }

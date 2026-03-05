@@ -3,7 +3,7 @@ use std::{env, sync::Arc};
 use shared::data::item::ItemSpecs;
 use shared_chat::{
     messages::client::ClientPostMessage,
-    types::{ChatChannel, ChatContent, UserId},
+    types::{ChatChannel, ChatContent, LinkedItemBytes, UserId},
 };
 
 #[derive(Clone)]
@@ -30,7 +30,7 @@ impl ChatIntegration {
             .json(&ClientPostMessage {
                 channel: ChatChannel::System,
                 content: ChatContent::try_new(content)?,
-                linked_item: linked_item.and_then(|item_specs| rmp_serde::to_vec(item_specs).ok()),
+                linked_item: linked_item.and_then(to_linked_item_bytes),
             })
             .send()
             .await?;
@@ -54,7 +54,7 @@ impl ChatIntegration {
             .json(&ClientPostMessage {
                 channel: ChatChannel::System,
                 content: ChatContent::try_new(content)?,
-                linked_item: linked_item.and_then(|item_specs| rmp_serde::to_vec(item_specs).ok()),
+                linked_item: linked_item.and_then(to_linked_item_bytes),
             })
             .send()
             .await?;
@@ -66,4 +66,10 @@ impl ChatIntegration {
 
         Ok(())
     }
+}
+
+fn to_linked_item_bytes(item_specs: &ItemSpecs) -> Option<LinkedItemBytes> {
+    // let mut cloned_item_specs = item_specs.clone();
+    // cloned_item_specs.signature = Default::default();
+    LinkedItemBytes::try_new(rmp_serde::to_vec(item_specs).ok()?).ok()
 }

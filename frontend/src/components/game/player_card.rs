@@ -18,7 +18,7 @@ use crate::{
         ui::{
             buttons::{FancyButton, Toggle},
             card::Card,
-            number::format_number,
+            number::{Number, format_number},
             progress_bars::{
                 CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
                 predictive_cooldown,
@@ -383,7 +383,8 @@ fn BuySkillButton() -> impl IntoView {
             <div class="flex flex-col space-y-1 text-sm max-w-xs">
                 <span class="font-semibold text-white">{"Buy Cost"}</span>
                 <span class="text-zinc-300">
-                    {format!("{} Gold", format_number(buy_skill_cost.get()))}
+                    <Number class:font-semibold value=buy_skill_cost />
+                    " Gold"
                 </span>
             </div>
         }
@@ -631,7 +632,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             <div class="flex flex-col space-y-1 text-sm max-w-xs">
                 <span class="font-semibold text-white">{"Upgrade Cost"}</span>
                 <span class="text-zinc-300">
-                    {format!("{} Gold", format_number(level_up_cost.get()))}
+                    <Number class:font-semibold value=level_up_cost />
+                    " Gold"
                 </span>
                 <span class="text-xs italic text-gray-400">
                     {format!("Hold CTRL: +{}", level_up_batch.get().0)}

@@ -23,7 +23,7 @@ pub async fn handle_client_inputs(
     master_store: &MasterStore,
 ) -> ControlFlow<(), ()> {
     // We limit the amount of events we handle in one loop
-    for _ in 1..100 {
+    for _ in 1..5 {
         match client_conn.poll_receive() {
             ControlFlow::Continue(Some(m)) => {
                 if let Some(error_message) = handle_client_message(master_store, game_data, m)

@@ -20,3 +20,6 @@ aho-corasick = "1.1.4"
 unicode-normalization = "0.1.25"
 
 anyhow = "1.0.97"
+hmac = "0.12.1"
+sha2 = "0.10.9"
+hex = "0.4.3"

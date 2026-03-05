@@ -18,7 +18,7 @@ use shared_chat::{
         server::{ErrorType, ServerChatMessage},
     },
     ring_buffer::RingBuffer,
-    types::{ChatChannel, ChatContent, ChatMessage, UserId},
+    types::{ChatChannel, ChatContent, ChatMessage, LinkedItemBytes, UserId},
 };
 
 use crate::components::{auth::AuthContext, ui::toast::*};
@@ -133,10 +133,20 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
                 &ClientPostMessage {
                     channel: write_channel.get_untracked(),
                     content,
-                    linked_item: linked_item
-                        .read_untracked()
-                        .as_ref()
-                        .and_then(|linked_item| MsgpackSerdeCodec::encode(linked_item).ok()),
+                    linked_item: linked_item.read_untracked().as_ref().and_then(
+                        |linked_item: &Arc<ItemSpecs>| {
+                            // let mut item_specs = (**linked_item).clone();
+                            // item_specs.signature = Default::default();
+
+                            let serialized_item = LinkedItemBytes::try_new(
+                                MsgpackSerdeCodec::encode(linked_item).ok()?,
+                            )
+                            .ok()?;
+
+                            // Some((serialized_item, linked_item.signature.clone()))
+                            Some(serialized_item)
+                        },
+                    ),
                 }
                 .into(),
             );
@@ -148,7 +158,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         user_id: RwSignal::new(None),
         send,
         users_map: Default::default(),
-        messages: RwSignal::new(RingBuffer::new(20)),
+        messages: RwSignal::new(RingBuffer::new(100)),
         // TODO: Store in storage
         minimized: RwSignal::new(true),
         opened: RwSignal::new(true),

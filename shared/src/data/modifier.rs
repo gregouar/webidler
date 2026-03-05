@@ -22,6 +22,7 @@ pub enum Modifier {
 
 #[cfg(not(feature = "modifiable"))]
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+#[serde(transparent)]
 pub struct ModifiableValue<T>(T);
 
 #[cfg(not(feature = "modifiable"))]
@@ -85,6 +86,7 @@ where
     }
 
     fn compute(&mut self) {
+        // TODO: Round? Would need to rescale cooldowns
         self.evaluated = self.evaluate(true);
     }
 
@@ -218,6 +220,7 @@ pub trait BaseModifiableValue {
     fn multiply_value(&self, value: f64) -> Self;
     fn add_value(&self, value: f64) -> Self;
     fn is_negative(&self) -> bool;
+    fn round(&self) -> Self;
 }
 
 impl BaseModifiableValue for f64 {
@@ -232,6 +235,10 @@ impl BaseModifiableValue for f64 {
     fn is_negative(&self) -> bool {
         *self < 0.0
     }
+
+    fn round(&self) -> f64 {
+        (*self).round()
+    }
 }
 
 impl BaseModifiableValue for f32 {
@@ -245,6 +252,10 @@ impl BaseModifiableValue for f32 {
 
     fn is_negative(&self) -> bool {
         *self < 0.0
+    }
+
+    fn round(&self) -> f32 {
+        (*self).round()
     }
 }
 

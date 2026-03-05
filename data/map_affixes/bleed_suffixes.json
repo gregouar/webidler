@@ -2,18 +2,18 @@
   {
     "name": "of Lesion",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -28,7 +28,7 @@
         "value": 40
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 20
@@ -38,18 +38,18 @@
   {
     "name": "of Laceration",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -64,7 +64,7 @@
         "value": 80
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 40
@@ -74,18 +74,18 @@
   {
     "name": "of Wounding",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 300,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -100,7 +100,7 @@
         "value": 120
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 60
@@ -110,18 +110,18 @@
   {
     "name": "of Hemorrhage",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 400,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -136,7 +136,7 @@
         "value": 160
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 80
@@ -146,18 +146,18 @@
   {
     "name": "of Gushing",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -172,7 +172,7 @@
         "value": 200
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 100
@@ -182,18 +182,18 @@
   {
     "name": "of Slicing",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -208,7 +208,7 @@
         "value": 240
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 120
@@ -218,18 +218,18 @@
   {
     "name": "of Severing",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 700,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -244,7 +244,7 @@
         "value": 280
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 140
@@ -254,18 +254,18 @@
   {
     "name": "of Evisceration",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 800,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -280,7 +280,7 @@
         "value": 320
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 160
@@ -290,18 +290,18 @@
   {
     "name": "of Exsanguination",
     "family": "extra_bleed_damage",
-    "tags": ["Physical"],
+    "tags": [ "Physical" ],
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 500,
-    "restrictions": ["Map"],
+    "restrictions": [ "Map" ],
     "item_level": 900,
     "effects": [
       {
         "scope": "Local",
         "stat": {
           "StatConverter": {
-            "source": { "DamageOverTime": {} },
+            "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
                 "status_type": {
@@ -316,7 +316,7 @@
         "value": 400
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
         "value": 200

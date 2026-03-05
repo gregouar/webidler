@@ -1,4 +1,5 @@
 use anyhow::{Result, anyhow};
+use backend_shared::signature::HmacKey;
 use futures::future::join_all;
 use std::{
     collections::HashMap,
@@ -50,14 +51,17 @@ impl LoadJsonFromFile for PassivesTreeSpecs {}
 impl LoadJsonFromFile for BenedictionSpecs {}
 
 impl MasterStore {
-    pub async fn load_from_folder(folder_path: impl AsRef<Path>) -> Result<Self> {
+    pub async fn load_from_folder(
+        folder_path: impl AsRef<Path>,
+        item_signature_key: HmacKey,
+    ) -> Result<Self> {
         let manifest = manifest::load_manifest(folder_path).await?;
 
         let (
             passives_store,
             benedictions_store,
             skills_store,
-            items_store,
+            items_store_content,
             item_affixes_table,
             item_adjectives_table,
             item_nouns_table,
@@ -93,7 +97,10 @@ impl MasterStore {
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),
             skills_store: Arc::new(skills_store?),
-            items_store: Arc::new(items_store?),
+            items_store: Arc::new(ItemsStore {
+                content: items_store_content?,
+                signature_key: item_signature_key,
+            }),
             item_affixes_table: Arc::new(item_affixes_table?),
             item_adjectives_table: Arc::new(item_adjectives_table?),
             item_nouns_table: Arc::new(item_nouns_table?),
@@ -150,7 +157,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         .values()
         .flat_map(|t| &t.entries)
     {
-        if master_store.items_store.get(&loot.item_id).is_none() {
+        if !master_store.items_store.content.contains_key(&loot.item_id) {
             errors.push(anyhow!("Missing item '{}' from store", loot.item_id));
         }
     }
@@ -190,7 +197,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_store_integrity() -> Result<(), Box<dyn std::error::Error>> {
-        MasterStore::load_from_folder("../data").await?;
+        MasterStore::load_from_folder("../data", Default::default()).await?;
         Ok(())
     }
 }

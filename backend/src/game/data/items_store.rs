@@ -1,3 +1,4 @@
+use backend_shared::signature::HmacKey;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -10,7 +11,14 @@ use crate::game::utils::json::LoadJsonFromFile;
 
 pub type ItemId = String;
 
-pub type ItemsStore = HashMap<ItemId, ItemBase>;
+pub type ItemsStoreContent = HashMap<ItemId, ItemBase>;
+
+#[derive(Debug, Clone)]
+pub struct ItemsStore {
+    pub content: ItemsStoreContent,
+    pub signature_key: HmacKey,
+}
+
 pub type ItemAffixesTable = Vec<ItemAffixBlueprint>;
 
 impl LoadJsonFromFile for ItemBase {}

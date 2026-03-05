@@ -1,5 +1,6 @@
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
+#[derive(Debug, Clone)]
 pub struct UserModerationState {
     tokens: u32,
     last_refill: Instant,
@@ -44,5 +45,9 @@ impl UserModerationState {
             Some(t) => Instant::now() < t,
             None => false,
         }
+    }
+
+    pub fn mute(&mut self, duration: Duration) {
+        self.mute_until = Some(Instant::now() + duration);
     }
 }

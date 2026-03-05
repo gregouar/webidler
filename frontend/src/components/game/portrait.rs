@@ -139,8 +139,8 @@ pub fn CharacterPortrait(
     let (border_class, shimmer_effect) = match rarity {
         MonsterRarity::Normal => (
             "
-            shadow-[0_0_0_2px_#78716c,0_0_0_4px_#1c1917,0_0_0_6px_#78716c]
-            xl:shadow-[0_0_0_2px_#78716c,0_0_0_6px_#1c1917,0_0_0_8px_#78716c]
+            shadow-[0_0_0_2px_#78716c,0_0_0_4px_#2e2926,0_0_0_6px_#78716c]
+            xl:shadow-[0_0_0_3px_#78716c,0_0_0_6px_#2e2926,0_0_0_8px_#78716c]
             ",
             "",
         ),
@@ -148,7 +148,7 @@ pub fn CharacterPortrait(
         MonsterRarity::Champion => (
             "
             shadow-[0_0_0_2px_#4338ca,0_0_0_4px_#1e1b4b,0_0_0_6px_#4338ca]
-            xl:shadow-[0_0_0_2px_#4338ca,0_0_0_6px_#1e1b4b,0_0_0_8px_#4338ca]
+            xl:shadow-[0_0_0_3px_#4338ca,0_0_0_6px_#1e1b4b,0_0_0_8px_#4338ca]
             ",
             "champion-shimmer",
         ),
@@ -163,6 +163,7 @@ pub fn CharacterPortrait(
     };
 
     view! {
+        <style>"color: #2e2926;"</style>
         <div class=move || {
             format!(
                 "flex items-center justify-center h-full w-full relative p-1 xl:p-2 {}",

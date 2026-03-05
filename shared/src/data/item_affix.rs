@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 
 use crate::data::{chance::ChanceRange, modifier::Modifier};
 
@@ -52,14 +52,14 @@ pub enum AffixEffectScope {
 pub struct ItemAffixBlueprint {
     pub name: String,
     pub family: String, // Cannot generate multiple affixes of same category on item
-    pub tags: HashSet<AffixTag>,
+    pub tags: BTreeSet<AffixTag>,
 
     pub affix_type: AffixType,
     pub tier: u8,
     pub weight: u64, // Bigger weight means more chance to have affix
 
     #[serde(default)]
-    pub restrictions: Option<HashSet<ItemCategory>>,
+    pub restrictions: Option<BTreeSet<ItemCategory>>,
     pub item_level: AreaLevel,
 
     #[serde(default)]
@@ -83,7 +83,7 @@ pub struct AffixEffectBlueprint {
 pub struct ItemAffix {
     pub name: String,
     pub family: String,
-    pub tags: HashSet<AffixTag>,
+    pub tags: BTreeSet<AffixTag>,
 
     pub affix_type: AffixType,
     pub tier: u8,
