@@ -5,9 +5,9 @@ pub type HmacKey = [u8; 32];
 pub type HmacSignature = [u8; 32];
 
 pub fn load_hmac_key(setting_name: &str) -> HmacKey {
-    let hex = std::env::var(setting_name).expect(&format!("{setting_name} must be set"));
+    let hex = std::env::var(setting_name).unwrap_or_else(|_| panic!("{setting_name} must be set"));
 
-    let bytes = hex::decode(hex).expect(&format!("{setting_name} must be valid hex"));
+    let bytes = hex::decode(hex).unwrap_or_else(|_| panic!("{setting_name} must be valid hex"));
 
     if bytes.len() != 32 {
         panic!("{setting_name} must be 32 bytes (64 hex chars)");

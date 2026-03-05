@@ -120,13 +120,12 @@ pub fn ChatPanel() -> impl IntoView {
     });
 
     Effect::new(move || {
-        if !chat_context.minimized.get() && chat_context.opened.get() {
-            if let Some(el) = messages_node.get()
+        if !chat_context.minimized.get() && chat_context.opened.get()
+            && let Some(el) = messages_node.get()
                 && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
             {
                 html_el.set_scroll_top(html_el.scroll_height());
             }
-        }
     });
 
     let text_area_ref: NodeRef<leptos::html::Textarea> = NodeRef::new();
