@@ -157,12 +157,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         .values()
         .flat_map(|t| &t.entries)
     {
-        if master_store
-            .items_store
-            .content
-            .get(&loot.item_id)
-            .is_none()
-        {
+        if !master_store.items_store.content.contains(&loot.item_id) {
             errors.push(anyhow!("Missing item '{}' from store", loot.item_id));
         }
     }
