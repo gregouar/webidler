@@ -424,7 +424,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
             .map(|item_specs| {
                 inventory
                     .equip_filter
-                    .with_untracked(|equip_filter| match equip_filter {
+                    .with(|equip_filter| match equip_filter {
                         InventoryEquipFilter::Slot => item_specs.base.slot.is_some(),
                         InventoryEquipFilter::Map(area_id) => item_specs
                             .base
