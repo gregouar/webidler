@@ -15,7 +15,10 @@ use crate::{
             effects_tooltip::{self, formatted_effects_list},
             trigger_tooltip::{self, format_trigger},
         },
-        ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+        ui::{
+            Separator,
+            tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+        },
     },
 };
 
@@ -484,13 +487,13 @@ pub fn NodeTooltipContent(
             <ul class="list-none space-y-1">
                 <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>
             </ul>
-            <hr class="border-t border-gray-700" />
+            <Separator />
         }
     });
     let locked_text = move || {
         is_locked().then(|| {
             view! {
-                <hr class="border-t border-gray-700" />
+                <Separator />
                 <ul class="list-none space-y-1">
                     <li class="text-red-500 text-sm leading-snug">"Locked"</li>
                 </ul>
@@ -509,7 +512,7 @@ pub fn NodeTooltipContent(
                             </ul>
                         }
                     })}
-                <hr class="border-t border-gray-700" />
+                <Separator />
                 <ul>
                     <li class="text-sm text-gray-400 leading-snug">"Ascend to Socket Rune"</li>
                 </ul>
@@ -526,7 +529,7 @@ pub fn NodeTooltipContent(
             } else if is_locked() {
                 Some(
                     view! {
-                        <hr class="border-t border-gray-700" />
+                        <Separator />
                         <ul>
                             <li>
                                 <span class="text-sm text-gray-400 leading-snug">
@@ -541,7 +544,7 @@ pub fn NodeTooltipContent(
                 let max_level = node_level() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
-                        <hr class="border-t border-gray-700" />
+                        <Separator />
                         <p class="text-sm text-gray-400 leading-snug">
                             "Level: " <span class="text-white">{node_level}</span>
                             {max_upgrade_level
@@ -564,7 +567,7 @@ pub fn NodeTooltipContent(
                         {(!max_level)
                             .then(|| {
                                 view! {
-                                    <hr class="border-t border-gray-700" />
+                                    <Separator />
                                     <ul class="text-xs xl:text-sm">
                                         <li>
                                             <span class="text-gray-400 leading-snug">
@@ -592,7 +595,7 @@ pub fn NodeTooltipContent(
                 <li class="leading-snug whitespace-pre-line">{node_specs.name.clone()}</li>
             </ul>
         </strong>
-        <hr class="border-t border-gray-700" />
+        <Separator />
         {starting_node_text}
         <ul class="list-none space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
         {socket_text}

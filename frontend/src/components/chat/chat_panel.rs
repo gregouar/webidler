@@ -415,15 +415,11 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         let item_specs = item_specs.clone();
         move || {
             let item_specs = item_specs.clone();
+            let show_affixes = show_affixes.get();
             // TODO: Compare? Max Item Level?
             view! {
                 <div class="flex gap-1 xl:gap-2">
-                    {move || {
-                        let item_specs = item_specs.clone();
-                        let show_affixes = show_affixes.get();
-                        view! { <ItemTooltip item_specs show_affixes /> }
-                    }}
-
+                    <ItemTooltip item_specs show_affixes />
                 </div>
             }
             .into_any()

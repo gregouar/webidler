@@ -297,7 +297,9 @@ pub fn apply_status(
 
     let (duration, value) = if status_resistance > 0.0 {
         let factor = (1.0 - status_resistance * 0.01).clamp(0.0, 1.0);
-        if let Some(duration) = duration {
+        if let Some(duration) = duration
+            && duration.get() < 1e10
+        {
             (Some(duration * factor), value)
         } else {
             (None, value * factor)

@@ -103,10 +103,10 @@ impl MessagesProcessor {
                 };
 
             let content = if self.profanities_checker.contains_profanities(&content) {
-                tracing::warn!(target: "chat", user_id = %msg.user_id.unwrap_or_default(), content = %&content, "moderated message");
+                tracing::warn!(target: "chat", channel = ?msg.channel, user_id = %msg.user_id.unwrap_or_default(), content = %&content, "moderated message");
                 ChatContent::try_new("***").unwrap_or_default()
             } else {
-                tracing::info!(target: "chat", user_id = %msg.user_id.unwrap_or_default(), content = %&content, "message");
+                tracing::info!(target: "chat", channel = ?msg.channel, user_id = %msg.user_id.unwrap_or_default(), content = %&content, "message");
                 content
             };
 

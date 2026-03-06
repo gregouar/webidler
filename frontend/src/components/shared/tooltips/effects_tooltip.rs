@@ -472,7 +472,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             status_type,
         } => {
             format!(
-                "{}{} Resistance",
+                "{}{} Resilience",
                 skill_type_str(*skill_type),
                 status_type_str(status_type.as_ref())
             )
@@ -704,7 +704,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_type,
         } => {
             format!(
-                "{} Resistance to {}{}",
+                "{}% Resilience to {}{}",
                 format_adds_removes(value, false, ""),
                 skill_type_str(*skill_type),
                 status_type_value_str(status_type.as_ref())

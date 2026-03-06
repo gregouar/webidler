@@ -5,13 +5,18 @@ use shared::data::{
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{StatStatusType, StatType},
+    trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
 
 use crate::components::{
     game::GameContext,
-    shared::tooltips::effects_tooltip::{self, format_multiplier_stat_name},
+    shared::tooltips::{
+        effects_tooltip::{self, format_multiplier_stat_name},
+        trigger_tooltip,
+    },
     ui::{
+        Separator,
         card::{Card, CardHeader, CardInset},
         menu_panel::MenuPanel,
         number::{format_duration, format_number},
@@ -623,6 +628,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             0.0,
                         )} {make_opt_stat(StatType::CritDamage(None), Modifier::More, 0.0)}
                     </StatCategory>
+
+                    <TriggersStats class:col-span-2 class:xl:col-span-3 />
                 </div>
 
             </Card>
@@ -707,5 +714,52 @@ pub fn format_effect_value(value: f64) -> String {
             "-{}%",
             format_number(-(if div != 0.0 { value / div } else { 0.0 }))
         )
+    }
+}
+
+#[component]
+fn TriggersStats() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    // after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px
+    // after:bg-gradient-to-r after:from-transparent after:via-zinc-600 after:to-transparent
+    // last:after:hidden
+    // xl:[&:nth-last-child(-n+3)]:after:hidden
+    // [&:nth-last-child(-n+2)]:after:hidden
+    view! {
+        <CardInset pad=false>
+            <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
+                "Triggers"
+            </h2>
+            <div class="columns-2 xl:columns-3 gap-1">
+                {move || {
+                    let mut triggers = game_context
+                        .player_specs
+                        .read()
+                        .character_specs
+                        .triggers
+                        .clone();
+                    triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
+
+                    view! {
+                        <For
+                            each=move || triggers.clone().into_iter()
+                            key=|triggered_effect| triggered_effect.trigger_id.clone()
+                            let(triggered_effect)
+                        >
+                            <div class="relative pb-2 list-none break-inside-avoid">
+                                {trigger_tooltip::format_trigger(TriggerSpecs {
+                                    name: None,
+                                    icon: None,
+                                    description: None,
+                                    triggered_effect: triggered_effect.clone(),
+                                })} <Separator />
+                            </div>
+                        </For>
+                    }
+                }}
+
+            </div>
+        </CardInset>
     }
 }

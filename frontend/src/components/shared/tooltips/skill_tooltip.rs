@@ -30,7 +30,7 @@ use crate::components::{
             format_trigger_modifier_per, trigger_text,
         },
     },
-    ui::number::format_number,
+    ui::{Separator, number::format_number},
 };
 
 use super::effects_tooltip::damage_type_str;
@@ -93,7 +93,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 </ul>
             </strong>
 
-            <hr class="border-t border-gray-700" />
+            <Separator />
 
             <p class="text-xs xl:text-sm text-gray-400 leading-snug">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
@@ -120,7 +120,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             {(!skill_specs.base.auto_use_conditions.is_empty())
                 .then(|| {
                     view! {
-                        <hr class="border-t border-gray-700" />
+                        <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
                                 <span class="text-gray-400 leading-snug">
@@ -140,14 +140,13 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <ul class="list-none space-y-1 text-xs xl:text-sm">
                 {targets_lines}{trigger_lines}
-                {(!modifier_lines.is_empty())
-                    .then(|| view! { <hr class="border-t border-gray-700" /> })} {modifier_lines}
+                {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
 
             {(skill_specs.next_upgrade_cost > 0.0)
                 .then(|| {
                     view! {
-                        <hr class="border-t border-gray-700" />
+                        <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
                                 <span class="text-gray-400 leading-snug">"Next upgrade:"</span>
@@ -157,7 +156,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                             )}
                         </ul>
 
-                        <hr class="border-t border-gray-700" />
+                        <Separator />
                         <p class="text-xs xl:text-sm text-gray-400 leading-snug">
                             "Level: "
                             {if skill_specs.level_modifier > 0 {
@@ -183,7 +182,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
             {(!skill_specs.base.description.is_empty())
                 .then(|| {
                     view! {
-                        <hr class="border-t border-gray-700" />
+                        <Separator />
                         <p class="text-xs xl:text-sm italic text-gray-400 leading-snug">
                             {skill_specs.base.description.clone()}
                         </p>
@@ -232,7 +231,7 @@ fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> imp
         .collect::<Vec<_>>();
 
     view! {
-        <hr class="border-t border-gray-700" />
+        <Separator />
         <EffectLi>{range}", "{shape}{repeat}</EffectLi>
         {effects}
     }
@@ -342,6 +341,7 @@ pub fn format_skill_effect(
         SkillEffectType::ApplyStatus { statuses, duration } => {
             let mut stackable_stat_effects = false;
             let mut stat_effects = Vec::new();
+            let mut trigger_name = None;
             let mut trigger_effects = Vec::new();
             let mut max_stat_effects = Vec::new();
 
@@ -453,6 +453,9 @@ pub fn format_skill_effect(
                         ().into_any()
                     }
                     StatusSpecs::Trigger(trigger_specs) => {
+                        if let Some(name) = &trigger_specs.name {
+                            trigger_name = Some(name.clone());
+                        }
                         trigger_effects.push(view! { <ul>{format_trigger(*trigger_specs)}</ul> });
                         ().into_any()
                     }
@@ -480,9 +483,13 @@ pub fn format_skill_effect(
                             SkillType::Blessing => "Blessing",
                             _ => "Status"
                         };
+                        let status_str = match trigger_name {
+                            Some(trigger_name) => trigger_name,
+                            None => format!("the following {status_skill_type}" ),
+                        };
                     view! {
                         <EffectLi>
-                            {success_chance}{apply_str}" the following "{status_skill_type}" "
+                            {success_chance}{apply_str}" "{status_str}" "
                             {format_duration(duration)} {trigger_modifier_duration_str} ":"
                             {(!stat_effects.is_empty())
                                 .then(|| {

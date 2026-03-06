@@ -22,6 +22,7 @@ use crate::{
         },
         town::TownContext,
         ui::{
+            Separator,
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle},
             menu_panel::MenuPanel,
@@ -513,7 +514,7 @@ pub fn StartGrindPanel(
                                     <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
                                     xl:mb-4 max-w-xl mx-auto">{area_specs.description}</span>
 
-                                    <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+                                    <Separator />
 
                                     <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
                                         <li class="leading-snug ">

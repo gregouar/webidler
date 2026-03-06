@@ -13,6 +13,7 @@
       "life_prefixes.json",
       "life_regen_prefixes.json",
       "speed_suffixes.json",
+      "status_prefixes.json",
       "storm_suffixes.json"
     ]
   }

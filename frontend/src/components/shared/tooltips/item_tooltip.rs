@@ -13,6 +13,7 @@ use shared::data::{
 use crate::components::{
     data_context::DataContext,
     shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
+    ui::Separator,
 };
 
 use super::effects_tooltip;
@@ -169,7 +170,7 @@ pub fn ItemTooltipContent(
                                     _ => "",
                                 }}
                             </p>
-                            <hr class="border-t border-gray-700" />
+                            <Separator />
                         },
                     )
                 }
@@ -191,7 +192,7 @@ pub fn ItemTooltipContent(
                     }}
 
                 </ul>
-            </strong> <hr class="border-t border-gray-700" /> <ul class="list-none space-y-1">
+            </strong> <Separator /> <ul class="list-none space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
@@ -202,10 +203,10 @@ pub fn ItemTooltipContent(
             {(has_triggers || has_effects)
                 .then(|| {
                     view! {
-                        <hr class="border-t border-gray-700 my-1" />
+                        <Separator />
                         <ul class="list-none space-y-1 text-xs xl:text-sm">{effects}{triggers}</ul>
                     }
-                })} <hr class="border-t border-gray-700" /> <ul class="list-none space-y-1">
+                })} <Separator /> <ul class="list-none space-y-1">
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
                     "Required Power Level: "
                     <span class=move || {
@@ -228,7 +229,7 @@ pub fn ItemTooltipContent(
                         .clone()
                         .map(|description| {
                             view! {
-                                <hr class="border-t border-gray-700" />
+                                <Separator />
                                 <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
                                     {description}
                                 </p>
@@ -239,7 +240,7 @@ pub fn ItemTooltipContent(
                 ComparableType::Comparable => {
                     Some(
                         view! {
-                            <hr class="border-t border-gray-700" />
+                            <Separator />
                             <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
                                 "Hold CTRL to compare."
                             </p>
