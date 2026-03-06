@@ -192,7 +192,7 @@ pub fn ItemTooltipContent(
 
                 </ul>
             </strong> <hr class="border-t border-gray-700" /> <ul class="list-none space-y-1">
-                <ItemSlotTooltip item_specs=item_specs.clone() />
+                <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
@@ -508,7 +508,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl IntoView {
     view! {
         {item_specs
             .base
@@ -532,7 +532,13 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     }
                 };
 
-                view! { <li class="text-gray-400 text-xs xl:text-sm leading-snug">{item_slot}</li> }
+                view! {
+                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        {item_slot}
+                        {(show_level)
+                            .then(|| format!(" - Level {}", item_specs.base.min_area_level))}
+                    </li>
+                }
             })}
     }
 }
@@ -568,10 +574,12 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique => {
-                    view! { <li class="text-gray-400 text-xs leading-snug">"Implicit affix"</li> }
-                        .into_any()
+                AffixType::Unique => view! {
+                    <li class="text-gray-400 text-xs leading-snug">
+                        "Implicit affix – "{scope_str(scope)}
+                    </li>
                 }
+                .into_any(),
                 _ => {
                     let mut tags: Vec<_> = affix.tags.iter().collect();
                     tags.sort();
@@ -583,8 +591,8 @@ pub fn formatted_affixes_list(
                     view! {
                         <li class="text-gray-400 text-xs leading-snug">
                             {affix_type_str(affix.affix_type)}" "
-                            <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Tier: "
-                            {affix.tier}") – " {scope_str(scope)} " – "{tags.join(", ")}
+                            <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
+                            {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}
                         </li>
                     }
                     .into_any()

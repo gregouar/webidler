@@ -409,6 +409,8 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
 
 #[component]
 fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    let events_context: EventsContext = expect_context();
+    let show_affixes = Memo::new(move |_| events_context.key_pressed(Key::Alt));
     let tooltip = {
         let item_specs = item_specs.clone();
         move || {
@@ -416,7 +418,12 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             // TODO: Compare? Max Item Level?
             view! {
                 <div class="flex gap-1 xl:gap-2">
-                    <ItemTooltip item_specs />
+                    {move || {
+                        let item_specs = item_specs.clone();
+                        let show_affixes = show_affixes.get();
+                        view! { <ItemTooltip item_specs show_affixes /> }
+                    }}
+
                 </div>
             }
             .into_any()
@@ -454,7 +461,6 @@ fn channel_str(channel: ChatChannel) -> String {
         ChatChannel::System => "System".into(),
         ChatChannel::Global => "Global".into(),
         ChatChannel::Trade => "Trade".into(),
-        // TODO: Add username from local users map?
         ChatChannel::Whisper(user_id) => chat_context
             .users_map
             .read_untracked()

@@ -190,7 +190,7 @@ pub fn CharacterPortrait(
                         }
                     />
 
-                    <div class="absolute inset-0 flex flex-wrap items-start justify-items-start pointer-events-none">
+                    <div class="absolute inset-0 flex flex-wrap items-start justify-start pointer-events-none">
                         <For
                             each=move || { active_debuffs.get().into_iter() }
                             key=|k| k.clone()
@@ -207,7 +207,7 @@ pub fn CharacterPortrait(
                         </For>
                     </div>
 
-                    <div class="absolute inset-0 flex flex-wrap items-end justify-items-start pointer-events-none">
+                    <div class="absolute inset-0 flex flex-wrap items-end justify-start pointer-events-none">
                         <For
                             each=move || { active_buffs.get().into_iter() }
                             key=|k| k.clone()

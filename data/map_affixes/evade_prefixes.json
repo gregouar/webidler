@@ -10,7 +10,7 @@
     "item_level": 100,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 10
@@ -46,7 +46,7 @@
     "item_level": 200,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 12
@@ -82,7 +82,7 @@
     "item_level": 300,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 15
@@ -118,7 +118,7 @@
     "item_level": 400,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 18
@@ -154,7 +154,7 @@
     "item_level": 500,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 20
@@ -190,7 +190,7 @@
     "item_level": 600,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 22
@@ -226,7 +226,7 @@
     "item_level": 700,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 25
@@ -256,7 +256,7 @@
     "item_level": 800,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 28
@@ -286,7 +286,7 @@
     "item_level": 900,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
         "value": 30
