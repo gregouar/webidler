@@ -6,6 +6,7 @@ use leptos::{
     prelude::*,
     web_sys::wasm_bindgen::JsCast,
 };
+use leptos_use::use_resize_observer;
 
 use shared::data::item::ItemSpecs;
 use shared_chat::types::{ChatChannel, ChatMessage};
@@ -23,10 +24,28 @@ pub fn ChatPanel() -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
     let panel_ref = NodeRef::new();
+    let position = RwSignal::new((50i32, 50i32)); // bottom, left
+
+    let clamp_panel = move || {
+        let (bottom, left) = position.get_untracked();
+
+        let win = window();
+        let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
+        let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
+
+        let panel: web_sys::HtmlDivElement = panel_ref.get().unwrap();
+        let rect = panel.get_bounding_client_rect();
+        let panel_width = rect.width() as i32;
+        let panel_height = rect.height() as i32;
+
+        let clamped_bottom = bottom.clamp(0, (height - panel_height).max(0));
+        let clamped_left = left.clamp(0, (width - panel_width).max(0));
+
+        position.set((clamped_bottom, clamped_left));
+    };
 
     // Drag state
     let dragging = RwSignal::new(false);
-    let position = RwSignal::new((50i32, 50i32)); // bottom, left
     let drag_start_mouse = RwSignal::new((0i32, 0i32));
     let drag_start_position = RwSignal::new((0i32, 0i32));
     let start_drag = move |ev: leptos::ev::MouseEvent| {
@@ -46,19 +65,8 @@ pub fn ChatPanel() -> impl IntoView {
             let dx = ev.screen_x() - start_mx;
             let dy = ev.screen_y() - start_my;
 
-            let win = window();
-            let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
-            let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
-
-            let panel: web_sys::HtmlDivElement = panel_ref.get().unwrap();
-            let rect = panel.get_bounding_client_rect();
-            let panel_width = rect.width() as i32;
-            let panel_height = rect.height() as i32;
-
-            let clamped_bottom = (start_bottom - dy).clamp(0, (height - panel_height).max(0));
-            let clamped_left = (start_left + dx).clamp(0, (width - panel_width).max(0));
-
-            position.set((clamped_bottom, clamped_left));
+            position.set(((start_bottom - dy), (start_left + dx)));
+            clamp_panel()
         });
 
         let up_listener = window_event_listener(mouseup, move |_| {
@@ -68,6 +76,10 @@ pub fn ChatPanel() -> impl IntoView {
         drop(move_listener);
         drop(up_listener);
     };
+
+    use_resize_observer(panel_ref, move |_, _| {
+        clamp_panel();
+    });
 
     let input_value = RwSignal::new(String::new());
 
@@ -120,12 +132,13 @@ pub fn ChatPanel() -> impl IntoView {
     });
 
     Effect::new(move || {
-        if !chat_context.minimized.get() && chat_context.opened.get()
+        if !chat_context.minimized.get()
+            && chat_context.opened.get()
             && let Some(el) = messages_node.get()
-                && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
-            {
-                html_el.set_scroll_top(html_el.scroll_height());
-            }
+            && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
+        {
+            html_el.set_scroll_top(html_el.scroll_height());
+        }
     });
 
     let text_area_ref: NodeRef<leptos::html::Textarea> = NodeRef::new();
