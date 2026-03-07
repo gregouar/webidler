@@ -150,8 +150,6 @@ pub enum StatType {
     SkillTargetModifier {
         // TODO: More control and options?
         #[serde(default)]
-        skill_id: Option<String>,
-        #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
         range: Option<SkillRange>,
@@ -159,6 +157,8 @@ pub enum StatType {
         shape: Option<SkillShape>,
         #[serde(default)]
         repeat: Option<StatSkillRepeat>,
+        #[serde(default)]
+        skill_id: Option<String>,
     },
     StatConditionalModifier {
         stat: Box<StatType>,

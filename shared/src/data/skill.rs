@@ -17,9 +17,6 @@ use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMa
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseSkillSpecs {
-    #[serde(default)]
-    pub skill_id: String,
-
     pub name: String,
     pub icon: String,
 
@@ -47,6 +44,9 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub auto_use_conditions: Vec<Condition>,
+
+    #[serde(default)]
+    pub skill_id: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
