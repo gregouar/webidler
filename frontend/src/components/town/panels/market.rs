@@ -101,7 +101,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                                     tooltip=move || {
                                         disable_sell
                                             .get()
-                                            .then(|| {
+                                            .then_some({
                                                 "Buy a Market Stash with Gold to sell on the Market"
                                             })
                                     }
