@@ -498,7 +498,8 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         view! {
             <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Shielded"}</span>
-                {SkillType::iter()
+                {[SkillType::Attack, SkillType::Spell]
+                    .into_iter()
                     .filter_map(|skill_type| {
                         let value = specs
                             .block
