@@ -322,12 +322,10 @@ where
             StaticTooltipPosition::Right => (rect.right(), rect.top() + rect.height() / 2.0),
         };
 
-        // Viewport size
         let window = web_sys::window().unwrap();
         let vw = window.inner_width().unwrap().as_f64().unwrap();
         let vh = window.inner_height().unwrap().as_f64().unwrap();
 
-        // Compute actual rendered box depending on transform
         let (mut left, mut top) = match position {
             StaticTooltipPosition::Top => (x - tip_rect.width() / 2.0, y - tip_rect.height()),
             StaticTooltipPosition::Bottom => (x - tip_rect.width() / 2.0, y),
@@ -335,7 +333,6 @@ where
             StaticTooltipPosition::Right => (x, y - tip_rect.height() / 2.0),
         };
 
-        // Clamp inside viewport with 8px padding
         let padding = 8.0;
 
         left = left.clamp(padding, vw - tip_rect.width() - padding);
@@ -382,7 +379,7 @@ where
 
     view! {
         <div
-            class="inline-block"
+            // class="inline-block"
             on:touchstart=move |_| is_open.set(true)
             on:mouseenter=move |_| is_open.set(true)
             on:mouseleave=move |_| is_open.set(false)
