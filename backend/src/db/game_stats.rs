@@ -64,6 +64,14 @@ async fn insert_game_stats<'c>(
     passives_data: JsonValue,
     skills_data: JsonValue,
 ) -> Result<bool, sqlx::Error> {
+    // For some reason, I need to count 0 instead of 1
+    // 1 = (
+    //     SELECT COUNT(*)
+    //     FROM game_stats gs
+    //     WHERE gs.area_id = $2
+    //         AND gs.data_version = $5
+    //         AND gs.area_level >= $3
+    //     )
     let record = sqlx::query!(
         r#"
         INSERT INTO game_stats
@@ -71,8 +79,8 @@ async fn insert_game_stats<'c>(
              stats_data, items_data, passives_data, skills_data)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING
-        1 = (
-        SELECT COUNT(*)
+        NOT EXISTS (
+        SELECT 1
         FROM game_stats gs
         WHERE gs.area_id = $2
             AND gs.data_version = $5

@@ -30,6 +30,8 @@ pub struct AreaSpecs {
     pub coming_soon: bool,
     #[serde(default)]
     pub disable_shards: bool,
+    #[serde(default)]
+    pub boss: bool,
 
     #[serde(default = "default_reward_slots")]
     pub reward_slots: u8,

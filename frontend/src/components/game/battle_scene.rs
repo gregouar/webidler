@@ -13,7 +13,10 @@ use crate::{
             GameContext, loot_queue::LootQueue, monsters_grid::MonstersGrid,
             player_card::PlayerCard, websocket::WebsocketContext,
         },
-        icons::battle_scene::{EdictIcon, ThreatIcon},
+        icons::{
+            area::{BossAreaIcon, CrucibleAreaIcon},
+            battle_scene::{EdictIcon, ThreatIcon},
+        },
         ui::{
             card::Card,
             number::format_duration,
@@ -141,7 +144,14 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 <div class="relative z-10 inline-flex items-center justify-center space-x-2 xl:space-x-4
                 text-shadow/30 text-amber-200">
                     {move || {
-                        game_context.map_item.get().map(|map_item| view! { <EdictIcon map_item /> })
+                        game_context
+                            .area_specs
+                            .read()
+                            .disable_shards
+                            .then(|| view! { <CrucibleAreaIcon /> })
+                    }}
+                    {move || {
+                        game_context.area_specs.read().boss.then(|| view! { <BossAreaIcon /> })
                     }} <p class=" text-lg xl:text-2xl font-bold">
                         <span class="[font-variant:small-caps]">
                             {move || game_context.area_specs.read().name.clone()}
@@ -158,6 +168,9 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                 })
                         }}
                     </p>
+                    {move || {
+                        game_context.map_item.get().map(|map_item| view! { <EdictIcon map_item /> })
+                    }}
                 </div>
             </div>
 
