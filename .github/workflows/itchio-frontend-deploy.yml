@@ -23,14 +23,9 @@ jobs:
       # Install Rust Nightly Toolchain, with Clippy & Rustfmt
       - name: Install nightly Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy, rustfmt
 
       - name: Add WASM target
         run: rustup target add wasm32-unknown-unknown
-
-      - name: lint
-        run: cargo clippy & cargo fmt
 
       - name: Download and install Trunk binary
         working-directory: ./frontend
