@@ -4,9 +4,10 @@ use strum::IntoEnumIterator;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    chance::ChanceRange,
     item_affix::AffixEffectScope,
     modifier::Modifier,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
         LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
         StatStatusType, StatType,
@@ -14,9 +15,10 @@ use shared::data::{
 };
 
 use crate::components::{
+    data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
-        skill_tooltip::{restore_type_str, skill_type_str},
+        skill_tooltip::{self, restore_type_str, skill_type_str},
     },
     ui::number::format_number,
 };
@@ -566,6 +568,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 }
 
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
+    let data_context: DataContext = expect_context();
     match stat {
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
@@ -843,7 +846,57 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type),
             )
         }
-        StatType::SkillTargetModifier { .. } => "TODO?".into(),
+
+        StatType::SkillTargetModifier {
+            skill_id,
+            skill_type,
+            range,
+            shape,
+            repeat,
+        } => {
+            let skill_name = match skill_id {
+                Some(skill_id) => data_context
+                    .skill_specs
+                    .read()
+                    .get(skill_id)
+                    .map(|skill| skill.base.name.clone())
+                    .unwrap_or(skill_id.clone()),
+                None => "".to_string(),
+            };
+
+            let range_str = match range {
+                Some(range) => match range {
+                    shared::data::item::SkillRange::Melee => "Melee",
+                    shared::data::item::SkillRange::Distance => "Distance",
+                    shared::data::item::SkillRange::Any => "Any",
+                },
+                None => "",
+            };
+
+            let shape_str = match shape {
+                Some(shape) => skill_tooltip::shape_str(*shape),
+                None => "",
+            };
+
+            let repeat_str = repeat
+                .as_ref()
+                .map(|repeat| {
+                    skill_tooltip::repeat_str(&SkillRepeat {
+                        value: ChanceRange {
+                            min: repeat.min_value,
+                            max: repeat.max_value,
+                            lucky_chance: Default::default(),
+                        },
+                        target: repeat.target,
+                    })
+                })
+                .unwrap_or_default();
+
+            format!(
+                "{skill_name}{} becomes {range_str}{shape_str}{repeat_str}",
+                skill_type_str(*skill_type),
+            )
+        }
         StatType::SkillConditionalModifier {
             stat,
             skill_type,

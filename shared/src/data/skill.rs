@@ -17,10 +17,15 @@ use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMa
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseSkillSpecs {
+    #[serde(default)]
+    pub skill_id: String,
+
     pub name: String,
     pub icon: String,
+
     #[serde(default)]
     pub description: String,
+
     pub skill_type: SkillType,
 
     pub cooldown: NonNegative,
@@ -158,7 +163,7 @@ impl Default for SkillRepeat {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum SkillRepeatTarget {
     Any,
     Same,

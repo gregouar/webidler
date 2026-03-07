@@ -2,6 +2,7 @@ use std::{collections::HashMap, time::Duration};
 use strum::IntoEnumIterator;
 
 use shared::data::{
+    chance::ChanceRange,
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
     modifier::Modifier,
@@ -101,11 +102,14 @@ pub fn apply_effects_to_skill_specs<'a>(
         }
 
         if let StatType::SkillTargetModifier {
+            skill_id,
             skill_type,
             range,
             shape,
+            repeat,
         } = &effect.stat
             && compare_options(skill_type, &Some(skill_specs.base.skill_type))
+            && compare_options(&skill_id.as_ref(), &Some(&skill_specs.base.skill_id))
         {
             for target in skill_specs.targets.iter_mut() {
                 if let Some(range) = range {
@@ -113,6 +117,14 @@ pub fn apply_effects_to_skill_specs<'a>(
                 }
                 if let Some(shape) = shape {
                     target.shape = *shape;
+                }
+                if let Some(repeat) = repeat {
+                    target.repeat.target = repeat.target;
+                    target.repeat.value = ChanceRange {
+                        min: repeat.min_value,
+                        max: repeat.max_value,
+                        lucky_chance: Default::default(),
+                    };
                 }
             }
 

@@ -3,7 +3,7 @@
     "name": "Wooden Beads",
     "icon": "items/wooden_beads.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -17,7 +17,7 @@
     "name": "Brass Medallion",
     "icon": "items/medallion.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -32,7 +32,7 @@
     "name": "Burning Desire",
     "icon": "items/burning_desire.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -44,7 +44,7 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
         "modifier": "More",
-        "value": [50, 100],
+        "value": [ 50, 100 ],
         "ignore_quality": true
       },
       {
@@ -55,7 +55,7 @@
           }
         },
         "modifier": "More",
-        "value": [50, 100],
+        "value": [ 50, 100 ],
         "ignore_quality": true
       },
       {
@@ -66,21 +66,21 @@
           }
         },
         "modifier": "Increased",
-        "value": [20, 40],
+        "value": [ 20, 40 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [5, 10],
+        "value": [ 5, 10 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [-20, -10],
+        "value": [ -20, -10 ],
         "ignore_quality": true
       }
     ],
@@ -91,7 +91,7 @@
     "name": "Silver Chain",
     "icon": "items/silver_chain.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -107,7 +107,7 @@
     "description": "When her heart stopped, the storm did not. It only found a new host.",
     "icon": "items/amulet_spider.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -127,7 +127,7 @@
         "scope": "Global",
         "stat": { "CritDamage": null },
         "modifier": "Flat",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
@@ -137,7 +137,7 @@
           }
         },
         "modifier": "More",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       },
       {
         "scope": "Global",
@@ -145,7 +145,7 @@
           "Armor": "Storm"
         },
         "modifier": "Flat",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       }
     ],
     "min_area_level": 100
@@ -154,7 +154,7 @@
     "name": "Gold Pendant",
     "icon": "items/gold_pendant.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -169,7 +169,7 @@
     "name": "Crest Pendant",
     "icon": "items/crest_pendant.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -184,7 +184,7 @@
     "name": "Amulet",
     "icon": "items/amulet.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -199,7 +199,7 @@
     "name": "Sacred Talisman",
     "icon": "items/sacred_talisman.webp",
     "slot": "Amulet",
-    "categories": ["Jewelry", "Amulet"],
+    "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
       {
         "scope": "Global",
@@ -209,5 +209,67 @@
       }
     ],
     "min_area_level": 320
+  },
+  "amulet_7_unique": {
+    "name": "Cross of the Deep Well",
+    "description": "The faithful did not pray for power. They prayed for endurance.",
+    "icon": "items/amulet_unique_cross.webp",
+    "slot": "Amulet",
+    "categories": [ "Jewelry", "Amulet" ],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": 140
+      },
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 100,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "ManaCost": { } },
+        "modifier": "Increased",
+        "value": 50,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "SkillLevel": null },
+        "modifier": "Flat",
+        "value": 5,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": "ManaRegen",
+            "conditions": [ "LowMana" ]
+          }
+        },
+        "modifier": "Increased",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": { "Damage": { } },
+            "conditions": [ "MaximumLife" ],
+            "conditions_duration": 50
+          }
+        },
+        "modifier": "More",
+        "value": [ 100, 160 ]
+      }
+    ],
+    "min_area_level": 330
   }
 }

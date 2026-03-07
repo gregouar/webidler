@@ -387,7 +387,10 @@ pub fn buy_skill(
         equip_skill(
             player_specs,
             player_state,
-            base_skill_specs.clone(),
+            BaseSkillSpecs {
+                skill_id: skill_id.to_string(),
+                ..base_skill_specs.clone()
+            },
             true,
             None,
         );

@@ -53,6 +53,10 @@
       "weight": 64000
     },
     {
+      "item_id": "amulet_7_unique",
+      "weight": 500
+    },
+    {
       "item_id": "edict",
       "weight": 800,
       "min_area_level": 320

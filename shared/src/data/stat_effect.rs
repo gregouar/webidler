@@ -9,7 +9,7 @@ use crate::data::{
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
     modifier::{ModifiableValue, Modifier, compute_more_factor},
-    skill::{RestoreType, SkillEffectType},
+    skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
     values::NonNegative,
 };
 
@@ -150,11 +150,15 @@ pub enum StatType {
     SkillTargetModifier {
         // TODO: More control and options?
         #[serde(default)]
+        skill_id: Option<String>,
+        #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
         range: Option<SkillRange>,
         #[serde(default)]
         shape: Option<SkillShape>,
+        #[serde(default)]
+        repeat: Option<StatSkillRepeat>,
     },
     StatConditionalModifier {
         stat: Box<StatType>,
@@ -313,6 +317,13 @@ impl Matchable for StatType {
     //             | GoldFind
     //     )
     // }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatSkillRepeat {
+    pub min_value: u8,
+    pub max_value: u8,
+    pub target: SkillRepeatTarget,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]

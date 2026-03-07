@@ -45,6 +45,10 @@
       "weight": 8000
     },
     {
+      "item_id": "iron_wand_unique",
+      "weight": 500
+    },
+    {
       "item_id": "heater_shield",
       "weight": 8000
     },

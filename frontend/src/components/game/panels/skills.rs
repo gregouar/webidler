@@ -11,7 +11,7 @@ use strum::IntoEnumIterator;
 use crate::{
     assets::img_asset,
     components::{
-        backend_client::BackendClient,
+        data_context::DataContext,
         game::{game_context::GameContext, websocket::WebsocketContext},
         shared::{resources::GoldCounter, tooltips::SkillTooltip},
         ui::{
@@ -38,7 +38,8 @@ pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+    let game_context: GameContext = expect_context();
+    let data_context: DataContext = expect_context();
 
     let selected_skill = RwSignal::new(None::<String>);
     let disable_confirm = Signal::derive(move || selected_skill.get().is_none());
@@ -53,43 +54,33 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
-    let available_skills = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
-        move || async move {
-            let skills_response = backend.get_skills().await.unwrap_or_default();
+    let available_skills = Memo::new(move |_| {
+        let mut skills = data_context.skill_specs.get().into_iter().fold(
+            HashMap::<_, Vec<_>>::new(),
+            |mut acc, skill| {
+                acc.entry(skill.1.base.skill_type).or_default().push(skill);
+                acc
+            },
+        );
 
-            let mut skills = skills_response.skills.clone().into_iter().fold(
-                HashMap::<_, Vec<_>>::new(),
-                |mut acc, skill| {
-                    acc.entry(skill.1.base.skill_type).or_default().push(skill);
-                    acc
-                },
-            );
-
-            for section in skills.values_mut() {
-                section.sort_by_key(|(_, skill_specs)| skill_specs.base.name.clone());
-            }
-
-            skills
+        for section in skills.values_mut() {
+            section.sort_by_key(|(_, skill_specs)| skill_specs.base.name.clone());
         }
+
+        skills
     });
 
     view! {
         <CardInset>
-            <Suspense fallback=move || {
-                view! { "Loading..." }
-            }>
-                {move || {
-                    Suspend::new(async move {
-                        let available_skills = available_skills.await;
-                        SkillType::iter()
-                            .map(move |skill_type| {
-                                let available_skills = available_skills
-                                    .get(&skill_type)
-                                    .cloned()
-                                    .unwrap_or_default();
-                                view! {
-                                    <div class="grid grid-cols-6 xl:grid-cols-6 gap-2 xl:gap-3">
+            {SkillType::iter()
+                .map(move |skill_type| {
+                    let available_skills = available_skills
+                        .read()
+                        .get(&skill_type)
+                        .cloned()
+                        .unwrap_or_default();
+                    view! {
+                        <div class="grid grid-cols-6 xl:grid-cols-6 gap-2 xl:gap-3">
                     <For
                         each=move || available_skills.clone().into_iter()
                         key=|(skill_id,_)| skill_id.clone()
@@ -111,13 +102,9 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                     }}
                     </For>
                 </div>
-                                }
-                            })
-                            .collect::<Vec<_>>()
-                    })
-                }}
-
-            </Suspense>
+                    }
+                })
+                .collect::<Vec<_>>()}
         </CardInset>
 
         <div class="flex items-center justify-center">
