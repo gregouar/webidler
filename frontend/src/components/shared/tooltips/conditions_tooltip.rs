@@ -1,7 +1,7 @@
 use shared::data::{
     conditional_modifier::Condition,
     skill::{DamageType, SkillType},
-    stat_effect::StatStatusType,
+    stat_effect::{StatStatusType, StatType},
 };
 
 use crate::components::shared::tooltips::{effects_tooltip, skill_tooltip};
@@ -69,10 +69,11 @@ pub fn format_under_status_type_condition(
             StatStatusType::DamageOverTime { damage_type } => {
                 damaged_over_time_str(*damage_type).to_string()
             }
-            StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => debuffed_str(Some(true)).to_string(),
-                Some(false) => buffed_str(Some(true)).to_string(),
-                None => "Under Stats Effects".to_string(),
+            StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
+                (Some(StatType::Speed(_)), Some(true)) => "Slowed".into(),
+                (_, Some(true)) => debuffed_str(Some(true)).to_string(),
+                (_, Some(false)) => buffed_str(Some(true)).to_string(),
+                _ => "Under Stats Effects".to_string(),
             },
             StatStatusType::Trigger {
                 trigger_id: Some(trigger_id),
@@ -113,8 +114,8 @@ pub fn stunned_str(value: Option<bool>) -> &'static str {
 pub fn buffed_str(value: Option<bool>) -> &'static str {
     match value {
         Some(value) => match value {
-            true => "Positive ",
-            false => "Non-Positive ",
+            true => "Buffed ",
+            false => "Non-Buffed ",
         },
         None => "",
     }
@@ -123,8 +124,8 @@ pub fn buffed_str(value: Option<bool>) -> &'static str {
 pub fn debuffed_str(value: Option<bool>) -> &'static str {
     match value {
         Some(value) => match value {
-            true => "Negative ",
-            false => "Non-Negative ",
+            true => "Debuffed ",
+            false => "Non-Debuffed ",
         },
         None => "",
     }

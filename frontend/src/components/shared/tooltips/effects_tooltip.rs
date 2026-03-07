@@ -170,10 +170,11 @@ pub fn status_type_str(status_type: Option<&StatStatusType>) -> String {
             StatStatusType::DamageOverTime { damage_type } => {
                 damage_over_time_type_str(*damage_type).into()
             }
-            StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => "Negative Statuses".to_string(),
-                Some(false) => "Positive Statuses".to_string(),
-                None => "Statuses".to_string(),
+            StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
+                (Some(StatType::Speed(_)), Some(true)) => "Slowed".to_string(),
+                (_, Some(true)) => "Negative Statuses".to_string(),
+                (_, Some(false)) => "Positive Statuses".to_string(),
+                _ => "Statuses".to_string(),
             },
             StatStatusType::Trigger {
                 trigger_id: Some(trigger_id),
@@ -196,10 +197,11 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
                 // format!("{}Damage per second", damage_type_str(*damage_type))
                 damage_over_time_type_str(*damage_type).into()
             }
-            StatStatusType::StatModifier { debuff } => match debuff {
-                Some(true) => "Negative Statuses Effects".to_string(),
-                Some(false) => "Positive Statuses Effects".to_string(),
-                None => "Statuses Effects".to_string(),
+            StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
+                (Some(StatType::Speed(_)), Some(true)) => "Slow Effects".to_string(),
+                (_, Some(true)) => "Negative Statuses Effects".to_string(),
+                (_, Some(false)) => "Positive Statuses Effects".to_string(),
+                _ => "Statuses Effects".to_string(),
             },
             StatStatusType::Trigger {
                 trigger_id: Some(trigger_id),

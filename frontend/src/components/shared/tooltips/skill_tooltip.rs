@@ -467,7 +467,7 @@ pub fn format_skill_effect(
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
-                                    status_type: Some(StatStatusType::StatModifier { debuff: None }) ,
+                                    status_type: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
                                     skill_type: None,
                                 },
                                 modifiers,
