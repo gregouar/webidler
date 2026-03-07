@@ -10,7 +10,7 @@ use shared::data::{
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     skill::{
         DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreModifier,
-        RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget, SkillSpecs,
+        RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{Matchable, StatEffect, StatSkillEffectType, StatStatusType, StatType},
@@ -208,18 +208,7 @@ fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> imp
     };
 
     let repeat = if targets_group.repeat.value.max > 1 {
-        format!(
-            ", {} {}",
-            match targets_group.repeat.target {
-                SkillRepeatTarget::Any => "Repeat",
-                SkillRepeatTarget::Same => "Multi-Hit",
-                SkillRepeatTarget::Different => "Chain",
-            },
-            format_min_max_f64(
-                targets_group.repeat.value.min,
-                targets_group.repeat.value.max
-            ),
-        )
+        format!(", {}", repeat_str(&targets_group.repeat))
     } else {
         "".into()
     };
@@ -235,6 +224,18 @@ fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> imp
         <EffectLi>{range}", "{shape}{repeat}</EffectLi>
         {effects}
     }
+}
+
+pub fn repeat_str(skill_repeat: &SkillRepeat) -> String {
+    format!(
+        "{} {}",
+        match skill_repeat.target {
+            SkillRepeatTarget::Any => "Multi-Hit",
+            SkillRepeatTarget::Same => "Repeat",
+            SkillRepeatTarget::Different => "Chain",
+        },
+        format_min_max_f64(skill_repeat.value.min, skill_repeat.value.max),
+    )
 }
 
 pub fn shape_str(shape: SkillShape) -> &'static str {
@@ -467,7 +468,7 @@ pub fn format_skill_effect(
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
-                                    status_type: Some(StatStatusType::StatModifier { debuff: None }) ,
+                                    status_type: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
                                     skill_type: None,
                                 },
                                 modifiers,

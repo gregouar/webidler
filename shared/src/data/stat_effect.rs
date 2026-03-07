@@ -9,7 +9,7 @@ use crate::data::{
     conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
     modifier::{ModifiableValue, Modifier, compute_more_factor},
-    skill::{RestoreType, SkillEffectType},
+    skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
     values::NonNegative,
 };
 
@@ -150,11 +150,15 @@ pub enum StatType {
     SkillTargetModifier {
         // TODO: More control and options?
         #[serde(default)]
+        skill_id: Option<String>,
+        #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
         range: Option<SkillRange>,
         #[serde(default)]
         shape: Option<SkillShape>,
+        #[serde(default)]
+        repeat: Option<StatSkillRepeat>,
     },
     StatConditionalModifier {
         stat: Box<StatType>,
@@ -316,6 +320,13 @@ impl Matchable for StatType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatSkillRepeat {
+    pub min_value: u8,
+    pub max_value: u8,
+    pub target: SkillRepeatTarget,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatStatusType {
     Stun,
     DamageOverTime {
@@ -325,7 +336,8 @@ pub enum StatStatusType {
     StatModifier {
         #[serde(default)]
         debuff: Option<bool>,
-        // TODO: Add stat type?
+        #[serde(default)]
+        stat: Option<Box<StatType>>,
     },
     Trigger {
         #[serde(default)]
@@ -351,8 +363,15 @@ impl Matchable for StatStatusType {
                     damage_type: damage_type_2,
                 },
             ) => compare_options(damage_type, damage_type_2),
-            (StatModifier { debuff }, StatModifier { debuff: debuff_2 }) => {
+            (
+                StatModifier { debuff, stat },
+                StatModifier {
+                    debuff: debuff_2,
+                    stat: stat2,
+                },
+            ) => {
                 compare_options(debuff, debuff_2)
+                    && compare_options(&stat.as_deref(), &stat2.as_deref())
             }
             (
                 Trigger {
@@ -376,8 +395,9 @@ impl From<&StatusSpecs> for StatStatusType {
             StatusSpecs::DamageOverTime { damage_type, .. } => StatStatusType::DamageOverTime {
                 damage_type: Some(*damage_type),
             },
-            StatusSpecs::StatModifier { debuff, .. } => StatStatusType::StatModifier {
+            StatusSpecs::StatModifier { debuff, stat, .. } => StatStatusType::StatModifier {
                 debuff: Some(*debuff),
+                stat: Some(stat.clone().into()),
             },
             StatusSpecs::Trigger(trigger_specs) => StatStatusType::Trigger {
                 trigger_id: Some(trigger_specs.triggered_effect.trigger_id.clone()),

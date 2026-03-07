@@ -105,7 +105,11 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-around w-full items-center">
                 <GoldCounter value=gold w_full=true />
                 <GemsCounter value=gems w_full=true />
-                <ShardsCounter value=shards w_full=true />
+                <ShardsCounter
+                    value=shards
+                    w_full=true
+                    disabled=Signal::derive(move || game_context.area_specs.read().disable_shards)
+                />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <FullscreenButton />

@@ -111,15 +111,39 @@ pub fn ShardsIcon() -> impl IntoView {
     }
 }
 #[component]
-pub fn ShardsCounter(value: Signal<f64>, #[prop(default = false)] w_full: bool) -> impl IntoView {
+pub fn ShardsCounter(
+    value: Signal<f64>,
+    #[prop(default = false)] w_full: bool,
+    #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
+) -> impl IntoView {
     view! {
-        <ResourceCounter
-            class:text-cyan-300
-            icon="ui/power_shard.webp"
-            name="Power Shards"
-            description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
-            value
-            w_full
-        />
+        {move || {
+            if disabled.get() {
+                view! {
+                    <ResourceCounter
+                        class:saturate-10
+                        class:text-gray-300
+                        icon="ui/power_shard.webp"
+                        name="Power Shards"
+                        description="Power Shards are not obtainable in Crucible Area."
+                        value
+                        w_full
+                    />
+                }
+                    .into_any()
+            } else {
+                view! {
+                    <ResourceCounter
+                        class:text-cyan-300
+                        icon="ui/power_shard.webp"
+                        name="Power Shards"
+                        description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
+                        value
+                        w_full
+                    />
+                }
+                    .into_any()
+            }
+        }}
     }
 }

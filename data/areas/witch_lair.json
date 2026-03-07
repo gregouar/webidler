@@ -1,10 +1,11 @@
 {
   "specs": {
     "name": "Spider Witch Lair",
-    "description": "[Boss Area] This is no mere nest, but a lair woven of silk, curses, and whispered bargains. Every step draws you deeper into the Spider Witch's web.",
+    "description": "This is no mere nest, but a lair woven of silk, curses, and whispered bargains. Every step draws you deeper into the Spider Witch's web.",
     "power_level": 20,
     "required_level": 100,
     "item_level_modifier": 40,
+    "boss": true,
     "header_background": "areas/witch_header.webp",
     "footer_background": "areas/witch_footer.webp"
   },
@@ -38,27 +39,27 @@
       "spawns": [
         {
           "monster": "spiderlings.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spider_phys.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spider_poison.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spiderlings.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spider_phys.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spider_poison.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         }
       ]
     },
@@ -69,31 +70,31 @@
       "spawns": [
         {
           "monster": "spider_fire.json",
-          "quantity": [0, 2]
+          "quantity": [ 0, 2 ]
         },
         {
           "monster": "ghost_child.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spider_fire.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "witch_spider.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "spider_fire.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "ghost_child.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "witch_spider.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         }
       ]
     },
@@ -104,7 +105,7 @@
       "spawns": [
         {
           "monster": "witch_child.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "spider_mother.json",
@@ -112,7 +113,7 @@
         },
         {
           "monster": "witch_child.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "witch_spider.json",

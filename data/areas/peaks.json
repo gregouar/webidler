@@ -1,10 +1,11 @@
 {
   "specs": {
     "name": "Wyrm's Peaks",
-    "description": "[Boss Area] The peaks do not weather storms. They are shaped by the wings and wrath of their masters.",
+    "description": "The peaks do not weather storms. They are shaped by the wings and wrath of their masters.",
     "power_level": 50,
     "required_level": 250,
     "item_level_modifier": 100,
+    "boss": true,
     "header_background": "areas/peaks_header.webp",
     "footer_background": "areas/peaks_footer.webp"
   },
@@ -48,15 +49,15 @@
       "spawns": [
         {
           "monster": "beetle_lava.json",
-          "quantity": [0, 2]
+          "quantity": [ 0, 2 ]
         },
         {
           "monster": "wyrmling.json",
-          "quantity": [0, 2]
+          "quantity": [ 0, 2 ]
         },
         {
           "monster": "lizard_stone.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "wyrmling.json",
@@ -83,19 +84,19 @@
       "spawns": [
         {
           "monster": "pine_trickster.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "troll.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "wyvern_poison.json",
-          "quantity": [0, 2]
+          "quantity": [ 0, 2 ]
         },
         {
           "monster": "pine_trickster.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "troll.json",
@@ -118,11 +119,11 @@
       "spawns": [
         {
           "monster": "cloud.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "yeti.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "wyvern_snow.json",
@@ -130,7 +131,7 @@
         },
         {
           "monster": "cloud.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "wyvern_snow.json",

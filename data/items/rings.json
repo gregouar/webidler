@@ -3,7 +3,7 @@
     "name": "Copper Ring",
     "icon": "items/copper_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",
@@ -17,7 +17,7 @@
     "name": "Silver Ring",
     "icon": "items/silver_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",
@@ -33,7 +33,7 @@
     "description": "It does not favor you, it does not curse you, it simply spins the wheel and dares you to wear it.",
     "icon": "items/gamblers_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -48,7 +48,7 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Physical" } } }
         },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       },
       {
         "scope": "Global",
@@ -56,7 +56,7 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Fire" } } }
         },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       },
       {
         "scope": "Global",
@@ -64,7 +64,7 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Poison" } } }
         },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       },
       {
         "scope": "Global",
@@ -72,25 +72,25 @@
           "Lucky": { "roll_type": { "Damage": { "damage_type": "Storm" } } }
         },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       },
       {
         "scope": "Global",
         "stat": { "Lucky": { "roll_type": "Block" } },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       },
       {
         "scope": "Global",
         "stat": { "Lucky": { "roll_type": "CritChance" } },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       },
       {
         "scope": "Global",
-        "stat": { "Lucky": { "roll_type": { "SuccessChance": {} } } },
+        "stat": { "Lucky": { "roll_type": { "SuccessChance": { } } } },
         "modifier": "Flat",
-        "value": [-40, 40]
+        "value": [ -40, 40 ]
       }
     ],
     "min_area_level": 50
@@ -99,7 +99,7 @@
     "name": "Gold Ring",
     "icon": "items/gold_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",
@@ -114,7 +114,7 @@
     "name": "Signet Ring",
     "icon": "items/signet_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",
@@ -130,7 +130,7 @@
     "description": "Who says battle can't be fabulous?",
     "icon": "items/princess_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -143,31 +143,31 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [100, 140]
+        "value": [ 100, 140 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "value": [60, 100]
+        "value": [ 60, 100 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Poison" },
         "modifier": "Flat",
-        "value": [60, 100]
+        "value": [ 60, 100 ]
       },
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [100, 140]
+        "value": [ 100, 140 ]
       }
     ],
     "triggers": [
@@ -180,7 +180,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "value": [5, 10],
+              "value": [ 5, 10 ],
               "modifier": "Flat"
             }
           }
@@ -193,7 +193,7 @@
     "name": "Inlaid Ring",
     "icon": "items/inlaid_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",
@@ -209,7 +209,7 @@
     "description": "In devotion, there is no room for doubt, nor for curses.",
     "icon": "items/band_blessing.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -236,14 +236,20 @@
         "scope": "Global",
         "stat": { "StatusDuration": { "skill_type": "Blessing" } },
         "modifier": "Increased",
-        "value": [20, 40],
+        "value": [ 20, 40 ],
         "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Attack" } },
+        "modifier": "More",
+        "value": [ 100, 140 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Storm" },
         "modifier": "Flat",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       }
     ],
     "min_area_level": 200
@@ -253,7 +259,7 @@
     "description": "Every blessing denied leaves space for something far worse.",
     "icon": "items/band_cursing.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -280,14 +286,20 @@
         "scope": "Global",
         "stat": { "StatusDuration": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [20, 40],
+        "value": [ 20, 40 ],
         "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": { "Damage": { "skill_type": "Spell" } },
+        "modifier": "More",
+        "value": [ 100, 140 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Poison" },
         "modifier": "Flat",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       }
     ],
     "min_area_level": 200
@@ -296,7 +308,7 @@
     "name": "Jewelled Ring",
     "icon": "items/jewelled_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",
@@ -311,7 +323,7 @@
     "name": "Runic Ring",
     "icon": "items/runic_ring.webp",
     "slot": "Ring",
-    "categories": ["Jewelry", "Ring"],
+    "categories": [ "Jewelry", "Ring" ],
     "affixes": [
       {
         "scope": "Global",

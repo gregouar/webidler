@@ -148,6 +148,7 @@ pub fn TabButton(
     children: Children,
     #[prop(into)] is_active: Signal<bool>,
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    #[prop(optional)] title: Option<&'static str>,
 ) -> impl IntoView {
     let active_class = |active| {
         if active {
@@ -174,6 +175,7 @@ pub fn TabButton(
 
     view! {
         <button
+            title=title
             class=move || {
                 format!(
                     "btn

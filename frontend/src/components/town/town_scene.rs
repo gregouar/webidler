@@ -15,6 +15,7 @@ use crate::{
     assets::img_asset,
     components::{
         data_context::DataContext,
+        icons::area::{BossAreaIcon, CrucibleAreaIcon},
         shared::{
             inventory::InventoryEquipFilter,
             item_card::ItemCard,
@@ -332,7 +333,7 @@ fn GrindingAreaCard(
             </div>
 
             <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
-                <div class="text-base xl:text-lg font-semibold text-amber-200">
+                <div class="text-base xl:text-lg font-semibold text-amber-200 [font-variant:small-caps]">
                     {move || area_specs.read().name.clone()}
                 </div>
 
@@ -507,9 +508,15 @@ pub fn StartGrindPanel(
                                 </div>
 
                                 <CardInset class="xl:space-y-4">
-                                    <span class="text-lg xl:text-2xl font-bold text-amber-300 text-center">
-                                        {area_specs.name}
-                                    </span>
+                                    <div class="w-full flex text-lg xl:text-2xl font-bold text-amber-300 justify-center items-center gap-4">
+                                        {area_specs
+                                            .disable_shards
+                                            .then(|| view! { <CrucibleAreaIcon /> })}
+                                        {area_specs.boss.then(|| view! { <BossAreaIcon /> })}
+                                        <span class="[font-variant:small-caps]">
+                                            {area_specs.name}
+                                        </span>
+                                    </div>
 
                                     <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
                                     xl:mb-4 max-w-xl mx-auto">{area_specs.description}</span>

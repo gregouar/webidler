@@ -3,7 +3,7 @@
     "name": "Wooden Rod",
     "icon": "items/wooden_rod.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",
@@ -21,7 +21,7 @@
     "name": "Magic Wand",
     "icon": "items/wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",
@@ -41,7 +41,7 @@
     "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
     "icon": "items/baguette_fromage.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -62,13 +62,13 @@
           }
         },
         "modifier": "More",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Increased",
-        "value": [20, 40]
+        "value": [ 20, 40 ]
       },
       {
         "scope": "Global",
@@ -76,7 +76,7 @@
           "Speed": "Spell"
         },
         "modifier": "Increased",
-        "value": [8, 12],
+        "value": [ 8, 12 ],
         "ignore_quality": true
       }
     ],
@@ -162,7 +162,7 @@
     "name": "Bone Wand",
     "icon": "items/bone_wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",
@@ -181,7 +181,7 @@
     "name": "Iron Wand",
     "icon": "items/iron_wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",
@@ -196,11 +196,83 @@
     ],
     "min_area_level": 140
   },
+  "iron_wand_unique": {
+    "name": "Starlit Baton",
+    "icon": "items/princess_wand.webp",
+    "description": "A flick of the wrist, and the stars learn to travel in pairs.",
+    "slot": "Weapon",
+    "categories": [ "SpellWeapon" ],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "More",
+        "value": 80
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "damage_type": "Storm"
+          }
+        },
+        "modifier": "More",
+        "value": [ 80, 120 ]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "CritChance": "Spell"
+        },
+        "modifier": "Increased",
+        "value": 50,
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "CritDamage": "Spell"
+        },
+        "modifier": "More",
+        "value": [ 80, 120 ]
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "Speed": "Spell"
+        },
+        "modifier": "Increased",
+        "value": [ 12, 16 ],
+        "ignore_quality": true
+      },
+      {
+        "scope": "Global",
+        "stat": {
+          "SkillTargetModifier": {
+            "skill_id": "magic_missile",
+            "repeat": {
+              "min_value": 2,
+              "max_value": 2,
+              "target": "Any"
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ],
+    "min_area_level": 150
+  },
   "decorated_wand": {
     "name": "Decorated Wand",
     "icon": "items/carved_wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",
@@ -220,7 +292,7 @@
     "description": "Wizards say this horn was carved to pour mana, not keep it, and it has never stopped spilling since.",
     "icon": "items/magic_horn.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -237,7 +309,7 @@
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [200, 250]
+        "value": [ 200, 250 ]
       },
       {
         "scope": "Global",
@@ -245,14 +317,14 @@
           "Speed": "Spell"
         },
         "modifier": "Increased",
-        "value": [20, 25],
+        "value": [ 20, 25 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [100, 150],
+        "value": [ 100, 150 ],
         "ignore_quality": true
       },
       {
@@ -260,7 +332,7 @@
         "stat": {
           "StatConditionalModifier": {
             "stat": { "Damage": { "skill_type": "Spell" } },
-            "conditions": ["MaximumMana"]
+            "conditions": [ "MaximumMana" ]
           }
         },
         "modifier": "More",
@@ -281,7 +353,7 @@
     "name": "Crystal Wand",
     "icon": "items/crystal_wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",
@@ -300,7 +372,7 @@
     "name": "Mage Wand",
     "icon": "items/mage_wand.webp",
     "slot": "Weapon",
-    "categories": ["SpellWeapon"],
+    "categories": [ "SpellWeapon" ],
     "affixes": [
       {
         "scope": "Global",

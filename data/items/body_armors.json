@@ -3,7 +3,7 @@
     "name": "Padded Tunic",
     "icon": "items/padded_tunic.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 20
     }
@@ -13,7 +13,7 @@
     "description": "Who needs more?",
     "icon": "items/shirt.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 20
     },
@@ -30,7 +30,7 @@
         "scope": "Global",
         "stat": { "SkillLevel": null },
         "modifier": "Flat",
-        "value": [1, 10],
+        "value": [ 1, 10 ],
         "ignore_quality": true
       }
     ]
@@ -39,7 +39,7 @@
     "name": "Leather Armor",
     "icon": "items/leather_armor.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 40
     },
@@ -50,7 +50,7 @@
     "description": "Life feeds on life, this is no cruelty, only the forest's way",
     "icon": "items/wildheart.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 40
     },
@@ -62,19 +62,19 @@
           "Restore": { "restore_type": "Life" }
         },
         "modifier": "Increased",
-        "value": [30, 50]
+        "value": [ 30, 50 ]
       },
       {
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Increased",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [8, 10]
+        "value": [ 8, 10 ]
       },
       {
         "scope": "Global",
@@ -82,13 +82,13 @@
           "Armor": "Poison"
         },
         "modifier": "Flat",
-        "value": [40, 60]
+        "value": [ 40, 60 ]
       },
       {
         "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "value": [20, 40]
+        "value": [ 20, 40 ]
       }
     ],
     "min_area_level": 50
@@ -97,7 +97,7 @@
     "name": "Chain Shirt",
     "icon": "items/chain_shirt.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 60
     },
@@ -107,7 +107,7 @@
     "name": "Scale Vest",
     "icon": "items/scale_vest.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 80
     },
@@ -118,7 +118,7 @@
     "description": "It whispers: you may strike, but you may not touch.",
     "icon": "items/princess_robe.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 80
     },
@@ -149,14 +149,14 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [6, 10],
+        "value": [ 6, 10 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [6, 10],
+        "value": [ 6, 10 ],
         "ignore_quality": true
       }
     ],
@@ -166,7 +166,7 @@
     "name": "Brigandine",
     "icon": "items/brigandine.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 100
     },
@@ -177,7 +177,7 @@
     "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
     "icon": "items/crab_armor.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 100
     },
@@ -194,31 +194,31 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": 300
+        "value": 500
       },
       {
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Increased",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Storm" },
         "modifier": "Flat",
-        "value": [100, 140]
+        "value": [ 100, 140 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "value": [60, 100]
+        "value": [ 60, 100 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Poison" },
         "modifier": "Flat",
-        "value": [60, 100]
+        "value": [ 60, 100 ]
       }
     ],
     "min_area_level": 200
@@ -227,7 +227,7 @@
     "name": "Breastplate",
     "icon": "items/breastplate.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 120
     },
@@ -238,7 +238,7 @@
     "description": "Abal's heart did not burn out, it learned to endure.",
     "icon": "items/dragon_armor.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 120
     },
@@ -248,27 +248,27 @@
         "scope": "Local",
         "stat": { "Armor": "Physical" },
         "modifier": "Increased",
-        "value": [150, 200],
+        "value": [ 150, 200 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "value": [200, 300]
+        "value": [ 200, 300 ]
       },
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [10, 15],
+        "value": [ 10, 15 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [200, 300]
+        "value": [ 200, 300 ]
       },
       {
         "scope": "Global",
@@ -300,7 +300,7 @@
           {
             "Restore": {
               "restore_type": "Life",
-              "value": [5, 10],
+              "value": [ 5, 10 ],
               "modifier": "Flat"
             }
           }
@@ -313,7 +313,7 @@
     "name": "Cavalry Armor",
     "icon": "items/cavalry_armor.webp",
     "slot": "Body",
-    "categories": ["Armor", "Body"],
+    "categories": [ "Armor", "Body" ],
     "armor_specs": {
       "armor": 120
     },

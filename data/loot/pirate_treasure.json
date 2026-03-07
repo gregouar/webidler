@@ -2,20 +2,20 @@
   "entries": [
     {
       "item_id": "treasure_gun",
-      "weight": 2500,
+      "weight": 1200,
       "min_area_level": 240
     },
     {
       "item_id": "treasure_crown",
-      "weight": 2500
+      "weight": 1200
     },
     {
       "item_id": "treasure_cutlass",
-      "weight": 2500
+      "weight": 1200
     },
     {
       "item_id": "treasure_idol",
-      "weight": 2500
+      "weight": 1200
     }
   ]
 }

@@ -2,38 +2,38 @@
   "rune": {
     "name": "Rune",
     "icon": "items/rune.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
-    "rune_specs": {},
+    "rune_specs": { },
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": [ ],
     "min_area_level": 50
   },
   "rune_root": {
     "name": "Anchor Rune",
     "icon": "items/rune_root.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
     "rune_specs": {
       "root_node": true
     },
-    "affixes": [],
+    "affixes": [ ],
     "min_area_level": 150
   },
   "rune_gilded": {
     "name": "Gilded Covenant",
     "description": "Gold answers every prayer... eventually.",
     "icon": "items/rune_gilded.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
-    "rune_specs": {},
+    "rune_specs": { },
     "rarity": "Unique",
     "affixes": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [400, 600]
+        "value": [ 400, 600 ]
       }
     ],
     "min_area_level": 50
@@ -42,9 +42,9 @@
     "name": "Mark of the Berserker",
     "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
     "icon": "items/rune_berserker.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
-    "rune_specs": {},
+    "rune_specs": { },
     "rarity": "Unique",
     "affixes": [
       {
@@ -72,7 +72,7 @@
           "damage_type": null
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Attack",
         "effects": [
@@ -111,8 +111,8 @@
                 "lucky_chance": 0.0
               }
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -126,7 +126,7 @@
     "name": "Flux Stabilizer",
     "description": "Tames the wildest storms, binding chaos into order.",
     "icon": "items/rune_flux_stabilizer.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
     "rune_specs": {
       "root_node": true
@@ -158,7 +158,7 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Storm" } },
         "modifier": "More",
-        "value": [100, 200]
+        "value": [ 100, 200 ]
       }
     ],
     "min_area_level": 150
@@ -167,11 +167,11 @@
     "name": "Caustic Convergence",
     "description": "The alchemists learned that decay has a temperature.",
     "icon": "items/rune_poison_fire.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
-    "rune_specs": {},
+    "rune_specs": { },
     "rarity": "Unique",
-    "affixes": [],
+    "affixes": [ ],
     "triggers": [
       {
         "trigger_id": "rune_poison_fire",
@@ -196,22 +196,22 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {}
+                "StatusDuration": { }
               },
               {
-                "StatusPower": {}
+                "StatusPower": { }
               },
               {
-                "Damage": {}
+                "Damage": { }
               }
             ]
           }
         ],
         "modifiers": [
           {
-            "stat": { "Damage": {} },
+            "stat": { "Damage": { } },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 1.0,
             "source": {
               "StatusValue": {
                 "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
@@ -243,9 +243,9 @@
     "name": "Mnemonic Singularity",
     "description": "A mind dense enough bends reality.",
     "icon": "items/rune_mana_damage.webp",
-    "categories": ["Rune"],
+    "categories": [ "Rune" ],
     "ignore_quality": true,
-    "rune_specs": {},
+    "rune_specs": { },
     "rarity": "Unique",
     "affixes": [
       {
@@ -271,10 +271,10 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [-20, -10]
+        "value": [ -20, -10 ]
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "min_area_level": 250
   }
 }
