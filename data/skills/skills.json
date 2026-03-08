@@ -5,7 +5,7 @@
     "icon": "skills/magic_missile.svg",
     "skill_type": "Spell",
     "cooldown": 2,
-    "mana_cost": 1,
+    "mana_cost": 2,
     "upgrade_cost": 20,
     "upgrade_effects": [
       {
@@ -23,7 +23,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Storm": [ 0, 15 ]
+                "Storm": [ 0, 12 ]
               },
               "crit_chance": 10,
               "crit_damage": 100
@@ -956,7 +956,7 @@
   },
   "blessing_haste": {
     "name": "Blessing of Haste",
-    "description": "A blessing that increases your speed and movement, allowing quicker actions in battle.",
+    "description": "A blessing that increases your speed, allowing quicker actions in battle.",
     "icon": "skills/haste.svg",
     "skill_type": "Blessing",
     "cooldown": 20,
@@ -984,7 +984,7 @@
                       "stat": {
                         "Speed": null
                       },
-                      "modifier": "Increased"
+                      "modifier": "More"
                     }
                   },
                   "value": 20

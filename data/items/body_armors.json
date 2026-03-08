@@ -30,7 +30,7 @@
         "scope": "Global",
         "stat": { "SkillLevel": null },
         "modifier": "Flat",
-        "value": [ 1, 10 ],
+        "value": [ 1, 8 ],
         "ignore_quality": true
       }
     ]
@@ -194,7 +194,8 @@
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": 500
+        "value": 500,
+        "ignore_quality": true
       },
       {
         "scope": "Local",
