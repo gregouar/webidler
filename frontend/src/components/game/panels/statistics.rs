@@ -1,6 +1,7 @@
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    chance::BoundedChance,
     conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
@@ -28,17 +29,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let stats = move || game_context.game_stats.read();
-    let effect = move |stat: StatType, modifier: Modifier| {
-        game_context
-            .player_specs
-            .read()
-            .character_specs
-            .effects
-            .0
-            .get(&(stat, modifier, false))
-            .copied()
-            .unwrap_or_default()
-    };
+    // let effect = move |stat: StatType, modifier: Modifier| {
+    //     game_context
+    //         .player_specs
+    //         .read()
+    //         .character_specs
+    //         .effects
+    //         .0
+    //         .get(&(stat, modifier, false))
+    //         .copied()
+    //         .unwrap_or_default()
+    // };
 
     view! {
         <MenuPanel open=open h_full=false center=false>
@@ -233,15 +234,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Stat
                             label="Attack Block Chance (max 80%)"
                             value=move || {
-                                format!(
-                                    "{:.0}%",
-                                    game_context
+                                format_chance(
+                                    &game_context
                                         .player_specs
                                         .read()
                                         .character_specs
                                         .block
                                         .get(&SkillType::Attack)
-                                        .map(|x| x.value.get())
+                                        .copied()
                                         .unwrap_or_default(),
                                 )
                             }
@@ -253,14 +253,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 .character_specs
                                 .block
                                 .get(&SkillType::Spell)
-                                .map(|x| x.value.get())
+                                .copied()
                                 .unwrap_or_default();
-                            (block_spell != 0.0)
+                            (block_spell.value.get() != 0.0)
                                 .then(move || {
                                     view! {
                                         <Stat
                                             label="Spell Block Chance (max 80%)"
-                                            value=move || format!("{:.0}%", block_spell)
+                                            value=move || { format_chance(&block_spell) }
                                         />
                                     }
                                 })
@@ -336,17 +336,15 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         {move || {
                             DamageType::iter()
                                 .filter_map(|damage_type| {
-                                    let value = game_context
+                                    let evade = game_context
                                         .player_specs
                                         .read()
                                         .character_specs
                                         .evade
                                         .get(&damage_type)
                                         .copied()
-                                        .unwrap_or_default()
-                                        .value
-                                        .get() as f64;
-                                    (value != 0.0 && damage_type != DamageType::Storm)
+                                        .unwrap_or_default();
+                                    (evade.value.get() != 0.0 && damage_type != DamageType::Storm)
                                         .then(|| {
                                             view! {
                                                 <Stat
@@ -356,7 +354,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                             Some(damage_type),
                                                         ),
                                                     )
-                                                    value=move || format_effect_value(value)
+                                                    value=move || { format_chance(&evade) }
                                                 />
                                             }
                                         })
@@ -411,42 +409,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )
                             }
                         />
-                        {move || {
-                            let life_on_hit = effect(
-                                StatType::RestoreOnHit {
-                                    restore_type: RestoreType::Life,
-                                    skill_type: Some(SkillType::Attack),
-                                },
-                                Modifier::Flat,
-                            );
-                            (life_on_hit > 0.0)
-                                .then(move || {
-                                    view! {
-                                        <Stat
-                                            label="Life on Attack Hit"
-                                            value=move || { format!("{:.0}", life_on_hit) }
-                                        />
-                                    }
-                                })
-                        }}
-                        {move || {
-                            let mana_on_hit = effect(
-                                StatType::RestoreOnHit {
-                                    restore_type: RestoreType::Mana,
-                                    skill_type: Some(SkillType::Attack),
-                                },
-                                Modifier::Flat,
-                            );
-                            (mana_on_hit > 0.0)
-                                .then(move || {
-                                    view! {
-                                        <Stat
-                                            label="Mana on Attack Hit"
-                                            value=move || { format!("{:.0}", mana_on_hit) }
-                                        />
-                                    }
-                                })
-                        }}
                         {make_stat(
                             StatType::Restore {
                                 restore_type: None,
@@ -762,4 +724,13 @@ fn TriggersStats() -> impl IntoView {
             </div>
         </CardInset>
     }
+}
+
+pub fn format_chance(chance: &BoundedChance) -> String {
+    let luck_chance = chance
+        .luck_estimate()
+        .map(|luck_estimate| format!(" ({:.0}%)", luck_estimate))
+        .unwrap_or_default();
+
+    format!("{:.0}%{luck_chance}", chance.value.get())
 }

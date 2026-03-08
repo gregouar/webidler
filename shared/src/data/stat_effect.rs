@@ -493,6 +493,12 @@ impl Matchable for LuckyRollType {
                     damage_type: damage_type_2,
                 },
             ) => compare_options(damage_type, damage_type_2),
+            (
+                SuccessChance { effect_type },
+                SuccessChance {
+                    effect_type: effect_type_2,
+                },
+            ) => compare_options(effect_type, effect_type_2),
             _ => false,
         }
     }

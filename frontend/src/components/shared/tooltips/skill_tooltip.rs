@@ -4,7 +4,7 @@ use itertools::Itertools;
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
-    chance::ChanceRange,
+    chance::{Chance, ChanceRange},
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
@@ -260,6 +260,24 @@ fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
+pub fn format_chance(chance: &Chance, precise: bool) -> String {
+    if precise {
+        let luck_chance = chance
+            .luck_estimate()
+            .map(|luck_estimate| format!(" ({:.2}%)", luck_estimate))
+            .unwrap_or_default();
+
+        format!("{:.2}%{luck_chance}", chance.value.get())
+    } else {
+        let luck_chance = chance
+            .luck_estimate()
+            .map(|luck_estimate| format!(" ({:.0}%)", luck_estimate))
+            .unwrap_or_default();
+
+        format!("{:.0}%{luck_chance}", chance.value.get())
+    }
+}
+
 pub fn format_skill_effect(
     effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
@@ -267,9 +285,7 @@ pub fn format_skill_effect(
 ) -> impl IntoView + use<> {
     let success_chance = if effect.success_chance.value.get() < 100.0 {
         Some(view! {
-            <span class="font-semibold">
-                {format!("{:.0}%", effect.success_chance.value.get())}
-            </span>
+            <span class="font-semibold">{format_chance(&effect.success_chance, false)}</span>
             " chance to "
         })
     } else {
@@ -324,9 +340,7 @@ pub fn format_skill_effect(
                     view! {
                         <EffectLi>
                             "Critical hit chance: "
-                            <span class="font-semibold">
-                                {format!("{:.2}%", crit_chance.value.get())}
-                            </span>
+                            <span class="font-semibold">{format_chance(&crit_chance, true)}</span>
                         </EffectLi>
                         <EffectLi>
                             "Critical hit damage: "

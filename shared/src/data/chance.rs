@@ -31,6 +31,22 @@ impl Chance {
             lucky_chance: Default::default(),
         }
     }
+
+    pub fn luck_estimate(&self) -> Option<f32> {
+        (self.lucky_chance.get() != 0.0).then_some(
+            self.value.get()
+                + (100.0 - self.value.get()) * self.value.get() * self.lucky_chance.get() * 0.0001,
+        )
+    }
+}
+
+impl BoundedChance {
+    pub fn luck_estimate(&self) -> Option<f32> {
+        (self.lucky_chance.get() != 0.0).then_some(
+            self.value.get()
+                + (100.0 - self.value.get()) * self.value.get() * self.lucky_chance.get() * 0.0001,
+        )
+    }
 }
 
 // Spicy serde

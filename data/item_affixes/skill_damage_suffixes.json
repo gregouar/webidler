@@ -2,180 +2,180 @@
   {
     "name": "of Ire",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [25, 45]
+        "value": [ 25, 45 ]
       }
     ]
   },
   {
     "name": "of Temper",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [55, 70]
+        "value": [ 55, 70 ]
       }
     ]
   },
   {
     "name": "of Wrath",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [80, 95]
+        "value": [ 80, 95 ]
       }
     ]
   },
   {
     "name": "of Belligerence",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [105, 120]
+        "value": [ 105, 120 ]
       }
     ]
   },
   {
     "name": "of Ferocity",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [130, 145]
+        "value": [ 130, 145 ]
       }
     ]
   },
   {
     "name": "of Aggression",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [155, 170]
+        "value": [ 155, 170 ]
       }
     ]
   },
   {
     "name": "of Rage",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [180, 195]
+        "value": [ 180, 195 ]
       }
     ]
   },
   {
     "name": "of Hatred",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [205, 220]
+        "value": [ 205, 220 ]
       }
     ]
   },
   {
     "name": "of Fury",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 600,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [230, 250]
+        "value": [ 230, 250 ]
       }
     ]
   },
   {
     "name": "of Bloodlust",
     "family": "inc_attack_damage",
-    "tags": ["Attack"],
+    "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 500,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [260, 300]
+        "value": [ 260, 300 ]
       }
     ]
   },
@@ -183,18 +183,18 @@
   {
     "name": "of Caution",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 1,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [50, 90]
+        "value": [ 50, 90 ]
       },
       {
         "scope": "Global",
@@ -207,18 +207,18 @@
   {
     "name": "of Carefulness",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 2,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [110, 140]
+        "value": [ 110, 140 ]
       },
       {
         "scope": "Global",
@@ -231,18 +231,18 @@
   {
     "name": "of Attention",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 3,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [160, 190]
+        "value": [ 160, 190 ]
       },
       {
         "scope": "Global",
@@ -255,18 +255,18 @@
   {
     "name": "of Watchfulness",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 4,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [210, 240]
+        "value": [ 210, 240 ]
       },
       {
         "scope": "Global",
@@ -279,18 +279,18 @@
   {
     "name": "of Deliberation",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 5,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [260, 290]
+        "value": [ 260, 290 ]
       },
       {
         "scope": "Global",
@@ -303,18 +303,18 @@
   {
     "name": "of Focus",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 6,
-    "weight": 450,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 225,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [310, 340]
+        "value": [ 310, 340 ]
       },
       {
         "scope": "Global",
@@ -327,18 +327,18 @@
   {
     "name": "of Calculation",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 7,
-    "weight": 400,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 200,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [360, 390]
+        "value": [ 360, 390 ]
       },
       {
         "scope": "Global",
@@ -351,18 +351,18 @@
   {
     "name": "of Discipline",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 350,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 175,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [410, 440]
+        "value": [ 410, 440 ]
       },
       {
         "scope": "Global",
@@ -375,18 +375,18 @@
   {
     "name": "of Control",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 300,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 150,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [460, 500]
+        "value": [ 460, 500 ]
       },
       {
         "scope": "Global",
@@ -399,18 +399,18 @@
   {
     "name": "of Reckoning",
     "family": "heavy_attack_damage",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 250,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 100,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Attack" } },
         "modifier": "More",
-        "value": [520, 600]
+        "value": [ 520, 600 ]
       },
       {
         "scope": "Global",
@@ -424,180 +424,180 @@
   {
     "name": "of Spellcasting",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [25, 45]
+        "value": [ 25, 45 ]
       }
     ]
   },
   {
     "name": "of Wizardry",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [55, 70]
+        "value": [ 55, 70 ]
       }
     ]
   },
   {
     "name": "of Sorcery",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [80, 95]
+        "value": [ 80, 95 ]
       }
     ]
   },
   {
     "name": "of Thaumaturgy",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [105, 120]
+        "value": [ 105, 120 ]
       }
     ]
   },
   {
     "name": "of Arcanum",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [120, 145]
+        "value": [ 120, 145 ]
       }
     ]
   },
   {
     "name": "of Theurgy",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [155, 170]
+        "value": [ 155, 170 ]
       }
     ]
   },
   {
     "name": "of Enchantment",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [180, 195]
+        "value": [ 180, 195 ]
       }
     ]
   },
   {
     "name": "of Incantation",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [205, 220]
+        "value": [ 205, 220 ]
       }
     ]
   },
   {
     "name": "of Conjuration",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 600,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [230, 250]
+        "value": [ 230, 250 ]
       }
     ]
   },
   {
     "name": "of Invocation",
     "family": "inc_spell_damage",
-    "tags": ["Spell"],
+    "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 500,
-    "restrictions": ["Jewelry", "SpellWeapon", "Focus"],
+    "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [260, 300]
+        "value": [ 260, 300 ]
       }
     ]
   },
@@ -605,18 +605,18 @@
   {
     "name": "of Confidence",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 1,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [40, 65]
+        "value": [ 40, 65 ]
       },
       {
         "scope": "Global",
@@ -629,18 +629,18 @@
   {
     "name": "of Presumption",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 2,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [75, 105]
+        "value": [ 75, 105 ]
       },
       {
         "scope": "Global",
@@ -653,18 +653,18 @@
   {
     "name": "of Vanity",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 3,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [120, 145]
+        "value": [ 120, 145 ]
       },
       {
         "scope": "Global",
@@ -677,18 +677,18 @@
   {
     "name": "of Arrogance",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 4,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [155, 180]
+        "value": [ 155, 180 ]
       },
       {
         "scope": "Global",
@@ -701,18 +701,18 @@
   {
     "name": "of Conceit",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 5,
-    "weight": 500,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 250,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [190, 215]
+        "value": [ 190, 215 ]
       },
       {
         "scope": "Global",
@@ -725,18 +725,18 @@
   {
     "name": "of Audacity",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 6,
-    "weight": 450,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 225,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [230, 255]
+        "value": [ 230, 255 ]
       },
       {
         "scope": "Global",
@@ -749,18 +749,18 @@
   {
     "name": "of Insolence",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 7,
-    "weight": 400,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 200,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [270, 295]
+        "value": [ 270, 295 ]
       },
       {
         "scope": "Global",
@@ -773,18 +773,18 @@
   {
     "name": "of Pride",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 350,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 175,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [305, 330]
+        "value": [ 305, 330 ]
       },
       {
         "scope": "Global",
@@ -797,18 +797,18 @@
   {
     "name": "of Ego",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 300,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 150,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [345, 360]
+        "value": [ 345, 360 ]
       },
       {
         "scope": "Global",
@@ -821,18 +821,18 @@
   {
     "name": "of Hubris",
     "family": "costly_power",
-    "tags": ["Spell", "Mana"],
+    "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 250,
-    "restrictions": ["Jewelry", "Accessory"],
+    "weight": 100,
+    "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Damage": { "skill_type": "Spell" } },
         "modifier": "More",
-        "value": [390, 450]
+        "value": [ 390, 450 ]
       },
       {
         "scope": "Global",
