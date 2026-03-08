@@ -728,7 +728,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 30
+                  "value": 100
                 },
                 {
                   "replace_on_value_only": true,

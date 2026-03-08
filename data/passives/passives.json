@@ -648,7 +648,22 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -671,7 +686,22 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -806,7 +836,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -839,7 +869,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2340,7 +2370,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
@@ -2373,7 +2403,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           },
           {
             "stat": {
@@ -3800,7 +3830,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -3833,7 +3863,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4021,7 +4051,22 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -4044,7 +4089,22 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5831,7 +5891,7 @@
               }
             },
             "modifier": "More",
-            "value": 2.0
+            "value": 5.0
           }
         ],
         "triggers": [],
@@ -5859,7 +5919,7 @@
               }
             },
             "modifier": "More",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6078,8 +6138,8 @@
                     }
                   ],
                   "duration": {
-                    "min": 3.0,
-                    "max": 3.0,
+                    "min": 5.0,
+                    "max": 5.0,
                     "lucky_chance": 0.0
                   }
                 },
@@ -7116,7 +7176,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -7135,7 +7195,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7990,7 +8050,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -8009,7 +8069,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10258,7 +10318,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 25.0,
+                  "value": 35.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -10654,7 +10714,7 @@
               }
             },
             "modifier": "More",
-            "value": 2.0
+            "value": 5.0
           }
         ],
         "triggers": [],
@@ -10682,7 +10742,7 @@
               }
             },
             "modifier": "More",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10985,6 +11045,13 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
@@ -10994,13 +11061,6 @@
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -11121,16 +11181,16 @@
                     }
                   },
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   }
                 ],
@@ -11243,13 +11303,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -11260,6 +11313,13 @@
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -12305,7 +12365,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -12338,7 +12398,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13112,7 +13172,7 @@
               }
             },
             "modifier": "More",
-            "value": 4.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -13140,7 +13200,7 @@
               }
             },
             "modifier": "More",
-            "value": 2.0
+            "value": 4.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13756,7 +13816,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -13789,7 +13849,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,

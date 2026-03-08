@@ -22,7 +22,7 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
-            self, damage_over_time_type_str, formatted_effects_list, min_max_str,
+            self, damage_over_time_type_value_str, formatted_effects_list, min_max_str,
             stat_skill_effect_type_str, status_type_str,
         },
         trigger_tooltip::{
@@ -428,7 +428,7 @@ pub fn format_skill_effect(
                                         )>{format_min_max(status_effect.value)}</span>
                                         {trigger_modifier_damage_str}"  "
                                         // {damage_type_str(Some(damage_type))} "Damage per second "
-                                        {damage_over_time_type_str(Some(damage_type))}
+                                        {damage_over_time_type_value_str(Some(damage_type))}
                                         " per second " {format_duration(duration)}
                                         {trigger_modifier_duration_str}
                                     </EffectLi>
@@ -749,7 +749,7 @@ pub fn skill_effect_text(
                     }
                     StatusSpecs::Trigger(trigger_specs) => trigger_text(*trigger_specs),
                     StatusSpecs::Stun | StatusSpecs::DamageOverTime { .. } => {
-                        status_type_str(Some(&stat_status_type))
+                        status_type_str(&stat_status_type)
                     }
                 };
                 format!(

@@ -81,6 +81,17 @@ pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
 pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
         Some(damage_type) => match damage_type {
+            DamageType::Physical => "Bleed ",
+            DamageType::Fire => "Burn ",
+            DamageType::Poison => "Poison ",
+            DamageType::Storm => "Weather ",
+        },
+        None => "Damage over Time",
+    }
+}
+pub fn damage_over_time_type_value_str(damage_type: Option<DamageType>) -> &'static str {
+    match damage_type {
+        Some(damage_type) => match damage_type {
             DamageType::Physical => "Bleed Damage ",
             DamageType::Fire => "Burn Damage ",
             DamageType::Poison => "Poison Damage ",
@@ -165,28 +176,49 @@ fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
-pub fn status_type_str(status_type: Option<&StatStatusType>) -> String {
+pub fn skill_status_type_str(
+    skill_type: Option<SkillType>,
+    status_type: Option<&StatStatusType>,
+) -> String {
+    match (skill_type, status_type) {
+        (None, None) => "Effects over Time".to_string(),
+        (Some(SkillType::Blessing | SkillType::Curse), None) => {
+            format!("{}", skill_type_str(skill_type))
+        }
+        (skill_type, status_type) => format!(
+            "{}{}",
+            skill_type_str(skill_type),
+            opt_status_type_str(status_type)
+        ),
+    }
+}
+
+pub fn status_type_str(status_type: &StatStatusType) -> String {
     match status_type {
-        Some(status_type) => match status_type {
-            StatStatusType::Stun => "Stun".to_string(),
-            StatStatusType::DamageOverTime { damage_type } => {
-                damage_over_time_type_str(*damage_type).into()
-            }
-            StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
-                (Some(StatType::Speed(_)), Some(true)) => "Slowed".to_string(),
-                (_, Some(true)) => "Negative Statuses".to_string(),
-                (_, Some(false)) => "Positive Statuses".to_string(),
-                _ => "Statuses".to_string(),
-            },
-            StatStatusType::Trigger {
-                trigger_id: Some(trigger_id),
-                trigger_description,
-            } => trigger_description.clone().unwrap_or(trigger_id.clone()),
-            StatStatusType::Trigger {
-                trigger_id: _,
-                trigger_description: _,
-            } => "Triggered Effects".to_string(),
+        StatStatusType::Stun => "Stun".to_string(),
+        StatStatusType::DamageOverTime { damage_type } => {
+            damage_over_time_type_str(*damage_type).into()
+        }
+        StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
+            (Some(StatType::Speed(_)), Some(true)) => "Slowed".to_string(),
+            (_, Some(true)) => "Negative Statuses".to_string(),
+            (_, Some(false)) => "Positive Statuses".to_string(),
+            _ => "Statuses".to_string(),
         },
+        StatStatusType::Trigger {
+            trigger_id: Some(trigger_id),
+            trigger_description,
+        } => trigger_description.clone().unwrap_or(trigger_id.clone()),
+        StatStatusType::Trigger {
+            trigger_id: _,
+            trigger_description: _,
+        } => "Triggered Effects".to_string(),
+    }
+}
+
+pub fn opt_status_type_str(status_type: Option<&StatStatusType>) -> String {
+    match status_type {
+        Some(status_type) => status_type_str(status_type),
         None => "Effects over Time".to_string(),
     }
 }
@@ -197,7 +229,7 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
             StatStatusType::Stun => "Stun Effects".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
                 // format!("{}Damage per second", damage_type_str(*damage_type))
-                damage_over_time_type_str(*damage_type).into()
+                damage_over_time_type_value_str(*damage_type).into()
             }
             StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
                 (Some(StatType::Speed(_)), Some(true)) => "Slow Effects".to_string(),
@@ -226,7 +258,7 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
             StatSkillEffectType::ApplyStatus { status_type } => {
-                format!("Apply {}", status_type_str(status_type.as_ref()))
+                format!("Apply {}", opt_status_type_str(status_type.as_ref()))
             }
             StatSkillEffectType::Restore { restore_type } => {
                 format!("Restore{}", restore_type_str(*restore_type))
@@ -466,9 +498,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_type,
         } => {
             format!(
-                "{}{} Duration",
-                skill_type_str(*skill_type),
-                status_type_str(status_type.as_ref())
+                "{} Duration",
+                skill_status_type_str(*skill_type, status_type.as_ref())
             )
         }
         StatType::StatusResistance {
@@ -476,9 +507,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             status_type,
         } => {
             format!(
-                "{}{} Resilience",
-                skill_type_str(*skill_type),
-                status_type_str(status_type.as_ref())
+                "{} Resilience",
+                skill_status_type_str(*skill_type, status_type.as_ref())
             )
         }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
@@ -691,16 +721,14 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             if value.unwrap_or_default() >= 99999.0 {
                 format!(
-                    "{}{} never expire",
-                    skill_type_str(*skill_type),
-                    status_type_str(status_type.as_ref())
+                    "{} never expire",
+                    skill_status_type_str(*skill_type, status_type.as_ref())
                 )
             } else {
                 format!(
-                    "{} seconds duration to {}{}",
+                    "{} seconds duration to {}",
                     format_adds_removes(value, true, ""),
-                    skill_type_str(*skill_type),
-                    status_type_str(status_type.as_ref())
+                    skill_status_type_str(*skill_type, status_type.as_ref())
                 )
             }
         }

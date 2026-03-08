@@ -15,9 +15,7 @@ use crate::assets::img_asset;
 use crate::components::icons::monster_tags::{
     ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
 };
-use crate::components::shared::tooltips::effects_tooltip::{
-    damage_over_time_type_str, damage_type_str, status_type_str,
-};
+use crate::components::shared::tooltips::effects_tooltip;
 use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
 use crate::components::ui::progress_bars::predictive_cooldown;
 use crate::components::{
@@ -480,7 +478,10 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                                 view! {
                                     <span>
                                         <span class="font-semibold">{format!("{:.0}", value)}</span>
-                                        {format!(" {}Armor", damage_type_str(Some(damage_type)))}
+                                        {format!(
+                                            " {}Armor",
+                                            effects_tooltip::damage_type_str(Some(damage_type)),
+                                        )}
                                     </span>
                                 }
                             })
@@ -565,7 +566,9 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                                         </span>
                                         {format!(
                                             " {} Evade Chance",
-                                            damage_over_time_type_str(Some(damage_type)),
+                                            effects_tooltip::damage_over_time_type_str(
+                                                Some(damage_type),
+                                            ),
                                         )}
                                     </span>
                                 }
@@ -623,7 +626,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                                     <span class="font-semibold">{format!("{:.0}%", value)}</span>
                                     {format!(
                                         " {} Resilience",
-                                        status_type_str(status_type.as_ref()),
+                                        effects_tooltip::opt_status_type_str(status_type.as_ref()),
                                     )}
                                 </span>
                             }
@@ -639,9 +642,11 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                                                     {format!("{:.0}%", value)}
                                                 </span>
                                                 {format!(
-                                                    " {}{} Resilience",
-                                                    skill_type_str(Some(skill_type)),
-                                                    status_type_str(status_type.as_ref()),
+                                                    " {} Resilience",
+                                                    effects_tooltip::skill_status_type_str(
+                                                        Some(skill_type),
+                                                        status_type.as_ref(),
+                                                    ),
                                                 )}
                                             </span>
                                         }

@@ -14,7 +14,7 @@ use shared::data::{
 
 use crate::components::shared::tooltips::{
     conditions_tooltip,
-    effects_tooltip::{damage_type_str, format_stat, status_type_str, status_type_value_str},
+    effects_tooltip::{damage_type_str, format_stat, skill_status_type_str, status_type_value_str},
     skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
 };
 
@@ -39,13 +39,18 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
 
     view! {
-        <EffectLi class:mt-2>
-            {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}{shape_infos}":"
+        <EffectLi>
+            <ul>
+                <EffectLi>
+                    {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}
+                    {shape_infos}":"
+                </EffectLi>
+                {trigger
+                    .description
+                    .map(|description| view! { <EffectLi>{description}</EffectLi> }.into_any())
+                    .unwrap_or(view! { {effects} }.into_any())}
+            </ul>
         </EffectLi>
-        {trigger
-            .description
-            .map(|description| view! { <EffectLi>{description}</EffectLi> }.into_any())
-            .unwrap_or(view! { {effects} }.into_any())}
     }
 }
 
@@ -125,9 +130,8 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
             skill_type,
         } => {
             format!(
-                "{}{} Duration",
-                skill_type_str(*skill_type),
-                status_type_str(status_type.as_ref())
+                "{} Duration",
+                skill_status_type_str(*skill_type, status_type.as_ref())
             )
         }
         TriggerEffectModifierSource::StatusStacks {
@@ -135,9 +139,8 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
             skill_type,
         } => {
             format!(
-                "{}{} Stacks",
-                skill_type_str(*skill_type),
-                status_type_str(status_type.as_ref())
+                "{} Stacks",
+                skill_status_type_str(*skill_type, status_type.as_ref())
             )
         }
     }
@@ -175,9 +178,11 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     format!(
-        "{}{}",
-        skill_type_str(status_trigger.skill_type),
-        status_type_str(status_trigger.status_type.as_ref()),
+        "{}",
+        skill_status_type_str(
+            status_trigger.skill_type,
+            status_trigger.status_type.as_ref()
+        ),
     )
 }
 

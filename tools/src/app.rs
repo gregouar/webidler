@@ -1,5 +1,6 @@
 use frontend::components::{
     accessibility::provide_accessibility_context,
+    data_context::provide_data_context,
     events::provide_events_context,
     settings::provide_settings_context,
     ui::{
@@ -24,6 +25,7 @@ pub fn App() -> impl IntoView {
     provide_accessibility_context();
     provide_settings_context();
     provide_events_context();
+    provide_data_context();
 
     let confirm_state = provide_confirm_context();
 

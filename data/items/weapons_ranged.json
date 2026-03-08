@@ -207,14 +207,13 @@
         "value": [ 80, 140 ]
       },
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": {
-          "Damage": {
-            "skill_type": "Spell"
-          }
+          "CritDamage": null
         },
-        "modifier": "More",
-        "value": [ 200, 300 ]
+        "modifier": "Increased",
+        "value": [ 100, 200 ],
+        "ignore_quality": true
       },
       {
         "scope": "Global",
@@ -222,7 +221,8 @@
           "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
         },
         "modifier": "Flat",
-        "value": [ 2, 4 ]
+        "value": [ 2, 4 ],
+        "ignore_quality": true
       }
     ],
     "triggers": [
