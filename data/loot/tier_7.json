@@ -75,6 +75,10 @@
       "item_id": "rune_root",
       "weight": 640,
       "min_area_level": 320
+    },
+    {
+      "item_id": "rune_storm_poison",
+      "weight": 50
     }
   ]
 }

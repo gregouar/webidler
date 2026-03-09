@@ -271,10 +271,66 @@
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [ -20, -10 ]
+        "value": [ -30, -15 ]
       }
     ],
     "triggers": [ ],
-    "min_area_level": 250
+    "min_area_level": 260
+  },
+  "rune_storm_poison": {
+    "name": "Voltrach Contraption",
+    "description": "Few survived Voltrach's experiments. Fewer understood them.",
+    "icon": "items/rune_storm_poison.webp",
+    "categories": [ "Rune" ],
+    "ignore_quality": true,
+    "rune_specs": { },
+    "rarity": "Unique",
+    "affixes": [
+    ], "triggers": [
+      {
+        "trigger_id": "rune_storm_poison",
+        "OnHit": { "is_hurt": true },
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": 50,
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0
+                }
+              ]
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "damage_type": "Storm"
+                }
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": { }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Storm"
+            }
+          }
+        ]
+      }
+    ],
+    "min_area_level": 330
   }
 }

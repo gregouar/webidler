@@ -228,7 +228,7 @@
     "triggers": [
       {
         "trigger_id": "voltrach_bite",
-        "OnHit": { },
+        "OnHit": { "is_hurt": true },
         "skill_type": "Other",
         "effects": [
           {
