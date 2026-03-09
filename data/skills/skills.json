@@ -728,7 +728,7 @@
                       "debuff": true
                     }
                   },
-                  "value": 100
+                  "value": 30
                 },
                 {
                   "replace_on_value_only": true,
@@ -774,7 +774,7 @@
                             "Damage": { "damage_type": "Physical" }
                           },
                           "modifier": "Flat",
-                          "factor": 0.3,
+                          "factor": 1.0,
                           "source": {
                             "StatusValue": {
                               "status_type": {
