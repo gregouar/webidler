@@ -660,7 +660,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
     let source_description = match skill_modifier.source {
         ModifierEffectSource::ItemStats { slot, item_stats } => {
             format!(
-                "Per {} {} on equipped {}:",
+                "Per {}{} on equipped {}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
                     ItemStatsSource::Armor => " Armor".to_string(),
@@ -696,7 +696,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
             )
         }
         ModifierEffectSource::CharacterStats(stat_converter) => format!(
-            "Per {}{}:",
+            "Per {} {}:",
             format_number(1.0 / skill_modifier.factor),
             effects_tooltip::stat_converter_source_str(stat_converter),
         ),

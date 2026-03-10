@@ -264,7 +264,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": 1
+                  "value": 2
                 }
               ]
             },
@@ -426,7 +426,7 @@
     "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
     "icon": "skills/voodoo.svg",
     "skill_type": "Spell",
-    "cooldown": 1.5,
+    "cooldown": 1.2,
     "mana_cost": 2,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -465,8 +465,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 3
       }
     ],
     "targets": [
@@ -555,8 +555,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 3
       }
     ],
     "targets": [
@@ -701,8 +701,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 3
       }
     ],
     "targets": [
@@ -805,8 +805,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 3
       }
     ],
     "targets": [
@@ -918,8 +918,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Curse" } },
-        "modifier": "Increased",
-        "value": 5
+        "modifier": "Flat",
+        "value": 1
       }
     ],
     "targets": [
@@ -965,8 +965,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Increased",
-        "value": 5
+        "modifier": "Flat",
+        "value": 1
       }
     ],
     "targets": [
@@ -984,7 +984,7 @@
                       "stat": {
                         "Speed": null
                       },
-                      "modifier": "More"
+                      "modifier": "Increased"
                     }
                   },
                   "value": 20
@@ -1007,8 +1007,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 2
       }
     ],
     "targets": [
@@ -1059,8 +1059,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 1
       }
     ],
     "targets": [
@@ -1249,8 +1249,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 3
       }
     ],
     "targets": [
@@ -1362,8 +1362,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { } },
-        "modifier": "Increased",
-        "value": 10
+        "modifier": "Flat",
+        "value": 1
       }
     ],
     "targets": [
@@ -1484,8 +1484,8 @@
         "stat": {
           "Restore": { "restore_type": "Life" }
         },
-        "modifier": "Increased",
-        "value": 20
+        "modifier": "Flat",
+        "value": 5
       }
     ],
     "targets": [
@@ -1515,8 +1515,8 @@
     "upgrade_effects": [
       {
         "stat": { "StatusPower": { "skill_type": "Blessing" } },
-        "modifier": "Increased",
-        "value": 4
+        "modifier": "Flat",
+        "value": 1
       }
     ],
     "targets": [

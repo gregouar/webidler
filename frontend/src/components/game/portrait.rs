@@ -425,6 +425,7 @@ fn StatusIcon(
                     StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
                     _ => "statuses/buff.svg".to_string(),
                 },
+                // TODO: More debuff types
                 StatusId::StatModifier {
                     stat, debuff: true, ..
                 } => match stat {
@@ -432,6 +433,7 @@ fn StatusIcon(
                         "statuses/debuff_armor.svg".to_string()
                     }
                     StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
+                    StatType::Speed(_) => "statuses/slow.svg".to_string(),
                     StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
                     _ => "statuses/debuff.svg".to_string(),
                 },

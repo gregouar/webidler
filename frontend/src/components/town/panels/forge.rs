@@ -276,7 +276,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     class:xl:mb-2
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Add" <span class="text-white font-bold">"Affix"</span>
+                        "Add random" <span class="text-white font-bold">"Affix"</span>
                         {move || {
                             affix_price()
                                 .map(|price| {
@@ -299,7 +299,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     })
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Add" <span class="text-white font-bold">"Prefix"</span>
+                        "Add random" <span class="text-white font-bold">"Prefix"</span>
                         {move || {
                             prefix_price()
                                 .map(|price| {
@@ -319,7 +319,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     })
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Add" <span class="text-white font-bold">"Suffix"</span>
+                        "Add random" <span class="text-white font-bold">"Suffix"</span>
                         {move || {
                             suffix_price()
                                 .map(|price| {

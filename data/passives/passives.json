@@ -987,8 +987,8 @@
         "socket": false
       },
       "146b8b55-3b98-455b-ad05-f53b6e7c65ef": {
-        "name": "Damage against Slowed Enemies",
-        "icon": "passives/slow_blob.svg",
+        "name": "Damage against Stunned Enemies",
+        "icon": "passives/surprised_skull.svg",
         "x": 105.0,
         "y": 122.5,
         "size": 0,
@@ -1009,14 +1009,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "StatModifier": {
-                          "debuff": true,
-                          "stat": {
-                            "Speed": null
-                          }
-                        }
-                      },
+                      "status_type": "Stun",
                       "skill_type": null,
                       "not": false
                     }
@@ -1045,14 +1038,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "StatModifier": {
-                          "debuff": true,
-                          "stat": {
-                            "Speed": null
-                          }
-                        }
-                      },
+                      "status_type": "Stun",
                       "skill_type": null,
                       "not": false
                     }
@@ -4603,20 +4589,45 @@
         "socket": false
       },
       "5ee192ea-49d6-4923-a857-0d5a21498f53": {
-        "name": "Armor",
-        "icon": "passives/armor.svg",
+        "name": "Damage against Slowed Enemies",
+        "icon": "passives/slow_blob.svg",
         "x": -75.0,
         "y": -177.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Armor",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "Armor": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -4624,10 +4635,35 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
             },
-            "modifier": "Increased",
-            "value": 5.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5717,8 +5753,8 @@
         "socket": false
       },
       "73809ca0-cd1d-4d0c-ba3d-1455acc68b02": {
-        "name": "Mana Leech Power",
-        "icon": "passives/eel.svg",
+        "name": "Spell Mana Cost",
+        "icon": "passives/potion_ball.svg",
         "x": 125.0,
         "y": -100.0,
         "size": 0,
@@ -5727,13 +5763,12 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
-                "restore_type": "Mana",
-                "skill_type": "Attack"
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": -10.0
           }
         ],
         "triggers": [],
@@ -5741,13 +5776,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
-                "restore_type": "Mana",
-                "skill_type": "Attack"
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": -5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8230,8 +8264,8 @@
         "socket": false
       },
       "9addfe39-f177-427a-aefa-4f3ba229c856": {
-        "name": "Damage against Slowed Enemies",
-        "icon": "passives/slow_blob.svg",
+        "name": "Damage against Stunned Enemies",
+        "icon": "passives/surprised_skull.svg",
         "x": 97.5,
         "y": 112.5,
         "size": 0,
@@ -8252,14 +8286,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "StatModifier": {
-                          "debuff": true,
-                          "stat": {
-                            "Speed": null
-                          }
-                        }
-                      },
+                      "status_type": "Stun",
                       "skill_type": null,
                       "not": false
                     }
@@ -8288,14 +8315,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "StatModifier": {
-                          "debuff": true,
-                          "stat": {
-                            "Speed": null
-                          }
-                        }
-                      },
+                      "status_type": "Stun",
                       "skill_type": null,
                       "not": false
                     }
@@ -8401,7 +8421,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 100.0,
+                  "value": 50.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -8421,7 +8441,7 @@
                         "max": 25.0,
                         "lucky_chance": 0.0
                       },
-                      "cumulate": true,
+                      "cumulate": false,
                       "replace_on_value_only": false,
                       "unavoidable": false
                     },
@@ -8429,21 +8449,18 @@
                       "status_type": {
                         "StatModifier": {
                           "stat": {
-                            "DamageResistance": {
-                              "skill_type": null,
-                              "damage_type": "Poison"
-                            }
+                            "Speed": null
                           },
-                          "modifier": "Flat",
+                          "modifier": "Increased",
                           "debuff": true
                         }
                       },
                       "value": {
-                        "min": 10.0,
-                        "max": 10.0,
+                        "min": 33.0,
+                        "max": 33.0,
                         "lucky_chance": 0.0
                       },
-                      "cumulate": true,
+                      "cumulate": false,
                       "replace_on_value_only": false,
                       "unavoidable": false
                     }
@@ -8503,20 +8520,45 @@
         "socket": false
       },
       "9e32669b-6e90-4021-8c9a-a5d1d2a03387": {
-        "name": "Armor",
-        "icon": "passives/armor.svg",
+        "name": "Damage against Slowed Enemies",
+        "icon": "passives/slow_blob.svg",
         "x": -50.0,
         "y": -167.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Armor",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "Armor": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -8524,10 +8566,35 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
             },
-            "modifier": "Increased",
-            "value": 5.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8867,8 +8934,8 @@
         "socket": false
       },
       "a8c6e35c-bd30-4211-9e6d-65d59ad7e375": {
-        "name": "Damage against Slowed Enemies",
-        "icon": "passives/slow_blob.svg",
+        "name": "Damage against Stunned Enemies",
+        "icon": "passives/surprised_skull.svg",
         "x": 82.5,
         "y": 117.5,
         "size": 1,
@@ -8889,14 +8956,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "StatModifier": {
-                          "debuff": true,
-                          "stat": {
-                            "Speed": null
-                          }
-                        }
-                      },
+                      "status_type": "Stun",
                       "skill_type": null,
                       "not": false
                     }
@@ -8925,14 +8985,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "StatModifier": {
-                          "debuff": true,
-                          "stat": {
-                            "Speed": null
-                          }
-                        }
-                      },
+                      "status_type": "Stun",
                       "skill_type": null,
                       "not": false
                     }
@@ -9382,20 +9435,45 @@
         "socket": false
       },
       "b59ab706-e788-4501-8bc8-e55157d0edc5": {
-        "name": "Armor",
-        "icon": "passives/armor.svg",
+        "name": "Damage against Slowed Enemies",
+        "icon": "passives/slow_blob.svg",
         "x": -60.0,
         "y": -185.0,
         "size": 1,
         "root_node": false,
-        "node_type": "Armor",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "Armor": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -9403,10 +9481,35 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": null
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9813,22 +9916,45 @@
         "socket": false
       },
       "c15cc2fd-ee56-44f4-a658-e727cc8bc155": {
-        "name": "Spell Mana Cost",
-        "icon": "passives/potion_ball.svg",
+        "name": "Damage against Slowed Enemies",
+        "icon": "passives/slow_blob.svg",
         "x": 120.0,
         "y": 107.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "ManaCost": {
-                "skill_type": "Spell"
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
               }
             },
-            "modifier": "Increased",
-            "value": -10.0
+            "modifier": "More",
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -9836,12 +9962,35 @@
         "upgrade_effects": [
           {
             "stat": {
-              "ManaCost": {
-                "skill_type": "Spell"
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
               }
             },
-            "modifier": "Increased",
-            "value": -5.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11303,13 +11452,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
@@ -11319,6 +11461,13 @@
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
                       "min_max": null
                     }
                   }
@@ -11764,22 +11913,45 @@
         "socket": false
       },
       "d921b9c1-b64e-4b26-8bed-a46a239393b3": {
-        "name": "Spell Mana Cost",
-        "icon": "passives/potion_ball.svg",
+        "name": "Damage against Slowed Enemies",
+        "icon": "passives/slow_blob.svg",
         "x": 110.0,
         "y": 100.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "ManaCost": {
-                "skill_type": "Spell"
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
               }
             },
-            "modifier": "Increased",
-            "value": -10.0
+            "modifier": "More",
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -11787,12 +11959,35 @@
         "upgrade_effects": [
           {
             "stat": {
-              "ManaCost": {
-                "skill_type": "Spell"
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
               }
             },
-            "modifier": "Increased",
-            "value": -5.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11952,8 +12147,8 @@
         "socket": false
       },
       "da2b4bd7-a844-4270-8c7c-67bc62673e61": {
-        "name": "Mana Leech Power",
-        "icon": "passives/eel.svg",
+        "name": "Spell Mana Cost",
+        "icon": "passives/potion_ball.svg",
         "x": 127.5,
         "y": -112.5,
         "size": 1,
@@ -11962,13 +12157,12 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
-                "restore_type": "Mana",
-                "skill_type": "Attack"
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": -20.0
           }
         ],
         "triggers": [],
@@ -11976,13 +12170,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
-                "restore_type": "Mana",
-                "skill_type": "Attack"
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": -10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12256,8 +12449,8 @@
         "socket": false
       },
       "ddb42629-34b3-4202-bc1b-569b3858020b": {
-        "name": "Mana Leech Power",
-        "icon": "passives/eel.svg",
+        "name": "Spell Mana Cost",
+        "icon": "passives/potion_ball.svg",
         "x": 112.5,
         "y": -97.5,
         "size": 0,
@@ -12266,13 +12459,12 @@
         "effects": [
           {
             "stat": {
-              "Restore": {
-                "restore_type": "Mana",
-                "skill_type": "Attack"
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": -10.0
           }
         ],
         "triggers": [],
@@ -12280,13 +12472,12 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Restore": {
-                "restore_type": "Mana",
-                "skill_type": "Attack"
+              "ManaCost": {
+                "skill_type": "Spell"
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": -5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13418,22 +13609,45 @@
         "socket": false
       },
       "f288158b-81e2-4237-ac6e-34bd492e45f4": {
-        "name": "Spell Mana Cost",
-        "icon": "passives/potion_ball.svg",
+        "name": "Damage against Slowed Enemies",
+        "icon": "passives/slow_blob.svg",
         "x": 132.5,
         "y": 107.5,
         "size": 1,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "ManaCost": {
-                "skill_type": "Spell"
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
               }
             },
-            "modifier": "Increased",
-            "value": -20.0
+            "modifier": "More",
+            "value": 45.0
           }
         ],
         "triggers": [],
@@ -13441,12 +13655,35 @@
         "upgrade_effects": [
           {
             "stat": {
-              "ManaCost": {
-                "skill_type": "Spell"
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": {
+                        "StatModifier": {
+                          "debuff": true,
+                          "stat": {
+                            "Speed": null
+                          }
+                        }
+                      },
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
               }
             },
-            "modifier": "Increased",
-            "value": -10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
