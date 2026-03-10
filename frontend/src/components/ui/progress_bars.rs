@@ -356,8 +356,9 @@ pub fn predictive_cooldown(
     remaining_time: Signal<f64>,
     reset: Signal<bool>,
     disabled: Signal<bool>,
+    starting_value: f64,
 ) -> RwSignal<f64> {
-    let progress_value = RwSignal::new(0.0);
+    let progress_value = RwSignal::new(starting_value);
     let rate = RwSignal::new(0.0);
 
     Effect::new(move || {

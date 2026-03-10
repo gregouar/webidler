@@ -343,7 +343,7 @@ pub fn ThreatMeter() -> impl IntoView {
     let no_threat = Signal::derive(move || time_remaining.get() == 0.0);
 
     let reset = Signal::derive(move || threat_increase.get() || no_threat.get());
-    let progress_value = predictive_cooldown(time_remaining, reset, no_threat);
+    let progress_value = predictive_cooldown(time_remaining, reset, no_threat, 0.0);
 
     view! {
         <StaticTooltip

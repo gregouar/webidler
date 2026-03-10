@@ -687,6 +687,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         skill_cooldown,
         reset_progress,
         Signal::derive(move || is_dead.get() || rush_mode.get()),
+        0.0,
     );
 
     view! {

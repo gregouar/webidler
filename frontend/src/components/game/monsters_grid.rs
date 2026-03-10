@@ -816,7 +816,18 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
         }
     });
 
-    let progress_value = predictive_cooldown(skill_cooldown, just_triggered.into(), is_dead.into());
+    let progress_value = predictive_cooldown(
+        skill_cooldown,
+        just_triggered.into(),
+        is_dead.into(),
+        game_context
+            .monster_states
+            .read_untracked()
+            .get(monster_index)
+            .and_then(|m| m.skill_states.get(index))
+            .map(|s| s.elapsed_cooldown.get())
+            .unwrap_or_default(),
+    );
 
     view! {
         <CircularProgressBar

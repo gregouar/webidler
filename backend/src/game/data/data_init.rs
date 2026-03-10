@@ -2,6 +2,7 @@ use shared::{
     constants::{DEFAULT_MAX_LEVEL, SKILL_BASE_COST},
     data::{
         area::{AreaSpecs, AreaState},
+        chance::ChanceRange,
         character::{CharacterSpecs, CharacterState},
         character_status::StatusMap,
         monster::{MonsterSpecs, MonsterState},
@@ -85,8 +86,24 @@ impl DataInit<&MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
         MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
-            initiative: specs.initiative.roll(),
+            // skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
+            skill_states: specs
+                .skill_specs
+                .iter()
+                .map(|_| SkillState {
+                    elapsed_cooldown: ChanceRange {
+                        min: 0.0,
+                        max: 1.0,
+                        ..Default::default()
+                    }
+                    .roll()
+                    .into(),
+                    is_ready: false,
+                    just_triggered: false,
+                })
+                .collect(),
+            // initiative: specs.initiative.roll(), // TODO
+            initiative: 0.0,
             gold_reward: 0.0,
             gems_reward: 0.0,
         }

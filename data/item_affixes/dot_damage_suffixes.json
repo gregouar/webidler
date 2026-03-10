@@ -1,0 +1,182 @@
+[
+    {
+        "name": "of Torment",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 1,
+        "weight": 250,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 1,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 25, 45 ]
+            }
+        ]
+    },
+    {
+        "name": "of Agony",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 2,
+        "weight": 250,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 50,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 55, 70 ]
+            }
+        ]
+    },
+    {
+        "name": "of Cruelty",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 3,
+        "weight": 250,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 100,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 80, 95 ]
+            }
+        ]
+    },
+    {
+        "name": "of Affliction",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 4,
+        "weight": 250,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 150,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 105, 120 ]
+            }
+        ]
+    },
+    {
+        "name": "of Suffering",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 5,
+        "weight": 250,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 200,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 130, 145 ]
+            }
+        ]
+    },
+    {
+        "name": "of Sadism",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 6,
+        "weight": 225,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 260,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 155, 170 ]
+            }
+        ]
+    },
+    {
+        "name": "of Torture",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 7,
+        "weight": 200,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 330,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 180, 195 ]
+            }
+        ]
+    },
+    {
+        "name": "of Excruciation",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 8,
+        "weight": 175,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 410,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 205, 220 ]
+            }
+        ]
+    },
+    {
+        "name": "of Vivisection",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 9,
+        "weight": 150,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 500,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 230, 250 ]
+            }
+        ]
+    },
+    {
+        "name": "of Atrocity",
+        "family": "inc_dot_damage",
+        "tags": [ "Attack", "Status" ],
+        "affix_type": "Suffix",
+        "tier": 10,
+        "weight": 100,
+        "restrictions": [ "AttackWeapon" ],
+        "item_level": 250,
+        "effects": [
+            {
+                "scope": "Global",
+                "stat": { "StatusPower": { "status_type": { "DamageOverTime": { } } } },
+                "modifier": "More",
+                "value": [ 260, 300 ]
+            }
+        ]
+    }
+]
