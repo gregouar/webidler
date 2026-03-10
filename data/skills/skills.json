@@ -249,6 +249,7 @@
         "value": 20
       }
     ],
+    "ignore_stat_effects": [ { "Speed": null } ],
     "targets": [
       {
         "range": "Melee",
@@ -1058,7 +1059,11 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": { "StatusPower": { "skill_type": "Blessing" } },
+        "stat": { "StatusPower": { "status_type": {
+              "StatModifier": {
+                "stat": { "Armor": null },
+                "debuff": false
+              } } } },
         "modifier": "Flat",
         "value": 1
       }
@@ -1082,19 +1087,7 @@
                     }
                   },
                   "value": 15
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusPower": { }
-              }
-            ]
-          },
-          {
-            "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
+                },
                 {
                   "replace_on_value_only": true,
                   "status_type": {
@@ -1106,7 +1099,8 @@
                   "value": 10
                 }
               ]
-            }
+            },
+            "ignore_stat_effects": [ ]
           }
         ]
       }
@@ -1114,7 +1108,7 @@
   },
   "poison_coating": {
     "name": "Poison Coating",
-    "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
+    "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time. It combines with your weapon base poison damage.",
     "icon": "skills/poison_coating.svg",
     "skill_type": "Attack",
     "cooldown": 5,
@@ -1134,10 +1128,11 @@
             "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "value": 1
       }
     ],
+    "ignore_stat_effects": [ { "Speed": null } ],
     "targets": [
       {
         "target_type": "Me",
@@ -1253,6 +1248,7 @@
         "value": 3
       }
     ],
+    "ignore_stat_effects": [ { "Speed": null } ],
     "targets": [
       {
         "target_type": "Me",
@@ -1366,6 +1362,7 @@
         "value": 1
       }
     ],
+    "ignore_stat_effects": [ { "Speed": null } ],
     "targets": [
       {
         "target_type": "Me",

@@ -5,7 +5,7 @@ use shared::{
     constants::ARMOR_FACTOR,
     data::{
         character::{CharacterId, CharacterSpecs, CharacterState},
-        character_status::{StatusSpecs, StatusState},
+        character_status::{StatusId, StatusSpecs, StatusState},
         item::SkillRange,
         modifier::Modifier,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
@@ -366,6 +366,24 @@ pub fn apply_status(
                 skill_type,
             },
         ));
+
+        // TODO: Quickfix, have proper limit later
+        if target_state.statuses.cumulative_statuses.len() > 100 {
+            let status_id: StatusId = status_specs.into();
+
+            if let Some(i) = target_state
+                .statuses
+                .cumulative_statuses
+                .iter()
+                .enumerate()
+                .rev()
+                .filter(|(_, (specs, _))| StatusId::from(specs) == status_id)
+                .nth(100)
+                .map(|(i, _)| i)
+            {
+                target_state.statuses.cumulative_statuses.remove(i);
+            }
+        }
     } else {
         target_state
             .statuses

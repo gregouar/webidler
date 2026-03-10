@@ -47,7 +47,7 @@ impl ChatSession {
                 .lock()
                 .unwrap()
                 .iter_rev()
-                .take(20)
+                .take(50)
                 .map(|m| (**m).clone())
                 .collect(),
         }

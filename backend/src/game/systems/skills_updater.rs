@@ -87,6 +87,15 @@ pub fn apply_effects_to_skill_specs<'a>(
     skill_specs: &mut SkillSpecs,
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
 ) {
+    let effects = effects.filter(|effect| {
+        effect.bypass_ignore
+            || skill_specs
+                .base
+                .ignore_stat_effects
+                .iter()
+                .all(|ignore| !effect.stat.is_match(ignore))
+    });
+
     for effect in effects.clone() {
         if effect
             .stat

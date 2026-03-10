@@ -47,6 +47,9 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub skill_id: String,
+
+    #[serde(default)]
+    pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

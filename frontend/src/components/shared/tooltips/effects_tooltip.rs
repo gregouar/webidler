@@ -233,9 +233,21 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
             }
             StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
                 (Some(StatType::Speed(_)), Some(true)) => "Slow Effects".to_string(),
-                (_, Some(true)) => "Negative Statuses Effects".to_string(),
-                (_, Some(false)) => "Positive Statuses Effects".to_string(),
-                _ => "Statuses Effects".to_string(),
+                (Some(stat), Some(false)) => {
+                    format!(
+                        "Increased {} Status Effects",
+                        format_multiplier_stat_name(stat)
+                    )
+                }
+                (Some(stat), Some(true)) => {
+                    format!(
+                        "Decreased {} Status Effects",
+                        format_multiplier_stat_name(stat)
+                    )
+                }
+                (_, Some(true)) => "Negative Status Effects".to_string(),
+                (_, Some(false)) => "Positive Status Effects".to_string(),
+                _ => "Status Effects".to_string(),
             },
             StatStatusType::Trigger {
                 trigger_id: Some(trigger_id),
