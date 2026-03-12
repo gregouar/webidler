@@ -169,7 +169,7 @@
         "tier": 10,
         "weight": 100,
         "restrictions": [ "AttackWeapon" ],
-        "item_level": 250,
+        "item_level": 600,
         "effects": [
             {
                 "scope": "Global",
