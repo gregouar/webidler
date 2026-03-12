@@ -196,9 +196,8 @@ fn compute_skill_modifier_effects<'a>(
                 .flat_map(|inv| inv.equipped_items())
                 .filter_map(move |(item_slot, item_specs)| {
                     let mut modifier_effect = modifier_effect.clone();
-                    let base = if slot.unwrap_or(item_slot) == item_slot
-                        || item_specs.base.extra_slots.contains(&item_slot)
-                    {
+                    let slot = slot.unwrap_or(item_slot);
+                    let base = if slot == item_slot || item_specs.base.extra_slots.contains(&slot) {
                         match (
                             item_stats,
                             &item_specs.weapon_specs,

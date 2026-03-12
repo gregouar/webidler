@@ -21,7 +21,7 @@ use shared_chat::{
     types::{ChatChannel, ChatContent, ChatMessage, LinkedItemBytes, UserId},
 };
 
-use crate::components::{auth::AuthContext, ui::toast::*};
+use crate::components::{accessibility::AccessibilityContext, auth::AuthContext, ui::toast::*};
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
 
@@ -51,6 +51,9 @@ impl ChatContext {
 
 #[component]
 pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
+    let accessibility_context: AccessibilityContext = expect_context();
+    let opened = RwSignal::new(!accessibility_context.is_on_mobile());
+
     // Websocket
     let on_error_callback = {
         let toaster = expect_context::<Toasts>();
@@ -104,6 +107,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
             if is_auth
                 && state != ConnectionReadyState::Open
                 && state != ConnectionReadyState::Connecting
+                && opened.get()
             {
                 open();
             }
@@ -161,7 +165,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         messages: RwSignal::new(RingBuffer::new(100)),
         // TODO: Store in storage
         minimized: RwSignal::new(true),
-        opened: RwSignal::new(true),
+        opened,
         selected_channels: RwSignal::new(HashSet::from([
             ChatChannel::Global,
             ChatChannel::Trade,
