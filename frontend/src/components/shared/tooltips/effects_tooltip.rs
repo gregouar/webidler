@@ -721,7 +721,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             format!(
                 "{} {}{}{}",
-                format_adds_removes(value, false, " to"),
+                format_adds_removes(
+                    value,
+                    false,
+                    if matches!(status_type, Some(StatStatusType::StatModifier { .. })) {
+                        "% to"
+                    } else {
+                        " to"
+                    }
+                ),
                 min_max_str(*min_max),
                 skill_type_str(*skill_type),
                 status_type_value_str(status_type.as_ref())
