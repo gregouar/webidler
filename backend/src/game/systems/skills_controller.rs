@@ -363,9 +363,7 @@ fn apply_skill_effect_on_target(
     trigger_id: Option<&str>,
     seed: &mut RngSeed,
 ) -> (bool, bool) {
-    if !skill_effect.success_chance.roll_with_seed(seed) {
-        return (true, false);
-    }
+    let is_successful = skill_effect.success_chance.roll_with_seed(seed);
 
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
@@ -374,6 +372,10 @@ fn apply_skill_effect_on_target(
             crit_damage,
             unblockable,
         } => {
+            if !is_successful {
+                return (true, false);
+            }
+
             let is_crit = crit_chance.roll_with_seed(seed);
 
             let damage: HashMap<_, _> = damage
@@ -432,6 +434,10 @@ fn apply_skill_effect_on_target(
                 return (false, false);
             }
 
+            if !is_successful {
+                return (true, false);
+            }
+
             (
                 true,
                 statuses
@@ -458,6 +464,10 @@ fn apply_skill_effect_on_target(
             value,
             modifier,
         } => {
+            if !is_successful {
+                return (true, false);
+            }
+
             let restored = characters_controller::restore_character(
                 target,
                 *restore_type,
@@ -467,6 +477,10 @@ fn apply_skill_effect_on_target(
             (restored, restored)
         }
         SkillEffectType::Resurrect => {
+            if !is_successful {
+                return (true, false);
+            }
+
             let resurrected = characters_controller::resuscitate_character(target);
             (resurrected, resurrected)
         }
