@@ -8,8 +8,8 @@ use shared::data::{
     modifier::Modifier,
     player::{CharacterSpecs, PlayerInventory},
     skill::{
-        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
-        SkillSpecs, SkillState, SkillType,
+        DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect, SkillEffect,
+        SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
@@ -30,6 +30,29 @@ pub fn update_skills_states(
                 (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
         }
         skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
+    }
+}
+
+pub fn update_repeated_skill_effects(
+    elapsed_time: Duration,
+    repeated_skill_effectd: &mut [RepeatedSkillEffect],
+) {
+    for repeated_skill_effect in repeated_skill_effectd.iter_mut() {
+        if repeated_skill_effect
+            .targets_group
+            .repeat
+            .repeat_cooldown
+            .get()
+            > 0.0
+        {
+            repeated_skill_effect.elapsed_cooldown += (elapsed_time.as_secs_f64()
+                / repeated_skill_effect
+                    .targets_group
+                    .repeat
+                    .repeat_cooldown
+                    .get())
+            .into();
+        }
     }
 }
 

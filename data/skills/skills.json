@@ -112,7 +112,8 @@
         "shape": "Square4",
         "repeat": {
           "value": 5,
-          "target": "Any"
+          "target": "Any",
+          "repeat_cooldown": 0.5
         },
         "effects": [
           {
@@ -2275,7 +2276,8 @@
         "shape": "Vertical2",
         "repeat": {
           "value": [ 3, 5 ],
-          "target": "Any"
+          "target": "Any",
+          "repeat_cooldown": 0.3
         },
         "effects": [
           {

@@ -9,8 +9,8 @@ use shared::{
         item::{SkillRange, SkillShape},
         player::PlayerResources,
         skill::{
-            SkillEffect, SkillEffectType, SkillRepeatTarget, SkillTargetsGroup, SkillType,
-            TargetType,
+            RepeatedSkillEffect, SkillEffect, SkillEffectType, SkillRepeatTarget,
+            SkillTargetsGroup, SkillType, TargetType,
         },
         values::NonNegative,
     },
@@ -70,26 +70,59 @@ fn apply_skill_on_targets<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
-    let mut already_hit = HashSet::new();
+    let max_repeat = targets_group.repeat.value.roll();
 
-    for _ in 0..targets_group.repeat.value.roll() {
-        match apply_repeated_skill_on_targets(
-            events_queue,
-            skill_type,
-            targets_group,
-            me,
-            friends,
-            enemies,
-            &already_hit,
-        ) {
-            Some(id) => {
-                already_hit.insert(id);
-            }
-            None => break,
-        }
+    if max_repeat == 0 {
+        return false;
     }
 
-    !already_hit.is_empty()
+    let character_hit = apply_repeated_skill_on_targets(
+        events_queue,
+        skill_type,
+        targets_group,
+        me,
+        friends,
+        enemies,
+        None,
+    );
+
+    match character_hit {
+        Some(character_hit) => {
+            if max_repeat > 1 {
+                me.1.1.repeated_skills.push(RepeatedSkillEffect {
+                    skill_type,
+                    targets_group: targets_group.clone(),
+                    max_repeat,
+                    amount_repeat: 1,
+                    elapsed_cooldown: Default::default(),
+                    already_hit: HashSet::from([character_hit]),
+                });
+            }
+            true
+        }
+        None => false,
+    }
+
+    // let mut already_hit = HashSet::new();
+
+    // for _ in 0..targets_group.repeat.value.roll() {
+    //     match apply_repeated_skill_on_targets(
+    //         events_queue,
+    //         skill_type,
+    //         targets_group,
+    //         me,
+    //         friends,
+    //         enemies,
+    //         &already_hit,
+    //     ) {
+    //         Some(id) => {
+    //             already_hit.insert(id);
+    //         }
+    //         None => break,
+    //     }
+    // }
+
+    // !already_hit.is_empty()
 }
 
 fn apply_repeated_skill_on_targets<'a>(
@@ -99,7 +132,7 @@ fn apply_repeated_skill_on_targets<'a>(
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
-    already_hit: &HashSet<CharacterId>,
+    already_hit: Option<&HashSet<CharacterId>>,
 ) -> Option<CharacterId> {
     let attacker = me.0;
 
@@ -151,7 +184,7 @@ fn find_targets<'a, 'b>(
     targets_group: &SkillTargetsGroup,
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
-    already_hit: &HashSet<CharacterId>,
+    already_hit: Option<&HashSet<CharacterId>>,
 ) -> Option<(CharacterId, Vec<&'b mut Target<'a>>)> {
     let (main_target_id, main_target_pos) =
         find_main_target(targets_group, me_position, pre_targets, already_hit)?;
@@ -172,7 +205,7 @@ fn find_main_target<'a, 'b>(
     targets_group: &SkillTargetsGroup,
     me_position: (u8, u8),
     pre_targets: &'b mut [Target<'a>],
-    already_hit: &HashSet<CharacterId>,
+    already_hit: Option<&HashSet<CharacterId>>,
 ) -> Option<(CharacterId, (u8, u8))> {
     // Filter by alive status & already hit targets depending on repeat type
     let target_specs = pre_targets
@@ -180,10 +213,14 @@ fn find_main_target<'a, 'b>(
         .filter(|(_, (_, state))| {
             targets_group.target_dead != (state.is_alive & (state.life.get() > 0.0))
         })
-        .filter(|(id, _)| match targets_group.repeat.target {
-            SkillRepeatTarget::Any => true,
-            SkillRepeatTarget::Same => already_hit.is_empty() || already_hit.contains(id),
-            SkillRepeatTarget::Different => !already_hit.contains(id),
+        .filter(|(id, _)| {
+            already_hit
+                .map(|already_hit| match targets_group.repeat.target {
+                    SkillRepeatTarget::Any => true,
+                    SkillRepeatTarget::Same => already_hit.is_empty() || already_hit.contains(id),
+                    SkillRepeatTarget::Different => !already_hit.contains(id),
+                })
+                .unwrap_or(true)
         })
         .map(|(id, (specs, _))| (id, specs));
 
@@ -484,6 +521,62 @@ fn apply_skill_effect_on_target(
             let resurrected = characters_controller::resuscitate_character(target);
             (resurrected, resurrected)
         }
+    }
+}
+
+pub fn repeat_skills<'a>(
+    events_queue: &mut EventsQueue,
+    me: &mut Target<'a>,
+    friends: &mut [Target<'a>],
+    enemies: &mut [Target<'a>],
+) {
+    let mut repeated_skills = std::mem::take(&mut me.1.1.repeated_skills);
+    repeated_skills.retain_mut(|repeated_skill| {
+        repeat_skill(events_queue, repeated_skill, me, friends, enemies)
+    });
+    me.1.1.repeated_skills = repeated_skills;
+}
+
+// Return whether the repeat effect is ended
+fn repeat_skill<'a>(
+    events_queue: &mut EventsQueue,
+    repeated_skill_effect: &mut RepeatedSkillEffect,
+    me: &mut Target<'a>,
+    friends: &mut [Target<'a>],
+    enemies: &mut [Target<'a>],
+) -> bool {
+    // TODO: Check cooldown
+    if repeated_skill_effect
+        .targets_group
+        .repeat
+        .repeat_cooldown
+        .get()
+        > 0.0
+        && repeated_skill_effect.elapsed_cooldown.get() < 1.0
+    {
+        return true;
+    }
+
+    let character_hit = apply_repeated_skill_on_targets(
+        events_queue,
+        repeated_skill_effect.skill_type,
+        &repeated_skill_effect.targets_group,
+        me,
+        friends,
+        enemies,
+        Some(&repeated_skill_effect.already_hit),
+    );
+
+    match character_hit {
+        Some(charater_hit) => {
+            repeated_skill_effect.already_hit.insert(charater_hit);
+            repeated_skill_effect.elapsed_cooldown =
+                (repeated_skill_effect.elapsed_cooldown.get() - 1.0).into();
+            repeated_skill_effect.amount_repeat += 1;
+
+            repeated_skill_effect.amount_repeat < repeated_skill_effect.max_repeat
+        }
+        None => false,
     }
 }
 

@@ -936,6 +936,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                             lucky_chance: Default::default(),
                         },
                         target: repeat.target,
+                        repeat_cooldown: Default::default(), // TODO?
                     })
                 })
                 .unwrap_or_default();
