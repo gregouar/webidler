@@ -103,7 +103,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 400
+        "value": 300
       },
       {
         "scope": "Global",
@@ -133,7 +133,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 800
+        "value": 500
       },
       {
         "scope": "Global",
@@ -163,7 +163,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 1600
+        "value": 800
       },
       {
         "scope": "Global",
@@ -193,7 +193,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 3200
+        "value": 1300
       },
       {
         "scope": "Global",
@@ -223,7 +223,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 6400
+        "value": 2000
       },
       {
         "scope": "Global",
@@ -253,7 +253,7 @@
         "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 10000
+        "value": 3500
       },
       {
         "scope": "Global",
