@@ -110,8 +110,9 @@ pub struct ModifierEffect {
 pub enum ModifierEffectSource {
     ItemStats {
         slot: Option<ItemSlot>,
-        category: Option<ItemCategory>,
         item_stats: ItemStatsSource,
+        #[serde(default)]
+        category: Option<ItemCategory>,
     },
     CharacterStats(StatConverterSource),
 }
