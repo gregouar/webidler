@@ -95,43 +95,45 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         >
                             "Buy"
                         </TabButton>
-                        {if disable_sell.get() {
-                            view! {
-                                <StaticTooltip
-                                    tooltip=move || {
-                                        disable_sell
-                                            .get()
-                                            .then_some({
-                                                "Buy a Market Stash with Gold to sell on the Market"
+                        {move || {
+                            if disable_sell.get() {
+                                view! {
+                                    <StaticTooltip
+                                        tooltip=move || {
+                                            disable_sell
+                                                .get()
+                                                .then_some({
+                                                    "Buy a Market Stash with Gold to sell on the Market"
+                                                })
+                                        }
+                                        position=StaticTooltipPosition::Bottom
+                                        class:flex-1
+                                        class:flex
+                                    >
+                                        <TabButton
+                                            is_active=Signal::derive(move || {
+                                                active_tab.get() == MarketTab::Sell
                                             })
-                                    }
-                                    position=StaticTooltipPosition::Bottom
-                                    class:flex-1
-                                    class:flex
-                                >
+                                            disabled=disable_sell
+                                        >
+                                            "Sell"
+                                        </TabButton>
+                                    </StaticTooltip>
+                                }
+                                    .into_any()
+                            } else {
+                                view! {
                                     <TabButton
                                         is_active=Signal::derive(move || {
                                             active_tab.get() == MarketTab::Sell
                                         })
-                                        disabled=disable_sell
+                                        on:click=move |_| { switch_tab(MarketTab::Sell) }
                                     >
                                         "Sell"
                                     </TabButton>
-                                </StaticTooltip>
+                                }
+                                    .into_any()
                             }
-                                .into_any()
-                        } else {
-                            view! {
-                                <TabButton
-                                    is_active=Signal::derive(move || {
-                                        active_tab.get() == MarketTab::Sell
-                                    })
-                                    on:click=move |_| { switch_tab(MarketTab::Sell) }
-                                >
-                                    "Sell"
-                                </TabButton>
-                            }
-                                .into_any()
                         }}
 
                         <TabButton
