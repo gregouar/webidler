@@ -6,6 +6,7 @@ use strum_macros::EnumIter;
 use crate::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::{Condition, ConditionalModifier},
+    item::ItemCategory,
     modifier::ModifiableValue,
     stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatType},
     trigger::TriggerSpecs,
@@ -109,6 +110,7 @@ pub struct ModifierEffect {
 pub enum ModifierEffectSource {
     ItemStats {
         slot: Option<ItemSlot>,
+        category: Option<ItemCategory>,
         item_stats: ItemStatsSource,
     },
     CharacterStats(StatConverterSource),

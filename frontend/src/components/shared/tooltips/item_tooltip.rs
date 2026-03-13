@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
 };
@@ -639,5 +639,30 @@ fn affix_tag_str(affix_tag: AffixTag) -> &'static str {
         AffixTag::Stealth => "Stealth",
         AffixTag::Storm => "Storm",
         AffixTag::Threat => "Threat",
+    }
+}
+
+pub fn item_category_str(item_category: ItemCategory) -> &'static str {
+    match item_category {
+        ItemCategory::Armor => "Armor Piece",
+        ItemCategory::AttackWeapon => "Attack Weapon",
+        ItemCategory::SpellWeapon => "Spell Weapon",
+        ItemCategory::MeleeWeapon => "Melee Weapon",
+        ItemCategory::MeleeWeapon1H => "One-Handed Melee Weapon",
+        ItemCategory::MeleeWeapon2H => "Two-Handed Melee Weapon",
+        ItemCategory::RangedWeapon => "Ranged Weapon",
+        ItemCategory::Shield => "Shield",
+        ItemCategory::Focus => "Magic Focus",
+        ItemCategory::Jewelry => "Jewelry",
+        ItemCategory::Accessory => "Accessory",
+        ItemCategory::Amulet => "Amulet",
+        ItemCategory::Body => "Body Armor",
+        ItemCategory::Boots => "Boots",
+        ItemCategory::Cloak => "Cloak",
+        ItemCategory::Gloves => "Gloves",
+        ItemCategory::Helmet => "Helmet",
+        ItemCategory::Ring => "Ring",
+        ItemCategory::Map => "Edict",
+        ItemCategory::Rune => "Rune",
     }
 }
