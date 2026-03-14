@@ -428,7 +428,7 @@ pub fn compute_skill_specs_effect<'a>(
                 crit_damage,
                 ..
             } => {
-                for damage_type in DamageType::iter() {
+                for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
                     let value = damage.entry(damage_type).or_default();
 
                     if effect.stat.is_match(&StatType::Damage {

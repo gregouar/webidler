@@ -102,27 +102,6 @@ fn apply_skill_on_targets<'a>(
         }
         None => false,
     }
-
-    // let mut already_hit = HashSet::new();
-
-    // for _ in 0..targets_group.repeat.value.roll() {
-    //     match apply_repeated_skill_on_targets(
-    //         events_queue,
-    //         skill_type,
-    //         targets_group,
-    //         me,
-    //         friends,
-    //         enemies,
-    //         &already_hit,
-    //     ) {
-    //         Some(id) => {
-    //             already_hit.insert(id);
-    //         }
-    //         None => break,
-    //     }
-    // }
-
-    // !already_hit.is_empty()
 }
 
 fn apply_repeated_skill_on_targets<'a>(
@@ -153,19 +132,6 @@ fn apply_repeated_skill_on_targets<'a>(
             TargetType::Me => Some((me.0, vec![me])),
         }
     }?;
-
-    // let mut applied = false;
-    // for skill_effect in targets_group.effects.iter() {
-    //     applied |= apply_skill_effect(
-    //         events_queue,
-    //         attacker,
-    //         skill_type,
-    //         targets_group.range,
-    //         skill_effect,
-    //         &mut targets,
-    //         None,
-    //     );
-    // }
 
     let applied = apply_skill_effects(
         events_queue,
@@ -265,7 +231,7 @@ pub fn find_sub_targets<'a, 'b>(
         SkillRange::Melee => 1,
         SkillRange::Distance => -1,
         SkillRange::Any => {
-            if flip_coin() {
+            if skill_position.0 <= 1 || (skill_position.0 == 2 && flip_coin()) {
                 1
             } else {
                 -1
