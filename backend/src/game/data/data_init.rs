@@ -49,6 +49,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             just_evaded: false,
 
             monitored_conditions: Default::default(),
+            repeated_skills: Default::default(),
         }
     }
 }

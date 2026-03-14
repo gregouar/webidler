@@ -52,6 +52,10 @@ async fn main() {
         .await
         .expect("failed to migrate data");
 
+    check_peek_data_compatibility(&db_pool, &master_store)
+        .await
+        .expect("incompatible data in running instances");
+
     db::game_sessions::clean_all_sessions(&db_pool)
         .await
         .expect("couldn't clean game sessions");
@@ -144,6 +148,14 @@ async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyho
     db::migrations::migration_0_1_6_to_0_1_7::migrate(db_pool, master_store).await?;
     db::migrations::migration_0_1_7_to_0_1_8::migrate(db_pool).await?;
     db::migrations::migration_0_1_8_to_0_1_9::migrate(db_pool, master_store).await?;
+    Ok(())
+}
+
+async fn check_peek_data_compatibility(
+    db_pool: &db::DbPool,
+    master_store: &MasterStore,
+) -> anyhow::Result<()> {
+    db::game_instances::peek_game_instances(db_pool, master_store).await?;
     Ok(())
 }
 

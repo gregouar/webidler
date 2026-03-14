@@ -71,6 +71,11 @@ pub fn update_player_state(
             &player_specs.skills_specs,
             &mut player_state.skills_states,
         );
+
+        skills_updater::update_repeated_skill_effects(
+            elapsed_time,
+            &mut player_state.character_state.repeated_skills,
+        )
     }
 }
 

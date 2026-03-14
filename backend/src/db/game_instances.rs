@@ -6,12 +6,13 @@ use sqlx::FromRow;
 use shared::data::user::UserCharacterId;
 
 use crate::{
+    app_state::MasterStore,
     constants::DATA_VERSION,
     db::utc_datetime::UtcDateTime,
     game::{data::master_store, game_data::GameInstanceData},
 };
 
-use super::pool::DbExecutor;
+use super::pool::{DbExecutor, DbPool};
 
 #[derive(Debug, FromRow)]
 pub struct SavedGameInstance {
@@ -118,6 +119,23 @@ pub async fn delete_game_instance_data<'c>(
     )
     .execute(executor)
     .await?;
+
+    Ok(())
+}
+
+pub async fn peek_game_instances(
+    db_pool: &DbPool,
+    master_store: &MasterStore,
+) -> anyhow::Result<()> {
+    let entries = sqlx::query!(
+        r#"SELECT character_id as "character_id: UserCharacterId" FROM saved_game_instances LIMIT 10"#
+    )
+    .fetch_all(db_pool)
+    .await?;
+
+    for entry in entries {
+        load_game_instance_data(db_pool, master_store, &entry.character_id).await?;
+    }
 
     Ok(())
 }
