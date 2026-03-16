@@ -5,6 +5,7 @@ use strum_macros::EnumIter;
 
 use crate::data::{
     chance::{Chance, ChanceRange},
+    character::CharacterId,
     conditional_modifier::{Condition, ConditionalModifier},
     item::ItemCategory,
     modifier::ModifiableValue,
@@ -154,6 +155,8 @@ pub struct SkillTargetsGroup {
 pub struct SkillRepeat {
     pub value: ChanceRange<u8>,
     pub target: SkillRepeatTarget,
+    #[serde(default)]
+    pub repeat_cooldown: NonNegative,
 }
 
 impl Default for SkillRepeat {
@@ -165,6 +168,7 @@ impl Default for SkillRepeat {
                 lucky_chance: Default::default(),
             },
             target: SkillRepeatTarget::Any,
+            repeat_cooldown: Default::default(),
         }
     }
 }
@@ -275,4 +279,17 @@ impl Matchable for RestoreType {
     fn is_match(&self, other: &Self) -> bool {
         *self == *other
     }
+}
+
+#[derive(Debug, Clone)]
+pub struct RepeatedSkillEffect {
+    // Could we avoid to clone each time?
+    pub skill_type: SkillType,
+    pub targets_group: SkillTargetsGroup,
+
+    pub max_repeat: u8,
+    pub amount_repeat: u8,
+    pub elapsed_cooldown: Cooldown,
+
+    pub already_hit: HashSet<CharacterId>, // TODO: Add wave?
 }

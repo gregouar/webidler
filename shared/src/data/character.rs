@@ -7,7 +7,7 @@ use crate::data::{
     character_status::StatusId,
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, RepeatedSkillEffect, SkillType},
     stat_effect::{EffectsMap, StatStatusType},
     trigger::TriggeredEffect,
     values::{AtLeastOne, NonNegative, Percent},
@@ -127,6 +127,9 @@ pub struct CharacterState {
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
     pub monitored_conditions: HashMap<Condition, MonitoredCondition>,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub repeated_skills: Vec<RepeatedSkillEffect>,
 }
 
 // This shouldn't be here

@@ -91,6 +91,8 @@ impl PlayerController {
 
         let mut friends = vec![];
 
+        skills_controller::repeat_skills(events_queue, &mut player, &mut friends, monsters);
+
         let min_mana_needed = if player_specs
             .character_specs
             .take_from_mana_before_life

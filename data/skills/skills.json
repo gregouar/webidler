@@ -112,7 +112,8 @@
         "shape": "Square4",
         "repeat": {
           "value": 5,
-          "target": "Any"
+          "target": "Any",
+          "repeat_cooldown": 0.5
         },
         "effects": [
           {
@@ -1202,7 +1203,7 @@
   },
   "poison_coating": {
     "name": "Poison Coating",
-    "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time. It combines with your weapon base poison damage.",
+    "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
     "icon": "skills/poison_coating.svg",
     "skill_type": "Attack",
     "cooldown": 5,
@@ -1211,22 +1212,39 @@
     "upgrade_effects": [
       {
         "stat": {
-          "Damage": { }
-        },
-        "modifier": "More",
-        "value": 30
-      },
-      {
-        "stat": {
-          "StatusDuration": {
+          "StatusPower": {
             "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
+              "StatModifier": {
+                "stat": {
+                  "Damage": { }
+                }
               }
             }
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
+        "value": 5
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "StatModifier": {
+                "stat": {
+                  "StatusDuration": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    }
+                  }
+                },
+                "debuff": false
+              }
+            }
+          }
+        },
+        "modifier": "Flat",
         "value": 1
       }
     ],
@@ -1246,40 +1264,53 @@
                 {
                   "replace_on_value_only": true,
                   "status_type": {
-                    "Trigger": {
-                      "trigger_id": "poison_coating",
-                      "icon": "skills/poison_coating.svg",
-                      "target": "SameTarget",
-                      "skill_type": "Attack",
-                      "OnHit": {
-                        "skill_type": "Attack",
-                        "is_hurt": true,
-                        "is_triggered": false
-                      },
-                      "effects": [
-                        {
-                          "ApplyStatus": {
-                            "duration": 2,
-                            "statuses": [
-                              {
-                                "status_type": {
-                                  "DamageOverTime": {
-                                    "damage_type": "Poison"
-                                  }
-                                },
-                                "value": [
-                                  3,
-                                  6
-                                ]
-                              }
-                            ]
-                          },
-                          "ignore_stat_effects": [ ]
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": "Attack",
+                          "damage_type": "Poison",
+                          "min_max": "Min"
                         }
-                      ],
-                      "inherit_modifiers": true
+                      },
+                      "modifier": "Flat"
                     }
-                  }
+                  },
+                  "value": 2
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": "Attack",
+                          "damage_type": "Poison",
+                          "min_max": "Max"
+                        }
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 4
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "StatusDuration": {
+                          "status_type": {
+                            "DamageOverTime": {
+                              "damage_type": "Poison"
+                            }
+                          },
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "modifier": "Increased"
+                    }
+                  },
+                  "value": 10
                 }
               ]
             }
@@ -1796,6 +1827,22 @@
               "crit_chance": 5,
               "crit_damage": 100
             }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
+            }
           }
         ]
       }
@@ -1878,6 +1925,22 @@
               "damage": { },
               "crit_chance": 5,
               "crit_damage": 100
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
             }
           }
         ]
@@ -2275,7 +2338,8 @@
         "shape": "Vertical2",
         "repeat": {
           "value": [ 3, 5 ],
-          "target": "Any"
+          "target": "Any",
+          "repeat_cooldown": 0.3
         },
         "effects": [
           {
@@ -2634,6 +2698,352 @@
           }
         },
         "factor": 0.7
+      }
+    ]
+  },
+  "rain_arrows": {
+    "name": "Rain of Arrows",
+    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies for 50% of your base weapon damage each hit.",
+    "icon": "skills/rain_arrows.svg",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "mana_cost": 5,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Single",
+        "repeat": {
+          "value": [ 6, 8 ],
+          "target": "Any",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": { }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Speed": "Attack"
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": "Cooldown"
+          }
+        },
+        "factor": -2
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "CritChance": "Attack"
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": "CritChance"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": "Attack"
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": "CritDamage"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Min"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": "Max"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Min"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": "Max"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Min"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": "Max"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "min_max": "Min"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Poison",
+                "min_max": "Min"
+              }
+            }
+          }
+        },
+        "factor": 0.5
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "min_max": "Max"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "category": "RangedWeapon",
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Poison",
+                "min_max": "Max"
+              }
+            }
+          }
+        },
+        "factor": 0.5
       }
     ]
   }
