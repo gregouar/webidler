@@ -177,13 +177,10 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
 }
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
-    format!(
-        "{}",
-        skill_status_type_str(
+    skill_status_type_str(
             status_trigger.skill_type,
             status_trigger.status_type.as_ref()
-        ),
-    )
+        ).to_string()
 }
 
 fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {

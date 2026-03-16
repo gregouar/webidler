@@ -183,7 +183,7 @@ pub fn skill_status_type_str(
     match (skill_type, status_type) {
         (None, None) => "Effects over Time".to_string(),
         (Some(SkillType::Blessing | SkillType::Curse), None) => {
-            format!("{}", skill_type_str(skill_type))
+            skill_type_str(skill_type).to_string()
         }
         (skill_type, status_type) => format!(
             "{}{}",
