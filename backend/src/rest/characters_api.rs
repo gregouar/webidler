@@ -75,7 +75,7 @@ async fn post_create_character(
         return Err(AppError::Forbidden);
     }
 
-    if profanities_checker.contains_profanities(&payload.name) {
+    if profanities_checker.find_profanity(&payload.name).is_some() {
         return Err(AppError::UserError(
             "this name contains inappropriate language, please choose a different name".into(),
         ));
@@ -255,7 +255,7 @@ async fn post_update_character(
         return Err(AppError::Forbidden);
     }
 
-    if profanities_checker.contains_profanities(&payload.name) {
+    if profanities_checker.find_profanity(&payload.name).is_some() {
         return Err(AppError::UserError(
             "this name contains inappropriate language, please choose a different name".into(),
         ));
