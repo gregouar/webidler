@@ -7,16 +7,10 @@ use shared::data::{
 
 use crate::{game::systems::inventory_controller, rest::AppError};
 
-use super::player_controller::PlayerController;
-
 const MAX_QUEUE_SIZE: usize = 5;
 
-pub fn drop_loot(
-    player_controller: &PlayerController,
-    queued_loot: &mut Vec<QueuedLoot>,
-    item_specs: ItemSpecs,
-) -> Vec<ItemSpecs> {
-    drop_loot_impl(player_controller, queued_loot, item_specs, true)
+pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) -> Vec<ItemSpecs> {
+    drop_loot_impl(queued_loot, item_specs, true)
 }
 
 pub fn take_loot(queued_loot: &mut [QueuedLoot], loot_identifier: u32) -> Option<ItemSpecs> {
@@ -31,7 +25,6 @@ pub fn take_loot(queued_loot: &mut [QueuedLoot], loot_identifier: u32) -> Option
 }
 
 pub fn pickup_loot(
-    player_controller: &PlayerController,
     player_inventory: &mut PlayerInventory,
     queued_loot: &mut Vec<QueuedLoot>,
     loot_identifier: u32,
@@ -53,17 +46,16 @@ pub fn pickup_loot(
 
     // Put back item at front of queue if couldn't pickup
     if let Some((item_specs, e)) = move_item {
-        drop_loot_impl(player_controller, queued_loot, item_specs, false);
+        drop_loot_impl(queued_loot, item_specs, false);
         return Err(e);
     }
 
-    update_loot_states(player_controller, queued_loot);
+    update_loot_states(queued_loot);
     Ok(())
 }
 
 // Return discarded loot
 fn drop_loot_impl(
-    player_controller: &PlayerController,
     queued_loot: &mut Vec<QueuedLoot>,
     item_specs: ItemSpecs,
     purge_disappeared: bool,
@@ -85,14 +77,11 @@ fn drop_loot_impl(
         state: LootState::Normal,
     });
 
-    update_loot_states(player_controller, queued_loot)
+    update_loot_states(queued_loot)
 }
 
 // Return discarded loot
-fn update_loot_states(
-    player_controller: &PlayerController,
-    queued_loot: &mut [QueuedLoot],
-) -> Vec<ItemSpecs> {
+fn update_loot_states(queued_loot: &mut [QueuedLoot]) -> Vec<ItemSpecs> {
     // TODO: replace by reference
     let mut discarded_loot = Vec::new();
 
@@ -111,7 +100,6 @@ fn update_loot_states(
         // If new loot is worst than the one we want to discard, we discard the new one instead
         // and put back old loot in front
         if is_better_loot(
-            player_controller,
             &queued_loot[i].item_specs,
             &queued_loot[last_index].item_specs,
         ) && i != last_index
@@ -136,21 +124,17 @@ fn update_loot_states(
     discarded_loot
 }
 
-fn is_better_loot(
-    player_controller: &PlayerController,
-    item_1: &ItemSpecs,
-    item_2: &ItemSpecs,
-) -> bool {
-    item_score(player_controller, item_1) > item_score(player_controller, item_2)
+fn is_better_loot(item_1: &ItemSpecs, item_2: &ItemSpecs) -> bool {
+    item_score(item_1) > item_score(item_2)
 }
 
-fn item_score(player_controller: &PlayerController, item: &ItemSpecs) -> usize {
+fn item_score(item: &ItemSpecs) -> usize {
     let mut score = 0;
-    if let Some(item_category) = player_controller.preferred_loot
-        && item.base.categories.contains(&item_category)
-    {
-        score += 2_000_000;
-    }
+    // if let Some(item_category) = player_controller.preferred_loot
+    //     && item.base.categories.contains(&item_category)
+    // {
+    //     score += 2_000_000;
+    // }
 
     score += match item.modifiers.rarity {
         ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,

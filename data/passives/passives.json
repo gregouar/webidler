@@ -2936,7 +2936,7 @@
                 "min_max": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": 50.0
           }
         ],
@@ -12010,16 +12010,16 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   }

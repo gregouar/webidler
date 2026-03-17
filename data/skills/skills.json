@@ -818,7 +818,7 @@
                             {
                               "Damage": {
                                 "skill_type": null,
-                                "damage_type": null,
+                                "damage_type": "Poison",
                                 "min_max": null
                               }
                             }
@@ -833,7 +833,7 @@
                             }
                           },
                           "modifier": "Flat",
-                          "factor": 1,
+                          "factor": 0.25,
                           "source": {
                             "StatusValue": {
                               "status_type": {

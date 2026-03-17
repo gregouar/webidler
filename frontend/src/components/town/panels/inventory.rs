@@ -131,7 +131,8 @@ pub fn TownInventoryPanel(
     } else {
         InventoryConfig {
             player_inventory: town_context.inventory,
-            loot_preference: None,
+            // loot_preference: None,
+            on_loot_filter: None,
             on_unequip: Some(Arc::new(on_unequip)),
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),

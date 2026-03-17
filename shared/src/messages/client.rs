@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, StartAreaConfig},
-    item::{ItemCategory, ItemSlot},
+    item::ItemSlot,
     passive::PassiveNodeId,
     user::UserCharacterId,
 };
@@ -31,7 +31,7 @@ impl_into_message! {
         UnequipItem(UnequipItemMessage),
         SellItems(SellItemsMessage),
 
-        FilterLoot(FilterLootMessage),
+        // FilterLoot(FilterLootMessage),
         PickupLoot(PickUpLootMessage),
 
         SetAutoProgress(SetAutoProgressMessage),
@@ -107,10 +107,10 @@ pub struct SellItemsMessage {
     pub item_indexes: Vec<u8>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct FilterLootMessage {
-    pub preferred_loot: Option<ItemCategory>,
-}
+// #[derive(Serialize, Deserialize, Debug, Clone)]
+// pub struct FilterLootMessage {
+//     pub preferred_loot: Option<ItemCategory>,
+// }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PickUpLootMessage {

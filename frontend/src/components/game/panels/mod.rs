@@ -1,5 +1,6 @@
 mod end_quest;
 pub mod inventory;
+pub mod loot_filter;
 pub mod passives;
 mod skills;
 mod statistics;

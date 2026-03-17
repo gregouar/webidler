@@ -12,7 +12,7 @@ pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;
 pub const CHAMPION_INC_CHANCE: f64 = 0.000005;
 pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
 
-pub const WAVES_PER_AREA_LEVEL: u8 = 5;
+pub const WAVES_PER_AREA_LEVEL: u8 = 1;
 pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
 pub const MAX_PLAYER_STAMINA: Duration = Duration::from_hours(24);
 

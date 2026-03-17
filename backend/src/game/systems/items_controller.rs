@@ -187,7 +187,16 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                     .damage
                     .iter()
                     .filter(|(k, _)| **k != DamageType::Poison)
-                    .map(|(&k, &v)| (k, v))
+                    .map(|(&k, &v)| {
+                        (
+                            k,
+                            ChanceRange {
+                                min: v.min.as_new_base(),
+                                max: v.max.as_new_base(),
+                                lucky_chance: v.lucky_chance.as_new_base(),
+                            },
+                        )
+                    })
                     .collect(),
                 crit_chance: weapon_specs.crit_chance,
                 crit_damage: weapon_specs.crit_damage,

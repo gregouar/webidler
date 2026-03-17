@@ -3,13 +3,22 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::{area::AreaLevel, item::ItemRarity, loot::LootState, player::EquippedSlot},
+    data::{
+        area::AreaLevel,
+        item::{ItemRarity, ItemSpecs},
+        loot::LootState,
+        player::EquippedSlot,
+    },
     messages::client::PickUpLootMessage,
 };
 
 use crate::components::{
     accessibility::AccessibilityContext,
-    game::{GameContext, websocket::WebsocketContext},
+    game::{
+        GameContext,
+        panels::loot_filter::{FilterRule, FilterRuleType, LootFilter},
+        websocket::WebsocketContext,
+    },
     shared::item_card::ItemCard,
     ui::tooltip::DynamicTooltipPosition,
 };
@@ -89,6 +98,32 @@ pub fn LootQueue() -> impl IntoView {
             }
         }
     };
+
+    Effect::new({
+        let loot_filter = game_context.loot_filter;
+        let pickup_loot = pickup_loot.clone();
+        let sell_loot = sell_loot.clone();
+        let last_try = RwSignal::new(Default::default());
+        move || {
+            let queued_loot = game_context
+                .queued_loot
+                .read()
+                .iter()
+                .find(|l| l.state == LootState::WillDisappear)
+                .cloned();
+
+            if let Some(queued_loot) = queued_loot
+                && last_try.try_get_untracked().unwrap_or_default() != queued_loot.identifier
+            {
+                match filter_loot(loot_filter, &queued_loot.item_specs) {
+                    Some(FilterRuleType::Pickup) => pickup_loot(queued_loot.identifier),
+                    Some(FilterRuleType::Sell) => sell_loot(queued_loot.identifier),
+                    None => {}
+                }
+                last_try.set(queued_loot.identifier);
+            }
+        }
+    });
 
     view! {
         <div class="relative w-full z-0 pr-4">
@@ -171,4 +206,57 @@ pub fn LootQueue() -> impl IntoView {
             </For>
         </div>
     }
+}
+
+fn filter_loot(loot_filter: LootFilter, item_specs: &ItemSpecs) -> Option<FilterRuleType> {
+    for rule in loot_filter
+        .rules
+        .read()
+        .values()
+        .filter(|rule| rule.enabled)
+    {
+        if verify_filter_rule(rule, item_specs) {
+            return Some(rule.rule_type);
+        }
+    }
+    None
+}
+
+fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool {
+    if !filter_rule.enabled {
+        return true;
+    }
+
+    if filter_rule
+        .item_name
+        .as_ref()
+        .map(|item_name| {
+            !item_specs
+                .base
+                .name
+                .to_lowercase()
+                .contains(&item_name.to_lowercase())
+        })
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    if filter_rule
+        .item_category
+        .map(|item_category| !item_specs.base.categories.contains(&item_category))
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    if filter_rule
+        .item_rarity
+        .map(|item_rarity| item_specs.modifiers.rarity != item_rarity)
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    true
 }
