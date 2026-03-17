@@ -64,7 +64,7 @@ pub struct GameContext {
     pub open_end_quest: RwSignal<bool>,
 
     pub last_skills_bought: RwSignal<IndexSet<String>>,
-    pub loot_filter: LootFilter,
+    pub loot_filter: RwSignal<LootFilter>,
 }
 
 impl Default for GameContext {

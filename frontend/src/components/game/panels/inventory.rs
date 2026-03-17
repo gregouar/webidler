@@ -140,6 +140,12 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         equip_filter: Signal::derive(move || InventoryEquipFilter::Slot),
     };
 
+    Effect::new(move || {
+        if !open.get() {
+            open_loot_filter.set(false);
+        }
+    });
+
     view! {
         <Inventory open=open inventory=inventory_config />
         <LootFilterPanel open=open_loot_filter />

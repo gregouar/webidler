@@ -6,6 +6,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
+        item_affix::AffixEffectScope,
         loot::LootState,
         player::EquippedSlot,
     },
@@ -208,10 +209,13 @@ pub fn LootQueue() -> impl IntoView {
     }
 }
 
-fn filter_loot(loot_filter: LootFilter, item_specs: &ItemSpecs) -> Option<FilterRuleType> {
+fn filter_loot(
+    loot_filter: RwSignal<LootFilter>,
+    item_specs: &ItemSpecs,
+) -> Option<FilterRuleType> {
     for rule in loot_filter
-        .rules
         .read()
+        .rules
         .values()
         .filter(|rule| rule.enabled)
     {
@@ -223,12 +227,31 @@ fn filter_loot(loot_filter: LootFilter, item_specs: &ItemSpecs) -> Option<Filter
 }
 
 fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool {
-    if !filter_rule.enabled {
+    let FilterRule {
+        rule_type,
+        rule_name: _,
+        enabled,
+        item_name,
+        req_item_level,
+        item_rarity,
+        item_category,
+        item_damages,
+        item_damage_physical,
+        item_damage_fire,
+        item_damage_poison,
+        item_damage_storm,
+        item_crit_chance,
+        item_crit_damage,
+        item_armor,
+        item_block,
+        stat_filters,
+    } = filter_rule;
+
+    if !enabled {
         return true;
     }
 
-    if filter_rule
-        .item_name
+    if item_name
         .as_ref()
         .map(|item_name| {
             !item_specs
@@ -242,20 +265,54 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return false;
     }
 
-    if filter_rule
-        .item_category
+    if item_category
         .map(|item_category| !item_specs.base.categories.contains(&item_category))
         .unwrap_or_default()
     {
         return false;
     }
 
-    if filter_rule
-        .item_rarity
-        .map(|item_rarity| item_specs.modifiers.rarity != item_rarity)
+    if item_rarity
+        .map(|item_rarity| !match rule_type {
+            FilterRuleType::Pickup => item_specs.modifiers.rarity >= item_rarity,
+            FilterRuleType::Sell => item_specs.modifiers.rarity <= item_rarity,
+        })
         .unwrap_or_default()
     {
         return false;
+    }
+
+    if req_item_level
+        .map(|req_item_level| !match rule_type {
+            FilterRuleType::Pickup => item_specs.required_level >= req_item_level,
+            FilterRuleType::Sell => item_specs.required_level <= req_item_level,
+        })
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    let effects = item_specs
+        .modifiers
+        .aggregate_effects(AffixEffectScope::Global)
+        .0;
+    for stat_filter in stat_filters {
+        if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref() {
+            if !effects
+                .get(&(stat_type.clone(), *stat_modifier, false))
+                .map(|value| match rule_type {
+                    FilterRuleType::Pickup => stat_value
+                        .map(|stat_value| *value >= stat_value)
+                        .unwrap_or(true),
+                    FilterRuleType::Sell => stat_value
+                        .map(|stat_value| *value <= stat_value)
+                        .unwrap_or(true),
+                })
+                .unwrap_or_default()
+            {
+                return false;
+            }
+        }
     }
 
     true

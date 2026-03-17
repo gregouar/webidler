@@ -1170,14 +1170,14 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damage_physical"
                         label="Min Physical Damage:"
                         input_type="number"
-                        placeholder="Minimum Bleed Damage"
+                        placeholder="Minimum Physical Damage"
                         bind=item_damage_physical
                     />
                     <ValidatedInput
                         id="item_damage_fire"
                         label="Min Fire Damage:"
                         input_type="number"
-                        placeholder="Minimum Burn Damage"
+                        placeholder="Minimum Fire Damage"
                         bind=item_damage_fire
                     />
                     <ValidatedInput
@@ -1191,7 +1191,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damage_storm"
                         label="Min Storm Damage:"
                         input_type="number"
-                        placeholder="Minimum Weather Damage"
+                        placeholder="Minimum Storm Damage"
                         bind=item_damage_storm
                     />
                 </div>
@@ -1317,7 +1317,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 }
 
 #[component]
-fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl IntoView {
+pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl IntoView {
     let available_stats = vec![
         (StatType::Life, Modifier::Increased),
         (StatType::Life, Modifier::Flat),

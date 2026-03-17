@@ -1,10 +1,16 @@
+use std::sync::Arc;
+
 use indexmap::IndexMap;
 use leptos::{html::*, prelude::*};
 
+use serde::{Deserialize, Serialize};
 use shared::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity},
+        market::STAT_FILTERS_AMOUNT,
+        modifier::Modifier,
+        stat_effect::StatType,
     },
     types::ItemName,
 };
@@ -14,31 +20,31 @@ use uuid::Uuid;
 use crate::components::{
     game::GameContext,
     shared::inventory::loot_filter_category_to_str,
-    town::panels::market::item_rarity_str,
+    town::panels::market::{StatDropdown, item_rarity_str},
     ui::{
-        buttons::{MenuButton, Toggle},
+        buttons::{FancyButton, MenuButton, Toggle},
         card::{Card, CardHeader, CardInset},
+        confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
-        input::ValidatedInput,
+        input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
     },
 };
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LootFilter {
-    pub rules: RwSignal<IndexMap<Uuid, FilterRule>>,
+    pub rules: IndexMap<Uuid, FilterRule>,
 }
 
-#[derive(Debug, Clone, Copy, Default, Hash, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, Hash, PartialEq, Eq)]
 pub enum FilterRuleType {
     #[default]
     Pickup,
     Sell,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct FilterRule {
-    pub rule_id: Uuid,
     pub rule_type: FilterRuleType,
     pub rule_name: String,
 
@@ -49,12 +55,24 @@ pub struct FilterRule {
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
+
+    pub item_damages: Option<f64>,
+    pub item_damage_physical: Option<f64>,
+    pub item_damage_fire: Option<f64>,
+    pub item_damage_poison: Option<f64>,
+    pub item_damage_storm: Option<f64>,
+    pub item_crit_chance: Option<f64>,
+    pub item_crit_damage: Option<f64>,
+    pub item_armor: Option<f64>,
+    pub item_block: Option<f64>,
+
+    pub stat_filters: [Option<((StatType, Modifier), Option<f64>)>; STAT_FILTERS_AMOUNT],
 }
 
 impl FilterRule {
     fn new() -> Self {
         Self {
-            rule_id: Uuid::new_v4(),
+            // rule_id: Uuid::new_v4(),
             rule_type: FilterRuleType::Pickup,
             rule_name: "New Rule".into(),
             enabled: true,
@@ -74,9 +92,9 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
         let new_rule = FilterRule::new();
         game_context
             .loot_filter
-            .rules
             .write()
-            .insert(new_rule.rule_id, new_rule);
+            .rules
+            .insert(Uuid::new_v4(), new_rule);
     };
 
     view! {
@@ -104,13 +122,16 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-pub fn RulesList(loot_filter: LootFilter, selected_rule: RwSignal<Option<Uuid>>) -> impl IntoView {
+pub fn RulesList(
+    loot_filter: RwSignal<LootFilter>,
+    selected_rule: RwSignal<Option<Uuid>>,
+) -> impl IntoView {
     view! {
         <CardInset>
             <div class="gap-2 flex flex-col">
                 <For
                     each=move || {
-                        let keys = loot_filter.rules.read().keys().copied().collect::<Vec<_>>();
+                        let keys = loot_filter.read().rules.keys().copied().collect::<Vec<_>>();
                         keys.into_iter()
                     }
                     key=|rule_id| *rule_id
@@ -126,29 +147,49 @@ pub fn RulesList(loot_filter: LootFilter, selected_rule: RwSignal<Option<Uuid>>)
 #[component]
 fn RuleRow(
     rule_id: Uuid,
-    loot_filter: LootFilter,
+    loot_filter: RwSignal<LootFilter>,
     selected_rule: RwSignal<Option<Uuid>>,
 ) -> impl IntoView {
     let rule_name = move || {
         loot_filter
-            .rules
             .read()
+            .rules
             .get(&rule_id)
             .map(|rule| rule.rule_name.clone())
             .unwrap_or_default()
     };
 
     let is_enabled = loot_filter
-        .rules
         .read_untracked()
+        .rules
         .get(&rule_id)
         .map(|rule| rule.enabled)
         .unwrap_or_default();
 
     let enable_toggle = move |value| {
-        if let Some(rule) = loot_filter.rules.write().get_mut(&rule_id) {
+        if let Some(rule) = loot_filter.write().rules.get_mut(&rule_id) {
             rule.enabled = value;
         }
+    };
+
+    let move_up = move |_| {
+        loot_filter.update(|filter| {
+            if let Some(index) = filter.rules.get_index_of(&rule_id) {
+                if index > 0 {
+                    filter.rules.swap_indices(index, index - 1);
+                }
+            }
+        });
+    };
+
+    let move_down = move |_| {
+        loot_filter.update(|filter| {
+            if let Some(index) = filter.rules.get_index_of(&rule_id) {
+                if index + 1 < filter.rules.len() {
+                    filter.rules.swap_indices(index, index + 1);
+                }
+            }
+        });
     };
     // TODO: Move up, down, delete
     view! {
@@ -176,8 +217,8 @@ fn RuleRow(
                     <div>
                         {move || {
                             match loot_filter
-                                .rules
                                 .read()
+                                .rules
                                 .get(&rule_id)
                                 .map(|rule| rule.rule_type)
                                 .unwrap_or_default()
@@ -194,19 +235,13 @@ fn RuleRow(
 
                     <div class="text-sm xl:text-base font-semibold text-white">{rule_name}</div>
 
-                    // <div class="text-sm text-gray-400">
-                    // {move || {
-                    // if stash.read().max_items > 0 {
-                    // format!("{}/{}", stash.read().items_amount, stash.read().max_items)
-                    // } else {
-                    // "Click to buy!".into()
-                    // }
-                    // }}
-                    // </div>
-                    <Toggle initial=is_enabled toggle_callback=enable_toggle>
-                        "Enabled"
-                    </Toggle>
-                // <MenuButton on:click=move |_| {}>"❌"</MenuButton>
+                    <div class="flex items-center gap-1">
+                        <FancyButton on:click=move_up>"↑"</FancyButton>
+                        <FancyButton on:click=move_down>"↓"</FancyButton>
+                        <Toggle initial=is_enabled toggle_callback=enable_toggle>
+                            "Enabled"
+                        </Toggle>
+                    </div>
                 </div>
 
             </div>
@@ -214,73 +249,120 @@ fn RuleRow(
     }
 }
 
-fn with_selected_rule<F>(selected_rule: RwSignal<Option<Uuid>>, loot_filter: LootFilter, f: F)
-where
+fn with_selected_rule<F>(
+    selected_rule: RwSignal<Option<Uuid>>,
+    loot_filter: RwSignal<LootFilter>,
+    f: F,
+) where
     F: FnOnce(&FilterRule),
 {
     if let Some(id) = selected_rule.get() {
-        if let Some(rule) = loot_filter.rules.read_untracked().get(&id) {
+        if let Some(rule) = loot_filter.read_untracked().rules.get(&id) {
             f(rule);
         }
     }
 }
 
-fn update_selected_rule<F>(selected_rule: RwSignal<Option<Uuid>>, loot_filter: LootFilter, f: F)
-where
+fn update_selected_rule<F>(
+    selected_rule: RwSignal<Option<Uuid>>,
+    loot_filter: RwSignal<LootFilter>,
+    f: F,
+) where
     F: FnOnce(&mut FilterRule),
 {
     if let Some(id) = selected_rule.get() {
-        if let Some(rule) = loot_filter.rules.write().get_mut(&id) {
+        if let Some(rule) = loot_filter.write().rules.get_mut(&id) {
             f(rule);
         }
     }
 }
 
 #[component]
-pub fn EditRule(loot_filter: LootFilter, selected_rule: RwSignal<Option<Uuid>>) -> impl IntoView {
-    let rule_name = RwSignal::new(None);
-    Effect::new(move |_| {
-        with_selected_rule(selected_rule, loot_filter, |rule| {
-            rule_name.set(Some(rule.rule_name.clone()))
+pub fn EditRule(
+    loot_filter: RwSignal<LootFilter>,
+    selected_rule: RwSignal<Option<Uuid>>,
+) -> impl IntoView {
+    let do_delete = Arc::new({
+        move || {
+            if let Some(rule_id) = selected_rule.get_untracked() {
+                loot_filter.write().rules.shift_remove(&rule_id);
+                selected_rule.set(None);
+            }
+        }
+    });
+
+    let try_delete = {
+        let confirm_context: ConfirmContext = expect_context();
+        move |_| (confirm_context.confirm)("Confirm delete rule?".into(), do_delete.clone())
+    };
+
+    // Fields
+    macro_rules! rule_field {
+        ($name:ident) => {
+            let $name = RwSignal::new(None);
+
+            Effect::new({
+                move |_| {
+                    with_selected_rule(selected_rule, loot_filter, |rule| {
+                        $name.set(Some(rule.$name.clone()));
+                    });
+                }
+            });
+
+            Effect::new({
+                move |_| {
+                    if let Some(value) = $name.get() {
+                        update_selected_rule(selected_rule, loot_filter, |rule| {
+                            rule.$name = value;
+                        });
+                    }
+                }
+            });
+        };
+    }
+
+    rule_field!(rule_name);
+    rule_field!(item_name);
+    rule_field!(req_item_level);
+    rule_field!(item_damages);
+    rule_field!(item_damage_physical);
+    rule_field!(item_damage_fire);
+    rule_field!(item_damage_poison);
+    rule_field!(item_damage_storm);
+    rule_field!(item_crit_chance);
+    rule_field!(item_crit_damage);
+    rule_field!(item_armor);
+    rule_field!(item_block);
+
+    // Stats
+    let stat_filters: [(_, _); STAT_FILTERS_AMOUNT] =
+        std::array::from_fn(|_| (RwSignal::new(None), RwSignal::new(None)));
+
+    Effect::new(move || {
+        with_selected_rule(selected_rule, loot_filter, move |rule| {
+            for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
+                if let Some((stat_type_2, stat_value_2)) = &rule.stat_filters[i] {
+                    stat_type.set(Some(stat_type_2.clone()));
+                    stat_value.set(*stat_value_2);
+                } else {
+                    stat_type.set(None);
+                    stat_value.set(None);
+                }
+            }
         });
     });
-    Effect::new(move |_| {
-        if let Some(rule_name) = rule_name.get() {
-            update_selected_rule(selected_rule, loot_filter, |rule| {
-                rule.rule_name = rule_name
+
+    Effect::new(move || {
+        for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
+            update_selected_rule(selected_rule, loot_filter, move |rule| {
+                rule.stat_filters[i] = stat_type
+                    .get()
+                    .map(|stat_type| (stat_type, stat_value.get()))
             });
         }
     });
 
-    let item_name = RwSignal::new(None);
-    Effect::new(move |_| {
-        with_selected_rule(selected_rule, loot_filter, |rule| {
-            item_name.set(Some(rule.item_name.clone()))
-        });
-    });
-    Effect::new(move |_| {
-        if let Some(item_name) = item_name.get() {
-            update_selected_rule(selected_rule, loot_filter, |rule| {
-                rule.item_name = item_name
-            });
-        }
-    });
-
-    let item_level = RwSignal::new(None);
-    Effect::new(move |_| {
-        with_selected_rule(selected_rule, loot_filter, |rule| {
-            item_level.set(Some(rule.req_item_level.clone()))
-        });
-    });
-    Effect::new(move |_| {
-        if let Some(item_level) = item_level.get() {
-            update_selected_rule(selected_rule, loot_filter, |rule| {
-                rule.req_item_level = item_level
-            });
-        }
-    });
-
-    //Dropdowns
+    // Dropdowns
     let rule_type = RwSignal::new(FilterRuleType::Pickup);
     Effect::new(move |_| {
         with_selected_rule(selected_rule, loot_filter, |rule| {
@@ -342,7 +424,7 @@ pub fn EditRule(loot_filter: LootFilter, selected_rule: RwSignal<Option<Uuid>>) 
 
                 <DropdownMenu options=rule_type_options chosen_option=rule_type />
 
-                <MenuButton on:click=move |_| {}>"❌"</MenuButton>
+                <MenuButton on:click=try_delete>"❌"</MenuButton>
             </div>
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
@@ -356,10 +438,10 @@ pub fn EditRule(loot_filter: LootFilter, selected_rule: RwSignal<Option<Uuid>>) 
 
                     <ValidatedInput
                         id="item_level"
-                        label="Min Required Level:"
+                        label="Required Level:"
                         input_type="number"
-                        placeholder="Enter minimum required level"
-                        bind=item_level
+                        placeholder="Enter required level"
+                        bind=req_item_level
                     />
                 </div>
 
@@ -377,6 +459,130 @@ pub fn EditRule(loot_filter: LootFilter, selected_rule: RwSignal<Option<Uuid>>) 
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                     </div>
                 </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Damage:"
+                        input_type="number"
+                        placeholder="Damage per second"
+                        bind=item_damages
+                    />
+                    <ValidatedInput
+                        id="item_damage_physical"
+                        label="Physical Damage:"
+                        input_type="number"
+                        placeholder="Physical Damage"
+                        bind=item_damage_physical
+                    />
+                    <ValidatedInput
+                        id="item_damage_fire"
+                        label="Fire Damage:"
+                        input_type="number"
+                        placeholder="Fire Damage"
+                        bind=item_damage_fire
+                    />
+                    <ValidatedInput
+                        id="item_damage_poison"
+                        label="Poison Damage:"
+                        input_type="number"
+                        placeholder="Poison Damage"
+                        bind=item_damage_poison
+                    />
+                    <ValidatedInput
+                        id="item_damage_storm"
+                        label="Storm Damage:"
+                        input_type="number"
+                        placeholder="Storm Damage"
+                        bind=item_damage_storm
+                    />
+                </div>
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Critical Hit Chance:"
+                        input_type="number"
+                        placeholder="Critical Percent Chance"
+                        bind=item_crit_chance
+                    />
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Critical Hit Damage:"
+                        input_type="number"
+                        placeholder="Critical Percent Damage"
+                        bind=item_crit_damage
+                    />
+                    <ValidatedInput
+                        id="item_armor"
+                        label="Armor:"
+                        input_type="number"
+                        placeholder="Armor"
+                        bind=item_armor
+                    />
+                    <ValidatedInput
+                        id="item_block"
+                        label="Block %:"
+                        input_type="number"
+                        placeholder="Block Percent Chance"
+                        bind=item_block
+                    />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
+                {stat_filters
+                    .map(|(stat_type, stat_value)| {
+                        view! {
+                            <div class="flex gap-2 xl:gap-4 items-center">
+                                {move || {
+                                    stat_type
+                                        .read()
+                                        .is_some()
+                                        .then(|| {
+                                            view! {
+                                                <MenuButton
+                                                    class:flex-none
+                                                    on:click=move |_| {
+                                                        stat_type.set(None);
+                                                        stat_value.set(None);
+                                                    }
+                                                >
+                                                    "❌"
+                                                </MenuButton>
+                                            }
+                                        })
+                                }}
+                                <span class=move || {
+                                    if stat_type.read().is_none() {
+                                        "flex-1 text-center"
+                                    } else {
+                                        "flex-1"
+                                    }
+                                }>
+                                    <StatDropdown chosen_option=stat_type />
+                                </span>
+                                {move || {
+                                    stat_type
+                                        .read()
+                                        .is_some()
+                                        .then(|| {
+                                            view! {
+                                                <div class="w-36">
+                                                    <Input
+                                                        id="stat_value_1"
+                                                        input_type="number"
+                                                        placeholder="Min"
+                                                        bind=stat_value
+                                                    />
+                                                </div>
+                                            }
+                                        })
+                                }}
+                            </div>
+                        }
+                    })}
             </div>
         </CardInset>
     }
