@@ -300,13 +300,18 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref() {
             if !effects
                 .get(&(stat_type.clone(), *stat_modifier, false))
-                .map(|value| match rule_type {
-                    FilterRuleType::Pickup => stat_value
-                        .map(|stat_value| *value >= stat_value)
-                        .unwrap_or(true),
-                    FilterRuleType::Sell => stat_value
-                        .map(|stat_value| *value <= stat_value)
-                        .unwrap_or(true),
+                .map(|value| {
+                    if *value == 0.0 {
+                        return false;
+                    };
+                    match rule_type {
+                        FilterRuleType::Pickup => stat_value
+                            .map(|stat_value| *value >= stat_value)
+                            .unwrap_or(true),
+                        FilterRuleType::Sell => stat_value
+                            .map(|stat_value| *value <= stat_value)
+                            .unwrap_or(true),
+                    }
                 })
                 .unwrap_or_default()
             {

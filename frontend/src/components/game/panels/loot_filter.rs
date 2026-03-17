@@ -366,7 +366,7 @@ pub fn EditRule(
     let rule_type = RwSignal::new(FilterRuleType::Pickup);
     Effect::new(move |_| {
         with_selected_rule(selected_rule, loot_filter, |rule| {
-            rule_type.set(rule.rule_type.clone())
+            rule_type.set(rule.rule_type)
         });
     });
     Effect::new(move |_| {
@@ -382,7 +382,7 @@ pub fn EditRule(
     let item_rarity = RwSignal::new(None);
     Effect::new(move |_| {
         with_selected_rule(selected_rule, loot_filter, |rule| {
-            item_rarity.set(rule.item_rarity.clone())
+            item_rarity.set(rule.item_rarity)
         });
     });
     Effect::new(move |_| {
@@ -398,7 +398,7 @@ pub fn EditRule(
     let item_category = RwSignal::new(None);
     Effect::new(move |_| {
         with_selected_rule(selected_rule, loot_filter, |rule| {
-            item_category.set(rule.item_category.clone())
+            item_category.set(rule.item_category)
         });
     });
     Effect::new(move |_| {
