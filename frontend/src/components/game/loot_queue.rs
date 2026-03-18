@@ -296,15 +296,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_damages
         .map(|item_damages| {
-            let weapon_damage = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.average_damages())
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_damage < item_damages,
-                FilterRuleType::Sell => weapon_damage > item_damages,
-            }
+                .map(|weapon_specs| {
+                    let weapon_damage = weapon_specs.average_damages();
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_damage < item_damages,
+                        FilterRuleType::Sell => weapon_damage > item_damages,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -313,15 +315,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_damage_physical
         .map(|item_damage_physical| {
-            let weapon_damage = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Physical))
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_damage < item_damage_physical,
-                FilterRuleType::Sell => weapon_damage > item_damage_physical,
-            }
+                .map(|weapon_specs| {
+                    let weapon_damage = weapon_specs.average_damage_type(DamageType::Physical);
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_damage < item_damage_physical,
+                        FilterRuleType::Sell => weapon_damage > item_damage_physical,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -330,15 +334,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_damage_fire
         .map(|item_damage_fire| {
-            let weapon_damage = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Fire))
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_damage < item_damage_fire,
-                FilterRuleType::Sell => weapon_damage > item_damage_fire,
-            }
+                .map(|weapon_specs| {
+                    let weapon_damage = weapon_specs.average_damage_type(DamageType::Fire);
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_damage < item_damage_fire,
+                        FilterRuleType::Sell => weapon_damage > item_damage_fire,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -347,15 +353,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_damage_poison
         .map(|item_damage_poison| {
-            let weapon_damage = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Poison))
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_damage < item_damage_poison,
-                FilterRuleType::Sell => weapon_damage > item_damage_poison,
-            }
+                .map(|weapon_specs| {
+                    let weapon_damage = weapon_specs.average_damage_type(DamageType::Poison);
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_damage < item_damage_poison,
+                        FilterRuleType::Sell => weapon_damage > item_damage_poison,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -364,15 +372,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_damage_storm
         .map(|item_damage_storm| {
-            let weapon_damage = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Storm))
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_damage < item_damage_storm,
-                FilterRuleType::Sell => weapon_damage > item_damage_storm,
-            }
+                .map(|weapon_specs| {
+                    let weapon_damage = weapon_specs.average_damage_type(DamageType::Storm);
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_damage < item_damage_storm,
+                        FilterRuleType::Sell => weapon_damage > item_damage_storm,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -381,15 +391,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_crit_chance
         .map(|item_crit_chance| {
-            let weapon_crit_chance = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| weapon_specs.crit_chance.value.get() as f64)
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_crit_chance < item_crit_chance,
-                FilterRuleType::Sell => weapon_crit_chance > item_crit_chance,
-            }
+                .map(|weapon_specs| {
+                    let weapon_crit_chance = weapon_specs.crit_chance.value.get() as f64;
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_crit_chance < item_crit_chance,
+                        FilterRuleType::Sell => weapon_crit_chance > item_crit_chance,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -398,15 +410,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_crit_damage
         .map(|item_crit_damage| {
-            let weapon_crit_damage = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| *weapon_specs.crit_damage)
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_crit_damage < item_crit_damage,
-                FilterRuleType::Sell => weapon_crit_damage > item_crit_damage,
-            }
+                .map(|weapon_specs| {
+                    let weapon_crit_damage = *weapon_specs.crit_damage;
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_crit_damage < item_crit_damage,
+                        FilterRuleType::Sell => weapon_crit_damage > item_crit_damage,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -415,15 +429,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_cooldown
         .map(|item_cooldown| {
-            let weapon_cooldown = item_specs
+            item_specs
                 .weapon_specs
                 .as_ref()
-                .map(|weapon_specs| *weapon_specs.cooldown)
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => weapon_cooldown > item_cooldown,
-                FilterRuleType::Sell => weapon_cooldown < item_cooldown,
-            }
+                .map(|weapon_specs| {
+                    let weapon_cooldown = weapon_specs.cooldown.get();
+                    match rule_type {
+                        FilterRuleType::Pickup => weapon_cooldown > item_cooldown,
+                        FilterRuleType::Sell => weapon_cooldown < item_cooldown,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -432,15 +448,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_armor
         .map(|item_armor| {
-            let armor = item_specs
+            item_specs
                 .armor_specs
                 .as_ref()
-                .map(|armor_specs| *armor_specs.armor)
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => armor < item_armor,
-                FilterRuleType::Sell => armor > item_armor,
-            }
+                .map(|armor_specs| {
+                    let armor = *armor_specs.armor;
+                    match rule_type {
+                        FilterRuleType::Pickup => armor < item_armor,
+                        FilterRuleType::Sell => armor > item_armor,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -449,15 +467,17 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_block
         .map(|item_block| {
-            let block = item_specs
+            item_specs
                 .armor_specs
                 .as_ref()
-                .map(|armor_specs| armor_specs.block.get() as f64)
-                .unwrap_or_default();
-            match rule_type {
-                FilterRuleType::Pickup => block < item_block,
-                FilterRuleType::Sell => block > item_block,
-            }
+                .map(|armor_specs| {
+                    let block = armor_specs.block.get() as f64;
+                    match rule_type {
+                        FilterRuleType::Pickup => block < item_block,
+                        FilterRuleType::Sell => block > item_block,
+                    }
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {

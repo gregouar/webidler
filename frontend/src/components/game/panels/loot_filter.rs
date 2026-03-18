@@ -1,8 +1,10 @@
 use std::sync::Arc;
 
+use codee::string::JsonSerdeCodec;
 use indexmap::IndexMap;
 use leptos::{html::*, prelude::*};
 
+use leptos_use::storage;
 use serde::{Deserialize, Serialize};
 use shared::{
     data::{
@@ -31,7 +33,7 @@ use crate::components::{
     },
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct LootFilter {
     pub rules: IndexMap<Uuid, FilterRule>,
 }
@@ -43,7 +45,7 @@ pub enum FilterRuleType {
     Sell,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct FilterRule {
     pub rule_type: FilterRuleType,
     pub rule_name: String,
@@ -91,13 +93,28 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
     let selected_rule = RwSignal::new(None);
 
     let new_rule = move || {
-        let new_rule = FilterRule::new();
+        let rule_id = Uuid::new_v4();
         game_context
             .loot_filter
             .write()
             .rules
-            .insert(Uuid::new_v4(), new_rule);
+            .insert(rule_id, FilterRule::new());
+        selected_rule.set(Some(rule_id));
     };
+
+    let (get_loot_filter, set_loot_filter, _) =
+        storage::use_local_storage::<LootFilter, JsonSerdeCodec>(format!(
+            "loot_filter_{}",
+            game_context.character_id.get_untracked()
+        ));
+
+    Effect::new(move || {
+        if !open.get() {
+            set_loot_filter.set(loot_filter.get());
+        } else {
+            loot_filter.set(get_loot_filter.get())
+        }
+    });
 
     view! {
         <MenuPanel open=open class:items-center>
