@@ -134,7 +134,7 @@ where
     }
 
     pub fn as_new_base(&self) -> Self {
-        (*self).into()
+        self.evaluated.into()
     }
 }
 

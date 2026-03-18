@@ -6280,7 +6280,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 2.0
           }
         ],
         "triggers": [],
@@ -6308,7 +6308,7 @@
               }
             },
             "modifier": "More",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11019,7 +11019,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 35.0,
+                  "value": 25.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -11415,7 +11415,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 2.0
           }
         ],
         "triggers": [],
@@ -11443,7 +11443,7 @@
               }
             },
             "modifier": "More",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12010,16 +12010,16 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }
@@ -13942,7 +13942,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -13970,7 +13970,7 @@
               }
             },
             "modifier": "More",
-            "value": 4.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,

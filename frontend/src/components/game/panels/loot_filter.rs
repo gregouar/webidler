@@ -63,9 +63,11 @@ pub struct FilterRule {
     pub item_damage_storm: Option<f64>,
     pub item_crit_chance: Option<f64>,
     pub item_crit_damage: Option<f64>,
+    pub item_cooldown: Option<f64>,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
 
+    // TODO Cooldown
     pub stat_filters: [Option<((StatType, Modifier), Option<f64>)>; STAT_FILTERS_AMOUNT],
 }
 
@@ -331,6 +333,7 @@ pub fn EditRule(
     rule_field!(item_damage_storm);
     rule_field!(item_crit_chance);
     rule_field!(item_crit_damage);
+    rule_field!(item_cooldown);
     rule_field!(item_armor);
     rule_field!(item_block);
 
@@ -500,6 +503,13 @@ pub fn EditRule(
                     />
                 </div>
                 <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_cooldown"
+                        label="Cooldown:"
+                        input_type="number"
+                        placeholder="Cooldown"
+                        bind=item_cooldown
+                    />
                     <ValidatedInput
                         id="item_damages"
                         label="Critical Hit Chance:"

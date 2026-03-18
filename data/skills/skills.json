@@ -1034,7 +1034,7 @@
     "description": "A blessing that increases your speed, allowing quicker actions in battle.",
     "icon": "skills/haste.svg",
     "skill_type": "Blessing",
-    "cooldown": 20,
+    "cooldown": 10,
     "mana_cost": 30,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -1044,8 +1044,8 @@
             "skill_type": "Blessing"
           }
         },
-        "modifier": "Flat",
-        "value": 1
+        "modifier": "Increased",
+        "value": 2
       }
     ],
     "targets": [
@@ -1061,7 +1061,19 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": null
+                        "Speed": "Attack"
+                      },
+                      "modifier": "Increased"
+                    }
+                  },
+                  "value": 20
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": "Spell"
                       },
                       "modifier": "Increased"
                     }
@@ -2703,7 +2715,7 @@
   },
   "rain_arrows": {
     "name": "Rain of Arrows",
-    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies for 50% of your base weapon damage each hit.",
+    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies for 30% of your base weapon damage each hit.",
     "icon": "skills/rain_arrows.svg",
     "skill_type": "Attack",
     "cooldown": 0,
@@ -2839,7 +2851,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -2867,7 +2879,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -2895,7 +2907,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -2923,7 +2935,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -2951,7 +2963,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -2979,7 +2991,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -3011,7 +3023,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       },
       {
         "hidden": true,
@@ -3043,7 +3055,7 @@
             }
           }
         },
-        "factor": 0.5
+        "factor": 0.3
       }
     ]
   }
