@@ -3,14 +3,13 @@ use std::collections::HashSet;
 use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
-    item::{ItemSpecs, WeaponSpecs},
+    item::ItemSpecs,
     item_affix::AffixEffectScope,
     market::MarketFilters,
     skill::DamageType,
     stash::StashId,
     user::{UserCharacterId, UserId},
 };
-use strum::IntoEnumIterator;
 
 use crate::{
     constants::DATA_VERSION,
@@ -56,27 +55,26 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
     type Error = anyhow::Error;
 
     fn try_from(value: &ItemSpecs) -> Result<Self, Self::Error> {
-        let item_damages = value.weapon_specs.as_ref().map(|weapon_specs| {
-            DamageType::iter()
-                .flat_map(|damage_type| average_weapon_damage(weapon_specs, damage_type))
-                .sum()
-        });
+        let item_damages = value
+            .weapon_specs
+            .as_ref()
+            .map(|weapon_specs| weapon_specs.average_damages());
         let item_damage_physical = value
             .weapon_specs
             .as_ref()
-            .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Physical));
+            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Physical));
         let item_damage_fire = value
             .weapon_specs
             .as_ref()
-            .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Fire));
+            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Fire));
         let item_damage_poison = value
             .weapon_specs
             .as_ref()
-            .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Poison));
+            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Poison));
         let item_damage_storm = value
             .weapon_specs
             .as_ref()
-            .and_then(|weapon_specs| average_weapon_damage(weapon_specs, DamageType::Storm));
+            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Storm));
 
         Ok(Self {
             base_item_id: value.modifiers.base_item_id.clone(),
@@ -106,14 +104,6 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
                 .map(|weapon_specs| *weapon_specs.crit_damage),
         })
     }
-}
-
-fn average_weapon_damage(weapon_specs: &WeaponSpecs, damage_type: DamageType) -> Option<f64> {
-    weapon_specs
-                .damage.get(&damage_type)
-                .map(|value| 1.0 / weapon_specs.cooldown.get()
-            // TODO: Lucky?
-            * (1.0 + *weapon_specs.crit_damage * weapon_specs.crit_chance.value.get() as f64 * 0.0001)*(value.min.get() + value.max.get()) * 0.5)
 }
 
 pub async fn store_item<'c>(

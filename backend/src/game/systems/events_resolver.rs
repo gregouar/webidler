@@ -333,11 +333,8 @@ fn handle_area_completed_event(
         *game_data.area_specs.loot_rarity,
     ) {
         Some(item_specs) => {
-            for item_specs in loot_controller::drop_loot(
-                &game_data.player_controller,
-                game_data.queued_loot.mutate(),
-                item_specs,
-            ) {
+            for item_specs in loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs)
+            {
                 player_controller::sell_item(
                     &game_data.area_specs,
                     game_data.player_specs.read(),

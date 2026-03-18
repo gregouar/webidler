@@ -3,9 +3,13 @@ use leptos::{prelude::*, web_sys};
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 
+use crate::components::ui::toast::*;
+
 pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>()
 -> (RwSignal<Option<T>>, impl Fn(web_sys::Event)) {
     let data = RwSignal::new(None::<T>);
+
+    let toaster: Toasts = expect_context();
 
     let on_file_change = {
         move |event: web_sys::Event| {
@@ -17,9 +21,12 @@ pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>()
                 let onload = Closure::once_into_js({
                     let reader = reader.clone();
                     move |_e: web_sys::ProgressEvent| {
-                        let text = reader.result().unwrap().as_string().unwrap();
-                        let parsed: T = serde_json::from_str(&text).unwrap();
-                        data.set(Some(parsed));
+                        let text = reader.result().unwrap().as_string().unwrap_or_default();
+
+                        match serde_json::from_str(&text) {
+                            Ok(parsed) => data.set(Some(parsed)),
+                            Err(_) => show_toast(toaster, "Invalid file.", ToastVariant::Error),
+                        }
                     }
                 });
 

@@ -96,7 +96,8 @@ pub fn Toggle(
     children: Children,
 ) -> impl IntoView {
     let checked: RwSignal<bool> = RwSignal::new(initial);
-    let switch_value = move |_| {
+    let switch_value = move |ev: web_sys::MouseEvent| {
+        ev.stop_propagation();
         let new_value = !checked.get();
         checked.set(new_value);
         toggle_callback(new_value);

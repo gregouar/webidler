@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
-        item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
+        item::{ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
         player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
         skill::{BaseSkillSpecs, SkillSpecs, SkillState},
@@ -29,7 +29,7 @@ use super::{characters_controller::Target, items_controller, skills_controller};
 pub struct PlayerController {
     // pub auto_skills: Vec<bool>,
     pub use_skills: Vec<usize>,
-    pub preferred_loot: Option<ItemCategory>,
+    // pub preferred_loot: Option<ItemCategory>,
 }
 
 impl PlayerController {
@@ -37,7 +37,7 @@ impl PlayerController {
         PlayerController {
             // auto_skills: specs.auto_skills.clone(),
             use_skills: Vec::with_capacity(specs.skills_specs.len()),
-            preferred_loot: None,
+            // preferred_loot: None,
         }
     }
 

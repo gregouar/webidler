@@ -132,6 +132,10 @@ where
         })
         .multiply_value(percent * 0.01)
     }
+
+    pub fn as_new_base(&self) -> Self {
+        self.evaluated.into()
+    }
 }
 
 #[cfg(feature = "modifiable")]
