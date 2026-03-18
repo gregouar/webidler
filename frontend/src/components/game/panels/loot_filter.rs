@@ -31,6 +31,7 @@ use crate::components::{
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
     },
+    utils::file_loader::{save_json, use_json_loader},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
@@ -116,7 +117,45 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
         }
     });
 
+    let (loaded_file, on_change) = use_json_loader::<LootFilter>();
+    let file_input: NodeRef<Input> = NodeRef::new();
+
+    Effect::new(move || {
+        loaded_file.with(|loaded_file| {
+            if let Some(loaded_filter) = loaded_file {
+                loot_filter.set(loaded_filter.clone());
+            }
+        });
+    });
+
+    let on_export = move |_| {
+        save_json(
+            &loot_filter.get_untracked(),
+            &format!(
+                "loot_filter_{}.json",
+                game_context
+                    .player_specs
+                    .read_untracked()
+                    .character_specs
+                    .name
+            ),
+        );
+    };
+
+    let on_import = move |_| {
+        if let Some(input) = file_input.get() {
+            input.click();
+        }
+    };
+
     view! {
+        <input
+            node_ref=file_input
+            type="file"
+            accept="application/json"
+            on:change=on_change
+            class="hidden"
+        />
         <MenuPanel open=open class:items-center>
             <Card class="w-full h-full">
                 <CardHeader title="Loot Filter" on_close=move || open.set(false)>
@@ -127,8 +166,8 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
                     <div class="flex-1" />
 
                     <div class="flex gap-2 mx-4">
-                        <MenuButton>"Import"</MenuButton>
-                        <MenuButton>"Export"</MenuButton>
+                        <MenuButton on:click=on_import>"Import"</MenuButton>
+                        <MenuButton on:click=on_export>"Export"</MenuButton>
                     </div>
                 </CardHeader>
                 <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
