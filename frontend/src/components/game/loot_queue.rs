@@ -489,8 +489,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         .aggregate_effects(AffixEffectScope::Global)
         .0;
     for stat_filter in stat_filters {
-        if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref() {
-            if !effects
+        if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref()
+            && !effects
                 .get(&(stat_type.clone(), *stat_modifier, false))
                 .map(|value| {
                     if *value == 0.0 {
@@ -507,7 +507,6 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
             {
                 return false;
             }
-        }
     }
 
     true

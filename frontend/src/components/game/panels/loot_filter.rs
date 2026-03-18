@@ -70,7 +70,7 @@ pub struct FilterRule {
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
 
-    // TODO Cooldown
+    #[allow(clippy::type_complexity)]
     pub stat_filters: [Option<((StatType, Modifier), Option<f64>)>; STAT_FILTERS_AMOUNT],
 }
 
@@ -232,20 +232,20 @@ fn RuleRow(
 
     let move_up = move |_| {
         loot_filter.update(|filter| {
-            if let Some(index) = filter.rules.get_index_of(&rule_id) {
-                if index > 0 {
-                    filter.rules.swap_indices(index, index - 1);
-                }
+            if let Some(index) = filter.rules.get_index_of(&rule_id)
+                && index > 0
+            {
+                filter.rules.swap_indices(index, index - 1);
             }
         });
     };
 
     let move_down = move |_| {
         loot_filter.update(|filter| {
-            if let Some(index) = filter.rules.get_index_of(&rule_id) {
-                if index + 1 < filter.rules.len() {
-                    filter.rules.swap_indices(index, index + 1);
-                }
+            if let Some(index) = filter.rules.get_index_of(&rule_id)
+                && index + 1 < filter.rules.len()
+            {
+                filter.rules.swap_indices(index, index + 1);
             }
         });
     };
@@ -314,10 +314,10 @@ fn with_selected_rule<F>(
 ) where
     F: FnOnce(&FilterRule),
 {
-    if let Some(id) = selected_rule.get() {
-        if let Some(rule) = loot_filter.read_untracked().rules.get(&id) {
-            f(rule);
-        }
+    if let Some(id) = selected_rule.get()
+        && let Some(rule) = loot_filter.read_untracked().rules.get(&id)
+    {
+        f(rule);
     }
 }
 
@@ -328,10 +328,10 @@ fn update_selected_rule<F>(
 ) where
     F: FnOnce(&mut FilterRule),
 {
-    if let Some(id) = selected_rule.get() {
-        if let Some(rule) = loot_filter.write().rules.get_mut(&id) {
-            f(rule);
-        }
+    if let Some(id) = selected_rule.get()
+        && let Some(rule) = loot_filter.write().rules.get_mut(&id)
+    {
+        f(rule);
     }
 }
 
