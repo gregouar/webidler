@@ -509,7 +509,7 @@ pub fn EditRule(
 
     view! {
         <CardInset>
-            <div class="flex justify-between items-center p-4 border-b border-zinc-700">
+            <div class="flex justify-between items-center px-4 pb-4 border-b border-zinc-700">
                 <ValidatedInput
                     id="rule_name"
                     label="Rule Name:"
