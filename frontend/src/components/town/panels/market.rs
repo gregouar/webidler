@@ -11,7 +11,7 @@ use shared::{
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::{StatEffect, StatSkillEffectType, StatType},
+        stat_effect::{StatEffect, StatSkillEffectType, StatStatusType, StatType},
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -1393,8 +1393,16 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: None,
+                status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
                 skill_type: None,
+                min_max: None,
+            },
+            Modifier::More,
+        ),
+        (
+            StatType::StatusPower {
+                status_type: None,
+                skill_type: Some(SkillType::Curse),
                 min_max: None,
             },
             Modifier::Increased,

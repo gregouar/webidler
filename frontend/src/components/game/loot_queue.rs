@@ -16,12 +16,11 @@ use shared::{
 
 use crate::components::{
     accessibility::AccessibilityContext,
-    game::{
-        GameContext,
-        panels::loot_filter::{FilterRule, FilterRuleType, LootFilter},
-        websocket::WebsocketContext,
+    game::{GameContext, websocket::WebsocketContext},
+    shared::{
+        item_card::ItemCard,
+        loot_filter::{FilterRule, FilterRuleType, LootFilter},
     },
-    shared::item_card::ItemCard,
     ui::tooltip::DynamicTooltipPosition,
 };
 
@@ -233,6 +232,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         rule_name: _,
         enabled,
         item_name,
+        item_level,
         req_item_level,
         item_rarity,
         item_category,
@@ -278,6 +278,16 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         .map(|item_rarity| !match rule_type {
             FilterRuleType::Pickup => item_specs.modifiers.rarity >= item_rarity,
             FilterRuleType::Sell => item_specs.modifiers.rarity <= item_rarity,
+        })
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    if item_level
+        .map(|item_level| !match rule_type {
+            FilterRuleType::Pickup => item_specs.modifiers.level >= item_level,
+            FilterRuleType::Sell => item_specs.modifiers.level <= item_level,
         })
         .unwrap_or_default()
     {
@@ -504,9 +514,9 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                         .unwrap_or(true)
                 })
                 .unwrap_or_default()
-            {
-                return false;
-            }
+        {
+            return false;
+        }
     }
 
     true

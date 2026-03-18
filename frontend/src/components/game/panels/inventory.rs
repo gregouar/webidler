@@ -7,11 +7,11 @@ use shared::{
 };
 
 use crate::components::{
-    game::{
-        game_context::GameContext, panels::loot_filter::LootFilterPanel,
-        websocket::WebsocketContext,
+    game::{game_context::GameContext, websocket::WebsocketContext},
+    shared::{
+        inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+        loot_filter::LootFilterPanel,
     },
-    shared::inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
     ui::confirm::ConfirmContext,
 };
 
@@ -148,6 +148,11 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <Inventory open=open inventory=inventory_config />
-        <LootFilterPanel open=open_loot_filter />
+        <LootFilterPanel
+            open=open_loot_filter
+            loot_filter=game_context.loot_filter
+            character_id=game_context.character_id.get_untracked()
+            character_name=game_context.player_specs.read_untracked().character_specs.name.clone()
+        />
     }
 }

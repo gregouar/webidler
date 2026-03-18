@@ -19,7 +19,7 @@ use shared::data::{
 };
 
 use crate::{
-    components::game::{local_stats::GameLocalStats, panels::loot_filter::LootFilter},
+    components::{game::local_stats::GameLocalStats, shared::loot_filter::LootFilter},
     utils,
 };
 

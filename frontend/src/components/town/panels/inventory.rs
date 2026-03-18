@@ -9,7 +9,10 @@ use shared::http::client::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+    shared::{
+        inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+        loot_filter::LootFilterPanel,
+    },
     town::TownContext,
     ui::toast::*,
 };
@@ -23,6 +26,8 @@ pub fn TownInventoryPanel(
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
     let town_context = expect_context::<TownContext>();
+
+    let open_loot_filter = RwSignal::new(false);
 
     let on_equip = move |item_index| {
         let character_id = town_context.character.read_untracked().character_id;
@@ -132,7 +137,7 @@ pub fn TownInventoryPanel(
         InventoryConfig {
             player_inventory: town_context.inventory,
             // loot_preference: None,
-            on_loot_filter: None,
+            on_loot_filter: Some(Arc::new(move || open_loot_filter.set(true))),
             on_unequip: Some(Arc::new(on_unequip)),
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),
@@ -142,5 +147,21 @@ pub fn TownInventoryPanel(
         }
     };
 
-    view! { <Inventory open=open inventory=inventory_config /> }
+    Effect::new(move || {
+        if !open.get() {
+            open_loot_filter.set(false);
+        }
+    });
+
+    let loot_filter = RwSignal::new(Default::default());
+
+    view! {
+        <Inventory open=open inventory=inventory_config />
+        <LootFilterPanel
+            open=open_loot_filter
+            loot_filter=loot_filter
+            character_id=town_context.character.read_untracked().character_id
+            character_name=town_context.character.read_untracked().name.clone()
+        />
+    }
 }

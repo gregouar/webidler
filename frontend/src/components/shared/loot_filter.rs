@@ -13,6 +13,7 @@ use shared::{
         market::STAT_FILTERS_AMOUNT,
         modifier::Modifier,
         stat_effect::StatType,
+        user::UserCharacterId,
     },
     types::ItemName,
 };
@@ -20,7 +21,6 @@ use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
-    game::GameContext,
     shared::inventory::loot_filter_category_to_str,
     town::panels::market::{StatDropdown, item_rarity_str},
     ui::{
@@ -54,6 +54,7 @@ pub struct FilterRule {
     pub enabled: bool,
 
     pub item_name: Option<ItemName>,
+    pub item_level: Option<AreaLevel>,
     pub req_item_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
@@ -87,27 +88,24 @@ impl FilterRule {
 }
 
 #[component]
-pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
-    let game_context: GameContext = expect_context();
-    let loot_filter = game_context.loot_filter;
-
+pub fn LootFilterPanel(
+    open: RwSignal<bool>,
+    loot_filter: RwSignal<LootFilter>,
+    character_id: UserCharacterId,
+    character_name: String,
+) -> impl IntoView {
     let selected_rule = RwSignal::new(None);
 
     let new_rule = move || {
         let rule_id = Uuid::new_v4();
-        game_context
-            .loot_filter
-            .write()
-            .rules
-            .insert(rule_id, FilterRule::new());
+        loot_filter.write().rules.insert(rule_id, FilterRule::new());
         selected_rule.set(Some(rule_id));
     };
 
-    let (get_loot_filter, set_loot_filter, _) =
-        storage::use_local_storage::<LootFilter, JsonSerdeCodec>(format!(
-            "loot_filter_{}",
-            game_context.character_id.get_untracked()
-        ));
+    let (get_loot_filter, set_loot_filter, _) = storage::use_local_storage::<
+        LootFilter,
+        JsonSerdeCodec,
+    >(format!("loot_filter_{}", character_id));
 
     Effect::new(move || {
         if !open.get() {
@@ -128,18 +126,14 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
         });
     });
 
-    let on_export = move |_| {
-        save_json(
-            &loot_filter.get_untracked(),
-            &format!(
-                "loot_filter_{}.json",
-                game_context
-                    .player_specs
-                    .read_untracked()
-                    .character_specs
-                    .name
-            ),
-        );
+    let on_export = {
+        let character_name = character_name.clone();
+        move |_| {
+            save_json(
+                &loot_filter.get_untracked(),
+                &format!("loot_filter_{}.json", &character_name),
+            );
+        }
     };
 
     let on_import = move |_| {
@@ -157,24 +151,29 @@ pub fn LootFilterPanel(open: RwSignal<bool>) -> impl IntoView {
             class="hidden"
         />
         <MenuPanel open=open class:items-center>
-            <Card class="w-full h-full">
-                <CardHeader title="Loot Filter" on_close=move || open.set(false)>
-                    <div class="flex gap-2 mx-4">
-                        <MenuButton on:click=move |_| new_rule()>"New Rule"</MenuButton>
-                    </div>
+            {
+                let on_export = on_export.clone();
+                view! {
+                    <Card class="w-full h-full">
+                        <CardHeader title="Loot Filter" on_close=move || open.set(false)>
+                            <div class="flex gap-2 mx-4">
+                                <MenuButton on:click=move |_| new_rule()>"New Rule"</MenuButton>
+                            </div>
 
-                    <div class="flex-1" />
+                            <div class="flex-1" />
 
-                    <div class="flex gap-2 mx-4">
-                        <MenuButton on:click=on_import>"Import"</MenuButton>
-                        <MenuButton on:click=on_export>"Export"</MenuButton>
-                    </div>
-                </CardHeader>
-                <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
-                    <RulesList loot_filter selected_rule />
-                    <EditRule loot_filter selected_rule />
-                </div>
-            </Card>
+                            <div class="flex gap-2 mx-4">
+                                <MenuButton on:click=on_import>"Import"</MenuButton>
+                                <MenuButton on:click=on_export>"Export"</MenuButton>
+                            </div>
+                        </CardHeader>
+                        <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
+                            <RulesList loot_filter selected_rule />
+                            <EditRule loot_filter selected_rule />
+                        </div>
+                    </Card>
+                }
+            }
         </MenuPanel>
     }
 }
@@ -419,6 +418,7 @@ pub fn EditRule(
     rule_field!(rule_name);
     rule_field!(item_name);
     rule_field!(req_item_level);
+    rule_field!(item_level);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
     rule_field!(item_damage_fire);
@@ -533,7 +533,7 @@ pub fn EditRule(
                     />
 
                     <ValidatedInput
-                        id="item_level"
+                        id="req_item_level"
                         label="Required Level:"
                         input_type="number"
                         placeholder="Enter required level"
@@ -542,6 +542,14 @@ pub fn EditRule(
                 </div>
 
                 <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_level"
+                        label="Item Level:"
+                        input_type="number"
+                        placeholder="Enter item level"
+                        bind=item_level
+                    />
+
                     <div class="flex items-center justify-between text-gray-300 text-sm">
                         <span>"Item Category:"</span>
                         <SearchableDropdownMenu
