@@ -230,7 +230,8 @@ fn RuleRow(
         }
     };
 
-    let move_up = move |_| {
+    let move_up = move |ev: web_sys::MouseEvent| {
+        ev.stop_propagation();
         loot_filter.update(|filter| {
             if let Some(index) = filter.rules.get_index_of(&rule_id)
                 && index > 0
@@ -240,7 +241,8 @@ fn RuleRow(
         });
     };
 
-    let move_down = move |_| {
+    let move_down = move |ev: web_sys::MouseEvent| {
+        ev.stop_propagation();
         loot_filter.update(|filter| {
             if let Some(index) = filter.rules.get_index_of(&rule_id)
                 && index + 1 < filter.rules.len()
@@ -249,12 +251,31 @@ fn RuleRow(
             }
         });
     };
+
+    let is_first = Signal::derive(move || {
+        loot_filter
+            .read()
+            .rules
+            .first()
+            .map(|(k, _)| *k == rule_id)
+            .unwrap_or(false)
+    });
+
+    let is_last = Signal::derive(move || {
+        loot_filter
+            .read()
+            .rules
+            .last()
+            .map(|(k, _)| *k == rule_id)
+            .unwrap_or(false)
+    });
+
     // TODO: Move up, down, delete
     view! {
         <div
             class=move || {
                 format!(
-                    "relative flex w-full items-center justify-between p-3 gap-2 cursor-pointer shadow-sm transition-colors duration-150 rounded-lg
+                    "relative flex w-full items-center justify-between p-2 gap-2 cursor-pointer shadow-sm transition-colors duration-150 rounded-sm
                 bg-neutral-800 hover:bg-neutral-700 {}",
                     if selected_rule
                         .read()
@@ -294,10 +315,26 @@ fn RuleRow(
                     <div class="text-sm xl:text-base font-semibold text-white">{rule_name}</div>
 
                     <div class="flex items-center gap-1">
-                        <FancyButton on:click=move_up>"↑"</FancyButton>
-                        <FancyButton on:click=move_down>"↓"</FancyButton>
+                        <FancyButton on:click=move_up disabled=is_first>
+                            "↑"
+                        </FancyButton>
+                        <FancyButton on:click=move_down disabled=is_last>
+                            "↓"
+                        </FancyButton>
                         <Toggle initial=is_enabled toggle_callback=enable_toggle>
-                            "Enabled"
+                            {move || {
+                                if loot_filter
+                                    .read()
+                                    .rules
+                                    .get(&rule_id)
+                                    .map(|rule| rule.enabled)
+                                    .unwrap_or_default()
+                                {
+                                    "On"
+                                } else {
+                                    "Off"
+                                }
+                            }}
                         </Toggle>
                     </div>
                 </div>
