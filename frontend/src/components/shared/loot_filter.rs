@@ -96,22 +96,20 @@ pub fn LootFilterPanel(
 ) -> impl IntoView {
     let selected_rule = RwSignal::new(None);
 
-    let new_rule = move || {
-        let rule_id = Uuid::new_v4();
-        loot_filter.write().rules.insert(rule_id, FilterRule::new());
-        selected_rule.set(Some(rule_id));
-    };
-
     let (get_loot_filter, set_loot_filter, _) = storage::use_local_storage::<
         LootFilter,
         JsonSerdeCodec,
     >(format!("loot_filter_{}", character_id));
 
+    loot_filter.set(get_loot_filter.get_untracked());
+    let local_loot_filter = RwSignal::new(loot_filter.get_untracked());
+
     Effect::new(move || {
-        if !open.get() {
-            set_loot_filter.set(loot_filter.get());
+        if open.get() {
+            local_loot_filter.set(loot_filter.get());
         } else {
-            loot_filter.set(get_loot_filter.get())
+            loot_filter.set(local_loot_filter.get());
+            set_loot_filter.set(local_loot_filter.get());
         }
     });
 
@@ -121,7 +119,7 @@ pub fn LootFilterPanel(
     Effect::new(move || {
         loaded_file.with(|loaded_file| {
             if let Some(loaded_filter) = loaded_file {
-                loot_filter.set(loaded_filter.clone());
+                local_loot_filter.set(loaded_filter.clone());
             }
         });
     });
@@ -130,7 +128,7 @@ pub fn LootFilterPanel(
         let character_name = character_name.clone();
         move |_| {
             save_json(
-                &loot_filter.get_untracked(),
+                &local_loot_filter.get_untracked(),
                 &format!("loot_filter_{}.json", &character_name),
             );
         }
@@ -140,6 +138,15 @@ pub fn LootFilterPanel(
         if let Some(input) = file_input.get() {
             input.click();
         }
+    };
+
+    let new_rule = move || {
+        let rule_id = Uuid::new_v4();
+        local_loot_filter
+            .write()
+            .rules
+            .insert(rule_id, FilterRule::new());
+        selected_rule.set(Some(rule_id));
     };
 
     view! {
@@ -168,8 +175,8 @@ pub fn LootFilterPanel(
                             </div>
                         </CardHeader>
                         <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
-                            <RulesList loot_filter selected_rule />
-                            <EditRule loot_filter selected_rule />
+                            <RulesList loot_filter=local_loot_filter selected_rule />
+                            <EditRule loot_filter=local_loot_filter selected_rule />
                         </div>
                     </Card>
                 }
