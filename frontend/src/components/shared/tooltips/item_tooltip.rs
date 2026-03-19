@@ -417,7 +417,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
-                    )>{format!("+{:.0}%", number::format_number(*specs.crit_damage))}</span>
+                    )>{format!("+{}%", number::format_number(*specs.crit_damage))}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                     "Cooldown: "

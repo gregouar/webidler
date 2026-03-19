@@ -31,7 +31,10 @@ use crate::components::{
             format_trigger_modifier_per, trigger_text,
         },
     },
-    ui::{Separator, number::format_number},
+    ui::{
+        Separator,
+        number::{self, format_number},
+    },
 };
 
 use super::effects_tooltip::damage_type_str;
@@ -345,7 +348,9 @@ pub fn format_skill_effect(
                         </EffectLi>
                         <EffectLi>
                             "Critical hit damage: "
-                            <span class="font-semibold">{format!("+{:.0}%", *crit_damage)}</span>
+                            <span class="font-semibold">
+                                {format!("+{}%", number::format_number(*crit_damage))}
+                            </span>
                         </EffectLi>
                     },
                 )
