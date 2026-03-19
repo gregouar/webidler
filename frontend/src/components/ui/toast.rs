@@ -37,7 +37,7 @@ pub fn ToastView(message: String, variant: ToastVariant, toast_id: ToastId) -> i
         )>
             <div class="text-xl leading-none">{icon}</div>
             <div class=format!(
-                "flex-1 text-sm font-medium leading-snug {}",
+                "flex-1 text-sm font-medium  {}",
                 text_color,
             )>{message}</div>
             <CloseButton on:click=move |_| dismiss_toast(&toast_id) />

@@ -378,7 +378,7 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
 
     view! {
         <div
-            class="text-[13px] leading-snug"
+            class="text-[13px] "
             title=format!("Sent at {}", format_datetime(msg.sent_at))
         >
             <span

@@ -524,7 +524,7 @@ pub fn StartGrindPanel(
                                     <Separator />
 
                                     <ul class="text-xs xl:text-sm text-gray-400 list-none xl:space-y-1">
-                                        <li class="leading-snug ">
+                                        <li class=" ">
                                             "Power Level Modifier: "
                                             <span class="font-semibold text-white">
                                                 "+"

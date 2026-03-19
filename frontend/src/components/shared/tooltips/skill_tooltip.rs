@@ -91,7 +91,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         ">
             <strong class="text-sm xl:text-base font-bold text-violet-300 font-display">
                 <ul class="list-none xl:space-y-1 mb-2">
-                    <li class="leading-snug whitespace-pre-line">
+                    <li class=" whitespace-pre-line">
                         {skill_specs.base.name.clone()}
                     </li>
                 </ul>
@@ -99,7 +99,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <Separator />
 
-            <p class="text-xs xl:text-sm text-gray-400 leading-snug">
+            <p class="text-xs xl:text-sm text-gray-400 ">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
                 {if skill_specs.cooldown.get() > 0.0 {
                     view! {
@@ -127,7 +127,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-gray-400 leading-snug">
+                                <span class="text-gray-400 ">
                                     "Auto-use only when "
                                     {conditions_tooltip::format_skill_modifier_conditions_pre(
                                         &skill_specs.base.auto_use_conditions,
@@ -153,7 +153,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-gray-400 leading-snug">"Next upgrade:"</span>
+                                <span class="text-gray-400 ">"Next upgrade:"</span>
                             </li>
                             {effects_tooltip::formatted_effects_list(
                                 skill_specs.base.upgrade_effects.clone(),
@@ -161,7 +161,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         </ul>
 
                         <Separator />
-                        <p class="text-xs xl:text-sm text-gray-400 leading-snug">
+                        <p class="text-xs xl:text-sm text-gray-400 ">
                             "Level: "
                             {if skill_specs.level_modifier > 0 {
                                 view! {
@@ -187,7 +187,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <Separator />
-                        <p class="text-xs xl:text-sm italic text-gray-400 leading-snug">
+                        <p class="text-xs xl:text-sm italic text-gray-400 ">
                             {skill_specs.base.description.clone()}
                         </p>
                     }
@@ -656,7 +656,7 @@ where
 #[component]
 pub fn EffectLi(children: Children) -> impl IntoView {
     view! {
-        <li class="text-xs xl:text-sm text-violet-200 leading-snug whitespace-pre-line">
+        <li class="text-xs xl:text-sm text-violet-200  whitespace-pre-line">
             {children()}
         </li>
     }
