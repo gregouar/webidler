@@ -377,10 +377,7 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
 
     view! {
-        <div
-            class="text-[13px] "
-            title=format!("Sent at {}", format_datetime(msg.sent_at))
-        >
+        <div class="text-sm" title=format!("Sent at {}", format_datetime(msg.sent_at))>
             <span
                 class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
                 on:click=move |_| {

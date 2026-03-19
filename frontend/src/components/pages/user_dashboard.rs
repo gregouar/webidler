@@ -150,7 +150,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                     </a>
                 </div>
 
-                <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight font-display">
+                <h1 class="text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight font-display">
                     "Welcome, " {move || username.get()}"!"
                 </h1>
 
