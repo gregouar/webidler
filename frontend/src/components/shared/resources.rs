@@ -16,7 +16,7 @@ pub fn ResourceIcon(
 ) -> impl IntoView {
     let tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 w-[20vw] whitespace-normal">
+            <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
                 <div class="font-semibold text-white">{name}</div>
                 <div class="text-sm text-zinc-300">{description}</div>
             </div>

@@ -9,7 +9,7 @@ pub fn BossAreaIcon() -> impl IntoView {
             position=StaticTooltipPosition::Bottom
             tooltip=|| {
                 view! {
-                    <div class="flex flex-col space-y-1 w-[20vw] whitespace-normal">
+                    <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
                         <div class="font-semibold text-white">"Boss Area"</div>
                         <div class="text-sm text-zinc-300">
                             "Defeat the Boss Minions, then fight the Boss repeatedly for a chance at unique rewards."
@@ -44,7 +44,7 @@ pub fn CrucibleAreaIcon() -> impl IntoView {
             position=StaticTooltipPosition::Bottom
             tooltip=|| {
                 view! {
-                    <div class="flex flex-col space-y-1 w-[20vw] whitespace-normal">
+                    <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
                         <div class="font-semibold text-white">"Crucible Area"</div>
                         <div class="text-sm text-zinc-300">
                             "Enter to prove your might and climb the leaderboard. No power shards may be earned. Progress resets at every major update."

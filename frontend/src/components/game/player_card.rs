@@ -286,7 +286,7 @@ pub fn PlayerCard() -> impl IntoView {
                                 position=StaticTooltipPosition::Bottom
                                 tooltip=move || {
                                     view! {
-                                        <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                                        <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                                             <span class="font-semibold text-white">
                                                 {"Mana Reserved"}
                                             </span>
@@ -380,7 +380,7 @@ fn BuySkillButton() -> impl IntoView {
 
     let buy_skill_cost_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                 <span class="font-semibold text-white">{"Buy Cost"}</span>
                 <span class="text-zinc-300">
                     <Number class:font-semibold value=buy_skill_cost />
@@ -629,7 +629,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let cost_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                 <span class="font-semibold text-white">{"Upgrade Cost"}</span>
                 <span class="text-zinc-300">
                     <Number class:font-semibold value=level_up_cost />

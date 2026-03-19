@@ -485,7 +485,7 @@ pub fn NodeTooltipContent(
 
     let starting_node_text = (node_specs.root_node).then(|| {
         view! {
-            <ul class="list-none space-y-1">
+            <ul class="list-none xl:space-y-1">
                 <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>
             </ul>
             <Separator />
@@ -495,7 +495,7 @@ pub fn NodeTooltipContent(
         is_locked().then(|| {
             view! {
                 <Separator />
-                <ul class="list-none space-y-1">
+                <ul class="list-none xl:space-y-1">
                     <li class="text-red-500 text-sm leading-snug">"Locked"</li>
                 </ul>
             }
@@ -508,7 +508,7 @@ pub fn NodeTooltipContent(
                 {(node_specs.effects.is_empty() && node_specs.triggers.is_empty())
                     .then(|| {
                         view! {
-                            <ul class="list-none space-y-1">
+                            <ul class="list-none xl:space-y-1">
                                 <li class="text-sm text-gray-400 leading-snug italic">"Empty"</li>
                             </ul>
                         }
@@ -546,7 +546,7 @@ pub fn NodeTooltipContent(
                 Some(
                     view! {
                         <Separator />
-                        <p class="text-sm text-gray-400 leading-snug">
+                        <p class="text-xs xl:text-sm text-gray-400 leading-snug">
                             "Level: " <span class="text-white">{node_level}</span>
                             {max_upgrade_level
                                 .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
@@ -591,14 +591,14 @@ pub fn NodeTooltipContent(
     };
 
     view! {
-        <strong class="text-lg font-bold text-teal-300">
-            <ul class="list-none space-y-1 mb-2">
+        <strong class="text-sm xl:text-base font-bold text-teal-300 font-display">
+            <ul class="list-none xl:space-y-1 mb-2">
                 <li class="leading-snug whitespace-pre-line">{node_specs.name.clone()}</li>
             </ul>
         </strong>
         <Separator />
         {starting_node_text}
-        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
+        <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
         {socket_text}
         {locked_text}
         {upgrade_text}

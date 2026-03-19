@@ -884,7 +884,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         </CardInset>
 
         <div>"Result:"</div>
-        <CardInset class="space-y-1">
+        <CardInset class="xl:space-y-1">
             {move || {
                 let node_specs = Arc::new(node_specs.get());
                 view! { <NodeTooltipContent node_specs node_level show_upgrade=true /> }

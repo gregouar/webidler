@@ -175,8 +175,8 @@ pub fn ItemTooltipContent(
                     )
                 }
                 _ => None,
-            }} <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1 mb-2">
+            }} <strong class=format!("text-sm xl:text-base font-bold  font-display {}", name_color)>
+                <ul class="list-none xl:space-y-1 mb-2">
                     <li class="leading-snug whitespace-pre-line">
                         {item_specs.modifiers.name.clone()}
                     </li>
@@ -192,7 +192,7 @@ pub fn ItemTooltipContent(
                     }}
 
                 </ul>
-            </strong> <Separator /> <ul class="list-none space-y-1">
+            </strong> <Separator /> <ul class="list-none xl:space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
@@ -204,9 +204,11 @@ pub fn ItemTooltipContent(
                 .then(|| {
                     view! {
                         <Separator />
-                        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects}{triggers}</ul>
+                        <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                            {effects}{triggers}
+                        </ul>
                     }
-                })} <Separator /> <ul class="list-none space-y-1">
+                })} <Separator /> <ul class="list-none xl:space-y-1">
                 <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
                     "Required Power Level: "
                     <span class=move || {

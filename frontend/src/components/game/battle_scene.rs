@@ -153,7 +153,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     {move || {
                         game_context.area_specs.read().boss.then(|| view! { <BossAreaIcon /> })
                     }} <p class=" text-lg xl:text-2xl font-bold">
-                        <span class="[font-variant:small-caps]">
+                        <span class="[font-variant:small-caps] font-display">
                             {move || game_context.area_specs.read().name.clone()}
                         </span>
                         " — "

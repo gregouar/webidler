@@ -100,7 +100,7 @@ fn LeaderboardContent() -> impl IntoView {
                                                                         href=format!("/view-character/{}", &entry.character_name)
                                                                         underline=false
                                                                     >
-                                                                        <span class="text-white font-semibold text-lg">
+                                                                        <span class="text-white font-semibold text-lg font-display">
                                                                             {entry.character_name.clone()}
                                                                         </span>
                                                                     </ALink>

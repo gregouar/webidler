@@ -370,7 +370,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let title_style = match specs.rarity {
         MonsterRarity::Normal => "",
         MonsterRarity::Champion => "champion-title",
-        MonsterRarity::Boss => "boss-title",
+        MonsterRarity::Boss => "boss-title xl:text-base font-display",
     };
 
     let x_size = specs.character_specs.size.get_xy_size().0;
@@ -468,7 +468,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
     let is_armored = specs.armor.iter().any(|(_, value)| **value > 0.0);
     let armored_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Armored"}</span>
                 {DamageType::iter()
                     .filter_map(|damage_type| {
@@ -497,7 +497,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         .any(|(_, chance)| chance.value.get() > 0.0);
     let shielded_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Shielded"}</span>
                 {[SkillType::Attack, SkillType::Spell]
                     .into_iter()
@@ -546,7 +546,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         .any(|(_, chance)| chance.value.get() > 0.0);
     let evasive_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Evasive"}</span>
                 {DamageType::iter()
                     .filter_map(|damage_type| {
@@ -605,7 +605,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
 
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Resilient"}</span>
 
                 {grouped
@@ -664,7 +664,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
     let is_regenerating = *specs.life_regen > 0.0;
     let regenerating_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs text-zinc-300">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
                     <span class="font-semibold">{format!("{:.1}%", *specs.life_regen * 0.1)}</span>

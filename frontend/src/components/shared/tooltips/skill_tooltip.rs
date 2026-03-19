@@ -89,8 +89,8 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         shadow-md shadow-violet-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         text-center
         ">
-            <strong class="text-base xl:text-lg font-bold text-violet-300">
-                <ul class="list-none space-y-1 mb-2">
+            <strong class="text-sm xl:text-base font-bold text-violet-300 font-display">
+                <ul class="list-none xl:space-y-1 mb-2">
                     <li class="leading-snug whitespace-pre-line">
                         {skill_specs.base.name.clone()}
                     </li>
@@ -142,7 +142,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     }
                 })}
 
-            <ul class="list-none space-y-1 text-xs xl:text-sm">
+            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
                 {targets_lines}{trigger_lines}
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>

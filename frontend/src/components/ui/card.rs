@@ -30,7 +30,7 @@ pub fn CardTitle(children: Children) -> impl IntoView {
     view! {
         <span class="
         text-shadow-md/50 shadow-gray-950 text-amber-200 font-semibold
-        text-base xl:text-xl 
+        text-base xl:text-xl font-display
         ">{children()}</span>
     }
 }

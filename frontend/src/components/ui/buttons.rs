@@ -9,6 +9,7 @@ pub fn MenuButton(
     view! {
         <button
             class="btn
+            tracking-wide
             text-white font-bold text-shadow shadow-neutral-950
             py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
             text-sm xl:text-base 
@@ -39,6 +40,7 @@ pub fn MenuButtonRed(
     view! {
         <button
             class="btn
+            tracking-wide
             text-red-300 font-bold text-shadow shadow-neutral-950
             py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
             text-sm xl:text-base 
@@ -67,6 +69,7 @@ pub fn FancyButton(
     view! {
         <button
             class="btn
+            tracking-wide
             text-white font-bold text-shadow shadow-neutral-950
             px-2 xl:px-3 rounded shadow-md
             text-sm xl:text-base 
@@ -118,6 +121,7 @@ pub fn Toggle(
             class=move || {
                 format!(
                     "btn
+                    tracking-wide
                     px-2 xl:px-3
                     text-sm xl:text-base 
                     font-bold text-shadow shadow-neutral-950
@@ -180,6 +184,7 @@ pub fn TabButton(
             class=move || {
                 format!(
                     "btn
+                    tracking-wide
                     flex-1
                     px-2 xl:px-3 py-1 xl:py-2 
                     text-sm xl:text-base 
