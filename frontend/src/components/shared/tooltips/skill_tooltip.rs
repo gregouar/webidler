@@ -25,6 +25,7 @@ use crate::components::{
             self, damage_over_time_type_value_str, formatted_effects_list, min_max_str,
             stat_skill_effect_type_str, status_type_str,
         },
+        item_tooltip,
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
             format_trigger_modifier_per, trigger_text,
@@ -658,9 +659,13 @@ pub fn EffectLi(children: Children) -> impl IntoView {
 
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
     let source_description = match skill_modifier.source {
-        ModifierEffectSource::ItemStats { slot, item_stats } => {
+        ModifierEffectSource::ItemStats {
+            slot,
+            category,
+            item_stats,
+        } => {
             format!(
-                "Per {}{} on equipped {}:",
+                "Per {}{} on equipped {}{}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
                     ItemStatsSource::Armor => " Armor".to_string(),
@@ -678,6 +683,10 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                     ),
                     ItemStatsSource::Range => " Range".into(),
                     ItemStatsSource::Shape => " Shape".into(),
+                },
+                match category {
+                    Some(category) => item_tooltip::item_category_str(category),
+                    None => "",
                 },
                 match slot {
                     Some(slot) => match slot {

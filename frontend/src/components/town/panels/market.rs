@@ -11,7 +11,7 @@ use shared::{
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::{StatEffect, StatSkillEffectType, StatType},
+        stat_effect::{StatEffect, StatSkillEffectType, StatStatusType, StatType},
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -95,43 +95,45 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         >
                             "Buy"
                         </TabButton>
-                        {if disable_sell.get() {
-                            view! {
-                                <StaticTooltip
-                                    tooltip=move || {
-                                        disable_sell
-                                            .get()
-                                            .then_some({
-                                                "Buy a Market Stash with Gold to sell on the Market"
+                        {move || {
+                            if disable_sell.get() {
+                                view! {
+                                    <StaticTooltip
+                                        tooltip=move || {
+                                            disable_sell
+                                                .get()
+                                                .then_some({
+                                                    "Buy a Market Stash with Gold to sell on the Market"
+                                                })
+                                        }
+                                        position=StaticTooltipPosition::Bottom
+                                        class:flex-1
+                                        class:flex
+                                    >
+                                        <TabButton
+                                            is_active=Signal::derive(move || {
+                                                active_tab.get() == MarketTab::Sell
                                             })
-                                    }
-                                    position=StaticTooltipPosition::Bottom
-                                    class:flex-1
-                                    class:flex
-                                >
+                                            disabled=disable_sell
+                                        >
+                                            "Sell"
+                                        </TabButton>
+                                    </StaticTooltip>
+                                }
+                                    .into_any()
+                            } else {
+                                view! {
                                     <TabButton
                                         is_active=Signal::derive(move || {
                                             active_tab.get() == MarketTab::Sell
                                         })
-                                        disabled=disable_sell
+                                        on:click=move |_| { switch_tab(MarketTab::Sell) }
                                     >
                                         "Sell"
                                     </TabButton>
-                                </StaticTooltip>
+                                }
+                                    .into_any()
                             }
-                                .into_any()
-                        } else {
-                            view! {
-                                <TabButton
-                                    is_active=Signal::derive(move || {
-                                        active_tab.get() == MarketTab::Sell
-                                    })
-                                    on:click=move |_| { switch_tab(MarketTab::Sell) }
-                                >
-                                    "Sell"
-                                </TabButton>
-                            }
-                                .into_any()
                         }}
 
                         <TabButton
@@ -1168,14 +1170,14 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damage_physical"
                         label="Min Physical Damage:"
                         input_type="number"
-                        placeholder="Minimum Bleed Damage"
+                        placeholder="Minimum Physical Damage"
                         bind=item_damage_physical
                     />
                     <ValidatedInput
                         id="item_damage_fire"
                         label="Min Fire Damage:"
                         input_type="number"
-                        placeholder="Minimum Burn Damage"
+                        placeholder="Minimum Fire Damage"
                         bind=item_damage_fire
                     />
                     <ValidatedInput
@@ -1189,7 +1191,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damage_storm"
                         label="Min Storm Damage:"
                         input_type="number"
-                        placeholder="Minimum Weather Damage"
+                        placeholder="Minimum Storm Damage"
                         bind=item_damage_storm
                     />
                 </div>
@@ -1315,7 +1317,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 }
 
 #[component]
-fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl IntoView {
+pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl IntoView {
     let available_stats = vec![
         (StatType::Life, Modifier::Increased),
         (StatType::Life, Modifier::Flat),
@@ -1391,8 +1393,16 @@ fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl I
         ),
         (
             StatType::StatusPower {
-                status_type: None,
+                status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
                 skill_type: None,
+                min_max: None,
+            },
+            Modifier::More,
+        ),
+        (
+            StatType::StatusPower {
+                status_type: None,
+                skill_type: Some(SkillType::Curse),
                 min_max: None,
             },
             Modifier::Increased,

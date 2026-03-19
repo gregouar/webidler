@@ -1,4 +1,5 @@
 use axum::body::Bytes;
+use chrono::Utc;
 use std::sync::{Arc, Mutex};
 use tokio::sync::{broadcast, mpsc};
 use uuid::Uuid;
@@ -102,8 +103,36 @@ impl MessagesProcessor {
                     (msg.content, msg.channel, None)
                 };
 
-            let content = if self.profanities_checker.contains_profanities(&content) {
+            let content = if let Some(profanity) = self.profanities_checker.find_profanity(&content)
+            {
                 tracing::warn!(target: "chat", channel = ?msg.channel, user_id = %msg.user_id.unwrap_or_default(), content = %&content, "moderated message");
+                // send_direct_error(
+                //     &self.chat_state,
+                //     session_id,
+                //     &format!(
+                //         "Your message has been redacted because it contains the profanity '{}': {}",
+                //         profanity, content
+                //     ),
+                // )
+                // .await;
+
+                send_direct_message(
+                    &self.chat_state,
+                    session_id,
+                    ChatMessage {
+                        channel: ChatChannel::System,
+                        sent_at: Utc::now(),
+                        user_id: None,
+                        username: None,
+                        content: ChatContent::try_new(format!(
+                            "Your message has been redacted because it contains the profanity '{}': \"{}\"",
+                            profanity, content
+                        )).unwrap_or_default(),
+                        linked_item: None,
+                    }
+                    .into(),
+                )
+                .await;
                 ChatContent::try_new("***").unwrap_or_default()
             } else {
                 tracing::info!(target: "chat", channel = ?msg.channel, user_id = %msg.user_id.unwrap_or_default(), content = %&content, "message");

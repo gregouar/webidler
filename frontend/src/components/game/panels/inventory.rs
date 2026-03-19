@@ -3,12 +3,15 @@ use std::sync::Arc;
 
 use shared::{
     data::{item::ItemSlot, player::EquippedSlot},
-    messages::client::{EquipItemMessage, FilterLootMessage, SellItemsMessage, UnequipItemMessage},
+    messages::client::{EquipItemMessage, SellItemsMessage, UnequipItemMessage},
 };
 
 use crate::components::{
     game::{game_context::GameContext, websocket::WebsocketContext},
-    shared::inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+    shared::{
+        inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+        loot_filter::LootFilterPanel,
+    },
     ui::confirm::ConfirmContext,
 };
 
@@ -19,17 +22,20 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let confirm_context = expect_context::<ConfirmContext>();
 
     // Loot filter
-    Effect::new({
-        let conn = conn.clone();
-        move || {
-            conn.send(
-                &FilterLootMessage {
-                    preferred_loot: game_context.loot_preference.get(),
-                }
-                .into(),
-            );
-        }
-    });
+    // Effect::new({
+    //     let conn = conn.clone();
+    //     move || {
+    //         conn.send(
+    //             &FilterLootMessage {
+    //                 preferred_loot: game_context.loot_preference.get(),
+    //             }
+    //             .into(),
+    //         );
+    //     }
+    // });
+
+    // let open_loot_filter = { move || {} };
+    let open_loot_filter = RwSignal::new(false);
 
     // Equip
     let try_equip = {
@@ -124,7 +130,8 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     let inventory_config = InventoryConfig {
         player_inventory: game_context.player_inventory,
-        loot_preference: Some(game_context.loot_preference),
+        // loot_preference: Some(game_context.loot_preference),
+        on_loot_filter: Some(Arc::new(move || open_loot_filter.set(true))),
         on_unequip: Some(Arc::new(try_unequip)),
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
@@ -133,5 +140,19 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         equip_filter: Signal::derive(move || InventoryEquipFilter::Slot),
     };
 
-    view! { <Inventory open=open inventory=inventory_config /> }
+    Effect::new(move || {
+        if !open.get() {
+            open_loot_filter.set(false);
+        }
+    });
+
+    view! {
+        <Inventory open=open inventory=inventory_config />
+        <LootFilterPanel
+            open=open_loot_filter
+            loot_filter=game_context.loot_filter
+            character_id=game_context.character_id.get_untracked()
+            character_name=game_context.player_specs.read_untracked().character_specs.name.clone()
+        />
+    }
 }

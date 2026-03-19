@@ -182,7 +182,7 @@
 
   {
     "name": "of Caution",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 1,
@@ -206,7 +206,7 @@
   },
   {
     "name": "of Carefulness",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 2,
@@ -230,7 +230,7 @@
   },
   {
     "name": "of Attention",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 3,
@@ -254,7 +254,7 @@
   },
   {
     "name": "of Watchfulness",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 4,
@@ -278,7 +278,7 @@
   },
   {
     "name": "of Deliberation",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 5,
@@ -302,7 +302,7 @@
   },
   {
     "name": "of Focus",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 6,
@@ -326,7 +326,7 @@
   },
   {
     "name": "of Calculation",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 7,
@@ -350,7 +350,7 @@
   },
   {
     "name": "of Discipline",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
@@ -374,7 +374,7 @@
   },
   {
     "name": "of Control",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
@@ -398,7 +398,7 @@
   },
   {
     "name": "of Reckoning",
-    "family": "heavy_attack_damage",
+    "family": "inc_attack_damage",
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
@@ -604,7 +604,7 @@
 
   {
     "name": "of Confidence",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 1,
@@ -628,7 +628,7 @@
   },
   {
     "name": "of Presumption",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 2,
@@ -652,7 +652,7 @@
   },
   {
     "name": "of Vanity",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 3,
@@ -676,7 +676,7 @@
   },
   {
     "name": "of Arrogance",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 4,
@@ -700,7 +700,7 @@
   },
   {
     "name": "of Conceit",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 5,
@@ -724,7 +724,7 @@
   },
   {
     "name": "of Audacity",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 6,
@@ -748,7 +748,7 @@
   },
   {
     "name": "of Insolence",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 7,
@@ -772,7 +772,7 @@
   },
   {
     "name": "of Pride",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 8,
@@ -796,7 +796,7 @@
   },
   {
     "name": "of Ego",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 9,
@@ -820,7 +820,7 @@
   },
   {
     "name": "of Hubris",
-    "family": "costly_power",
+    "family": "inc_spell_damage",
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 10,

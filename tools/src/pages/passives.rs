@@ -16,6 +16,7 @@ use frontend::components::{
         input::{Input, ValidatedInput},
         pannable::Pannable,
     },
+    utils::file_loader::{save_json, use_json_loader},
 };
 use leptos::{html::*, prelude::*};
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
@@ -27,11 +28,7 @@ use strum::IntoEnumIterator;
 
 use crate::{
     header::HeaderMenu,
-    utils::{
-        file_loader::{save_json, use_json_loader},
-        history_tracker::HistoryTracker,
-        json_editor::JsonEditor,
-    },
+    utils::{history_tracker::HistoryTracker, json_editor::JsonEditor},
 };
 
 #[derive(Serialize)]

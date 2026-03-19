@@ -53,11 +53,19 @@ impl ProfanitiesChecker {
         })
     }
 
-    pub fn contains_profanities(&self, content: &str) -> bool {
+    pub fn find_profanity(&self, content: &str) -> Option<String> {
         let weak_normalized = self.weak_normalize(content);
         let strong_normalized = self.strong_normalize(&weak_normalized);
-        self.strong_matcher.is_match(&strong_normalized)
-            || self.weak_matcher.is_match(&weak_normalized)
+
+        if let Some(m) = self.strong_matcher.find(&strong_normalized) {
+            return Some(strong_normalized[m.start()..m.end()].to_string());
+        }
+
+        if let Some(m) = self.weak_matcher.find(&weak_normalized) {
+            return Some(weak_normalized[m.start()..m.end()].to_string());
+        }
+
+        None
     }
 
     pub fn weak_normalize(&self, content: &str) -> String {

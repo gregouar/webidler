@@ -149,9 +149,9 @@ fn handle_client_message(
                 )
             }
         }
-        ClientMessage::FilterLoot(m) => {
-            game_data.player_controller.preferred_loot = m.preferred_loot;
-        }
+        // ClientMessage::FilterLoot(m) => {
+        //     game_data.player_controller.preferred_loot = m.preferred_loot;
+        // }
         ClientMessage::PickupLoot(m) => {
             if m.sell {
                 if let Some(item_specs) =
@@ -165,7 +165,6 @@ fn handle_client_message(
                     );
                 }
             } else if let Err(e) = loot_controller::pickup_loot(
-                &game_data.player_controller,
                 game_data.player_inventory.mutate(),
                 game_data.queued_loot.mutate(),
                 m.loot_identifier,

@@ -1,12 +1,14 @@
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
+use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 use crate::data::{
     chance::Chance,
     item_affix::AffixType,
     modifier::ModifiableValue,
+    skill::DamageType,
     trigger::TriggerSpecs,
     values::{NonNegative, Percent},
 };
@@ -227,6 +229,22 @@ pub struct WeaponSpecs {
 
     pub crit_chance: Chance,
     pub crit_damage: ModifiableValue<f64>,
+}
+
+impl WeaponSpecs {
+    pub fn average_damages(&self) -> f64 {
+        DamageType::iter()
+            .map(|damage_type| self.average_damage_type(damage_type))
+            .sum()
+    }
+
+    pub fn average_damage_type(&self, damage_type: DamageType) -> f64 {
+        self
+                .damage.get(&damage_type)
+                .map(|value| 1.0 / self.cooldown.get()
+            // TODO: Lucky?
+            * (1.0 + *self.crit_damage * self.crit_chance.value.get() as f64 * 0.0001)*(value.min.get() + value.max.get()) * 0.5).unwrap_or_default()
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]

@@ -20,6 +20,7 @@ use crate::components::{
         buttons::MenuButton,
         card::{Card, CardHeader, CardInset},
         confirm::ConfirmContext,
+        input::Input,
         menu_panel::MenuPanel,
         pannable::Pannable,
         toast::*,
@@ -30,16 +31,36 @@ use crate::components::{
 #[component]
 pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+
+    let search_node = RwSignal::new(None);
+    let search_node_ref = NodeRef::<leptos::html::Input>::new();
+
+    Effect::new({
+        let events_context: EventsContext = expect_context();
+        move || {
+            if events_context.key_pressed(Key::Ctrl)
+                && events_context.key_pressed(Key::Character('f'))
+                && let Some(input) = search_node_ref.get()
+            {
+                input.focus().unwrap();
+                input.select();
+            }
+        }
+    });
+
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
                 <Card>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
-
-                        <div class="flex-1" />
-
-                        <div class="flex items-center gap-2 mx-2">
-                            <ExportButton />
+                        <div class="flex px-2 xl:px-4">
+                            <Input
+                                node_ref=search_node_ref
+                                id="search_node"
+                                input_type="text"
+                                placeholder="Search for node..."
+                                bind=search_node
+                            />
                         </div>
 
                         <div class="flex-1" />
@@ -54,14 +75,18 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="flex-1" />
 
                         <div class="flex items-center gap-2 mx-2">
-                            <AutoButton />
+                            <ExportButton />
                         </div>
 
                         <div class="flex-1" />
 
+                        <div class="flex items-center gap-2 mx-2">
+                            <AutoButton />
+                        </div>
+
                     </CardHeader>
                     <CardInset pad=false>
-                        <PassiveSkillTree />
+                        <PassiveSkillTree search_node />
                     </CardInset>
                 </Card>
             </div>
@@ -195,7 +220,7 @@ fn ExportButton() -> impl IntoView {
 }
 
 #[component]
-fn PassiveSkillTree() -> impl IntoView {
+fn PassiveSkillTree(search_node: RwSignal<Option<String>>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let points_available =
@@ -217,7 +242,12 @@ fn PassiveSkillTree() -> impl IntoView {
                 key=|(id, _)| *id
                 let((id, node))
             >
-                <InGameNode node_id=id node_specs=node points_available=points_available />
+                <InGameNode
+                    node_id=id
+                    node_specs=node
+                    points_available=points_available
+                    search_node
+                />
             </For>
         </Pannable>
     }
@@ -228,6 +258,7 @@ fn InGameNode(
     node_id: PassiveNodeId,
     node_specs: PassiveNodeSpecs,
     points_available: Memo<bool>,
+    search_node: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context: GameContext = expect_context();
     let node_level = Memo::new(move |_| {
@@ -306,6 +337,7 @@ fn InGameNode(
             on_click=purchase
             on_right_click=|| {}
             show_upgrade=false
+            search_node
         />
     }
 }

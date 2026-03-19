@@ -183,7 +183,7 @@ pub fn skill_status_type_str(
     match (skill_type, status_type) {
         (None, None) => "Effects over Time".to_string(),
         (Some(SkillType::Blessing | SkillType::Curse), None) => {
-            format!("{}", skill_type_str(skill_type))
+            skill_type_str(skill_type).to_string()
         }
         (skill_type, status_type) => format!(
             "{}{}",
@@ -244,6 +244,9 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
                         "Decreased {} Status Effects",
                         format_multiplier_stat_name(stat)
                     )
+                }
+                (Some(stat), None) => {
+                    format!("{} Status Effects", format_multiplier_stat_name(stat))
                 }
                 (_, Some(true)) => "Negative Status Effects".to_string(),
                 (_, Some(false)) => "Positive Status Effects".to_string(),
@@ -671,15 +674,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Damage {
-            min_max: Some(_), ..
-        } => "".to_string(),
-        StatType::Damage {
             skill_type,
             damage_type,
-            min_max: None,
+            min_max,
         } => format!(
-            "{} {}Damage{}",
+            "{} {}{}Damage{}",
             format_adds_removes(value, false, ""),
+            min_max_str(*min_max),
             damage_type_str(*damage_type),
             to_skill_type_str(*skill_type)
         ),
@@ -721,7 +722,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             format!(
                 "{} {}{}{}",
-                format_adds_removes(value, false, " to"),
+                format_adds_removes(
+                    value,
+                    false,
+                    if matches!(status_type, Some(StatStatusType::StatModifier { .. })) {
+                        "% to"
+                    } else {
+                        " to"
+                    }
+                ),
                 min_max_str(*min_max),
                 skill_type_str(*skill_type),
                 status_type_value_str(status_type.as_ref())
@@ -928,6 +937,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                             lucky_chance: Default::default(),
                         },
                         target: repeat.target,
+                        repeat_cooldown: Default::default(), // TODO?
                     })
                 })
                 .unwrap_or_default();

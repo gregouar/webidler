@@ -13,7 +13,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 10
+        "value": 20
       },
       {
         "scope": "Local",
@@ -49,7 +49,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 12
+        "value": 22
       },
       {
         "scope": "Local",
@@ -85,7 +85,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 15
+        "value": 25
       },
       {
         "scope": "Local",
@@ -121,7 +121,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 18
+        "value": 28
       },
       {
         "scope": "Local",
@@ -157,7 +157,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 20
+        "value": 30
       },
       {
         "scope": "Local",
@@ -193,7 +193,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 22
+        "value": 32
       },
       {
         "scope": "Local",
@@ -229,7 +229,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 25
+        "value": 35
       },
       {
         "scope": "Global",
@@ -259,7 +259,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 28
+        "value": 38
       },
       {
         "scope": "Global",
@@ -289,7 +289,7 @@
         "scope": "Local",
         "stat": { "Evade": null },
         "modifier": "Flat",
-        "value": 30
+        "value": 40
       },
       {
         "scope": "Global",

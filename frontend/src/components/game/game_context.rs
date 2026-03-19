@@ -9,7 +9,7 @@ use leptos::prelude::{
 use shared::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
-    item::{ItemCategory, ItemSpecs},
+    item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
@@ -18,8 +18,12 @@ use shared::data::{
     user::UserCharacterId,
 };
 
-use crate::{components::game::local_stats::GameLocalStats, utils};
+use crate::{
+    components::{game::local_stats::GameLocalStats, shared::loot_filter::LootFilter},
+    utils,
+};
 
+// TODO: Should I split this in multiple contexts?
 #[derive(Clone, Copy)]
 pub struct GameContext {
     pub started: RwSignal<bool>,
@@ -59,8 +63,8 @@ pub struct GameContext {
     pub open_skills: RwSignal<bool>,
     pub open_end_quest: RwSignal<bool>,
 
-    pub loot_preference: RwSignal<Option<ItemCategory>>,
     pub last_skills_bought: RwSignal<IndexSet<String>>,
+    pub loot_filter: RwSignal<LootFilter>,
 }
 
 impl Default for GameContext {
@@ -106,8 +110,8 @@ impl GameContext {
             open_skills: RwSignal::new(false),
             open_end_quest: RwSignal::new(false),
 
-            loot_preference: RwSignal::new(None),
             last_skills_bought: RwSignal::new(Default::default()),
+            loot_filter: Default::default(),
         }
     }
 }

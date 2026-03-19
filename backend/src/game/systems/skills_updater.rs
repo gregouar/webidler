@@ -8,8 +8,8 @@ use shared::data::{
     modifier::Modifier,
     player::{CharacterSpecs, PlayerInventory},
     skill::{
-        DamageType, ItemStatsSource, ModifierEffectSource, SkillEffect, SkillEffectType,
-        SkillSpecs, SkillState, SkillType,
+        DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect, SkillEffect,
+        SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
@@ -30,6 +30,29 @@ pub fn update_skills_states(
                 (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
         }
         skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
+    }
+}
+
+pub fn update_repeated_skill_effects(
+    elapsed_time: Duration,
+    repeated_skill_effectd: &mut [RepeatedSkillEffect],
+) {
+    for repeated_skill_effect in repeated_skill_effectd.iter_mut() {
+        if repeated_skill_effect
+            .targets_group
+            .repeat
+            .repeat_cooldown
+            .get()
+            > 0.0
+        {
+            repeated_skill_effect.elapsed_cooldown += (elapsed_time.as_secs_f64()
+                / repeated_skill_effect
+                    .targets_group
+                    .repeat
+                    .repeat_cooldown
+                    .get())
+            .into();
+        }
     }
 }
 
@@ -185,19 +208,25 @@ fn compute_skill_modifier_effects<'a>(
         .modifier_effects
         .iter()
         .filter_map(|modifier_effect| match &modifier_effect.source {
-            ModifierEffectSource::ItemStats { slot, item_stats } => {
-                Some((modifier_effect, *slot, item_stats))
-            }
+            ModifierEffectSource::ItemStats {
+                slot,
+                category,
+                item_stats,
+            } => Some((modifier_effect, *slot, *category, item_stats)),
             _ => None,
         })
-        .flat_map(move |(modifier_effect, slot, item_stats)| {
+        .flat_map(move |(modifier_effect, slot, category, item_stats)| {
             inventory
                 .into_iter()
                 .flat_map(|inv| inv.equipped_items())
                 .filter_map(move |(item_slot, item_specs)| {
                     let mut modifier_effect = modifier_effect.clone();
-                    let base = if slot.unwrap_or(item_slot) == item_slot
-                        || item_specs.base.extra_slots.contains(&item_slot)
+                    let slot = slot.unwrap_or(item_slot);
+
+                    let base = if (slot == item_slot || item_specs.base.extra_slots.contains(&slot))
+                        && category
+                            .map(|category| item_specs.base.categories.contains(&category))
+                            .unwrap_or(true)
                     {
                         match (
                             item_stats,
@@ -399,7 +428,7 @@ pub fn compute_skill_specs_effect<'a>(
                 crit_damage,
                 ..
             } => {
-                for damage_type in DamageType::iter() {
+                for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
                     let value = damage.entry(damage_type).or_default();
 
                     if effect.stat.is_match(&StatType::Damage {

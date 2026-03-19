@@ -1,5 +1,4 @@
 use std::{collections::HashSet, sync::Arc, time::Duration};
-use strum::IntoEnumIterator;
 
 use leptos::{portal::Portal, prelude::*, web_sys};
 use leptos_use::on_click_outside;
@@ -20,7 +19,6 @@ use crate::{
         ui::{
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle},
-            dropdown::SearchableDropdownMenu,
             menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
@@ -47,7 +45,8 @@ pub enum InventoryEquipFilter {
 #[derive(Clone, Default)]
 pub struct InventoryConfig {
     pub player_inventory: RwSignal<PlayerInventory>,
-    pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
+    // pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
+    pub on_loot_filter: Option<Arc<dyn Fn() + Send + Sync>>,
     pub on_unequip: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
     pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
@@ -360,18 +359,31 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                     </span>
                 </div>
 
-                {inventory
-                    .loot_preference
-                    .map(|loot_preference| {
-                        view! {
-                            <div class="flex items-center gap-2">
-                                <span class="hidden xl:inline text-gray-400 text-sm">
-                                    "Loot Preference:"
-                                </span>
-                                <LootFilterDropdown loot_preference />
-                            </div>
-                        }
-                    })}
+                // {inventory
+                // .loot_preference
+                // .map(|loot_preference| {
+                // view! {
+                // <div class="flex items-center gap-2">
+                // <span class="hidden xl:inline text-gray-400 text-sm">
+                // "Loot Preference:"
+                // </span>
+                // <LootFilterDropdown loot_preference />
+                // </div>
+                // }
+                // })}
+
+                {
+                    let on_loot_filter = inventory.on_loot_filter.clone();
+                    on_loot_filter
+                        .map(|on_loot_filter| {
+
+                            view! {
+                                <MenuButton on:click=move |_| on_loot_filter()>
+                                    "Loot Filter"
+                                </MenuButton>
+                            }
+                        })
+                }
 
                 <div class="flex items-center gap-1 xl:gap-2">
                     <SellAllButton inventory=inventory.clone() />
@@ -747,15 +759,15 @@ fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
     })
 }
 
-#[component]
-pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> impl IntoView {
-    let options = std::iter::once(None)
-        .chain(ItemCategory::iter().map(Some))
-        .map(|category| (category, loot_filter_category_to_str(category).into()))
-        .collect();
+// #[component]
+// pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> impl IntoView {
+//     let options = std::iter::once(None)
+//         .chain(ItemCategory::iter().map(Some))
+//         .map(|category| (category, loot_filter_category_to_str(category).into()))
+//         .collect();
 
-    view! { <SearchableDropdownMenu options chosen_option=loot_preference /> }
-}
+//     view! { <SearchableDropdownMenu options chosen_option=loot_preference /> }
+// }
 
 pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
     use ItemCategory::*;

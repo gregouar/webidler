@@ -72,15 +72,16 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <CardInset>
-            {SkillType::iter()
-                .map(move |skill_type| {
-                    let available_skills = available_skills
-                        .read()
-                        .get(&skill_type)
-                        .cloned()
-                        .unwrap_or_default();
-                    view! {
-                        <div class="grid grid-cols-6 xl:grid-cols-6 gap-2 xl:gap-3">
+            {move || {
+                SkillType::iter()
+                    .map(move |skill_type| {
+                        let available_skills = available_skills
+                            .read()
+                            .get(&skill_type)
+                            .cloned()
+                            .unwrap_or_default();
+                        view! {
+                            <div class="grid grid-cols-6 xl:grid-cols-6 gap-2 xl:gap-3">
                     <For
                         each=move || available_skills.clone().into_iter()
                         key=|(skill_id,_)| skill_id.clone()
@@ -102,9 +103,10 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                     }}
                     </For>
                 </div>
-                    }
-                })
-                .collect::<Vec<_>>()}
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            }}
         </CardInset>
 
         <div class="flex items-center justify-center">

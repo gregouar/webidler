@@ -180,25 +180,33 @@ fn compute_armor_specs(
 }
 
 pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {
-    let mut effects = vec![SkillEffect {
-        effect_type: SkillEffectType::FlatDamage {
-            damage: weapon_specs
-                .damage
-                .iter()
-                .filter(|(k, _)| **k != DamageType::Poison)
-                .map(|(&k, &v)| (k, v))
-                .collect(),
-            crit_chance: weapon_specs.crit_chance,
-            crit_damage: weapon_specs.crit_damage,
-            unblockable: false,
+    let effects = vec![
+        SkillEffect {
+            effect_type: SkillEffectType::FlatDamage {
+                damage: weapon_specs
+                    .damage
+                    .iter()
+                    .filter(|(k, _)| **k != DamageType::Poison)
+                    .map(|(&k, &v)| {
+                        (
+                            k,
+                            ChanceRange {
+                                min: v.min.as_new_base(),
+                                max: v.max.as_new_base(),
+                                lucky_chance: v.lucky_chance.as_new_base(),
+                            },
+                        )
+                    })
+                    .collect(),
+                crit_chance: weapon_specs.crit_chance,
+                crit_damage: weapon_specs.crit_damage,
+                unblockable: false,
+            },
+            success_chance: Chance::new_sure(),
+            ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
         },
-        success_chance: Chance::new_sure(),
-        ignore_stat_effects: Default::default(),
-        conditional_modifiers: Vec::new(),
-    }];
-
-    if let Some(&value) = weapon_specs.damage.get(&DamageType::Poison) {
-        effects.push(SkillEffect {
+        SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
                 duration: ChanceRange {
                     min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
@@ -209,7 +217,11 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                     status_type: StatusSpecs::DamageOverTime {
                         damage_type: DamageType::Poison,
                     },
-                    value,
+                    value: weapon_specs
+                        .damage
+                        .get(&DamageType::Poison)
+                        .copied()
+                        .unwrap_or_default(),
                     cumulate: false,
                     unavoidable: false,
                     replace_on_value_only: false,
@@ -218,8 +230,32 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
             conditional_modifiers: Vec::new(),
-        });
-    }
+        },
+    ];
+
+    // if let Some(&value) = weapon_specs.damage.get(&DamageType::Poison) {
+    //     effects.push(SkillEffect {
+    //         effect_type: SkillEffectType::ApplyStatus {
+    //             duration: ChanceRange {
+    //                 min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+    //                 max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
+    //                 lucky_chance: Default::default(),
+    //             },
+    //             statuses: vec![ApplyStatusEffect {
+    //                 status_type: StatusSpecs::DamageOverTime {
+    //                     damage_type: DamageType::Poison,
+    //                 },
+    //                 value,
+    //                 cumulate: false,
+    //                 unavoidable: false,
+    //                 replace_on_value_only: false,
+    //             }],
+    //         },
+    //         success_chance: Chance::new_sure(),
+    //         ignore_stat_effects: Default::default(),
+    //         conditional_modifiers: Vec::new(),
+    //     });
+    // }
 
     BaseSkillSpecs {
         skill_id: "weapon_attack".to_string(),

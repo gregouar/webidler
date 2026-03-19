@@ -402,6 +402,13 @@ fn StatusIcon(
                     StatType::CritChance(_) => "passives/critical_chance.svg".into(),
                     StatType::CritDamage(_) => "passives/critical_damage.svg".into(),
                     StatType::Speed(_) => "passives/sprint.svg".into(),
+                    StatType::StatusDuration {
+                        status_type:
+                            Some(StatStatusType::DamageOverTime {
+                                damage_type: Some(DamageType::Poison),
+                            }),
+                        ..
+                    } => "passives/ouroboros.svg".into(),
                     StatType::StatusResistance {
                         status_type: Some(StatStatusType::Stun),
                         ..
