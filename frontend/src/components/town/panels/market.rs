@@ -1328,6 +1328,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
         (StatType::Armor(Some(DamageType::Poison)), Modifier::Flat),
         (StatType::Armor(Some(DamageType::Storm)), Modifier::Flat),
+        (StatType::Armor(None), Modifier::Increased),
         (StatType::Evade(None), Modifier::Flat),
         (
             StatType::Damage {
