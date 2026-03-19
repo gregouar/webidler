@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use shared::data::{
-    chance::ChanceRange,
     modifier::Modifier,
     monster::{MonsterRarity, MonsterSpecs},
     player::CharacterSpecs,
@@ -32,7 +31,7 @@ pub struct BaseMonsterSpecs {
     #[serde(default)]
     pub rarity: MonsterRarity,
 
-    pub initiative: ChanceRange<f32>,
+    // pub initiative: ChanceRange<f32>,
     pub power_factor: f64,
 
     #[serde(default)]
@@ -45,7 +44,7 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
             character_specs: specs.character_specs,
             skill_specs: specs.skills.iter().cloned().map(SkillSpecs::init).collect(),
             rarity: specs.rarity,
-            initiative: specs.initiative,
+            // initiative: specs.initiative,
             power_factor: specs.power_factor,
             reward_factor: specs.power_factor,
         };

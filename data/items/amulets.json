@@ -271,5 +271,20 @@
       }
     ],
     "min_area_level": 330
+  },
+  "amulet_8": {
+    "name": "Royal Parure",
+    "icon": "items/royal_parure.webp",
+    "slot": "Amulet",
+    "categories": [ "Jewelry", "Amulet" ],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": 160
+      }
+    ],
+    "min_area_level": 400
   }
 }

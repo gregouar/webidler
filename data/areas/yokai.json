@@ -2,12 +2,11 @@
   "specs": {
     "name": "Spirit Garden",
     "description": "An abandoned garden where spirits linger among lantern light and falling petals. Not all who wander here wear their true face.",
-    "power_level": 70,
+    "power_level": 60,
     "required_level": 300,
-    "item_level_modifier": 110,
+    "item_level_modifier": 120,
     "header_background": "areas/yokai_header.webp",
-    "footer_background": "areas/yokai_footer.webp",
-    "coming_soon": true
+    "footer_background": "areas/yokai_footer.webp"
   },
   "loot_tables": [
     "tier_1.json",
@@ -16,7 +15,8 @@
     "tier_4.json",
     "tier_5.json",
     "tier_6.json",
-    "tier_7.json"
+    "tier_7.json",
+    "tier_8.json"
   ],
   "bosses": [
     {
@@ -37,24 +37,28 @@
       "weight": 1000,
       "spawns": [
         {
-          "monster": "pirate_deckhand.json",
-          "quantity": [1, 2]
+          "monster": "possessed_ashigaru.json",
+          "quantity": [ 1, 2 ]
         },
         {
-          "monster": "pirate_pistol.json",
-          "quantity": [1, 2]
+          "monster": "hososhi.json",
+          "quantity": [ 0, 1 ]
         },
         {
-          "monster": "pirate_lookout.json",
+          "monster": "karakasa_kozo.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "possessed_ashigaru.json",
           "quantity": 1
         },
         {
-          "monster": "pirate_pistol.json",
+          "monster": "hososhi.json",
           "quantity": 1
         },
         {
-          "monster": "pirate_deckhand.json",
-          "quantity": 1
+          "monster": "karakasa_kozo.json",
+          "quantity": 2
         }
       ]
     }

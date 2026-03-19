@@ -13,7 +13,8 @@
     "tier_4.json",
     "tier_5.json",
     "tier_6.json",
-    "tier_7.json"
+    "tier_7.json",
+    "tier_8.json"
   ],
   "bosses": [
     {
@@ -39,7 +40,7 @@
       "spawns": [
         {
           "monster": "bat.json",
-          "quantity": [2, 4]
+          "quantity": [ 2, 4 ]
         }
       ]
     },
@@ -50,11 +51,11 @@
       "spawns": [
         {
           "monster": "rat.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "bat.json",
-          "quantity": [2, 4]
+          "quantity": [ 2, 4 ]
         }
       ]
     },
@@ -65,7 +66,7 @@
       "spawns": [
         {
           "monster": "bat.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "centipede.json",
@@ -73,7 +74,7 @@
         },
         {
           "monster": "bat.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "centipede.json",
@@ -92,11 +93,11 @@
       "spawns": [
         {
           "monster": "rat.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "bat.json",
-          "quantity": [3, 4]
+          "quantity": [ 3, 4 ]
         },
         {
           "monster": "rat.json",
@@ -111,15 +112,15 @@
       "spawns": [
         {
           "monster": "cat_skeleton.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "soot_imp.json",
-          "quantity": [2, 3]
+          "quantity": [ 2, 3 ]
         },
         {
           "monster": "soot_imp_2.json",
-          "quantity": [2, 3]
+          "quantity": [ 2, 3 ]
         },
         {
           "monster": "cat_skeleton.json",
@@ -134,15 +135,15 @@
       "spawns": [
         {
           "monster": "barrel_mimic.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "booze_elemental.json",
-          "quantity": [2, 3]
+          "quantity": [ 2, 3 ]
         },
         {
           "monster": "patron_ghost.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "booze_elemental.json",
@@ -157,15 +158,15 @@
       "spawns": [
         {
           "monster": "haunted_pot.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "bat_fire.json",
-          "quantity": [2, 3]
+          "quantity": [ 2, 3 ]
         },
         {
           "monster": "haunted_lantern.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "bat_fire.json",

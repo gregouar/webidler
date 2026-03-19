@@ -1,0 +1,12 @@
+{
+    "meta": {
+        "enabled": true
+    },
+    "resources": {
+        "monsters": [
+            "hososhi.json",
+            "karakasa_kozo.json",
+            "possessed_ashigaru.json"
+        ]
+    }
+}

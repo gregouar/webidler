@@ -289,5 +289,16 @@
       "block": 27
     },
     "min_area_level": 320
+  },
+  "shield_8": {
+    "name": "Runic Ward",
+    "icon": "items/runic_shield.webp",
+    "slot": "Shield",
+    "categories": [ "Shield" ],
+    "armor_specs": {
+      "armor": 200,
+      "block": 29
+    },
+    "min_area_level": 400
   }
 }

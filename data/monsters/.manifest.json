@@ -2,6 +2,9 @@
   "meta": {
     "enabled": true
   },
+  "folders": [
+    "yokai"
+  ],
   "resources": {
     "monsters": [
       "ashroot_sentinel.json",

@@ -536,5 +536,23 @@
       "crit_damage": 100
     },
     "min_area_level": 320
+  },
+  "weapon_ranged_8": {
+    "name": "Arbalest",
+    "icon": "items/arbalest.webp",
+    "slot": "Weapon",
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "RangedWeapon" ],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [ 31, 35 ]
+      },
+      "crit_chance": 10,
+      "crit_damage": 100
+    },
+    "min_area_level": 400
   }
 }

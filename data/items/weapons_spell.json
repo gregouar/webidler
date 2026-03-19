@@ -386,5 +386,24 @@
       }
     ],
     "min_area_level": 320
+  },
+  "weapon_spell_8": {
+    "name": "Mystical Rod",
+    "icon": "items/mystical_rod.webp",
+    "slot": "Weapon",
+    "categories": [ "SpellWeapon" ],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell"
+          }
+        },
+        "modifier": "More",
+        "value": 160
+      }
+    ],
+    "min_area_level": 400
   }
 }

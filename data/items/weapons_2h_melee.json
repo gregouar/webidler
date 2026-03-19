@@ -349,5 +349,23 @@
       "crit_damage": 200
     },
     "min_area_level": 320
+  },
+  "weapon_2h_8": {
+    "name": "Zweihander",
+    "icon": "items/zweihander.webp",
+    "slot": "Weapon",
+    "extra_slots": [ "Shield" ],
+    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3,
+      "damage": {
+        "Physical": [ 18, 66 ]
+      },
+      "crit_chance": 5,
+      "crit_damage": 200
+    },
+    "min_area_level": 400
   }
 }
