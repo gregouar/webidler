@@ -13,7 +13,7 @@ use shared::data::{
 use crate::components::{
     data_context::DataContext,
     shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
-    ui::Separator,
+    ui::{Separator, number},
 };
 
 use super::effects_tooltip;
@@ -417,7 +417,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
-                    )>{format!("+{:.0}%", *specs.crit_damage)}</span>
+                    )>{format!("+{:.0}%", number::format_number(*specs.crit_damage))}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm leading-snug">
                     "Cooldown: "
