@@ -4,6 +4,10 @@
   "max_life": 10,
   "power_factor": 1.5,
   "armor": { "Physical": 50 },
+  "block": {
+    "Attack": 30,
+    "Spell": 20
+  },
   "skills": [
     {
       "name": "Spear",

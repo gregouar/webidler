@@ -3,10 +3,10 @@
   "portrait": "monsters/crab.webp",
   "max_life": 15,
   "power_factor": 3.0,
-  "initiative": [3.0, 5.0],
+  "initiative": [ 3.0, 5.0 ],
   "armor": { "Physical": 50 },
   "block": {
-    "Attack": 40,
+    "Attack": 30,
     "Spell": 20
   },
   "skills": [
@@ -21,7 +21,7 @@
             {
               "FlatDamage": {
                 "damage": {
-                  "Physical": [3, 5]
+                  "Physical": [ 3, 5 ]
                 }
               }
             }
