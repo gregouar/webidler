@@ -150,7 +150,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                     </a>
                 </div>
 
-                <h1 class="mb-2 text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight">
+                <h1 class="text-shadow-lg/30 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-extrabold leading-none tracking-tight font-display">
                     "Welcome, " {move || username.get()}"!"
                 </h1>
 
@@ -392,8 +392,8 @@ fn CharacterSlot(
                     <MenuButton on:click=try_delete_character>"❌"</MenuButton>
                 </div>
 
-                <div class="space-y-1 overflow-x-hidden text-left">
-                    <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate">
+                <div class="xl:space-y-1 overflow-x-hidden text-left">
+                    <div class="text-lg font-semibold text-shadow-md shadow-gray-950 text-amber-300 truncate font-display">
                         {character.name.clone()}
                     </div>
 

@@ -184,7 +184,7 @@ pub fn PlayerName() -> impl IntoView {
 
     let character_name = move || town_context.character.read().name.clone();
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
+        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
             <span class="font-bold">{character_name}</span>
         </p>
     }
@@ -332,8 +332,8 @@ fn GrindingAreaCard(
                 />
             </div>
 
-            <div class="p-2 xl:p-4 space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
-                <div class="text-base xl:text-lg font-semibold text-amber-200 [font-variant:small-caps]">
+            <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
+                <div class="text-base xl:text-lg font-semibold text-amber-200 [font-variant:small-caps]  font-display">
                     {move || area_specs.read().name.clone()}
                 </div>
 
@@ -513,7 +513,7 @@ pub fn StartGrindPanel(
                                             .disable_shards
                                             .then(|| view! { <CrucibleAreaIcon /> })}
                                         {area_specs.boss.then(|| view! { <BossAreaIcon /> })}
-                                        <span class="[font-variant:small-caps]">
+                                        <span class="[font-variant:small-caps] font-display">
                                             {area_specs.name}
                                         </span>
                                     </div>
@@ -523,8 +523,8 @@ pub fn StartGrindPanel(
 
                                     <Separator />
 
-                                    <ul class="text-xs xl:text-sm text-gray-400 list-none space-y-1">
-                                        <li class="leading-snug ">
+                                    <ul class="text-xs xl:text-sm text-gray-400 list-none xl:space-y-1">
+                                        <li class=" ">
                                             "Power Level Modifier: "
                                             <span class="font-semibold text-white">
                                                 "+"

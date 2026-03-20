@@ -260,6 +260,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
+                            enable_blink=false
                         />
                     </div>
                     <FancyButton disabled=disable_level_up on:click=level_up>
@@ -286,7 +287,7 @@ pub fn PlayerCard() -> impl IntoView {
                                 position=StaticTooltipPosition::Bottom
                                 tooltip=move || {
                                     view! {
-                                        <div class="flex flex-col space-y-1 text-sm max-w-xs">
+                                        <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                                             <span class="font-semibold text-white">
                                                 {"Mana Reserved"}
                                             </span>
@@ -361,7 +362,7 @@ pub fn PlayerName() -> impl IntoView {
     });
 
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
+        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
             <span class="font-bold">
                 {player_name} " — " {move || game_context.player_specs.read().level}
             </span>
@@ -380,7 +381,7 @@ fn BuySkillButton() -> impl IntoView {
 
     let buy_skill_cost_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                 <span class="font-semibold text-white">{"Buy Cost"}</span>
                 <span class="text-zinc-300">
                     <Number class:font-semibold value=buy_skill_cost />
@@ -629,7 +630,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let cost_tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                 <span class="font-semibold text-white">{"Upgrade Cost"}</span>
                 <span class="text-zinc-300">
                     <Number class:font-semibold value=level_up_cost />

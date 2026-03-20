@@ -64,7 +64,7 @@ pub fn PlayerCount() -> impl IntoView {
                                 {if glimpse.is_empty() {
                                     view! {
                                         <div class="absolute bottom-full right-0 mb-2 overflow-auto
-                                        bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 space-y-1 z-50">
+                                        bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 xl:space-y-1 z-50">
                                             <div class="text-gray-400 text-center">
                                                 "No players grinding"
                                             </div>
@@ -74,7 +74,7 @@ pub fn PlayerCount() -> impl IntoView {
                                 } else {
                                     view! {
                                         <div class="absolute w-96 bottom-full right-0 mb-2 overflow-auto
-                                        bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 space-y-1 z-50
+                                        bg-zinc-900 text-white text-xs rounded-lg border border-zinc-700 shadow-lg p-2 xl:space-y-1 z-50
                                         grid grid-cols-2">
                                             {glimpse
                                                 .into_iter()

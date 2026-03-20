@@ -69,8 +69,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
     let stash = town_context.market_stash;
 
     let filters = RwSignal::new(MarketFilters {
-        item_level: Some(town_context.character.read_untracked().max_area_level),
-        // price: ItemPrice::try_new(town_context.character.read_untracked().resource_gems).ok(),
+        max_req_level: Some(town_context.character.read_untracked().max_area_level),
         ..Default::default()
     });
 
@@ -1013,74 +1012,81 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
 #[component]
 pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+
     // Inputs
+    macro_rules! rule_field {
+        ($name:ident) => {
+            let $name = RwSignal::new(None);
 
-    let item_name = RwSignal::new(Some(filters.get_untracked().item_name));
-    Effect::new(move || filters.write().item_name = item_name.get().unwrap_or_default());
+            Effect::new({
+                move |_| {
+                    $name.set(Some(filters.read().$name.clone()));
+                }
+            });
 
-    let item_level = RwSignal::new(Some(filters.get_untracked().item_level));
-    Effect::new(move || filters.write().item_level = item_level.get().unwrap_or_default());
+            Effect::new({
+                move |_| {
+                    if let Some(value) = $name.get()
+                        && filters.read().$name != value
+                    {
+                        filters.write().$name = value;
+                    }
+                }
+            });
+        };
+    }
 
-    let price = RwSignal::new(Some(filters.get_untracked().price));
-    Effect::new(move || filters.write().price = price.get().unwrap_or_default());
-
-    let item_damages = RwSignal::new(Some(filters.get_untracked().item_damages));
-    Effect::new(move || filters.write().item_damages = item_damages.get().unwrap_or_default());
-
-    let item_damage_physical = RwSignal::new(Some(filters.get_untracked().item_damage_physical));
-    Effect::new(move || {
-        filters.write().item_damage_physical = item_damage_physical.get().unwrap_or_default()
-    });
-
-    let item_damage_fire = RwSignal::new(Some(filters.get_untracked().item_damage_fire));
-    Effect::new(move || {
-        filters.write().item_damage_fire = item_damage_fire.get().unwrap_or_default()
-    });
-
-    let item_damage_poison = RwSignal::new(Some(filters.get_untracked().item_damage_poison));
-    Effect::new(move || {
-        filters.write().item_damage_poison = item_damage_poison.get().unwrap_or_default()
-    });
-
-    let item_damage_storm = RwSignal::new(Some(filters.get_untracked().item_damage_storm));
-    Effect::new(move || {
-        filters.write().item_damage_storm = item_damage_storm.get().unwrap_or_default()
-    });
-
-    let item_crit_chance = RwSignal::new(Some(filters.get_untracked().item_crit_chance));
-    Effect::new(move || {
-        filters.write().item_crit_chance = item_crit_chance.get().unwrap_or_default()
-    });
-
-    let item_crit_damage = RwSignal::new(Some(filters.get_untracked().item_crit_damage));
-    Effect::new(move || {
-        filters.write().item_crit_damage = item_crit_damage.get().unwrap_or_default()
-    });
-
-    let item_armor = RwSignal::new(Some(filters.get_untracked().item_armor));
-    Effect::new(move || filters.write().item_armor = item_armor.get().unwrap_or_default());
-
-    let item_block = RwSignal::new(Some(filters.get_untracked().item_block));
-    Effect::new(move || filters.write().item_block = item_block.get().unwrap_or_default());
+    rule_field!(item_name);
+    rule_field!(min_req_level);
+    rule_field!(max_req_level);
+    rule_field!(price);
+    rule_field!(item_damages);
+    rule_field!(item_damage_physical);
+    rule_field!(item_damage_fire);
+    rule_field!(item_damage_poison);
+    rule_field!(item_damage_storm);
+    rule_field!(item_crit_chance);
+    rule_field!(item_crit_damage);
+    rule_field!(item_armor);
+    rule_field!(item_block);
 
     // Dropdowns
 
-    let item_rarity = RwSignal::new(filters.get_untracked().item_rarity);
-    Effect::new(move || filters.write().item_rarity = item_rarity.get());
+    let item_rarity = RwSignal::new(None);
+    Effect::new(move || item_rarity.set(filters.read().item_rarity));
+    Effect::new(move || {
+        let item_rarity = item_rarity.get();
+        if filters.read_untracked().item_rarity != item_rarity {
+            filters.write().item_rarity = item_rarity;
+        }
+    });
     let item_rarity_options = std::iter::once(None)
         .chain(ItemRarity::iter().map(Some))
         .map(|rarity| (rarity, item_rarity_str(rarity).into()))
         .collect();
 
-    let item_category = RwSignal::new(filters.get_untracked().item_category);
-    Effect::new(move || filters.write().item_category = item_category.get());
+    let item_category = RwSignal::new(None);
+    Effect::new(move || item_category.set(filters.read().item_category));
+    Effect::new(move || {
+        let item_category = item_category.get();
+        if filters.read_untracked().item_category != item_category {
+            filters.write().item_category = item_category;
+        }
+    });
     let item_category_options = std::iter::once(None)
         .chain(ItemCategory::iter().map(Some))
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
-    let order_by = RwSignal::new(filters.get_untracked().order_by);
-    Effect::new(move || filters.write().order_by = order_by.get());
+    let order_by = RwSignal::new(Default::default());
+    Effect::new(move || order_by.set(filters.read().order_by));
+    Effect::new(move || {
+        let order_by = order_by.get();
+        if filters.read_untracked().order_by != order_by {
+            filters.write().order_by = order_by;
+        }
+    });
     let order_by_options = MarketOrderBy::iter()
         .map(|category| {
             (
@@ -1107,6 +1113,15 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col gap-2 xl:gap-4 relative p-1 xl:p-4">
+            <div class="flex gap-2 absolute top-3 right-3 z-10">
+                <MenuButton on:click=move |_| {
+                    *filters.write() = MarketFilters {
+                        max_req_level: Some(town_context.character.read_untracked().max_area_level),
+                        stat_filters: filters.read_untracked().stat_filters.clone(),
+                        ..Default::default()
+                    };
+                }>"Reset"</MenuButton>
+            </div>
             <CardTitle>"Main Filters"</CardTitle>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
@@ -1115,23 +1130,32 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_name"
                         label="Item Name:"
                         input_type="text"
-                        placeholder="Enter item name"
+                        placeholder="Item Name substring"
                         bind=item_name
                     />
 
-                    <ValidatedInput
-                        id="item_level"
-                        label="Max Required Level:"
-                        input_type="number"
-                        placeholder="Enter max required level"
-                        bind=item_level
-                    />
+                    <div class="w-full flex gap-2">
+                        <ValidatedInput
+                            id="min_req_level"
+                            label="Min Required Level:"
+                            input_type="number"
+                            placeholder="Min Required Level"
+                            bind=min_req_level
+                        />
+                        <ValidatedInput
+                            id="max_req_level"
+                            label="Max Required Level:"
+                            input_type="number"
+                            placeholder="Max Required Level"
+                            bind=max_req_level
+                        />
+                    </div>
 
                     <ValidatedInput
                         id="price"
                         label="Max Price:"
                         input_type="number"
-                        placeholder="Enter max price"
+                        placeholder="Max Price"
                         bind=price
                     />
                 </div>
@@ -1328,6 +1352,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
         (StatType::Armor(Some(DamageType::Poison)), Modifier::Flat),
         (StatType::Armor(Some(DamageType::Storm)), Modifier::Flat),
+        (StatType::Armor(None), Modifier::Increased),
         (StatType::Evade(None), Modifier::Flat),
         (
             StatType::Damage {

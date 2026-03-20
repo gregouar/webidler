@@ -31,7 +31,10 @@ use crate::components::{
             format_trigger_modifier_per, trigger_text,
         },
     },
-    ui::{Separator, number::format_number},
+    ui::{
+        Separator,
+        number::{self, format_number},
+    },
 };
 
 use super::effects_tooltip::damage_type_str;
@@ -86,9 +89,9 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         shadow-md shadow-violet-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
         text-center
         ">
-            <strong class="text-base xl:text-lg font-bold text-violet-300">
-                <ul class="list-none space-y-1 mb-2">
-                    <li class="leading-snug whitespace-pre-line">
+            <strong class="text-sm xl:text-base font-bold text-violet-300 font-display">
+                <ul class="list-none xl:space-y-1 mb-2">
+                    <li class=" whitespace-pre-line">
                         {skill_specs.base.name.clone()}
                     </li>
                 </ul>
@@ -96,7 +99,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
 
             <Separator />
 
-            <p class="text-xs xl:text-sm text-gray-400 leading-snug">
+            <p class="text-xs xl:text-sm text-gray-400 ">
                 {skill_type_str(Some(skill_specs.base.skill_type))} "| "
                 {if skill_specs.cooldown.get() > 0.0 {
                     view! {
@@ -124,7 +127,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-gray-400 leading-snug">
+                                <span class="text-gray-400 ">
                                     "Auto-use only when "
                                     {conditions_tooltip::format_skill_modifier_conditions_pre(
                                         &skill_specs.base.auto_use_conditions,
@@ -139,7 +142,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     }
                 })}
 
-            <ul class="list-none space-y-1 text-xs xl:text-sm">
+            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
                 {targets_lines}{trigger_lines}
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
@@ -150,7 +153,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-gray-400 leading-snug">"Next upgrade:"</span>
+                                <span class="text-gray-400 ">"Next upgrade:"</span>
                             </li>
                             {effects_tooltip::formatted_effects_list(
                                 skill_specs.base.upgrade_effects.clone(),
@@ -158,7 +161,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                         </ul>
 
                         <Separator />
-                        <p class="text-xs xl:text-sm text-gray-400 leading-snug">
+                        <p class="text-xs xl:text-sm text-gray-400 ">
                             "Level: "
                             {if skill_specs.level_modifier > 0 {
                                 view! {
@@ -184,7 +187,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 .then(|| {
                     view! {
                         <Separator />
-                        <p class="text-xs xl:text-sm italic text-gray-400 leading-snug">
+                        <p class="text-xs xl:text-sm italic text-gray-400 ">
                             {skill_specs.base.description.clone()}
                         </p>
                     }
@@ -345,7 +348,9 @@ pub fn format_skill_effect(
                         </EffectLi>
                         <EffectLi>
                             "Critical hit damage: "
-                            <span class="font-semibold">{format!("+{:.0}%", *crit_damage)}</span>
+                            <span class="font-semibold">
+                                {format!("+{}%", number::format_number(*crit_damage))}
+                            </span>
                         </EffectLi>
                     },
                 )
@@ -651,7 +656,7 @@ where
 #[component]
 pub fn EffectLi(children: Children) -> impl IntoView {
     view! {
-        <li class="text-xs xl:text-sm text-violet-200 leading-snug whitespace-pre-line">
+        <li class="text-xs xl:text-sm text-violet-200  whitespace-pre-line">
             {children()}
         </li>
     }

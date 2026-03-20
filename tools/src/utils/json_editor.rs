@@ -101,7 +101,7 @@ where
              .json-editor-gutter { color: #888; text-align: right; user-select: none; padding-right: 4px; }"
         </style>
 
-        <div class="flex flex-col space-y-1 text-left">
+        <div class="flex flex-col xl:space-y-1 text-left">
             <label class="text-xs font-medium text-gray-400">{label}</label>
 
             <div class="relative flex w-full h-64">

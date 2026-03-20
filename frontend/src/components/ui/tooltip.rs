@@ -229,6 +229,8 @@ pub fn DynamicTooltipTarget(
     //     }
     // });
 
+    let _ = leptos_use::on_click_outside(node_ref, move |_| hide_tooltip());
+
     let children = StoredValue::new(children);
     view! {
         <span

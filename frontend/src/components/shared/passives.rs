@@ -473,7 +473,7 @@ pub fn NodeTooltipContent(
 
     let node_specs_locked = node_specs.locked;
     let max_upgrade_level = node_specs.max_upgrade_level;
-    // let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm leading-snug">{trigger.description.clone()}</li> }).collect();
+    // let triggers_text: Vec<_> = node_specs.triggers.iter().map(|trigger| view! { <li class="text-blue-400 text-sm ">{trigger.description.clone()}</li> }).collect();
     let triggers_text: Vec<_> = node_specs
         .triggers
         .clone()
@@ -485,8 +485,8 @@ pub fn NodeTooltipContent(
 
     let starting_node_text = (node_specs.root_node).then(|| {
         view! {
-            <ul class="list-none space-y-1">
-                <li class="text-gray-400 text-sm leading-snug">"Root Node"</li>
+            <ul class="list-none xl:space-y-1">
+                <li class="text-gray-400 text-sm ">"Root Node"</li>
             </ul>
             <Separator />
         }
@@ -495,8 +495,8 @@ pub fn NodeTooltipContent(
         is_locked().then(|| {
             view! {
                 <Separator />
-                <ul class="list-none space-y-1">
-                    <li class="text-red-500 text-sm leading-snug">"Locked"</li>
+                <ul class="list-none xl:space-y-1">
+                    <li class="text-red-500 text-sm ">"Locked"</li>
                 </ul>
             }
         })
@@ -508,14 +508,14 @@ pub fn NodeTooltipContent(
                 {(node_specs.effects.is_empty() && node_specs.triggers.is_empty())
                     .then(|| {
                         view! {
-                            <ul class="list-none space-y-1">
-                                <li class="text-sm text-gray-400 leading-snug italic">"Empty"</li>
+                            <ul class="list-none xl:space-y-1">
+                                <li class="text-sm text-gray-400  italic">"Empty"</li>
                             </ul>
                         }
                     })}
                 <Separator />
                 <ul>
-                    <li class="text-sm text-gray-400 leading-snug">"Ascend to Socket Rune"</li>
+                    <li class="text-sm text-gray-400 ">"Ascend to Socket Rune"</li>
                 </ul>
             }
             .into_any()
@@ -533,9 +533,7 @@ pub fn NodeTooltipContent(
                         <Separator />
                         <ul>
                             <li>
-                                <span class="text-sm text-gray-400 leading-snug">
-                                    "Ascend to Unlock"
-                                </span>
+                                <span class="text-sm text-gray-400 ">"Ascend to Unlock"</span>
                             </li>
                         </ul>
                     }
@@ -546,7 +544,7 @@ pub fn NodeTooltipContent(
                 Some(
                     view! {
                         <Separator />
-                        <p class="text-sm text-gray-400 leading-snug">
+                        <p class="text-xs xl:text-sm text-gray-400 ">
                             "Level: " <span class="text-white">{node_level}</span>
                             {max_upgrade_level
                                 .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
@@ -571,9 +569,7 @@ pub fn NodeTooltipContent(
                                     <Separator />
                                     <ul class="text-xs xl:text-sm">
                                         <li>
-                                            <span class="text-gray-400 leading-snug">
-                                                "Ascend to get:"
-                                            </span>
+                                            <span class="text-gray-400 ">"Ascend to get:"</span>
                                         </li>
                                         {effects_tooltip::formatted_effects_list(
                                             upgrade_effects.clone(),
@@ -591,14 +587,14 @@ pub fn NodeTooltipContent(
     };
 
     view! {
-        <strong class="text-lg font-bold text-teal-300">
-            <ul class="list-none space-y-1 mb-2">
-                <li class="leading-snug whitespace-pre-line">{node_specs.name.clone()}</li>
+        <strong class="text-sm xl:text-base font-bold text-teal-300 font-display">
+            <ul class="list-none xl:space-y-1 mb-2">
+                <li class=" whitespace-pre-line">{node_specs.name.clone()}</li>
             </ul>
         </strong>
         <Separator />
         {starting_node_text}
-        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
+        <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{effects_text}{triggers_text}</ul>
         {socket_text}
         {locked_text}
         {upgrade_text}

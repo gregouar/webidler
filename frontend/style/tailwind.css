@@ -2,6 +2,19 @@
 
 @source "./src/**/*.rs";
 
+:root {
+  --font-sans: "Spectral", "Alegreya Sans", "IBM Plex Sans" ,"Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel", serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
 @theme {
   --text-shadow-sm: 0 1px 2px rgb(0, 0, 0);
   --text-shadow: 0 2px 4px rgb(0, 0, 0);
@@ -187,6 +200,17 @@
     }
   }
 
+  @keyframes hit-blink {
+    0%   { filter: brightness(1) contrast(1); }
+    20%  { filter: brightness(2.2) contrast(1.6); }
+    40%  { filter: brightness(0.6) contrast(1.2); }
+    100% { filter: brightness(1) contrast(1); }
+  }
+
+  .hit-blink {
+    animation: hit-blink 300ms ease-out;
+  }
+
   @keyframes shake {
     0%,
     100% {
@@ -244,7 +268,6 @@
     animation: bleedPulse 2.5s ease-in-out infinite;
   }
 
-  /* subtle pulsing of intensity */
   @keyframes bleedPulse {
     0%,
     100% {
@@ -510,6 +533,6 @@
 }
 
 @utility font-number {
-  font-family: "SF Mono", "Consolas", "Liberation Mono", "Menlo", monospace;
+ /* font-family: "SF Mono", "Consolas", "Liberation Mono", "Menlo", monospace; */
   font-variant-numeric: tabular-nums;
 }

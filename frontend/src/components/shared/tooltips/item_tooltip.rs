@@ -13,7 +13,7 @@ use shared::data::{
 use crate::components::{
     data_context::DataContext,
     shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
-    ui::Separator,
+    ui::{Separator, number},
 };
 
 use super::effects_tooltip;
@@ -82,7 +82,7 @@ pub fn ItemTooltipContent(
                 {(!base_affixes.is_empty())
                     .then(|| {
                         view! {
-                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // <li class="text-gray-400 text-xs xl:text-sm ">
                             // "Base affixes:"
                             // </li>
                             {base_affixes}
@@ -91,7 +91,7 @@ pub fn ItemTooltipContent(
                 {(!prefixes.is_empty())
                     .then(|| {
                         view! {
-                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // <li class="text-gray-400 text-xs xl:text-sm ">
                             // "Prefixes:"
                             // </li>
                             {prefixes}
@@ -100,7 +100,7 @@ pub fn ItemTooltipContent(
                 {(!suffixes.is_empty())
                     .then(|| {
                         view! {
-                            // <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            // <li class="text-gray-400 text-xs xl:text-sm ">
                             // "Suffixes:"
                             // </li>
                             {suffixes}
@@ -141,7 +141,7 @@ pub fn ItemTooltipContent(
                     {(!trigger_lines.is_empty())
                         .then(|| {
                             view! {
-                                <li class="text-gray-400 text-xs leading-snug">"Triggers:"</li>
+                                <li class="text-gray-400 text-xs ">"Triggers:"</li>
                                 {trigger_lines}
                             }
                         })}
@@ -163,7 +163,7 @@ pub fn ItemTooltipContent(
                 ComparableType::Compared | ComparableType::Equipped => {
                     Some(
                         view! {
-                            <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                            <p class="text-xs xl:text-sm italic text-gray-400  whitespace-pre-line">
                                 {match comparable {
                                     ComparableType::Compared => "Selected",
                                     ComparableType::Equipped => "Equipped",
@@ -175,24 +175,18 @@ pub fn ItemTooltipContent(
                     )
                 }
                 _ => None,
-            }} <strong class=format!("text-base xl:text-lg font-bold {}", name_color)>
-                <ul class="list-none space-y-1 mb-2">
-                    <li class="leading-snug whitespace-pre-line">
-                        {item_specs.modifiers.name.clone()}
-                    </li>
+            }} <strong class=format!("text-sm xl:text-base font-bold  font-display {}", name_color)>
+                <ul class="list-none xl:space-y-1 mb-2">
+                    <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
                         ItemRarity::Rare | ItemRarity::Masterwork => {
-                            Some(
-                                view! {
-                                    <li class="leading-snug">{item_specs.base.name.clone()}</li>
-                                },
-                            )
+                            Some(view! { <li class="">{item_specs.base.name.clone()}</li> })
                         }
                         _ => None,
                     }}
 
                 </ul>
-            </strong> <Separator /> <ul class="list-none space-y-1">
+            </strong> <Separator /> <ul class="list-none xl:space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
@@ -204,10 +198,12 @@ pub fn ItemTooltipContent(
                 .then(|| {
                     view! {
                         <Separator />
-                        <ul class="list-none space-y-1 text-xs xl:text-sm">{effects}{triggers}</ul>
+                        <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                            {effects}{triggers}
+                        </ul>
                     }
-                })} <Separator /> <ul class="list-none space-y-1">
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
+                })} <Separator /> <ul class="list-none xl:space-y-1">
+                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
                     "Required Power Level: "
                     <span class=move || {
                         if max_item_level.get() < required_level {
@@ -217,7 +213,7 @@ pub fn ItemTooltipContent(
                         }
                     }>{required_level}</span>
                 </li>
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 leading-snug">
+                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
                     "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
                 </li>
             </ul>
@@ -230,7 +226,7 @@ pub fn ItemTooltipContent(
                         .map(|description| {
                             view! {
                                 <Separator />
-                                <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                                <p class="text-xs xl:text-sm italic text-gray-400  whitespace-pre-line">
                                     {description}
                                 </p>
                             }
@@ -241,7 +237,7 @@ pub fn ItemTooltipContent(
                     Some(
                         view! {
                             <Separator />
-                            <p class="text-xs xl:text-sm italic text-gray-400 leading-snug whitespace-pre-line">
+                            <p class="text-xs xl:text-sm italic text-gray-400  whitespace-pre-line">
                                 "Hold CTRL to compare."
                             </p>
                         },
@@ -286,7 +282,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 {if *specs.armor > 0.0 {
                     Some(
                         view! {
-                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            <li class="text-gray-400 text-xs xl:text-sm ">
                                 "Armor: "
                                 <span class=format!(
                                     "{} font-semibold",
@@ -301,7 +297,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 {if specs.block.get() > 0.0 {
                     Some(
                         view! {
-                            <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                            <li class="text-gray-400 text-xs xl:text-sm ">
                                 "Block chance: "
                                 <span class=format!(
                                     "{} font-semibold",
@@ -351,7 +347,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
                 if specs_value.min.get() > 0.0 || specs_value.max.get() > 0.0 {
                     damage_lines.push(view! {
-                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        <li class="text-gray-400 text-xs xl:text-sm ">
                             {effects_tooltip::damage_type_str(Some(damage_type))} "Damage: "
                             <span class=format!(
                                 "{} font-semibold",
@@ -403,23 +399,23 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             };
 
             view! {
-                <li class="text-gray-400 text-xs xl:text-sm leading-snug">{range} {shape}</li>
+                <li class="text-gray-400 text-xs xl:text-sm ">{range} {shape}</li>
                 {damage_lines}
-                <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                <li class="text-gray-400 text-xs xl:text-sm ">
                     "Critical hit chance: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_chance_color,
                     )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
                 </li>
-                <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                <li class="text-gray-400 text-xs xl:text-sm ">
                     "Critical hit damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
-                    )>{format!("+{:.0}%", *specs.crit_damage)}</span>
+                    )>{format!("+{}%", number::format_number(*specs.crit_damage))}</span>
                 </li>
-                <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                <li class="text-gray-400 text-xs xl:text-sm ">
                     "Cooldown: "
                     <span class=format!(
                         "{} font-semibold",
@@ -434,16 +430,16 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     item_specs.base.rune_specs.as_ref().map(|specs| {
         view! {
-            <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Rune"</li>
+            <li class="text-gray-400 text-xs xl:text-sm ">"Rune"</li>
             {(specs.root_node)
                 .then(|| {
                     view! {
-                        <li class="text-white text-xs xl:text-sm leading-snug">
+                        <li class="text-white text-xs xl:text-sm ">
                             "Transform Node into Root Node"
                         </li>
                     }
                 })}
-            <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
+            <li class="text-gray-400 text-xs xl:text-sm  italic">
                 "Socket into an empty Passive Node to give the following effects:"
             </li>
         }
@@ -456,14 +452,14 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
     item_specs.base.map_specs.as_ref().map(|specs| {
         view! {
-            <li class="text-gray-400 text-xs xl:text-sm leading-snug">"Edict"</li>
+            <li class="text-gray-400 text-xs xl:text-sm ">"Edict"</li>
 
             {specs
                 .area_id
                 .as_ref()
                 .map(|area_id| {
                     view! {
-                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        <li class="text-gray-400 text-xs xl:text-sm ">
                             "Only for: "
                             <span class="text-white font-semibold">
                                 {data_context
@@ -480,7 +476,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             {(specs.reward_slots > 0)
                 .then(|| {
                     view! {
-                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        <li class="text-gray-400 text-xs xl:text-sm ">
                             "Rare Reward Slots: "
                             <span class="text-white font-semibold">
                                 {format!("+{:.0}", specs.reward_slots)}
@@ -492,7 +488,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             {(specs.reward_picks > 0)
                 .then(|| {
                     view! {
-                        <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                        <li class="text-gray-400 text-xs xl:text-sm ">
                             "Reward Picks: "
                             <span class="text-white font-semibold">
                                 {format!("+{:.0}", specs.reward_picks)}
@@ -501,7 +497,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     }
                 })}
 
-            <li class="text-gray-400 text-xs xl:text-sm leading-snug italic">
+            <li class="text-gray-400 text-xs xl:text-sm  italic">
                 "Apply to a Grind to give all Enemies the following effects:"
             </li>
         }
@@ -534,7 +530,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                 };
 
                 view! {
-                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                    <li class="text-gray-400 text-xs xl:text-sm ">
                         {item_slot}
                         {(show_level)
                             .then(|| format!(" - Level {}", item_specs.base.min_area_level))}
@@ -550,7 +546,7 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
         {(item_specs.modifiers.quality > 0.0)
             .then(|| {
                 view! {
-                    <li class="text-gray-400 text-xs xl:text-sm leading-snug">
+                    <li class="text-gray-400 text-xs xl:text-sm ">
                         "Quality: "
                         <span class="text-white font-semibold">
                             {format!("+{:.0}%", item_specs.modifiers.quality)}
@@ -575,11 +571,7 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique => view! {
-                    <li class="text-gray-400 text-xs leading-snug">
-                        "Implicit affix – "{scope_str(scope)}
-                    </li>
-                }
+                AffixType::Unique => view! { <li class="text-gray-400 text-xs ">"Implicit affix – "{scope_str(scope)}</li> }
                 .into_any(),
                 _ => {
                     let mut tags: Vec<_> = affix.tags.iter().collect();
@@ -590,7 +582,7 @@ pub fn formatted_affixes_list(
                         .collect();
 
                     view! {
-                        <li class="text-gray-400 text-xs leading-snug">
+                        <li class="text-gray-400 text-xs ">
                             {affix_type_str(affix.affix_type)}" "
                             <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
                             {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}

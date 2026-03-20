@@ -292,7 +292,7 @@ pub fn scope_str(scope: AffixEffectScope) -> &'static str {
 }
 
 pub fn effect_li(text: String) -> impl IntoView {
-    view! { <li class="text-blue-400 leading-snug">{text}</li> }
+    view! { <li class="text-blue-400 ">{text}</li> }
 }
 
 pub fn formatted_effects_list(

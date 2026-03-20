@@ -118,7 +118,7 @@ fn AutoButton() -> impl IntoView {
 
     let tooltip = move || {
         view! {
-            <div class="flex flex-col space-y-1 text-sm max-w-xs">
+            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                 <span class="text-white">"Assign points following previously saved build."</span>
                 <span class="text-xs italic text-gray-400">
                     "Hold CTRL: +"{10.min(game_context.player_resources.read().passive_points)}

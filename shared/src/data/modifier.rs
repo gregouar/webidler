@@ -78,6 +78,10 @@ where
             return base;
         }
 
+        if self.more == -100.0 {
+            return base.multiply_value(0.0);
+        }
+
         let factor = (1.0 + self.more * 0.01)
             * (1.0 + self.increased * 0.01)
             * (if div > 0.0 { 1.0 / div } else { 1.0 });
@@ -102,7 +106,11 @@ where
             Modifier::Flat => self.base = self.base.add_value(value),
             Modifier::More => {
                 let value = compute_more_factor(value);
-                self.more = self.more + value + self.more * value * 0.01;
+                if value == -100.0 || self.more == -100.0 {
+                    self.more = -100.0
+                } else {
+                    self.more = self.more + value + self.more * value * 0.01;
+                }
             }
         }
         self.compute();
@@ -288,7 +296,7 @@ pub fn compute_more_factor(value: f64) -> f64 {
         // We want that negative effect are diminishingly interesting
         let div = (1.0 - value * 0.01).max(0.0);
 
-        if value <= -1e300 {
+        if value <= -1e299 {
             -100.0
         } else if div != 0.0 {
             value / div

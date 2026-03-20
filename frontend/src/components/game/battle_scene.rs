@@ -152,8 +152,8 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     }}
                     {move || {
                         game_context.area_specs.read().boss.then(|| view! { <BossAreaIcon /> })
-                    }} <p class=" text-lg xl:text-2xl font-bold">
-                        <span class="[font-variant:small-caps]">
+                    }} <div class="flex items-center text-lg xl:text-2xl font-bold leading-none">
+                        <span class="[font-variant:small-caps] font-display">
                             {move || game_context.area_specs.read().name.clone()}
                         </span>
                         " — "
@@ -167,7 +167,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                         .max(1)
                                 })
                         }}
-                    </p>
+                    </div>
                     {move || {
                         game_context.map_item.get().map(|map_item| view! { <EdictIcon map_item /> })
                     }}

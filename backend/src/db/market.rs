@@ -114,7 +114,8 @@ pub async fn read_market_items<'c>(
         .map(|x| format!("%{}%", x.to_uppercase()))
         .unwrap_or_default();
 
-    let item_level = filters.item_level.map(|x| x as i32).unwrap_or(i32::MAX);
+    let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
+    let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
     let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
 
     let no_filter_item_damages = filters.item_damages.is_none();
@@ -243,7 +244,8 @@ pub async fn read_market_items<'c>(
                 )
             )
             AND ($5 OR UPPER(market.item_name) LIKE $6)
-            AND (market.item_level <= $7)
+            AND (market.item_level >= $7)
+            AND (market.item_level <= $46)
             AND ($8 = '' OR market.item_rarity = $8)
             AND ($9 = '' OR EXISTS (
                 SELECT 1
@@ -302,7 +304,7 @@ pub async fn read_market_items<'c>(
         user_id,
         no_filter_by_name, // $5
         item_name,
-        item_level,
+        min_req_level,
         item_rarity,
         item_category,
         no_filter_item_damages, // $10
@@ -340,7 +342,8 @@ pub async fn read_market_items<'c>(
         stat_filters[4].2,
         price,
         own_listings,
-        is_deleted,
+        is_deleted, // $45
+        max_req_level,
     )
     .fetch_all(executor)
     .await?;

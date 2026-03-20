@@ -297,7 +297,8 @@ pub async fn read_stash_items<'c>(
         .map(|x| format!("%{}%", x.to_uppercase()))
         .unwrap_or_default();
 
-    let item_level = filters.item_level.map(|x| x as i32).unwrap_or(i32::MAX);
+    let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
+    let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
 
     let no_filter_item_damages = filters.item_damages.is_none();
     let item_damages = filters.item_damages.unwrap_or_default();
@@ -391,7 +392,8 @@ pub async fn read_stash_items<'c>(
             stash_items.stash_id = $4
             AND stash_items.deleted_at IS NULL
             AND ($5 OR UPPER(stash_items.item_name) LIKE $6)
-            AND (stash_items.item_level <= $7)
+            AND (stash_items.item_level >= $7)
+            AND (stash_items.item_level <= $43)
             AND ($8 = '' OR stash_items.item_rarity = $8)
             AND ($9 = '' OR EXISTS (
                 SELECT 1
@@ -443,7 +445,7 @@ pub async fn read_stash_items<'c>(
         stash_id,
         no_filter_by_name, // $5
         item_name,
-        item_level,
+        min_req_level,
         item_rarity,
         item_category,
         no_filter_item_damages, // $10
@@ -479,6 +481,7 @@ pub async fn read_stash_items<'c>(
         stat_filters[4].0, // $40
         stat_filters[4].1,
         stat_filters[4].2,
+        max_req_level
     )
     .fetch_all(executor)
     .await?;

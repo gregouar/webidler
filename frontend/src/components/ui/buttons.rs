@@ -9,7 +9,8 @@ pub fn MenuButton(
     view! {
         <button
             class="btn
-            text-white font-bold text-shadow shadow-neutral-950
+            tracking-wide
+            text-white font-extrabold text-shadow shadow-neutral-950
             py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
             text-sm xl:text-base 
             border border-neutral-950
@@ -39,7 +40,8 @@ pub fn MenuButtonRed(
     view! {
         <button
             class="btn
-            text-red-300 font-bold text-shadow shadow-neutral-950
+            tracking-wide
+            text-red-300 font-extrabold text-shadow shadow-neutral-950
             py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
             text-sm xl:text-base 
             border border-red-800
@@ -67,7 +69,8 @@ pub fn FancyButton(
     view! {
         <button
             class="btn
-            text-white font-bold text-shadow shadow-neutral-950
+            tracking-wide
+            text-white font-extrabold text-shadow shadow-neutral-950
             px-2 xl:px-3 rounded shadow-md
             text-sm xl:text-base 
             border border-neutral-950
@@ -118,9 +121,10 @@ pub fn Toggle(
             class=move || {
                 format!(
                     "btn
+                    tracking-wide
                     px-2 xl:px-3
                     text-sm xl:text-base 
-                    font-bold text-shadow shadow-neutral-950
+                    font-extrabold text-shadow shadow-neutral-950
                     border border-neutral-950 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
@@ -180,10 +184,11 @@ pub fn TabButton(
             class=move || {
                 format!(
                     "btn
+                    tracking-wide
                     flex-1
                     px-2 xl:px-3 py-1 xl:py-2 
                     text-sm xl:text-base 
-                    font-bold text-shadow
+                    font-extrabold text-shadow
                     border-t border-l border-r border-neutral-950 rounded-t-md 
                     transition-all duration-200
                     relative
