@@ -184,7 +184,7 @@ pub fn PlayerName() -> impl IntoView {
 
     let character_name = move || town_context.character.read().name.clone();
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
+        <p class=" text-shadow-md/50 shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
             <span class="font-bold">{character_name}</span>
         </p>
     }
@@ -333,7 +333,7 @@ fn GrindingAreaCard(
             </div>
 
             <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
-                <div class="text-base xl:text-lg font-semibold text-amber-200 [font-variant:small-caps]  font-display">
+                <div class="text-base xl:text-lg font-semibold text-amber-200  text-shadow-md/50 shadow-gray-950 [font-variant:small-caps]  font-display">
                     {move || area_specs.read().name.clone()}
                 </div>
 
@@ -508,7 +508,7 @@ pub fn StartGrindPanel(
                                 </div>
 
                                 <CardInset class="xl:space-y-4">
-                                    <div class="w-full flex text-lg xl:text-2xl font-bold text-amber-300 justify-center items-center gap-4">
+                                    <div class="w-full flex text-lg xl:text-2xl font-bold  text-shadow-md/50 shadow-gray-950 text-amber-300 justify-center items-center gap-4">
                                         {area_specs
                                             .disable_shards
                                             .then(|| view! { <CrucibleAreaIcon /> })}

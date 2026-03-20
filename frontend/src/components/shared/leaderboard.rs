@@ -81,8 +81,8 @@ fn LeaderboardContent() -> impl IntoView {
                                     };
                                     view! {
                                         <CardInset>
-                                            <h2 class="text-shadow-lg shadow-gray-950 text-amber-300
-                                            text-base xl:text-lg mb-2
+                                            <h2 class=" text-shadow-md/50 shadow-gray-950 text-amber-300
+                                            text-sm xl:text-base mb-2 font-display
                                             font-bold leading-none tracking-tight">{area_name}</h2>
                                             {leaderboard
                                                 .into_iter()
@@ -100,7 +100,7 @@ fn LeaderboardContent() -> impl IntoView {
                                                                         href=format!("/view-character/{}", &entry.character_name)
                                                                         underline=false
                                                                     >
-                                                                        <span class="text-white font-semibold text-lg font-display">
+                                                                        <span class="text-white font-semibold text-lg font-display  text-shadow-md/50 shadow-gray-950">
                                                                             {entry.character_name.clone()}
                                                                         </span>
                                                                     </ALink>
