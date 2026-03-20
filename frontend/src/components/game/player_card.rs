@@ -362,7 +362,7 @@ pub fn PlayerName() -> impl IntoView {
     });
 
     view! {
-        <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
+        <p class=" text-shadow-md/50 shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
             <span class="font-bold">
                 {player_name} " — " {move || game_context.player_specs.read().level}
             </span>

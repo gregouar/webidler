@@ -246,5 +246,14 @@ fn push_message(chat_context: &ChatContext, message: ChatMessage) {
     {
         chat_context.users_map.write().insert(user_id, username);
     }
-    chat_context.messages.write().push(message);
+
+    if !chat_context
+        .messages
+        .read_untracked()
+        .iter()
+        .find(|m| m.sent_at == message.sent_at && m.user_id == message.user_id)
+        .is_some()
+    {
+        chat_context.messages.write().push(message);
+    }
 }
