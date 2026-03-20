@@ -407,8 +407,8 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         just_evaded=just_evaded
                         is_dead=is_dead
                         statuses=statuses
-                        enable_blink=true
                     />
+                // enable_blink=true
                 </div>
 
                 <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
