@@ -30,6 +30,7 @@ pub fn CharacterPortrait(
     #[prop(into)] just_evaded: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
+    enable_blink: bool,
 ) -> impl IntoView {
     let is_dead_img_effect = move || {
         if is_dead.get() {
@@ -162,6 +163,21 @@ pub fn CharacterPortrait(
         ),
     };
 
+    let (hit_signal, set_hit_signal) = signal(false);
+
+    Effect::new(move || {
+        if just_hurt.get() && enable_blink {
+            set_hit_signal.set(true);
+
+            set_timeout(
+                move || {
+                    set_hit_signal.set(false);
+                },
+                Duration::from_millis(300),
+            );
+        }
+    });
+
     view! {
         <style>"color: #2e2926;"</style>
         <div class=move || {
@@ -184,10 +200,11 @@ pub fn CharacterPortrait(
                         alt=character_name
                         class=move || {
                             format!(
-                                "object-cover h-full w-full transition-all duration-[5s] {}",
+                                "object-cover h-full w-full transition-all duration-[5s] {} ",
                                 if is_dead.get() { "opacity-50 " } else { "" },
                             )
                         }
+                        class:hit-blink=hit_signal
                     />
 
                     <div class="absolute inset-0 flex flex-wrap items-start justify-start pointer-events-none">

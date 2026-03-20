@@ -200,6 +200,17 @@ body {
     }
   }
 
+  @keyframes hit-blink {
+    0%   { filter: brightness(1) contrast(1); }
+    20%  { filter: brightness(2.2) contrast(1.6); }
+    40%  { filter: brightness(0.6) contrast(1.2); }
+    100% { filter: brightness(1) contrast(1); }
+  }
+
+  .hit-blink {
+    animation: hit-blink 300ms ease-out;
+  }
+
   @keyframes shake {
     0%,
     100% {
@@ -257,7 +268,6 @@ body {
     animation: bleedPulse 2.5s ease-in-out infinite;
   }
 
-  /* subtle pulsing of intensity */
   @keyframes bleedPulse {
     0%,
     100% {

@@ -260,6 +260,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
+                            enable_blink=false
                         />
                     </div>
                     <FancyButton disabled=disable_level_up on:click=level_up>
