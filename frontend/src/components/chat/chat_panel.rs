@@ -96,7 +96,7 @@ pub fn ChatPanel() -> impl IntoView {
     // TODO: Do better than that...
     let filtered_messages = move || {
         let selected = chat_context.selected_channels.get();
-        chat_context
+        let mut messages = chat_context
             .messages
             .read()
             .iter()
@@ -104,7 +104,9 @@ pub fn ChatPanel() -> impl IntoView {
                 matches!(m.channel, ChatChannel::Whisper(_)) || selected.contains(&m.channel)
             })
             .cloned()
-            .collect::<Vec<_>>()
+            .collect::<Vec<_>>();
+        messages.sort_by_key(|message| message.sent_at);
+        messages
     };
 
     let dropdown_open = RwSignal::new(false);

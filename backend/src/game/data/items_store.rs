@@ -1,6 +1,6 @@
 use backend_shared::signature::HmacKey;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use shared::data::{
     item::{ItemBase, ItemCategory},
@@ -27,7 +27,7 @@ impl LoadJsonFromFile for ItemAffixBlueprint {}
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Adjective {
     pub text: String,
-    pub tags: Vec<AffixTag>,
+    pub tags: HashSet<AffixTag>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

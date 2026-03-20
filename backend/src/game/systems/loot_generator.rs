@@ -460,13 +460,17 @@ fn generate_rare_name(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> String {
-    let tags: HashSet<_> = affixes.iter().flat_map(|a| a.tags.iter()).collect();
+    let tags: HashSet<_> = affixes
+        .iter()
+        .flat_map(|a| a.tags.iter().copied())
+        .collect();
 
     let available_adjectives: Vec<_> = adjectives_table
         .iter()
+        .filter(|part| part.tags.is_subset(&tags))
         .map(|part| WeightedNamePart {
             text: &part.text,
-            weight: part.tags.iter().filter(|t| tags.contains(t)).count() as u64,
+            weight: part.tags.len() as u64,
         })
         .collect();
 

@@ -10989,7 +10989,7 @@
             "description": null,
             "trigger_id": "open_wound_apply",
             "OnHit": {
-              "skill_type": "Attack",
+              "skill_type": null,
               "range": null,
               "is_crit": null,
               "is_blocked": null,
@@ -11068,10 +11068,10 @@
                                   }
                                 },
                                 {
-                                  "CritChance": null
+                                  "CritDamage": null
                                 },
                                 {
-                                  "CritDamage": null
+                                  "CritChance": null
                                 }
                               ],
                               "conditional_modifiers": []
@@ -12010,16 +12010,16 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   }

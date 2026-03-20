@@ -39,7 +39,8 @@ pub struct MarketFilters {
     pub order_by: MarketOrderBy,
 
     pub item_name: Option<ItemName>,
-    pub item_level: Option<AreaLevel>,
+    pub min_req_level: Option<AreaLevel>,
+    pub max_req_level: Option<AreaLevel>,
     pub price: Option<ItemPrice>,
 
     pub item_rarity: Option<ItemRarity>,
