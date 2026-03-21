@@ -200,7 +200,9 @@ pub fn CharacterPortrait(
                         alt=character_name
                         class=move || {
                             format!(
-                                "object-cover h-full w-full transition-all duration-[5s] {} ",
+                                "object-cover h-full w-full transition-all duration-[5s]
+                                xl:drop-shadow-[0_15px_15px_rgba(0,0,0,0.5)]
+                                {}",
                                 if is_dead.get() { "opacity-50 " } else { "" },
                             )
                         }

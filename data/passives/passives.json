@@ -331,8 +331,8 @@
         "socket": true
       },
       "08853117-9798-462c-801b-5ae67f80736e": {
-        "name": "Damage over Time Efficacity",
-        "icon": "passives/chemical_bolt.svg",
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
         "x": -100.0,
         "y": -162.5,
         "size": 0,
@@ -341,32 +341,17 @@
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "min_max": null
-              }
-            },
-            "modifier": "More",
-            "value": 25.0
-          },
-          {
-            "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": null
+                    "damage_type": "Poison"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Increased",
-            "value": -25.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -374,32 +359,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "min_max": null
-              }
-            },
-            "modifier": "More",
-            "value": 10.0
-          },
-          {
-            "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": null
+                    "damage_type": "Poison"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Increased",
-            "value": -10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4531,8 +4501,8 @@
         "socket": false
       },
       "595ac586-9537-46f5-a4b5-b621cee6d5aa": {
-        "name": "Damage over Time Efficacity",
-        "icon": "passives/chemical_bolt.svg",
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
         "x": -97.5,
         "y": -147.5,
         "size": 0,
@@ -4541,32 +4511,17 @@
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "min_max": null
-              }
-            },
-            "modifier": "More",
-            "value": 25.0
-          },
-          {
-            "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": null
+                    "damage_type": "Poison"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Increased",
-            "value": -25.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -4574,32 +4529,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "min_max": null
-              }
-            },
-            "modifier": "More",
-            "value": 10.0
-          },
-          {
-            "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": null
+                    "damage_type": "Poison"
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Increased",
-            "value": -10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6768,110 +6708,10 @@
         "socket": false
       },
       "77d9af74-3e5d-4263-b3e0-1134c10fda2e": {
-        "name": "Poison Duration",
-        "icon": "passives/ouroboros.svg",
-        "x": 62.5,
-        "y": -152.5,
-        "size": 0,
-        "root_node": false,
-        "node_type": "Poison",
-        "effects": [
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 15.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 5.0
-          }
-        ],
-        "max_upgrade_level": 5,
-        "socket": false
-      },
-      "78708628-ec55-4977-809e-c97806ab760b": {
-        "name": "Threat Damage",
-        "icon": "passives/threat_damage.svg",
-        "x": 140.0,
-        "y": 95.0,
-        "size": 1,
-        "root_node": false,
-        "node_type": "Attack",
-        "effects": [
-          {
-            "stat": {
-              "StatConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "conditions": [
-                  "ThreatLevel"
-                ],
-                "conditions_duration": 0
-              }
-            },
-            "modifier": "More",
-            "value": 30.0
-          }
-        ],
-        "triggers": [],
-        "locked": false,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "StatConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "damage_type": null,
-                    "min_max": null
-                  }
-                },
-                "conditions": [
-                  "ThreatLevel"
-                ],
-                "conditions_duration": 0
-              }
-            },
-            "modifier": "More",
-            "value": 14.0
-          }
-        ],
-        "max_upgrade_level": 5,
-        "socket": false
-      },
-      "7a24a6c4-5cbf-4923-a083-d323cac68612": {
         "name": "Damage over Time Efficacity",
         "icon": "passives/chemical_bolt.svg",
-        "x": -117.5,
-        "y": -145.0,
+        "x": 62.5,
+        "y": -152.5,
         "size": 0,
         "root_node": false,
         "node_type": "Poison",
@@ -6937,6 +6777,106 @@
             },
             "modifier": "Increased",
             "value": -10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "78708628-ec55-4977-809e-c97806ab760b": {
+        "name": "Threat Damage",
+        "icon": "passives/threat_damage.svg",
+        "x": 140.0,
+        "y": 95.0,
+        "size": 1,
+        "root_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 30.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "damage_type": null,
+                    "min_max": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 14.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "7a24a6c4-5cbf-4923-a083-d323cac68612": {
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
+        "x": -117.5,
+        "y": -145.0,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Poison",
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 15.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8366,8 +8306,8 @@
         "socket": false
       },
       "907e3dc9-8052-4120-ab01-0abf0ee825c0": {
-        "name": "Poison Duration",
-        "icon": "passives/ouroboros.svg",
+        "name": "Damage over Time Efficacity",
+        "icon": "passives/chemical_bolt.svg",
         "x": 62.5,
         "y": -130.0,
         "size": 0,
@@ -8376,17 +8316,32 @@
         "effects": [
           {
             "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "value": 25.0
+          },
+          {
+            "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Poison"
+                    "damage_type": null
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": -25.0
           }
         ],
         "triggers": [],
@@ -8394,17 +8349,32 @@
         "upgrade_effects": [
           {
             "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": null
+                  }
+                },
+                "skill_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          },
+          {
+            "stat": {
               "StatusDuration": {
                 "status_type": {
                   "DamageOverTime": {
-                    "damage_type": "Poison"
+                    "damage_type": null
                   }
                 },
                 "skill_type": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": -10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11068,10 +11038,10 @@
                                   }
                                 },
                                 {
-                                  "CritDamage": null
+                                  "CritChance": null
                                 },
                                 {
-                                  "CritChance": null
+                                  "CritDamage": null
                                 }
                               ],
                               "conditional_modifiers": []
@@ -12010,16 +11980,16 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
+                    "Damage": {
                       "skill_type": null,
+                      "damage_type": null,
                       "min_max": null
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_type": null,
                       "skill_type": null,
-                      "damage_type": null,
                       "min_max": null
                     }
                   }

@@ -333,5 +333,20 @@
       }
     ],
     "min_area_level": 320
+  },
+  "ring_8": {
+    "name": "Regal Ring",
+    "icon": "items/runic_ring.webp",
+    "slot": "Ring",
+    "categories": [ "Jewelry", "Ring" ],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": 160
+      }
+    ],
+    "min_area_level": 400
   }
 }

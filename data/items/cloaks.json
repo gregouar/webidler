@@ -3,7 +3,7 @@
     "name": "Wool Cloak",
     "icon": "items/wool_cloak.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -29,7 +29,7 @@
     "name": "Hooded Wrap",
     "icon": "items/hooded_wrap.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -57,7 +57,7 @@
     "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
     "icon": "items/stormfeast_shroud.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -98,25 +98,25 @@
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Fire" } },
         "modifier": "More",
-        "value": [50, 100]
+        "value": [ 50, 100 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Storm" },
         "modifier": "Flat",
-        "value": [-90, -60]
+        "value": [ -90, -60 ]
       },
       {
         "scope": "Global",
         "stat": { "Armor": "Fire" },
         "modifier": "Flat",
-        "value": [30, 60]
+        "value": [ 30, 60 ]
       },
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [8, 12],
+        "value": [ 8, 12 ],
         "ignore_quality": true
       }
     ],
@@ -126,7 +126,7 @@
     "name": "Heavy Cloak",
     "icon": "items/heavy_cloak.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -153,7 +153,7 @@
     "name": "Fur-lined Cloak",
     "icon": "items/fur_cloak.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -181,7 +181,7 @@
     "description": "Spread your wings, let the world fear what follows.",
     "icon": "items/princess_cloak.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "rarity": "Unique",
     "affixes": [
       {
@@ -217,20 +217,20 @@
           }
         },
         "modifier": "Increased",
-        "value": [30, 50],
+        "value": [ 30, 50 ],
         "ignore_quality": true
       },
       {
         "scope": "Global",
         "stat": { "Damage": { "damage_type": "Poison" } },
         "modifier": "More",
-        "value": [80, 120]
+        "value": [ 80, 120 ]
       },
       {
         "scope": "Global",
         "stat": { "CritChance": "Spell" },
         "modifier": "Increased",
-        "value": [40, 60],
+        "value": [ 40, 60 ],
         "ignore_quality": true
       }
     ],
@@ -240,7 +240,7 @@
     "name": "Reinforced Cloak",
     "icon": "items/reinforced_cloak.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -267,7 +267,7 @@
     "name": "Great Cloak",
     "icon": "items/great_cloak.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -294,7 +294,7 @@
     "name": "Elven Cape",
     "icon": "items/elven_cape.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "categories": [ "Accessory", "Cloak" ],
     "affixes": [
       {
         "scope": "Global",
@@ -316,5 +316,32 @@
       }
     ],
     "min_area_level": 320
+  },
+  "cloak_8": {
+    "name": "Regal Mantle",
+    "icon": "items/regal_mantle.webp",
+    "slot": "Accessory",
+    "categories": [ "Accessory", "Cloak" ],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Fire" },
+        "modifier": "Flat",
+        "value": 175
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Poison" },
+        "modifier": "Flat",
+        "value": 175
+      },
+      {
+        "scope": "Global",
+        "stat": { "Armor": "Storm" },
+        "modifier": "Flat",
+        "value": 175
+      }
+    ],
+    "min_area_level": 400
   }
 }

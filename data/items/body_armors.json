@@ -319,5 +319,15 @@
       "armor": 120
     },
     "min_area_level": 320
+  },
+  "body_8": {
+    "name": "Plate Armor",
+    "icon": "items/plate_armor.webp",
+    "slot": "Body",
+    "categories": [ "Armor", "Body" ],
+    "armor_specs": {
+      "armor": 140
+    },
+    "min_area_level": 400
   }
 }
