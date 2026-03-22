@@ -1,0 +1,59 @@
+{
+  "name": "Dreaded Captain",
+  "portrait": "monsters/island/cursed_pirate_captain.webp",
+  "max_life": 15,
+  "power_factor": 3.0,
+  "initiative": [ 2.0, 4.0 ],
+  "armor": { "Physical": 100 },
+  "skills": [
+    {
+      "name": "Dread Smite",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 4, 8 ],
+                  "Storm": [ 0, 15 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Spread the Curse",
+      "icon": "skills/curse_weakness.svg",
+      "cooldown": 5.0,
+      "skill_type": "Curse",
+      "targets": [
+        {
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": "LifeRegen",
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 30
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

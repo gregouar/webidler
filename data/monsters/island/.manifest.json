@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "monsters": [
+      "crab.json",
+      "cursed_pirate_captain.json",
+      "cursed_pirate_digger.json",
+      "cursed_pirate_spider.json",
+      "cursed_pirate_spider_2.json",
+      "drowned.json",
+      "harpy.json",
+      "jellyfish.json",
+      "mermaid.json",
+      "pirate_captain.json",
+      "pirate_deckhand.json",
+      "pirate_lookout.json",
+      "pirate_monkey.json",
+      "pirate_parrot.json",
+      "pirate_pistol.json",
+      "pirate_skirmisher.json",
+      "pirate_witch.json",
+      "shark.json",
+      "treasure_chest.json",
+      "treasure_compass.json",
+      "treasure_crown.json",
+      "treasure_cutlass.json",
+      "treasure_gun.json",
+      "treasure_idol.json"
+    ]
+  }
+}

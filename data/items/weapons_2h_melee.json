@@ -1,7 +1,7 @@
 {
   "quarterstaff": {
     "name": "Quarterstaff",
-    "icon": "items/quarterstaff.webp",
+    "icon": "items/weapons_2h/quarterstaff.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -18,7 +18,7 @@
   },
   "woodcutter_axe": {
     "name": "Woodcutter's Axe",
-    "icon": "items/woodcutter_axe.webp",
+    "icon": "items/weapons_2h/woodcutter_axe.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -37,7 +37,7 @@
   "woodcutter_axe_unique": {
     "name": "Sootreaver",
     "description": "Ash feeds ash.",
-    "icon": "items/sootreaver.webp",
+    "icon": "items/weapons_2h/sootreaver.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -160,7 +160,7 @@
   },
   "glaive": {
     "name": "Glaive",
-    "icon": "items/glaive.webp",
+    "icon": "items/weapons_2h/glaive.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -178,7 +178,7 @@
   },
   "halberd": {
     "name": "Halberd",
-    "icon": "items/halberd.webp",
+    "icon": "items/weapons_2h/halberd.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -196,7 +196,7 @@
   },
   "bardiche": {
     "name": "Bardiche",
-    "icon": "items/bardiche.webp",
+    "icon": "items/weapons_2h/bardiche.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -215,7 +215,7 @@
   "bardiche_unique": {
     "name": "Tidesbreaker Anchor",
     "description": "Each swing drags the tides behind it, and the tides never return gently.",
-    "icon": "items/tidesbreaker_anchor.webp",
+    "icon": "items/weapons_2h/tidesbreaker_anchor.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -316,7 +316,7 @@
   },
   "flamberge": {
     "name": "Flamberge",
-    "icon": "items/flamberge.webp",
+    "icon": "items/weapons_2h/flamberge.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -334,7 +334,7 @@
   },
   "weapon_2h_7": {
     "name": "Warhammer",
-    "icon": "items/warhammer.webp",
+    "icon": "items/weapons_2h/warhammer.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],
@@ -352,7 +352,7 @@
   },
   "weapon_2h_8": {
     "name": "Zweihander",
-    "icon": "items/zweihander.webp",
+    "icon": "items/weapons_2h/zweihander.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon2H" ],

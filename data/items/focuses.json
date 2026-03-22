@@ -1,7 +1,7 @@
 {
   "grigri": {
     "name": "Gri-Gri",
-    "icon": "items/grigri.webp",
+    "icon": "items/focuses/grigri.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [
@@ -15,7 +15,7 @@
   },
   "spellbook": {
     "name": "Spellbook",
-    "icon": "items/spellbook.webp",
+    "icon": "items/focuses/spellbook.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [
@@ -31,7 +31,7 @@
   "spellbook_unique": {
     "name": "Vile Codex",
     "description": "Each cursed name written in its pages rots faster than flesh should.",
-    "icon": "items/vile_codex.webp",
+    "icon": "items/focuses/vile_codex.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "rarity": "Unique",
@@ -93,7 +93,7 @@
   },
   "focus_stone": {
     "name": "Focus Stone",
-    "icon": "items/focus_stone.webp",
+    "icon": "items/focuses/focus_stone.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [
@@ -108,7 +108,7 @@
   },
   "engraved_tablet": {
     "name": "Engraved Tabled",
-    "icon": "items/engraved_tablet.webp",
+    "icon": "items/focuses/engraved_tablet.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [
@@ -123,7 +123,7 @@
   },
   "seer_lens": {
     "name": "Seer's Lens",
-    "icon": "items/seer_lens.webp",
+    "icon": "items/focuses/seer_lens.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [
@@ -139,7 +139,7 @@
   "treasure_idol": {
     "name": "Idol of the Serpent Queen",
     "description": "Her children drank the poison willingly. The wise died quickly.",
-    "icon": "items/treasure_idol.webp",
+    "icon": "items/focuses/treasure_idol.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "rarity": "Unique",
@@ -280,7 +280,7 @@
   },
   "ritual_orb": {
     "name": "Ritual Orb",
-    "icon": "items/ritual_orb.webp",
+    "icon": "items/focuses/ritual_orb.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [
@@ -296,7 +296,7 @@
   "ritual_orb_unique": {
     "name": "Zael's Eye",
     "description": "Zael's gaze weighed the sky and found it wanting.",
-    "icon": "items/dragon_eye.webp",
+    "icon": "items/focuses/dragon_eye.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "rarity": "Unique",
@@ -353,7 +353,7 @@
   },
   "focus_7": {
     "name": "Grimoire",
-    "icon": "items/grimoire.webp",
+    "icon": "items/focuses/grimoire.webp",
     "slot": "Shield",
     "categories": [ "Focus" ],
     "affixes": [

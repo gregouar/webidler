@@ -1,7 +1,7 @@
 {
   "dagger": {
     "name": "Dagger",
-    "icon": "items/dagger.webp",
+    "icon": "items/weapons_1h/dagger.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -17,7 +17,7 @@
   "dagger_unique": {
     "name": "Onions Slicer",
     "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
-    "icon": "items/onions_slicer.webp",
+    "icon": "items/weapons_1h/onions_slicer.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -48,7 +48,7 @@
   },
   "shortsword": {
     "name": "Shortsword",
-    "icon": "items/shortsword.webp",
+    "icon": "items/weapons_1h/shortsword.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -65,7 +65,7 @@
   "shortsword_unique": {
     "name": "Broken Trophy",
     "description": "A kind remembrance of a foe you'd rather drink to forget...",
-    "icon": "items/broken_trophy.webp",
+    "icon": "items/weapons_1h/broken_trophy.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -153,7 +153,7 @@
   },
   "hand_axe": {
     "name": "Hand Axe",
-    "icon": "items/hand_axe.webp",
+    "icon": "items/weapons_1h/hand_axe.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -170,7 +170,7 @@
   "handaxe_unique": {
     "name": "Fang of the Widow",
     "description": "Its edge drips with the venom of a thousand silenced hearts.",
-    "icon": "items/hand_axe_spider.webp",
+    "icon": "items/weapons_1h/hand_axe_spider.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "rarity": "Unique",
@@ -260,7 +260,7 @@
   },
   "militia_sword": {
     "name": "Militia Sword",
-    "icon": "items/longsword.webp",
+    "icon": "items/weapons_1h/longsword.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -276,7 +276,7 @@
   },
   "spiked_mace": {
     "name": "Spiked Mace",
-    "icon": "items/spiked_mace.webp",
+    "icon": "items/weapons_1h/spiked_mace.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -292,7 +292,7 @@
   },
   "sabre": {
     "name": "Sabre",
-    "icon": "items/sabre.webp",
+    "icon": "items/weapons_1h/sabre.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -309,7 +309,7 @@
   "treasure_cutlass": {
     "name": "Cutlass of Greed",
     "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
-    "icon": "items/treasure_cutlass.webp",
+    "icon": "items/weapons_1h/treasure_cutlass.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -407,7 +407,7 @@
   },
   "weapon_1h_7": {
     "name": "Battleaxe",
-    "icon": "items/battleaxe.webp",
+    "icon": "items/weapons_1h/battleaxe.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {
@@ -423,7 +423,7 @@
   },
   "weapon_1h_8": {
     "name": "Rapier",
-    "icon": "items/rapier.webp",
+    "icon": "items/weapons_1h/rapier.webp",
     "slot": "Weapon",
     "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
     "weapon_specs": {

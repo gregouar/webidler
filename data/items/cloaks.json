@@ -1,7 +1,7 @@
 {
   "wool_cloak": {
     "name": "Wool Cloak",
-    "icon": "items/wool_cloak.webp",
+    "icon": "items/cloaks/wool_cloak.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -27,7 +27,7 @@
   },
   "hooded_wrap": {
     "name": "Hooded Wrap",
-    "icon": "items/hooded_wrap.webp",
+    "icon": "items/cloaks/hooded_wrap.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -55,7 +55,7 @@
   "hooded_wrap_unique": {
     "name": "Stormfeast Shroud",
     "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
-    "icon": "items/stormfeast_shroud.webp",
+    "icon": "items/cloaks/stormfeast_shroud.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "rarity": "Unique",
@@ -124,7 +124,7 @@
   },
   "heavy_cloak": {
     "name": "Heavy Cloak",
-    "icon": "items/heavy_cloak.webp",
+    "icon": "items/cloaks/heavy_cloak.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -151,7 +151,7 @@
   },
   "fur_cloak": {
     "name": "Fur-lined Cloak",
-    "icon": "items/fur_cloak.webp",
+    "icon": "items/cloaks/fur_cloak.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -179,7 +179,7 @@
   "fur_cloak_unique": {
     "name": "Shadowmoth Embrace",
     "description": "Spread your wings, let the world fear what follows.",
-    "icon": "items/princess_cloak.webp",
+    "icon": "items/cloaks/princess_cloak.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "rarity": "Unique",
@@ -238,7 +238,7 @@
   },
   "reinforced_cloak": {
     "name": "Reinforced Cloak",
-    "icon": "items/reinforced_cloak.webp",
+    "icon": "items/cloaks/reinforced_cloak.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -265,7 +265,7 @@
   },
   "great_cloak": {
     "name": "Great Cloak",
-    "icon": "items/great_cloak.webp",
+    "icon": "items/cloaks/great_cloak.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -292,7 +292,7 @@
   },
   "cloak_7": {
     "name": "Elven Cape",
-    "icon": "items/elven_cape.webp",
+    "icon": "items/cloaks/elven_cape.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [
@@ -319,7 +319,7 @@
   },
   "cloak_8": {
     "name": "Regal Mantle",
-    "icon": "items/regal_mantle.webp",
+    "icon": "items/cloaks/regal_mantle.webp",
     "slot": "Accessory",
     "categories": [ "Accessory", "Cloak" ],
     "affixes": [

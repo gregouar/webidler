@@ -1,7 +1,7 @@
 {
   "wooden_beads": {
     "name": "Wooden Beads",
-    "icon": "items/wooden_beads.webp",
+    "icon": "items/amulets/wooden_beads.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -15,7 +15,7 @@
   },
   "medallion": {
     "name": "Brass Medallion",
-    "icon": "items/medallion.webp",
+    "icon": "items/amulets/medallion.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -30,7 +30,7 @@
   },
   "medallion_unique": {
     "name": "Burning Desire",
-    "icon": "items/burning_desire.webp",
+    "icon": "items/amulets/burning_desire.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -89,7 +89,7 @@
   },
   "silver_chain": {
     "name": "Silver Chain",
-    "icon": "items/silver_chain.webp",
+    "icon": "items/amulets/silver_chain.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -105,7 +105,7 @@
   "silver_chain_unique": {
     "name": "Arachnid Heart",
     "description": "When her heart stopped, the storm did not. It only found a new host.",
-    "icon": "items/amulet_spider.webp",
+    "icon": "items/amulets/amulet_spider.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "rarity": "Unique",
@@ -152,7 +152,7 @@
   },
   "gold_pendant": {
     "name": "Gold Pendant",
-    "icon": "items/gold_pendant.webp",
+    "icon": "items/amulets/gold_pendant.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -167,7 +167,7 @@
   },
   "crest_pendant": {
     "name": "Crest Pendant",
-    "icon": "items/crest_pendant.webp",
+    "icon": "items/amulets/crest_pendant.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -182,7 +182,7 @@
   },
   "amulet": {
     "name": "Amulet",
-    "icon": "items/amulet.webp",
+    "icon": "items/amulets/amulet.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -197,7 +197,7 @@
   },
   "amulet_7": {
     "name": "Sacred Talisman",
-    "icon": "items/sacred_talisman.webp",
+    "icon": "items/amulets/sacred_talisman.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [
@@ -213,7 +213,7 @@
   "amulet_7_unique": {
     "name": "Cross of the Deep Well",
     "description": "The faithful did not pray for power. They prayed for endurance.",
-    "icon": "items/amulet_unique_cross.webp",
+    "icon": "items/amulets/amulet_unique_cross.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "rarity": "Unique",
@@ -274,7 +274,7 @@
   },
   "amulet_8": {
     "name": "Royal Parure",
-    "icon": "items/royal_parure.webp",
+    "icon": "items/amulets/royal_parure.webp",
     "slot": "Amulet",
     "categories": [ "Jewelry", "Amulet" ],
     "affixes": [

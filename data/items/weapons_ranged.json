@@ -1,7 +1,7 @@
 {
   "shortbow": {
     "name": "Shortbow",
-    "icon": "items/shortbow.webp",
+    "icon": "items/weapons_ranged/shortbow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -18,7 +18,7 @@
   },
   "hunting_bow": {
     "name": "Hunting Bow",
-    "icon": "items/longbow.webp",
+    "icon": "items/weapons_ranged/longbow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -37,7 +37,7 @@
   "hunting_bow_unique": {
     "name": "Bloodspiller",
     "description": "It drinks deep of crimson under moonlight, never sated, never silent.",
-    "icon": "items/bloodspiller.webp",
+    "icon": "items/weapons_ranged/bloodspiller.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -110,7 +110,7 @@
   },
   "decorated_bow": {
     "name": "Decorated Bow",
-    "icon": "items/decorated_bow.webp",
+    "icon": "items/weapons_ranged/decorated_bow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -128,7 +128,7 @@
   },
   "composite_bow": {
     "name": "Composite Bow",
-    "icon": "items/composite_bow.webp",
+    "icon": "items/weapons_ranged/composite_bow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -147,7 +147,7 @@
   "composite_bow_unique": {
     "name": "Voltrach Bite",
     "description": "Where lightning meets venom, life itself hesitates.",
-    "icon": "items/voltrach_bite.webp",
+    "icon": "items/weapons_ranged/voltrach_bite.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -274,7 +274,7 @@
   },
   "light_crossbow": {
     "name": "Light Crossbow",
-    "icon": "items/light_crossbow.webp",
+    "icon": "items/weapons_ranged/light_crossbow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -293,7 +293,7 @@
   "treasure_gun": {
     "name": "Pistol of the Damned",
     "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
-    "icon": "items/treasure_gun.webp",
+    "icon": "items/weapons_ranged/treasure_gun.webp",
     "slot": "Weapon",
     "extra_slots": [ ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -381,7 +381,7 @@
   },
   "compound_bow": {
     "name": "Compound Bow",
-    "icon": "items/compound_bow.webp",
+    "icon": "items/weapons_ranged/compound_bow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -399,7 +399,7 @@
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
-    "icon": "items/dragon_crossbow.webp",
+    "icon": "items/weapons_ranged/dragon_crossbow.webp",
     "description": "Even unloaded, it smells of ash and oil.",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
@@ -521,7 +521,7 @@
   },
   "weapon_ranged_7": {
     "name": "Crossbow",
-    "icon": "items/crossbow.webp",
+    "icon": "items/weapons_ranged/crossbow.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],
@@ -539,7 +539,7 @@
   },
   "weapon_ranged_8": {
     "name": "Arbalest",
-    "icon": "items/arbalest.webp",
+    "icon": "items/weapons_ranged/arbalest.webp",
     "slot": "Weapon",
     "extra_slots": [ "Shield" ],
     "categories": [ "AttackWeapon", "RangedWeapon" ],

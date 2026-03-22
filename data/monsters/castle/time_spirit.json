@@ -1,0 +1,50 @@
+{
+  "name": "Time Spirit",
+  "portrait": "monsters/castle/time_spirit.webp",
+  "max_life": 5,
+  "power_factor": 1,
+  "initiative": [ 2, 3 ],
+  "evade": {
+    "Physical": 20,
+    "Fire": 20,
+    "Storm": 20,
+    "Poison": 20
+  },
+  "skills": [
+    {
+      "name": "Time is Ticking",
+      "icon": "skills/magic_missile.svg",
+      "cooldown": 3.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 4, 8 ]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Speed": null },
+                        "debuff": true
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

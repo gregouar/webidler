@@ -1,7 +1,7 @@
 {
   "cloth_shoes": {
     "name": "Cloth Shoes",
-    "icon": "items/cloth_shoes.webp",
+    "icon": "items/boots/cloth_shoes.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -10,7 +10,7 @@
   },
   "leather_boots": {
     "name": "Leather Boots",
-    "icon": "items/leather_boots.webp",
+    "icon": "items/boots/leather_boots.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -21,7 +21,7 @@
   "leather_boots_unique": {
     "name": "Pathwalker's Remains",
     "description": "Their journey never ended, maybe yours won't either.",
-    "icon": "items/pathwalker_remains.webp",
+    "icon": "items/boots/pathwalker_remains.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -77,7 +77,7 @@
   },
   "reinforced_boots": {
     "name": "Reinforced Boots",
-    "icon": "items/reinforced_boots.webp",
+    "icon": "items/boots/reinforced_boots.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -87,7 +87,7 @@
   },
   "mail_boots": {
     "name": "Mail Boots",
-    "icon": "items/mail_boots.webp",
+    "icon": "items/boots/mail_boots.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -97,7 +97,7 @@
   },
   "iron_shod_boots": {
     "name": "Iron-Shod Boots",
-    "icon": "items/iron_shod_boots.webp",
+    "icon": "items/boots/iron_shod_boots.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -107,7 +107,7 @@
   },
   "sabatons": {
     "name": "Sabatons",
-    "icon": "items/sabatons.webp",
+    "icon": "items/boots/sabatons.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -118,7 +118,7 @@
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
     "description": "The Father Drake never fled, the storm simply carried him elsewhere.",
-    "icon": "items/dragon_boots.webp",
+    "icon": "items/boots/dragon_boots.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -190,7 +190,7 @@
   },
   "boots_7": {
     "name": "Plated Boots",
-    "icon": "items/plated_boots.webp",
+    "icon": "items/boots/plated_boots.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {
@@ -200,7 +200,7 @@
   },
   "boots_8": {
     "name": "Runic Greaves",
-    "icon": "items/runic_greaves.webp",
+    "icon": "items/boots/runic_greaves.webp",
     "slot": "Boots",
     "categories": [ "Armor", "Boots" ],
     "armor_specs": {

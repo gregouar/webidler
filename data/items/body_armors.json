@@ -1,7 +1,7 @@
 {
   "padded_tunic": {
     "name": "Padded Tunic",
-    "icon": "items/padded_tunic.webp",
+    "icon": "items/body_armors/padded_tunic.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -11,7 +11,7 @@
   "padded_tunic_unique": {
     "name": "A Simple Shirt",
     "description": "Who needs more?",
-    "icon": "items/shirt.webp",
+    "icon": "items/body_armors/shirt.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -37,7 +37,7 @@
   },
   "leather_armor": {
     "name": "Leather Armor",
-    "icon": "items/leather_armor.webp",
+    "icon": "items/body_armors/leather_armor.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -48,7 +48,7 @@
   "leather_armor_unique": {
     "name": "Wildheart Vest",
     "description": "Life feeds on life, this is no cruelty, only the forest's way",
-    "icon": "items/wildheart.webp",
+    "icon": "items/body_armors/wildheart.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -95,7 +95,7 @@
   },
   "chain_shirt": {
     "name": "Chain Shirt",
-    "icon": "items/chain_shirt.webp",
+    "icon": "items/body_armors/chain_shirt.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -105,7 +105,7 @@
   },
   "scale_vest": {
     "name": "Scale Vest",
-    "icon": "items/scale_vest.webp",
+    "icon": "items/body_armors/scale_vest.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -116,7 +116,7 @@
   "scale_vest_unique": {
     "name": "Mirrorshroud Dress",
     "description": "It whispers: you may strike, but you may not touch.",
-    "icon": "items/princess_robe.webp",
+    "icon": "items/body_armors/princess_robe.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -164,7 +164,7 @@
   },
   "brigandine": {
     "name": "Brigandine",
-    "icon": "items/brigandine.webp",
+    "icon": "items/body_armors/brigandine.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -175,7 +175,7 @@
   "brigandine_unique": {
     "name": "Crustback Bulwark",
     "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
-    "icon": "items/crab_armor.webp",
+    "icon": "items/body_armors/crab_armor.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -226,7 +226,7 @@
   },
   "breastplate": {
     "name": "Breastplate",
-    "icon": "items/breastplate.webp",
+    "icon": "items/body_armors/breastplate.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -237,7 +237,7 @@
   "breastplate_unique": {
     "name": "Heart of the Wyrm",
     "description": "Abal's heart did not burn out, it learned to endure.",
-    "icon": "items/dragon_armor.webp",
+    "icon": "items/body_armors/dragon_armor.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -312,7 +312,7 @@
   },
   "body_7": {
     "name": "Cavalry Armor",
-    "icon": "items/cavalry_armor.webp",
+    "icon": "items/body_armors/cavalry_armor.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {
@@ -322,7 +322,7 @@
   },
   "body_8": {
     "name": "Plate Armor",
-    "icon": "items/plate_armor.webp",
+    "icon": "items/body_armors/plate_armor.webp",
     "slot": "Body",
     "categories": [ "Armor", "Body" ],
     "armor_specs": {

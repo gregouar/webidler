@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "monsters": [
+      "ashroot_sentinel.json",
+      "bonebark_wolf.json",
+      "cinder_hag.json",
+      "gravevine_crawler.json",
+      "hunter.json",
+      "hound_fire.json",
+      "hound_storm.json",
+      "moth_ember.json",
+      "moth_mourning.json",
+      "rotcap_shambler.json",
+      "snake.json",
+      "stormwraith.json",
+      "thorn_sprite.json",
+      "thorn_sprite_2.json",
+      "thorn_wall.json",
+      "thunder_stag.json"
+    ]
+  }
+}

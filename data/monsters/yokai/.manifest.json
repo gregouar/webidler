@@ -5,8 +5,12 @@
     "resources": {
         "monsters": [
             "hososhi.json",
+            "kappa.json",
             "karakasa_kozo.json",
-            "possessed_ashigaru.json"
+            "nure_onna.json",
+            "possessed_ashigaru.json",
+            "raiju.json",
+            "yurei.json"
         ]
     }
 }

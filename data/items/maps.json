@@ -1,7 +1,7 @@
 {
   "edict": {
     "name": "Edict",
-    "icon": "items/edict.webp",
+    "icon": "items/maps/edict.webp",
     "categories": [ "Map" ],
     "ignore_quality": true,
     "rarity": "Magic",
@@ -13,7 +13,7 @@
   },
   "edict_2": {
     "name": "Grand Edict",
-    "icon": "items/edict_grand.webp",
+    "icon": "items/maps/edict_grand.webp",
     "categories": [ "Map" ],
     "ignore_quality": true,
     "rarity": "Magic",
@@ -27,7 +27,7 @@
   "edict_treasure_map": {
     "name": "Cursed Treasure Map",
     "description": "It does not lead to treasure. It leads to what remains of those who sought it.",
-    "icon": "items/edict_treasure_map.webp",
+    "icon": "items/maps/edict_treasure_map.webp",
     "categories": [ "Map" ],
     "ignore_quality": true,
     "rarity": "Unique",

@@ -1,0 +1,42 @@
+{
+  "name": "Venomous Snake",
+  "portrait": "monsters/forest/snake.webp",
+  "max_life": 15,
+  "size": "Large",
+  "power_factor": 3.0,
+  "initiative": [ 1, 2 ],
+  "skills": [
+    {
+      "name": "Venomous Bite",
+      "icon": "skills/bite.svg",
+      "cooldown": 5.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 2, 4 ]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "value": 4
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Candle Knight",
+  "portrait": "monsters/castle/candle_knight.webp",
+  "max_life": 15,
+  "power_factor": 3,
+  "initiative": [ 1, 2 ],
+  "armor": { "Physical": 50 },
+  "block": {
+    "Attack": 30,
+    "Spell": 20
+  },
+  "skills": [
+    {
+      "name": "Melted Slice",
+      "icon": "skills/attack.svg",
+      "cooldown": 4.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 2, 4 ],
+                  "Fire": [ 2, 5 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

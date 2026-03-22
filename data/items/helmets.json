@@ -1,7 +1,7 @@
 {
   "cloth_hood": {
     "name": "Cloth Hood",
-    "icon": "items/cloth_hood.webp",
+    "icon": "items/helmets/cloth_hood.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -10,7 +10,7 @@
   },
   "leather_cap": {
     "name": "Leather Cap",
-    "icon": "items/leather_cap.webp",
+    "icon": "items/helmets/leather_cap.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -21,7 +21,7 @@
   "leather_cap_unique": {
     "name": "Skullcap of the Provoker",
     "description": "In the wild, to show your kills is to invite a fight, and to prove you're ready for it.",
-    "icon": "items/skullcap.webp",
+    "icon": "items/helmets/skullcap.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "rarity": "Unique",
@@ -71,7 +71,7 @@
   },
   "iron_cap": {
     "name": "Iron Cap",
-    "icon": "items/iron_cap.webp",
+    "icon": "items/helmets/iron_cap.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -82,7 +82,7 @@
   "iron_cap_unique": {
     "name": "The Seamstress's Folly",
     "description": "No spellbook could teach what she learned from her own undoing.",
-    "icon": "items/witch_hat.webp",
+    "icon": "items/helmets/witch_hat.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "rarity": "Unique",
@@ -149,7 +149,7 @@
   },
   "mail_coif": {
     "name": "Mail Coif",
-    "icon": "items/mail_coif.webp",
+    "icon": "items/helmets/mail_coif.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -159,7 +159,7 @@
   },
   "nasal_helm": {
     "name": "Nasal Helm",
-    "icon": "items/nasal_helm.webp",
+    "icon": "items/helmets/nasal_helm.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -169,7 +169,7 @@
   },
   "bascinet": {
     "name": "Bascinet",
-    "icon": "items/bascinet.webp",
+    "icon": "items/helmets/bascinet.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -180,7 +180,7 @@
   "treasure_crown": {
     "name": "Crown of Tides Storm",
     "description": "What crowns you is not the ocean... but what sleeps beneath it.",
-    "icon": "items/treasure_crown.webp",
+    "icon": "items/helmets/treasure_crown.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {
@@ -232,7 +232,7 @@
   },
   "helmet_7": {
     "name": "Barbute",
-    "icon": "items/barbute.webp",
+    "icon": "items/helmets/barbute.webp",
     "slot": "Helmet",
     "categories": [ "Armor", "Helmet" ],
     "armor_specs": {

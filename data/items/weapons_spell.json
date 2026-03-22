@@ -1,7 +1,7 @@
 {
   "wooden_rod": {
     "name": "Wooden Rod",
-    "icon": "items/wooden_rod.webp",
+    "icon": "items/weapons_spell/wooden_rod.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -19,7 +19,7 @@
   },
   "wand": {
     "name": "Magic Wand",
-    "icon": "items/wand.webp",
+    "icon": "items/weapons_spell/wand.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -39,7 +39,7 @@
   "wand_unique": {
     "name": "Baguette du Fromage",
     "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
-    "icon": "items/baguette_fromage.webp",
+    "icon": "items/weapons_spell/baguette_fromage.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "rarity": "Unique",
@@ -160,7 +160,7 @@
   },
   "bone_wand": {
     "name": "Bone Wand",
-    "icon": "items/bone_wand.webp",
+    "icon": "items/weapons_spell/bone_wand.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -179,7 +179,7 @@
   },
   "iron_wand": {
     "name": "Iron Wand",
-    "icon": "items/iron_wand.webp",
+    "icon": "items/weapons_spell/iron_wand.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -198,7 +198,7 @@
   },
   "iron_wand_unique": {
     "name": "Starlit Baton",
-    "icon": "items/princess_wand.webp",
+    "icon": "items/weapons_spell/princess_wand.webp",
     "description": "A flick of the wrist, and the stars learn to travel in pairs.",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
@@ -270,7 +270,7 @@
   },
   "decorated_wand": {
     "name": "Decorated Wand",
-    "icon": "items/carved_wand.webp",
+    "icon": "items/weapons_spell/carved_wand.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -290,7 +290,7 @@
   "decorated_wand_unique": {
     "name": "Arcane Cornucopia",
     "description": "Wizards say this horn was carved to pour mana, not keep it, and it has never stopped spilling since.",
-    "icon": "items/magic_horn.webp",
+    "icon": "items/weapons_spell/magic_horn.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "rarity": "Unique",
@@ -351,7 +351,7 @@
   },
   "crystal_wand": {
     "name": "Crystal Wand",
-    "icon": "items/crystal_wand.webp",
+    "icon": "items/weapons_spell/crystal_wand.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -370,7 +370,7 @@
   },
   "weapon_spell_7": {
     "name": "Mage Wand",
-    "icon": "items/mage_wand.webp",
+    "icon": "items/weapons_spell/mage_wand.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [
@@ -389,7 +389,7 @@
   },
   "weapon_spell_8": {
     "name": "Mystical Rod",
-    "icon": "items/mystical_rod.webp",
+    "icon": "items/weapons_spell/mystical_rod.webp",
     "slot": "Weapon",
     "categories": [ "SpellWeapon" ],
     "affixes": [

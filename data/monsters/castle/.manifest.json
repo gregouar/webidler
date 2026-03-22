@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "monsters": [
+      "briar_ornament.json",
+      "candle_knight.json",
+      "cogspinner_imp.json",
+      "court_composer.json",
+      "ember_butler.json",
+      "haunted_clock.json",
+      "mourning_basin.json",
+      "perfume_siren.json",
+      "porcelain_doll.json",
+      "princess_fire.json",
+      "princess_poison.json",
+      "princess_storm.json",
+      "royal_guard.json",
+      "silverware_familiars.json",
+      "smoldering_rug.json",
+      "teapot_wraith.json",
+      "time_spirit.json",
+      "topiary_golem.json"
+    ]
+  }
+}

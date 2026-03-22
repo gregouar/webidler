@@ -1,7 +1,7 @@
 {
   "rune": {
     "name": "Rune",
-    "icon": "items/rune.webp",
+    "icon": "items/runes/rune.webp",
     "categories": [
       "Rune"
     ],
@@ -13,7 +13,7 @@
   },
   "rune_root": {
     "name": "Anchor Rune",
-    "icon": "items/rune_root.webp",
+    "icon": "items/runes/rune_root.webp",
     "categories": [
       "Rune"
     ],
@@ -27,7 +27,7 @@
   "rune_gilded": {
     "name": "Gilded Covenant",
     "description": "Gold answers every prayer... eventually.",
-    "icon": "items/rune_gilded.webp",
+    "icon": "items/runes/rune_gilded.webp",
     "categories": [
       "Rune"
     ],
@@ -50,7 +50,7 @@
   "rune_berserker": {
     "name": "Mark of the Berserker",
     "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
-    "icon": "items/rune_berserker.webp",
+    "icon": "items/runes/rune_berserker.webp",
     "categories": [
       "Rune"
     ],
@@ -136,7 +136,7 @@
   "rune_storm_average": {
     "name": "Flux Stabilizer",
     "description": "Tames the wildest storms, binding chaos into order.",
-    "icon": "items/rune_flux_stabilizer.webp",
+    "icon": "items/runes/rune_flux_stabilizer.webp",
     "categories": [
       "Rune"
     ],
@@ -189,7 +189,7 @@
   "rune_poison_fire": {
     "name": "Caustic Convergence",
     "description": "The alchemists learned that decay has a temperature.",
-    "icon": "items/rune_poison_fire.webp",
+    "icon": "items/runes/rune_poison_fire.webp",
     "categories": [
       "Rune"
     ],
@@ -289,7 +289,7 @@
   "rune_mana_damage": {
     "name": "Mnemonic Singularity",
     "description": "A mind dense enough bends reality.",
-    "icon": "items/rune_mana_damage.webp",
+    "icon": "items/runes/rune_mana_damage.webp",
     "categories": [
       "Rune"
     ],
@@ -332,7 +332,7 @@
   "rune_storm_poison": {
     "name": "Voltrach Contraption",
     "description": "Few survived Voltrach's experiments. Fewer understood them.",
-    "icon": "items/rune_storm_poison.webp",
+    "icon": "items/runes/rune_storm_poison.webp",
     "categories": [
       "Rune"
     ],

@@ -1,7 +1,7 @@
 {
   "copper_ring": {
     "name": "Copper Ring",
-    "icon": "items/copper_ring.webp",
+    "icon": "items/rings/copper_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -15,7 +15,7 @@
   },
   "silver_ring": {
     "name": "Silver Ring",
-    "icon": "items/silver_ring.webp",
+    "icon": "items/rings/silver_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -31,7 +31,7 @@
   "silver_ring_unique": {
     "name": "Gambler's Luck",
     "description": "It does not favor you, it does not curse you, it simply spins the wheel and dares you to wear it.",
-    "icon": "items/gamblers_ring.webp",
+    "icon": "items/rings/gamblers_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
@@ -97,7 +97,7 @@
   },
   "gold_ring": {
     "name": "Gold Ring",
-    "icon": "items/gold_ring.webp",
+    "icon": "items/rings/gold_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -112,7 +112,7 @@
   },
   "signet_ring": {
     "name": "Signet Ring",
-    "icon": "items/signet_ring.webp",
+    "icon": "items/rings/signet_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -128,7 +128,7 @@
   "signet_ring_unique": {
     "name": "Heartstone Band",
     "description": "Who says battle can't be fabulous?",
-    "icon": "items/princess_ring.webp",
+    "icon": "items/rings/princess_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
@@ -191,7 +191,7 @@
   },
   "inlaid_ring": {
     "name": "Inlaid Ring",
-    "icon": "items/inlaid_ring.webp",
+    "icon": "items/rings/inlaid_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -207,7 +207,7 @@
   "inlaid_ring_unique": {
     "name": "Band of Blessing",
     "description": "In devotion, there is no room for doubt, nor for curses.",
-    "icon": "items/band_blessing.webp",
+    "icon": "items/rings/band_blessing.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
@@ -257,7 +257,7 @@
   "inlaid_ring_unique_2": {
     "name": "Band of Cursing",
     "description": "Every blessing denied leaves space for something far worse.",
-    "icon": "items/band_cursing.webp",
+    "icon": "items/rings/band_cursing.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "rarity": "Unique",
@@ -306,7 +306,7 @@
   },
   "jewelled_ring": {
     "name": "Jewelled Ring",
-    "icon": "items/jewelled_ring.webp",
+    "icon": "items/rings/jewelled_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -321,7 +321,7 @@
   },
   "ring_7": {
     "name": "Runic Ring",
-    "icon": "items/runic_ring.webp",
+    "icon": "items/rings/runic_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [
@@ -336,7 +336,7 @@
   },
   "ring_8": {
     "name": "Regal Ring",
-    "icon": "items/runic_ring.webp",
+    "icon": "items/rings/runic_ring.webp",
     "slot": "Ring",
     "categories": [ "Jewelry", "Ring" ],
     "affixes": [

@@ -1,0 +1,49 @@
+{
+  "name": "Mourning Moth",
+  "portrait": "monsters/forest/moth_mourning.webp",
+  "max_life": 7,
+  "power_factor": 2.0,
+  "initiative": [ 0.0, 0.5 ],
+  "skills": [
+    {
+      "name": "Lamenting Cry",
+      "icon": "skills/curse_frailty.svg",
+      "skill_type": "Spell",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [ 0, 8 ]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Physical"
+                          }
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "cloth_wraps": {
     "name": "Cloth Wraps",
-    "icon": "items/cloth_wraps.webp",
+    "icon": "items/gloves/cloth_wraps.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -11,7 +11,7 @@
   "cloth_wraps_unique": {
     "name": "Baker's Embrace",
     "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven— they cradle the fury of molten magic.",
-    "icon": "items/oven_mitts.webp",
+    "icon": "items/gloves/oven_mitts.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -41,7 +41,7 @@
   },
   "leather_gloves": {
     "name": "Leather Gloves",
-    "icon": "items/leather_gloves.webp",
+    "icon": "items/gloves/leather_gloves.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -52,7 +52,7 @@
   "leather_gloves_unique": {
     "name": "Fangbreaker",
     "description": "When steel is taken from you, bare hands become the fangs of survival.",
-    "icon": "items/fangbreaker.webp",
+    "icon": "items/gloves/fangbreaker.webp",
     "slot": "Gloves",
     "extra_slots": [ "Weapon" ],
     "categories": [
@@ -155,7 +155,7 @@
   },
   "studded_gloves": {
     "name": "Studded Gloves",
-    "icon": "items/studded_gloves.webp",
+    "icon": "items/gloves/studded_gloves.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -165,7 +165,7 @@
   },
   "chain_gloves": {
     "name": "Chain Gloves",
-    "icon": "items/chain_gloves.webp",
+    "icon": "items/gloves/chain_gloves.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -176,7 +176,7 @@
   "chain_gloves_unique": {
     "name": "Petalweave Gloves",
     "description": "Each blossom stitched into the silk drinks in stray magic and returns it to its wielder in steady breaths.",
-    "icon": "items/princess_gloves.webp",
+    "icon": "items/gloves/princess_gloves.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -217,7 +217,7 @@
   },
   "leather_gauntlets": {
     "name": "Boiled Leather Gauntlets",
-    "icon": "items/leather_gauntlets.webp",
+    "icon": "items/gloves/leather_gauntlets.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -227,7 +227,7 @@
   },
   "lamellar_gauntlets": {
     "name": "Lamellar Gauntlets",
-    "icon": "items/leather_gauntlets.webp",
+    "icon": "items/gloves/leather_gauntlets.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -238,7 +238,7 @@
   "lamellar_gauntlets_unique": {
     "name": "Twinbound Grasp",
     "description": "Abal's fury, Zael's cunning, bound in mortal hands.",
-    "icon": "items/dragon_gloves.webp",
+    "icon": "items/gloves/dragon_gloves.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -345,7 +345,7 @@
   },
   "gloves_7": {
     "name": "Plated Gauntlets",
-    "icon": "items/plated_gauntlets.webp",
+    "icon": "items/gloves/plated_gauntlets.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {
@@ -355,7 +355,7 @@
   },
   "gloves_8": {
     "name": "Runic Gauntlets",
-    "icon": "items/runic_gauntlets.webp",
+    "icon": "items/gloves/runic_gauntlets.webp",
     "slot": "Gloves",
     "categories": [ "Armor", "Gloves" ],
     "armor_specs": {

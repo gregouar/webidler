@@ -1,7 +1,7 @@
 {
   "buckler": {
     "name": "Buckler",
-    "icon": "items/buckler.webp",
+    "icon": "items/shields/buckler.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -11,7 +11,7 @@
   },
   "small_round_shield": {
     "name": "Small Round Shield",
-    "icon": "items/small_round_shield.webp",
+    "icon": "items/shields/small_round_shield.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -23,7 +23,7 @@
   "small_round_shield_unique": {
     "name": "Thunderclap Bulwark",
     "description": "When struck, it roars like the heavens, felling foes as if lightning kissed their skulls.",
-    "icon": "items/thunderclap_bulwark.webp",
+    "icon": "items/shields/thunderclap_bulwark.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -79,7 +79,7 @@
   },
   "iron_buckler": {
     "name": "Iron Buckler",
-    "icon": "items/iron_buckler.webp",
+    "icon": "items/shields/iron_buckler.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -90,7 +90,7 @@
   },
   "heater_shield": {
     "name": "Heater Shield",
-    "icon": "items/heater_shield.webp",
+    "icon": "items/shields/heater_shield.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -102,7 +102,7 @@
   "heater_shield_unique": {
     "name": "Bouffon's Last Jest",
     "description": "He laughed at danger until danger learned to fear the joke.",
-    "icon": "items/mocking_shield.webp",
+    "icon": "items/shields/mocking_shield.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -157,7 +157,7 @@
   },
   "targe": {
     "name": "Targe",
-    "icon": "items/targe.webp",
+    "icon": "items/shields/targe.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -168,7 +168,7 @@
   },
   "kite_shield": {
     "name": "Kite Shield",
-    "icon": "items/kite_shield.webp",
+    "icon": "items/shields/kite_shield.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -180,7 +180,7 @@
   "kite_shield_unique": {
     "name": "Oath of the Cursed King",
     "description": "Each curse strengthens his reign, and drains what little life remains.",
-    "icon": "items/shield_cursed.webp",
+    "icon": "items/shields/shield_cursed.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -281,7 +281,7 @@
   },
   "shield_7": {
     "name": "Pavise",
-    "icon": "items/pavise.webp",
+    "icon": "items/shields/pavise.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
@@ -292,7 +292,7 @@
   },
   "shield_8": {
     "name": "Runic Ward",
-    "icon": "items/runic_shield.webp",
+    "icon": "items/shields/runic_shield.webp",
     "slot": "Shield",
     "categories": [ "Shield" ],
     "armor_specs": {
