@@ -3,6 +3,7 @@
     "portrait": "monsters/yokai/gashadokuro.webp",
     "rarity": "Boss",
     "max_life": 1200,
+    "life_regen": 30,
     "size": "Gargantuan",
     "power_factor": 20,
     "initiative": 3,
@@ -16,8 +17,8 @@
     ],
     "skills": [
         {
-            "name": "Crushing Hand",
-            "icon": "skills/attack.svg",
+            "name": "Crushing Left Hand",
+            "icon": "skills/skeletal_hand.svg",
             "skill_type": "Attack",
             "cooldown": 3.0,
             "targets": [
@@ -31,6 +32,58 @@
                                 }
                             }
                         }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Crushing Right Hand",
+            "icon": "skills/skeletal_hand.svg",
+            "skill_type": "Attack",
+            "cooldown": 3.0,
+            "targets": [
+                {
+                    "range": "Melee",
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": {
+                                    "Physical": [ 20, 40 ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Gachi Gachi",
+            "icon": "skills/skull.svg",
+            "skill_type": "Curse",
+            "cooldown": 8.0,
+            "targets": [
+                {
+                    "range": "Any",
+                    "effects": [
+
+                        {
+                            "ApplyStatus": {
+                                "duration": 4,
+                                "statuses": [
+                                    {
+                                        "status_type": {
+                                            "StatModifier": {
+                                                "stat": { "Speed": null },
+                                                "modifier": "More",
+                                                "debuff": true
+                                            }
+                                        },
+                                        "value": 100
+                                    }
+                                ]
+                            }
+                        }
+
                     ]
                 }
             ]

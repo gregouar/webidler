@@ -20,7 +20,7 @@
   ],
   "bosses": [
     {
-      "level": 1,
+      "level": 50,
       "interval": 50,
       "spawns": [
         {
