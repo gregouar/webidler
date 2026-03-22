@@ -32,7 +32,7 @@ pub fn update_monster_states(
         .enumerate()
         .filter(|(_, (s, _))| s.character_state.is_alive)
     {
-        monster_state.initiative = (monster_state.initiative - elapsed_time.as_secs_f32()).max(0.0);
+        // monster_state.initiative = (monster_state.initiative - elapsed_time.as_secs_f32()).max(0.0);
 
         characters_updater::update_character_state(
             events_queue,
@@ -43,7 +43,9 @@ pub fn update_monster_states(
             area_threat,
         );
 
-        if monster_state.initiative > 0.0 || monster_state.character_state.is_stunned() {
+        if
+        //  monster_state.initiative > 0.0 ||
+        monster_state.character_state.is_stunned() {
             continue;
         }
 
@@ -52,6 +54,11 @@ pub fn update_monster_states(
             &monster_specs.skill_specs,
             &mut monster_state.skill_states,
         );
+
+        skills_updater::update_repeated_skill_effects(
+            elapsed_time,
+            &mut monster_state.character_state.repeated_skills,
+        )
     }
 }
 

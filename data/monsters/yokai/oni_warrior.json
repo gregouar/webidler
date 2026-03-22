@@ -1,0 +1,35 @@
+{
+  "name": "Oni Warrior",
+  "portrait": "monsters/yokai/oni_warrior.webp",
+  "max_life": 35,
+  "size": "Huge",
+  "power_factor": 5,
+  "armor": { "Physical": 50, "Fire": 50 },
+  "skills": [
+    {
+      "name": "Infernal Cyclone",
+      "icon": "skills/whirlwind.svg",
+      "cooldown": 5.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "repeat": {
+            "value": [ 2, 4 ],
+            "target": "Any",
+            "repeat_cooldown": 0.5
+          },
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 5, 10 ],
+                  "Fire": [ 5, 10 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

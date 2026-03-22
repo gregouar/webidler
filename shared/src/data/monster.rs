@@ -27,7 +27,7 @@ pub struct MonsterState {
     pub character_state: CharacterState,
     pub skill_states: Vec<SkillState>,
 
-    pub initiative: f32,
+    // pub initiative: f32,
     pub gold_reward: f64,
     pub gems_reward: f64,
 }

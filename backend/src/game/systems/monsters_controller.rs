@@ -30,7 +30,7 @@ pub fn control_monsters(
         };
 
         if !this_monster_state.character_state.is_alive
-            || this_monster_state.initiative > 0.0
+            // || this_monster_state.initiative > 0.0
             || this_monster_state.character_state.is_stunned()
         {
             continue;
@@ -70,6 +70,8 @@ pub fn control_monsters(
                 &mut player_state.character_state,
             ),
         )];
+
+        skills_controller::repeat_skills(events_queue, &mut me, &mut friends, &mut player);
 
         for (skill_specs, skill_state) in this_monster_specs
             .skill_specs

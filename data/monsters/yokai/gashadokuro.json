@@ -1,0 +1,39 @@
+{
+    "name": "Gashadokuro",
+    "portrait": "monsters/yokai/gashadokuro.webp",
+    "rarity": "Boss",
+    "max_life": 1200,
+    "size": "Gargantuan",
+    "power_factor": 20,
+    "initiative": 3,
+    "armor": { "Physical": 200, "Storm": 50, "Poison": 50, "Fire": 50 },
+    "stun_lockout": 5.0,
+    "status_resistances": [
+        {
+            "status_type": "Stun",
+            "value": 66
+        }
+    ],
+    "skills": [
+        {
+            "name": "Crushing Hand",
+            "icon": "skills/attack.svg",
+            "skill_type": "Attack",
+            "cooldown": 3.0,
+            "targets": [
+                {
+                    "range": "Melee",
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": {
+                                    "Physical": [ 20, 40 ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

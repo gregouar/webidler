@@ -104,7 +104,6 @@ impl DataInit<&MonsterSpecs> for MonsterState {
                 })
                 .collect(),
             // initiative: specs.initiative.roll(), // TODO
-            initiative: 0.0,
             gold_reward: 0.0,
             gems_reward: 0.0,
         }

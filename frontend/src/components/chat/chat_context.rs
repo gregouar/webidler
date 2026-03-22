@@ -251,8 +251,7 @@ fn push_message(chat_context: &ChatContext, message: ChatMessage) {
         .messages
         .read_untracked()
         .iter()
-        .find(|m| m.sent_at == message.sent_at && m.user_id == message.user_id)
-        .is_some()
+        .any(|m| m.sent_at == message.sent_at && m.user_id == message.user_id)
     {
         chat_context.messages.write().push(message);
     }

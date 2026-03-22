@@ -5,12 +5,16 @@
     "resources": {
         "monsters": [
             "chochin_obake.json",
+            "gashadokuro.json",
             "hitotsume_kozo.json",
             "hososhi.json",
             "kappa.json",
             "karakasa_kozo.json",
+            "kasha.json",
             "nure_onna.json",
             "ohaguro_bettari.json",
+            "oni_pyro.json",
+            "oni_warrior.json",
             "possessed_ashigaru.json",
             "raiju.json",
             "rokurokubi.json",
