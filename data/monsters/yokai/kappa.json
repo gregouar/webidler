@@ -8,7 +8,7 @@
   "block": { "Attack": 20, "Spell": 20 },
   "skills": [
     {
-      "name": "Poison Grenade",
+      "name": "Acid Grenade",
       "icon": "skills/poison_cloud.svg",
       "cooldown": 5.0,
       "skill_type": "Attack",
@@ -23,7 +23,8 @@
                     "status_type": {
                       "DamageOverTime": { "damage_type": "Poison" }
                     },
-                    "value": 5
+                    "value": 5,
+                    "cumulate": true
                   }
                 ]
               }

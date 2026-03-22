@@ -4,12 +4,17 @@
     },
     "resources": {
         "monsters": [
+            "chochin_obake.json",
+            "hitotsume_kozo.json",
             "hososhi.json",
             "kappa.json",
             "karakasa_kozo.json",
             "nure_onna.json",
+            "ohaguro_bettari.json",
             "possessed_ashigaru.json",
             "raiju.json",
+            "rokurokubi.json",
+            "ushi_oni.json",
             "yurei.json"
         ]
     }

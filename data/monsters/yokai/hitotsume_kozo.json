@@ -1,40 +1,43 @@
 {
-  "name": "Yurei",
-  "portrait": "monsters/yokai/yurei.webp",
-  "max_life": 7,
-  "power_factor": 2.0,
-  "evade": {
-    "Physical": 20,
-    "Fire": 20,
-    "Storm": 20,
-    "Poison": 20
-  },
+  "name": "Hitotsume Kozo",
+  "portrait": "monsters/yokai/hitotsume_kozo.webp",
+  "max_life": 10,
+  "power_factor": 1.0,
   "skills": [
     {
-      "name": "Haunting",
-      "icon": "skills/curse_frailty.svg",
-      "skill_type": "Spell",
+      "name": "Child's Play",
+      "icon": "skills/skull.svg",
       "cooldown": 3.0,
+      "skill_type": "Spell",
       "targets": [
         {
           "effects": [
             {
               "FlatDamage": {
                 "damage": {
-                  "Storm": [ 0, 8 ]
+                  "Physical": [ 3, 6 ]
                 }
               }
             },
             {
               "ApplyStatus": {
-                "duration": 5,
+                "duration": 3,
                 "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": "ManaRegen",
+                        "debuff": true
+                      }
+                    },
+                    "value": 100
+                  },
                   {
                     "status_type": {
                       "StatModifier": {
                         "stat": {
                           "DamageResistance": {
-                            "damage_type": "Storm"
+                            "damage_type": "Fire"
                           }
                         },
                         "modifier": "Flat",
