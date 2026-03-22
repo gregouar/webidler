@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use sqlx::{FromRow, Transaction};
 
-use shared::data::user::UserId;
+use shared::data::user::{User, UserId};
 
 use super::{
     pool::{Database, DbExecutor, DbPool},
@@ -137,11 +137,12 @@ pub async fn get_user_by_name<'c>(
 pub async fn auth_user(
     db_pool: &DbPool,
     username: &str,
-) -> Result<Option<(UserId, Option<String>)>, sqlx::Error> {
+) -> Result<Option<(User, Option<String>)>, sqlx::Error> {
     Ok(sqlx::query!(
         r#"
         SELECT 
             user_id as "user_id: UserId", 
+            username, 
             password_hash 
         FROM users WHERE LOWER(username) = LOWER($1) AND deleted_at IS NULL
         "#,
@@ -149,7 +150,15 @@ pub async fn auth_user(
     )
     .fetch_optional(db_pool)
     .await?
-    .map(|record| (record.user_id, record.password_hash)))
+    .map(|record| {
+        (
+            User {
+                user_id: record.user_id,
+                username: record.username.unwrap_or("someone".into()),
+            },
+            record.password_hash,
+        )
+    }))
 }
 
 pub async fn update_last_login(db_pool: &DbPool, user_id: &UserId) -> Result<(), sqlx::Error> {

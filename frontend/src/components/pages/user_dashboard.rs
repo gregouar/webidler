@@ -8,7 +8,7 @@ use leptos_use::storage;
 use shared::{
     data::{
         area::AreaSpecs,
-        user::{User, UserCharacter, UserCharacterActivity, UserCharacterId, UserId},
+        user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserDetails, UserId},
     },
     http::{
         client::{CreateCharacterRequest, UpdateCharacterRequest},
@@ -58,21 +58,21 @@ pub fn UserDashboardPage() -> impl IntoView {
                 .map(|r| r.areas)
                 .unwrap_or_default();
 
-            let user = backend
+            let user_details = backend
                 .get_me(&auth_context.token())
                 .await
-                .map(|r| r.user_details.user)
+                .map(|r| r.user_details)
                 .ok();
 
-            match user {
-                Some(user) => {
+            match user_details {
+                Some(user_details) => {
                     let characters = backend
-                        .get_user_characters(&auth_context.token(), &user.user_id)
+                        .get_user_characters(&auth_context.token(), &user_details.user.user_id)
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
-                    username.set(user.username.clone());
-                    Some((areas, user, characters))
+                    username.set(user_details.user.username.clone());
+                    Some((areas, user_details, characters))
                 }
                 None => None,
             }
@@ -181,14 +181,14 @@ pub fn UserDashboardPage() -> impl IntoView {
                         }>
                             {move || {
                                 Suspend::new(async move {
-                                    let (areas, user, characters) = async_data
+                                    let (areas, user_details, characters) = async_data
                                         .await
                                         .unwrap_or_default();
                                     let areas = Arc::new(areas);
                                     view! {
                                         <CreateCharacterPanel
                                             open=open_character_panel
-                                            user_id=user.user_id
+                                            user_id=user_details.user.user_id
                                             refresh_trigger=refresh_trigger
                                             selected_character_id
                                             selected_character_name
@@ -200,7 +200,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                             <CharactersSelection
                                                 areas=areas.clone()
                                                 characters
-                                                user
+                                                user_details
                                                 refresh_trigger
                                                 open_character_panel
                                                 selected_character_id
@@ -223,7 +223,7 @@ pub fn UserDashboardPage() -> impl IntoView {
 fn CharactersSelection(
     areas: Arc<HashMap<String, AreaSpecs>>,
     characters: Vec<UserCharacter>,
-    user: User,
+    user_details: UserDetails,
     refresh_trigger: RwSignal<u64>,
     open_character_panel: RwSignal<bool>,
     selected_character_id: RwSignal<Option<UserCharacterId>>,
@@ -237,7 +237,7 @@ fn CharactersSelection(
             <div class="flex flex-row justify-between items-center px-4">
                 <CardTitle>"Your Characters"</CardTitle>
                 <span class="text-sm text-gray-400 font-medium">
-                    {format!("{characters_len} / {}", user.max_characters)}
+                    {format!("{characters_len} / {}", user_details.max_characters)}
                 </span>
             </div>
 
@@ -261,7 +261,7 @@ fn CharactersSelection(
                         }
                     />
 
-                    {if characters_len < user.max_characters as usize {
+                    {if characters_len < user_details.max_characters as usize {
                         Some(
                             view! {
                                 <CreateCharacterSlot on:click=move |_| {

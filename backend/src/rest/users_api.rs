@@ -12,7 +12,7 @@ use chrono::{Duration, Utc};
 
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
-    data::user::UserId,
+    data::user::{UserDetails, UserId},
     http::{
         client::{
             ForgotPasswordRequest, ResetPasswordRequest, SignInRequest, SignUpRequest,
@@ -126,18 +126,31 @@ async fn get_discord_invite(
     Extension(current_user): Extension<CurrentUser>,
     State(discord): State<DiscordIntegration>,
 ) -> Result<Json<GetDiscordInviteResponse>, AppError> {
-    let code = discord
-        .get_invite(current_user.user_details.user.user_id)
-        .await?;
+    let code = discord.get_invite(current_user.user.user_id).await?;
 
     Ok(Json(GetDiscordInviteResponse { code }))
 }
 
 async fn get_me(
+    State(app_settings): State<AppSettings>,
+    State(db_pool): State<db::DbPool>,
     Extension(current_user): Extension<CurrentUser>,
 ) -> Result<Json<GetUserDetailsResponse>, AppError> {
+    let user = db::users::read_user(&db_pool, &current_user.user.user_id)
+        .await?
+        .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
+
+    let email = user
+        .email_crypt
+        .as_ref()
+        .and_then(|email_crypt| auth::decrypt_email(&app_settings, email_crypt).ok());
+
     Ok(Json(GetUserDetailsResponse {
-        user_details: current_user.user_details,
+        user_details: UserDetails {
+            max_characters: user.max_characters as u8,
+            user: user.into(),
+            email,
+        },
     }))
 }
 
@@ -243,7 +256,7 @@ async fn post_update_account(
         auth::sign_in(
             &app_settings,
             &db_pool,
-            &current_user.user_details.user.username,
+            &current_user.user.username,
             &payload
                 .old_password
                 .map(|p| p.into_inner())
@@ -270,13 +283,7 @@ async fn post_update_account(
     }
     let mut tx = db_pool.begin().await?;
 
-    let r = match db::users::update_user(
-        &mut tx,
-        &current_user.user_details.user.user_id,
-        &user_update,
-    )
-    .await?
-    {
+    let r = match db::users::update_user(&mut tx, &current_user.user.user_id, &user_update).await? {
         Some(_) => Ok(Json(UpdateAccountResponse {})),
         None => Err(AppError::UserError(
             "username or email already in use".to_string(),
@@ -293,7 +300,7 @@ async fn delete_account(
     Path(user_id): Path<UserId>,
     Extension(current_user): Extension<CurrentUser>,
 ) -> Result<Json<DeleteAccountResponse>, AppError> {
-    if current_user.user_details.user.user_id != user_id {
+    if current_user.user.user_id != user_id {
         return Err(AppError::Forbidden);
     }
 

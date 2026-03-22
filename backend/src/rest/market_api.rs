@@ -51,7 +51,7 @@ pub async fn post_browse_market(
 ) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
     let (items, has_more) = db::market::read_market_items(
         &db_pool,
-        &current_user.user_details.user.user_id,
+        &current_user.user.user_id,
         payload.filters,
         payload.skip as i64,
         payload.limit.into_inner(),
@@ -90,7 +90,7 @@ pub async fn post_buy_market_item(
     let market_buy_entry = db::market::buy_item(
         &mut tx,
         payload.item_index as i64,
-        Some(current_user.user_details.user.user_id),
+        Some(current_user.user.user_id),
     )
     .await?
     .ok_or(AppError::NotFound)?;
@@ -106,7 +106,7 @@ pub async fn post_buy_market_item(
     // Allow seller to remove own listing
     let price = if character.user_id != item_bought.user_id {
         if let Some(recipient_id) = market_buy_entry.recipient_id
-            && recipient_id != current_user.user_details.user.user_id
+            && recipient_id != current_user.user.user_id
         {
             return Err(AppError::Forbidden);
         }
@@ -145,7 +145,7 @@ pub async fn post_buy_market_item(
                 item_bought.user_id,
                 format!(
                     "Sold to {} for {:.0} Gems.",
-                    current_user.user_details.user.username, price
+                    current_user.user.username, price
                 ),
                 Some(&item_bought.item_specs),
             )
@@ -175,7 +175,7 @@ pub async fn post_reject_market_item(
     if !db::market::reject_item(
         &db_pool,
         payload.item_index as i64,
-        &current_user.user_details.user.user_id,
+        &current_user.user.user_id,
     )
     .await?
     {
@@ -234,7 +234,7 @@ pub async fn post_sell_market_item(
         None
     };
 
-    if recipient_id.unwrap_or_default() == current_user.user_details.user.user_id {
+    if recipient_id.unwrap_or_default() == current_user.user.user_id {
         return Err(AppError::UserError("cannot offer to yourself".into()));
     }
 
@@ -284,7 +284,7 @@ pub async fn post_edit_market_item(
     let market_item = db::market::buy_item(
         &mut tx,
         payload.item_index as i64,
-        Some(current_user.user_details.user.user_id),
+        Some(current_user.user.user_id),
     )
     .await?
     .ok_or(AppError::NotFound)?;

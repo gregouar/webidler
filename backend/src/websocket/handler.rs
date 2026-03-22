@@ -138,14 +138,14 @@ async fn handle_connect(
 ) -> Result<Session> {
     tracing::info!("connect: {}", msg.character_id);
 
-    let user_id = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
+    let user = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
         .ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
     let user_character = db::characters::read_character(&app_state.db_pool, &msg.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if user_character.user_id != user_id {
+    if user_character.user_id != user.user_id {
         return Err(AppError::NotFound.into());
     }
 

@@ -8,16 +8,14 @@ pub type UserCharacterId = uuid::Uuid;
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct User {
     pub user_id: UserId,
-
     pub username: String,
-    pub max_characters: u8,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UserDetails {
     pub user: User,
-
     pub email: Option<Email>,
+    pub max_characters: u8,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

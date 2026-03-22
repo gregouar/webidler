@@ -52,7 +52,7 @@ fn verify_stash_access_write(
     current_user: &CurrentUser,
     stash: &StashEntry,
 ) -> Result<(), AppError> {
-    if stash.user_id != current_user.user_details.user.user_id {
+    if stash.user_id != current_user.user.user_id {
         return Err(AppError::Forbidden);
     }
     Ok(())
@@ -64,7 +64,7 @@ fn verify_stash_access_read(
 ) -> Result<(), AppError> {
     if !match stash.stash_type.0 {
         StashType::Market => true,
-        StashType::User => stash.user_id == current_user.user_details.user.user_id,
+        StashType::User => stash.user_id == current_user.user.user_id,
     } {
         return Err(AppError::Forbidden);
     }

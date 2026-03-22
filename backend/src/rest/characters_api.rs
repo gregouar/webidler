@@ -71,7 +71,7 @@ async fn post_create_character(
     Json(payload): Json<CreateCharacterRequest>,
 ) -> Result<Json<CreateCharacterResponse>, AppError> {
     // TODO: better access management
-    if current_user.user_details.user.user_id != user_id {
+    if current_user.user.user_id != user_id {
         return Err(AppError::Forbidden);
     }
 
@@ -251,7 +251,7 @@ async fn post_update_character(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if current_user.user_details.user.user_id != character.user_id {
+    if current_user.user.user_id != character.user_id {
         return Err(AppError::Forbidden);
     }
 
@@ -282,7 +282,7 @@ async fn delete_character(
     let character = db::characters::read_character(&db_pool, &character_id).await?;
 
     if !character
-        .map(|character| character.user_id == current_user.user_details.user.user_id)
+        .map(|character| character.user_id == current_user.user.user_id)
         .unwrap_or_default()
     {
         return Err(AppError::NotFound);
