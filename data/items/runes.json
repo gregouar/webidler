@@ -179,8 +179,8 @@
         },
         "modifier": "More",
         "value": [
-          100,
-          200
+          40,
+          80
         ]
       }
     ],
@@ -219,7 +219,8 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": 0
+                  "value": 0,
+                  "unavoidable": true
                 }
               ]
             },
@@ -250,7 +251,7 @@
               "Damage": { }
             },
             "modifier": "Flat",
-            "factor": 1,
+            "factor": 0.5,
             "source": {
               "StatusValue": {
                 "status_type": {
@@ -270,7 +271,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 1.0,
             "source": {
               "StatusDuration": {
                 "status_type": {
