@@ -82,7 +82,7 @@ fn generate_end_quest_rewards(
 
     let item_level = area_level
         .saturating_add(*game_data.area_specs.item_level_modifier)
-        .saturating_add(game_data.area_specs.power_level);
+        .saturating_add(*game_data.area_specs.power_level);
 
     let item_rewards = (0..amount_map_rewards)
         .flat_map(|_| {

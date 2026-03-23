@@ -79,6 +79,15 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                 each=move || {
                                     let mut areas = town_context.areas.get();
                                     areas
+                                        .retain(|area| {
+                                            data_context
+                                                .areas_specs
+                                                .read()
+                                                .get(&area.area_id)
+                                                .map(|area_specs| !area_specs.hidden)
+                                                .unwrap_or_default()
+                                        });
+                                    areas
                                         .sort_by_key(|area| {
                                             data_context
                                                 .areas_specs
@@ -341,7 +350,7 @@ fn GrindingAreaCard(
                     {move || {
                         format!(
                             "Power level: +{}",
-                            area_specs.read().power_level + *area_specs.read().item_level_modifier,
+                            *area_specs.read().power_level + *area_specs.read().item_level_modifier,
                         )
                     }}
                 </div>
@@ -528,7 +537,7 @@ pub fn StartGrindPanel(
                                             "Power Level Modifier: "
                                             <span class="font-semibold text-white">
                                                 "+"
-                                                {area_specs.power_level + *area_specs.item_level_modifier}
+                                                {*area_specs.power_level + *area_specs.item_level_modifier}
                                             </span>
                                         </li>
                                     </ul>

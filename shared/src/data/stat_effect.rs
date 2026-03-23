@@ -168,6 +168,7 @@ pub enum StatType {
     },
     StatConverter(StatConverterSpecs),
     GoldFind,
+    PowerLevel,
     Description2(String),
 }
 

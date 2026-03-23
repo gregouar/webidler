@@ -373,6 +373,7 @@ fn modify_player_specs(
             StatType::ItemRarity
             | StatType::ItemLevel
             | StatType::GemsFind
+            | StatType::PowerLevel
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }

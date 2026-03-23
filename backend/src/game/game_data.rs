@@ -128,6 +128,17 @@ impl GameInstanceData {
             &map_item,
         );
 
+        if area_specs.hidden
+            && !map_item
+                .as_ref()
+                .and_then(|map_item| map_item.base.map_specs.as_ref())
+                .and_then(|map_specs| map_specs.replace_area_id.as_ref())
+                .map(|replace_area_id| replace_area_id == area_id)
+                .unwrap_or_default()
+        {
+            return Err(anyhow::anyhow!("area is hidden"));
+        }
+
         let mut area_state = AreaState::init(&area_specs);
         area_state.max_area_level_ever = max_area_level_completed;
 

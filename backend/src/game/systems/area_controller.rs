@@ -73,6 +73,7 @@ fn compute_area_specs(area_specs: &mut AreaSpecs) {
             StatType::ItemRarity => area_specs.loot_rarity.apply_effect(&effect),
             StatType::ItemLevel => area_specs.item_level_modifier.apply_effect(&effect),
             StatType::GemsFind => area_specs.gems_find.apply_effect(&effect),
+            StatType::PowerLevel => area_specs.power_level.apply_effect(&effect),
             _ => {}
         }
     }

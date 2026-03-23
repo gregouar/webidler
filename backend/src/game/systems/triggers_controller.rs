@@ -159,7 +159,7 @@ pub fn apply_trigger_effects(
                                     .unwrap_or_default(),
                                 TriggerEffectModifierSource::AreaLevel => {
                                     trigger_context.level as f64
-                                        + game_data.area_specs.power_level as f64
+                                        + *game_data.area_specs.power_level as f64
                                 }
                                 TriggerEffectModifierSource::StatusValue {
                                     status_type,

@@ -52,7 +52,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
         game_context.player_resources.read().gold_total
             * computations::exponential(
                 *game_context.area_specs.read().item_level_modifier
-                    + game_context.area_specs.read().power_level,
+                    + *game_context.area_specs.read().power_level,
                 constants::MONSTER_REWARD_INCREASE_FACTOR,
             )
     });

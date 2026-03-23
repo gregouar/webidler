@@ -190,7 +190,7 @@ async fn new_game_instance(
         }
     };
 
-    let area_map = match area_config.map_item_index {
+    let map_item = match area_config.map_item_index {
         Some(map_item_index) => {
             if (map_item_index as usize) < player_inventory.bag.len() {
                 let map_item = player_inventory.bag.remove(map_item_index as usize);
@@ -217,10 +217,16 @@ async fn new_game_instance(
         None => None,
     };
 
+    let area_id = map_item
+        .as_ref()
+        .and_then(|item_specs| item_specs.base.map_specs.as_ref())
+        .and_then(|map_specs| map_specs.replace_area_id.clone())
+        .unwrap_or(area_config.area_id);
+
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        &area_config.area_id,
-        area_map,
+        &area_id,
+        map_item,
         area_level_completed as AreaLevel,
         "default",
         passives_tree_state,

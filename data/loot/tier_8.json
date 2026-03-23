@@ -71,6 +71,10 @@
       "item_id": "rune_root",
       "weight": 1280,
       "min_area_level": 400
+    },
+    {
+      "item_id": "edict_witch",
+      "weight": 50
     }
   ]
 }

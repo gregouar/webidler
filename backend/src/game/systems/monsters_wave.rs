@@ -186,7 +186,7 @@ fn generate_monster_specs(
     monster_id: CharacterId,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(base_monster_specs.clone());
-    let mut monster_level = area_state.area_level + area_specs.power_level;
+    let mut monster_level = area_state.area_level + *area_specs.power_level;
     monster_specs
         .character_specs
         .triggers
@@ -206,7 +206,7 @@ fn generate_monster_specs(
 
     let life_factor = computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR);
     let power_factor = computations::exponential(
-        area_state.area_level + area_specs.power_level / 2,
+        area_state.area_level + *area_specs.power_level / 2,
         MONSTER_REWARD_INCREASE_FACTOR,
     );
     let reward_factor =

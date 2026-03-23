@@ -270,6 +270,8 @@ pub struct MapSpecs {
     pub reward_slots: u8,
     #[serde(default)]
     pub loot_tables: Vec<String>,
+    #[serde(default)]
+    pub replace_area_id: Option<String>,
 }
 
 impl ItemModifiers {
