@@ -365,5 +365,20 @@
       }
     ],
     "min_area_level": 320
+  },
+  "focus_8": {
+    "name": "Astrolabe",
+    "icon": "items/focuses/astrolabe.webp",
+    "slot": "Shield",
+    "categories": [ "Focus" ],
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "Mana",
+        "modifier": "Flat",
+        "value": 100.0
+      }
+    ],
+    "min_area_level": 400
   }
 }
