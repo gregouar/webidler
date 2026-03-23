@@ -103,7 +103,14 @@ where
                     self.decreased += value
                 }
             }
-            Modifier::Flat => self.base = self.base.add_value(value),
+            Modifier::Flat => {
+                // In case we add flat after the conversion
+                if self.converted > 0.0 {
+                    self.base = self.base.multiply_value(1.0 - self.converted * 0.01);
+                    self.converted = 0.0;
+                }
+                self.base = self.base.add_value(value);
+            }
             Modifier::More => {
                 let value = compute_more_factor(value);
                 if value == -100.0 || self.more == -100.0 {
