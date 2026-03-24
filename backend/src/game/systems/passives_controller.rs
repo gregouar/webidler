@@ -182,7 +182,7 @@ pub fn validate_ascension(
             ));
         }
 
-        cost += (*level) as f64;
+        cost += node_specs.total_ascend_cost(*level) as f64;
     }
 
     Ok(cost)

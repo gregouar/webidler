@@ -919,8 +919,9 @@ fn AscendNode(
         }
     });
 
-    let purchase = move || {
-        match active_tab.get() {
+    let purchase = {
+        let node_specs = node_specs.clone();
+        move || match active_tab.get() {
             PassivesTab::Ascend => {
                 if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
                     selected_socket_node.set(Some(node_id));
@@ -933,9 +934,11 @@ fn AscendNode(
                             .ascended_nodes
                             .entry(node_id)
                             .or_default();
+                        ascension_cost.update(|ascension_cost| {
+                            *ascension_cost += node_specs.next_ascend_cost(*entry) as f64
+                        });
                         *entry = entry.saturating_add(1);
                     });
-                    ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
                 }
             }
             PassivesTab::Build => {
@@ -986,9 +989,12 @@ fn AscendNode(
                         .ascended_nodes
                         .entry(node_id)
                         .or_default();
+                    // TODO: Use ascend cost
                     if *entry > 0 {
                         *entry = entry.saturating_sub(1);
-                        ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
+                        ascension_cost.update(|ascension_cost| {
+                            *ascension_cost -= node_specs.next_ascend_cost(*entry) as f64
+                        });
                     }
                 });
             }
@@ -1002,8 +1008,8 @@ fn AscendNode(
                     node_specs=derived_node_specs.get()
                     node_status
                     node_level
-                    on_click=purchase
-                    on_right_click=refund
+                    on_click=purchase.clone()
+                    on_right_click=refund.clone()
                     show_upgrade=true
                     search_node
                 />

@@ -524,7 +524,7 @@ pub fn NodeTooltipContent(
     };
 
     let upgrade_text = {
-        let upgrade_effects = node_specs.upgrade_effects.clone();
+        let node_specs = node_specs.clone();
         move || {
             if !show_upgrade {
                 None
@@ -540,7 +540,7 @@ pub fn NodeTooltipContent(
                     }
                     .into_any(),
                 )
-            } else if !upgrade_effects.is_empty() {
+            } else if !node_specs.upgrade_effects.is_empty() {
                 let max_level = node_level() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
@@ -559,7 +559,12 @@ pub fn NodeTooltipContent(
                             } else {
                                 view! {
                                     " | Ascend Cost: "
-                                    <span class="text-cyan-300">"1 Power Shard"</span>
+                                    <span class="text-cyan-300">
+                                        <span class="font-semibold">
+                                            {node_specs.next_ascend_cost(node_level())}
+                                        </span>
+                                        " Power Shard(s)"
+                                    </span>
                                 }
                                     .into_any()
                             }}
@@ -573,7 +578,7 @@ pub fn NodeTooltipContent(
                                             <span class="text-gray-400 ">"Ascend to get:"</span>
                                         </li>
                                         {effects_tooltip::formatted_effects_list(
-                                            upgrade_effects.clone(),
+                                            node_specs.upgrade_effects.clone(),
                                         )}
                                     </ul>
                                 }
@@ -652,15 +657,17 @@ pub fn PassiveSkillStats(
         }>
             <div class="h-full w-md overflow-y-auto
             bg-neutral-950 border-r border-zinc-800
-            p-1 xl:p-2">
+            p-1 xl:p-3">
                 <h2 class="text-shadow-md/50 shadow-gray-950 text-amber-300
                 text-sm xl:text-base mb-2 mt-2 font-display
                 font-bold leading-none tracking-tight">"Total Effects"</h2>
 
-                {move || {
-                    let stats = stats.with(|stats| stats.into());
-                    effects_tooltip::formatted_effects_list(stats)
-                }}
+                <ul class="list-none xl:space-y-1">
+                    {move || {
+                        let stats = stats.with(|stats| stats.into());
+                        effects_tooltip::formatted_effects_list(stats)
+                    }}
+                </ul>
 
                 {move || {
                     purchased_nodes
@@ -674,7 +681,7 @@ pub fn PassiveSkillStats(
                                 .cloned()
                                 .map(|trigger_specs| {
                                     view! {
-                                        <div class="relative pb-2 list-none break-inside-avoid">
+                                        <div class="relative pb-2 list-none">
                                             <Separator />
                                             {trigger_tooltip::format_trigger(trigger_specs)}
                                         </div>

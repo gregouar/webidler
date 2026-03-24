@@ -118,6 +118,14 @@ impl PassiveNodeSpecs {
                 effects_map
             })
     }
+
+    pub fn next_ascend_cost(&self, level: u8) -> u16 {
+        level as u16 + 1
+    }
+
+    pub fn total_ascend_cost(&self, level: u8) -> u16 {
+        (0..level).map(|l| self.next_ascend_cost(l)).sum()
+    }
 }
 
 pub fn generate_effects_map_from_passives<'a>(
