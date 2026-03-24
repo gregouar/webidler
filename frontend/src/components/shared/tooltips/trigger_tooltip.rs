@@ -131,7 +131,7 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         } => {
             format!(
                 "{} Duration",
-                skill_status_type_str(*skill_type, status_type.as_ref())
+                skill_status_type_str(*skill_type, status_type.as_ref(), false)
             )
         }
         TriggerEffectModifierSource::StatusStacks {
@@ -140,7 +140,7 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         } => {
             format!(
                 "{} Stacks",
-                skill_status_type_str(*skill_type, status_type.as_ref())
+                skill_status_type_str(*skill_type, status_type.as_ref(), false)
             )
         }
     }
@@ -178,9 +178,11 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     skill_status_type_str(
-            status_trigger.skill_type,
-            status_trigger.status_type.as_ref()
-        ).to_string()
+        status_trigger.skill_type,
+        status_trigger.status_type.as_ref(),
+        false,
+    )
+    .to_string()
 }
 
 fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {

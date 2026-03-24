@@ -50,6 +50,17 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     }
 }
 
+pub fn skills_type_str(skill_type: Option<SkillType>) -> &'static str {
+    match skill_type {
+        Some(SkillType::Attack) => "Attacks ",
+        Some(SkillType::Spell) => "Spells ",
+        Some(SkillType::Curse) => "Curses ",
+        Some(SkillType::Blessing) => "Blessings ",
+        Some(SkillType::Other) => "Others ",
+        None => "",
+    }
+}
+
 pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
     match restore_type {
         Some(RestoreType::Life) => " Life",
@@ -91,9 +102,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         ">
             <strong class="text-sm xl:text-base font-bold text-violet-300 font-display">
                 <ul class="list-none xl:space-y-1 mb-2">
-                    <li class=" whitespace-pre-line">
-                        {skill_specs.base.name.clone()}
-                    </li>
+                    <li class=" whitespace-pre-line">{skill_specs.base.name.clone()}</li>
                 </ul>
             </strong>
 
@@ -655,11 +664,7 @@ where
 
 #[component]
 pub fn EffectLi(children: Children) -> impl IntoView {
-    view! {
-        <li class="text-xs xl:text-sm text-violet-200  whitespace-pre-line">
-            {children()}
-        </li>
-    }
+    view! { <li class="text-xs xl:text-sm text-violet-200  whitespace-pre-line">{children()}</li> }
 }
 
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {

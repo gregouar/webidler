@@ -4,7 +4,8 @@ use leptos::{html::*, prelude::*};
 use std::sync::Arc;
 
 use shared::data::passive::{
-    PassiveConnection, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
+    self, PassiveConnection, PassiveNodeSpecs, PassiveNodeType, PassivesTreeAscension,
+    PassivesTreeSpecs, PurchasedNodes,
 };
 
 use crate::{
@@ -617,4 +618,66 @@ pub fn node_text(node_specs: &PassiveNodeSpecs) -> String {
             .map(trigger_tooltip::trigger_text)
             .join(" ")
     )
+}
+
+#[component]
+pub fn PassiveSkillStats(
+    #[prop(into)] passives_tree_specs: Signal<PassivesTreeSpecs>,
+    #[prop(into)] passives_tree_ascension: Signal<PassivesTreeAscension>,
+    #[prop(into)] purchased_nodes: Signal<PurchasedNodes>,
+) -> impl IntoView {
+    let stats = Memo::new(move |_| {
+        passives_tree_specs.with(|passives_tree_specs| {
+            passives_tree_ascension.with(|passives_tree_ascension| {
+                purchased_nodes.with(|purchased_nodes| {
+                    passive::generate_effects_map_from_passives(
+                        passives_tree_specs,
+                        passives_tree_ascension,
+                        purchased_nodes,
+                    )
+                })
+            })
+        })
+    });
+
+    let (panel_open, set_panel_open) = signal(true);
+
+    view! {
+        <div class=move || {
+            format!(
+                "absolute left-0 top-0 h-full
+                transition-transform duration-300 ease-in-out {}",
+                if panel_open.get() { "translate-x-0" } else { "-translate-x-full" },
+            )
+        }>
+            <div class="h-full w-md overflow-y-auto
+            bg-neutral-950 border-r border-zinc-800
+            p-1 xl:p-2">
+                <h2 class="text-shadow-md/50 shadow-gray-950 text-amber-300
+                text-sm xl:text-base mb-2 mt-2 font-display
+                font-bold leading-none tracking-tight">"Total Effects"</h2>
+
+                {move || {
+                    let stats = stats.with(|stats| stats.into());
+                    effects_tooltip::formatted_effects_list(stats)
+                }}
+            </div>
+
+            <button
+                class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-full
+                rounded-r-md flex items-center justify-center
+                w-6 h-16 font-extrabold shadow-md
+                border border-zinc-800
+                bg-gradient-to-t from-zinc-900 to-zinc-800 
+                hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
+                active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+                "
+                on:click=move |_| {
+                    set_panel_open.update(|v| *v = !*v);
+                }
+            >
+                {move || if panel_open.get() { "<" } else { ">" }}
+            </button>
+        </div>
+    }
 }

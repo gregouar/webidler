@@ -10,7 +10,7 @@ use shared::{
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
-        passive::{PassivesTreeSpecs, PassivesTreeState},
+        passive::{self, PassivesTreeSpecs, PassivesTreeState},
         player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
@@ -27,7 +27,7 @@ use crate::game::{
     systems::{stats_updater, statuses_controller},
 };
 
-use super::{characters_updater, passives_controller, skills_updater};
+use super::{characters_updater, skills_updater};
 
 pub fn base_player_character_specs(name: String, portrait: String, level: u8) -> CharacterSpecs {
     CharacterSpecs {
@@ -100,10 +100,11 @@ pub fn update_player_specs(
             .equipped_items()
             .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
             .chain(iter::once(benedictions_effects.clone()))
-            .chain(passives_controller::generate_effects_map_from_passives(
+            .chain(iter::once(passive::generate_effects_map_from_passives(
                 passives_tree_specs,
-                passives_tree_state,
-            ))
+                &passives_tree_state.ascension,
+                &passives_tree_state.purchased_nodes,
+            )))
             .chain(iter::once(
                 statuses_controller::generate_effects_map_from_statuses(
                     &player_state.character_state.statuses,

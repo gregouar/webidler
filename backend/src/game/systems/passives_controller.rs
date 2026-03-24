@@ -6,7 +6,6 @@ use shared::data::{
     item_affix::AffixEffectScope,
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
-    stat_effect::EffectsMap,
     user::UserCharacterId,
 };
 use sqlx::Transaction;
@@ -67,27 +66,6 @@ pub fn purchase_node(
     } else {
         Err(AppError::UserError("Unknown passive node...".into()))
     }
-}
-
-pub fn generate_effects_map_from_passives<'a>(
-    passives_tree_specs: &'a PassivesTreeSpecs,
-    passives_tree_state: &'a PassivesTreeState,
-) -> impl Iterator<Item = EffectsMap> + use<'a> {
-    passives_tree_state
-        .purchased_nodes
-        .iter()
-        .filter_map(|node_id| {
-            passives_tree_specs.nodes.get(node_id).map(|node| {
-                node.aggregate_effects(
-                    passives_tree_state
-                        .ascension
-                        .ascended_nodes
-                        .get(node_id)
-                        .cloned()
-                        .unwrap_or_default(),
-                )
-            })
-        })
 }
 
 pub fn compute_passives_tree_specs(

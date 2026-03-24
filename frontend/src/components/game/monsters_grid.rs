@@ -647,6 +647,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                                                     effects_tooltip::skill_status_type_str(
                                                         Some(skill_type),
                                                         status_type.as_ref(),
+                                                        true,
                                                     ),
                                                 )}
                                             </span>

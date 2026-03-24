@@ -23,7 +23,7 @@ use crate::components::{
     events::{EventsContext, Key},
     shared::{
         inventory::InventoryEquipFilter,
-        passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+        passives::{Connection, MetaStatus, Node, NodeStatus, PassiveSkillStats, PurchaseStatus},
         resources::ShardsCounter,
     },
     town::TownContext,
@@ -213,7 +213,7 @@ pub fn PassivesPanel(
                         }}
 
                     </CardHeader>
-                    <CardInset pad=false>
+                    <CardInset pad=false class="relative">
                         <PassiveSkillTree
                             active_tab
                             passives_tree_ascension
@@ -682,6 +682,11 @@ fn PassiveSkillTree(
     });
 
     view! {
+        <PassiveSkillStats
+            passives_tree_specs=town_context.passives_tree_specs
+            passives_tree_ascension=passives_tree_ascension
+            purchased_nodes=passives_tree_build
+        />
         <Pannable>
             <For
                 each=move || {

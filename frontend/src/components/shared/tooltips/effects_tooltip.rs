@@ -18,7 +18,7 @@ use crate::components::{
     data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
-        skill_tooltip::{self, restore_type_str, skill_type_str},
+        skill_tooltip::{self, restore_type_str, skill_type_str, skills_type_str},
     },
     ui::number::format_number,
 };
@@ -179,11 +179,16 @@ fn with_skill_type_str(skill_type: Option<SkillType>) -> &'static str {
 pub fn skill_status_type_str(
     skill_type: Option<SkillType>,
     status_type: Option<&StatStatusType>,
+    plural: bool,
 ) -> String {
     match (skill_type, status_type) {
         (None, None) => "Effects over Time".to_string(),
         (Some(SkillType::Blessing | SkillType::Curse), None) => {
-            skill_type_str(skill_type).to_string()
+            if plural {
+                skills_type_str(skill_type).to_string()
+            } else {
+                skill_type_str(skill_type).to_string()
+            }
         }
         (skill_type, status_type) => format!(
             "{}{}",
@@ -514,7 +519,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => {
             format!(
                 "{} Duration",
-                skill_status_type_str(*skill_type, status_type.as_ref())
+                skill_status_type_str(*skill_type, status_type.as_ref(), true)
             )
         }
         StatType::StatusResistance {
@@ -523,7 +528,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => {
             format!(
                 "{} Resilience",
-                skill_status_type_str(*skill_type, status_type.as_ref())
+                skill_status_type_str(*skill_type, status_type.as_ref(), true)
             )
         }
         StatType::Speed(skill_type) => format!("{}Speed", skill_type_str(*skill_type)),
@@ -744,13 +749,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if value.unwrap_or_default() >= 99999.0 {
                 format!(
                     "{} never expire",
-                    skill_status_type_str(*skill_type, status_type.as_ref())
+                    skill_status_type_str(*skill_type, status_type.as_ref(), true)
                 )
             } else {
                 format!(
                     "{} seconds duration to {}",
                     format_adds_removes(value, true, ""),
-                    skill_status_type_str(*skill_type, status_type.as_ref())
+                    skill_status_type_str(*skill_type, status_type.as_ref(), true)
                 )
             }
         }
