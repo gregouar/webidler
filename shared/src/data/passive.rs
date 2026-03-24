@@ -30,7 +30,7 @@ pub enum PassiveNodeType {
     Utility,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassivesTreeSpecs {
     pub nodes: HashMap<PassiveNodeId, PassiveNodeSpecs>,
     pub connections: Vec<PassiveConnection>,
@@ -83,7 +83,7 @@ pub struct PassiveNodeSpecs {
     pub socket: bool,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct PassiveConnection {
     pub from: PassiveNodeId,
     pub to: PassiveNodeId,

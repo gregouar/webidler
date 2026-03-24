@@ -661,6 +661,28 @@ pub fn PassiveSkillStats(
                     let stats = stats.with(|stats| stats.into());
                     effects_tooltip::formatted_effects_list(stats)
                 }}
+
+                {move || {
+                    purchased_nodes
+                        .with(|purchased_nodes| {
+                            passives_tree_specs
+                                .read()
+                                .nodes
+                                .iter()
+                                .filter(|(node_id, _)| purchased_nodes.contains(*node_id))
+                                .flat_map(|(_, node_specs)| node_specs.triggers.iter())
+                                .cloned()
+                                .map(|trigger_specs| {
+                                    view! {
+                                        <div class="relative pb-2 list-none break-inside-avoid">
+                                            <Separator />
+                                            {trigger_tooltip::format_trigger(trigger_specs)}
+                                        </div>
+                                    }
+                                })
+                                .collect::<Vec<_>>()
+                        })
+                }}
             </div>
 
             <button

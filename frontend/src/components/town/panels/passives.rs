@@ -681,9 +681,22 @@ fn PassiveSkillTree(
         }
     });
 
+    let derived_passives_tree_specs = Memo::new(move |_| {
+        let mut passives_tree_specs = town_context.passives_tree_specs.get();
+        for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
+            let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
+            node_specs.effects = (&(item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global)))
+                .into();
+            node_specs.triggers = item_specs.base.triggers.clone();
+        }
+        passives_tree_specs
+    });
+
     view! {
         <PassiveSkillStats
-            passives_tree_specs=town_context.passives_tree_specs
+            passives_tree_specs=derived_passives_tree_specs
             passives_tree_ascension=passives_tree_ascension
             purchased_nodes=passives_tree_build
         />
