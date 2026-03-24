@@ -131,13 +131,13 @@
         "scope": "Global",
         "stat": "ItemLevel",
         "modifier": "Flat",
-        "value": 120
+        "value": 100
       },
       {
         "scope": "Local",
         "stat": "PowerLevel",
         "modifier": "Flat",
-        "value": 60
+        "value": 50
       }
     ],
     "triggers": [
