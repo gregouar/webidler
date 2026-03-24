@@ -11,7 +11,7 @@
   "status_resistances": [
     {
       "status_type": "Stun",
-      "value": 66
+      "value": 30
     }
   ],
   "skills": [
