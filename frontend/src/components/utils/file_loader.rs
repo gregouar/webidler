@@ -4,10 +4,13 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 
 use crate::components::ui::toast::*;
-
-pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>()
--> (RwSignal<Option<T>>, impl Fn(web_sys::Event)) {
+pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>() -> (
+    RwSignal<Option<T>>,
+    RwSignal<Option<String>>,
+    impl Fn(web_sys::Event),
+) {
     let data = RwSignal::new(None::<T>);
+    let filename = RwSignal::new(None::<String>);
 
     let toaster: Toasts = expect_context();
 
@@ -16,6 +19,8 @@ pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>()
             let input: web_sys::HtmlInputElement = event.target().unwrap().dyn_into().unwrap();
 
             if let Some(file) = input.files().and_then(|f| f.get(0)) {
+                filename.set(Some(file.name()));
+
                 let reader = web_sys::FileReader::new().unwrap();
 
                 let onload = Closure::once_into_js({
@@ -36,7 +41,7 @@ pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>()
         }
     };
 
-    (data, on_file_change)
+    (data, filename, on_file_change)
 }
 
 pub fn save_json<T: Serialize>(data: &T, filename: &str) {

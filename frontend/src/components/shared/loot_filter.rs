@@ -113,7 +113,7 @@ pub fn LootFilterPanel(
         }
     });
 
-    let (loaded_file, on_change) = use_json_loader::<LootFilter>();
+    let (loaded_file, filename, on_change) = use_json_loader::<LootFilter>();
     let file_input: NodeRef<Input> = NodeRef::new();
 
     Effect::new(move || {
@@ -129,7 +129,9 @@ pub fn LootFilterPanel(
         move |_| {
             save_json(
                 &local_loot_filter.get_untracked(),
-                &format!("loot_filter_{}.json", &character_name),
+                &filename
+                    .get()
+                    .unwrap_or(format!("loot_filter_{}.json", &character_name)),
             );
         }
     };

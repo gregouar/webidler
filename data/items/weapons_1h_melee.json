@@ -2,118 +2,237 @@
   "dagger": {
     "name": "Dagger",
     "icon": "items/weapons_1h/dagger.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 2, 4 ]
+        "Physical": [
+          2.0,
+          4.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
-    }
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "dagger_unique": {
     "name": "Onions Slicer",
-    "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
     "icon": "items/weapons_1h/onions_slicer.webp",
+    "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
-    "weapon_specs": {
-      "range": "Melee",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [ 2, 4 ]
-      },
-      "crit_chance": 5,
-      "crit_damage": 100
-    },
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 0,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
-        "stat": { "Speed": "Attack" },
+        "stat": {
+          "Speed": "Attack"
+        },
         "modifier": "Increased",
-        "value": 100,
+        "scope": "Local",
+        "value": 100.0,
         "ignore_quality": true
       },
       {
-        "scope": "Local",
-        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Physical",
+            "min_max": "Max"
+          }
+        },
         "modifier": "Flat",
-        "value": [ 8, 10 ]
+        "scope": "Local",
+        "value": [
+          8.0,
+          10.0
+        ],
+        "ignore_quality": false
       }
-    ]
+    ],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          2.0,
+          4.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "shortsword": {
     "name": "Shortsword",
     "icon": "items/weapons_1h/shortsword.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 4, 7 ]
+        "Physical": [
+          4.0,
+          7.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 40
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "shortsword_unique": {
     "name": "Broken Trophy",
-    "description": "A kind remembrance of a foe you'd rather drink to forget...",
     "icon": "items/weapons_1h/broken_trophy.webp",
+    "description": "A kind remembrance of a foe you'd rather drink to forget...",
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
-    "weapon_specs": {
-      "range": "Melee",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [ 4, 7 ]
-      },
-      "crit_chance": 5,
-      "crit_damage": 100
-    },
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 50,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
-        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Min" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Physical",
+            "min_max": "Min"
+          }
+        },
         "modifier": "Flat",
-        "value": [ 2, 4 ]
+        "scope": "Local",
+        "value": [
+          2.0,
+          4.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Local",
-        "stat": { "Damage": { "damage_type": "Physical", "min_max": "Max" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Physical",
+            "min_max": "Max"
+          }
+        },
         "modifier": "Flat",
-        "value": [ 5, 7 ]
+        "scope": "Local",
+        "value": [
+          5.0,
+          7.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Local",
         "stat": {
           "CritChance": null
         },
         "modifier": "Flat",
-        "value": [ 4, 6 ]
+        "scope": "Local",
+        "value": [
+          4.0,
+          6.0
+        ],
+        "ignore_quality": false
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "broken_trophy",
         "OnHit": {
           "skill_type": "Attack",
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
           "is_hurt": true,
-          "is_triggered": false
+          "is_triggered": false,
+          "damage_type": null
         },
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Physical"
+            }
+          }
+        ],
+        "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
           {
-            "success_chance": 25,
+            "success_chance": {
+              "value": 25.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -121,7 +240,10 @@
                       "damage_type": "Physical"
                     }
                   },
-                  "value": 0
+                  "value": 0.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 },
                 {
                   "status_type": {
@@ -133,218 +255,385 @@
                       "debuff": true
                     }
                   },
-                  "value": 100.0
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
-            }
+              ],
+              "duration": 3.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
         ],
-        "modifiers": [
-          {
-            "stat": { "Damage": { } },
-            "modifier": "Flat",
-            "factor": 0.5,
-            "source": { "HitDamage": "Physical" }
-          }
-        ]
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 50
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          4.0,
+          7.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "hand_axe": {
     "name": "Hand Axe",
     "icon": "items/weapons_1h/hand_axe.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 6, 10 ]
+        "Physical": [
+          6.0,
+          10.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 90
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "handaxe_unique": {
     "name": "Fang of the Widow",
-    "description": "Its edge drips with the venom of a thousand silenced hearts.",
     "icon": "items/weapons_1h/hand_axe_spider.webp",
+    "description": "Its edge drips with the venom of a thousand silenced hearts.",
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 100,
     "rarity": "Unique",
-    "weapon_specs": {
-      "range": "Melee",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [ 6, 10 ]
-      },
-      "crit_chance": 5,
-      "crit_damage": 100
-    },
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
+            "skill_type": null,
             "damage_type": "Poison",
             "min_max": "Min"
           }
         },
         "modifier": "Flat",
-        "value": 6,
+        "scope": "Local",
+        "value": 6.0,
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
+            "skill_type": null,
             "damage_type": "Poison",
             "min_max": "Max"
           }
         },
         "modifier": "Flat",
-        "value": 12,
+        "scope": "Local",
+        "value": 12.0,
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
-            "damage_type": "Physical"
+            "skill_type": null,
+            "damage_type": "Physical",
+            "min_max": null
           }
         },
         "modifier": "Increased",
-        "value": [ -100, -100 ],
+        "scope": "Local",
+        "value": -100.0,
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
-            "damage_type": "Poison"
+            "skill_type": null,
+            "damage_type": "Poison",
+            "min_max": null
           }
         },
         "modifier": "Increased",
-        "value": [ 80, 120 ]
+        "scope": "Local",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": {
-          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+          "RestoreOnHit": {
+            "restore_type": "Mana",
+            "skill_type": "Attack"
+          }
         },
         "modifier": "Flat",
-        "value": [ 1, 2 ]
+        "scope": "Global",
+        "value": [
+          1.0,
+          2.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": {
           "StatusDuration": {
-            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+            "status_type": {
+              "DamageOverTime": {
+                "damage_type": "Poison"
+              }
+            },
+            "skill_type": null
           }
         },
         "modifier": "Increased",
-        "value": [ 10, 20 ]
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": {
-          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": "Attack"
+          }
         },
         "modifier": "Flat",
-        "value": [ 3, 5 ]
+        "scope": "Global",
+        "value": [
+          3.0,
+          5.0
+        ],
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 100
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          6.0,
+          10.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "militia_sword": {
     "name": "Militia Sword",
     "icon": "items/weapons_1h/longsword.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 8, 13 ]
+        "Physical": [
+          8.0,
+          13.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 140
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "spiked_mace": {
     "name": "Spiked Mace",
     "icon": "items/weapons_1h/spiked_mace.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 10, 16 ]
+        "Physical": [
+          10.0,
+          16.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 190
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "sabre": {
     "name": "Sabre",
     "icon": "items/weapons_1h/sabre.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 12, 19 ]
+        "Physical": [
+          12.0,
+          19.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 250
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "treasure_cutlass": {
     "name": "Cutlass of Greed",
-    "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
     "icon": "items/weapons_1h/treasure_cutlass.webp",
+    "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
-    "weapon_specs": {
-      "range": "Melee",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [ 12, 19 ]
-      },
-      "crit_chance": 5,
-      "crit_damage": 100
-    },
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 250,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": {
+          "CritChance": null
+        },
         "modifier": "Flat",
-        "value": 5,
-        "ignore_quality": true
-      },
-      {
         "scope": "Local",
-        "stat": { "Damage": { } },
-        "modifier": "Increased",
-        "value": [ 180, 240 ],
+        "value": 5.0,
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "StatusPower": { "skill_type": "Curse" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": null,
+            "min_max": null
+          }
+        },
         "modifier": "Increased",
-        "value": [ 40, 60 ]
+        "scope": "Local",
+        "value": [
+          180.0,
+          240.0
+        ],
+        "ignore_quality": true
       },
       {
+        "stat": {
+          "StatusPower": {
+            "status_type": null,
+            "skill_type": "Curse",
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
         "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": false
+      },
+      {
         "stat": {
           "StatusPower": {
             "status_type": {
@@ -357,28 +646,47 @@
           }
         },
         "modifier": "More",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": false
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "treasure_cutlass",
-        "OnKill": { },
+        "OnKill": {
+          "conditions": []
+        },
         "target": "Me",
+        "modifiers": [],
+        "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
               "statuses": [
                 {
                   "status_type": {
                     "StatModifier": {
                       "stat": "GoldFind",
-                      "modifier": "More"
+                      "modifier": "More",
+                      "debuff": false
                     }
                   },
                   "value": 20.0,
-                  "cumulate": true
+                  "cumulate": true,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 },
                 {
                   "status_type": {
@@ -394,47 +702,113 @@
                     }
                   },
                   "value": 5.0,
-                  "cumulate": true
+                  "cumulate": true,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
               ],
-              "duration": 60
-            }
+              "duration": 60.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 250
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          12.0,
+          19.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "weapon_1h_7": {
     "name": "Battleaxe",
     "icon": "items/weapons_1h/battleaxe.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 14, 22 ]
+        "Physical": [
+          14.0,
+          22.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 320
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "weapon_1h_8": {
     "name": "Rapier",
     "icon": "items/weapons_1h/rapier.webp",
+    "description": null,
     "slot": "Weapon",
-    "categories": [ "AttackWeapon", "MeleeWeapon", "MeleeWeapon1H" ],
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Melee",
+      "shape": "Single",
       "cooldown": 2.0,
       "damage": {
-        "Physical": [ 16, 25 ]
+        "Physical": [
+          16.0,
+          25.0
+        ]
       },
-      "crit_chance": 5,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 400
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   }
 }

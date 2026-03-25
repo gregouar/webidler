@@ -127,7 +127,7 @@ pub enum ItemCategory {
     Rune,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
 pub struct ItemBase {
     pub name: String,
     pub icon: String,

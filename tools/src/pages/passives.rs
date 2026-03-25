@@ -3,6 +3,14 @@ use std::{
     sync::Arc,
 };
 
+use leptos::{html::*, prelude::*};
+use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
+use serde::Serialize;
+use shared::data::passive::{
+    PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
+};
+use strum::IntoEnumIterator;
+
 use frontend::components::{
     events::{EventsContext, Key},
     shared::passives::{
@@ -18,13 +26,6 @@ use frontend::components::{
     },
     utils::file_loader::{save_json, use_json_loader},
 };
-use leptos::{html::*, prelude::*};
-use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
-use serde::Serialize;
-use shared::data::passive::{
-    PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
-};
-use strum::IntoEnumIterator;
 
 use crate::{
     header::HeaderMenu,
@@ -74,7 +75,7 @@ impl SelectedNode {
 pub fn PassivesPage() -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
-    let (loaded_file, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
+    let (loaded_file, _, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());
     let passives_history_tracker = RwSignal::new(HistoryTracker::<PassivesTreeSpecs>::new(
         100,
@@ -878,9 +879,9 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                 input_type="number"
                 bind=node_max_level
             />
-            <JsonEditor label="Effects" value=node_effects />
-            <JsonEditor label="Upgrade Effects" value=node_upgrades />
-            <JsonEditor label="Triggers" value=node_triggers />
+            <JsonEditor label="Effects" value=node_effects h_size="h-96" />
+            <JsonEditor label="Upgrade Effects" value=node_upgrades h_size="h-96" />
+            <JsonEditor label="Triggers" value=node_triggers h_size="h-96" />
         </CardInset>
 
         <div>"Result:"</div>

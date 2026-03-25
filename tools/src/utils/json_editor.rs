@@ -6,7 +6,7 @@ use serde_ignored;
 use serde_json::Deserializer;
 
 #[component]
-pub fn JsonEditor<T>(label: &'static str, value: RwSignal<T>) -> impl IntoView
+pub fn JsonEditor<T>(label: &'static str, value: RwSignal<T>, h_size: &'static str) -> impl IntoView
 where
     T: Serialize + DeserializeOwned + Clone + Send + Sync + 'static,
 {
@@ -104,17 +104,19 @@ where
         <div class="flex flex-col xl:space-y-1 text-left">
             <label class="text-xs font-medium text-gray-400">{label}</label>
 
-            <div class="relative flex w-full h-64">
+            <div class=format!("relative flex w-full {h_size}")>
                 <div
                     node_ref=gutter_ref
-                    class="
+                    class=format!(
+                        "
                     json-editor-gutter
                     flex-shrink-0
                     font-mono text-sm leading-5
-                    p-2 h-64 overflow-y-hidden
+                    p-2 {h_size} overflow-y-hidden
                     bg-gray-800 rounded-l-lg
                     text-right
-                    "
+                    ",
+                    )
                 />
 
                 <div class="relative flex-1 h-full">

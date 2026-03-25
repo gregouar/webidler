@@ -37,6 +37,7 @@ pub fn App() -> impl IntoView {
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::HomePage />
                 <Route path=path!("/passives") view=pages::PassivesPage />
+                <Route path=path!("/items") view=pages::ItemsPage />
             </Routes>
         </Router>
     }
