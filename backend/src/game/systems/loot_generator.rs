@@ -389,7 +389,10 @@ fn update_rarity(
         ItemRarity::Masterwork
     };
 
-    if new_rarity != modifiers.rarity && new_rarity != ItemRarity::Masterwork {
+    if new_rarity != modifiers.rarity
+        && new_rarity != ItemRarity::Masterwork
+        && modifiers.rarity != ItemRarity::Masterwork
+    {
         modifiers.name = generate_name(
             base,
             new_rarity,

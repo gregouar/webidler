@@ -197,7 +197,7 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
         move || {
             let do_remove_affix = Arc::new(move || do_affix_operation(ForgeAffixOperation::Remove));
             (confirm_context.confirm)(
-                "Removing an Affix is random and irremediable. Continue?".to_string(),
+                "Removing an affix is random and cannot be undone. Continue?".to_string(),
                 do_remove_affix.clone(),
             );
         }
