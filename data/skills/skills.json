@@ -28,7 +28,7 @@
                   12
                 ]
               },
-              "crit_chance": 10,
+              "crit_chance": 5,
               "crit_damage": 100
             }
           }
@@ -178,7 +178,9 @@
                   5,
                   15
                 ]
-              }
+              },
+              "crit_chance": 5,
+              "crit_damage": 100
             }
           }
         ]
