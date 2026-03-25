@@ -2,7 +2,7 @@ use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
 use shared::{
     data::{forge, item::ItemRarity, item_affix::AffixType, player::EquippedSlot},
-    http::client::ForgeAddAffixRequest,
+    http::client::{ForgeAffixOperation, ForgeAffixRequest},
 };
 use std::sync::Arc;
 
@@ -113,19 +113,19 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
         })
     };
 
-    let do_add_affix = {
+    let do_affix_operation = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |affix_type| {
+        move |operation| {
             if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
                     async move {
                         match backend
-                            .forge_add_affix(
+                            .forge_affix(
                                 &auth_context.token(),
-                                &ForgeAddAffixRequest {
+                                &ForgeAffixRequest {
                                     character_id,
                                     item_index: item.index as u32,
-                                    affix_type,
+                                    operation,
                                 },
                             )
                             .await
@@ -177,7 +177,8 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let try_add_affix = {
         let confirm_context = confirm_context.clone();
         move |affix_type| {
-            let do_add_affix = Arc::new(move || do_add_affix(affix_type));
+            let do_add_affix =
+                Arc::new(move || do_affix_operation(ForgeAffixOperation::Add(affix_type)));
             if town_context.character.read_untracked().max_area_level < item_level() {
                 (confirm_context
                         .confirm)(
@@ -188,6 +189,17 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             } else {
                 do_add_affix();
             }
+        }
+    };
+
+    let try_remove_affix = {
+        let confirm_context = confirm_context.clone();
+        move || {
+            let do_remove_affix = Arc::new(move || do_affix_operation(ForgeAffixOperation::Remove));
+            (confirm_context.confirm)(
+                "Removing an Affix is random and irremediable. Continue?".to_string(),
+                do_remove_affix.clone(),
+            );
         }
     };
 
@@ -247,6 +259,15 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 } else {
                     None
                 }
+            }
+            _ => None,
+        })
+    };
+
+    let remove_price = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(item) => {
+                forge::remove_price(item.item_specs.modifiers.count_nonunique_affixes())
             }
             _ => None,
         })
@@ -322,6 +343,29 @@ pub fn ForgeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                         "Add random" <span class="text-white font-bold">"Suffix"</span>
                         {move || {
                             suffix_price()
+                                .map(|price| {
+                                    view! {
+                                        "for "
+                                        <span class="text-fuchsia-300 font-bold">{price}</span>
+                                        <GemsIcon />
+                                    }
+                                })
+                        }}
+                    </div>
+                </MenuButton>
+
+                <MenuButton
+                    on:click=move |_| try_remove_affix()
+                    disabled=Signal::derive({
+                        move || remove_price().map(|price| price > user_gems()).unwrap_or(true)
+                    })
+                    class:mt-1
+                    class:xl:mt-2
+                >
+                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
+                        "Remove random" <span class="text-white font-bold">"Affix"</span>
+                        {move || {
+                            remove_price()
                                 .map(|price| {
                                     view! {
                                         "for "

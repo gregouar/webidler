@@ -11,7 +11,7 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
             BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
-            EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAddAffixRequest,
+            EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
             ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
             InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
             SavePassivesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
@@ -349,12 +349,12 @@ impl BackendClient {
 
     // Forge
 
-    pub async fn forge_add_affix(
+    pub async fn forge_affix(
         &self,
         token: &str,
-        request: &ForgeAddAffixRequest,
+        request: &ForgeAffixRequest,
     ) -> Result<ForgeAddAffixResponse, BackendError> {
-        self.post_auth("forge/add_affix", token, request).await
+        self.post_auth("forge/affix", token, request).await
     }
 
     // Inventory

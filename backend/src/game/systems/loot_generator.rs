@@ -17,7 +17,7 @@ use crate::game::{
         items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
-    utils::rng::{self, RandomWeighted, Rollable},
+    utils::rng::{self, RandomWeighted, Rollable, flip_coin},
 };
 
 use super::items_controller;
@@ -303,6 +303,84 @@ pub fn add_affix(
     }
 
     let affixes_amount = prefixes_amount + suffixes_amount + 1;
+    update_rarity(
+        base,
+        modifiers,
+        affixes_amount,
+        adjectives_table,
+        nouns_table,
+    );
+
+    true
+}
+
+pub fn remove_affix(
+    base: &ItemBase,
+    modifiers: &mut ItemModifiers,
+    adjectives_table: &ItemAdjectivesTable,
+    nouns_table: &ItemNounsTable,
+) -> bool {
+    if base.rarity == ItemRarity::Unique {
+        return false;
+    }
+
+    let prefixes_amount = modifiers.count_affixes(AffixType::Prefix);
+    let suffixes_amount = modifiers.count_affixes(AffixType::Suffix);
+
+    if prefixes_amount == 0 && suffixes_amount == 0 {
+        return false;
+    }
+
+    let affix_type = if prefixes_amount > suffixes_amount {
+        AffixType::Prefix
+    } else if suffixes_amount > prefixes_amount {
+        AffixType::Suffix
+    } else {
+        if flip_coin() {
+            AffixType::Prefix
+        } else {
+            AffixType::Suffix
+        }
+    };
+
+    let affixes_amount = match affix_type {
+        AffixType::Prefix => prefixes_amount,
+        AffixType::Suffix => suffixes_amount,
+        AffixType::Unique => 0,
+    };
+
+    let affix_subindex = rng::random_range(0..affixes_amount).unwrap_or_default();
+
+    let affix_index = modifiers
+        .affixes
+        .iter()
+        .enumerate()
+        .filter(|(_, affix)| affix.affix_type == affix_type)
+        .nth(affix_subindex)
+        .map(|(idx, _)| idx)
+        .unwrap_or_default();
+
+    modifiers.affixes.remove(affix_index);
+
+    let affixes_amount = prefixes_amount + suffixes_amount - 1;
+    update_rarity(
+        base,
+        modifiers,
+        affixes_amount,
+        adjectives_table,
+        nouns_table,
+    );
+
+    true
+}
+
+fn update_rarity(
+    base: &ItemBase,
+    modifiers: &mut ItemModifiers,
+    affixes_amount: usize,
+    adjectives_table: &ItemAdjectivesTable,
+    nouns_table: &ItemNounsTable,
+) {
     let new_rarity = if affixes_amount <= 2 {
         ItemRarity::Magic
     } else if affixes_amount <= 4 {
@@ -311,23 +389,19 @@ pub fn add_affix(
         ItemRarity::Masterwork
     };
 
-    match modifiers.rarity {
-        ItemRarity::Normal | ItemRarity::Magic => {
-            modifiers.name = generate_name(
-                base,
-                new_rarity,
-                &modifiers.affixes,
-                adjectives_table,
-                nouns_table,
-            );
-        }
-        _ => {}
-    };
+    if new_rarity != modifiers.rarity && new_rarity != ItemRarity::Masterwork {
+        modifiers.name = generate_name(
+            base,
+            new_rarity,
+            &modifiers.affixes,
+            adjectives_table,
+            nouns_table,
+        );
+    }
 
     modifiers.rarity = new_rarity;
-
-    true
 }
+
 struct TweakedItemAffixBlueprint<'a> {
     affix_blueprint: &'a ItemAffixBlueprint,
     weight: u64,

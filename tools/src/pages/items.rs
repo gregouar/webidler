@@ -171,11 +171,10 @@ fn ItemEditor(
     let item_base = RwSignal::new(Default::default());
 
     Effect::new(move || {
-        if let Some(selected_item) = selected_item.get() {
-            if let Some(selected_item_specs) = items_store.read().get(&selected_item) {
+        if let Some(selected_item) = selected_item.get()
+            && let Some(selected_item_specs) = items_store.read().get(&selected_item) {
                 item_base.set(selected_item_specs.clone());
             }
-        }
     });
 
     let _ = watch_debounced_with_options(

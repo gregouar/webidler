@@ -186,11 +186,17 @@ pub struct TakeStashItemRequest {
 
 // Forge
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum ForgeAffixOperation {
+    Add(Option<AffixType>),
+    Remove,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ForgeAddAffixRequest {
+pub struct ForgeAffixRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
-    pub affix_type: Option<AffixType>,
+    pub operation: ForgeAffixOperation,
 }
 
 // Inventory

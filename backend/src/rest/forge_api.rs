@@ -3,22 +3,18 @@ use anyhow::Result;
 use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
-    data::{
-        forge::{PREFIX_PRICE_FACTOR, SUFFIX_PRICE_FACTOR, affix_price},
-        item_affix::AffixType,
-        player::EquippedSlot,
+    data::{forge::affix_operation_price, player::EquippedSlot},
+    http::{
+        client::{ForgeAffixOperation, ForgeAffixRequest},
+        server::ForgeAddAffixResponse,
     },
-    http::{client::ForgeAddAffixRequest, server::ForgeAddAffixResponse},
 };
 
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db::{self},
-    game::{
-        data::inventory_data::inventory_data_to_player_inventory,
-        systems::loot_generator::add_affix,
-    },
+    game::{data::inventory_data::inventory_data_to_player_inventory, systems::loot_generator},
     rest::utils::{verify_character_in_town, verify_character_user},
 };
 
@@ -26,18 +22,18 @@ use super::AppError;
 
 pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
-        .route("/forge/add_affix", post(post_add_affix))
+        .route("/forge/affix", post(post_affix))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
         ))
 }
 
-pub async fn post_add_affix(
+pub async fn post_affix(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     Extension(current_user): Extension<CurrentUser>,
-    Json(payload): Json<ForgeAddAffixRequest>,
+    Json(payload): Json<ForgeAffixRequest>,
 ) -> Result<Json<ForgeAddAffixResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
@@ -71,13 +67,8 @@ pub async fn post_add_affix(
     }
     .ok_or(AppError::NotFound)?;
 
-    let price = affix_price(item.modifiers.count_nonunique_affixes())
-        .ok_or(AppError::UserError("cannot add more affixes".into()))?
-        * match payload.affix_type {
-            Some(AffixType::Prefix) => PREFIX_PRICE_FACTOR,
-            Some(AffixType::Suffix) => SUFFIX_PRICE_FACTOR,
-            _ => 1.0,
-        };
+    let price = affix_operation_price(payload.operation, item.modifiers.count_nonunique_affixes())
+        .ok_or(AppError::UserError("forge operation unavailable".into()))?;
 
     let character_resources = db::characters::update_character_resources(
         &mut *tx,
@@ -92,18 +83,23 @@ pub async fn post_add_affix(
         return Err(AppError::UserError("not enough gems".into()));
     }
 
-    // Decrease item level to match with player: REMOVED
-    // item.modifiers.level = item.modifiers.level.min(character.max_area_level as u16);
-
-    if !add_affix(
-        &item.base,
-        &mut item.modifiers,
-        payload.affix_type,
-        &master_store.item_affixes_table,
-        &master_store.item_adjectives_table,
-        &master_store.item_nouns_table,
-    ) {
-        return Err(AppError::UserError("failed to add affix".into()));
+    if !match payload.operation {
+        ForgeAffixOperation::Add(affix_type) => loot_generator::add_affix(
+            &item.base,
+            &mut item.modifiers,
+            affix_type,
+            &master_store.item_affixes_table,
+            &master_store.item_adjectives_table,
+            &master_store.item_nouns_table,
+        ),
+        ForgeAffixOperation::Remove => loot_generator::remove_affix(
+            &item.base,
+            &mut item.modifiers,
+            &master_store.item_adjectives_table,
+            &master_store.item_nouns_table,
+        ),
+    } {
+        return Err(AppError::UserError("forge operation failed".into()));
     }
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
