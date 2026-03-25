@@ -195,7 +195,18 @@ fn ItemEditor(
         WatchDebouncedOptions::default().immediate(false),
     );
 
-    view! { <JsonEditor label="Item" value=item_base h_size="h-196" /> }
+    view! {
+        <div class="flex flex-col gap-2">
+            <div class="flex justify-between">
+                <span>{move || selected_item.get()}</span>
+
+                <MenuButton class:ml-2 on:click=move |_| {}>
+                    "❌"
+                </MenuButton>
+            </div>
+            <JsonEditor label="Item" value=item_base h_size="h-196" />
+        </div>
+    }
 }
 
 #[component]

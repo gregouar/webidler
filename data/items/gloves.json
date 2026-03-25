@@ -2,264 +2,480 @@
   "cloth_wraps": {
     "name": "Cloth Wraps",
     "icon": "items/gloves/cloth_wraps.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 10
-    }
+      "armor": 10.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "cloth_wraps_unique": {
     "name": "Baker's Embrace",
-    "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven— they cradle the fury of molten magic.",
     "icon": "items/gloves/oven_mitts.webp",
+    "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven— they cradle the fury of molten magic.",
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
-    "armor_specs": {
-      "armor": 10
-    },
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 0,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "damage_type": "Fire" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Fire",
+            "min_max": null
+          }
+        },
         "modifier": "More",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [ 20, 40 ]
+        "scope": "Global",
+        "value": [
+          20.0,
+          40.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
-        "value": [ 100, 150 ]
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": false
       }
-    ]
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 10.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "leather_gloves": {
     "name": "Leather Gloves",
     "icon": "items/gloves/leather_gloves.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 20
+      "armor": 20.0,
+      "block": 0.0
     },
-    "min_area_level": 40
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "leather_gloves_unique": {
     "name": "Fangbreaker",
-    "description": "When steel is taken from you, bare hands become the fangs of survival.",
     "icon": "items/gloves/fangbreaker.webp",
+    "description": "When steel is taken from you, bare hands become the fangs of survival.",
     "slot": "Gloves",
-    "extra_slots": [ "Weapon" ],
+    "extra_slots": [
+      "Weapon"
+    ],
     "categories": [
       "Armor",
-      "Gloves",
       "AttackWeapon",
       "MeleeWeapon",
-      "MeleeWeapon1H"
+      "MeleeWeapon1H",
+      "Gloves"
     ],
-    "armor_specs": {
-      "armor": 20
-    },
-    "weapon_specs": {
-      "range": "Melee",
-      "cooldown": 1.5,
-      "damage": {
-        "Physical": [ 4, 10 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
+    "min_area_level": 50,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": {
+          "Armor": "Poison"
+        },
         "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [ 4, 6 ]
+        "scope": "Global",
+        "value": [
+          4.0,
+          6.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": {
+          "Speed": "Attack"
+        },
         "modifier": "Increased",
-        "value": [ 10, 15 ]
+        "scope": "Global",
+        "value": [
+          10.0,
+          15.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": {
-          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": "Attack"
+          }
         },
         "modifier": "Flat",
-        "value": [ 4, 8 ]
+        "scope": "Global",
+        "value": [
+          4.0,
+          8.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": {
-          "Description2": "Cannot use a Weapon"
+          "Description": "Cannot use a Weapon"
         },
         "modifier": "Flat",
-        "value": 1
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": false
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "fangbreaker",
         "OnHit": {
           "skill_type": "Attack",
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
           "is_hurt": true,
-          "is_triggered": false
+          "is_triggered": false,
+          "damage_type": null
         },
         "target": "Source",
+        "modifiers": [],
+        "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
                     "StatModifier": {
                       "stat": {
                         "Damage": {
-                          "skill_type": "Attack"
+                          "skill_type": "Attack",
+                          "damage_type": null,
+                          "min_max": null
                         }
-                      }
+                      },
+                      "modifier": "Increased",
+                      "debuff": false
                     }
                   },
-                  "value": 50,
-                  "cumulate": true
+                  "value": 50.0,
+                  "cumulate": true,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
-            }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 50
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 1.5,
+      "damage": {
+        "Physical": [
+          4.0,
+          10.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": {
+      "armor": 20.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "studded_gloves": {
     "name": "Studded Gloves",
     "icon": "items/gloves/studded_gloves.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 30
+      "armor": 30.0,
+      "block": 0.0
     },
-    "min_area_level": 90
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "chain_gloves": {
     "name": "Chain Gloves",
     "icon": "items/gloves/chain_gloves.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 40
+      "armor": 40.0,
+      "block": 0.0
     },
-    "min_area_level": 140
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "chain_gloves_unique": {
     "name": "Petalweave Gloves",
-    "description": "Each blossom stitched into the silk drinks in stray magic and returns it to its wielder in steady breaths.",
     "icon": "items/gloves/princess_gloves.webp",
+    "description": "Each blossom stitched into the silk drinks in stray magic and returns it to its wielder in steady breaths.",
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
-    "armor_specs": {
-      "armor": 40
-    },
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 150,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": {
-          "RestoreOnHit": { "restore_type": "Mana" }
+          "RestoreOnHit": {
+            "restore_type": "Mana",
+            "skill_type": null
+          }
         },
         "modifier": "Flat",
-        "value": 2,
+        "scope": "Global",
+        "value": 2.0,
         "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 60, 100 ]
+        "scope": "Global",
+        "value": [
+          60.0,
+          100.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [ 4, 6 ],
+        "scope": "Global",
+        "value": [
+          4.0,
+          6.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": {
+          "Armor": "Poison"
+        },
         "modifier": "Flat",
-        "value": [ 60, 100 ]
+        "scope": "Global",
+        "value": [
+          60.0,
+          100.0
+        ],
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 150
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 40.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "leather_gauntlets": {
     "name": "Boiled Leather Gauntlets",
     "icon": "items/gloves/leather_gauntlets.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 50
+      "armor": 50.0,
+      "block": 0.0
     },
-    "min_area_level": 190
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "lamellar_gauntlets": {
     "name": "Lamellar Gauntlets",
     "icon": "items/gloves/leather_gauntlets.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 60
+      "armor": 60.0,
+      "block": 0.0
     },
-    "min_area_level": 250
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "lamellar_gauntlets_unique": {
     "name": "Twinbound Grasp",
-    "description": "Abal's fury, Zael's cunning, bound in mortal hands.",
     "icon": "items/gloves/dragon_gloves.webp",
+    "description": "Abal's fury, Zael's cunning, bound in mortal hands.",
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
-    "armor_specs": {
-      "armor": 60
-    },
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Storm"
+        },
         "modifier": "Flat",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": {
           "SkillConditionalModifier": {
             "stat": {
@@ -273,7 +489,11 @@
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": { "DamageOverTime": { "damage_type": "Fire" } },
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  },
                   "skill_type": null,
                   "not": false
                 }
@@ -282,41 +502,35 @@
           }
         },
         "modifier": "More",
-        "value": 100,
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "twinbound_storm",
         "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
           "is_hurt": true,
+          "is_triggered": null,
           "damage_type": "Storm"
         },
         "target": "SameTarget",
-        "skill_type": "Other",
-        "effects": [
-          {
-            "FlatDamage": {
-              "damage": { },
-              "unblockable": true
-            },
-            "ignore_stat_effects": [
-              {
-                "Damage": {
-                  "damage_type": "Storm"
-                }
-              },
-              {
-                "CritChance": null
-              }
-            ]
-          }
-        ],
         "modifiers": [
           {
             "stat": {
-              "Damage": { "damage_type": "Fire" }
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Fire",
+                "min_max": null
+              }
             },
             "modifier": "Flat",
             "factor": 0.35,
@@ -324,29 +538,97 @@
               "HitDamage": "Storm"
             }
           }
-        ]
+        ],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": true
+            },
+            "ignore_stat_effects": [
+              {
+                "CritChance": null
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "damage_type": "Storm",
+                  "min_max": null
+                }
+              }
+            ],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 260
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 60.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "gloves_7": {
     "name": "Plated Gauntlets",
     "icon": "items/gloves/plated_gauntlets.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 70
+      "armor": 70.0,
+      "block": 0.0
     },
-    "min_area_level": 320
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   },
   "gloves_8": {
     "name": "Runic Gauntlets",
     "icon": "items/gloves/runic_gauntlets.webp",
+    "description": null,
     "slot": "Gloves",
-    "categories": [ "Armor", "Gloves" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 80
+      "armor": 80.0,
+      "block": 0.0
     },
-    "min_area_level": 400
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false
   }
 }
