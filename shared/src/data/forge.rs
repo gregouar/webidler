@@ -29,6 +29,6 @@ pub fn affix_operation_price(operation: ForgeAffixOperation, affixes_amount: usi
                     _ => 1.0,
                 }
         }),
-        ForgeAffixOperation::Remove => (affixes_amount > 0).then(|| 10.0),
+        ForgeAffixOperation::Remove => (affixes_amount > 0).then_some(10.0),
     }
 }

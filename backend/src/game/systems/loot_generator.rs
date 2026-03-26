@@ -335,12 +335,10 @@ pub fn remove_affix(
         AffixType::Prefix
     } else if suffixes_amount > prefixes_amount {
         AffixType::Suffix
+    } else if flip_coin() {
+        AffixType::Prefix
     } else {
-        if flip_coin() {
-            AffixType::Prefix
-        } else {
-            AffixType::Suffix
-        }
+        AffixType::Suffix
     };
 
     let affixes_amount = match affix_type {
