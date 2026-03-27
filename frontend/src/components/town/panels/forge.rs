@@ -741,7 +741,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 fn GambleBrowser(gamble_category: RwSignal<Option<ItemCategory>>) -> impl IntoView {
     let set_gamble_category = move |item_category| gamble_category.set(item_category);
     view! {
-        <div class="w-full flex flex-col gap-2 p-2">
+        <div class="w-full flex flex-col gap-1 p-2">
             {GAMBLE_ITEM_CATEGORIES
                 .map(|item_category| {
                     view! {

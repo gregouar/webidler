@@ -114,7 +114,7 @@ impl MasterStore {
                     .flat_map(|t| {
                         loot_tables_store
                             .get(t)
-                            .expect(&format!("missing loot table '{t}'"))
+                            .unwrap_or_else(|| panic!("missing loot table '{t}'"))
                             .entries
                             .clone()
                     })

@@ -160,7 +160,7 @@ pub async fn post_gamble(
         return Err(AppError::UserError("not enough gems".into()));
     }
 
-    // TODO: Only max base item
+    // TODO: Only max base item & max amount of affixes
     match loot_generator::generate_loot(
         &master_store.gamble_table.loot_table,
         &master_store.items_store,
