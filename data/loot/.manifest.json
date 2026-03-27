@@ -3,6 +3,9 @@
     "enabled": true
   },
   "resources": {
+    "gamble_table": [
+      "gamble_table.json"
+    ],
     "loot": [
       "tier_1.json",
       "tier_2.json",

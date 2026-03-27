@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use crate::data::{area::AreaLevel, stash::StashPrice};
+use crate::data::{area::AreaLevel, item::ItemCategory, stash::StashPrice};
 
 // TODO: put in some game config file
 pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
@@ -52,3 +52,20 @@ pub const STASH_MARKET_PRICE: StashPrice = StashPrice {
     upgrade_price: 1e5,
     upgrade_size: 10,
 };
+
+pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 14] = [
+    None,
+    Some(ItemCategory::MeleeWeapon1H),
+    Some(ItemCategory::MeleeWeapon2H),
+    Some(ItemCategory::RangedWeapon),
+    Some(ItemCategory::SpellWeapon),
+    Some(ItemCategory::Shield),
+    Some(ItemCategory::Focus),
+    Some(ItemCategory::Helmet),
+    Some(ItemCategory::Body),
+    Some(ItemCategory::Gloves),
+    Some(ItemCategory::Boots),
+    Some(ItemCategory::Cloak),
+    Some(ItemCategory::Amulet),
+    Some(ItemCategory::Ring),
+];

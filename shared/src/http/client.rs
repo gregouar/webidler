@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
-        item::ItemSlot,
+        item::{ItemCategory, ItemSlot},
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
@@ -197,6 +197,12 @@ pub struct ForgeAffixRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
     pub operation: ForgeAffixOperation,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GambleItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_category: Option<ItemCategory>,
 }
 
 // Inventory

@@ -241,6 +241,12 @@ pub struct ForgeAddAffixResponse {
     pub inventory: PlayerInventory,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GambleItemResponse {
+    pub resource_gems: f64,
+    pub inventory: PlayerInventory,
+}
+
 // Inventory
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

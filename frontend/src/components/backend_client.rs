@@ -12,10 +12,10 @@ use shared::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
             BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
             EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
-            ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
-            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
-            SavePassivesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
-            SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
+            ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
+            InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
+            ResetPasswordRequest, SavePassivesRequest, SellMarketItemRequest, SignInRequest,
+            SignUpRequest, SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
             UpdateAccountRequest, UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
@@ -23,13 +23,13 @@ use shared::{
             BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
             DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
             ExchangeGemsStashResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
-            GetAreasResponse, GetBenedictionsResponse, GetCharacterDetailsResponse,
-            GetDiscordInviteResponse, GetPassivesResponse, GetSkillsResponse,
-            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
-            InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
-            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
-            SavePassivesResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
-            SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
+            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
+            GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
+            InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
+            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
+            ResetPasswordResponse, SavePassivesResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
             UpdateAccountResponse, UpgradeStashResponse,
         },
     },
@@ -355,6 +355,14 @@ impl BackendClient {
         request: &ForgeAffixRequest,
     ) -> Result<ForgeAddAffixResponse, BackendError> {
         self.post_auth("forge/affix", token, request).await
+    }
+
+    pub async fn gamble_item(
+        &self,
+        token: &str,
+        request: &GambleItemRequest,
+    ) -> Result<GambleItemResponse, BackendError> {
+        self.post_auth("forge/gamble", token, request).await
     }
 
     // Inventory

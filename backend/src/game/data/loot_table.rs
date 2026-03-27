@@ -43,3 +43,17 @@ impl Default for RarityWeights {
 }
 
 impl LoadJsonFromFile for LootTable {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GambleTableBlueprint {
+    pub loot_tables: Vec<String>,
+    pub item_rarity: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct GambleTable {
+    pub loot_table: LootTable,
+    pub item_rarity: f64,
+}
+
+impl LoadJsonFromFile for GambleTableBlueprint {}

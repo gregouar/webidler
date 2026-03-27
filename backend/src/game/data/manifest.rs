@@ -19,6 +19,7 @@ pub enum ManifestCategory {
     ItemAdjectives,
     ItemNouns,
     Loot,
+    GambleTable,
     Monsters,
     Areas,
 }
