@@ -664,7 +664,7 @@ where
 
 #[component]
 pub fn EffectLi(children: Children) -> impl IntoView {
-    view! { <li class="text-xs xl:text-sm text-violet-200  whitespace-pre-line">{children()}</li> }
+    view! { <li class="text-xs xl:text-sm text-violet-200 whitespace-pre-line">{children()}</li> }
 }
 
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {

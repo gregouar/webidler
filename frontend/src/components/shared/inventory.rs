@@ -774,14 +774,14 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
     match opt {
         Some(item_category) => match item_category {
             Armor => "Any Armor",
-            AttackWeapon => "Any Attack Weapon",
-            SpellWeapon => "Any Spell Weapon",
-            MeleeWeapon => "Any Melee Weapon",
             Jewelry => "Any Jewelry",
             Accessory => "Any Accessory",
+            AttackWeapon => "Attack Weapon",
+            SpellWeapon => "Spell Weapon",
+            MeleeWeapon => "Melee Weapon",
+            RangedWeapon => "Ranged Weapon",
             MeleeWeapon1H => "One-Handed Melee Weapon",
             MeleeWeapon2H => "Two-Handed Melee Weapon",
-            RangedWeapon => "Ranged Weapon",
             Shield => "Shield",
             Focus => "Magical Focus",
             Amulet => "Amulet",

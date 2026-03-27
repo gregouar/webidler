@@ -662,7 +662,7 @@ pub fn PassiveSkillStats(
                 text-sm xl:text-base mb-2 mt-2 font-display
                 font-bold leading-none tracking-tight">"Total Effects"</h2>
 
-                <ul class="list-none xl:space-y-1">
+                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
                     {move || {
                         let stats = stats.with(|stats| stats.into());
                         effects_tooltip::formatted_effects_list(stats)

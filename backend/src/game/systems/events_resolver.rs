@@ -329,6 +329,8 @@ fn handle_area_completed_event(
             .saturating_add(*game_data.area_specs.power_level),
         is_boss_level,
         new_max, // Only drop unique when new area completed
+        false,
+        false,
         None,
         *game_data.area_specs.loot_rarity,
     ) {

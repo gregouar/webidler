@@ -170,6 +170,8 @@ pub async fn post_gamble(
         character.max_area_level as u16,
         false,
         true,
+        payload.item_category.is_some(),
+        true,
         payload.item_category,
         master_store.gamble_table.item_rarity,
     ) {
