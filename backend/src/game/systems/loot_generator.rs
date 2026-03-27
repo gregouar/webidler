@@ -82,6 +82,7 @@ fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn roll_item(
     base_item_id: String,
     base: ItemBase,
