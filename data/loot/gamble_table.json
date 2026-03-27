@@ -1,0 +1,13 @@
+{
+    "item_rarity": 1000.0,
+    "loot_tables": [
+        "tier_1.json",
+        "tier_2.json",
+        "tier_3.json",
+        "tier_4.json",
+        "tier_5.json",
+        "tier_6.json",
+        "tier_7.json",
+        "tier_8.json"
+    ]
+}

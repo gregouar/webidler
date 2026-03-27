@@ -4,6 +4,8 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 
 use crate::components::ui::toast::*;
+
+#[allow(clippy::type_complexity)]
 pub fn use_json_loader<T: 'static + DeserializeOwned + Sync + Send>() -> (
     RwSignal<Option<T>>,
     RwSignal<Option<String>>,
