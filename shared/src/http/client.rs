@@ -200,6 +200,12 @@ pub struct ForgeAffixRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeUpgradeRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GambleItemRequest {
     pub character_id: UserCharacterId,
     pub item_category: Option<ItemCategory>,

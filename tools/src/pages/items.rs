@@ -172,9 +172,10 @@ fn ItemEditor(
 
     Effect::new(move || {
         if let Some(selected_item) = selected_item.get()
-            && let Some(selected_item_specs) = items_store.read().get(&selected_item) {
-                item_base.set(selected_item_specs.clone());
-            }
+            && let Some(selected_item_specs) = items_store.read().get(&selected_item)
+        {
+            item_base.set(selected_item_specs.clone());
+        }
     });
 
     let _ = watch_debounced_with_options(
@@ -253,6 +254,7 @@ fn ItemPreview(
                             level: item_base.min_area_level,
                             affixes: unique_effects,
                             quality: 0.0,
+                            upgrade_level: 0,
                         },
                         base: item_base,
                         old_game: false,

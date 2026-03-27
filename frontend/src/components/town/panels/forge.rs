@@ -10,7 +10,8 @@ use shared::{
         player::EquippedSlot,
     },
     http::client::{
-        ForgeAffixOperation, ForgeAffixRequest, GambleItemRequest, InventoryDeleteRequest,
+        ForgeAffixOperation, ForgeAffixRequest, ForgeUpgradeRequest, GambleItemRequest,
+        InventoryDeleteRequest,
     },
 };
 use std::sync::Arc;
@@ -468,19 +469,18 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
         })
     };
 
-    let do_affix_operation = {
+    let do_upgrade_item = {
         let character_id = town_context.character.read_untracked().character_id;
-        move |operation| {
+        move || {
             if let SelectedItem::InMarket(item) = selected_item.get() {
                 spawn_local({
                     async move {
                         match backend
-                            .forge_affix(
+                            .forge_upgrade(
                                 &auth_context.token(),
-                                &ForgeAffixRequest {
+                                &ForgeUpgradeRequest {
                                     character_id,
                                     item_index: item.index as u32,
-                                    operation,
                                 },
                             )
                             .await
@@ -529,35 +529,6 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
         }
     };
 
-    let try_add_affix = {
-        let confirm_context = confirm_context.clone();
-        move |affix_type| {
-            let do_add_affix =
-                Arc::new(move || do_affix_operation(ForgeAffixOperation::Add(affix_type)));
-            if town_context.character.read_untracked().max_area_level < item_level() {
-                (confirm_context
-                        .confirm)(
-                        "Your Character Power Level is lower than this item's level. Forging an Affix may make it unusable for your character. Continue?"
-                            .to_string(),
-                        do_add_affix.clone(),
-                    );
-            } else {
-                do_add_affix();
-            }
-        }
-    };
-
-    let try_remove_affix = {
-        let confirm_context = confirm_context.clone();
-        move || {
-            let do_remove_affix = Arc::new(move || do_affix_operation(ForgeAffixOperation::Remove));
-            (confirm_context.confirm)(
-                "Removing an affix is random and cannot be undone. Continue?".to_string(),
-                do_remove_affix.clone(),
-            );
-        }
-    };
-
     let is_equipped = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(selected_item) => selected_item.recipient.is_some(),
@@ -565,64 +536,11 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
         })
     };
 
-    let affix_price = move || {
+    let upgrade_price = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
-                    return None;
-                }
-                forge::affix_price(item.item_specs.modifiers.count_nonunique_affixes())
-            }
-            _ => None,
-        })
-    };
-
-    let prefix_price = move || {
-        selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
-                    return None;
-                }
-
-                let prefixes = item.item_specs.modifiers.count_affixes(AffixType::Prefix);
-                let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
-
-                if prefixes == suffixes {
-                    forge::affix_price(prefixes + suffixes)
-                        .map(|price| price * forge::PREFIX_PRICE_FACTOR)
-                } else {
-                    None
-                }
-            }
-            _ => None,
-        })
-    };
-
-    let suffix_price = move || {
-        selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
-                    return None;
-                }
-
-                let prefixes = item.item_specs.modifiers.count_affixes(AffixType::Prefix);
-                let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
-
-                if suffixes == prefixes {
-                    forge::affix_price(prefixes + suffixes)
-                        .map(|price| price * forge::SUFFIX_PRICE_FACTOR)
-                } else {
-                    None
-                }
-            }
-            _ => None,
-        })
-    };
-
-    let remove_price = move || {
-        selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => {
-                forge::remove_price(item.item_specs.modifiers.count_nonunique_affixes())
+                Some(42.0)
+                // forge::remove_price(item.item_specs.modifiers.count_nonunique_affixes())
             }
             _ => None,
         })
@@ -630,7 +548,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Forge Item"</CardTitle>
+            <CardTitle>"Empower Unique Item"</CardTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">
@@ -641,86 +559,17 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
             <div class="flex flex-col gap-1 xl:gap-2">
                 <MenuButton
-                    on:click={
-                        let try_add_affix = try_add_affix.clone();
-                        move |_| try_add_affix(None)
-                    }
+                    on:click=move |_| do_upgrade_item()
                     disabled=Signal::derive({
-                        move || affix_price().map(|price| price > user_gems()).unwrap_or(true)
+                        move || upgrade_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
                     class:mb-1
                     class:xl:mb-2
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Add random" <span class="text-white font-bold">"Affix"</span>
+                        <span class="text-white font-bold">"Empower"</span>
                         {move || {
-                            affix_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButton>
-                <MenuButton
-                    on:click={
-                        let try_add_affix = try_add_affix.clone();
-                        move |_| try_add_affix(Some(AffixType::Prefix))
-                    }
-                    disabled=Signal::derive({
-                        move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Add random" <span class="text-white font-bold">"Prefix"</span>
-                        {move || {
-                            prefix_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButton>
-                <MenuButton
-                    on:click=move |_| try_add_affix(Some(AffixType::Suffix))
-                    disabled=Signal::derive({
-                        move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Add random" <span class="text-white font-bold">"Suffix"</span>
-                        {move || {
-                            suffix_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButton>
-
-                <MenuButton
-                    on:click=move |_| try_remove_affix()
-                    disabled=Signal::derive({
-                        move || remove_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                    class:mt-1
-                    class:xl:mt-2
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        "Remove random" <span class="text-white font-bold">"Affix"</span>
-                        {move || {
-                            remove_price()
+                            upgrade_price()
                                 .map(|price| {
                                     view! {
                                         "for "

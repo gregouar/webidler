@@ -346,7 +346,12 @@ pub fn formatted_effects_list(
                     effect.value,
                 );
             }
-            _ => merged.push(format_stat(effect)),
+            _ => {
+                let formatted_stat = format_stat(effect);
+                if !formatted_stat.is_empty() {
+                    merged.push(format_stat(effect))
+                }
+            }
         }
     }
 
@@ -412,7 +417,8 @@ pub fn formatted_effects_list(
 
 pub fn format_stat(effect: &StatEffect) -> String {
     if effect.value == 0.0 {
-        "No Effect".to_string()
+        "".to_string()
+        // "No Effect".to_string()
     } else if let StatType::StatConverter(stat_converter_specs) = &effect.stat {
         let extra_str = match stat_converter_specs.is_extra {
             true => "gained as",

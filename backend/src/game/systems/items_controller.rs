@@ -15,7 +15,7 @@ use shared::data::{
     values::NonNegative,
 };
 
-use crate::game::data::items_store::ItemsStore;
+use crate::{game::data::items_store::ItemsStore, rest::AppError};
 
 const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
 
@@ -269,4 +269,22 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         auto_use_conditions: Default::default(),
         ignore_stat_effects: Default::default(),
     }
+}
+
+pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+    let available_upgrade_levels = item
+        .base
+        .upgrade_levels
+        .iter()
+        .filter(|l| **l <= item.modifiers.level)
+        .count();
+
+    if available_upgrade_levels <= item.modifiers.upgrade_level as usize {
+        return Err(AppError::UserError("maximum empower level reached.".into()));
+    }
+
+    let mut item_modifiers = item.modifiers.clone();
+    item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
+
+    Ok(create_item_specs(item.base.clone(), item_modifiers, true))
 }

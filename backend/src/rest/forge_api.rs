@@ -6,8 +6,8 @@ use shared::{
     computations, constants,
     data::{forge::affix_operation_price, player::EquippedSlot},
     http::{
-        client::{ForgeAffixOperation, ForgeAffixRequest, GambleItemRequest},
-        server::{ForgeAddAffixResponse, GambleItemResponse},
+        client::{ForgeAffixOperation, ForgeAffixRequest, ForgeUpgradeRequest, GambleItemRequest},
+        server::{ForgeAffixResponse, ForgeUpgradeResponse, GambleItemResponse},
     },
 };
 
@@ -17,7 +17,7 @@ use crate::{
     db::{self},
     game::{
         data::inventory_data::inventory_data_to_player_inventory,
-        systems::{inventory_controller, loot_generator},
+        systems::{inventory_controller, items_controller, loot_generator},
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -27,6 +27,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/forge/affix", post(post_affix))
+        .route("/forge/upgrade", post(post_upgrade))
         .route("/forge/gamble", post(post_gamble))
         .layer(middleware::from_fn_with_state(
             app_state,
@@ -39,7 +40,7 @@ pub async fn post_affix(
     State(master_store): State<MasterStore>,
     Extension(current_user): Extension<CurrentUser>,
     Json(payload): Json<ForgeAffixRequest>,
-) -> Result<Json<ForgeAddAffixResponse>, AppError> {
+) -> Result<Json<ForgeAffixResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
@@ -112,7 +113,75 @@ pub async fn post_affix(
 
     tx.commit().await?;
 
-    Ok(Json(ForgeAddAffixResponse {
+    Ok(Json(ForgeAffixResponse {
+        resource_gems: character_resources.resource_gems,
+        inventory,
+    }))
+}
+
+pub async fn post_upgrade(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(current_user): Extension<CurrentUser>,
+    Json(payload): Json<ForgeUpgradeRequest>,
+) -> Result<Json<ForgeUpgradeResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &current_user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, _, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    let item = if payload.item_index < 9 {
+        inventory
+            .equipped
+            .get_mut(&(payload.item_index as usize).try_into()?)
+            .and_then(|equipped_item| match equipped_item {
+                EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_mut()),
+                _ => None,
+            })
+    } else {
+        inventory
+            .bag
+            .get_mut(payload.item_index.saturating_sub(9) as usize)
+    }
+    .ok_or(AppError::NotFound)?;
+
+    // let price = affix_operation_price(payload.operation, item.modifiers.count_nonunique_affixes())
+    //     .ok_or(AppError::UserError("forge operation unavailable".into()))?;
+    let price = 0.0;
+
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        -price,
+        0.0,
+        0.0,
+    )
+    .await?;
+
+    if character_resources.resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".into()));
+    }
+
+    *item = items_controller::upgrade_item(item)?;
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(ForgeUpgradeResponse {
         resource_gems: character_resources.resource_gems,
         inventory,
     }))

@@ -153,6 +153,24 @@ pub fn ItemTooltipContent(
         )
     };
 
+    let (has_upgrades, upgrades) = {
+        if show_affixes && !item_specs.base.upgrade_effects.is_empty() {
+            let upgrade_effects = item_specs
+                .base
+                .upgrade_effects
+                .iter()
+                .map(|effect| effect.stat_effect.clone())
+                .collect::<Vec<_>>();
+
+            (
+                true,
+                Some(effects_tooltip::formatted_effects_list(upgrade_effects)),
+            )
+        } else {
+            (false, None)
+        }
+    };
+
     let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
     let required_level = item_specs.required_level;
@@ -202,8 +220,16 @@ pub fn ItemTooltipContent(
                             {effects}{triggers}
                         </ul>
                     }
+                })}
+            {(has_upgrades)
+                .then(|| {
+                    view! {
+                        <Separator />
+                        <span class="text-xs xl:text-sm text-gray-400">"Empower effects:"</span>
+                        <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{upgrades}</ul>
+                    }
                 })} <Separator /> <ul class="list-none xl:space-y-1">
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
+                <li class="text-xs xl:text-sm text-gray-400">
                     "Required Power Level: "
                     <span class=move || {
                         if max_item_level.get() < required_level {
@@ -571,7 +597,7 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique => view! { <li class="text-gray-400 text-xs ">"Implicit affix – "{scope_str(scope)}</li> }
+                AffixType::Unique => view! { <li class="text-gray-400 text-xs ">"Base affix – "{scope_str(scope)}</li> }
                 .into_any(),
                 _ => {
                     let mut tags: Vec<_> = affix.tags.iter().collect();
@@ -610,6 +636,7 @@ fn affix_type_str(affix_type: AffixType) -> &'static str {
         AffixType::Prefix => "Prefix",
         AffixType::Suffix => "Suffix",
         AffixType::Unique => "Base affix",
+        AffixType::Upgrade => "Empowering affix",
     }
 }
 

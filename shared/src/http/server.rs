@@ -236,7 +236,13 @@ pub struct TakeStashItemResponse {
 // Forge
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ForgeAddAffixResponse {
+pub struct ForgeAffixResponse {
+    pub resource_gems: f64,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeUpgradeResponse {
     pub resource_gems: f64,
     pub inventory: PlayerInventory,
 }

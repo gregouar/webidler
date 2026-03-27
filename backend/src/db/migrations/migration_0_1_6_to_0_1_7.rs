@@ -183,6 +183,7 @@ impl From<OldItemModifiers> for ItemModifiers {
             level: value.level,
             affixes: value.affixes.into_iter().map(Into::into).collect(),
             quality: value.quality,
+            upgrade_level: 0,
         }
     }
 }

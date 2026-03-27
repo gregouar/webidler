@@ -2,210 +2,478 @@
   "cloth_shoes": {
     "name": "Cloth Shoes",
     "icon": "items/boots/cloth_shoes.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 10
-    }
+      "armor": 10.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_boots": {
     "name": "Leather Boots",
     "icon": "items/boots/leather_boots.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 20
+      "armor": 20.0,
+      "block": 0.0
     },
-    "min_area_level": 40
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_boots_unique": {
     "name": "Pathwalker's Remains",
-    "description": "Their journey never ended, maybe yours won't either.",
     "icon": "items/boots/pathwalker_remains.webp",
+    "description": "Their journey never ended, maybe yours won't either.",
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
-    "armor_specs": {
-      "armor": 20
-    },
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 50,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 40, 60 ]
-      },
-      {
         "scope": "Global",
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "value": 10,
+        "value": [
+          40.0,
+          60.0
+        ],
         "ignore_quality": true
       },
       {
+        "stat": "MovementSpeed",
+        "modifier": "Increased",
         "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "value": 20.0,
+        "ignore_quality": true
       },
       {
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
         "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": "Mana",
         "modifier": "Flat",
-        "value": [ 20, 30 ],
+        "scope": "Global",
+        "value": [
+          20.0,
+          30.0
+        ],
         "ignore_quality": true
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "pathwalker_remains",
-        "OnWaveCompleted": { },
+        "OnWaveCompleted": null,
         "target": "Me",
+        "modifiers": [],
+        "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "Restore": {
               "restore_type": "Mana",
-              "value": [ 5, 10 ],
+              "value": [
+                5.0,
+                10.0
+              ],
               "modifier": "Percent"
-            }
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 50
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 20.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 25.0
+        }
+      }
+    ]
   },
   "reinforced_boots": {
     "name": "Reinforced Boots",
     "icon": "items/boots/reinforced_boots.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 30
+      "armor": 30.0,
+      "block": 0.0
     },
-    "min_area_level": 90
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "mail_boots": {
     "name": "Mail Boots",
     "icon": "items/boots/mail_boots.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 40
+      "armor": 40.0,
+      "block": 0.0
     },
-    "min_area_level": 140
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "iron_shod_boots": {
     "name": "Iron-Shod Boots",
     "icon": "items/boots/iron_shod_boots.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 50
+      "armor": 50.0,
+      "block": 0.0
     },
-    "min_area_level": 190
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "sabatons": {
     "name": "Sabatons",
     "icon": "items/boots/sabatons.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 60
+      "armor": 60.0,
+      "block": 0.0
     },
-    "min_area_level": 250
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
-    "description": "The Father Drake never fled, the storm simply carried him elsewhere.",
     "icon": "items/boots/dragon_boots.webp",
+    "description": "The Father Drake never fled, the storm simply carried him elsewhere.",
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
-    "armor_specs": {
-      "armor": 60
-    },
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": 20,
+        "scope": "Global",
+        "value": 20.0,
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Storm"
+        },
         "modifier": "Flat",
-        "value": [ 100, 150 ],
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": {
+          "Armor": "Poison"
+        },
         "modifier": "Flat",
-        "value": [ 100, 150 ],
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": {
           "StatusDuration": {
-            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+            "status_type": {
+              "DamageOverTime": {
+                "damage_type": "Poison"
+              }
+            },
+            "skill_type": null
           }
         },
         "modifier": "Increased",
-        "value": [ 30, 50 ],
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
         "ignore_quality": true
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "sabatons_unique",
         "OnApplyStatus": {
-          "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          "skill_type": null,
+          "status_type": {
+            "DamageOverTime": {
+              "damage_type": "Poison"
+            }
+          },
+          "is_triggered": null
         },
         "target": "Me",
+        "modifiers": [],
+        "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 10,
               "statuses": [
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Damage": { "damage_type": "Storm" } }
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": "Storm",
+                          "min_max": null
+                        }
+                      },
+                      "modifier": "Increased",
+                      "debuff": false
                     }
                   },
-                  "value": 300
+                  "value": 300.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
-            }
+              ],
+              "duration": 10.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 260
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 60.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "boots_7": {
     "name": "Plated Boots",
     "icon": "items/boots/plated_boots.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 70
+      "armor": 70.0,
+      "block": 0.0
     },
-    "min_area_level": 320
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "boots_8": {
     "name": "Runic Greaves",
     "icon": "items/boots/runic_greaves.webp",
+    "description": null,
     "slot": "Boots",
-    "categories": [ "Armor", "Boots" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 80
+      "armor": 80.0,
+      "block": 0.0
     },
-    "min_area_level": 400
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

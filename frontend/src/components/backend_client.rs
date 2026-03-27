@@ -12,7 +12,7 @@ use shared::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
             BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
             EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
-            ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
+            ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
             InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
             ResetPasswordRequest, SavePassivesRequest, SellMarketItemRequest, SignInRequest,
             SignUpRequest, SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
@@ -22,8 +22,8 @@ use shared::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
             BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
             DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
-            ExchangeGemsStashResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
-            GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
+            ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
+            ForgotPasswordResponse, GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
             GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
             GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
             InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
@@ -353,8 +353,16 @@ impl BackendClient {
         &self,
         token: &str,
         request: &ForgeAffixRequest,
-    ) -> Result<ForgeAddAffixResponse, BackendError> {
+    ) -> Result<ForgeAffixResponse, BackendError> {
         self.post_auth("forge/affix", token, request).await
+    }
+
+    pub async fn forge_upgrade(
+        &self,
+        token: &str,
+        request: &ForgeUpgradeRequest,
+    ) -> Result<ForgeUpgradeResponse, BackendError> {
+        self.post_auth("forge/upgrade", token, request).await
     }
 
     pub async fn gamble_item(

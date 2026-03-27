@@ -110,6 +110,7 @@ pub fn roll_item(
         level,
         quality,
         affixes: roll_unique_affixes(&base, quality),
+        upgrade_level: 0,
     };
 
     let affixes_amount = if max_affixes {
@@ -386,7 +387,7 @@ pub fn remove_affix(
     let affixes_amount = match affix_type {
         AffixType::Prefix => prefixes_amount,
         AffixType::Suffix => suffixes_amount,
-        AffixType::Unique => 0,
+        AffixType::Unique | AffixType::Upgrade => 0,
     };
 
     let affix_subindex = rng::random_range(0..affixes_amount).unwrap_or_default();

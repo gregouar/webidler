@@ -6,7 +6,7 @@ use strum_macros::EnumIter;
 
 use crate::data::{
     chance::Chance,
-    item_affix::AffixType,
+    item_affix::{AffixEffect, AffixType},
     modifier::ModifiableValue,
     skill::DamageType,
     trigger::TriggerSpecs,
@@ -160,6 +160,11 @@ pub struct ItemBase {
 
     #[serde(default)]
     pub ignore_quality: bool,
+
+    #[serde(default)]
+    pub upgrade_levels: Vec<AreaLevel>,
+    #[serde(default)]
+    pub upgrade_effects: Vec<AffixEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -174,6 +179,9 @@ pub struct ItemModifiers {
 
     #[serde(default)]
     pub quality: f32,
+
+    #[serde(default)]
+    pub upgrade_level: u8,
 }
 
 // #[cfg(feature = "modifiable")]

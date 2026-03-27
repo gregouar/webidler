@@ -2,252 +2,553 @@
   "cloth_hood": {
     "name": "Cloth Hood",
     "icon": "items/helmets/cloth_hood.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 15
-    }
+      "armor": 15.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_cap": {
     "name": "Leather Cap",
     "icon": "items/helmets/leather_cap.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 30
+      "armor": 30.0,
+      "block": 0.0
     },
-    "min_area_level": 40
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_cap_unique": {
     "name": "Skullcap of the Provoker",
-    "description": "In the wild, to show your kills is to invite a fight, and to prove you're ready for it.",
     "icon": "items/helmets/skullcap.webp",
+    "description": "In the wild, to show your kills is to invite a fight, and to prove you're ready for it.",
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 50,
     "rarity": "Unique",
-    "armor_specs": {
-      "armor": 30
-    },
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
           "Armor": "Physical"
         },
         "modifier": "Increased",
-        "value": [ 40, 60 ]
-      },
-      {
-        "scope": "Global",
-        "stat": "ThreatGain",
-        "modifier": "Increased",
-        "value": [ 50, 50 ],
+        "scope": "Local",
+        "value": [
+          40.0,
+          60.0
+        ],
         "ignore_quality": true
       },
       {
+        "stat": "ThreatGain",
+        "modifier": "Increased",
         "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 40, 60 ]
+        "value": 50.0,
+        "ignore_quality": true
       },
       {
+        "stat": {
+          "Damage": {
+            "skill_type": "Attack",
+            "damage_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
         "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": {
           "Armor": "Poison"
         },
         "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": {
           "Armor": "Storm"
         },
         "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
       }
     ],
-    "min_area_level": 50
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 30.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 15.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      }
+    ]
   },
   "iron_cap": {
     "name": "Iron Cap",
     "icon": "items/helmets/iron_cap.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 45
+      "armor": 45.0,
+      "block": 0.0
     },
-    "min_area_level": 90
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "iron_cap_unique": {
     "name": "The Seamstress's Folly",
-    "description": "No spellbook could teach what she learned from her own undoing.",
     "icon": "items/helmets/witch_hat.webp",
+    "description": "No spellbook could teach what she learned from her own undoing.",
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 100,
     "rarity": "Unique",
-    "armor_specs": {
-      "armor": 45
-    },
     "affixes": [
       {
-        "scope": "Global",
         "stat": {
           "Armor": "Poison"
         },
         "modifier": "Flat",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "Mana",
         "modifier": "Increased",
-        "value": [ 20, 40 ]
+        "scope": "Global",
+        "value": [
+          20.0,
+          40.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [ 8, 12 ]
+        "scope": "Global",
+        "value": [
+          8.0,
+          12.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "StatusDuration": { } },
+        "stat": {
+          "StatusDuration": {
+            "status_type": null,
+            "skill_type": null
+          }
+        },
         "modifier": "Increased",
-        "value": [ 20, 30 ]
+        "scope": "Global",
+        "value": [
+          20.0,
+          30.0
+        ],
+        "ignore_quality": false
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "witch_hat",
-        "skill_type": "Curse",
         "OnTakeHit": {
-          "is_hurt": true
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null
         },
         "target": "Source",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Curse",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "SuccessChance": { } },
+                      "stat": {
+                        "SuccessChance": {
+                          "skill_type": null,
+                          "effect_type": null
+                        }
+                      },
+                      "modifier": "Increased",
                       "debuff": true
                     }
                   },
-                  "value": 100
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
-            }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false
       }
     ],
-    "min_area_level": 100
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 45.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "mail_coif": {
     "name": "Mail Coif",
     "icon": "items/helmets/mail_coif.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 60
+      "armor": 60.0,
+      "block": 0.0
     },
-    "min_area_level": 140
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "nasal_helm": {
     "name": "Nasal Helm",
     "icon": "items/helmets/nasal_helm.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 75
+      "armor": 75.0,
+      "block": 0.0
     },
-    "min_area_level": 190
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "bascinet": {
     "name": "Bascinet",
     "icon": "items/helmets/bascinet.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 90
+      "armor": 90.0,
+      "block": 0.0
     },
-    "min_area_level": 250
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_crown": {
     "name": "Crown of Tides Storm",
-    "description": "What crowns you is not the ocean... but what sleeps beneath it.",
     "icon": "items/helmets/treasure_crown.webp",
+    "description": "What crowns you is not the ocean... but what sleeps beneath it.",
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
-    "armor_specs": {
-      "armor": 90
-    },
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": {
           "StatConverter": {
             "source": {
-              "Damage": { }
+              "Damage": {
+                "damage_type": null,
+                "min_max": null
+              }
             },
             "stat": {
-              "Damage": { "damage_type": "Storm", "min_max": "Max" }
+              "Damage": {
+                "skill_type": null,
+                "damage_type": "Storm",
+                "min_max": "Max"
+              }
             },
-            "is_extra": true
+            "is_extra": true,
+            "skill_type": null
           }
         },
         "modifier": "Flat",
-        "ignore_quality": true,
-        "value": 25
+        "scope": "Global",
+        "value": 25.0,
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": {
           "SuccessChance": {
-            "effect_type": { "ApplyStatus": { "status_type": "Stun" } }
+            "skill_type": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_type": "Stun"
+              }
+            }
           }
         },
         "modifier": "More",
-        "value": [ 16, 24 ]
+        "scope": "Global",
+        "value": [
+          16.0,
+          24.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Damage": { "damage_type": "Storm" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Storm",
+            "min_max": null
+          }
+        },
         "modifier": "More",
-        "value": [ 40, 80 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          80.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Storm"
+        },
         "modifier": "Flat",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 260
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 90.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "helmet_7": {
     "name": "Barbute",
     "icon": "items/helmets/barbute.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 105
+      "armor": 105.0,
+      "block": 0.0
     },
-    "min_area_level": 320
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "helmet_8": {
     "name": "Helm",
     "icon": "items/helmets/helm.webp",
+    "description": null,
     "slot": "Helmet",
-    "categories": [ "Armor", "Helmet" ],
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 120
+      "armor": 120.0,
+      "block": 0.0
     },
-    "min_area_level": 400
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }
