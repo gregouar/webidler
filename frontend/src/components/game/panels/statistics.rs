@@ -715,6 +715,7 @@ fn TriggersStats() -> impl IntoView {
                                     icon: None,
                                     description: None,
                                     triggered_effect: triggered_effect.clone(),
+                                    is_debuff: false,
                                 })} <Separator />
                             </div>
                         </For>

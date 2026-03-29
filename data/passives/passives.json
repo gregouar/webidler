@@ -18,7 +18,7 @@
             "value": 5.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -49,7 +49,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -84,7 +84,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -117,7 +117,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -144,7 +144,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -177,7 +177,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -216,7 +216,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -255,7 +255,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -288,7 +288,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -308,10 +308,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -323,10 +323,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -354,7 +354,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -390,7 +390,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -437,9 +437,9 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -460,7 +460,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -509,7 +509,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -562,7 +562,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -601,7 +601,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -663,7 +663,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -721,7 +721,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -752,7 +752,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -783,7 +783,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -836,7 +836,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -893,7 +893,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -935,7 +935,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -971,7 +971,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1018,7 +1018,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1065,7 +1065,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1098,7 +1098,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1150,9 +1150,9 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -1192,7 +1192,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1227,7 +1227,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1256,7 +1256,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1288,7 +1288,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -1320,7 +1320,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1347,7 +1347,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1380,7 +1380,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1415,7 +1415,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1450,7 +1450,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1488,7 +1488,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1522,7 +1522,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1551,7 +1551,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1580,7 +1580,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1632,9 +1632,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -1646,10 +1646,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -1674,7 +1674,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1712,7 +1712,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1744,7 +1744,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1780,7 +1780,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1809,10 +1809,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -1833,7 +1833,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1871,7 +1871,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1907,7 +1907,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1940,7 +1940,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1975,7 +1975,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2010,7 +2010,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2057,7 +2057,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2098,7 +2098,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2125,7 +2125,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2152,7 +2152,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2185,7 +2185,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2232,7 +2232,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2273,7 +2273,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2306,7 +2306,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2341,7 +2341,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2372,7 +2372,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2425,7 +2425,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2490,7 +2490,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2538,7 +2538,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -2593,7 +2593,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2626,7 +2626,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2653,7 +2653,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2686,7 +2686,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2721,7 +2721,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2774,7 +2774,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2830,7 +2830,7 @@
             "value": 12.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2862,7 +2862,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2910,9 +2910,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -2931,7 +2931,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2964,7 +2964,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3007,7 +3007,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3050,7 +3050,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3102,7 +3102,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3154,7 +3154,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3196,7 +3196,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3234,7 +3234,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3284,7 +3284,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3323,7 +3323,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3365,9 +3365,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -3386,7 +3386,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3415,7 +3415,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3457,7 +3457,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3511,7 +3511,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3552,7 +3552,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3579,7 +3579,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3599,7 +3599,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -3616,7 +3616,7 @@
               "damage_type": "Physical"
             },
             "target": "SameTarget",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Any",
             "skill_type": "Attack",
             "effects": [
@@ -3675,8 +3675,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -3685,7 +3685,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -3710,7 +3710,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3749,7 +3749,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3788,7 +3788,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3827,7 +3827,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3869,7 +3869,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3911,7 +3911,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3949,7 +3949,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4005,7 +4005,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4072,9 +4072,9 @@
             "value": -33.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -4098,7 +4098,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4144,7 +4144,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4185,7 +4185,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4241,7 +4241,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4311,7 +4311,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4352,7 +4352,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -4381,7 +4381,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4412,7 +4412,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4445,7 +4445,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4482,7 +4482,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4524,7 +4524,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4565,7 +4565,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -4618,7 +4618,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4657,7 +4657,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4690,7 +4690,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4717,7 +4717,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4753,7 +4753,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4803,7 +4803,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4871,7 +4871,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4930,7 +4930,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4971,7 +4971,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5011,7 +5011,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5042,7 +5042,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5079,7 +5079,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5116,7 +5116,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5149,7 +5149,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5182,7 +5182,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5233,7 +5233,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5284,7 +5284,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5313,7 +5313,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5342,7 +5342,7 @@
             "value": 6.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5369,7 +5369,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5401,7 +5401,7 @@
             "value": 1.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -5439,7 +5439,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5478,7 +5478,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5516,7 +5516,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5550,7 +5550,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5585,7 +5585,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5628,7 +5628,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5676,9 +5676,9 @@
             "value": 200.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -5703,7 +5703,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5729,7 +5729,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Life",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -5768,8 +5768,8 @@
                   },
                   "modifier": "Flat"
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -5778,7 +5778,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -5806,9 +5806,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -5827,7 +5827,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5860,7 +5860,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5897,7 +5897,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5930,7 +5930,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5964,7 +5964,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5996,7 +5996,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6029,7 +6029,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6066,7 +6066,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6102,7 +6102,7 @@
             "value": 1.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -6140,7 +6140,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6175,7 +6175,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6223,7 +6223,7 @@
             "value": 2.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6279,7 +6279,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6316,7 +6316,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6349,7 +6349,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6388,7 +6388,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6414,7 +6414,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -6431,7 +6431,7 @@
               "is_triggered": null
             },
             "target": "Me",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
             "skill_type": "Attack",
             "effects": [
@@ -6472,8 +6472,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -6482,7 +6482,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -6515,7 +6515,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6565,7 +6565,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6607,7 +6607,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6640,7 +6640,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6681,7 +6681,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6746,7 +6746,7 @@
             "value": -25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6811,7 +6811,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6861,7 +6861,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6902,7 +6902,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6934,7 +6934,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6966,7 +6966,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7014,7 +7014,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7075,7 +7075,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7126,7 +7126,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7159,7 +7159,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7196,7 +7196,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7247,7 +7247,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7288,7 +7288,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7321,7 +7321,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7354,7 +7354,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7387,7 +7387,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7426,7 +7426,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7465,7 +7465,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7519,7 +7519,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7562,7 +7562,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7603,7 +7603,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7634,7 +7634,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7661,7 +7661,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7688,7 +7688,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7717,7 +7717,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7755,7 +7755,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7791,7 +7791,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7818,7 +7818,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7847,7 +7847,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7886,7 +7886,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7943,7 +7943,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7992,7 +7992,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8021,7 +8021,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8054,7 +8054,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8087,7 +8087,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8120,7 +8120,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8159,7 +8159,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8192,7 +8192,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8225,7 +8225,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8260,7 +8260,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8291,7 +8291,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8344,7 +8344,7 @@
             "value": -25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8401,7 +8401,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8462,9 +8462,9 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -8485,7 +8485,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8524,7 +8524,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8563,7 +8563,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8597,7 +8597,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8631,7 +8631,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8674,7 +8674,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8735,7 +8735,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8788,7 +8788,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8814,7 +8814,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Poison",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -8916,7 +8916,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -8925,7 +8925,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -8944,7 +8944,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8998,7 +8998,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9045,10 +9045,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -9069,7 +9069,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9114,9 +9114,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -9141,7 +9141,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9194,7 +9194,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -9247,7 +9247,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9290,7 +9290,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9327,7 +9327,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9356,7 +9356,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9405,7 +9405,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9454,7 +9454,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9493,7 +9493,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9536,7 +9536,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9562,7 +9562,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -9636,7 +9636,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -9645,7 +9645,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -9678,7 +9678,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9719,7 +9719,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9755,7 +9755,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9796,7 +9796,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9828,7 +9828,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9857,7 +9857,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9907,7 +9907,7 @@
             "value": -150.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9967,7 +9967,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10026,7 +10026,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10064,7 +10064,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10097,7 +10097,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10126,7 +10126,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10155,7 +10155,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10196,7 +10196,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10242,7 +10242,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10280,7 +10280,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10313,7 +10313,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10340,7 +10340,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10367,7 +10367,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10396,7 +10396,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10425,7 +10425,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10479,7 +10479,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10538,7 +10538,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10584,7 +10584,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10618,10 +10618,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -10646,7 +10646,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10681,7 +10681,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10703,7 +10703,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -10720,7 +10720,7 @@
               "damage_type": "Fire"
             },
             "target": "Me",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
             "skill_type": "Other",
             "effects": [
@@ -10768,8 +10768,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -10778,7 +10778,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10802,7 +10802,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10840,7 +10840,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10873,7 +10873,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10902,7 +10902,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10931,7 +10931,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -10951,7 +10951,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -11001,6 +11001,7 @@
                           "icon": "passives/open_wound.svg",
                           "description": "Takes 50% of the initial hit's Physical Damage",
                           "trigger_id": "open_wound",
+                          "is_debuff": true,
                           "OnTakeHit": {
                             "skill_type": null,
                             "range": null,
@@ -11011,7 +11012,7 @@
                             "damage_type": null
                           },
                           "target": "SameTarget",
-                          "modifiers": [],
+                          "modifiers": [ ],
                           "skill_range": "Melee",
                           "skill_type": "Other",
                           "effects": [
@@ -11021,7 +11022,7 @@
                                 "lucky_chance": 0.0
                               },
                               "FlatDamage": {
-                                "damage": {},
+                                "damage": { },
                                 "crit_chance": {
                                   "value": 0.0,
                                   "lucky_chance": 0.0
@@ -11044,7 +11045,7 @@
                                   "CritDamage": null
                                 }
                               ],
-                              "conditional_modifiers": []
+                              "conditional_modifiers": [ ]
                             }
                           ],
                           "skill_shape": "Single",
@@ -11068,8 +11069,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -11078,7 +11079,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11103,7 +11104,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11151,9 +11152,9 @@
             "value": -33.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11178,7 +11179,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11218,7 +11219,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11266,7 +11267,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11309,7 +11310,7 @@
             "value": 5.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11340,7 +11341,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11388,7 +11389,7 @@
             "value": 2.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11434,7 +11435,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11461,7 +11462,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11500,9 +11501,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11534,7 +11535,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11583,9 +11584,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11597,10 +11598,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -11612,7 +11613,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Status",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -11736,7 +11737,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Contact",
@@ -11865,7 +11866,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Contact",
@@ -11994,7 +11995,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Contact",
@@ -12003,7 +12004,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -12036,7 +12037,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12082,7 +12083,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12114,7 +12115,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -12141,7 +12142,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -12170,7 +12171,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12205,7 +12206,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12252,7 +12253,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12309,7 +12310,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12358,7 +12359,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12393,7 +12394,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12422,7 +12423,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12476,7 +12477,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12540,7 +12541,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12601,7 +12602,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12654,7 +12655,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12687,7 +12688,7 @@
             "value": -20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12711,7 +12712,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Storm",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -12728,7 +12729,7 @@
               "damage_type": "Storm"
             },
             "target": "SameTarget",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
             "skill_type": "Attack",
             "effects": [
@@ -12757,8 +12758,8 @@
                     "lucky_chance": 0.0
                   }
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -12767,7 +12768,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -12792,7 +12793,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12825,7 +12826,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12858,7 +12859,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12891,7 +12892,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12938,7 +12939,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12989,7 +12990,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13025,7 +13026,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13081,7 +13082,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13137,7 +13138,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -13169,7 +13170,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -13196,7 +13197,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13232,7 +13233,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13273,7 +13274,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13311,7 +13312,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13344,7 +13345,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13377,7 +13378,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13424,7 +13425,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13465,7 +13466,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13498,7 +13499,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13533,7 +13534,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13568,7 +13569,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13607,7 +13608,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13646,7 +13647,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13693,7 +13694,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13779,7 +13780,7 @@
             "value": 40.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13860,7 +13861,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13915,7 +13916,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13961,7 +13962,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13993,7 +13994,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14027,7 +14028,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14058,7 +14059,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14116,7 +14117,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14199,7 +14200,7 @@
             "value": 45.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14253,7 +14254,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -14282,7 +14283,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14324,7 +14325,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14378,7 +14379,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14425,7 +14426,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14471,7 +14472,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14504,10 +14505,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -14540,7 +14541,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14605,7 +14606,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14665,7 +14666,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14707,7 +14708,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14740,7 +14741,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14780,7 +14781,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {

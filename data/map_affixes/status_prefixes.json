@@ -7,7 +7,7 @@
         ],
         "affix_type": "Prefix",
         "tier": 1,
-        "weight": 10000000,
+        "weight": 1000,
         "restrictions": [
             "Map"
         ],

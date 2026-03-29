@@ -69,6 +69,8 @@ pub struct TriggerSpecs {
     pub description: Option<String>,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,
+    #[serde(default)]
+    pub is_debuff: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
