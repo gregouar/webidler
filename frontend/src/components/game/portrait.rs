@@ -74,8 +74,8 @@ pub fn CharacterPortrait(
         }
     });
 
-    let statuses_map = Signal::derive({
-        move || {
+    let statuses_map = Memo::new({
+        move |_| {
             statuses.read().iter().fold(
                 HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
                 |mut acc, (status_specs, status_state)| {
@@ -116,14 +116,6 @@ pub fn CharacterPortrait(
         active_statuses.sort();
         active_statuses
     });
-
-    let status_stack = move |status_id| {
-        statuses_map
-            .read()
-            .get(&status_id)
-            .cloned()
-            .unwrap_or_default()
-    };
 
     // let (border_class, shimmer_effect) = match rarity {
     //     MonsterRarity::Normal => ("border-6 xl:border-8 border-double border-stone-500", ""),
@@ -216,8 +208,9 @@ pub fn CharacterPortrait(
                             <StatusIcon
                                 status_id=k.clone()
                                 stack=Signal::derive({
-                                    let k = k.clone();
-                                    move || status_stack(k.clone())
+                                    move || {
+                                        statuses_map.read().get(&k).cloned().unwrap_or_default()
+                                    }
                                 })
                                 tooltip_position=StaticTooltipPosition::Bottom
                             />
@@ -233,8 +226,9 @@ pub fn CharacterPortrait(
                             <StatusIcon
                                 status_id=k.clone()
                                 stack=Signal::derive({
-                                    let k = k.clone();
-                                    move || status_stack(k.clone())
+                                    move || {
+                                        statuses_map.read().get(&k).cloned().unwrap_or_default()
+                                    }
                                 })
                                 tooltip_position=StaticTooltipPosition::Top
                             />
@@ -358,7 +352,8 @@ fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
             StatusSpecs::DamageOverTime { .. } => true,
             StatusSpecs::StatModifier { debuff, .. } => *debuff,
             StatusSpecs::Trigger(trigger_specs) => {
-                matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
+                trigger_specs.is_debuff
+                    || matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
             }
         },
         None => false,
@@ -374,7 +369,7 @@ fn StatusIcon(
     let icon_uri = {
         let status_id = status_id.clone();
         move || {
-            match status_id.clone() {
+            match &status_id {
                 StatusId::Stun => "statuses/stunned.svg".to_string(),
                 StatusId::DamageOverTime { damage_type, .. } => match damage_type {
                     DamageType::Physical => "statuses/bleed.svg".to_string(),
@@ -477,8 +472,7 @@ fn StatusIcon(
         }
     };
 
-    let description =
-        move || status_description(&status_id.clone(), stack.read().1, stack.read().2.clone());
+    let description = move || status_description(&status_id, stack.read().1, &stack.read().2);
 
     let tooltip = {
         let description = description.clone();
@@ -507,7 +501,7 @@ fn StatusIcon(
 pub fn status_description(
     status_id: &StatusId,
     value: f64,
-    status_specs: Option<StatusSpecs>,
+    status_specs: &Option<StatusSpecs>,
 ) -> String {
     match status_id {
         StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
