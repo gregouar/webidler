@@ -211,7 +211,6 @@ pub fn ItemDetails(
     };
 
     view! {
-        s
         <div class="w-full h-full flex items-center justify-center">
             <div class="flex flex-row gap-6 items-center
             w-full h-auto aspect-5/2 overflow-y-auto

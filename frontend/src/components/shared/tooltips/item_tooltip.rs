@@ -75,6 +75,8 @@ pub fn ItemTooltipContent(
         let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
         let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
         let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
+        let upgrade_affixes =
+            formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
             (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
@@ -104,6 +106,15 @@ pub fn ItemTooltipContent(
                             // "Suffixes:"
                             // </li>
                             {suffixes}
+                        }
+                    })}
+                {(!upgrade_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-gray-400 text-xs xl:text-sm ">
+                            // "Base affixes:"
+                            // </li>
+                            {upgrade_affixes}
                         }
                     })}
             }
@@ -206,6 +217,17 @@ pub fn ItemTooltipContent(
                 </ul>
             </strong> <Separator /> <ul class="list-none xl:space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
+                {(item_specs.modifiers.upgrade_level > 0)
+                    .then(|| {
+                        view! {
+                            <li class="text-xs xl:text-sm text-gray-400">
+                                "Empower level: "
+                                <span class="font-bold text-orange-400">
+                                    {item_specs.modifiers.upgrade_level}
+                                </span>
+                            </li>
+                        }
+                    })}
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
@@ -597,7 +619,11 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique => view! { <li class="text-gray-400 text-xs ">"Base affix – "{scope_str(scope)}</li> }
+                AffixType::Unique | AffixType::Upgrade => view! {
+                    <li class="text-gray-400 text-xs -mb-1">
+                        {affix_type_str(affix.affix_type)}" – "{scope_str(scope)}
+                    </li>
+                }
                 .into_any(),
                 _ => {
                     let mut tags: Vec<_> = affix.tags.iter().collect();
@@ -608,7 +634,7 @@ pub fn formatted_affixes_list(
                         .collect();
 
                     view! {
-                        <li class="text-gray-400 text-xs ">
+                        <li class="text-gray-400 text-xs -mb-1">
                             {affix_type_str(affix.affix_type)}" "
                             <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
                             {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}

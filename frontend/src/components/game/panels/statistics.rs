@@ -691,7 +691,7 @@ fn TriggersStats() -> impl IntoView {
     view! {
         <CardInset pad=false>
             <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
-                "Triggers"
+                "Triggered Effects"
             </h2>
             <div class="columns-2 xl:columns-3 gap-1">
                 {move || {

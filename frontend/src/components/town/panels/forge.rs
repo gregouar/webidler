@@ -62,7 +62,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             })
                             on:click=move |_| { switch_tab(ForgeTab::Affix) }
                         >
-                            <span class="mb-2 mx-1">"Craft"</span>
+                            <span class="mx-1">"Craft"</span>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
@@ -70,7 +70,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             })
                             on:click=move |_| { switch_tab(ForgeTab::UniqueUpgrade) }
                         >
-                            <span class="mb-2 mx-1">"Empower"</span>
+                            <span class="mx-1">"Empower"</span>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
@@ -78,10 +78,10 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             })
                             on:click=move |_| { switch_tab(ForgeTab::Gamble) }
                         >
-                            <span class="mb-2 mx-1">"Gamble"</span>
+                            <span class="mx-1">"Gamble"</span>
                         </TabButton>
                     </div>
-                    <div class="flex-1" />
+                    <div class="flex-1 h-full" />
                 </CardHeader>
 
                 <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
@@ -458,14 +458,13 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
     let town_context: TownContext = expect_context();
     let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
-    let confirm_context: ConfirmContext = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
 
-    let item_level = move || {
+    let wrong_item = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => item.item_specs.modifiers.level,
-            _ => 0,
+            SelectedItem::InMarket(item) => item.item_specs.base.upgrade_levels.is_empty(),
+            _ => true,
         })
     };
 
@@ -538,10 +537,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     let upgrade_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => {
-                Some(42.0)
-                // forge::remove_price(item.item_specs.modifiers.count_nonunique_affixes())
-            }
+            SelectedItem::InMarket(item) => computations::upgrade_item_price(&item.item_specs),
             _ => None,
         })
     };
@@ -567,16 +563,30 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                     class:xl:mb-2
                 >
                     <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
-                        <span class="text-white font-bold">"Empower"</span>
                         {move || {
-                            upgrade_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
+                            if wrong_item() {
+                                view! { "Item cannot be empowered" }.into_any()
+                            } else if selected_item.read().is_empty() {
+                                view! { "Select a Unique item to empower" }.into_any()
+                            } else {
+                                let upgrade_price = upgrade_price();
+                                match upgrade_price {
+                                    Some(upgrade_price) => {
+                                        view! {
+                                            "Empower for "
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {upgrade_price}
+                                            </span>
+                                            <GemsIcon />
+                                        }
+                                            .into_any()
                                     }
-                                })
+                                    None => {
+                                        view! { "Item has reached its maximum potential" }
+                                            .into_any()
+                                    }
+                                }
+                            }
                         }}
                     </div>
                 </MenuButton>

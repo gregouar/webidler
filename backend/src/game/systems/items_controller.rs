@@ -5,7 +5,7 @@ use shared::data::{
     chance::{Chance, ChanceRange},
     character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
-    item_affix::AffixEffectScope,
+    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
     skill::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
@@ -38,13 +38,16 @@ pub fn init_item_specs_from_store(
 
 pub fn create_item_specs(
     base: ItemBase,
-    modifiers: ItemModifiers,
+    mut modifiers: ItemModifiers,
     old_game: bool,
     // signature_key: &HmacKey,
 ) -> ItemSpecs {
+    compute_upgrade_effects(&base, &mut modifiers);
+
     let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
+    // TODO: compute triggers with local effects applied to it
 
     ItemSpecs {
         required_level: base.min_area_level.max(
@@ -287,4 +290,64 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
 
     Ok(create_item_specs(item.base.clone(), item_modifiers, true))
+}
+
+fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
+    if item_modifiers.upgrade_level > 0 {
+        item_modifiers
+            .affixes
+            .retain(|affix| !matches!(affix.affix_type, AffixType::Upgrade));
+
+        item_modifiers
+            .affixes
+            .extend(base.upgrade_effects.iter().cloned().map(|upgrade_effect| {
+                ItemAffix {
+                    name: "Empowered".into(),
+                    family: "empowered".into(),
+                    tags: Default::default(),
+                    affix_type: AffixType::Upgrade,
+                    tier: item_modifiers.upgrade_level,
+                    effects: [AffixEffect {
+                        scope: upgrade_effect.scope,
+                        stat_effect: StatEffect {
+                            value: upgrade_effect.stat_effect.value
+                                * item_modifiers.upgrade_level as f64,
+                            ..upgrade_effect.stat_effect
+                        },
+                    }]
+                    .into(),
+                    item_level: base
+                        .upgrade_levels
+                        .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+                        .copied()
+                        .unwrap_or_default(),
+                }
+            }));
+
+        // item_modifiers.affixes.push(ItemAffix {
+        //     name: "Empowered".into(),
+        //     family: "empowered".into(),
+        //     tags: Default::default(),
+        //     affix_type: AffixType::Upgrade,
+        //     tier: item_modifiers.upgrade_level,
+        //     effects: base
+        //         .upgrade_effects
+        //         .iter()
+        //         .cloned()
+        //         .map(|upgrade_effect| AffixEffect {
+        //             scope: upgrade_effect.scope,
+        //             stat_effect: StatEffect {
+        //                 value: upgrade_effect.stat_effect.value
+        //                     * item_modifiers.upgrade_level as f64,
+        //                 ..upgrade_effect.stat_effect
+        //             },
+        //         })
+        //         .collect(),
+        //     item_level: base
+        //         .upgrade_levels
+        //         .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+        //         .copied()
+        //         .unwrap_or_default(),
+        // });
+    }
 }

@@ -5,6 +5,7 @@ use crate::{
     },
     data::{
         area::{AreaLevel, AreaState},
+        item::ItemSpecs,
         player::PlayerSpecs,
         skill::SkillSpecs,
         stash::{Stash, StashType},
@@ -71,4 +72,14 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
 
 pub fn gamble_price(item_level: AreaLevel) -> f64 {
     (item_level as f64 / 10.0).floor()
+}
+
+pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
+    item_specs
+        .base
+        .upgrade_levels
+        .get(item_specs.modifiers.upgrade_level as usize)
+        .and_then(|next_upgrade_level| {
+            (*next_upgrade_level <= item_specs.modifiers.level).then(|| *next_upgrade_level as f64)
+        })
 }

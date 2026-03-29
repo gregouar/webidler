@@ -157,9 +157,9 @@ pub async fn post_upgrade(
     }
     .ok_or(AppError::NotFound)?;
 
-    // let price = affix_operation_price(payload.operation, item.modifiers.count_nonunique_affixes())
-    //     .ok_or(AppError::UserError("forge operation unavailable".into()))?;
-    let price = 0.0;
+    let price = computations::upgrade_item_price(item).ok_or(AppError::UserError(
+        "maximum upgrade level reached for that item".into(),
+    ))?;
 
     let character_resources = db::characters::update_character_resources(
         &mut *tx,
