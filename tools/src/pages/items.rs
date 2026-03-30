@@ -16,10 +16,13 @@ use frontend::components::{
 
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use shared::data::{
-    item::{ItemBase, ItemModifiers, ItemSpecs},
-    item_affix::{AffixEffect, AffixType, ItemAffix},
-    stat_effect::StatEffect,
+    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
+    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
+    modifier::Modifier,
+    skill::{DamageType, SkillType},
+    stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
 };
+use strum::IntoEnumIterator;
 
 use crate::{header::HeaderMenu, utils::json_editor::JsonEditor};
 
@@ -204,7 +207,7 @@ fn ItemEditor(
                     "❌"
                 </MenuButton>
             </div>
-            <JsonEditor label="Item" value=item_base h_size="h-196" />
+            <JsonEditor label="Item" value=item_base h_size="h-160" />
         </div>
     }
 }
@@ -214,54 +217,203 @@ fn ItemPreview(
     items_store: RwSignal<ItemsStore>,
     selected_item: RwSignal<Option<String>>,
 ) -> impl IntoView {
-    view! {
-        {move || {
-            selected_item
-                .get()
-                .and_then(|selected_item| items_store.read().get(&selected_item).cloned())
-                .map(|item_base| {
-                    let unique_effects = item_base
-                        .affixes
-                        .iter()
-                        .map(|affix| ItemAffix {
-                            name: "Unique".to_string(),
-                            family: "unique".to_string(),
-                            tags: Default::default(),
-                            affix_type: AffixType::Unique,
-                            tier: 0,
-                            effects: Vec::from([
-                                AffixEffect {
-                                    scope: affix.scope,
-                                    stat_effect: StatEffect {
-                                        stat: affix.stat.clone(),
-                                        modifier: affix.modifier,
-                                        value: affix.value.max,
-                                        bypass_ignore: false,
-                                    },
-                                },
-                            ]),
-                            item_level: 0,
-                        })
-                        .collect();
-                    let item_specs = Arc::new(ItemSpecs {
-                        required_level: item_base.min_area_level,
-                        weapon_specs: item_base.weapon_specs.clone(),
-                        armor_specs: item_base.armor_specs.clone(),
-                        modifiers: ItemModifiers {
-                            base_item_id: selected_item.get().unwrap_or_default(),
-                            name: item_base.name.clone(),
-                            rarity: item_base.rarity,
-                            level: item_base.min_area_level,
-                            affixes: unique_effects,
-                            quality: 0.0,
-                            upgrade_level: 0,
-                        },
-                        base: item_base,
-                        old_game: false,
-                    });
+    let item_specs = move || {
+        selected_item
+            .get()
+            .and_then(|selected_item| items_store.read().get(&selected_item).cloned())
+            .map(|item_base| {
+                let unique_effects = item_base
+                    .affixes
+                    .iter()
+                    .map(|affix| ItemAffix {
+                        name: "Unique".to_string(),
+                        family: "unique".to_string(),
+                        tags: Default::default(),
+                        affix_type: AffixType::Unique,
+                        tier: 0,
+                        effects: Vec::from([AffixEffect {
+                            scope: affix.scope,
+                            stat_effect: StatEffect {
+                                stat: affix.stat.clone(),
+                                modifier: affix.modifier,
+                                value: affix.value.max,
+                                bypass_ignore: false,
+                            },
+                        }]),
+                        item_level: 0,
+                    })
+                    .collect();
+                let modifiers = ItemModifiers {
+                    base_item_id: selected_item.get().unwrap_or_default(),
+                    name: item_base.name.clone(),
+                    rarity: item_base.rarity,
+                    level: 999,
+                    affixes: unique_effects,
+                    quality: 0.0,
+                    upgrade_level: 0,
+                };
+                Arc::new(create_item_specs(item_base, modifiers, true))
+            })
+    };
+    view! { {move || item_specs().map(|item_specs| view! { <ItemCard item_specs /> })} }
+}
 
-                    view! { <ItemCard item_specs /> }
-                })
-        }}
+pub fn create_item_specs(
+    base: ItemBase,
+    mut modifiers: ItemModifiers,
+    old_game: bool,
+) -> ItemSpecs {
+    compute_upgrade_effects(&base, &mut modifiers);
+
+    let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
+
+    ItemSpecs {
+        required_level: base.min_area_level.max(
+            modifiers
+                .affixes
+                .iter()
+                .map(|affix| affix.item_level)
+                .max()
+                .unwrap_or_default(),
+        ),
+        weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
+            compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
+        }),
+        armor_specs: base.armor_specs.as_ref().map(|armor_specs| {
+            compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
+        }),
+        base,
+        modifiers,
+        old_game,
+    }
+}
+
+fn compute_weapon_specs(
+    mut weapon_specs: WeaponSpecs,
+    quality: f32,
+    effects: &[StatEffect],
+) -> WeaponSpecs {
+    weapon_specs.damage.values_mut().for_each(|value| {
+        value.min.apply_modifier(quality as f64, Modifier::More);
+        value.max.apply_modifier(quality as f64, Modifier::More);
+    });
+
+    for effect in effects {
+        match effect.stat {
+            StatType::Speed(Some(SkillType::Attack) | None) => {
+                weapon_specs.cooldown.apply_negative_effect(effect)
+            }
+            StatType::Damage {
+                skill_type: Some(SkillType::Attack) | None,
+                damage_type,
+                min_max,
+            } => match damage_type {
+                Some(damage_type) => {
+                    let value = weapon_specs.damage.entry(damage_type).or_default();
+                    if let Some(MinMax::Min) | None = min_max {
+                        value.min.apply_effect(effect);
+                    }
+                    if let Some(MinMax::Max) | None = min_max {
+                        value.max.apply_effect(effect);
+                    }
+                }
+                None => {
+                    for damage_type in DamageType::iter() {
+                        let value = weapon_specs.damage.entry(damage_type).or_default();
+                        if let Some(MinMax::Min) | None = min_max {
+                            value.min.apply_effect(effect);
+                        }
+                        if let Some(MinMax::Max) | None = min_max {
+                            value.max.apply_effect(effect);
+                        }
+                    }
+                }
+            },
+            StatType::CritChance(Some(SkillType::Attack) | None) => {
+                weapon_specs.crit_chance.value.apply_effect(effect)
+            }
+            StatType::CritDamage(Some(SkillType::Attack) | None) => {
+                weapon_specs.crit_damage.apply_effect(effect)
+            }
+            StatType::Lucky {
+                roll_type: LuckyRollType::CritChance,
+                ..
+            } => weapon_specs.crit_chance.lucky_chance.apply_effect(effect),
+
+            StatType::Lucky {
+                roll_type: LuckyRollType::Damage { damage_type },
+                ..
+            } => {
+                match damage_type {
+                    Some(damage_type) => {
+                        let value = weapon_specs.damage.entry(damage_type).or_default();
+                        value.lucky_chance.apply_effect(effect);
+                    }
+                    None => {
+                        for value in weapon_specs.damage.values_mut() {
+                            value.lucky_chance.apply_effect(effect);
+                        }
+                    }
+                };
+            }
+            _ => {}
+        }
+    }
+
+    weapon_specs
+}
+
+fn compute_armor_specs(
+    mut armor_specs: ArmorSpecs,
+    quality: f32,
+    effects: &[StatEffect],
+) -> ArmorSpecs {
+    armor_specs
+        .armor
+        .apply_modifier(quality as f64, Modifier::More);
+    for effect in effects {
+        match effect.stat {
+            StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
+            StatType::Block(Some(SkillType::Attack) | None) => {
+                armor_specs.block.apply_effect(effect);
+            }
+            _ => {}
+        }
+    }
+
+    armor_specs
+}
+
+fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
+    if item_modifiers.upgrade_level > 0 {
+        item_modifiers
+            .affixes
+            .retain(|affix| !matches!(affix.affix_type, AffixType::Upgrade));
+
+        item_modifiers
+            .affixes
+            .extend(base.upgrade_effects.iter().cloned().map(|upgrade_effect| {
+                ItemAffix {
+                    name: "Empowered".into(),
+                    family: "empowered".into(),
+                    tags: Default::default(),
+                    affix_type: AffixType::Upgrade,
+                    tier: item_modifiers.upgrade_level,
+                    effects: [AffixEffect {
+                        scope: upgrade_effect.scope,
+                        stat_effect: StatEffect {
+                            value: upgrade_effect.stat_effect.value
+                                * item_modifiers.upgrade_level as f64,
+                            ..upgrade_effect.stat_effect
+                        },
+                    }]
+                    .into(),
+                    item_level: base
+                        .upgrade_levels
+                        .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+                        .copied()
+                        .unwrap_or_default(),
+                }
+            }));
     }
 }

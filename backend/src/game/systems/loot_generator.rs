@@ -41,13 +41,14 @@ pub fn generate_loot(
     if !allow_unique {
         rarity = rarity.min(ItemRarity::Rare);
     }
+    let is_unique = rarity == ItemRarity::Unique;
     roll_base_item(
         loot_table,
         items_store,
         level,
         is_boss_level,
-        rarity == ItemRarity::Unique,
-        max_base,
+        is_unique,
+        max_base & !is_unique,
         filter_category,
     )
     .map(|(base_item_id, base)| {

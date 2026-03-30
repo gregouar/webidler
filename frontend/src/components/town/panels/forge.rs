@@ -61,27 +61,30 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                                 active_tab.get() == ForgeTab::Affix
                             })
                             on:click=move |_| { switch_tab(ForgeTab::Affix) }
+                            class:py-3
                         >
-                            <span class="mx-1">"Craft"</span>
+                            <div class="mx-1">"Craft"</div>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == ForgeTab::UniqueUpgrade
                             })
                             on:click=move |_| { switch_tab(ForgeTab::UniqueUpgrade) }
+                            class:py-3
                         >
-                            <span class="mx-1">"Empower"</span>
+                            <div class="mx-1">"Empower"</div>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == ForgeTab::Gamble
                             })
                             on:click=move |_| { switch_tab(ForgeTab::Gamble) }
+                            class:py-3
                         >
-                            <span class="mx-1">"Gamble"</span>
+                            <div class="mx-1 mb-2">"Gamble"</div>
                         </TabButton>
                     </div>
-                    <div class="flex-1 h-full" />
+                    <div class="flex-1" />
                 </CardHeader>
 
                 <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">

@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 frontend = { path = "../frontend" }
-shared = { path = "../shared" }
+shared = { path = "../shared", features = ["modifiable"] }
 
 anyhow = "1.0.97"
 leptos = { version = "0.7.7", features = ["csr"] }

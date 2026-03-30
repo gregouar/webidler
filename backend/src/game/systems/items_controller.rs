@@ -150,14 +150,6 @@ fn compute_weapon_specs(
         }
     }
 
-    // weapon_specs.damage.retain(|_, value| {
-    //     value.max = value.max.evaluate().max(0.0).into();
-    //     value.min = value.min.evaluate().max(0.0).into();
-    //     value.clamp();
-
-    //     value.max.evaluate() > 0.0
-    // });
-
     weapon_specs
 }
 
@@ -180,6 +172,84 @@ fn compute_armor_specs(
     }
 
     armor_specs
+}
+
+fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
+    if item_modifiers.upgrade_level > 0 {
+        item_modifiers
+            .affixes
+            .retain(|affix| !matches!(affix.affix_type, AffixType::Upgrade));
+
+        item_modifiers
+            .affixes
+            .extend(base.upgrade_effects.iter().cloned().map(|upgrade_effect| {
+                ItemAffix {
+                    name: "Empowered".into(),
+                    family: "empowered".into(),
+                    tags: Default::default(),
+                    affix_type: AffixType::Upgrade,
+                    tier: item_modifiers.upgrade_level,
+                    effects: [AffixEffect {
+                        scope: upgrade_effect.scope,
+                        stat_effect: StatEffect {
+                            value: upgrade_effect.stat_effect.value
+                                * item_modifiers.upgrade_level as f64,
+                            ..upgrade_effect.stat_effect
+                        },
+                    }]
+                    .into(),
+                    item_level: base
+                        .upgrade_levels
+                        .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+                        .copied()
+                        .unwrap_or_default(),
+                }
+            }));
+
+        // item_modifiers.affixes.push(ItemAffix {
+        //     name: "Empowered".into(),
+        //     family: "empowered".into(),
+        //     tags: Default::default(),
+        //     affix_type: AffixType::Upgrade,
+        //     tier: item_modifiers.upgrade_level,
+        //     effects: base
+        //         .upgrade_effects
+        //         .iter()
+        //         .cloned()
+        //         .map(|upgrade_effect| AffixEffect {
+        //             scope: upgrade_effect.scope,
+        //             stat_effect: StatEffect {
+        //                 value: upgrade_effect.stat_effect.value
+        //                     * item_modifiers.upgrade_level as f64,
+        //                 ..upgrade_effect.stat_effect
+        //             },
+        //         })
+        //         .collect(),
+        //     item_level: base
+        //         .upgrade_levels
+        //         .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+        //         .copied()
+        //         .unwrap_or_default(),
+        // });
+    }
+}
+
+pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+    let available_upgrade_levels = item
+        .base
+        .upgrade_levels
+        .iter()
+        .filter(|l| **l <= item.modifiers.level)
+        .count();
+
+    if available_upgrade_levels <= item.modifiers.upgrade_level as usize {
+        return Err(AppError::UserError("maximum empower level reached.".into()));
+    }
+
+    let mut item_modifiers = item.modifiers.clone();
+    item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
+
+    Ok(create_item_specs(item.base.clone(), item_modifiers, true))
 }
 
 pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {
@@ -271,83 +341,5 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         triggers: Default::default(),
         auto_use_conditions: Default::default(),
         ignore_stat_effects: Default::default(),
-    }
-}
-
-pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
-    let available_upgrade_levels = item
-        .base
-        .upgrade_levels
-        .iter()
-        .filter(|l| **l <= item.modifiers.level)
-        .count();
-
-    if available_upgrade_levels <= item.modifiers.upgrade_level as usize {
-        return Err(AppError::UserError("maximum empower level reached.".into()));
-    }
-
-    let mut item_modifiers = item.modifiers.clone();
-    item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
-
-    Ok(create_item_specs(item.base.clone(), item_modifiers, true))
-}
-
-fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
-    if item_modifiers.upgrade_level > 0 {
-        item_modifiers
-            .affixes
-            .retain(|affix| !matches!(affix.affix_type, AffixType::Upgrade));
-
-        item_modifiers
-            .affixes
-            .extend(base.upgrade_effects.iter().cloned().map(|upgrade_effect| {
-                ItemAffix {
-                    name: "Empowered".into(),
-                    family: "empowered".into(),
-                    tags: Default::default(),
-                    affix_type: AffixType::Upgrade,
-                    tier: item_modifiers.upgrade_level,
-                    effects: [AffixEffect {
-                        scope: upgrade_effect.scope,
-                        stat_effect: StatEffect {
-                            value: upgrade_effect.stat_effect.value
-                                * item_modifiers.upgrade_level as f64,
-                            ..upgrade_effect.stat_effect
-                        },
-                    }]
-                    .into(),
-                    item_level: base
-                        .upgrade_levels
-                        .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-                        .copied()
-                        .unwrap_or_default(),
-                }
-            }));
-
-        // item_modifiers.affixes.push(ItemAffix {
-        //     name: "Empowered".into(),
-        //     family: "empowered".into(),
-        //     tags: Default::default(),
-        //     affix_type: AffixType::Upgrade,
-        //     tier: item_modifiers.upgrade_level,
-        //     effects: base
-        //         .upgrade_effects
-        //         .iter()
-        //         .cloned()
-        //         .map(|upgrade_effect| AffixEffect {
-        //             scope: upgrade_effect.scope,
-        //             stat_effect: StatEffect {
-        //                 value: upgrade_effect.stat_effect.value
-        //                     * item_modifiers.upgrade_level as f64,
-        //                 ..upgrade_effect.stat_effect
-        //             },
-        //         })
-        //         .collect(),
-        //     item_level: base
-        //         .upgrade_levels
-        //         .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-        //         .copied()
-        //         .unwrap_or_default(),
-        // });
     }
 }

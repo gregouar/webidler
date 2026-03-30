@@ -33,7 +33,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "dagger_unique": {
     "name": "Onions Slicer",
@@ -95,7 +97,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "shortsword": {
     "name": "Shortsword",
@@ -131,7 +135,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "shortsword_unique": {
     "name": "Broken Trophy",
@@ -269,7 +275,8 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
     "weapon_specs": {
@@ -291,7 +298,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hand_axe": {
     "name": "Hand Axe",
@@ -327,7 +336,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "handaxe_unique": {
     "name": "Fang of the Widow",
@@ -442,8 +453,8 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": [
-          3.0,
-          5.0
+          1.0,
+          2.0
         ],
         "ignore_quality": false
       }
@@ -468,7 +479,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "militia_sword": {
     "name": "Militia Sword",
@@ -504,7 +517,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "spiked_mace": {
     "name": "Spiked Mace",
@@ -540,7 +555,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "sabre": {
     "name": "Sabre",
@@ -576,7 +593,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_cutlass": {
     "name": "Cutlass of Greed",
@@ -715,7 +734,8 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
     "weapon_specs": {
@@ -737,7 +757,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "weapon_1h_7": {
     "name": "Battleaxe",
@@ -773,7 +795,9 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "weapon_1h_8": {
     "name": "Rapier",
@@ -809,6 +833,8 @@
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

@@ -174,13 +174,25 @@ pub fn ItemTooltipContent(
                 .collect::<Vec<_>>();
 
             (
-                true,
+                item_specs
+                    .base
+                    .upgrade_levels
+                    .get(item_specs.modifiers.upgrade_level as usize)
+                    .map(|next_level| *next_level <= item_specs.modifiers.level)
+                    .unwrap_or_default(),
                 Some(effects_tooltip::formatted_effects_list(upgrade_effects)),
             )
         } else {
             (false, None)
         }
     };
+
+    let max_upgrade_level = item_specs
+        .base
+        .upgrade_levels
+        .iter()
+        .filter(|upgrade_level| **upgrade_level <= item_specs.modifiers.level)
+        .count();
 
     let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
@@ -217,14 +229,14 @@ pub fn ItemTooltipContent(
                 </ul>
             </strong> <Separator /> <ul class="list-none xl:space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
-                {(item_specs.modifiers.upgrade_level > 0)
+                {(max_upgrade_level > 0)
                     .then(|| {
                         view! {
                             <li class="text-xs xl:text-sm text-gray-400">
                                 "Empower level: "
                                 <span class="font-bold text-orange-400">
                                     {item_specs.modifiers.upgrade_level}
-                                </span>
+                                </span>"/"{max_upgrade_level}
                             </li>
                         }
                     })}
