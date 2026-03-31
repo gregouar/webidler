@@ -10,6 +10,7 @@ use frontend::components::{
     ui::{
         buttons::MenuButton,
         card::{Card, CardInset, CardTitle},
+        input::Input,
     },
     utils::file_loader::{save_json, use_json_loader},
 };
@@ -217,6 +218,8 @@ fn ItemPreview(
     items_store: RwSignal<ItemsStore>,
     selected_item: RwSignal<Option<String>>,
 ) -> impl IntoView {
+    let upgrade_level = RwSignal::new(Some(0));
+
     let item_specs = move || {
         selected_item
             .get()
@@ -250,12 +253,20 @@ fn ItemPreview(
                     level: 999,
                     affixes: unique_effects,
                     quality: 0.0,
-                    upgrade_level: 0,
+                    upgrade_level: upgrade_level.get().unwrap_or_default(),
                 };
                 Arc::new(create_item_specs(item_base, modifiers, true))
             })
     };
-    view! { {move || item_specs().map(|item_specs| view! { <ItemCard item_specs /> })} }
+    view! {
+        {move || item_specs().map(|item_specs| view! { <ItemCard item_specs /> })}
+        <Input
+            id="upgrade_level"
+            input_type="number"
+            placeholder="Empower Level"
+            bind=upgrade_level
+        />
+    }
 }
 
 pub fn create_item_specs(

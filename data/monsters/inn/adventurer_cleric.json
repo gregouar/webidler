@@ -1,0 +1,73 @@
+{
+  "name": "Baernur",
+  "portrait": "monsters/inn/adventurer_cleric.webp",
+  "rarity": "Boss",
+  "max_life": 150,
+  "power_factor": 8,
+  "stun_lockout": 5,
+  "armor": {
+    "Physical": 100,
+    "Storm": 100,
+    "Poison": 100
+  },
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 30
+    }
+  ],
+  "skills": [
+    {
+      "name": "Spiritual Strike",
+      "icon": "skills/attack.svg",
+      "cooldown": 2,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [
+                    0,
+                    10
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Prayer",
+      "icon": "skills/blessing_renewal.svg",
+      "skill_type": "Blessing",
+      "cooldown": 10,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "shape": "All",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": "LifeRegen",
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

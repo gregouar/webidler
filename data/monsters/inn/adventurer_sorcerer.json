@@ -1,0 +1,68 @@
+{
+  "name": "Zeed Peeps",
+  "portrait": "monsters/inn/adventurer_sorcerer.webp",
+  "rarity": "Boss",
+  "max_life": 100,
+  "power_factor": 8,
+  "stun_lockout": 5,
+  "armor": {
+    "Fire": 500
+  },
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 30
+    }
+  ],
+  "skills": [
+    {
+      "name": "Bolt of Fire",
+      "icon": "skills/fireball.svg",
+      "cooldown": 2,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [
+                    10,
+                    20
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Blight",
+      "icon": "skills/poison_cloud.svg",
+      "cooldown": 5,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Poison" }
+                    },
+                    "value": 10
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

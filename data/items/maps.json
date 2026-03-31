@@ -2,90 +2,273 @@
   "edict": {
     "name": "Edict",
     "icon": "items/maps/edict.webp",
-    "categories": [ "Map" ],
-    "ignore_quality": true,
+    "description": null,
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 100,
     "rarity": "Magic",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
     "map_specs": {
-      "reward_slots": 1
+      "area_id": null,
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "loot_tables": [],
+      "replace_area_id": null
     },
-    "affixes": [ ],
-    "min_area_level": 100
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "edict_2": {
     "name": "Grand Edict",
     "icon": "items/maps/edict_grand.webp",
-    "categories": [ "Map" ],
-    "ignore_quality": true,
+    "description": null,
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 250,
     "rarity": "Magic",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
     "map_specs": {
-      "reward_slots": 1,
-      "reward_picks": 1
-    },
-    "affixes": [ ],
-    "min_area_level": 250
-  },
-  "edict_treasure_map": {
-    "name": "Cursed Treasure Map",
-    "description": "It does not lead to treasure. It leads to what remains of those who sought it.",
-    "icon": "items/maps/edict_treasure_map.webp",
-    "categories": [ "Map" ],
-    "ignore_quality": true,
-    "rarity": "Unique",
-    "map_specs": {
-      "area_id": "island.json",
-      "reward_slots": 2,
+      "area_id": null,
       "reward_picks": 1,
-      "loot_tables": [ "pirate_treasure.json" ]
+      "reward_slots": 1,
+      "loot_tables": [],
+      "replace_area_id": null
     },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_menu": {
+    "name": "Regulars' Menu",
+    "icon": "items/maps/edict_menu.webp",
+    "description": "Not listed. Not advertised. Ask for it only if you know the faces at the bar.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
-          "Description": "May drop Cursed Treasures"
+          "Description": "Meet Regular Patrons"
         },
         "modifier": "Flat",
-        "value": 1
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "ItemRarity",
         "modifier": "Increased",
-        "value": [ 100, 150 ]
-      },
-      {
         "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 30
+        "value": [
+          50.0,
+          80.0
+        ],
+        "ignore_quality": false
       },
       {
-        "scope": "Local",
         "stat": "Life",
         "modifier": "Increased",
-        "value": 500
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Local",
-        "stat": { "Damage": { } },
-        "modifier": "Increased",
-        "value": 100
-      },
-      {
-        "scope": "Local",
-        "stat": { "StatusPower": { } },
-        "modifier": "Increased",
-        "value": 100
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 10.0,
+        "ignore_quality": false
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "edict_menu",
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": false,
+          "damage_type": null
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Spell",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "SuccessChance": {
+                          "skill_type": null,
+                          "effect_type": null
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 10.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 3.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false,
+        "is_debuff": false
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "inn_basement.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "loot_tables": [],
+      "replace_area_id": "inn_basement_2.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_treasure_map": {
+    "name": "Cursed Treasure Map",
+    "icon": "items/maps/edict_treasure_map.webp",
+    "description": "It does not lead to treasure. It leads to what remains of those who sought it.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 260,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Description": "May drop Cursed Treasures"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": false
+      },
+      {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 30.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": "Life",
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 500.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": null,
+            "skill_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "edict_treasure_map",
-        "OnHit": { "is_triggered": false, "is_hurt": true },
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": false,
+          "damage_type": null
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -95,77 +278,153 @@
                       "debuff": true
                     }
                   },
-                  "value": 30.0
+                  "value": 30.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
-            }
+              ],
+              "duration": 3.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
-    "min_area_level": 260
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "island.json",
+      "reward_picks": 1,
+      "reward_slots": 2,
+      "loot_tables": [
+        "pirate_treasure.json"
+      ],
+      "replace_area_id": null
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "edict_witch": {
     "name": "Forbidden Rites",
-    "description": "Amelia carved the last sigils into living flesh. Her brood waits in shadow, and the Forbidden Rite awakens.",
     "icon": "items/maps/edict_witch.webp",
-    "categories": [ "Map" ],
-    "ignore_quality": true,
+    "description": "Amelia carved the last sigils into living flesh. Her brood waits in shadow, and the Forbidden Rite awakens.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 500,
     "rarity": "Unique",
-    "map_specs": {
-      "area_id": "witch_lair.json",
-      "reward_slots": 2,
-      "reward_picks": 1,
-      "replace_area_id": "witch_lair_2.json"
-    },
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
           "Description": "The Spider Witch has finished her ritual..."
         },
         "modifier": "Flat",
-        "value": 1
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "ItemLevel",
         "modifier": "Flat",
-        "value": 100
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Local",
         "stat": "PowerLevel",
         "modifier": "Flat",
-        "value": 50
+        "scope": "Local",
+        "value": 50.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": false
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "edict_witch",
-        "OnHit": { "is_triggered": false, "is_hurt": true },
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": false,
+          "damage_type": null
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 5,
               "statuses": [
                 {
                   "status_type": {
                     "StatModifier": {
-                      "stat": { "Speed": null },
+                      "stat": {
+                        "Speed": null
+                      },
                       "modifier": "More",
                       "debuff": true
                     }
                   },
-                  "value": 33.0
+                  "value": 33.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
-            }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
-    "min_area_level": 500
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "witch_lair.json",
+      "reward_picks": 1,
+      "reward_slots": 2,
+      "loot_tables": [],
+      "replace_area_id": "witch_lair_2.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

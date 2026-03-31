@@ -1031,6 +1031,71 @@
       }
     ]
   },
+  "curse_vampirism": {
+    "name": "Curse of Vampirism",
+    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins.",
+    "icon": "skills/curse_vampirism.svg",
+    "skill_type": "Curse",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Restore": {
+            "restore_type": "Life"
+          }
+        },
+        "modifier": "Increased",
+        "value": 3
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "curse_vampirism",
+                      "name": "Curse of Vampirism",
+                      "icon": "skills/curse_vampirism.svg",
+                      "OnTakeHit": {
+                        "is_hurt": true,
+                        "is_triggered": false
+                      },
+                      "target": "Source",
+                      "skill_range": "Any",
+                      "skill_shape": "Single",
+                      "skill_type": "Other",
+                      "effects": [
+                        {
+                          "Restore": {
+                            "restore_type": "Life",
+                            "value": 2,
+                            "modifier": "Flat"
+                          },
+                          "ignore_stat_effects": [ ]
+                        }
+                      ],
+                      "modifiers": [ ],
+                      "inherit_modifiers": true
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "blessing_haste": {
     "name": "Blessing of Haste",
     "description": "A blessing that increases your speed, allowing quicker actions in battle.",
@@ -2351,7 +2416,10 @@
         "range": "Melee",
         "shape": "Vertical2",
         "repeat": {
-          "value": [ 3, 5 ],
+          "value": [
+            3,
+            5
+          ],
           "target": "Any",
           "repeat_cooldown": 0.3
         },
@@ -2737,7 +2805,10 @@
         "range": "Any",
         "shape": "Single",
         "repeat": {
-          "value": [ 6, 8 ],
+          "value": [
+            6,
+            8
+          ],
           "target": "Any",
           "repeat_cooldown": 0.3
         },

@@ -1,0 +1,47 @@
+{
+    "name": "Totally Normal Waitress",
+    "portrait": "monsters/inn/waitress.webp",
+    "max_life": 15,
+    "power_factor": 2.5,
+    "armor": { "Fire": 50 },
+    "skills": [
+        {
+            "name": "Ooops, I'm so clumsy!",
+            "icon": "skills/blizzard.svg",
+            "cooldown": 3.0,
+            "skill_type": "Attack",
+            "targets": [
+                {
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": {
+                                    "Storm": [ 0, 20 ]
+                                }
+                            }
+                        },
+                        {
+                            "ApplyStatus": {
+                                "duration": 5,
+                                "statuses": [
+                                    {
+                                        "status_type": {
+                                            "StatModifier": {
+                                                "stat": {
+                                                    "Speed": null
+                                                },
+                                                "modifier": "More",
+                                                "debuff": true
+                                            }
+                                        },
+                                        "value": 30
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

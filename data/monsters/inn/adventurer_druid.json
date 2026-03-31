@@ -1,0 +1,62 @@
+{
+  "name": "Miralissa",
+  "portrait": "monsters/inn/adventurer_druid.webp",
+  "rarity": "Boss",
+  "max_life": 150,
+  "power_factor": 8,
+  "stun_lockout": 5,
+  "armor": {
+    "Storm": 200,
+    "Poison": 200
+  },
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 30
+    }
+  ],
+  "skills": [
+    {
+      "name": "Wolf Form",
+      "icon": "skills/bite.svg",
+      "cooldown": 2,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 7, 15 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Call of the Storm",
+      "icon": "skills/chain_lightning.svg",
+      "cooldown": 5,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [
+                    0,
+                    100
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

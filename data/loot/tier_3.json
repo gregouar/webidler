@@ -57,6 +57,10 @@
       "weight": 100
     },
     {
+      "item_id": "edict_menu",
+      "weight": 499
+    },
+    {
       "item_id": "rune",
       "weight": 400,
       "min_area_level": 90

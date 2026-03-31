@@ -4,6 +4,12 @@
   },
   "resources": {
     "monsters": [
+      "adventurer_barbarian.json",
+      "adventurer_cleric.json",
+      "adventurer_druid.json",
+      "adventurer_paladin.json",
+      "adventurer_rogue.json",
+      "adventurer_sorcerer.json",
       "barrel_mimic.json",
       "bat_fire.json",
       "bat.json",
@@ -16,8 +22,12 @@
       "haunted_lantern.json",
       "patron_ghost.json",
       "rat.json",
+      "regular_patron_1.json",
+      "regular_patron_2.json",
+      "regular_patron_3.json",
       "soot_imp.json",
-      "soot_imp_2.json"
+      "soot_imp_2.json",
+      "waitress.json"
     ]
   }
 }
