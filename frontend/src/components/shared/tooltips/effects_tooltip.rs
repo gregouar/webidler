@@ -941,8 +941,8 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             };
 
             let shape_str = match shape {
-                Some(shape) => skill_tooltip::shape_str(*shape),
-                None => "",
+                Some(shape) => format!("Target {}", skill_tooltip::shape_str(*shape)),
+                None => "".into(),
             };
 
             let repeat_str = repeat
