@@ -133,7 +133,8 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
     "weapon_specs": null,
@@ -267,6 +268,260 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "treasure_compass": {
+    "name": "Compass of Ruin",
+    "icon": "items/boots/treasure_compass.webp",
+    "description": "You stopped asking how it fits in your boots. You should have kept asking where it points though.",
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": "MovementSpeed",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "treasure_compass",
+        "OnKill": {
+          "conditions": []
+        },
+        "target": "Me",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 10.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": "Attack"
+                      },
+                      "modifier": "Increased",
+                      "debuff": false
+                    }
+                  },
+                  "value": 30.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": "Spell"
+                      },
+                      "modifier": "Increased",
+                      "debuff": false
+                    }
+                  },
+                  "value": 30.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          },
+          {
+            "success_chance": {
+              "value": 10.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": null,
+                          "min_max": null
+                        }
+                      },
+                      "modifier": "More",
+                      "debuff": false
+                    }
+                  },
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          },
+          {
+            "success_chance": {
+              "value": 10.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "LifeRegen",
+                      "modifier": "Flat",
+                      "debuff": false
+                    }
+                  },
+                  "value": 30.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "ManaRegen",
+                      "modifier": "Flat",
+                      "debuff": false
+                    }
+                  },
+                  "value": 30.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          },
+          {
+            "success_chance": {
+              "value": 5.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": {
+                          "skill_type": null,
+                          "damage_type": null
+                        }
+                      },
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 1000.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          },
+          {
+            "success_chance": {
+              "value": 5.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "LifeRegen",
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "ManaRegen",
+                      "modifier": "Flat",
+                      "debuff": true
+                    }
+                  },
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 3.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false,
+        "is_debuff": false
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 50.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "sabatons": {
     "name": "Sabatons",
@@ -412,7 +667,8 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
     "weapon_specs": null,
@@ -423,8 +679,24 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "boots_7": {
     "name": "Plated Boots",

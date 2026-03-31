@@ -15,7 +15,17 @@
     },
     {
       "item_id": "treasure_idol",
-      "weight": 4999
+      "weight": 4999,
+      "min_area_level": 240
+    },
+    {
+      "item_id": "treasure_chest",
+      "weight": 99
+    },
+    {
+      "item_id": "treasure_compass",
+      "weight": 999,
+      "min_area_level": 240
     }
   ]
 }

@@ -924,7 +924,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             let skill_name = match skill_id {
                 Some(skill_id) => data_context
                     .skill_specs
-                    .read()
+                    .read_untracked()
                     .get(skill_id)
                     .map(|skill| skill.base.name.clone())
                     .unwrap_or(skill_id.clone()),

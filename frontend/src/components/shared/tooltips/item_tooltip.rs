@@ -578,7 +578,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Gloves => "Gloves",
                     ItemSlot::Helmet => "Helmet",
                     ItemSlot::Ring => "Ring",
-                    ItemSlot::Shield => "Shield",
+                    ItemSlot::Shield => "Off-hand",
                     ItemSlot::Accessory => "Accessory",
                     ItemSlot::Weapon => {
                         if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {

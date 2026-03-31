@@ -181,8 +181,26 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "focus_stone": {
     "name": "Focus Stone",
@@ -307,19 +325,19 @@
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
-            "Armor": "Fire"
-          },
+          "stat": "Mana",
           "modifier": "Flat",
-          "value": 25.0
+          "value": 10.0
         }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": "Mana",
+          "stat": {
+            "Armor": "Fire"
+          },
           "modifier": "Flat",
-          "value": 10.0
+          "value": 25.0
         }
       },
       {
@@ -616,8 +634,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "ritual_orb": {
     "name": "Ritual Orb",
@@ -749,8 +782,22 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "focus_7": {
     "name": "Grimoire",
