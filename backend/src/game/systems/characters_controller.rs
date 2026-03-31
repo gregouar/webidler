@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use shared::{
     computations,
-    constants::ARMOR_FACTOR,
+    constants::{self, ARMOR_FACTOR},
     data::{
         character::{CharacterId, CharacterSpecs, CharacterState},
         character_status::{StatusId, StatusSpecs, StatusState},
@@ -367,8 +367,7 @@ pub fn apply_status(
             },
         ));
 
-        // TODO: Quickfix, have proper limit later
-        if target_state.statuses.cumulative_statuses.len() > 100 {
+        if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
             let status_id: StatusId = status_specs.into();
 
             if let Some(i) = target_state

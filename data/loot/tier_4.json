@@ -14,7 +14,7 @@
     },
     {
       "item_id": "scale_vest_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "chain_gloves",
@@ -22,7 +22,7 @@
     },
     {
       "item_id": "chain_gloves_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "mail_boots",
@@ -38,7 +38,7 @@
     },
     {
       "item_id": "composite_bow_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "iron_wand",
@@ -46,7 +46,7 @@
     },
     {
       "item_id": "iron_wand_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "heater_shield",
@@ -54,7 +54,7 @@
     },
     {
       "item_id": "heater_shield_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "engraved_tablet",
@@ -66,7 +66,7 @@
     },
     {
       "item_id": "fur_cloak_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "signet_ring",
@@ -74,7 +74,7 @@
     },
     {
       "item_id": "signet_ring_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "gold_pendant",
@@ -96,7 +96,7 @@
     },
     {
       "item_id": "rune_storm_average",
-      "weight": 50
+      "weight": 499
     }
   ]
 }

@@ -54,7 +54,7 @@
     },
     {
       "item_id": "amulet_7_unique",
-      "weight": 500
+      "weight": 99
     },
     {
       "item_id": "edict",
@@ -78,7 +78,7 @@
     },
     {
       "item_id": "rune_storm_poison",
-      "weight": 50
+      "weight": 499
     }
   ]
 }
