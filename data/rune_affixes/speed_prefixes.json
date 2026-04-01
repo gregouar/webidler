@@ -2,11 +2,11 @@
   {
     "name": "Nimble",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 1,
     "effects": [
       {
@@ -20,11 +20,11 @@
   {
     "name": "Quick",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 100,
     "effects": [
       {
@@ -38,11 +38,11 @@
   {
     "name": "Swift",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 200,
     "effects": [
       {
@@ -56,11 +56,11 @@
   {
     "name": "Brisk",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 300,
     "effects": [
       {
@@ -74,11 +74,11 @@
   {
     "name": "Sudden",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 400,
     "effects": [
       {
@@ -92,11 +92,11 @@
   {
     "name": "Impulsive",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 500,
     "effects": [
       {
@@ -110,11 +110,11 @@
   {
     "name": "Precipitate",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
@@ -128,11 +128,11 @@
   {
     "name": "Abrupt",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Rune"],
+    "weight": 400,
+    "restrictions": [ "Rune" ],
     "item_level": 700,
     "effects": [
       {
@@ -146,11 +146,11 @@
   {
     "name": "Immediate",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Rune"],
+    "weight": 200,
+    "restrictions": [ "Rune" ],
     "item_level": 800,
     "effects": [
       {
@@ -164,11 +164,11 @@
   {
     "name": "Unforeseen",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Rune"],
+    "weight": 100,
+    "restrictions": [ "Rune" ],
     "item_level": 900,
     "effects": [
       {
@@ -183,11 +183,11 @@
   {
     "name": "Spiraling",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 1,
     "effects": [
       {
@@ -201,11 +201,11 @@
   {
     "name": "Veering",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 100,
     "effects": [
       {
@@ -219,11 +219,11 @@
   {
     "name": "Surging",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 200,
     "effects": [
       {
@@ -237,11 +237,11 @@
   {
     "name": "Soaring",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 300,
     "effects": [
       {
@@ -255,11 +255,11 @@
   {
     "name": "Warping",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 400,
     "effects": [
       {
@@ -273,11 +273,11 @@
   {
     "name": "Distorting",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 500,
     "effects": [
       {
@@ -291,11 +291,11 @@
   {
     "name": "Skewed",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
@@ -309,11 +309,11 @@
   {
     "name": "Displaced",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Rune"],
+    "weight": 400,
+    "restrictions": [ "Rune" ],
     "item_level": 700,
     "effects": [
       {
@@ -327,11 +327,11 @@
   {
     "name": "Anomalous",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Rune"],
+    "weight": 200,
+    "restrictions": [ "Rune" ],
     "item_level": 800,
     "effects": [
       {
@@ -345,11 +345,11 @@
   {
     "name": "Paradoxical",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Rune"],
+    "weight": 100,
+    "restrictions": [ "Rune" ],
     "item_level": 900,
     "effects": [
       {

@@ -2,180 +2,180 @@
   {
     "name": "of Aim",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [3, 5]
+        "value": [ 3, 5 ]
       }
     ]
   },
   {
     "name": "of Rigor",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [7, 10]
+        "value": [ 7, 10 ]
       }
     ]
   },
   {
     "name": "of Accuracy",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [13, 15]
+        "value": [ 13, 15 ]
       }
     ]
   },
   {
     "name": "of Efficiency",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 300,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [17, 20]
+        "value": [ 17, 20 ]
       }
     ]
   },
   {
     "name": "of Precision",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 400,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [23, 25]
+        "value": [ 23, 25 ]
       }
     ]
   },
   {
     "name": "of Incisiveness",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [27, 30]
+        "value": [ 27, 30 ]
       }
     ]
   },
   {
     "name": "of Exactitude",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [33, 35]
+        "value": [ 33, 35 ]
       }
     ]
   },
   {
     "name": "of Meticulousness",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Rune"],
+    "weight": 400,
+    "restrictions": [ "Rune" ],
     "item_level": 700,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [37, 40]
+        "value": [ 37, 40 ]
       }
     ]
   },
   {
     "name": "of Certainty",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Rune"],
+    "weight": 200,
+    "restrictions": [ "Rune" ],
     "item_level": 800,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [43, 45]
+        "value": [ 43, 45 ]
       }
     ]
   },
   {
     "name": "of Perfection",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Rune"],
+    "weight": 100,
+    "restrictions": [ "Rune" ],
     "item_level": 900,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [47, 50]
+        "value": [ 47, 50 ]
       }
     ]
   }
