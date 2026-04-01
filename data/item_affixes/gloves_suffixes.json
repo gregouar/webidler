@@ -2,180 +2,180 @@
   {
     "name": "of Dexterity",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [2, 4]
+        "value": [ 2, 4 ]
       }
     ]
   },
   {
     "name": "of Gesticulation",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [5, 6]
+        "value": [ 5, 6 ]
       }
     ]
   },
   {
     "name": "of Action",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [7, 8]
+        "value": [ 7, 8 ]
       }
     ]
   },
   {
     "name": "of Alacrity",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [9, 10]
+        "value": [ 9, 10 ]
       }
     ]
   },
   {
     "name": "of Coordination",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [11, 12]
+        "value": [ 11, 12 ]
       }
     ]
   },
   {
     "name": "of Reflexes",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [13, 14]
+        "value": [ 13, 14 ]
       }
     ]
   },
   {
     "name": "of Motion",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Gloves"],
+    "restrictions": [ "Gloves" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [15, 16]
+        "value": [ 15, 16 ]
       }
     ]
   },
   {
     "name": "of Execution",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Gloves"],
+    "weight": 400,
+    "restrictions": [ "Gloves" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [17, 18]
+        "value": [ 17, 18 ]
       }
     ]
   },
   {
     "name": "of Reaction",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Gloves"],
+    "weight": 200,
+    "restrictions": [ "Gloves" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [19, 20]
+        "value": [ 19, 20 ]
       }
     ]
   },
   {
     "name": "of Premonition",
     "family": "inc_action_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Gloves"],
+    "weight": 100,
+    "restrictions": [ "Gloves" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Speed": null },
         "modifier": "Increased",
-        "value": [21, 22]
+        "value": [ 21, 22 ]
       }
     ]
   }

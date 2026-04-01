@@ -2,180 +2,180 @@
   {
     "name": "Menacing",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [10, 15]
+        "value": [ 10, 15 ]
       }
     ]
   },
   {
     "name": "Dreadful",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [20, 25]
+        "value": [ 20, 25 ]
       }
     ]
   },
   {
     "name": "Threatening",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [30, 35]
+        "value": [ 30, 35 ]
       }
     ]
   },
   {
     "name": "Hostile",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [40, 45]
+        "value": [ 40, 45 ]
       }
     ]
   },
   {
     "name": "Intimidating",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [50, 55]
+        "value": [ 50, 55 ]
       }
     ]
   },
   {
     "name": "Formidable",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [60, 65]
+        "value": [ 60, 65 ]
       }
     ]
   },
   {
     "name": "Terrifying",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Shield", "Focus"],
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [70, 75]
+        "value": [ 70, 75 ]
       }
     ]
   },
   {
     "name": "Fearsome",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Shield", "Focus"],
+    "weight": 400,
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [80, 85]
+        "value": [ 80, 85 ]
       }
     ]
   },
   {
     "name": "Daunting",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Shield", "Focus"],
+    "weight": 200,
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [90, 95]
+        "value": [ 90, 95 ]
       }
     ]
   },
   {
     "name": "Terrorizing",
     "family": "inc_threat",
-    "tags": ["Threat"],
+    "tags": [ "Threat" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Shield", "Focus"],
+    "weight": 100,
+    "restrictions": [ "Shield", "Focus" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "ThreatGain",
         "modifier": "Increased",
-        "value": [100, 105]
+        "value": [ 100, 105 ]
       }
     ]
   }

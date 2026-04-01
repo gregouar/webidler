@@ -2,180 +2,180 @@
   {
     "name": "of Greed",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [25, 45]
+        "value": [ 25, 45 ]
       }
     ]
   },
   {
     "name": "of Cupidity",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [55, 70]
+        "value": [ 55, 70 ]
       }
     ]
   },
   {
     "name": "of Avarice",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [80, 95]
+        "value": [ 80, 95 ]
       }
     ]
   },
   {
     "name": "of Covetousness",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [105, 120]
+        "value": [ 105, 120 ]
       }
     ]
   },
   {
     "name": "of Rapacity",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [130, 145]
+        "value": [ 130, 145 ]
       }
     ]
   },
   {
     "name": "of Plunder",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [155, 170]
+        "value": [ 155, 170 ]
       }
     ]
   },
   {
     "name": "of Pillage",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [180, 195]
+        "value": [ 180, 195 ]
       }
     ]
   },
   {
     "name": "of Looting",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "weight": 400,
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [205, 220]
+        "value": [ 205, 220 ]
       }
     ]
   },
   {
     "name": "of Hoarding",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "weight": 200,
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [230, 250]
+        "value": [ 230, 250 ]
       }
     ]
   },
   {
     "name": "of Gluttony",
     "family": "inc_gold",
-    "tags": ["Gold"],
+    "tags": [ "Gold" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Armor", "Jewelry", "Accessory"],
+    "weight": 100,
+    "restrictions": [ "Armor", "Jewelry", "Accessory" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [260, 300]
+        "value": [ 260, 300 ]
       }
     ]
   }

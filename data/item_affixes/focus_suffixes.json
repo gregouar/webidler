@@ -2,180 +2,180 @@
   {
     "name": "of Whispers",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [10, 15]
+        "value": [ 10, 15 ]
       }
     ]
   },
   {
     "name": "of Murmurs",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [20, 25]
+        "value": [ 20, 25 ]
       }
     ]
   },
   {
     "name": "of Oddities",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [30, 35]
+        "value": [ 30, 35 ]
       }
     ]
   },
   {
     "name": "of Curiosities",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [40, 45]
+        "value": [ 40, 45 ]
       }
     ]
   },
   {
     "name": "of Enigmas",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [50, 55]
+        "value": [ 50, 55 ]
       }
     ]
   },
   {
     "name": "of Mysteries",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [60, 65]
+        "value": [ 60, 65 ]
       }
     ]
   },
   {
     "name": "of Puzzles",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [70, 75]
+        "value": [ 70, 75 ]
       }
     ]
   },
   {
     "name": "of Enchantments",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [80, 85]
+        "value": [ 80, 85 ]
       }
     ]
   },
   {
     "name": "of Phantasms",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 600,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [90, 95]
+        "value": [ 90, 95 ]
       }
     ]
   },
   {
     "name": "of Wonders",
     "family": "inc_status_duration",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 500,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "StatusDuration": {} },
+        "stat": { "StatusDuration": { } },
         "modifier": "Increased",
-        "value": [100, 120]
+        "value": [ 100, 120 ]
       }
     ]
   }

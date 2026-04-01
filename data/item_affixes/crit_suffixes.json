@@ -2,180 +2,180 @@
   {
     "name": "of Aim",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [15, 25]
+        "value": [ 15, 25 ]
       }
     ]
   },
   {
     "name": "of Rigor",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [30, 40]
+        "value": [ 30, 40 ]
       }
     ]
   },
   {
     "name": "of Accuracy",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [45, 55]
+        "value": [ 45, 55 ]
       }
     ]
   },
   {
     "name": "of Efficiency",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [60, 70]
+        "value": [ 60, 70 ]
       }
     ]
   },
   {
     "name": "of Precision",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [75, 85]
+        "value": [ 75, 85 ]
       }
     ]
   },
   {
     "name": "of Incisiveness",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [90, 100]
+        "value": [ 90, 100 ]
       }
     ]
   },
   {
     "name": "of Exactitude",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [105, 115]
+        "value": [ 105, 115 ]
       }
     ]
   },
   {
     "name": "of Meticulousness",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Jewelry"],
+    "weight": 400,
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [120, 130]
+        "value": [ 120, 130 ]
       }
     ]
   },
   {
     "name": "of Certainty",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Jewelry"],
+    "weight": 200,
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [135, 150]
+        "value": [ 135, 150 ]
       }
     ]
   },
   {
     "name": "of Perfection",
     "family": "inc_crit_chance",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Jewelry"],
+    "weight": 100,
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "CritChance": null },
         "modifier": "Increased",
-        "value": [155, 175]
+        "value": [ 155, 175 ]
       }
     ]
   }

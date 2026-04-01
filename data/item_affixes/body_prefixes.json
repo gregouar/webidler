@@ -2,9 +2,9 @@
   {
     "name": "Tonic",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 1,
     "weight": 1000,
     "item_level": 1,
@@ -13,16 +13,16 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [5, 10]
+        "value": [ 5, 10 ]
       }
     ]
   },
   {
     "name": "Soothing",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 2,
     "weight": 1000,
     "item_level": 50,
@@ -31,16 +31,16 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [15, 20]
+        "value": [ 15, 20 ]
       }
     ]
   },
   {
     "name": "Allaying",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 3,
     "weight": 1000,
     "item_level": 100,
@@ -49,16 +49,16 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [25, 30]
+        "value": [ 25, 30 ]
       }
     ]
   },
   {
     "name": "Beneficial",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 4,
     "weight": 1000,
     "item_level": 150,
@@ -67,16 +67,16 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [35, 40]
+        "value": [ 35, 40 ]
       }
     ]
   },
   {
     "name": "Analeptic",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 5,
     "weight": 1000,
     "item_level": 200,
@@ -85,16 +85,16 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [45, 50]
+        "value": [ 45, 50 ]
       }
     ]
   },
   {
     "name": "Therapeutic",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 6,
     "weight": 900,
     "item_level": 260,
@@ -103,16 +103,16 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [55, 60]
+        "value": [ 55, 60 ]
       }
     ]
   },
   {
     "name": "Remedial",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 7,
     "weight": 800,
     "item_level": 330,
@@ -121,61 +121,61 @@
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [65, 70]
+        "value": [ 65, 70 ]
       }
     ]
   },
   {
     "name": "Curative",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [75, 80]
+        "value": [ 75, 80 ]
       }
     ]
   },
   {
     "name": "Restorative",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [85, 90]
+        "value": [ 85, 90 ]
       }
     ]
   },
   {
     "name": "Salutary",
     "family": "inc_restore",
-    "tags": ["Mana", "Life"],
+    "tags": [ "Mana", "Life" ],
     "affix_type": "Prefix",
-    "restrictions": ["Body"],
+    "restrictions": [ "Body" ],
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "Restore": { "restore_type": "Life" } },
         "modifier": "Increased",
-        "value": [95, 100]
+        "value": [ 95, 100 ]
       }
     ]
   }

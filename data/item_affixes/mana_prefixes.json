@@ -131,7 +131,7 @@
     "tags": [ "Mana" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 410,
     "effects": [
@@ -149,7 +149,7 @@
     "tags": [ "Mana" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 500,
     "effects": [
@@ -167,7 +167,7 @@
     "tags": [ "Mana" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 600,
     "effects": [
@@ -312,7 +312,7 @@
     "tags": [ "Mana" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
     "item_level": 410,
     "effects": [
@@ -330,7 +330,7 @@
     "tags": [ "Mana" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
     "item_level": 500,
     "effects": [
@@ -348,7 +348,7 @@
     "tags": [ "Mana" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
     "item_level": 600,
     "effects": [

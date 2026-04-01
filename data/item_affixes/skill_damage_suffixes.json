@@ -131,7 +131,7 @@
     "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
@@ -149,7 +149,7 @@
     "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
@@ -167,7 +167,7 @@
     "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
@@ -354,7 +354,7 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 175,
+    "weight": 100,
     "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 410,
     "effects": [
@@ -378,7 +378,7 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 150,
+    "weight": 50,
     "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 500,
     "effects": [
@@ -402,7 +402,7 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 100,
+    "weight": 25,
     "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 600,
     "effects": [
@@ -553,7 +553,7 @@
     "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 410,
     "effects": [
@@ -571,7 +571,7 @@
     "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 500,
     "effects": [
@@ -589,7 +589,7 @@
     "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 600,
     "effects": [
@@ -776,7 +776,7 @@
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 175,
+    "weight": 100,
     "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 410,
     "effects": [
@@ -800,7 +800,7 @@
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 150,
+    "weight": 50,
     "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 500,
     "effects": [
@@ -824,7 +824,7 @@
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 100,
+    "weight": 25,
     "restrictions": [ "Jewelry", "Accessory" ],
     "item_level": 600,
     "effects": [

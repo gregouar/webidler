@@ -2,180 +2,180 @@
   {
     "name": "of Flow",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [1, 2]
+        "value": [ 1, 2 ]
       }
     ]
   },
   {
     "name": "of Stream",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [3, 4]
+        "value": [ 3, 4 ]
       }
     ]
   },
   {
     "name": "of Current",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [5, 6]
+        "value": [ 5, 6 ]
       }
     ]
   },
   {
     "name": "of Progress",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [7, 8]
+        "value": [ 7, 8 ]
       }
     ]
   },
   {
     "name": "of Growth",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [9, 10]
+        "value": [ 9, 10 ]
       }
     ]
   },
   {
     "name": "of Cogitation",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [11, 12]
+        "value": [ 11, 12 ]
       }
     ]
   },
   {
     "name": "of Meditation",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [13, 14]
+        "value": [ 13, 14 ]
       }
     ]
   },
   {
     "name": "of Tranquility",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "weight": 400,
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [15, 16]
+        "value": [ 15, 16 ]
       }
     ]
   },
   {
     "name": "of Enlightenment",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "weight": 200,
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [17, 18]
+        "value": [ 17, 18 ]
       }
     ]
   },
   {
     "name": "of Nirvana",
     "family": "add_mana_regen",
-    "tags": ["Mana"],
+    "tags": [ "Mana" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus", "Armor", "Accessory"],
+    "weight": 100,
+    "restrictions": [ "SpellWeapon", "Focus", "Armor", "Accessory" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [19, 20]
+        "value": [ 19, 20 ]
       }
     ]
   }

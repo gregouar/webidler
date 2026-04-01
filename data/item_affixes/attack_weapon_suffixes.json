@@ -131,7 +131,7 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -149,7 +149,7 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -167,7 +167,7 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [
@@ -312,7 +312,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -330,7 +330,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -348,7 +348,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [
@@ -493,7 +493,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -511,7 +511,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -529,7 +529,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [
@@ -674,7 +674,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -692,7 +692,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -710,7 +710,7 @@
     "tags": [ "Attack", "Critical" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [
@@ -869,7 +869,7 @@
     "tags": [ "Attack", "Life" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -889,7 +889,7 @@
     "tags": [ "Attack", "Life" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -909,7 +909,7 @@
     "tags": [ "Attack", "Life" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [
@@ -1070,7 +1070,7 @@
     "tags": [ "Attack", "Mana" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -1090,7 +1090,7 @@
     "tags": [ "Attack", "Mana" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -1110,7 +1110,7 @@
     "tags": [ "Attack", "Mana" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [

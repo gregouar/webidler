@@ -2,180 +2,180 @@
   {
     "name": "Odd",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [10, 15]
+        "value": [ 10, 15 ]
       }
     ]
   },
   {
     "name": "Weird",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [20, 25]
+        "value": [ 20, 25 ]
       }
     ]
   },
   {
     "name": "Curious",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [30, 35]
+        "value": [ 30, 35 ]
       }
     ]
   },
   {
     "name": "Freaky",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [40, 45]
+        "value": [ 40, 45 ]
       }
     ]
   },
   {
     "name": "Eerie",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [50, 55]
+        "value": [ 50, 55 ]
       }
     ]
   },
   {
     "name": "Uncanny",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [60, 65]
+        "value": [ 60, 65 ]
       }
     ]
   },
   {
     "name": "Quirky",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Focus"],
+    "restrictions": [ "Focus" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [70, 75]
+        "value": [ 70, 75 ]
       }
     ]
   },
   {
     "name": "Bizarre",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Focus"],
+    "weight": 400,
+    "restrictions": [ "Focus" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [80, 85]
+        "value": [ 80, 85 ]
       }
     ]
   },
   {
     "name": "Unusual",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Focus"],
+    "weight": 200,
+    "restrictions": [ "Focus" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [90, 95]
+        "value": [ 90, 95 ]
       }
     ]
   },
   {
     "name": "Fantastic",
     "family": "inc_status_power",
-    "tags": ["Spell", "Status"],
+    "tags": [ "Spell", "Status" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Focus"],
+    "weight": 100,
+    "restrictions": [ "Focus" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": { "StatusPower": { "skill_type": "Curse" } },
         "modifier": "Increased",
-        "value": [100, 120]
+        "value": [ 100, 120 ]
       }
     ]
   }
