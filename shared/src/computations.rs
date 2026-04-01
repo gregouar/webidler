@@ -80,6 +80,7 @@ pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
         .upgrade_levels
         .get(item_specs.modifiers.upgrade_level as usize)
         .and_then(|next_upgrade_level| {
-            (*next_upgrade_level <= item_specs.modifiers.level).then_some(*next_upgrade_level as f64)
+            (*next_upgrade_level <= item_specs.modifiers.level)
+                .then_some((*next_upgrade_level + item_specs.base.min_area_level) as f64)
         })
 }

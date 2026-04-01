@@ -135,7 +135,7 @@
         "target": "Me",
         "modifiers": [],
         "skill_range": "Melee",
-        "skill_type": "Other",
+        "skill_type": "Blessing",
         "effects": [
           {
             "success_chance": {

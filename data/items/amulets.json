@@ -2,289 +2,681 @@
   "wooden_beads": {
     "name": "Wooden Beads",
     "icon": "items/amulets/wooden_beads.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 20
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": false
       }
-    ]
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "medallion": {
     "name": "Brass Medallion",
     "icon": "items/amulets/medallion.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 40
+        "scope": "Global",
+        "value": 40.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 40
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "medallion_unique": {
     "name": "Burning Desire",
     "icon": "items/amulets/burning_desire.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 50,
+    "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 40
+        "scope": "Global",
+        "value": 40.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "More",
-        "value": [ 50, 100 ],
-        "ignore_quality": true
-      },
-      {
-        "scope": "Global",
         "stat": {
-          "StatusPower": {
-            "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Fire",
+            "min_max": null
           }
         },
         "modifier": "More",
-        "value": [ 50, 100 ],
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
         "ignore_quality": true
       },
       {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "DamageOverTime": {
+                "damage_type": "Fire"
+              }
+            },
+            "skill_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
         "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": {
           "StatusDuration": {
-            "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+            "status_type": {
+              "DamageOverTime": {
+                "damage_type": "Fire"
+              }
+            },
+            "skill_type": null
           }
         },
         "modifier": "Increased",
-        "value": [ 20, 40 ],
+        "scope": "Global",
+        "value": [
+          20.0,
+          50.0
+        ],
         "ignore_quality": true
       },
       {
+        "stat": {
+          "SuccessChance": {
+            "skill_type": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Fire"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "modifier": "Increased",
         "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [ 5, 10 ],
+        "scope": "Global",
+        "value": [
+          5.0,
+          10.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [ -20, -10 ],
+        "scope": "Global",
+        "value": [
+          -20.0,
+          -10.0
+        ],
         "ignore_quality": true
       }
     ],
-    "min_area_level": 50,
-    "rarity": "Unique"
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "damage_type": "Fire",
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_type": {
+                "DamageOverTime": {
+                  "damage_type": "Fire"
+                }
+              },
+              "skill_type": null,
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      }
+    ]
   },
   "silver_chain": {
     "name": "Silver Chain",
     "icon": "items/amulets/silver_chain.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 60
+        "scope": "Global",
+        "value": 60.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 90
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "silver_chain_unique": {
     "name": "Arachnid Heart",
-    "description": "When her heart stopped, the storm did not. It only found a new host.",
     "icon": "items/amulets/amulet_spider.webp",
+    "description": "When her heart stopped, the storm did not. It only found a new host.",
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 100,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 60
+        "scope": "Global",
+        "value": 60.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": {
+          "CritChance": null
+        },
         "modifier": "Flat",
-        "value": 3,
+        "scope": "Global",
+        "value": [
+          3.0,
+          5.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": {
+          "CritDamage": null
+        },
         "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": {
           "Damage": {
-            "damage_type": "Storm"
+            "skill_type": null,
+            "damage_type": "Storm",
+            "min_max": null
           }
         },
         "modifier": "More",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": {
           "Armor": "Storm"
         },
         "modifier": "Flat",
-        "value": [ 80, 120 ]
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": true
       }
     ],
-    "min_area_level": 100
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "damage_type": "Storm",
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      }
+    ]
   },
   "gold_pendant": {
     "name": "Gold Pendant",
     "icon": "items/amulets/gold_pendant.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 80
+        "scope": "Global",
+        "value": 80.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 140
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "crest_pendant": {
     "name": "Crest Pendant",
     "icon": "items/amulets/crest_pendant.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 100
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 190
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "amulet": {
     "name": "Amulet",
     "icon": "items/amulets/amulet.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 120
+        "scope": "Global",
+        "value": 120.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 250
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "amulet_7": {
     "name": "Sacred Talisman",
     "icon": "items/amulets/sacred_talisman.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 140
+        "scope": "Global",
+        "value": 140.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 320
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "amulet_7_unique": {
     "name": "Cross of the Deep Well",
-    "description": "The faithful did not pray for power. They prayed for endurance.",
     "icon": "items/amulets/amulet_unique_cross.webp",
+    "description": "The faithful did not pray for power. They prayed for endurance.",
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 330,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 140
+        "scope": "Global",
+        "value": 140.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
         "stat": "Mana",
         "modifier": "Flat",
-        "value": 100,
-        "ignore_quality": true
-      },
-      {
         "scope": "Global",
-        "stat": { "ManaCost": { } },
-        "modifier": "Increased",
-        "value": 50,
-        "ignore_quality": true
-      },
-      {
-        "scope": "Global",
-        "stat": { "SkillLevel": null },
-        "modifier": "Flat",
-        "value": 5,
-        "ignore_quality": true
-      },
-      {
-        "scope": "Global",
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": "ManaRegen",
-            "conditions": [ "LowMana" ]
-          }
-        },
-        "modifier": "Increased",
         "value": 100.0,
         "ignore_quality": true
       },
       {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null
+          }
+        },
+        "modifier": "More",
         "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillLevel": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
         "stat": {
           "StatConditionalModifier": {
-            "stat": { "Damage": { } },
-            "conditions": [ "MaximumLife" ],
+            "stat": "ManaRegen",
+            "conditions": [
+              "LowMana"
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null,
+                "min_max": null
+              }
+            },
+            "conditions": [
+              "MaximumLife"
+            ],
             "conditions_duration": 50
           }
         },
         "modifier": "More",
-        "value": [ 100, 160 ]
+        "scope": "Global",
+        "value": [
+          100.0,
+          140.0
+        ],
+        "ignore_quality": true
       }
     ],
-    "min_area_level": 330
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "damage_type": null,
+                  "min_max": null
+                }
+              },
+              "conditions": [
+                "MaximumLife"
+              ],
+              "conditions_duration": 50
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "amulet_8": {
     "name": "Royal Parure",
     "icon": "items/amulets/royal_parure.webp",
+    "description": null,
     "slot": "Amulet",
-    "categories": [ "Jewelry", "Amulet" ],
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": 160
+        "scope": "Global",
+        "value": 160.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 400
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

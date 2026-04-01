@@ -524,7 +524,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                             <span class="text-white font-semibold">
                                 {data_context
                                     .areas_specs
-                                    .read()
+                                    .read_untracked()
                                     .get(area_id)
                                     .map(|area| area.name.clone())
                                     .unwrap_or(area_id.clone())}

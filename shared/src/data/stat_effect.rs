@@ -105,6 +105,12 @@ pub enum StatType {
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
+    SuccessChance {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        effect_type: Option<StatSkillEffectType>,
+    },
     Speed(#[serde(default)] Option<SkillType>),
     RestoreOnHit {
         restore_type: RestoreType,
@@ -134,12 +140,6 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         roll_type: LuckyRollType,
     },
-    SuccessChance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-        #[serde(default)]
-        effect_type: Option<StatSkillEffectType>,
-    },
     SkillConditionalModifier {
         stat: Box<StatType>,
         #[serde(default)]
@@ -147,6 +147,13 @@ pub enum StatType {
         #[serde(default)]
         conditions: Vec<Condition>,
     },
+    StatConditionalModifier {
+        stat: Box<StatType>,
+        conditions: Vec<Condition>,
+        #[serde(default)]
+        conditions_duration: u32,
+    },
+    StatConverter(StatConverterSpecs),
     SkillTargetModifier {
         // TODO: More control and options?
         #[serde(default)]
@@ -160,13 +167,6 @@ pub enum StatType {
         #[serde(default)]
         skill_id: Option<String>,
     },
-    StatConditionalModifier {
-        stat: Box<StatType>,
-        conditions: Vec<Condition>,
-        #[serde(default)]
-        conditions_duration: u32,
-    },
-    StatConverter(StatConverterSpecs),
     GoldFind,
     PowerLevel,
     Description2(String),

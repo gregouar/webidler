@@ -85,7 +85,7 @@ impl MessagesProcessor {
                     if let Some(entry) = self.chat_state.usernames_map.get(&username) {
                         let (user_id, target_username) = entry.value();
                         (
-                            message,
+                            message.into_inner(),
                             ChatChannel::Whisper(*user_id),
                             Some(target_username.clone()),
                         )
@@ -124,16 +124,16 @@ impl MessagesProcessor {
                         sent_at: Utc::now(),
                         user_id: None,
                         username: None,
-                        content: ChatContent::try_new(format!(
+                        content: format!(
                             "Your message has been redacted because it contains the profanity '{}': \"{}\"",
                             profanity, content
-                        )).unwrap_or_default(),
+                        ),
                         linked_item: None,
                     }
                     .into(),
                 )
                 .await;
-                ChatContent::try_new("***").unwrap_or_default()
+                "***".into()
             } else {
                 tracing::info!(target: "chat", channel = ?msg.channel, user_id = %msg.user_id.unwrap_or_default(), content = %&content, "message");
                 content

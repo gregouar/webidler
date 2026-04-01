@@ -486,10 +486,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  1,
-                  2
-                ]
+                "Physical": 1
               }
             }
           }
@@ -559,19 +556,16 @@
                       "effects": [
                         {
                           "ApplyStatus": {
-                            "duration": 5,
+                            "duration": 8,
                             "statuses": [
                               {
                                 "replace_on_value_only": true,
                                 "status_type": {
                                   "StatModifier": {
                                     "stat": {
-                                      "DamageResistance": {
-                                        "skill_type": null,
-                                        "damage_type": null
-                                      }
+                                      "Armor": null
                                     },
-                                    "modifier": "Flat",
+                                    "modifier": "More",
                                     "debuff": true
                                   }
                                 },

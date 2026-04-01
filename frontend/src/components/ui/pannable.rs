@@ -19,21 +19,24 @@ pub fn Pannable(
 
     let svg_ref = NodeRef::new();
 
-    let screen_to_svg = move |x: f64, y: f64| -> (f64, f64) {
-        let svg: web_sys::SvgElement = svg_ref.get_untracked().expect("SVG node should exist");
+    let screen_to_svg = move |x: f64, y: f64| -> Option<(f64, f64)> {
+        svg_ref.try_get_untracked().map(|svg_ref| {
+            let svg: web_sys::SvgElement = svg_ref.unwrap();
 
-        let rect = svg.get_bounding_client_rect();
-        let x = (x - rect.left()) * 1000.0 / rect.width() - 500.0;
-        let y = (y - rect.top()) * 1000.0 / rect.height() - 500.0;
-        (x, y)
+            let rect = svg.get_bounding_client_rect();
+            let x = (x - rect.left()) * 1000.0 / rect.width() - 500.0;
+            let y = (y - rect.top()) * 1000.0 / rect.height() - 500.0;
+            (x, y)
+        })
     };
 
     // --- Mouse handling ---
     if let Some(mouse_position) = mouse_position {
         let _ = window_event_listener(leptos::ev::mousemove, move |ev| {
-            let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
-            let offset = offset.get_untracked();
-            let zoom = zoom.get_untracked();
+            let mouse_pos =
+                screen_to_svg(ev.client_x() as f64, ev.client_y() as f64).unwrap_or_default();
+            let offset = offset.try_get_untracked().unwrap_or_default();
+            let zoom = zoom.try_get_untracked().unwrap_or_default();
 
             mouse_position.set((
                 (mouse_pos.0 - offset.0) / zoom,
@@ -49,7 +52,8 @@ pub fn Pannable(
             }
 
             ev.stop_propagation();
-            let mouse_pos = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+            let mouse_pos =
+                screen_to_svg(ev.client_x() as f64, ev.client_y() as f64).unwrap_or_default();
             dragging.set(Some(mouse_pos));
         }
     };
@@ -61,7 +65,8 @@ pub fn Pannable(
         move |ev: web_sys::MouseEvent| {
             if let Some((last_x, last_y)) = dragging.get() {
                 ev.stop_propagation();
-                let (cur_x, cur_y) = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+                let (cur_x, cur_y) =
+                    screen_to_svg(ev.client_x() as f64, ev.client_y() as f64).unwrap_or_default();
                 let dx = cur_x - last_x;
                 let dy = cur_y - last_y;
                 offset.update(|(x, y)| {
@@ -81,7 +86,8 @@ pub fn Pannable(
             let old_zoom = zoom.get();
             let new_zoom = (old_zoom * zoom_factor).clamp(1.0 / max_dezoom, max_zoom);
 
-            let (x, y) = screen_to_svg(ev.client_x() as f64, ev.client_y() as f64);
+            let (x, y) =
+                screen_to_svg(ev.client_x() as f64, ev.client_y() as f64).unwrap_or_default();
             let (ox, oy) = offset.get();
             offset.set((
                 x - (x - ox) * (new_zoom / old_zoom),
@@ -99,7 +105,8 @@ pub fn Pannable(
         move |ev: web_sys::TouchEvent| {
             if ev.touches().length() == 1 {
                 let touch = ev.touches().item(0).unwrap();
-                let (x, y) = screen_to_svg(touch.client_x() as f64, touch.client_y() as f64);
+                let (x, y) = screen_to_svg(touch.client_x() as f64, touch.client_y() as f64)
+                    .unwrap_or_default();
                 dragging.set(Some((x, y)));
             } else if ev.touches().length() == 2 {
                 // pinch start
@@ -119,7 +126,8 @@ pub fn Pannable(
                 if let Some((last_x, last_y)) = dragging.get() {
                     let touch = ev.touches().item(0).unwrap();
                     let (cur_x, cur_y) =
-                        screen_to_svg(touch.client_x() as f64, touch.client_y() as f64);
+                        screen_to_svg(touch.client_x() as f64, touch.client_y() as f64)
+                            .unwrap_or_default();
                     offset.update(|(x, y)| {
                         *x += cur_x - last_x;
                         *y += cur_y - last_y;
@@ -142,7 +150,8 @@ pub fn Pannable(
                     let (x, y) = screen_to_svg(
                         (t1.client_x() + t2.client_x()) as f64 * 0.5,
                         (t1.client_y() + t2.client_y()) as f64 * 0.5,
-                    );
+                    )
+                    .unwrap_or_default();
                     let (ox, oy) = offset.get();
                     offset.set((
                         x - (x - ox) * (new_zoom / old_zoom),

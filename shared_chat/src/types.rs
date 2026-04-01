@@ -21,7 +21,7 @@ pub struct ChatMessage {
     pub user_id: Option<UserId>,
     pub username: Option<String>,
 
-    pub content: ChatContent,
+    pub content: String,
     pub linked_item: Option<LinkedItemBytes>,
     // #[serde(default, skip_serializing, skip_deserializing)]
     // pub item_signature: Option<[u8; 32]>,
@@ -30,7 +30,7 @@ pub struct ChatMessage {
 #[nutype(
     sanitize(with=strip_control_chars),
     validate(len_char_max = 200),
-    default="***",
+    default="",
     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref, Default, Display)
 )]
 pub struct ChatContent(String);

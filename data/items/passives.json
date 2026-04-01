@@ -3593,7 +3593,7 @@
       },
       "4993a125-fdbd-4ee2-a85e-d44f2c00e489": {
         "name": "Legionnaire Stance",
-        "icon": "passives/legionnaire_stance2.svg",
+        "icon": "passives/shield_impact.svg",
         "x": -127.5,
         "y": 25.0,
         "size": 2,
@@ -3605,20 +3605,20 @@
             "name": null,
             "icon": "",
             "description": null,
-            "trigger_id": "legionnaire_stance",
-            "OnTakeHit": {
+            "trigger_id": "legionaire_stance",
+            "OnHit": {
               "skill_type": null,
               "range": null,
-              "is_crit": null,
-              "is_blocked": true,
-              "is_hurt": null,
+              "is_crit": true,
+              "is_blocked": null,
+              "is_hurt": true,
               "is_triggered": null,
-              "damage_type": null
+              "damage_type": "Physical"
             },
             "target": "SameTarget",
             "modifiers": [],
             "skill_range": "Any",
-            "skill_type": "Other",
+            "skill_type": "Attack",
             "effects": [
               {
                 "success_chance": {
@@ -3631,18 +3631,32 @@
                       "status_type": {
                         "StatModifier": {
                           "stat": {
-                            "Damage": {
-                              "skill_type": null,
-                              "damage_type": null,
-                              "min_max": null
-                            }
+                            "Armor": null
                           },
-                          "modifier": "More",
-                          "debuff": false
+                          "modifier": "Increased",
+                          "debuff": true
                         }
                       },
-                      "value": 25.0,
-                      "cumulate": true,
+                      "value": 100.0,
+                      "cumulate": false,
+                      "replace_on_value_only": false,
+                      "unavoidable": false
+                    },
+                    {
+                      "status_type": {
+                        "StatModifier": {
+                          "stat": {
+                            "DamageResistance": {
+                              "skill_type": null,
+                              "damage_type": null
+                            }
+                          },
+                          "modifier": "Flat",
+                          "debuff": true
+                        }
+                      },
+                      "value": 100.0,
+                      "cumulate": false,
                       "replace_on_value_only": false,
                       "unavoidable": false
                     }
@@ -9049,7 +9063,7 @@
           {
             "stat": "BlockDamageTaken",
             "modifier": "Flat",
-            "value": 50.0
+            "value": 10.0
           },
           {
             "stat": {
@@ -10971,17 +10985,17 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "CritDamage": null
-                                },
-                                {
-                                  "CritChance": null
-                                },
-                                {
                                   "Damage": {
                                     "skill_type": null,
                                     "damage_type": null,
                                     "min_max": null
                                   }
+                                },
+                                {
+                                  "CritDamage": null
+                                },
+                                {
+                                  "CritChance": null
                                 }
                               ],
                               "conditional_modifiers": []
@@ -11764,6 +11778,13 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "damage_type": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -11774,13 +11795,6 @@
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "damage_type": null,
-                      "min_max": null
                     }
                   }
                 ],
@@ -11886,16 +11900,16 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "damage_type": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null
                     }
                   },
                   {

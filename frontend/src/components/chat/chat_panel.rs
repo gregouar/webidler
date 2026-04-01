@@ -401,7 +401,7 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                 .map(|item_specs: ItemSpecs| {
                     view! { <ChatItem item_specs=Arc::new(item_specs) /> }
                 })}
-            <span class="text-gray-200 select-text">{msg.content.into_inner()}</span>
+            <span class="text-gray-200 select-text">{msg.content}</span>
         </div>
     }
 }
