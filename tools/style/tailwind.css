@@ -147,6 +147,8 @@
     initial-value: 0%;
   }
 
+
+
   /* Portraits */
   .champion-shimmer {
     background: linear-gradient(
@@ -505,6 +507,10 @@
   transition:
     opacity 0.5s linear,
     --progress 0.25s linear;
+}
+@utility fade-out-circular-progress-bar {
+  animation: circular-progress-bar-fade-out 0.5s ease-out;
+  animation-fill-mode: both;
 }
 
 @utility font-number {
