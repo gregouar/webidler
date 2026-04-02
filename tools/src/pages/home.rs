@@ -148,11 +148,11 @@ pub fn SegmentedCircularProgressBar(
                     class="absolute inset-0 rounded-full"
                     style=format!(
                         "background:
-                            radial-gradient(circle, transparent 0 72%, rgba(0,0,0,0.28) 77%, transparent 80%),
-                            linear-gradient(180deg, {BRASS_BRIGHT} 0%, {BRASS_MID} 16%, {BRASS_DARK} 48%, {BRASS_BRIGHT} 100%);
+                            radial-gradient(circle, transparent 0 90%, rgba(0,0,0,0) 100%),
+                            linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%);
                          box-shadow:
-                            inset 0 2px 3px rgba(255,237,193,0.55),
-                            inset 0 -8px 10px rgba(36,20,10,0.74),
+                            inset 0 1px 2px rgba(255,255,255,0.03),
+                            inset 0 -8px 10px rgba(0,0,0,0.82),
                             0 0 0 1px rgba(16,10,7,0.88);",
                     )
                 ></div>
@@ -161,11 +161,21 @@ pub fn SegmentedCircularProgressBar(
                     class="absolute inset-[4%] rounded-full"
                     style=format!(
                         "background:
-                            radial-gradient(circle, transparent 0 72%, rgba(0,0,0,0.24) 77%, transparent 82%),
-                            linear-gradient(180deg, {BRASS_SHADOW} 0%, rgba(87,61,30,0.94) 45%, {BRASS_DARK} 100%);
+                            radial-gradient(circle, transparent 0 90%, rgba(0,0,0,0) 100%),
+                            linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%);
                          box-shadow:
-                            inset 0 1px 2px rgba(255,226,160,0.16),
-                            inset 0 -3px 6px rgba(0,0,0,0.56);",
+                            inset 0 1px 2px rgba(255,255,255,0.02),
+                            inset 0 -4px 8px rgba(0,0,0,0.72);",
+                    )
+                ></div>
+
+                <div
+                    class="absolute inset-0 rounded-full pointer-events-none"
+                    style=format!(
+                        "box-shadow:
+                            inset 0 0 0 2px {BRASS_DARK},
+                            inset 0 1px 0 2px rgba(255,233,185,0.38),
+                            inset 0 -2px 0 2px rgba(60,40,16,0.92);"
                     )
                 ></div>
 
@@ -234,7 +244,7 @@ pub fn SegmentedCircularProgressBar(
                                                 )
                                             };
                                             format!(
-                                                "clip-path: polygon(18% 0%, 82% 0%, 56% 100%, 44% 100%);
+                                                "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
                                                  border-radius: 4px 4px 10px 10px;
                                                  background: {background};
                                                  border: 1px solid {border};
@@ -252,11 +262,11 @@ pub fn SegmentedCircularProgressBar(
                                             class="absolute inset-x-[24%] top-[20%] h-[50%]"
                                             style=move || {
                                                 if index < active_segments.get() {
-                                                    "clip-path: polygon(16% 0%, 84% 0%, 58% 100%, 42% 100%);
+                                                    "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
                                                      background: linear-gradient(180deg, rgba(255,219,170,0.36), rgba(255,126,24,0.04));"
                                                         .to_string()
                                                 } else {
-                                                    "clip-path: polygon(16% 0%, 84% 0%, 58% 100%, 42% 100%);
+                                                    "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
                                                      background: linear-gradient(180deg, rgba(255,214,170,0.06), rgba(255,120,28,0.01));"
                                                         .to_string()
                                                 }
@@ -280,7 +290,7 @@ pub fn SegmentedCircularProgressBar(
                                         <div
                                             class="absolute inset-0"
                                             style=format!(
-                                                "clip-path: polygon(18% 0%, 82% 0%, 56% 100%, 44% 100%);
+                                                "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
                                                  border-left: 1px solid {SEGMENT_LEAD};
                                                  border-right: 1px solid {SEGMENT_LEAD};
                                                  border-top: 1px solid rgba(255,235,205,0.12);
