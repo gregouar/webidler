@@ -159,6 +159,7 @@ pub fn SegmentedCircularProgressBar(
     const SEGMENT_BRIGHT: &str = "rgba(255, 165, 44, 0.98)";
     const SEGMENT_EDGE: &str = "rgba(255, 226, 178, 0.92)";
     const SEGMENT_LEAD: &str = "rgba(47, 23, 11, 0.95)";
+    let _ = bar_color;
     const SEGMENT_GLOW: &str = "rgba(255, 126, 24, 0.78)";
     let _ = bar_width;
 
@@ -224,84 +225,64 @@ pub fn SegmentedCircularProgressBar(
                                 style=format!("transform: rotate({angle}deg);")
                             >
                                 <div
-                                    class=move || {
-                                        if animated {
-                                            "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter] duration-200 ease-linear"
-                                        } else {
-                                            "relative mt-[1.2%] h-[13%] w-[22%] origin-center"
-                                        }
-                                    }
+                                    class="relative mt-[1.2%] h-[13%] w-[22%] origin-center"
                                     class:brightness-60=move || disabled.get()
-                                    style=move || {
-                                        let progress = progress_signal.get();
-                                        let (_, glow_fill, depth_fill) = segment_state_from(
-                                            progress,
-                                            index,
-                                        );
-                                        let opacity = lerp(0.10, 1.0, glow_fill);
-                                        let scale = lerp(0.94, 1.0, glow_fill);
-                                        let glow = lerp(0.0, 12.0, glow_fill);
-                                        let glass_alpha = lerp(0.22, 0.90, glow_fill);
-                                        let highlight_alpha = lerp(0.0, 0.42, glow_fill);
-                                        let shadow_alpha = lerp(0.76, 0.48, depth_fill);
-                                        format!(
-                                            "clip-path: polygon(16% 0%, 84% 0%, 72% 100%, 28% 100%);
-                                             border-radius: 4px 4px 10px 10px;
-                                             background: linear-gradient(135deg,
-                                                rgba(255,244,222,{highlight_alpha}) 0%,
-                                                rgba(255,210,142,{glass_alpha}) 18%,
-                                                {SEGMENT_BRIGHT} 34%,
-                                                {bar_color} 54%,
-                                                {SEGMENT_MID} 76%,
-                                                {SEGMENT_DARK} 100%);
-                                             border: 1px solid rgba(255,219,170,{});
-                                             box-shadow:
-                                                0 0 {}px rgba(255,126,24,{}),
-                                                inset 1px 1px 2px rgba(255,245,224,{}),
-                                                inset -3px -4px 6px rgba(58,18,6,{});
-                                             opacity: {opacity};
-                                             transform: scale({scale});",
-                                            lerp(0.02, 0.72, glow_fill),
-                                            glow,
-                                            lerp(0.0, 0.58, glow_fill),
-                                            lerp(0.02, 0.18, glow_fill),
-                                            shadow_alpha,
-                                        )
-                                    }
+                                    style=format!(
+                                        "clip-path: polygon(16% 0%, 84% 0%, 72% 100%, 28% 100%);
+                                         border-radius: 4px 4px 10px 10px;
+                                         background: linear-gradient(135deg,
+                                            rgba(255,244,222,0.06) 0%,
+                                            rgba(180,104,36,0.34) 16%,
+                                            rgba(114,49,16,0.92) 40%,
+                                            rgba(74,31,11,0.98) 72%,
+                                            rgba(36,14,6,1.00) 100%);
+                                         border: 1px solid rgba(255,226,178,0.16);
+                                         box-shadow:
+                                            inset 1px 1px 2px rgba(255,244,222,0.08),
+                                            inset -2px -3px 5px rgba(24,8,2,0.72);"
+                                    )
                                 >
                                     <div
-                                        class="absolute left-[18%] top-[10%] h-[18%] w-[42%]"
+                                        class=if animated {
+                                            "absolute inset-0 transition-opacity duration-200 ease-linear"
+                                        } else {
+                                            "absolute inset-0"
+                                        }
+                                        style=move || {
+                                            let progress = progress_signal.get();
+                                            let (_, glow_fill, _) = segment_state_from(progress, index);
+                                            format!(
+                                                "clip-path: polygon(16% 0%, 84% 0%, 72% 100%, 28% 100%);
+                                                 border-radius: 4px 4px 10px 10px;
+                                                 background: linear-gradient(135deg,
+                                                    rgba(255,244,212,0.16) 0%,
+                                                    rgba(255,192,78,0.88) 18%,
+                                                    rgba(255,140,28,0.94) 42%,
+                                                    rgba(173,64,12,0.92) 76%,
+                                                    rgba(78,27,8,0.68) 100%);
+                                                 border: 1px solid rgba(255,228,188,0.38);
+                                                 opacity: {};",
+                                                lerp(0.0, 1.0, glow_fill),
+                                            )
+                                        }
+                                    ></div>
+                                    <div
+                                        class=if animated {
+                                            "absolute left-[18%] top-[10%] h-[18%] w-[42%] transition-opacity duration-200 ease-linear"
+                                        } else {
+                                            "absolute left-[18%] top-[10%] h-[18%] w-[42%]"
+                                        }
                                         style=move || {
                                             let progress = progress_signal.get();
                                             let (_, glow_fill, _) = segment_state_from(progress, index);
                                             format!(
                                                 "clip-path: polygon(0% 100%, 64% 0%, 100% 14%, 34% 100%);
                                                  background: linear-gradient(135deg,
-                                                    rgba(255,252,246,{}) ,
-                                                    rgba(255,245,224,{}) 48%,
-                                                    rgba(255,244,222,0.00));",
-                                                lerp(0.0, 0.52, glow_fill),
-                                                lerp(0.0, 0.10, glow_fill),
-                                            )
-                                        }
-                                    ></div>
-                                    <div
-                                        class="absolute inset-x-[10%] bottom-[4%] h-[24%] rounded-full blur-[3px]"
-                                        style=move || {
-                                            let progress = progress_signal.get();
-                                            let (_, glow_fill, raw_fill) = segment_state_from(
-                                                progress,
-                                                index,
-                                            );
-                                            format!(
-                                                "background: radial-gradient(circle,
-                                                    rgba(255,224,172,{}) 0%,
-                                                    {SEGMENT_BRIGHT} 36%,
-                                                    {bar_color} 68%,
-                                                    transparent 100%);
+                                                    rgba(255,252,246,0.86),
+                                                    rgba(255,245,224,0.18) 48%,
+                                                    rgba(255,244,222,0.00));
                                                  opacity: {};",
-                                                lerp(0.0, 0.42, glow_fill),
-                                                lerp(0.0, 0.38, raw_fill),
+                                                lerp(0.0, 0.58, glow_fill),
                                             )
                                         }
                                     ></div>
