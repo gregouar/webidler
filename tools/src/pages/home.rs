@@ -19,7 +19,7 @@ pub fn HomePage() -> impl IntoView {
                                 trigger_reset_progress.get()
                             });
                             let progress_value = predictive_cooldown(
-                                Signal::derive(move || 2.0),
+                                Signal::derive(move || 1.0),
                                 reset_progress,
                                 Signal::derive(move || false),
                                 0.0,
@@ -99,7 +99,7 @@ pub fn predictive_cooldown(
             if !disabled.get_untracked() && rate > 0.0 {
                 progress_value.update(|progress_value| {
                     if *progress_value < 1.2 {
-                        *progress_value += rate * 0.2;
+                        *progress_value += rate * 0.05;
                     }
                     if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
                         *progress_value = 1.0;
@@ -161,28 +161,33 @@ pub fn SegmentedCircularProgressBar(
     const SEGMENT_GLOW: &str = "rgba(255, 126, 24, 0.78)";
     let _ = bar_width;
 
-    let reset_bar_animation = RwSignal::new("opacity: 0;");
+    let reset_overlay_style = RwSignal::new("opacity: 0;".to_string());
     let reset_icon_animation = RwSignal::new("");
-    let enable_transition = RwSignal::new(true);
-    let segment_progress =
-        Signal::derive(move || value.get().clamp(0.0, 1.0) * SEGMENT_COUNT as f64);
+    let display_segment_progress = RwSignal::new(0.0);
+    let reset_segment_progress = RwSignal::new(0.0);
+    let reset_armed = RwSignal::new(false);
     let lerp = |start: f64, end: f64, t: f64| start + (end - start) * t;
     let ease_out = |t: f64| 1.0 - (1.0 - t).powf(2.0);
     let ease_in = |t: f64| t.powf(1.35);
-    let segment_state = move |index: usize| {
-        let raw_fill = (segment_progress.get() - index as f64).clamp(0.0, 1.0);
+    let segment_state_from = move |progress: f64, index: usize| {
+        let raw_fill = (progress - index as f64).clamp(0.0, 1.0);
         let glow_fill = ease_out(raw_fill);
         let depth_fill = ease_in(raw_fill);
         (raw_fill, glow_fill, depth_fill)
     };
 
     Effect::new(move |_| {
-        if reset.get() {
-            enable_transition.set(false);
+        display_segment_progress.set(value.get().clamp(0.0, 1.0) * SEGMENT_COUNT as f64);
+    });
+
+    Effect::new(move |_| {
+        if reset.get() && !reset_armed.get() {
+            reset_armed.set(true);
 
             if !disabled.get_untracked() {
-                reset_bar_animation
-                .set("animation: circular-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+                reset_segment_progress.set(display_segment_progress.get_untracked());
+                reset_overlay_style
+                    .set("opacity: 1; animation: circular-progress-bar-fade-out 0.5s linear; animation-fill-mode: both;".to_string());
                 reset_icon_animation.set(
                     "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
                 );
@@ -190,16 +195,157 @@ pub fn SegmentedCircularProgressBar(
                 // Trick to reset animation by removing it when ended
                 set_timeout(
                     move || {
-                        reset_bar_animation.set("opacity: 0;");
+                        reset_overlay_style.set("opacity: 0;".to_string());
                         reset_icon_animation.set("");
                     },
                     std::time::Duration::from_millis(500),
                 );
             }
-        } else {
-            enable_transition.set(true);
+        } else if !reset.get() {
+            reset_armed.set(false);
         }
     });
+
+    let segment_ring = move |progress_signal: RwSignal<f64>,
+                             container_style: RwSignal<String>,
+                             animated: bool| {
+        view! {
+            <div
+                class="absolute inset-[5%] rounded-full will-change-opacity"
+                style=move || container_style.get()
+            >
+                {(0..SEGMENT_COUNT)
+                    .map(|index| {
+                        let angle = index as f64 * (360.0 / SEGMENT_COUNT as f64);
+                        view! {
+                            <div
+                                class="absolute inset-0 flex items-start justify-center"
+                                style=format!("transform: rotate({angle}deg);")
+                            >
+                                <div
+                                    class=move || {
+                                        if animated {
+                                            "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter,background,border-color,box-shadow] duration-200 ease-linear"
+                                        } else {
+                                            "relative mt-[1.2%] h-[13%] w-[22%] origin-center"
+                                        }
+                                    }
+                                    class:brightness-60=move || disabled.get()
+                                    style=move || {
+                                        let progress = progress_signal.get();
+                                        let (raw_fill, glow_fill, depth_fill) = segment_state_from(progress, index);
+                                        let background = format!(
+                                            "linear-gradient(135deg,
+                                                rgba(255,248,230,{}) 0%,
+                                                rgba(255,226,178,{}) 12%,
+                                                rgba(255,194,108,{}) 20%,
+                                                {SEGMENT_BRIGHT} 34%,
+                                                {bar_color} 54%,
+                                                {SEGMENT_MID} 76%,
+                                                {SEGMENT_DARK} 100%),
+                                             radial-gradient(circle at 26% 18%,
+                                                rgba(255,248,231,{}) 0%,
+                                                rgba(255,220,168,{}) 18%,
+                                                transparent 42%),
+                                             linear-gradient(315deg,
+                                                rgba(255,170,64,{}) 0%,
+                                                transparent 40%)",
+                                            lerp(0.04, 0.92, glow_fill),
+                                            lerp(0.03, 0.88, glow_fill),
+                                            lerp(0.03, 0.78, glow_fill),
+                                            lerp(0.01, 0.46, glow_fill),
+                                            lerp(0.0, 0.22, glow_fill),
+                                            lerp(0.0, 0.18, raw_fill),
+                                        );
+                                        let border = format!(
+                                            "rgba(255,219,170,{})",
+                                            lerp(0.03, 0.82, glow_fill),
+                                        );
+                                        let shadow = format!(
+                                            "-2px -2px 6px rgba(255,242,214,{:.3}),
+                                             0 0 {:.1}px rgba(255,126,24,{:.3}),
+                                             0 0 {:.1}px {bar_color},
+                                             inset 2px 2px 3px rgba(255,244,220,{:.3}),
+                                             inset -4px -5px 8px rgba(58,18,6,{:.3})",
+                                            lerp(0.0, 0.08, glow_fill),
+                                            lerp(0.0, 9.0, glow_fill),
+                                            lerp(0.0, 0.72, glow_fill),
+                                            lerp(0.0, 18.0, glow_fill),
+                                            lerp(0.0, 0.28, raw_fill),
+                                            lerp(0.66, 0.54, depth_fill),
+                                        );
+                                        let opacity = lerp(0.22, 1.0, glow_fill);
+                                        let scale = lerp(0.94, 1.0, glow_fill);
+                                        format!(
+                                            "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
+                                             border-radius: 4px 4px 10px 10px;
+                                             background: {background};
+                                             border: 1px solid {border};
+                                             box-shadow: {shadow};
+                                             opacity: {opacity};
+                                             transform: scale({scale});",
+                                        )
+                                    }
+                                >
+                                    <div
+                                        class="absolute left-[18%] top-[10%] h-[18%] w-[42%]"
+                                        style=move || {
+                                            let progress = progress_signal.get();
+                                            let (_, glow_fill, _) = segment_state_from(progress, index);
+                                            format!(
+                                                "clip-path: polygon(0% 100%, 64% 0%, 100% 14%, 34% 100%);
+                                                 background: linear-gradient(135deg,
+                                                    rgba(255,252,246,{}) ,
+                                                    rgba(255,245,224,{}) 48%,
+                                                    rgba(255,244,222,0.02));",
+                                                lerp(0.0, 0.96, glow_fill),
+                                                lerp(0.0, 0.18, glow_fill),
+                                            )
+                                        }
+                                    ></div>
+                                    <div
+                                        class="absolute inset-x-[24%] top-[20%] h-[50%]"
+                                        style=move || {
+                                            let progress = progress_signal.get();
+                                            let (raw_fill, glow_fill, _) = segment_state_from(progress, index);
+                                            format!(
+                                                "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
+                                                 background: linear-gradient(135deg,
+                                                    rgba(255,231,194,{}) ,
+                                                    rgba(255,145,30,{}) 46%,
+                                                    rgba(32,10,6,0.00));",
+                                                lerp(0.0, 0.14, glow_fill),
+                                                lerp(0.0, 0.06, raw_fill),
+                                            )
+                                        }
+                                    ></div>
+                                    <div
+                                        class="absolute inset-x-[10%] bottom-[4%] h-[24%] rounded-full blur-[3px]"
+                                        style=move || {
+                                            let progress = progress_signal.get();
+                                            let (_, glow_fill, raw_fill) = segment_state_from(progress, index);
+                                            format!(
+                                                "background: radial-gradient(circle,
+                                                    rgba(255,224,172,{}) 0%,
+                                                    {SEGMENT_BRIGHT} 36%,
+                                                    {bar_color} 68%,
+                                                    transparent 100%);
+                                                 opacity: {};",
+                                                lerp(0.0, 0.72, glow_fill),
+                                                lerp(0.0, 0.62, raw_fill),
+                                            )
+                                        }
+                                    ></div>
+                                </div>
+                            </div>
+                        }
+                    })
+                    .collect_view()}
+            </div>
+        }
+    };
+
+    let live_ring_style = RwSignal::new(String::new());
 
     view! {
         <div class="circular-progress-bar">
@@ -224,133 +370,8 @@ pub fn SegmentedCircularProgressBar(
                     )
                 ></div>
 
-                <div class="absolute inset-[5%] rounded-full">
-                    {(0..SEGMENT_COUNT)
-                        .map(|index| {
-                            let angle = index as f64 * (360.0 / SEGMENT_COUNT as f64);
-                            view! {
-                                <div
-                                    class="absolute inset-0 flex items-start justify-center"
-                                    style=format!("transform: rotate({angle}deg);")
-                                >
-                                    <div
-                                        class=move || {
-                                            if enable_transition.get() {
-                                                "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter,background,border-color,box-shadow] duration-200 ease-linear"
-                                            } else {
-                                                "relative mt-[1.2%] h-[13%] w-[22%] origin-center"
-                                            }
-                                        }
-                                        class:brightness-60=move || disabled.get()
-                                        style=move || {
-                                            let (raw_fill, glow_fill, depth_fill) = segment_state(
-                                                index,
-                                            );
-                                            let background = format!(
-                                                "linear-gradient(135deg,
-                                                    rgba(255,248,230,{}) 0%,
-                                                    rgba(255,226,178,{}) 12%,
-                                                    rgba(255,194,108,{}) 20%,
-                                                    {SEGMENT_BRIGHT} 34%,
-                                                    {bar_color} 54%,
-                                                    {SEGMENT_MID} 76%,
-                                                    {SEGMENT_DARK} 100%),
-                                                 radial-gradient(circle at 26% 18%,
-                                                    rgba(255,248,231,{}) 0%,
-                                                    rgba(255,220,168,{}) 18%,
-                                                    transparent 42%),
-                                                 linear-gradient(315deg,
-                                                    rgba(255,170,64,{}) 0%,
-                                                    transparent 40%)",
-                                                lerp(0.04, 0.92, glow_fill),
-                                                lerp(0.03, 0.88, glow_fill),
-                                                lerp(0.03, 0.78, glow_fill),
-                                                lerp(0.01, 0.46, glow_fill),
-                                                lerp(0.0, 0.22, glow_fill),
-                                                lerp(0.0, 0.18, raw_fill),
-                                            );
-                                            let border = format!(
-                                                "rgba(255,219,170,{})",
-                                                lerp(0.03, 0.82, glow_fill),
-                                            );
-                                            let shadow = format!(
-                                                "-2px -2px 6px rgba(255,242,214,{:.3}),
-                                                 0 0 {:.1}px rgba(255,126,24,{:.3}),
-                                                 0 0 {:.1}px {bar_color},
-                                                 inset 2px 2px 3px rgba(255,244,220,{:.3}),
-                                                 inset -4px -5px 8px rgba(58,18,6,{:.3})",
-                                                lerp(0.0, 0.08, glow_fill),
-                                                lerp(0.0, 9.0, glow_fill),
-                                                lerp(0.0, 0.72, glow_fill),
-                                                lerp(0.0, 18.0, glow_fill),
-                                                lerp(0.0, 0.28, raw_fill),
-                                                lerp(0.66, 0.54, depth_fill),
-                                            );
-                                            let opacity = lerp(0.22, 1.0, glow_fill);
-                                            let scale = lerp(0.94, 1.0, glow_fill);
-                                            format!(
-                                                "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
-                                                 border-radius: 4px 4px 10px 10px;
-                                                 background: {background};
-                                                 border: 1px solid {border};
-                                                 box-shadow: {shadow};
-                                                 opacity: {opacity};
-                                                 transform: scale({scale});",
-                                            )
-                                        }
-                                    >
-                                        <div
-                                            class="absolute left-[18%] top-[10%] h-[18%] w-[42%]"
-                                            style=move || {
-                                                let (_, glow_fill, _) = segment_state(index);
-                                                format!(
-                                                    "clip-path: polygon(0% 100%, 64% 0%, 100% 14%, 34% 100%);
-                                                     background: linear-gradient(135deg,
-                                                         rgba(255,252,246,{}) ,
-                                                         rgba(255,245,224,{}) 48%,
-                                                         rgba(255,244,222,0.02));",
-                                                    lerp(0.0, 0.96, glow_fill),
-                                                    lerp(0.0, 0.18, glow_fill),
-                                                )
-                                            }
-                                        ></div>
-                                        <div
-                                            class="absolute inset-x-[24%] top-[20%] h-[50%]"
-                                            style=move || {
-                                                let (raw_fill, glow_fill, _) = segment_state(index);
-                                                format!(
-                                                    "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
-                                                     background: linear-gradient(135deg,
-                                                        rgba(255,231,194,{}) ,
-                                                        rgba(255,145,30,{}) 46%,
-                                                        rgba(32,10,6,0.00));",
-                                                    lerp(0.0, 0.14, glow_fill),
-                                                    lerp(0.0, 0.06, raw_fill),
-                                                )
-                                            }
-                                        ></div>
-                                        <div
-                                            class="absolute inset-x-[10%] bottom-[4%] h-[24%] rounded-full blur-[3px]"
-                                            style=move || {
-                                                let (_, glow_fill, raw_fill) = segment_state(index);
-                                                format!(
-                                                    "background: radial-gradient(circle,
-                                                        rgba(255,224,172,{}) 0%,
-                                                        {SEGMENT_BRIGHT} 36%,
-                                                        {bar_color} 68%,
-                                                        transparent 100%);
-                                                     opacity: {};",
-                                                    lerp(0.0, 0.72, glow_fill),
-                                                    lerp(0.0, 0.62, raw_fill),
-                                                )
-                                            }
-                                        ></div>
-                                    </div>
-                                </div>
-                            }
-                        })
-                        .collect_view()}
-                </div>
+                {segment_ring(display_segment_progress, live_ring_style, true)}
+                {segment_ring(reset_segment_progress, reset_overlay_style, false)}
 
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
