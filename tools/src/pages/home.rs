@@ -175,7 +175,7 @@ pub fn SegmentedCircularProgressBar(
                         "box-shadow:
                             inset 0 0 0 2px {BRASS_DARK},
                             inset 0 1px 0 2px rgba(255,233,185,0.38),
-                            inset 0 -2px 0 2px rgba(60,40,16,0.92);"
+                            inset 0 -2px 0 2px rgba(60,40,16,0.92);",
                     )
                 ></div>
 
@@ -337,7 +337,6 @@ pub fn SegmentedCircularProgressBar(
 
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    scale-125
                     will-change-[filter,transform] transition-[filter,transform] duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
