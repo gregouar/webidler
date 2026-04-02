@@ -33,20 +33,34 @@ pub fn HomePage() -> impl IntoView {
                             });
 
                             view! {
-                                <SegmentedCircularProgressBar
-                                    bar_color="oklch(55.5% 0.163 48.998)"
-                                    value=progress_value
-                                    reset=reset_progress
-                                    bar_width=4
-                                >
-                                    <img
-                                        draggable="false"
-                                        src="assets/images/skills/attack.svg"
-                                        alt="attack"
-                                        class="w-full h-full flex-no-shrink fill-current
-                                        xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                                    />
-                                </SegmentedCircularProgressBar>
+                                <div class="flex flex-col gap-1">
+                                    <SegmentedCircularProgressBar
+                                        bar_color="oklch(55.5% 0.163 48.998)"
+                                        value=progress_value
+                                        reset=reset_progress
+                                        bar_width=4
+                                    >
+                                        <img
+                                            draggable="false"
+                                            src="assets/images/skills/attack.svg"
+                                            alt="attack"
+                                            class="w-full h-full flex-no-shrink fill-current
+                                            xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                                        />
+                                    </SegmentedCircularProgressBar>
+
+                                    <div class="flex justify-around">
+                                        <Toggle toggle_callback=|_| {}>
+                                            <span class="inline xl:hidden">"A"</span>
+                                            <span class="hidden xl:inline font-variant:small-caps">
+                                                "Auto"
+                                            </span>
+                                        </Toggle>
+                                        <FancyButton>
+                                            <span class="text-base xl:text-2xl">"+"</span>
+                                        </FancyButton>
+                                    </div>
+                                </div>
                             }
                         })
                         .collect::<Vec<_>>()}
@@ -139,34 +153,22 @@ pub fn SegmentedCircularProgressBar(
     view! {
         <div class="circular-progress-bar">
             <div
-                class="relative w-full h-full aspect-square rounded-full overflow-hidden"
-                style="contain: strict; background:
-                radial-gradient(circle at 30% 25%, rgba(255,255,255,0.05), transparent 20%),
-                linear-gradient(180deg, rgba(24,17,15,0.98), rgba(6,6,8,1));"
+                class="relative w-full h-full aspect-square rounded-full overflow-hidden
+                bg-radial from-stone-800 to-zinc-950 to-70%"
+                style="contain: strict;"
             >
-                <div
-                    class="absolute inset-0 rounded-full"
-                    style=format!(
-                        "background:
-                            radial-gradient(circle, transparent 0 90%, rgba(0,0,0,0) 100%),
-                            linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%);
-                         box-shadow:
-                            inset 0 1px 2px rgba(255,255,255,0.03),
-                            inset 0 -8px 10px rgba(0,0,0,0.82),
-                            0 0 0 1px rgba(16,10,7,0.88);",
-                    )
-                ></div>
 
                 <div
-                    class="absolute inset-[4%] rounded-full"
-                    style=format!(
-                        "background:
-                            radial-gradient(circle, transparent 0 90%, rgba(0,0,0,0) 100%),
-                            linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%);
-                         box-shadow:
-                            inset 0 1px 2px rgba(255,255,255,0.02),
-                            inset 0 -4px 8px rgba(0,0,0,0.72);",
-                    )
+                    class="absolute rounded-full border border-[#120d0a] shadow-[inset_0_2px_3px_rgba(255,255,255,0.04),inset_0_-10px_16px_rgba(0,0,0,0.82)]"
+                    style="inset: 18%; background:
+                    radial-gradient(circle at 50% 46%, rgba(92,92,108,0.42) 0%, rgba(38,38,46,0.26) 24%, rgba(10,10,14,0.92) 58%, rgba(0,0,0,1) 82%),
+                    linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,1));
+                    radial-gradient(circle at 50% 46%,
+                    rgba(108,108,128,0.52) 0%,
+                    rgba(56,56,68,0.38) 22%,
+                    rgba(18,18,24,0.82) 52%,
+                    rgba(0,0,0,0.98) 78%,
+                    rgba(0,0,0,1) 100%);"
                 ></div>
 
                 <div
@@ -179,11 +181,7 @@ pub fn SegmentedCircularProgressBar(
                     )
                 ></div>
 
-                <div
-                    class="absolute inset-[5%] rounded-full"
-                    style="background:
-                    radial-gradient(circle, transparent 0 79%, rgba(0,0,0,1) 82%, rgba(0,0,0,1) 86%, transparent 89%);"
-                >
+                <div class="absolute inset-[5%] rounded-full">
                     {(0..SEGMENT_COUNT)
                         .map(|index| {
                             let angle = index as f64 * (360.0 / SEGMENT_COUNT as f64);
@@ -299,41 +297,12 @@ pub fn SegmentedCircularProgressBar(
                                                 }
                                             }
                                         ></div>
-                                        <div
-                                            class="absolute inset-0"
-                                            style=format!(
-                                                "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
-                                                 border-left: 1px solid {SEGMENT_LEAD};
-                                                 border-right: 1px solid {SEGMENT_LEAD};
-                                                 border-top: 1px solid rgba(255,235,205,0.12);
-                                                 border-bottom: 1px solid {SEGMENT_LEAD};
-                                                 opacity: 0.92;",
-                                            )
-                                        ></div>
                                     </div>
                                 </div>
                             }
                         })
                         .collect_view()}
                 </div>
-
-                <div
-                    class="absolute inset-0 rounded-full will-change-opacity"
-                    style=move || {
-                        format!(
-                            "background:
-                                radial-gradient(circle, transparent 0 78%, rgba(255,224,182,0.04) 82%, {SEGMENT_BRIGHT} 86%, transparent 90%);
-                                {};
-                            ",
-                            reset_bar_animation.get(),
-                        )
-                    }
-                ></div>
-
-                <div
-                    class="absolute rounded-full border border-[#120d0a] shadow-[inset_0_2px_3px_rgba(255,255,255,0.04),inset_0_-10px_16px_rgba(0,0,0,0.82)]"
-                    style="inset: 18%; background: linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,1));"
-                ></div>
 
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
@@ -345,5 +314,92 @@ pub fn SegmentedCircularProgressBar(
                 </div>
             </div>
         </div>
+    }
+}
+
+#[component]
+pub fn FancyButton(
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <button
+            class="btn
+            tracking-wide
+            text-white font-extrabold text-shadow shadow-neutral-950
+            px-2 xl:px-3 rounded shadow-md
+            text-sm xl:text-base 
+            border border-neutral-950
+            bg-gradient-to-t from-zinc-900 to-zinc-800 
+            overflow-hidden
+            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
+            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            active:translate-y-[1px]
+            disabled:from-zinc-700 disabled:to-zinc-600
+            disabled:text-zinc-400
+            disabled:opacity-60 disabled:shadow-none
+            "
+            disabled=disabled
+        >
+            // disabled=disabled
+            {children()}
+        </button>
+    }
+}
+
+#[component]
+pub fn Toggle(
+    #[prop(default = false)] initial: bool,
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    mut toggle_callback: impl FnMut(bool) + 'static,
+    children: Children,
+) -> impl IntoView {
+    let checked: RwSignal<bool> = RwSignal::new(initial);
+    let switch_value = move |ev: web_sys::MouseEvent| {
+        ev.stop_propagation();
+        let new_value = !checked.get();
+        checked.set(new_value);
+        toggle_callback(new_value);
+    };
+
+    let toggle_class = move || {
+        if checked.get() {
+            "shadow-md text-white"
+            // "ring-2 ring-amber-600/20 shadow-md text-white "
+        } else {
+            "opacity-60 shadow-none text-zinc-400"
+        }
+    };
+
+    view! {
+        <button
+            on:click=switch_value
+            class=move || {
+                format!(
+                    "btn
+                    tracking-wide
+                    px-2 xl:px-3
+                    text-sm xl:text-base 
+                    font-extrabold text-shadow shadow-neutral-950
+                    border border-neutral-950 rounded 
+                    bg-gradient-to-t from-zinc-900 to-zinc-800 
+                    hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
+                    active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
+                    active:translate-y-[1px]
+                    disabled:from-zinc-700 disabled:to-zinc-600
+                    disabled:text-zinc-400
+                    disabled:opacity-60 disabled:shadow-none
+                    transition-all duration-200
+                    relative
+                    group
+                    {}
+                    ",
+                    toggle_class(),
+                )
+            }
+            disabled=disabled
+        >
+            {children()}
+        </button>
     }
 }
