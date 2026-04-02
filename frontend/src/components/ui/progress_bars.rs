@@ -156,178 +156,92 @@ pub fn CircularProgressBar(
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
-    let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
-
-    let enable_transition = RwSignal::new(true);
-
-    let in_transition = RwSignal::new(false);
-    let next_value = RwSignal::new(0.0);
-
-    // let right_rotation = RwSignal::new(0.0);
-    // let bottom_rotation = RwSignal::new(0.0);
-    // let left_rotation = RwSignal::new(0.0);
-
-    // let hide_ul_overlay = RwSignal::new(false);
-    // let hide_bl_overlay = RwSignal::new(false);
+    let active_buffer = RwSignal::new(false);
+    let front_progress = RwSignal::new(value.get_untracked().clamp(0.0, 1.0) * 100.0);
+    let back_progress = RwSignal::new(0.0);
 
     Effect::new(move |_| {
         if reset.get() {
-            in_transition.set(false);
-
-            enable_transition.set(false);
-            // right_rotation.set(0.0);
-            // bottom_rotation.set(0.0);
-            // left_rotation.set(0.0);
-
             if !disabled.get_untracked() {
-                reset_bar_animation
-                .set("animation: circular-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
                 reset_icon_animation.set(
                     "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
                 );
+            }
 
-                // Trick to reset animation by removing it when ended
+            if active_buffer.get_untracked() {
+                active_buffer.set(false);
+
                 set_timeout(
                     move || {
-                        reset_bar_animation.set("opacity: 0;");
                         reset_icon_animation.set("");
+                        back_progress.set(0.0);
+                    },
+                    std::time::Duration::from_millis(500),
+                );
+            } else {
+                active_buffer.set(true);
+
+                set_timeout(
+                    move || {
+                        reset_icon_animation.set("");
+                        front_progress.set(0.0);
                     },
                     std::time::Duration::from_millis(500),
                 );
             }
         } else {
-            enable_transition.set(true);
+            let progress = if reset.get() {
+                0.0
+            } else {
+                value.get().clamp(0.0, 1.0) * 100.0
+            };
+
+            if active_buffer.get() {
+                back_progress.set(progress);
+            } else {
+                front_progress.set(progress);
+            }
         }
     });
-
-    Effect::new(move |_| {
-        if !in_transition.get() {
-            next_value.set(value.get());
-        }
-    });
-
-    // Effect::new(move |_| {
-    //     let value = next_value.get().clamp(0.0, 1.2);
-    //     left_rotation.set(value * 360.0);
-
-    //     if value <= 0.5 {
-    //         right_rotation.set(value.clamp(0.0, 0.5) * 360.0);
-    //         hide_bl_overlay.set(false);
-    //     } else {
-    //         right_rotation.set(180.0);
-    //         hide_bl_overlay.set(true);
-    //     }
-
-    //     if value <= 0.75 {
-    //         bottom_rotation.set(value.clamp(0.0, 0.75) * 360.0);
-    //         hide_ul_overlay.set(false);
-    //     } else {
-    //         bottom_rotation.set(270.0);
-    //         hide_ul_overlay.set(true);
-    //     }
-    // });
 
     view! {
         <div class="circular-progress-bar">
-            <div class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden" style="contain: strict;">
-
+            <div
+                class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden"
+                style="contain: strict;"
+            >
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity"
+                    class="absolute inset-0 will-change-(--progress) will-change-opacity
+                    transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
-                    style=format!("
-                        background: conic-gradient(
-                            {bar_color} var(--progress),
-                            transparent var(--progress) 100%
-                        );
-                    ")
-                    class:transition-circular-progress-bar=enable_transition
-                    style:--progress=move || format!("{}%", value.get() * 100.0)
-                    on:transitionstart=move |_| {
-                        in_transition.set(true);
-                    }
-                    on:transitionend=move |_| {
-                        next_value.set(value.get_untracked());
-                        in_transition.set(false);
-                    }
+                    class:fade-out-circular-progress-bar=move || active_buffer.get()
+                    style=format!(
+                            "
+                            background: conic-gradient(
+                                {bar_color} var(--progress),
+                                transparent var(--progress) 100%
+                            );
+                            ",
+                        )
+                    style:--progress=move || format!("{}%", front_progress.get())
+
                 ></div>
 
-
-                // Progress bar
-                // <div class="relative w-full aspect-square rounded-full overflow-hidden bg-stone-900">
-                    // Second container to add ring to hide not pixel perfect overflow
-                //     <div
-                //         class="absolute inset-px rounded-full overflow-hidden"
-                //         style="contain: strict;"
-                //         class:transition-progress-bar=enable_transition
-                //         class:opacity-0=disabled
-                //     >
-                //         // Left half
-                //         <div
-                //             on:transitionstart=move |_| {
-                //                 in_transition.set(true);
-                //             }
-                //             on:transitionend=move |_| {
-                //                 next_value.set(value.get_untracked());
-                //                 in_transition.set(false);
-                //             }
-                //             class="absolute inset-0 origin-right w-1/2 will-change-transform"
-                //             class:transition-progress-bar=enable_transition
-                //             style=move || {
-                //                 format!(
-                //                     "transform: rotate({}deg); background: {bar_color};",
-                //                     left_rotation.get(),
-                //                 )
-                //             }
-                //         ></div>
-
-                //         // Bottom half
-                //         <div
-                //             class="absolute left-0 bottom-0 right-0 origin-top
-                //             h-1/2 will-change-transform"
-                //             class:transition-progress-bar=enable_transition
-                //             style=move || {
-                //                 format!(
-                //                     "transform: rotate({}deg); background: {bar_color};
-                //                       border-style: solid; border-color: {bar_color};",
-                //                     bottom_rotation.get() + 90.0,
-                //                 )
-                //             }
-                //         ></div>
-
-                //         // Right half
-                //         <div
-                //             class="absolute top-0 bottom-0 right-0 origin-left
-                //             w-1/2 will-change-transform"
-                //             class:transition-progress-bar=enable_transition
-                //             style=move || {
-                //                 format!(
-                //                     "transform: rotate({}deg); background: {bar_color};",
-                //                     right_rotation.get() + 180.0,
-                //                 )
-                //             }
-                //         ></div>
-                //     </div>
-
-                //     // Upper-left overlay
-                //     <div
-                //         class="absolute inset-0 bg-stone-900 origin-bottom-right size-1/2"
-                //         class:hidden=hide_ul_overlay
-                //     ></div>
-
-                //     // Bottom-left overlay
-                //     <div
-                //         class="absolute inset-0 bg-stone-900 origin-right w-1/2"
-                //         class:hidden=hide_bl_overlay
-                //     ></div>
-                // </div>
-
-                // For nice fade out during reset
                 <div
-                    class="absolute inset-0 rounded-full will-change-opacity"
-                    style=move || {
-                        format!("background: {bar_color}; {}", reset_bar_animation.get())
-                    }
+                    class="absolute inset-0 will-change-(--progress) will-change-opacity
+                    transition-circular-progress-bar"
+                    class:opacity-0=move || disabled.get()
+                    class:fade-out-circular-progress-bar=move || !active_buffer.get()
+                    style=format!(
+                            "
+                            background: conic-gradient(
+                                {bar_color} var(--progress),
+                                transparent var(--progress) 100%
+                            );
+                            ",
+                        )
+                    style:--progress=move || format!("{}%", back_progress.get())
                 ></div>
 
                 // Hole in the middle
@@ -341,7 +255,7 @@ pub fn CircularProgressBar(
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
                     scale-125
-                    will-change-[filter,transform] transition-[filter,transform] duration-500"
+                    will-change-transform transition-transform duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >
