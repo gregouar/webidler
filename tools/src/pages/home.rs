@@ -1,3 +1,4 @@
+// use frontend::components::ui::progress_bars::CircularProgressBar;
 use leptos::prelude::*;
 use leptos_use::use_interval_fn;
 
@@ -99,7 +100,7 @@ pub fn predictive_cooldown(
             if !disabled.get_untracked() && rate > 0.0 {
                 progress_value.update(|progress_value| {
                     if *progress_value < 1.2 {
-                        *progress_value += rate * 0.05;
+                        *progress_value += rate * 0.1;
                     }
                     if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
                         *progress_value = 1.0;
@@ -107,7 +108,7 @@ pub fn predictive_cooldown(
                 });
             }
         },
-        50,
+        100,
     );
 
     progress_value
@@ -225,7 +226,7 @@ pub fn SegmentedCircularProgressBar(
                                 <div
                                     class=move || {
                                         if animated {
-                                            "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter,background,border-color,box-shadow] duration-200 ease-linear"
+                                            "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter] duration-200 ease-linear"
                                         } else {
                                             "relative mt-[1.2%] h-[13%] w-[22%] origin-center"
                                         }
@@ -233,57 +234,38 @@ pub fn SegmentedCircularProgressBar(
                                     class:brightness-60=move || disabled.get()
                                     style=move || {
                                         let progress = progress_signal.get();
-                                        let (raw_fill, glow_fill, depth_fill) = segment_state_from(progress, index);
-                                        let background = format!(
-                                            "linear-gradient(135deg,
-                                                rgba(255,248,230,{}) 0%,
-                                                rgba(255,226,178,{}) 12%,
-                                                rgba(255,194,108,{}) 20%,
-                                                {SEGMENT_BRIGHT} 34%,
-                                                {bar_color} 54%,
-                                                {SEGMENT_MID} 76%,
-                                                {SEGMENT_DARK} 100%),
-                                             radial-gradient(circle at 26% 18%,
-                                                rgba(255,248,231,{}) 0%,
-                                                rgba(255,220,168,{}) 18%,
-                                                transparent 42%),
-                                             linear-gradient(315deg,
-                                                rgba(255,170,64,{}) 0%,
-                                                transparent 40%)",
-                                            lerp(0.04, 0.92, glow_fill),
-                                            lerp(0.03, 0.88, glow_fill),
-                                            lerp(0.03, 0.78, glow_fill),
-                                            lerp(0.01, 0.46, glow_fill),
-                                            lerp(0.0, 0.22, glow_fill),
-                                            lerp(0.0, 0.18, raw_fill),
+                                        let (_, glow_fill, depth_fill) = segment_state_from(
+                                            progress,
+                                            index,
                                         );
-                                        let border = format!(
-                                            "rgba(255,219,170,{})",
-                                            lerp(0.03, 0.82, glow_fill),
-                                        );
-                                        let shadow = format!(
-                                            "-2px -2px 6px rgba(255,242,214,{:.3}),
-                                             0 0 {:.1}px rgba(255,126,24,{:.3}),
-                                             0 0 {:.1}px {bar_color},
-                                             inset 2px 2px 3px rgba(255,244,220,{:.3}),
-                                             inset -4px -5px 8px rgba(58,18,6,{:.3})",
-                                            lerp(0.0, 0.08, glow_fill),
-                                            lerp(0.0, 9.0, glow_fill),
-                                            lerp(0.0, 0.72, glow_fill),
-                                            lerp(0.0, 18.0, glow_fill),
-                                            lerp(0.0, 0.28, raw_fill),
-                                            lerp(0.66, 0.54, depth_fill),
-                                        );
-                                        let opacity = lerp(0.22, 1.0, glow_fill);
+                                        let opacity = lerp(0.10, 1.0, glow_fill);
                                         let scale = lerp(0.94, 1.0, glow_fill);
+                                        let glow = lerp(0.0, 12.0, glow_fill);
+                                        let glass_alpha = lerp(0.22, 0.90, glow_fill);
+                                        let highlight_alpha = lerp(0.0, 0.42, glow_fill);
+                                        let shadow_alpha = lerp(0.76, 0.48, depth_fill);
                                         format!(
                                             "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
                                              border-radius: 4px 4px 10px 10px;
-                                             background: {background};
-                                             border: 1px solid {border};
-                                             box-shadow: {shadow};
+                                             background: linear-gradient(135deg,
+                                                rgba(255,244,222,{highlight_alpha}) 0%,
+                                                rgba(255,210,142,{glass_alpha}) 18%,
+                                                {SEGMENT_BRIGHT} 34%,
+                                                {bar_color} 54%,
+                                                {SEGMENT_MID} 76%,
+                                                {SEGMENT_DARK} 100%);
+                                             border: 1px solid rgba(255,219,170,{});
+                                             box-shadow:
+                                                0 0 {}px rgba(255,126,24,{}),
+                                                inset 1px 1px 2px rgba(255,245,224,{}),
+                                                inset -3px -4px 6px rgba(58,18,6,{});
                                              opacity: {opacity};
                                              transform: scale({scale});",
+                                            lerp(0.02, 0.72, glow_fill),
+                                            glow,
+                                            lerp(0.0, 0.58, glow_fill),
+                                            lerp(0.02, 0.18, glow_fill),
+                                            shadow_alpha,
                                         )
                                     }
                                 >
@@ -297,25 +279,9 @@ pub fn SegmentedCircularProgressBar(
                                                  background: linear-gradient(135deg,
                                                     rgba(255,252,246,{}) ,
                                                     rgba(255,245,224,{}) 48%,
-                                                    rgba(255,244,222,0.02));",
-                                                lerp(0.0, 0.96, glow_fill),
-                                                lerp(0.0, 0.18, glow_fill),
-                                            )
-                                        }
-                                    ></div>
-                                    <div
-                                        class="absolute inset-x-[24%] top-[20%] h-[50%]"
-                                        style=move || {
-                                            let progress = progress_signal.get();
-                                            let (raw_fill, glow_fill, _) = segment_state_from(progress, index);
-                                            format!(
-                                                "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
-                                                 background: linear-gradient(135deg,
-                                                    rgba(255,231,194,{}) ,
-                                                    rgba(255,145,30,{}) 46%,
-                                                    rgba(32,10,6,0.00));",
-                                                lerp(0.0, 0.14, glow_fill),
-                                                lerp(0.0, 0.06, raw_fill),
+                                                    rgba(255,244,222,0.00));",
+                                                lerp(0.0, 0.52, glow_fill),
+                                                lerp(0.0, 0.10, glow_fill),
                                             )
                                         }
                                     ></div>
@@ -323,7 +289,10 @@ pub fn SegmentedCircularProgressBar(
                                         class="absolute inset-x-[10%] bottom-[4%] h-[24%] rounded-full blur-[3px]"
                                         style=move || {
                                             let progress = progress_signal.get();
-                                            let (_, glow_fill, raw_fill) = segment_state_from(progress, index);
+                                            let (_, glow_fill, raw_fill) = segment_state_from(
+                                                progress,
+                                                index,
+                                            );
                                             format!(
                                                 "background: radial-gradient(circle,
                                                     rgba(255,224,172,{}) 0%,
@@ -331,8 +300,8 @@ pub fn SegmentedCircularProgressBar(
                                                     {bar_color} 68%,
                                                     transparent 100%);
                                                  opacity: {};",
-                                                lerp(0.0, 0.72, glow_fill),
-                                                lerp(0.0, 0.62, raw_fill),
+                                                lerp(0.0, 0.42, glow_fill),
+                                                lerp(0.0, 0.38, raw_fill),
                                             )
                                         }
                                     ></div>
