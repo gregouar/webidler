@@ -1,5 +1,5 @@
-use frontend::components::ui::progress_bars::predictive_cooldown;
 use leptos::prelude::*;
+use leptos_use::use_interval_fn;
 
 use crate::header::HeaderMenu;
 
@@ -19,13 +19,13 @@ pub fn HomePage() -> impl IntoView {
                                 trigger_reset_progress.get()
                             });
                             let progress_value = predictive_cooldown(
-                                Signal::derive(move || 5.0),
+                                Signal::derive(move || 2.0),
                                 reset_progress,
                                 Signal::derive(move || false),
                                 0.0,
                             );
                             Effect::new(move || {
-                                if progress_value.get() >= 0.99 {
+                                if progress_value.get() >= 1.0 {
                                     trigger_reset_progress.set(true)
                                 } else {
                                     trigger_reset_progress.set(false)
@@ -68,6 +68,49 @@ pub fn HomePage() -> impl IntoView {
             </Card>
         </main>
     }
+}
+
+pub fn predictive_cooldown(
+    remaining_time: Signal<f64>,
+    reset: Signal<bool>,
+    disabled: Signal<bool>,
+    starting_value: f64,
+) -> RwSignal<f64> {
+    let progress_value = RwSignal::new(starting_value);
+    let rate = RwSignal::new(0.0);
+
+    Effect::new(move || {
+        let remaining_time = remaining_time.get();
+        if remaining_time > 0.0 {
+            let remaining: f64 = (1.0f64 - progress_value.get_untracked()).clamp(0.0, 1.0);
+            rate.set(remaining / remaining_time);
+        }
+    });
+
+    Effect::new(move || {
+        if reset.get() {
+            progress_value.set(0.0);
+        }
+    });
+
+    use_interval_fn(
+        move || {
+            let rate = rate.get_untracked();
+            if !disabled.get_untracked() && rate > 0.0 {
+                progress_value.update(|progress_value| {
+                    if *progress_value < 1.2 {
+                        *progress_value += rate * 0.2;
+                    }
+                    if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
+                        *progress_value = 1.0;
+                    }
+                });
+            }
+        },
+        50,
+    );
+
+    progress_value
 }
 
 #[component]
@@ -121,9 +164,17 @@ pub fn SegmentedCircularProgressBar(
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     let reset_icon_animation = RwSignal::new("");
     let enable_transition = RwSignal::new(true);
-    let active_segments = Signal::derive(move || {
-        ((value.get().clamp(0.0, 1.0) * SEGMENT_COUNT as f64).round() as usize).min(SEGMENT_COUNT)
-    });
+    let segment_progress =
+        Signal::derive(move || value.get().clamp(0.0, 1.0) * SEGMENT_COUNT as f64);
+    let lerp = |start: f64, end: f64, t: f64| start + (end - start) * t;
+    let ease_out = |t: f64| 1.0 - (1.0 - t).powf(2.0);
+    let ease_in = |t: f64| t.powf(1.35);
+    let segment_state = move |index: usize| {
+        let raw_fill = (segment_progress.get() - index as f64).clamp(0.0, 1.0);
+        let glow_fill = ease_out(raw_fill);
+        let depth_fill = ease_in(raw_fill);
+        (raw_fill, glow_fill, depth_fill)
+    };
 
     Effect::new(move |_| {
         if reset.get() {
@@ -185,66 +236,58 @@ pub fn SegmentedCircularProgressBar(
                                     <div
                                         class=move || {
                                             if enable_transition.get() {
-                                                "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter] duration-300 ease-out"
+                                                "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter,background,border-color,box-shadow] duration-200 ease-linear"
                                             } else {
                                                 "relative mt-[1.2%] h-[13%] w-[22%] origin-center"
                                             }
                                         }
                                         class:brightness-60=move || disabled.get()
                                         style=move || {
-                                            let is_active = index < active_segments.get();
-                                            let (background, border, shadow, opacity, scale) = if is_active {
-                                                (
-                                                    format!(
-                                                        "linear-gradient(135deg,
-                                                            rgba(255,248,230,0.92) 0%,
-                                                            rgba(255,226,178,0.88) 12%,
-                                                            rgba(255,194,108,0.78) 20%,
-                                                            {SEGMENT_BRIGHT} 34%,
-                                                            {bar_color} 54%,
-                                                            {SEGMENT_MID} 76%,
-                                                            {SEGMENT_DARK} 100%),
-                                                         radial-gradient(circle at 26% 18%,
-                                                            rgba(255,248,231,0.46) 0%,
-                                                            rgba(255,220,168,0.22) 18%,
-                                                            transparent 42%),
-                                                         linear-gradient(315deg,
-                                                            rgba(255,170,64,0.18) 0%,
-                                                            transparent 40%)",
-                                                    ),
-                                                    "rgba(255,219,170,0.82)".to_string(),
-                                                    format!(
-                                                        "-2px -2px 6px rgba(255,242,214,0.10),
-                                                         0 0 10px {SEGMENT_GLOW},
-                                                         0 0 20px {bar_color},
-                                                         inset 2px 2px 3px rgba(255,244,220,0.34),
-                                                         inset -4px -5px 8px rgba(58,18,6,0.52)",
-                                                    ),
-                                                    "1".to_string(),
-                                                    "scale(1.00)".to_string(),
-                                                )
-                                            } else {
-                                                (
-                                                    format!(
-                                                        "linear-gradient(135deg,
-                                                            rgba(255,218,164,0.14) 0%,
-                                                            rgba(152,70,22,0.20) 18%,
-                                                            rgba(72,24,8,0.88) 66%,
-                                                            rgba(14,8,8,0.98) 100%),
-                                                         radial-gradient(circle at 28% 20%,
-                                                            rgba(255,226,180,0.12) 0%,
-                                                            transparent 38%)",
-                                                    )
-                                                        .to_string(),
-                                                    "rgba(255,176,108,0.18)".to_string(),
-                                                    "inset 1px 1px 2px rgba(255,241,219,0.10),
-                                                     inset -3px -5px 8px rgba(0,0,0,0.54),
-                                                     0 0 0 1px rgba(0,0,0,0.30)"
-                                                        .to_string(),
-                                                    "0.74".to_string(),
-                                                    "scale(0.97)".to_string(),
-                                                )
-                                            };
+                                            let (raw_fill, glow_fill, depth_fill) = segment_state(
+                                                index,
+                                            );
+                                            let background = format!(
+                                                "linear-gradient(135deg,
+                                                    rgba(255,248,230,{}) 0%,
+                                                    rgba(255,226,178,{}) 12%,
+                                                    rgba(255,194,108,{}) 20%,
+                                                    {SEGMENT_BRIGHT} 34%,
+                                                    {bar_color} 54%,
+                                                    {SEGMENT_MID} 76%,
+                                                    {SEGMENT_DARK} 100%),
+                                                 radial-gradient(circle at 26% 18%,
+                                                    rgba(255,248,231,{}) 0%,
+                                                    rgba(255,220,168,{}) 18%,
+                                                    transparent 42%),
+                                                 linear-gradient(315deg,
+                                                    rgba(255,170,64,{}) 0%,
+                                                    transparent 40%)",
+                                                lerp(0.04, 0.92, glow_fill),
+                                                lerp(0.03, 0.88, glow_fill),
+                                                lerp(0.03, 0.78, glow_fill),
+                                                lerp(0.01, 0.46, glow_fill),
+                                                lerp(0.0, 0.22, glow_fill),
+                                                lerp(0.0, 0.18, raw_fill),
+                                            );
+                                            let border = format!(
+                                                "rgba(255,219,170,{})",
+                                                lerp(0.03, 0.82, glow_fill),
+                                            );
+                                            let shadow = format!(
+                                                "-2px -2px 6px rgba(255,242,214,{:.3}),
+                                                 0 0 {:.1}px rgba(255,126,24,{:.3}),
+                                                 0 0 {:.1}px {bar_color},
+                                                 inset 2px 2px 3px rgba(255,244,220,{:.3}),
+                                                 inset -4px -5px 8px rgba(58,18,6,{:.3})",
+                                                lerp(0.0, 0.08, glow_fill),
+                                                lerp(0.0, 9.0, glow_fill),
+                                                lerp(0.0, 0.72, glow_fill),
+                                                lerp(0.0, 18.0, glow_fill),
+                                                lerp(0.0, 0.28, raw_fill),
+                                                lerp(0.66, 0.54, depth_fill),
+                                            );
+                                            let opacity = lerp(0.22, 1.0, glow_fill);
+                                            let scale = lerp(0.94, 1.0, glow_fill);
                                             format!(
                                                 "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
                                                  border-radius: 4px 4px 10px 10px;
@@ -252,41 +295,54 @@ pub fn SegmentedCircularProgressBar(
                                                  border: 1px solid {border};
                                                  box-shadow: {shadow};
                                                  opacity: {opacity};
-                                                 transform: {scale};",
+                                                 transform: scale({scale});",
                                             )
                                         }
                                     >
                                         <div
                                             class="absolute left-[18%] top-[10%] h-[18%] w-[42%]"
-                                            style="clip-path: polygon(0% 100%, 64% 0%, 100% 14%, 34% 100%); background: linear-gradient(135deg, rgba(255,252,246,0.96), rgba(255,245,224,0.22) 48%, rgba(255,244,222,0.02));"
+                                            style=move || {
+                                                let (_, glow_fill, _) = segment_state(index);
+                                                format!(
+                                                    "clip-path: polygon(0% 100%, 64% 0%, 100% 14%, 34% 100%);
+                                                     background: linear-gradient(135deg,
+                                                         rgba(255,252,246,{}) ,
+                                                         rgba(255,245,224,{}) 48%,
+                                                         rgba(255,244,222,0.02));",
+                                                    lerp(0.0, 0.96, glow_fill),
+                                                    lerp(0.0, 0.18, glow_fill),
+                                                )
+                                            }
                                         ></div>
                                         <div
                                             class="absolute inset-x-[24%] top-[20%] h-[50%]"
                                             style=move || {
-                                                if index < active_segments.get() {
+                                                let (raw_fill, glow_fill, _) = segment_state(index);
+                                                format!(
                                                     "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
-                                                     background: linear-gradient(135deg, rgba(255,231,194,0.18), rgba(255,145,30,0.03) 46%, rgba(32,10,6,0.00));"
-                                                        .to_string()
-                                                } else {
-                                                    "clip-path: polygon(16% 0%, 84% 0%, 74% 100%, 26% 100%);
-                                                     background: linear-gradient(135deg, rgba(255,214,170,0.05), rgba(255,120,28,0.01) 46%, rgba(32,10,6,0.00));"
-                                                        .to_string()
-                                                }
+                                                     background: linear-gradient(135deg,
+                                                        rgba(255,231,194,{}) ,
+                                                        rgba(255,145,30,{}) 46%,
+                                                        rgba(32,10,6,0.00));",
+                                                    lerp(0.0, 0.14, glow_fill),
+                                                    lerp(0.0, 0.06, raw_fill),
+                                                )
                                             }
                                         ></div>
                                         <div
                                             class="absolute inset-x-[10%] bottom-[4%] h-[24%] rounded-full blur-[3px]"
                                             style=move || {
-                                                if index < active_segments.get() {
-                                                    format!(
-                                                        "background: radial-gradient(circle, rgba(255,224,172,0.78) 0%, {SEGMENT_BRIGHT} 36%, {bar_color} 68%, transparent 100%);
-                                                         opacity: 0.68;",
-                                                    )
-                                                } else {
-                                                    "background: radial-gradient(circle, rgba(255,150,68,0.10) 0%, rgba(76,29,9,0.04) 75%, transparent 100%);
-                                                     opacity: 0.14;"
-                                                        .to_string()
-                                                }
+                                                let (_, glow_fill, raw_fill) = segment_state(index);
+                                                format!(
+                                                    "background: radial-gradient(circle,
+                                                        rgba(255,224,172,{}) 0%,
+                                                        {SEGMENT_BRIGHT} 36%,
+                                                        {bar_color} 68%,
+                                                        transparent 100%);
+                                                     opacity: {};",
+                                                    lerp(0.0, 0.72, glow_fill),
+                                                    lerp(0.0, 0.62, raw_fill),
+                                                )
                                             }
                                         ></div>
                                     </div>
