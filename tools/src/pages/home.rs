@@ -217,7 +217,7 @@ pub fn SegmentedCircularProgressBar(
             >
                 {(0..SEGMENT_COUNT)
                     .map(|index| {
-                        let angle = index as f64 * (360.0 / SEGMENT_COUNT as f64);
+                        let angle = (index as f64 + 0.5) * (360.0 / SEGMENT_COUNT as f64);
                         view! {
                             <div
                                 class="absolute inset-0 flex items-start justify-center"
@@ -245,7 +245,7 @@ pub fn SegmentedCircularProgressBar(
                                         let highlight_alpha = lerp(0.0, 0.42, glow_fill);
                                         let shadow_alpha = lerp(0.76, 0.48, depth_fill);
                                         format!(
-                                            "clip-path: polygon(18% 0%, 82% 0%, 72% 100%, 28% 100%);
+                                            "clip-path: polygon(16% 0%, 84% 0%, 72% 100%, 28% 100%);
                                              border-radius: 4px 4px 10px 10px;
                                              background: linear-gradient(135deg,
                                                 rgba(255,244,222,{highlight_alpha}) 0%,
