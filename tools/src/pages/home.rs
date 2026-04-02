@@ -158,18 +158,10 @@ pub fn SegmentedCircularProgressBar(
                 style="contain: strict;"
             >
 
-                <div
-                    class="absolute rounded-full border border-[#120d0a] shadow-[inset_0_2px_3px_rgba(255,255,255,0.04),inset_0_-10px_16px_rgba(0,0,0,0.82)]"
-                    style="inset: 18%; background:
-                    radial-gradient(circle at 50% 46%, rgba(92,92,108,0.42) 0%, rgba(38,38,46,0.26) 24%, rgba(10,10,14,0.92) 58%, rgba(0,0,0,1) 82%),
-                    linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,1));
-                    radial-gradient(circle at 50% 46%,
-                    rgba(108,108,128,0.52) 0%,
-                    rgba(56,56,68,0.38) 22%,
-                    rgba(18,18,24,0.82) 52%,
-                    rgba(0,0,0,0.98) 78%,
-                    rgba(0,0,0,1) 100%);"
-                ></div>
+                // <div
+                // class="absolute rounded-full border border-[#120d0a] shadow-[inset_0_2px_3px_rgba(255,255,255,0.04),inset_0_-10px_16px_rgba(0,0,0,0.82)]"
+
+                // ></div>
 
                 <div
                     class="absolute inset-0 rounded-full pointer-events-none"
