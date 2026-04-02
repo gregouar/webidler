@@ -10,50 +10,72 @@ pub fn HomePage() -> impl IntoView {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <HeaderMenu />
             "Hello There"
-            <div class="w-6xl grid grid-cols-10 gap-2">
-                {(0..20)
-                    .map(|_| {
-                        let trigger_reset_progress = RwSignal::new(false);
-                        let reset_progress = Signal::derive(move || {
-                            trigger_reset_progress.get()
-                        });
-                        let progress_value = predictive_cooldown(
-                            Signal::derive(move || 5.0),
-                            reset_progress,
-                            Signal::derive(move || false),
-                            0.0,
-                        );
-                        Effect::new(move || {
-                            if progress_value.get() >= 0.99 {
-                                trigger_reset_progress.set(true)
-                            } else {
-                                trigger_reset_progress.set(false)
-                            }
-                        });
-                        // let progress_value = Memo::new(move |_| {
-                        // (progress_value.get() * 16.0).round() / 16.0
-                        // });
+            <Card class="w-3xl">
+                <div class="w-full grid grid-cols-5 gap-2">
+                    {(0..20)
+                        .map(|_| {
+                            let trigger_reset_progress = RwSignal::new(false);
+                            let reset_progress = Signal::derive(move || {
+                                trigger_reset_progress.get()
+                            });
+                            let progress_value = predictive_cooldown(
+                                Signal::derive(move || 5.0),
+                                reset_progress,
+                                Signal::derive(move || false),
+                                0.0,
+                            );
+                            Effect::new(move || {
+                                if progress_value.get() >= 0.99 {
+                                    trigger_reset_progress.set(true)
+                                } else {
+                                    trigger_reset_progress.set(false)
+                                }
+                            });
 
-                        view! {
-                            <SegmentedCircularProgressBar
-                                bar_color="oklch(55.5% 0.163 48.998)"
-                                value=progress_value
-                                reset=reset_progress
-                                bar_width=4
-                            >
-                                <img
-                                    draggable="false"
-                                    src="assets/images/skills/attack.svg"
-                                    alt="attack"
-                                    class="w-full h-full flex-no-shrink fill-current
-                                    xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                                />
-                            </SegmentedCircularProgressBar>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
-            </div>
+                            view! {
+                                <SegmentedCircularProgressBar
+                                    bar_color="oklch(55.5% 0.163 48.998)"
+                                    value=progress_value
+                                    reset=reset_progress
+                                    bar_width=4
+                                >
+                                    <img
+                                        draggable="false"
+                                        src="assets/images/skills/attack.svg"
+                                        alt="attack"
+                                        class="w-full h-full flex-no-shrink fill-current
+                                        xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                                    />
+                                </SegmentedCircularProgressBar>
+                            }
+                        })
+                        .collect::<Vec<_>>()}
+                </div>
+            </Card>
         </main>
+    }
+}
+
+#[component]
+pub fn Card(
+    #[prop(optional)] class: Option<&'static str>,
+    #[prop(default = true)] gap: bool,
+    #[prop(default = true)] pad: bool,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <div class=format!(
+            "max-h-full flex flex-col relative
+            bg-zinc-800 
+            rounded-[6px] xl:rounded-[8px]
+                 
+            ring-1 ring-zinc-900/80
+            shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
+            {} {} {}",
+            class.unwrap_or_default(),
+            if gap { "gap-1 xl:gap-2" } else { "" },
+            if pad { "p-1 xl:p-3" } else { "" },
+        )>{children()}</div>
     }
 }
 
@@ -150,7 +172,7 @@ pub fn SegmentedCircularProgressBar(
                 <div
                     class="absolute inset-[5%] rounded-full"
                     style="background:
-                    radial-gradient(circle, transparent 0 71%, rgba(0,0,0,0.18) 76%, rgba(66,28,10,0.10) 81%, transparent 85%);"
+                    radial-gradient(circle, transparent 0 79%, rgba(0,0,0,1) 82%, rgba(0,0,0,1) 86%, transparent 89%);"
                 >
                     {(0..SEGMENT_COUNT)
                         .map(|index| {
@@ -163,9 +185,9 @@ pub fn SegmentedCircularProgressBar(
                                     <div
                                         class=move || {
                                             if enable_transition.get() {
-                                                "relative mt-[1.2%] h-[24%] w-[22%] origin-center transition-[transform,opacity,filter] duration-300 ease-out"
+                                                "relative mt-[1.2%] h-[13%] w-[22%] origin-center transition-[transform,opacity,filter] duration-300 ease-out"
                                             } else {
-                                                "relative mt-[1.2%] h-[24%] w-[22%] origin-center"
+                                                "relative mt-[1.2%] h-[13%] w-[22%] origin-center"
                                             }
                                         }
                                         class:brightness-60=move || disabled.get()
@@ -212,8 +234,8 @@ pub fn SegmentedCircularProgressBar(
                                                 )
                                             };
                                             format!(
-                                                "clip-path: polygon(20% 0%, 80% 0%, 58% 100%, 42% 100%);
-                                                 border-radius: 4px 4px 14px 14px;
+                                                "clip-path: polygon(18% 0%, 82% 0%, 56% 100%, 44% 100%);
+                                                 border-radius: 4px 4px 10px 10px;
                                                  background: {background};
                                                  border: 1px solid {border};
                                                  box-shadow: {shadow};
@@ -223,25 +245,25 @@ pub fn SegmentedCircularProgressBar(
                                         }
                                     >
                                         <div
-                                            class="absolute inset-x-[20%] top-[8%] h-[12%]"
+                                            class="absolute inset-x-[18%] top-[8%] h-[24%]"
                                             style="clip-path: polygon(10% 100%, 50% 0%, 90% 100%); background: linear-gradient(180deg, rgba(255,252,246,0.92), rgba(255,244,222,0.10));"
                                         ></div>
                                         <div
-                                            class="absolute inset-x-[22%] top-[22%] h-[54%]"
+                                            class="absolute inset-x-[24%] top-[20%] h-[50%]"
                                             style=move || {
                                                 if index < active_segments.get() {
-                                                    "clip-path: polygon(18% 0%, 82% 0%, 60% 100%, 40% 100%);
+                                                    "clip-path: polygon(16% 0%, 84% 0%, 58% 100%, 42% 100%);
                                                      background: linear-gradient(180deg, rgba(255,219,170,0.36), rgba(255,126,24,0.04));"
                                                         .to_string()
                                                 } else {
-                                                    "clip-path: polygon(18% 0%, 82% 0%, 60% 100%, 40% 100%);
+                                                    "clip-path: polygon(16% 0%, 84% 0%, 58% 100%, 42% 100%);
                                                      background: linear-gradient(180deg, rgba(255,214,170,0.06), rgba(255,120,28,0.01));"
                                                         .to_string()
                                                 }
                                             }
                                         ></div>
                                         <div
-                                            class="absolute inset-x-[10%] bottom-[8%] h-[20%] rounded-full blur-[3px]"
+                                            class="absolute inset-x-[10%] bottom-[4%] h-[24%] rounded-full blur-[3px]"
                                             style=move || {
                                                 if index < active_segments.get() {
                                                     format!(
@@ -258,7 +280,7 @@ pub fn SegmentedCircularProgressBar(
                                         <div
                                             class="absolute inset-0"
                                             style=format!(
-                                                "clip-path: polygon(20% 0%, 80% 0%, 58% 100%, 42% 100%);
+                                                "clip-path: polygon(18% 0%, 82% 0%, 56% 100%, 44% 100%);
                                                  border-left: 1px solid {SEGMENT_LEAD};
                                                  border-right: 1px solid {SEGMENT_LEAD};
                                                  border-top: 1px solid rgba(255,235,205,0.12);
@@ -288,10 +310,7 @@ pub fn SegmentedCircularProgressBar(
 
                 <div
                     class="absolute rounded-full border border-[#120d0a] shadow-[inset_0_2px_3px_rgba(255,255,255,0.04),inset_0_-10px_16px_rgba(0,0,0,0.82)]"
-                    style="inset: 32%; background:
-                    radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.02),rgba(255,255,255,0.00)_14%,transparent_24%),
-                    radial-gradient(circle_at_50%_36%,rgba(22,22,26,0.10),rgba(0,0,0,0.98)_72%),
-                    linear-gradient(180deg, rgba(8,8,10,1), rgba(0,0,0,1));"
+                    style="inset: 18%; background: linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,1));"
                 ></div>
 
                 <div
