@@ -124,7 +124,7 @@ pub fn Card(
         <div
             class=format!(
                 "max-h-full flex flex-col relative overflow-hidden
-                bg-zinc-900
+                bg-zinc-800
                 border border-[#6c5734]/45
                 shadow-[0_6px_15px_rgba(0,0,0,0.35),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                 {} {} {}",
@@ -136,7 +136,7 @@ pub fn Card(
                 "
                 clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                 background-image: url('{}'); 
-                background-blend-mode: luminosity;
+                background-blend-mode: multiply;
                 ",
                 img_asset("ui/dark_stone.webp"),
             )
@@ -145,8 +145,6 @@ pub fn Card(
                 class="pointer-events-none absolute inset-[1px] border border-white/6"
                 style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
             ></div>
-            // <div class="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white/6 via-white/2 to-transparent"></div>
-            // <div class="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
 
             <div class="relative z-10 flex max-h-full flex-col">{children()}</div>
         </div>
@@ -221,19 +219,16 @@ pub fn CircularProgressBar(
                 xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]
                 border border-[#7a6137]
                 shadow-[0_8px_18px_rgba(0,0,0,0.48),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]"
-                style=format!(
+                style=
                     "
                     contain: strict;
                     background-image:
                         linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
-                        linear-gradient(180deg, rgba(34,32,37,0.96), rgba(15,14,18,1)),
-                        url('{}');
-                    background-size: auto, auto, 180px 180px;
-                    background-position: center, center, center;
-                    background-blend-mode: screen, normal, soft-light;
-                    ",
-                    img_asset("ui/dark_stone.webp"),
-                )
+                        linear-gradient(180deg, rgba(34,32,37,0.96), rgba(15,14,18,1));
+                    background-size: auto, auto;
+                    background-position: center, center;
+                    background-blend-mode: screen, normal;
+                    "
             >
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_10%,rgba(229,194,120,0.08),transparent_38%),radial-gradient(circle_at_50%_100%,rgba(0,0,0,0.22),transparent_44%)]"></div>
@@ -271,27 +266,12 @@ pub fn CircularProgressBar(
                     style:--progress=move || format!("{}%", back_progress.get())
                 ></div>
 
-                // Hole in the middle
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        border border-[#6d532e]/70
-                        shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
+                        bg-radial from-stone-600 to-zinc-950 to-70% 
+                        border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                     bar_width / 2,
-                )
-                    style=format!(
-                        "
-                        background-image:
-                            radial-gradient(circle at 50% 35%, rgba(74,69,78,0.92), rgba(16,15,20,0.98) 72%),
-                            url('{}');
-                        background-size: auto, 160px 160px;
-                        background-position: center, center;
-                        background-blend-mode: normal, soft-light;
-                        ",
-                        img_asset("ui/dark_stone.webp"),
-                    )
-                >
-                    <div class="pointer-events-none absolute inset-[2px] rounded-full border border-[#d6b978]/12"></div>
-                    <div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_18%,rgba(233,203,131,0.08),transparent_34%),radial-gradient(circle_at_50%_100%,rgba(0,0,0,0.3),transparent_52%)]"></div>
+                )>
                 </div>
 
                 // Icon
