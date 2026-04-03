@@ -1,6 +1,7 @@
 use frontend::assets::img_asset;
 use leptos::prelude::*;
 use leptos_use::use_interval_fn;
+use shared::data::monster::MonsterRarity;
 
 use crate::header::HeaderMenu;
 
@@ -12,8 +13,16 @@ pub fn UiTestsPage() -> impl IntoView {
             "Hello There"
             <MenuButton>"Passives"</MenuButton>
             <MenuButton>"Ui Tests"</MenuButton>
-            <Card class="w-3xl">
-                <div class="w-full grid grid-cols-5 gap-2">
+            <Card class="w-2xl">
+                <div class="my-4 w-full flex justify-center">
+                    <div class="w-sm">
+                        <CharacterPortrait
+                            image_uri="monsters/pirate_pistol.webp".into()
+                            character_name="Rat".into()
+                        />
+                    </div>
+                </div>
+                <div class="w-full grid grid-cols-4 gap-2">
                     {(0..3)
                         .map(|_| {
                             let trigger_reset_progress = RwSignal::new(false);
@@ -579,5 +588,62 @@ pub fn TabButton(
             ></span>
             <span class="relative z-10">{children()}</span>
         </button>
+    }
+}
+
+#[component]
+pub fn CharacterPortrait(
+    image_uri: String,
+    character_name: String,
+    #[prop(default = MonsterRarity::Normal)] rarity: MonsterRarity,
+) -> impl IntoView {
+    let (border_class, shimmer_effect) = match rarity {
+        MonsterRarity::Normal => (
+            "
+            shadow-[0_0_0_2px_#78716c,0_0_0_4px_#2e2926,0_0_0_6px_#78716c]
+            xl:shadow-[0_0_0_3px_#78716c,0_0_0_6px_#2e2926,0_0_0_8px_#78716c]
+            ",
+            "",
+        ),
+
+        MonsterRarity::Champion => (
+            "
+            shadow-[0_0_0_2px_#4338ca,0_0_0_4px_#1e1b4b,0_0_0_6px_#4338ca]
+            xl:shadow-[0_0_0_3px_#4338ca,0_0_0_6px_#1e1b4b,0_0_0_8px_#4338ca]
+            ",
+            "champion-shimmer",
+        ),
+
+        MonsterRarity::Boss => (
+            "
+            shadow-[0_0_0_2px_#b91c1c,0_0_0_4px_#2b0a0a,0_0_0_8px_#b91c1c]
+            xl:shadow-[0_0_0_4px_#b91c1c,0_0_0_9px_#2b0a0a,0_0_0_12px_#b91c1c]
+            ",
+            "boss-shimmer",
+        ),
+    };
+
+    view! {
+        <style>"color: #2e2926;"</style>
+        <div class="flex items-center justify-center h-full w-full relative p-1 xl:p-2 ">
+
+            <div class=format!("h-full w-full {}", border_class)>
+                <div
+                    class="h-full w-full relative xl:shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]"
+                    style=format!(
+                        "background-image: url('{}');",
+                        img_asset("ui/paper_background.webp"),
+                    )
+                >
+                    <img
+                        draggable="false"
+                        src=img_asset(&image_uri)
+                        alt=character_name
+                        class="object-cover h-full w-full transition-all duration-[5s]"
+                    />
+                </div>
+
+            </div>
+        </div>
     }
 }
