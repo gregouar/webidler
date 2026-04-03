@@ -12,7 +12,7 @@ pub fn UiTestsPage() -> impl IntoView {
             <HeaderMenu />
             "Hello There"
             <MenuButton>"Passives"</MenuButton>
-            <MenuButton>"Ui Tests"</MenuButton>
+            <MenuButtonRed>"Ui Tests"</MenuButtonRed>
             <Card class="w-2xl">
                 <div class="my-4 w-full flex justify-center">
                     <div class="w-sm">
@@ -138,7 +138,7 @@ pub fn Card(
                 "max-h-full flex flex-col relative overflow-hidden
                 bg-zinc-800
                 border border-[#6c5734]/45
-                shadow-[0_6px_15px_rgba(0,0,0,0.35),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
+                shadow-[0_10px_25px_rgba(0,0,0,0.45),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                 {} {} {}",
                 class.unwrap_or_default(),
                 if gap { "gap-1 xl:gap-2" } else { "" },
@@ -322,9 +322,9 @@ pub fn MenuButton(
             before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
             hover:border-[#a27f46]
             hover:text-[#f3ead2]
-            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
-            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
             w-auto
             disabled:text-zinc-500
             disabled:border-[#4b4030]
@@ -368,9 +368,9 @@ pub fn MenuButtonRed(
             before:bg-[linear-gradient(180deg,rgba(239,170,142,0.08),transparent_36%)]
             hover:border-[#b55d4c]
             hover:text-[#ffd8d0]
-            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,220,198,0.24),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,220,198,0.24),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
-            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(34,10,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
             disabled:text-zinc-500
             disabled:border-[#4f312d]
             disabled:opacity-60 disabled:shadow-none
@@ -412,9 +412,9 @@ pub fn FancyButton(
             bg-[#1b191d]
             hover:border-[#a27f46]
             hover:text-[#f3ead2]
-            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
-            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
             disabled:text-zinc-500
             disabled:border-[#4b4030]
             disabled:opacity-60 disabled:shadow-none
