@@ -3,7 +3,7 @@
     "name": "Dark Forest",
     "description": "The forest grows thick and restless, its roots tangled with rot, embers, and old bones. Few paths remain, and fewer are safe.",
     "power_level": 10,
-    "item_level_modifier": 2000,
+    "item_level_modifier": 20,
     "required_level": 50,
     "header_background": "areas/forest_header.webp",
     "footer_background": "areas/forest_footer.webp"

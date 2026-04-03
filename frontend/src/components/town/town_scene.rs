@@ -333,77 +333,123 @@ fn GrindingAreaCard(
 
     view! {
         <div
-            class=move || {
+            class="relative flex flex-col max-h-full"
+            on:click=select_area
+            style=move || {
                 format!(
-                    "relative flex flex-col rounded-xl border overflow-hidden shadow-md transition {}",
-                    if locked() {
-                        "bg-neutral-900 border-zinc-800 opacity-60"
-                    } else if view_only {
-                        "bg-neutral-800 border-zinc-700"
-                    } else {
-                        "bg-neutral-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
-                    },
+                    "pointer-events: {}; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.45));",
+                    if locked() { "none" } else { "auto" },
                 )
             }
-            on:click=select_area
         >
-            <div class="h-10 xl:h-16 w-full relative">
-                <img
-                    draggable="false"
-                    src=move || img_asset(&area_specs.read().header_background)
-                    class="object-cover w-full h-full"
-                />
-            </div>
+            <div
+                class="absolute inset-0 bg-black"
+                style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
+                aria-hidden="true"
+            ></div>
 
-            <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
-                <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
-                    {move || area_specs.read().name.clone()}
-                </div>
-
-                <div class="text-xs xl:text-sm text-gray-400">
-                    {move || {
-                        format!(
-                            "Power level: +{}",
-                            *area_specs.read().power_level + *area_specs.read().item_level_modifier,
-                        )
-                    }}
-                </div>
-
-                <div class="text-xs xl:text-sm text-gray-400">
-                    {if area.max_level_reached > 0 {
-                        format!("Level Reached: {}", area.max_level_reached)
+            <div
+                class="absolute inset-0 border border-[#6c5734]/45
+                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                style=format!(
+                    "
+                    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                    background-image: url('{}');
+                    background-blend-mode: multiply;
+                    {}
+                    ",
+                    img_asset("ui/dark_stone.webp"),
+                    if locked() {
+                        "background-color: rgba(0, 0, 0, 0.7);"
                     } else {
-                        "New Grind!".to_string()
-                    }}
-                </div>
+                        "background-color: rgb(39, 39, 42);"
+                    },
+                )
+            >
+                <div
+                    class="pointer-events-none absolute inset-[1px] border border-white/6"
+                    style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
+                ></div>
             </div>
 
-            <div class="h-10 xl:h-16 w-full relative">
-                <img
-                    draggable="false"
-                    src=move || img_asset(&area_specs.read().footer_background)
-                    class="object-cover w-full h-full"
-                />
-            </div>
-
-            <Show when=move || locked()>
-                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
-                    <div class="text-amber-400 text-lg font-bold tracking-wide">
-                        {if area_specs.read().coming_soon { "Coming Soon..." } else { "Locked" }}
-                    </div>
-                    <div class="text-gray-300 text-xs mt-1">
-                        {format!("Requires Level {}", area_specs.read().required_level)}
-                    </div>
-                    <div class="mt-2 text-xs text-gray-500 italic">
-                        {if area_specs.read().coming_soon {
-                            "Wait for a future update!"
+            <div
+                class=move || {
+                    format!(
+                        "relative z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
+                        if locked() {
+                            "opacity-60 cursor-default"
+                        } else if view_only {
+                            "cursor-default"
                         } else {
-                            "Keep grinding to unlock this area!"
-                        }}
+                            "cursor-pointer hover:brightness-110 active:scale-95"
+                        },
+                    )
+                }
+                style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
+            >
+                <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
+                    <img
+                        draggable="false"
+                        src=move || img_asset(&area_specs.read().header_background)
+                        class="object-cover w-full h-full"
+                    />
+                </div>
 
+                <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
+                    <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
+                        {move || area_specs.read().name.clone()}
+                    </div>
+
+                    <div class="text-xs xl:text-sm text-gray-400">
+                        {move || {
+                            format!(
+                                "Power level: +{}",
+                                *area_specs.read().power_level
+                                    + *area_specs.read().item_level_modifier,
+                            )
+                        }}
+                    </div>
+
+                    <div class="text-xs xl:text-sm text-gray-400">
+                        {if area.max_level_reached > 0 {
+                            format!("Level Reached: {}", area.max_level_reached)
+                        } else {
+                            "New Grind!".to_string()
+                        }}
                     </div>
                 </div>
-            </Show>
+
+                <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
+                    <img
+                        draggable="false"
+                        src=move || img_asset(&area_specs.read().footer_background)
+                        class="object-cover w-full h-full"
+                    />
+                </div>
+
+                <Show when=move || locked()>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
+                        <div class="text-amber-400 text-lg font-bold tracking-wide">
+                            {if area_specs.read().coming_soon {
+                                "Coming Soon..."
+                            } else {
+                                "Locked"
+                            }}
+                        </div>
+                        <div class="text-gray-300 text-xs mt-1">
+                            {format!("Requires Level {}", area_specs.read().required_level)}
+                        </div>
+                        <div class="mt-2 text-xs text-gray-500 italic">
+                            {if area_specs.read().coming_soon {
+                                "Wait for a future update!"
+                            } else {
+                                "Keep grinding to unlock this area!"
+                            }}
+
+                        </div>
+                    </div>
+                </Show>
+            </div>
         </div>
     }
 }
