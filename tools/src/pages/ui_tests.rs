@@ -1,134 +1,156 @@
 use frontend::assets::img_asset;
 use leptos::prelude::*;
+use leptos_router::hooks::use_navigate;
 use leptos_use::use_interval_fn;
 use shared::data::monster::MonsterRarity;
-
-use crate::header::HeaderMenu;
 
 #[component]
 pub fn UiTestsPage() -> impl IntoView {
     view! {
-        <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
+        <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <HeaderMenu />
-            "Hello There"
-            <MenuButton>"Passives"</MenuButton>
-            <MenuButtonRed>"Ui Tests"</MenuButtonRed>
-            <Card class="w-xl">
-                <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
-                    <VerticalProgressBar
-                        class:w-6
-                        class:xl:w-8
-                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
-                        value=Signal::derive(|| 70.0)
-                    />
-                    <div class="flex flex-col gap-1 xl:gap-2">
-                        <div class="flex-1 min-h-0">
-                            <CharacterPortrait
-                                image_uri="adventurers/demon_male_1.webp".into()
-                                character_name="player".to_string()
+            <div class="relative flex-1">
+                <div class="absolute inset-0 flex p-1 xl:p-4 items-center gap-4">
+                    <Card class="w-1/3 h-full">
+
+                        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
+                            <span class="font-bold">"Poupou — 42"</span>
+                        </p>
+                        <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+                            <VerticalProgressBar
+                                class:w-6
+                                class:xl:w-8
+                                bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                                value=Signal::derive(|| 70.0)
+                            />
+                            <div class="flex flex-col gap-1 xl:gap-2">
+                                <div class="flex-1 min-h-0">
+                                    <CharacterPortrait
+                                        image_uri="adventurers/demon_male_1.webp".into()
+                                        character_name="player".to_string()
+                                    />
+                                </div>
+                                <FancyButton>
+                                    <span class="text-base xl:text-lg">"Level Up"</span>
+                                </FancyButton>
+                            </div>
+
+                            <VerticalProgressBar
+                                class:w-6
+                                class:xl:w-8
+                                bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                                value=Signal::derive(|| 70.0)
                             />
                         </div>
-                        <FancyButton>
-                            <span class="text-base xl:text-lg">"Level Up"</span>
-                        </FancyButton>
-                    </div>
 
-                    <VerticalProgressBar
-                        class:w-6
-                        class:xl:w-8
-                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
-                        value=Signal::derive(|| 70.0)
-                    />
+                        <HorizontalProgressBar
+                            class:h-2
+                            class:xl:h-4
+                            bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                            value=Signal::derive(|| 70.0)
+                        >
+                            {}
+                        </HorizontalProgressBar>
+
+                        <div class="w-full grid grid-cols-4 gap-2">
+                            {(0..3)
+                                .map(|_| {
+                                    let trigger_reset_progress = RwSignal::new(false);
+                                    let reset_progress = Signal::derive(move || {
+                                        trigger_reset_progress.get()
+                                    });
+                                    let progress_value = predictive_cooldown(
+                                        Signal::derive(move || 2.0),
+                                        reset_progress,
+                                        Signal::derive(move || false),
+                                        0.0,
+                                    );
+                                    Effect::new(move || {
+                                        if progress_value.get() >= 1.0 {
+                                            trigger_reset_progress.set(true)
+                                        } else {
+                                            trigger_reset_progress.set(false)
+                                        }
+                                    });
+
+                                    view! {
+                                        <div class="flex flex-col gap-1">
+                                            <CircularProgressBar
+                                                bar_color="oklch(55.5% 0.163 48.998)"
+                                                value=progress_value
+                                                reset=reset_progress
+                                                bar_width=4
+                                            >
+                                                <img
+                                                    draggable="false"
+                                                    src="assets/images/skills/attack.svg"
+                                                    alt="attack"
+                                                    class="w-full h-full flex-no-shrink fill-current
+                                                    xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                                                />
+                                            </CircularProgressBar>
+
+                                            <div class="flex justify-around">
+                                                <Toggle toggle_callback=|_| {}>
+                                                    <span class="inline xl:hidden">"A"</span>
+                                                    <span class="hidden xl:inline font-variant:small-caps">
+                                                        "Auto"
+                                                    </span>
+                                                </Toggle>
+                                                <FancyButton>
+                                                    <span class="text-base xl:text-2xl">"+"</span>
+                                                </FancyButton>
+                                            </div>
+                                        </div>
+                                    }
+                                })
+                                .collect::<Vec<_>>()}
+                        </div>
+                    </Card>
+
+                    <Card class="w-2/3 h-full">
+                        <CardHeader title="Inventory" on_close=|| {}>
+                            <div class="flex gap-2 -mb-2 mx-4">
+                                <TabButton is_active=Signal::derive(|| true)>"Tab1"</TabButton>
+                                <TabButton is_active=Signal::derive(|| false)>"Tab2"</TabButton>
+                            </div>
+                            <div class="flex-1" />
+                            <div class="flex gap-2">
+                                <MenuButton>"Export"</MenuButton>
+                            </div>
+                        </CardHeader>
+                        <CardInset class="w-full h-160">"bouh"</CardInset>
+                    </Card>
                 </div>
-
-                <HorizontalProgressBar
-                    class:h-2
-                    class:xl:h-4
-                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
-                    value=Signal::derive(|| 70.0)
-                >
-                    {}
-                </HorizontalProgressBar>
-
-                // <div class="w-sm flex-col">
-                // <HorizontalProgressBar
-                // class="h-4 xl:h-5"
-                // bar_color="bg-gradient-to-b from-red-500 to-red-700"
-                // value=Signal::derive(|| 70.0)
-                // >
-                // "Pirate Mechant"
-                // </HorizontalProgressBar>
-                // <div class="flex gap-2">
-                // <CharacterPortrait
-                // image_uri="monsters/pirate_pistol.webp".into()
-                // character_name="Rat".into()
-                // rarity=MonsterRarity::Normal
-                // />
-                // <VerticalProgressBar
-                // class:w-6
-                // class:xl:w-8
-                // bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
-                // value=Signal::derive(|| 70.0)
-                // />
-                // </div>
-                // </div>
-                // </div>
-                <div class="w-full grid grid-cols-4 gap-2">
-                    {(0..3)
-                        .map(|_| {
-                            let trigger_reset_progress = RwSignal::new(false);
-                            let reset_progress = Signal::derive(move || {
-                                trigger_reset_progress.get()
-                            });
-                            let progress_value = predictive_cooldown(
-                                Signal::derive(move || 2.0),
-                                reset_progress,
-                                Signal::derive(move || false),
-                                0.0,
-                            );
-                            Effect::new(move || {
-                                if progress_value.get() >= 1.0 {
-                                    trigger_reset_progress.set(true)
-                                } else {
-                                    trigger_reset_progress.set(false)
-                                }
-                            });
-
-                            view! {
-                                <div class="flex flex-col gap-1">
-                                    <CircularProgressBar
-                                        bar_color="oklch(55.5% 0.163 48.998)"
-                                        value=progress_value
-                                        reset=reset_progress
-                                        bar_width=4
-                                    >
-                                        <img
-                                            draggable="false"
-                                            src="assets/images/skills/attack.svg"
-                                            alt="attack"
-                                            class="w-full h-full flex-no-shrink fill-current
-                                            xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                                        />
-                                    </CircularProgressBar>
-
-                                    <div class="flex justify-around">
-                                        <Toggle toggle_callback=|_| {}>
-                                            <span class="inline xl:hidden">"A"</span>
-                                            <span class="hidden xl:inline font-variant:small-caps">
-                                                "Auto"
-                                            </span>
-                                        </Toggle>
-                                        <FancyButton>
-                                            <span class="text-base xl:text-2xl">"+"</span>
-                                        </FancyButton>
-                                    </div>
-                                </div>
-                            }
-                        })
-                        .collect::<Vec<_>>()}
-                </div>
-            </Card>
+            </div>
         </main>
+    }
+}
+
+#[component]
+pub fn HeaderMenu() -> impl IntoView {
+    let navigate_to_passives = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("/passives", Default::default());
+        }
+    };
+
+    let navigate_to_ui_tests = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("/ui_tests", Default::default());
+        }
+    };
+
+    view! {
+        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
+        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
+            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+                <MenuButton on:click=navigate_to_passives>"Passives"</MenuButton>
+                <MenuButtonRed on:click=navigate_to_ui_tests>"Ui Tests"</MenuButtonRed>
+            </div>
+        </div>
     }
 }
 
@@ -184,11 +206,14 @@ pub fn Card(
 ) -> impl IntoView {
     view! {
         <div
-            class="max-h-full flex flex-col relative overflow-hidden
-            bg-zinc-800
-            border border-[#6c5734]/45
-            shadow-[0_10px_25px_rgba(0,0,0,0.45),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
-            "
+            class=format!(
+                "max-h-full flex flex-col relative overflow-hidden
+                bg-zinc-800
+                border border-[#6c5734]/45
+                shadow-[0_10px_25px_rgba(0,0,0,0.45),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
+                {}",
+                class.unwrap_or_default(),
+            )
             style=format!(
                 "
                 clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
@@ -204,12 +229,59 @@ pub fn Card(
             ></div>
 
             <div class=format!(
-                "relative z-10 flex max-h-full flex-col {} {} {}",
+                "relative z-10 flex max-h-full flex-col {} {}",
                 if gap { "gap-1 xl:gap-2" } else { "" },
                 if pad { "p-1 xl:p-3" } else { "" },
-                class.unwrap_or_default(),
             )>{children()}</div>
         </div>
+    }
+}
+
+#[component]
+pub fn CardTitle(children: Children) -> impl IntoView {
+    view! {
+        <span class="
+        text-shadow-lg/100 shadow-gray-950 text-amber-200 font-semibold
+        text-base xl:text-xl font-display
+        ">{children()}</span>
+    }
+}
+
+#[component]
+pub fn CardHeader(
+    title: &'static str,
+    on_close: impl Fn() + Send + Sync + 'static,
+    #[prop(optional)] children: Option<Children>,
+) -> impl IntoView {
+    view! {
+        <div class="px-4 relative z-10 flex items-center justify-between">
+            <CardTitle>{title}</CardTitle>
+            {children.map(|children| children())}
+            <CloseButton on:click=move |_| on_close() />
+        </div>
+    }
+}
+
+#[component]
+pub fn CardInset(
+    #[prop(optional)] class: Option<&'static str>,
+    #[prop(default = true)] gap: bool,
+    #[prop(default = true)] pad: bool,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <div class=format!(
+            "flex flex-col
+            bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]
+            shadow-[inset_-1px_-1px_2px_rgba(255,255,255,0.1)]
+            shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2)]
+            ring-1 ring-zinc-950
+            overflow-y-auto
+            {} {} {}",
+            class.unwrap_or_default(),
+            if gap { "gap-1 xl:gap-2" } else { "" },
+            if pad { "p-1 xl:p-3" } else { "" },
+        )>{children()}</div>
     }
 }
 
@@ -896,5 +968,27 @@ pub fn VerticalProgressBar(
                 {children.map(|children| children())}
             </div>
         </div>
+    }
+}
+
+#[component]
+pub fn CloseButton() -> impl IntoView {
+    view! {
+        <button class="btn ml-2 text-white hover:text-gray-400 transition-colors">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
     }
 }
