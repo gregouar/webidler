@@ -6,6 +6,7 @@ use shared::data::monster::MonsterRarity;
 
 #[component]
 pub fn UiTestsPage() -> impl IntoView {
+    let active_tab = RwSignal::new(true);
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <HeaderMenu />
@@ -110,9 +111,19 @@ pub fn UiTestsPage() -> impl IntoView {
 
                     <Card class="w-2/3 h-full">
                         <CardHeader title="Inventory" on_close=|| {}>
-                            <div class="flex gap-2 -mb-2 mx-4">
-                                <TabButton is_active=Signal::derive(|| true)>"Tab1"</TabButton>
-                                <TabButton is_active=Signal::derive(|| false)>"Tab2"</TabButton>
+                            <div class="flex gap-2 -mb-3 mx-4 overflow-hidden">
+                                <TabButton
+                                    is_active=Signal::derive(move || active_tab.get())
+                                    on:click=move |_| active_tab.set(true)
+                                >
+                                    "Tab1"
+                                </TabButton>
+                                <TabButton
+                                    is_active=Signal::derive(move || !active_tab.get())
+                                    on:click=move |_| active_tab.set(false)
+                                >
+                                    "Tab2"
+                                </TabButton>
                             </div>
                             <div class="flex-1" />
                             <div class="flex gap-2">
@@ -604,9 +615,10 @@ pub fn Toggle(
 
     let toggle_class = move || {
         if checked.get() {
-            "text-[#f6edd8] border-[#b28a4f] shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
+            "border-[#b28a4f] shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
         } else {
-            "text-zinc-400 border-[#65533a] shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]"
+            "opacity-60 shadow-none text-zinc-400"
+            // "text-zinc-400 border-[#65533a] shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]"
         }
     };
 
@@ -674,12 +686,11 @@ pub fn TabButton(
             text-[#f5ecd6]
             border-[#b28a4f]
             shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_4px_rgba(0,0,0,0.42)]
-            translate-y-[2px]
+            translate-y-[4px]
             "
         } else {
             "
             cursor-pointer
-            text-zinc-300
             border-[#6d5737]
             shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]
             hover:border-[#a27f46]
