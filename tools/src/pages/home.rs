@@ -127,7 +127,7 @@ pub fn Card(
             bg-zinc-800 
             rounded-[6px] xl:rounded-[8px]
                  
-            ring-1 ring-zinc-900/80
+            ring-1 ring-zinc-700/50
             shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
             {} {} {}",
             class.unwrap_or_default(),
@@ -163,7 +163,6 @@ pub fn CircularProgressBar(
             }
 
             if active_buffer.get_untracked() {
-                back_progress.set(100.0);
                 active_buffer.set(false);
 
                 set_timeout(
@@ -174,7 +173,6 @@ pub fn CircularProgressBar(
                     std::time::Duration::from_millis(500),
                 );
             } else {
-                front_progress.set(100.0);
                 active_buffer.set(true);
 
                 set_timeout(
@@ -273,7 +271,7 @@ pub fn FancyButton(
             text-white font-extrabold text-shadow shadow-neutral-950
             px-2 xl:px-3 rounded shadow-md
             text-sm xl:text-base 
-            border border-neutral-950
+            border border-zinc-700/50
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
@@ -325,7 +323,7 @@ pub fn Toggle(
                     px-2 xl:px-3
                     text-sm xl:text-base 
                     font-extrabold text-shadow shadow-neutral-950
-                    border border-neutral-950 rounded 
+                    border border-zinc-700/50 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
                     active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
