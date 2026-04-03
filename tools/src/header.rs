@@ -12,6 +12,13 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
+    let navigate_to_ui_tests = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("/ui_tests", Default::default());
+        }
+    };
+
     let navigate_to_items = {
         let navigate = use_navigate();
         move |_| {
@@ -25,6 +32,7 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <MenuButton on:click=navigate_to_passives>"Passives"</MenuButton>
                 <MenuButton on:click=navigate_to_items>"Items"</MenuButton>
+                <MenuButton on:click=navigate_to_ui_tests>"Ui Tests"</MenuButton>
             </div>
         </div>
     }

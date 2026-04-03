@@ -150,7 +150,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                     </a>
                 </div>
 
-                <h1 class=" text-shadow-md/50 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-semibold leading-none tracking-tight font-display">
+                <h1 class=" text-shadow-lg/100 shadow-gray-950 text-amber-200 text-2xl/30 xl:text-4xl font-semibold leading-none tracking-tight font-display">
                     "Welcome, " {move || username.get()}"!"
                 </h1>
 
@@ -393,7 +393,7 @@ fn CharacterSlot(
                 </div>
 
                 <div class="xl:space-y-1 overflow-x-hidden text-left">
-                    <div class="text-lg font-semibold  text-shadow-md/50 shadow-gray-950 text-amber-300 truncate font-display">
+                    <div class="text-lg font-semibold  text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
                         {character.name.clone()}
                     </div>
 
@@ -765,7 +765,7 @@ fn NewsCard(news: NewsEntry) -> impl IntoView {
         p-4 flex flex-col gap-3">
 
             <div class="flex items-center justify-between">
-                <span class="text-amber-300 font-semibold text-base font-display  text-shadow-md/50 shadow-gray-950">
+                <span class="text-amber-300 font-semibold text-base font-display text-shadow-lg/100 shadow-gray-950">
                     {title}
                 </span>
 

@@ -10,10 +10,10 @@ pub fn MenuButton(
         <button
             class="btn
             tracking-wide
-            text-white font-extrabold text-shadow shadow-neutral-950
+            text-white font-extrabold text-shadow-lg/50 shadow-neutral-950
             py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
             text-sm xl:text-base 
-            border border-neutral-950
+            border border-zinc-700/50
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
@@ -73,7 +73,7 @@ pub fn FancyButton(
             text-white font-extrabold text-shadow shadow-neutral-950
             px-2 xl:px-3 rounded shadow-md
             text-sm xl:text-base 
-            border border-neutral-950
+            border border-zinc-700/50
             bg-gradient-to-t from-zinc-900 to-zinc-800 
             overflow-hidden
             hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
@@ -125,7 +125,7 @@ pub fn Toggle(
                     px-2 xl:px-3
                     text-sm xl:text-base 
                     font-extrabold text-shadow shadow-neutral-950
-                    border border-neutral-950 rounded 
+                    border border-zinc-700/50 rounded 
                     bg-gradient-to-t from-zinc-900 to-zinc-800 
                     hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
                     active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
@@ -189,7 +189,7 @@ pub fn TabButton(
                     px-2 xl:px-3 py-1 xl:py-2 
                     text-sm xl:text-base 
                     font-extrabold text-shadow
-                    border-t border-l border-r border-neutral-950 rounded-t-md 
+                    border-t border-l border-r border-zinc-700/50 rounded-t-md 
                     transition-all duration-200
                     relative
                     group

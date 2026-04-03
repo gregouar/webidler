@@ -15,7 +15,7 @@ pub fn Card(
             bg-zinc-800 
             rounded-[6px] xl:rounded-[8px]
                  
-            ring-1 ring-zinc-900/80
+            ring-1 ring-zinc-700/50
             shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
             {} {} {}",
             class.unwrap_or_default(),
@@ -29,7 +29,7 @@ pub fn Card(
 pub fn CardTitle(children: Children) -> impl IntoView {
     view! {
         <span class="
-        text-shadow-md/50 shadow-gray-950 text-amber-200 font-semibold
+        text-shadow-lg/100 shadow-gray-950 text-amber-200 font-semibold
         text-base xl:text-xl font-display
         ">{children()}</span>
     }
