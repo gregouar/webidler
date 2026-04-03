@@ -130,7 +130,7 @@ pub fn UiTestsPage() -> impl IntoView {
                                 <MenuButton>"Export"</MenuButton>
                             </div>
                         </CardHeader>
-                        <CardInset class="w-full h-160">"bouh"</CardInset>
+                        <CardInset class="w-full h-full">"bouh"</CardInset>
                     </Card>
                 </div>
             </div>
@@ -266,7 +266,7 @@ pub fn Card(
             </div>
 
             <div class=format!(
-                "relative z-10 flex max-h-full flex-col {} {}",
+                "relative z-10 flex h-full flex-col {} {}",
                 if gap { "gap-1 xl:gap-2" } else { "" },
                 if pad { "p-1 xl:p-3" } else { "" },
             )>{children()}</div>

@@ -12,7 +12,7 @@ use crate::components::{
     backend_client::BackendClient,
     ui::{
         buttons::{MenuButton, MenuButtonRed},
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
         toast::*,
@@ -209,7 +209,7 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
     view! {
         <ConfirmAccountDeletionModal open=show_delete_modal user_id />
         <MenuPanel w_full=false h_full=false open>
-            <Card class="max-w-4xl">
+            <MenuCard class="max-w-4xl">
                 <CardHeader title="Account Settings" on_close=move || open.set(false) />
 
                 <div class="space-y-6 text-right text-white  mb-6">
@@ -281,7 +281,7 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
                     </CardInset>
                 </div>
 
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

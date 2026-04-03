@@ -8,26 +8,52 @@ pub fn MenuButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn
-            tracking-wide
-            text-white font-extrabold text-shadow-lg/50 shadow-neutral-950
-            py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
-            text-sm xl:text-base 
-            border border-zinc-700/50
-            bg-gradient-to-t from-zinc-900 to-zinc-800 
-            overflow-hidden
-            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
-            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            class="btn relative isolate overflow-hidden
+            tracking-[0.08em]
+            text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
+            py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
+            text-sm xl:text-base
+            border border-[#6c5329]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:rounded-[3px] xl:before:rounded-[5px]
+            before:border before:border-[#d5b16d]/18
+            before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+            hover:border-[#a27f46]
+            hover:text-[#f3ead2]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
+            active:before:opacity-0 active:brightness-90
+            active:text-white
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
             w-auto
-            disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400
+            disabled:text-zinc-500
+            disabled:border-[#4b4030]
             disabled:opacity-60 disabled:shadow-none
+            disabled:before:hidden"
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
             "
+            style:background-image=move || {
+                if disabled.map(|d| d.get()).unwrap_or(false) {
+                    "linear-gradient(180deg, rgba(110,104,96,0.08), rgba(0,0,0,0.12)), linear-gradient(180deg, rgba(58,55,60,0.92), rgba(34,33,37,1))"
+                        .to_string()
+                } else {
+                    "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                        .to_string()
+                }
+            }
             type=button_type
             disabled=disabled
         >
-            {children()}
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+            <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }
@@ -39,24 +65,40 @@ pub fn MenuButtonRed(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn
-            tracking-wide
-            text-red-300 font-extrabold text-shadow shadow-neutral-950
-            py-1 xl:py-2 px-2 xl:px-4 rounded shadow-md
-            text-sm xl:text-base 
-            border border-red-800
-            bg-gradient-to-t from-red-900 to-red-800
-            overflow-hidden
-            hover:bg-gradient-to-tr hover:from-red-800 hover:to-red-700
-            active:bg-gradient-to-t active:from-red-900 active:to-red-950
+            class="btn relative isolate overflow-hidden
+            tracking-[0.08em]
+            text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
+            py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
+            text-sm xl:text-base
+            border border-[#8e4538]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,210,184,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:rounded-[3px] xl:before:rounded-[5px]
+            before:border before:border-[#d78b78]/16
+            before:bg-[linear-gradient(180deg,rgba(239,170,142,0.08),transparent_36%)]
+            hover:border-[#b55d4c]
+            hover:text-[#ffd8d0]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,220,198,0.24),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
-            disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400
+            active:before:opacity-0 active:brightness-90
+            active:text-[#d7aca2]
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
+            disabled:text-zinc-500
+            disabled:border-[#4f312d]
             disabled:opacity-60 disabled:shadow-none
+            disabled:before:hidden"
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(230,164,125,0.14), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(72,28,26,0.98), rgba(35,11,13,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
             "
             disabled=disabled
         >
-            {children()}
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#ffc1ad]/40 to-transparent"></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }
@@ -68,25 +110,40 @@ pub fn FancyButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn
-            tracking-wide
-            text-white font-extrabold text-shadow shadow-neutral-950
-            px-2 xl:px-3 rounded shadow-md
-            text-sm xl:text-base 
-            border border-zinc-700/50
-            bg-gradient-to-t from-zinc-900 to-zinc-800 
-            overflow-hidden
-            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
-            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            class="btn relative isolate overflow-hidden
+            tracking-[0.08em]
+            text-stone-100 font-extrabold text-shadow shadow-black/90
+            px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
+            text-sm xl:text-base
+            border border-[#6c5329]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:rounded-[3px] xl:before:rounded-[5px]
+            before:border before:border-[#d5b16d]/18
+            before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+            bg-[#1b191d]
+            hover:border-[#a27f46]
+            hover:text-[#f3ead2]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
-            disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400
+            active:before:opacity-0 active:brightness-90
+            active:text-white
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
+            disabled:text-zinc-500
+            disabled:border-[#4b4030]
             disabled:opacity-60 disabled:shadow-none
+            disabled:before:hidden"
+            style="
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
             "
+            style:background-image="linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
             disabled=disabled
         >
-            // disabled=disabled
-            {children()}
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+            <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }
@@ -108,33 +165,46 @@ pub fn Toggle(
 
     let toggle_class = move || {
         if checked.get() {
-            "shadow-md text-white"
-            // "ring-2 ring-amber-600/20 shadow-md text-white "
+            "text-zinc-100 
+            border-[#b28a4f] 
+            shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
         } else {
             "opacity-60 shadow-none text-zinc-400"
+            // "text-zinc-400 border-[#65533a] shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]"
         }
     };
 
     view! {
         <button
             on:click=switch_value
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1));
+            background-size: auto, auto;
+            background-position: center, center;
+            background-blend-mode: screen, normal;
+            "
             class=move || {
                 format!(
-                    "btn
-                    tracking-wide
+                    "btn relative isolate overflow-hidden
+                    tracking-[0.08em]
                     px-2 xl:px-3
-                    text-sm xl:text-base 
-                    font-extrabold text-shadow shadow-neutral-950
-                    border border-zinc-700/50 rounded 
-                    bg-gradient-to-t from-zinc-900 to-zinc-800 
-                    hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
-                    active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
-                    active:translate-y-[1px]
-                    disabled:from-zinc-700 disabled:to-zinc-600
-                    disabled:text-zinc-400
+                    text-sm xl:text-base
+                    font-extrabold text-shadow shadow-black/90
+                    rounded-[4px] xl:rounded-[6px]
+                    before:pointer-events-none before:absolute before:inset-[1px]
+                    before:rounded-[3px] xl:before:rounded-[5px]
+                    before:border before:border-[#d5b16d]/16
+                    before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]
+                    hover:border-[#a27f46]
+                    hover:text-[#f1e4c4]
+                    active:text-white
+                    disabled:text-zinc-500
+                    disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
+                    disabled:before:hidden
                     transition-all duration-200
-                    relative
                     group
                     {}
                     ",
@@ -143,7 +213,13 @@ pub fn Toggle(
             }
             disabled=disabled
         >
-            {children()}
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
+            <span
+                class="pointer-events-none absolute inset-0 rounded-[4px] xl:rounded-[6px] opacity-0 transition-opacity duration-200"
+                class:opacity-100=move || checked.get()
+                style="background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%, rgba(0,0,0,0.04));"
+            ></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }
@@ -158,17 +234,23 @@ pub fn TabButton(
     let active_class = |active| {
         if active {
             "
-            bg-gradient-to-t from-zinc-900 to-zinc-950
-            translate-y-[3px]
+            text-zinc-100
+            border-[#9c7841]
+            before:opacity-0 brightness-90
+            shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
+            translate-y-[4px]
             "
         } else {
             "
             cursor-pointer
-            bg-gradient-to-t from-zinc-900 to-zinc-800 
-            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
-            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
-            disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400
+            border-[#6d5737]
+            shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]
+            hover:border-[#a27f46]
+            hover:text-[#f1e4c4]
+            hover:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.2),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            active:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45),inset_0_-1px_0_rgba(0,0,0,0.18)]
+            disabled:text-zinc-500
+            disabled:border-[#4b4030]
             disabled:opacity-60
             "
         }
@@ -181,17 +263,28 @@ pub fn TabButton(
     view! {
         <button
             title=title
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
+            "
             class=move || {
                 format!(
-                    "btn
-                    tracking-wide
+                    "btn relative isolate overflow-hidden
+                    tracking-[0.08em]
                     flex-1
-                    px-2 xl:px-3 py-1 xl:py-2 
-                    text-sm xl:text-base 
-                    font-extrabold text-shadow
-                    border-t border-l border-r border-zinc-700/50 rounded-t-md 
+                    px-2 xl:px-3 py-1 xl:py-2
+                    text-sm xl:text-base
+                    font-extrabold text-shadow shadow-black/90
+                    border-t border-l border-r rounded-t-[6px]
+                    before:pointer-events-none before:absolute before:inset-[1px]
+                    before:rounded-t-[5px]
+                    before:border-t before:border-l before:border-r before:border-[#d5b16d]/16
+                    before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]
                     transition-all duration-200
-                    relative
                     group
                     {}
                     ",
@@ -200,7 +293,13 @@ pub fn TabButton(
             }
             disabled=disable_button
         >
-            {children()}
+            <span class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
+            <span
+                class="pointer-events-none absolute inset-0 rounded-t-[6px] opacity-0 transition-opacity duration-200"
+                class:opacity-100=move || is_active.get()
+                style="background: linear-gradient(180deg, rgba(0,0,0,0.16), transparent 38%, rgba(0,0,0,0.06));"
+            ></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }

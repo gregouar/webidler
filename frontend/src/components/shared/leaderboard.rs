@@ -6,7 +6,7 @@ use crate::components::{
     backend_client::BackendClient,
     ui::{
         ALink,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         menu_panel::MenuPanel,
         number::{format_datetime, format_duration},
     },
@@ -16,10 +16,10 @@ use crate::components::{
 pub fn LeaderboardPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open>
-            <Card>
+            <MenuCard>
                 <CardHeader title="Leaderboard" on_close=move || open.set(false) />
                 <LeaderboardContent />
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

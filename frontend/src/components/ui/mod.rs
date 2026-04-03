@@ -4,6 +4,7 @@ pub mod checkbox;
 pub mod confirm;
 pub mod dropdown;
 pub mod fullscreen;
+pub mod header;
 pub mod input;
 mod link;
 pub mod menu_panel;

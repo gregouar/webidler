@@ -30,8 +30,9 @@ use crate::{
         },
         ui::{
             buttons::{MenuButton, MenuButtonRed},
-            card::{Card, CardInset, CardTitle},
+            card::{Card, CardInset, CardTitle, MenuCard},
             confirm::ConfirmContext,
+            header::BaseHeaderMenu,
             input::ValidatedInput,
             menu_panel::MenuPanel,
             number::format_datetime,
@@ -119,8 +120,7 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
-            bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
+            <BaseHeaderMenu>
                 <div class="flex gap-2">
                     <MenuButton on:click=move |_| {
                         open_settings.set(!open_settings.get_untracked());
@@ -162,7 +162,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                     }>"Account Settings"</MenuButton>
                     <MenuButtonRed on:click=move |_| sign_out()>"Sign Out"</MenuButtonRed>
                 </div>
-            </div>
+            </BaseHeaderMenu>
 
             <PlayerCount />
             <DiscordInviteBanner />
@@ -233,7 +233,7 @@ fn CharactersSelection(
     let characters_len = characters.len();
 
     view! {
-        <Card class="h-full w-2xl">
+        <MenuCard class="h-full w-2xl">
             <div class="flex flex-row justify-between items-center px-4">
                 <CardTitle>"Your Characters"</CardTitle>
                 <span class="text-sm text-gray-400 font-medium">
@@ -277,7 +277,7 @@ fn CharactersSelection(
                     }}
                 </div>
             </CardInset>
-        </Card>
+        </MenuCard>
     }
 }
 
@@ -570,7 +570,7 @@ pub fn CreateCharacterPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <Card class="w-full max-w-lg xl:max-w-xl mx-auto">
+            <MenuCard class="w-full max-w-lg xl:max-w-xl mx-auto">
                 <CardTitle>
                     {move || match selected_character_id.read().is_some() {
                         true => "Edit Character",
@@ -637,7 +637,7 @@ pub fn CreateCharacterPanel(
                         "Confirm"
                     </MenuButton>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

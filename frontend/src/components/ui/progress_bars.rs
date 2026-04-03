@@ -52,21 +52,38 @@ pub fn HorizontalProgressBar(
     });
 
     view! {
-        <div class=format!(
-            "
+        <div
+            class=format!(
+                "
             relative flex w-full
-            rounded-lg
-            bg-stone-900 border border-neutral-950 
-            xl:shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
+            rounded-[4px] xl:rounded-[6px]
+            border border-[#6c5329]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             {}
             ",
-            class.unwrap_or_default(),
-        )>
-            <div class="overflow-hidden w-full rounded-lg">
+                class.unwrap_or_default(),
+            )
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)),
+            linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
+            "
+        >
+            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+            <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+            <div class="w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-left will-change-transform {} {}",
+                            "h-full origin-left will-change-transform rounded-[2px] xl:rounded-[4px]
+                            shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]
+                            before:absolute before:inset-0 before:bg-[linear-gradient(90deg,rgba(255,255,255,0.16),transparent_22%,transparent_78%,rgba(0,0,0,0.12))]
+                            {} {}",
                             bar_color,
                             transition(),
                         )
@@ -77,10 +94,10 @@ pub fn HorizontalProgressBar(
 
             // Fake copy for glow effect on reset
             <div
-                class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
+                class=format!("absolute inset-0 z-1 rounded-[4px] xl:rounded-[6px] {}", bar_color)
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none text-shadow shadow-black/90">
                 {children()}
             </div>
         </div>
@@ -117,16 +134,36 @@ pub fn VerticalProgressBar(
     });
 
     view! {
-        <div class="
-        relative flex flex-col justify-end h-full
-        rounded-lg 
-        bg-stone-900 border border-neutral-950 
-        shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
-        ">
-            <div class="overflow-hidden h-full rounded-lg">
+        <div
+            class="
+            relative flex flex-col justify-end h-full
+            rounded-[4px] xl:rounded-[6px]
+            border border-[#6c5329]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            "
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)),
+            linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
+            "
+        >
+            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+            <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
+            <div class="h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
-                        format!("h-full origin-bottom will-change-transform {}", bar_color)
+                        format!(
+                            "h-full origin-bottom will-change-transform rounded-[2px] xl:rounded-[4px]
+                            shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]
+                            before:absolute before:inset-0 before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16),transparent_20%,transparent_80%,rgba(0,0,0,0.12))]
+                            {}",
+                            bar_color,
+                        )
                     }
                     class:transition-progress-bar=move || !reset.get()
                     style=move || format!("transform: scaleY({});", set_value())
@@ -134,10 +171,13 @@ pub fn VerticalProgressBar(
             </div>
             // Fake copy for glow effect on reset
             <div
-                class=format!("absolute rounded-lg inset-0 z-1 h-full {}", bar_color)
+                class=format!(
+                    "absolute rounded-[4px] xl:rounded-[6px] inset-0 z-1 h-full {}",
+                    bar_color,
+                )
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-lg overflow-hidden">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] text-shadow shadow-black/90">
                 {children.map(|children| children())}
             </div>
         </div>
@@ -207,11 +247,13 @@ pub fn CircularProgressBar(
 
     view! {
         <div class="circular-progress-bar">
-            <div
-                class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden
-                xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)] ring-1 ring-zinc-700/20"
-                style="contain: strict;"
+           <div
+                class="relative w-full h-full aspect-square rounded-full overflow-hidden
+                border border-[#6c5329]
+                bg-stone-900
+                shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
             >
+                <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div
                     class="absolute inset-0 will-change-(--progress) will-change-opacity
                     transition-circular-progress-bar"
@@ -245,13 +287,14 @@ pub fn CircularProgressBar(
                     style:--progress=move || format!("{}%", back_progress.get())
                 ></div>
 
-                // Hole in the middle
+
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
                         bg-radial from-stone-600 to-zinc-950 to-70% 
-                         ring-1 ring-zinc-700/20",
+                        border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                     bar_width / 2,
-                )></div>
+                )>
+                </div>
 
                 // Icon
                 <div

@@ -18,7 +18,7 @@ use crate::{
         shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
-            card::{Card, CardInset, CardTitle},
+            card::{CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
@@ -92,7 +92,7 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
 
     view! {
         // <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
-        <Card class="w-[30%] h-full">
+        <MenuCard class="w-[30%] h-full">
 
             // <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
             // <span class="font-bold">"Equipped"</span>
@@ -117,7 +117,7 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
                         .collect::<Vec<_>>()}
                 </div>
             </CardInset>
-        </Card>
+        </MenuCard>
     }
 }
 
@@ -344,7 +344,7 @@ pub fn EquippedItemContextMenu(
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
     view! {
         // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
-        <Card class="h-full w-[70%]">
+        <MenuCard class="h-full w-[70%]">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
                     <CardTitle>"Inventory"</CardTitle>
@@ -404,7 +404,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </CardInset>
 
-        </Card>
+        </MenuCard>
     }
 }
 

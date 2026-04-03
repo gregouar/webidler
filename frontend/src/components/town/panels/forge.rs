@@ -26,7 +26,7 @@ use crate::components::{
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
-        card::{Card, CardHeader, CardInset, CardTitle},
+        card::{CardHeader, CardInset, CardTitle, MenuCard},
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
         toast::*,
@@ -53,7 +53,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <Card class="h-full">
+            <MenuCard class="h-full">
                 <CardHeader title="Forge" on_close=move || open.set(false)>
                     <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-hidden">
                         <TabButton
@@ -114,7 +114,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                     </CardInset>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

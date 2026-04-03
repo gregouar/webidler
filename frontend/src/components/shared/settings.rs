@@ -4,7 +4,7 @@ use crate::components::{
     settings::SettingsContext,
     ui::{
         buttons::{MenuButton, MenuButtonRed, Toggle},
-        card::{Card, CardInset, CardTitle},
+        card::{CardInset, CardTitle, MenuCard},
         menu_panel::MenuPanel,
     },
 };
@@ -16,7 +16,7 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <Card class="w-xl mx-auto">
+            <MenuCard class="w-xl mx-auto">
                 <CardTitle>"Game Settings"</CardTitle>
 
                 <SettingsSection title="Numbers">
@@ -59,7 +59,7 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
                         settings.save_settings(settings_data.get());
                     }>"Confirm"</MenuButton>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

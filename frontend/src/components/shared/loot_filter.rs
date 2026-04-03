@@ -25,7 +25,7 @@ use crate::components::{
     town::panels::market::{StatDropdown, item_rarity_str},
     ui::{
         buttons::{FancyButton, MenuButton, Toggle},
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
@@ -163,7 +163,7 @@ pub fn LootFilterPanel(
             {
                 let on_export = on_export.clone();
                 view! {
-                    <Card class="w-full h-full">
+                    <MenuCard class="w-full h-full">
                         <CardHeader title="Loot Filter" on_close=move || open.set(false)>
                             <div class="flex gap-2 mx-4">
                                 <MenuButton on:click=move |_| new_rule()>"New Rule"</MenuButton>
@@ -180,7 +180,7 @@ pub fn LootFilterPanel(
                             <RulesList loot_filter=local_loot_filter selected_rule />
                             <EditRule loot_filter=local_loot_filter selected_rule />
                         </div>
-                    </Card>
+                    </MenuCard>
                 }
             }
         </MenuPanel>

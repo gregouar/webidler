@@ -29,7 +29,7 @@ use crate::components::{
     town::TownContext,
     ui::{
         buttons::{MenuButton, TabButton},
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
@@ -159,7 +159,7 @@ pub fn PassivesPanel(
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <Card>
+                <MenuCard>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
                         <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-hidden">
                             <TabButton
@@ -225,7 +225,7 @@ pub fn PassivesPanel(
                             view_only
                         />
                     </CardInset>
-                </Card>
+                </MenuCard>
             </div>
         </MenuPanel>
     }

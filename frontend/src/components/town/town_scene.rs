@@ -25,7 +25,7 @@ use crate::{
         ui::{
             Separator,
             buttons::{CloseButton, MenuButton},
-            card::{Card, CardInset, CardTitle},
+            card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
             progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
@@ -502,7 +502,7 @@ pub fn StartGrindPanel(
                 area_specs()
                     .map(|area_specs| {
                         view! {
-                            <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
+                            <MenuCard class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
                                 <div class="h-10 xl:h-16 w-full relative">
                                     <img
                                         draggable="false"
@@ -589,7 +589,7 @@ pub fn StartGrindPanel(
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
+                            </MenuCard>
                         }
                     })
             }}

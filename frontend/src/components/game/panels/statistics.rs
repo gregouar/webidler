@@ -18,7 +18,7 @@ use crate::components::{
     },
     ui::{
         Separator,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         menu_panel::MenuPanel,
         number::{format_duration, format_number},
     },
@@ -43,7 +43,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open h_full=false center=false>
-            <Card>
+            <MenuCard>
                 <CardHeader title="Statistics" on_close=move || open.set(false) />
 
                 <div class="grid grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-4 overflow-y-auto">
@@ -594,7 +594,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                     <TriggersStats class:col-span-2 class:xl:col-span-3 />
                 </div>
 
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

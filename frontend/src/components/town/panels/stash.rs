@@ -26,7 +26,7 @@ use crate::components::{
     },
     ui::{
         buttons::{MenuButton, TabButton},
-        card::{Card, CardHeader, CardInset, CardTitle},
+        card::{CardHeader, CardInset, CardTitle, MenuCard},
         input::ValidatedInput,
         menu_panel::MenuPanel,
         number::{format_datetime, format_number},
@@ -70,7 +70,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <Card class="h-full" gap=false>
+            <MenuCard class="h-full" gap=false>
                 <CardHeader title="Stash" on_close=move || open.set(false)>
                     <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-hidden">
                         <TabButton
@@ -155,7 +155,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                     </CardInset>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

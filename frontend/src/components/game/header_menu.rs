@@ -13,6 +13,7 @@ use crate::components::{
         buttons::{MenuButton, MenuButtonRed},
         confirm::ConfirmContext,
         fullscreen::FullscreenButton,
+        header::BaseHeaderMenu,
         wiki::WikiButton,
     },
 };
@@ -100,8 +101,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     view! {
-        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
-        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
+        <BaseHeaderMenu>
             <div class="flex justify-around w-full items-center">
                 <GoldCounter value=gold w_full=true />
                 <GemsCounter value=gems w_full=true />
@@ -139,6 +139,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButtonRed on:click=try_abandon_quest>"Stop"</MenuButtonRed>
                 <MenuButton on:click=quit>"Back"</MenuButton>
             </div>
-        </div>
+        </BaseHeaderMenu>
     }
 }

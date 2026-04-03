@@ -16,7 +16,7 @@ use crate::{
         shared::{resources::GoldCounter, tooltips::SkillTooltip},
         ui::{
             buttons::FancyButton,
-            card::{Card, CardHeader, CardInset},
+            card::{CardHeader, CardInset, MenuCard},
             menu_panel::MenuPanel,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
@@ -27,11 +27,11 @@ use crate::{
 pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <Card class="max-w-6xl mx-auto">
+            <MenuCard class="max-w-6xl mx-auto">
                 <CardHeader title="Buy New Skill" on_close=move || open.set(false) />
                 // flex-1 overflow-auto max-h-[65vh]
                 <SkillShop open=open />
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

@@ -11,7 +11,7 @@ use crate::components::{
     },
     ui::{
         buttons::MenuButton,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
         number::format_duration,
@@ -109,7 +109,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <Card class="max-w-2xl max-h-full mx-auto">
+        <MenuCard class="max-w-2xl max-h-full mx-auto">
             <CardHeader title="Grind Ended" on_close=move || open.set(false) />
 
             <CardInset>
@@ -146,7 +146,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
             <div class="flex justify-center">
                 <MenuButton on:click=try_confirm_end>"Confirm Reward & Exit"</MenuButton>
             </div>
-        </Card>
+        </MenuCard>
     }
 }
 

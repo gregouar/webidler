@@ -18,7 +18,7 @@ use crate::components::{
         panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
         town_scene::TownScene,
     },
-    ui::{buttons::MenuButton, fullscreen::FullscreenButton},
+    ui::{buttons::MenuButton, fullscreen::FullscreenButton, header::BaseHeaderMenu},
 };
 
 #[derive(Clone, Params, PartialEq)]
@@ -161,7 +161,7 @@ pub fn HeaderMenu() -> impl IntoView {
         Signal::derive(move || town_context.character.read().max_area_level == 0);
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
+        <BaseHeaderMenu>
             <div class="flex justify-around w-full items-center">
                 <GemsCounter value=gems />
                 <ShardsCounter value=shards />
@@ -200,6 +200,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
-        </div>
+        </BaseHeaderMenu>
     }
 }

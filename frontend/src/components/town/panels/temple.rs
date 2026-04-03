@@ -15,7 +15,7 @@ use crate::components::{
     town::TownContext,
     ui::{
         buttons::MenuButton,
-        card::{Card, CardHeader, CardInset, CardTitle},
+        card::{CardHeader, CardInset, CardTitle, MenuCard},
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
         number::{format_number, format_number_without_context},
@@ -46,7 +46,7 @@ pub fn TemplePanel(
 
     view! {
         <MenuPanel open=open>
-            <Card>
+            <MenuCard>
                 <CardHeader title="Temple" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {
@@ -77,7 +77,7 @@ pub fn TemplePanel(
                 <CardInset>
                     <BenedictionsList player_benedictions cost view_only />
                 </CardInset>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }

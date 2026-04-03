@@ -33,7 +33,7 @@ pub fn BattleScene() -> impl IntoView {
         <div class="absolute inset-0 p-1 xl:p-4">
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <PlayerCard />
-                <Card class="w-2/3 aspect-[12/8] overflow-hidden" pad=false gap=false>
+                <Card class="w-2/3 aspect-[12/8]" pad=false gap=false>
                     // <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden">
                     <BattleSceneHeader />
                     <div class="flex relative w-full flex-1 min-h-0

@@ -379,11 +379,20 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     view! {
         <div
             class="grid grid-cols-4 h-full
-            rounded-md bg-zinc-800
-            ring-1 ring-zinc-900/80
-            shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
+            rounded-md 
+            bg-zinc-800 border border-[#6c5734]/45
+            shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
             gap-1 xl:gap-2 p-1 xl:p-2"
-            style="contain: strict;"
+            style=format!(
+                "contain: strict;
+                    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                    background-image:
+                        /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
+                        url('{}');
+                    background-blend-mode: /*screen,*/ multiply;
+                    ",
+                img_asset("ui/dark_stone.webp"),
+            )
         >
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>

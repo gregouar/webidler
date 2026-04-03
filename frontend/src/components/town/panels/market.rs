@@ -35,7 +35,7 @@ use crate::components::{
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
-        card::{Card, CardHeader, CardInset, CardTitle},
+        card::{CardHeader, CardInset, CardTitle, MenuCard},
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
@@ -77,7 +77,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <Card class="h-full" gap=false>
+            <MenuCard class="h-full" gap=false>
                 <CardHeader title="Market" on_close=move || open.set(false)>
                     <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-hidden">
                         <TabButton
@@ -236,7 +236,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                     </CardInset>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }
