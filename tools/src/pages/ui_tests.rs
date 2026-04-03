@@ -13,16 +13,66 @@ pub fn UiTestsPage() -> impl IntoView {
             "Hello There"
             <MenuButton>"Passives"</MenuButton>
             <MenuButtonRed>"Ui Tests"</MenuButtonRed>
-            <Card class="w-2xl">
-                <div class="my-4 w-full flex justify-center">
-                    <div class="w-sm">
-                        <CharacterPortrait
-                            image_uri="monsters/pirate_pistol.webp".into()
-                            character_name="Rat".into()
-                            rarity=MonsterRarity::Normal
-                        />
+            <Card class="w-xl">
+                <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+                    <VerticalProgressBar
+                        class:w-6
+                        class:xl:w-8
+                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                        value=Signal::derive(|| 70.0)
+                    />
+                    <div class="flex flex-col gap-1 xl:gap-2">
+                        <div class="flex-1 min-h-0">
+                            <CharacterPortrait
+                                image_uri="adventurers/demon_male_1.webp".into()
+                                character_name="player".to_string()
+                            />
+                        </div>
+                        <FancyButton>
+                            <span class="text-base xl:text-lg">"Level Up"</span>
+                        </FancyButton>
                     </div>
+
+                    <VerticalProgressBar
+                        class:w-6
+                        class:xl:w-8
+                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                        value=Signal::derive(|| 70.0)
+                    />
                 </div>
+
+                <HorizontalProgressBar
+                    class:h-2
+                    class:xl:h-4
+                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                    value=Signal::derive(|| 70.0)
+                >
+                    {}
+                </HorizontalProgressBar>
+
+                // <div class="w-sm flex-col">
+                // <HorizontalProgressBar
+                // class="h-4 xl:h-5"
+                // bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                // value=Signal::derive(|| 70.0)
+                // >
+                // "Pirate Mechant"
+                // </HorizontalProgressBar>
+                // <div class="flex gap-2">
+                // <CharacterPortrait
+                // image_uri="monsters/pirate_pistol.webp".into()
+                // character_name="Rat".into()
+                // rarity=MonsterRarity::Normal
+                // />
+                // <VerticalProgressBar
+                // class:w-6
+                // class:xl:w-8
+                // bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                // value=Signal::derive(|| 70.0)
+                // />
+                // </div>
+                // </div>
+                // </div>
                 <div class="w-full grid grid-cols-4 gap-2">
                     {(0..3)
                         .map(|_| {
@@ -134,16 +184,11 @@ pub fn Card(
 ) -> impl IntoView {
     view! {
         <div
-            class=format!(
-                "max-h-full flex flex-col relative overflow-hidden
-                bg-zinc-800
-                border border-[#6c5734]/45
-                shadow-[0_10px_25px_rgba(0,0,0,0.45),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
-                {} {} {}",
-                class.unwrap_or_default(),
-                if gap { "gap-1 xl:gap-2" } else { "" },
-                if pad { "p-1 xl:p-3" } else { "" },
-            )
+            class="max-h-full flex flex-col relative overflow-hidden
+            bg-zinc-800
+            border border-[#6c5734]/45
+            shadow-[0_10px_25px_rgba(0,0,0,0.45),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
+            "
             style=format!(
                 "
                 clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
@@ -158,7 +203,12 @@ pub fn Card(
                 style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
             ></div>
 
-            <div class="relative z-10 flex max-h-full flex-col">{children()}</div>
+            <div class=format!(
+                "relative z-10 flex max-h-full flex-col {} {} {}",
+                if gap { "gap-1 xl:gap-2" } else { "" },
+                if pad { "p-1 xl:p-3" } else { "" },
+                class.unwrap_or_default(),
+            )>{children()}</div>
         </div>
     }
 }
@@ -701,6 +751,149 @@ pub fn CharacterPortrait(
                     fixture_class,
                 )></div>
 
+            </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn HorizontalProgressBar(
+    /// Percent value, must be between 0 and 100.
+    #[prop(into)]
+    value: Signal<f32>,
+    /// Bar color, must be of format "bg-XXXX-NNN"
+    bar_color: &'static str,
+    /// Text
+    children: Children,
+    // Instant reset
+    #[prop(into,default = RwSignal::new(false))] reset: RwSignal<bool>,
+    #[prop(optional)] class: Option<&'static str>,
+) -> impl IntoView {
+    let set_value = move || {
+        if reset.get() {
+            0.0
+        } else {
+            value.get().clamp(0.0, 100.0).round() * 0.01
+        }
+    };
+
+    let transition = move || {
+        if reset.get() {
+            "transition-none"
+        } else {
+            "transition-transform ease-linear duration-250 "
+        }
+    };
+
+    // Trick to reset animation by removing it when ended
+    let reset_bar_animation = RwSignal::new("opacity: 0;");
+    Effect::new(move |_| {
+        if reset.get() {
+            reset_bar_animation
+                .set("animation: horizontal-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+            set_timeout(
+                move || {
+                    reset.set(false);
+                },
+                std::time::Duration::from_millis(100),
+            );
+            set_timeout(
+                move || {
+                    reset_bar_animation.set("opacity: 0;");
+                },
+                std::time::Duration::from_millis(500),
+            );
+        }
+    });
+
+    view! {
+        <div class=format!(
+            "
+            relative flex w-full
+            rounded-lg
+            bg-stone-900 border border-neutral-950 
+            xl:shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
+            {}
+            ",
+            class.unwrap_or_default(),
+        )>
+            <div class="overflow-hidden w-full rounded-lg">
+                <div
+                    class=move || {
+                        format!(
+                            "h-full origin-left will-change-transform {} {}",
+                            bar_color,
+                            transition(),
+                        )
+                    }
+                    style=move || format!("transform: scaleX({});", set_value())
+                ></div>
+            </div>
+
+            // Fake copy for glow effect on reset
+            <div
+                class=format!("absolute inset-0 z-1 rounded-lg {}", bar_color)
+                style=reset_bar_animation
+            ></div>
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden">
+                {children()}
+            </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn VerticalProgressBar(
+    // Percent value, must be between 0 and 100.
+    #[prop(into)] value: Signal<f64>,
+    // Bar color, must be of format "bg-XXXX-NNN"
+    bar_color: &'static str,
+    // Instant reset
+    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(optional)] children: Option<Children>,
+) -> impl IntoView {
+    let set_value = move || {
+        if reset.get() { 0.0 } else { value.get() }
+    };
+
+    // Trick to reset animation by removing it when ended
+    let reset_bar_animation = RwSignal::new("opacity: 0;");
+    Effect::new(move |_| {
+        if reset.get() {
+            reset_bar_animation
+                .set("animation: vertical-progress-bar-fade-out 0.5s ease-out; animation-fill-mode: both;");
+            set_timeout(
+                move || {
+                    reset_bar_animation.set("opacity: 0;");
+                },
+                std::time::Duration::from_millis(500),
+            );
+        }
+    });
+
+    view! {
+        <div class="
+        relative flex flex-col justify-end h-full
+        rounded-lg 
+        bg-stone-900 border border-neutral-950 
+        shadow-[inset_0_0_8px_rgba(0,0,0,0.4)]
+        ">
+            <div class="overflow-hidden h-full rounded-lg">
+                <div
+                    class=move || {
+                        format!("h-full origin-bottom will-change-transform {}", bar_color)
+                    }
+                    class:transition-progress-bar=move || !reset.get()
+                    style=move || format!("transform: scaleY({});", set_value())
+                ></div>
+            </div>
+            // Fake copy for glow effect on reset
+            <div
+                class=format!("absolute rounded-lg inset-0 z-1 h-full {}", bar_color)
+                style=reset_bar_animation
+            ></div>
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-lg overflow-hidden">
+                {children.map(|children| children())}
             </div>
         </div>
     }
