@@ -642,9 +642,8 @@ pub fn CharacterPortrait(
     view! {
         <style>"color: #2e2926;"</style>
         <div class="flex items-center justify-center w-full h-full relative p-1 xl:p-2">
-            <div
-                class=format!(
-                    "w-full h-full relative isolate
+            <div class=format!(
+                "w-full h-full relative isolate
                     border-[1.5px] xl:border-2
                     shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
                     before:pointer-events-none before:absolute before:inset-[1px]
@@ -652,20 +651,9 @@ pub fn CharacterPortrait(
                     after:pointer-events-none after:absolute after:inset-[4px]
                     after:border-[1px]
                     {} {}",
-                    accent_class,
-                    shimmer_effect,
-                )
-                style=format!(
-                    "
-                    background-image:
-                        linear-gradient(180deg, rgba(214,177,102,0.13), rgba(0,0,0,0.2)),
-                        linear-gradient(180deg, rgba(68,49,28,0.9), rgba(26,20,16,0.97));
-                    background-size: auto, auto;
-                    background-position: center, center;
-                    background-blend-mode: screen, normal;
-                    ",
-                )
-            >
+                accent_class,
+                shimmer_effect,
+            )>
                 <div class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
                 <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
 
