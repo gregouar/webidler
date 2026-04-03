@@ -19,6 +19,7 @@ pub fn UiTestsPage() -> impl IntoView {
                         <CharacterPortrait
                             image_uri="monsters/pirate_pistol.webp".into()
                             character_name="Rat".into()
+                            rarity=MonsterRarity::Normal
                         />
                     </div>
                 </div>
@@ -606,8 +607,8 @@ pub fn CharacterPortrait(
             ",
             "",
             "
-            border-[#b89458]/65
-            bg-[linear-gradient(180deg,rgba(214,184,126,0.92),rgba(111,78,33,0.94))]
+            border-[#b89458]
+            bg-[linear-gradient(180deg,rgb(214,184,126),rgb(111,78,33))]
             ",
         ),
 
@@ -619,8 +620,8 @@ pub fn CharacterPortrait(
             ",
             "champion-shimmer",
             "
-            border-[#7a87d8]/70
-            bg-[linear-gradient(180deg,rgba(154,170,255,0.9),rgba(57,69,137,0.94))]
+            border-[#7a87d8]
+            bg-[linear-gradient(180deg,rgb(154,170,255),rgb(57,69,137))]
             ",
         ),
 
@@ -632,8 +633,8 @@ pub fn CharacterPortrait(
             ",
             "boss-shimmer",
             "
-            border-[#d77a68]/75
-            bg-[linear-gradient(180deg,rgba(247,167,145,0.92),rgba(116,38,30,0.96))]
+            border-[#d77a68]
+            bg-[linear-gradient(180deg,rgb(247,167,145),rgb(116,38,30))]
             ",
         ),
     };
@@ -643,7 +644,7 @@ pub fn CharacterPortrait(
         <div class="flex items-center justify-center w-full h-full relative p-1 xl:p-2">
             <div
                 class=format!(
-                    "w-full h-full relative isolate overflow-hidden
+                    "w-full h-full relative isolate
                     border-[1.5px] xl:border-2
                     shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
                     before:pointer-events-none before:absolute before:inset-[1px]
@@ -656,7 +657,6 @@ pub fn CharacterPortrait(
                 )
                 style=format!(
                     "
-                    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                     background-image:
                         linear-gradient(180deg, rgba(214,177,102,0.13), rgba(0,0,0,0.2)),
                         linear-gradient(180deg, rgba(68,49,28,0.9), rgba(26,20,16,0.97));
@@ -669,28 +669,10 @@ pub fn CharacterPortrait(
                 <div class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
                 <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
 
-                <div class=format!(
-                    "pointer-events-none absolute top-[3px] left-[3px] h-[6px] w-[6px] rotate-45 border shadow-[0_1px_1px_rgba(0,0,0,0.32)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute top-[3px] right-[3px] h-[6px] w-[6px] rotate-45 border shadow-[0_1px_1px_rgba(0,0,0,0.32)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute bottom-[3px] left-[3px] h-[6px] w-[6px] rotate-45 border shadow-[0_1px_1px_rgba(0,0,0,0.4)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute bottom-[3px] right-[3px] h-[6px] w-[6px] rotate-45 border shadow-[0_1px_1px_rgba(0,0,0,0.4)] {}",
-                    fixture_class,
-                )></div>
-
                 <div
                     class="h-full overflow-hidden border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                     style=format!(
                         "
-                        clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
                         background-image:
                             linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
                             url('{}');
@@ -709,6 +691,28 @@ pub fn CharacterPortrait(
                         class="object-cover h-full w-full transition-all duration-[5s]"
                     />
                 </div>
+
+                <div class=format!(
+                    "pointer-events-none absolute -top-[5px] -left-[5px] h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    fixture_class,
+                )></div>
+                <div class=format!(
+                    "pointer-events-none absolute -top-[5px] -right-[5px] h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    fixture_class,
+                )></div>
+                <div class=format!(
+                    "pointer-events-none absolute -bottom-[5px] -left-[5px] h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    fixture_class,
+                )></div>
+                <div class=format!(
+                    "pointer-events-none absolute -bottom-[5px] -right-[5px] h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    fixture_class,
+                )></div>
+
             </div>
         </div>
     }
