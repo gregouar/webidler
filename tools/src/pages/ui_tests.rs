@@ -144,9 +144,22 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     view! {
-        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
-        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
-            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+        <div
+            class="relative z-50 flex justify-between items-center p-1 xl:p-2 h-auto
+            border-b border-[#6c5734]/45 bg-zinc-800
+            shadow-[0_8px_18px_rgba(0,0,0,0.45),inset_0_-1px_0_rgba(0,0,0,0.18)]"
+            style=format!(
+                "
+                background-image:
+                    linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0)),
+                    url('{}');
+                background-blend-mode: screen, multiply;
+                ",
+                img_asset("ui/dark_stone.webp"),
+            )
+        >
+
+            <div class="flex justify-end space-x-1 xl:space-x-2 w-full relative z-10">
                 <MenuButton on:click=navigate_to_passives>"Passives"</MenuButton>
                 <MenuButtonRed on:click=navigate_to_ui_tests>"Ui Tests"</MenuButtonRed>
             </div>
@@ -207,10 +220,10 @@ pub fn Card(
     view! {
         <div
             class=format!(
-                "max-h-full flex flex-col relative overflow-hidden
+                "max-h-full flex flex-col relative
                 bg-zinc-800
                 border border-[#6c5734]/45
-                shadow-[0_10px_25px_rgba(0,0,0,0.45),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
+                shadow-[0_10px_25px_rgba(0,0,0,0.85),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                 {}",
                 class.unwrap_or_default(),
             )
