@@ -15,6 +15,7 @@ use crate::{
     assets::img_asset,
     components::{
         data_context::DataContext,
+        game::portrait::CharacterPortrait,
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
         shared::{
             inventory::InventoryEquipFilter,
@@ -133,7 +134,20 @@ fn PlayerCard() -> impl IntoView {
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
-                        <CharacterPortrait />
+                        {move || {
+                            view! {
+                                <CharacterPortrait
+                                    image_uri=town_context.character.read().portrait.clone()
+                                    character_name="Player".into()
+                                    just_hurt=Signal::derive(|| false)
+                                    just_hurt_crit=Signal::derive(|| false)
+                                    just_blocked=Signal::derive(|| false)
+                                    just_evaded=Signal::derive(|| false)
+                                    is_dead=Signal::derive(|| false)
+                                    statuses=Signal::derive(|| Default::default())
+                                />
+                            }
+                        }}
                     </div>
                 </div>
             </div>
@@ -160,33 +174,33 @@ fn PlayerCard() -> impl IntoView {
     }
 }
 
-#[component]
-pub fn CharacterPortrait() -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+// #[component]
+// pub fn CharacterPortrait() -> impl IntoView {
+//     let town_context = expect_context::<TownContext>();
 
-    let image_uri = move || img_asset(&town_context.character.read().portrait);
+//     let image_uri = move || img_asset(&town_context.character.read().portrait);
 
-    view! {
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-            <div class="border-6 xl:border-8 border-double border-stone-500 h-full w-full">
-                <div
-                    class="h-full w-full"
-                    style=format!(
-                        "background-image: url('{}');",
-                        img_asset("ui/paper_background.webp"),
-                    )
-                >
-                    <img
-                        draggable="false"
-                        src=image_uri
-                        alt="portrait"
-                        class="object-cover h-full w-full transition-all duration-[5s]"
-                    />
-                </div>
-            </div>
-        </div>
-    }
-}
+//     view! {
+//         <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
+//             <div class="border-6 xl:border-8 border-double border-stone-500 h-full w-full">
+//                 <div
+//                     class="h-full w-full"
+//                     style=format!(
+//                         "background-image: url('{}');",
+//                         img_asset("ui/paper_background.webp"),
+//                     )
+//                 >
+//                     <img
+//                         draggable="false"
+//                         src=image_uri
+//                         alt="portrait"
+//                         class="object-cover h-full w-full transition-all duration-[5s]"
+//                     />
+//                 </div>
+//             </div>
+//         </div>
+//     }
+// }
 #[component]
 pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();

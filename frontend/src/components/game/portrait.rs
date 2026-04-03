@@ -212,14 +212,10 @@ pub fn CharacterPortrait(
                 <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
 
                 <div
-                    class=move || {
-                        format!(
-                            "h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714]
-                            shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)] 
-                            transition-transform duration-1000 {}",
-                            if is_dead.get() { "[transform:rotateY(180deg)]" } else { "" },
-                        )
-                    }
+                    class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714]
+                    shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)] 
+                    transition-transform duration-1000"
+
                     style=format!(
                         "
                         background-image:
@@ -239,10 +235,15 @@ pub fn CharacterPortrait(
                         alt=character_name
                         class=move || {
                             format!(
-                                "object-cover h-full w-full transition-all duration-[5s]
+                                "object-cover h-full w-full
+                                [transition:transform_1s,opacity_5s]
                                 xl:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]
                                 {}",
-                                if is_dead.get() { "opacity-50 " } else { "" },
+                                if is_dead.get() {
+                                    "opacity-50 [transform:rotateY(180deg)]"
+                                } else {
+                                    ""
+                                },
                             )
                         }
                     />
@@ -413,118 +414,6 @@ pub fn CharacterPortrait(
                     None
                 }
             }}
-        </div>
-    }
-}
-
-#[component]
-pub fn CharacterPortrait2(
-    image_uri: String,
-    character_name: String,
-    #[prop(default = MonsterRarity::Normal)] rarity: MonsterRarity,
-) -> impl IntoView {
-    let (accent_class, shimmer_effect, fixture_class) = match rarity {
-        MonsterRarity::Normal => (
-            "
-            border-[#7f6744]
-            before:border-[#d0b173]/12
-            after:border-[#5a4427]/45
-            ",
-            "",
-            "
-            border-[#b89458]
-            bg-[linear-gradient(180deg,rgb(214,184,126),rgb(111,78,33))]
-            ",
-        ),
-
-        MonsterRarity::Champion => (
-            "
-            border-[#4f5fbe]
-            before:border-[#97a7ff]/14
-            after:border-[#2c356d]/55
-            ",
-            "champion-shimmer",
-            "
-            border-[#7a87d8]
-            bg-[linear-gradient(180deg,rgb(154,170,255),rgb(57,69,137))]
-            ",
-        ),
-
-        MonsterRarity::Boss => (
-            "
-            border-[#ab473c]
-            before:border-[#f2a18c]/20
-            after:border-[#6d2119]/60
-            ",
-            "boss-shimmer",
-            "
-            border-[#d77a68]
-            bg-[linear-gradient(180deg,rgb(247,167,145),rgb(116,38,30))]
-            ",
-        ),
-    };
-    view! {
-        <div class="flex items-center justify-center w-full h-full relative p-1 xl:p-2">
-            <div class=format!(
-                "w-full h-full relative isolate
-                    border-[1.5px] xl:border-2
-                    shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
-                    before:pointer-events-none before:absolute before:inset-[1px]
-                    before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.06),transparent_28%)]
-                    after:pointer-events-none after:absolute after:inset-[4px]
-                    after:border-[1px]
-                    {} {}",
-                accent_class,
-                shimmer_effect,
-            )>
-                <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
-
-                <div
-                    class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
-                    style=format!(
-                        "
-                        background-image:
-                            linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
-                            url('{}');
-                        background-size: auto, cover;
-                        background-position: center, center;
-                        ",
-                        img_asset("ui/paper_background.webp"),
-                    )
-                >
-                    <div class="pointer-events-none absolute inset-0 border-[2px] xl:border-[3px] border-[#2a1e19]/68"></div>
-                    <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
-                    <img
-                        draggable="false"
-                        src=img_asset(&image_uri)
-                        alt=character_name
-                        class="object-cover h-full w-full transition-all duration-[5s]"
-                    />
-                </div>
-
-                <div class=format!(
-                    "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-
-            </div>
         </div>
     }
 }
