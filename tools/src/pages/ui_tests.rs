@@ -654,11 +654,11 @@ pub fn CharacterPortrait(
                 accent_class,
                 shimmer_effect,
             )>
-                <div class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
+                <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
 
                 <div
-                    class="h-full overflow-hidden border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
+                    class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                     style=format!(
                         "
                         background-image:
@@ -671,7 +671,7 @@ pub fn CharacterPortrait(
                     )
                 >
                     <div class="pointer-events-none absolute inset-0 border-[2px] xl:border-[3px] border-[#2a1e19]/68"></div>
-                    <div class="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
+                    <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
                     <img
                         draggable="false"
                         src=img_asset(&image_uri)
@@ -681,23 +681,23 @@ pub fn CharacterPortrait(
                 </div>
 
                 <div class=format!(
-                    "pointer-events-none absolute -top-[5px] -left-[5px] h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
                     fixture_class,
                 )></div>
                 <div class=format!(
-                    "pointer-events-none absolute -top-[5px] -right-[5px] h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
                     fixture_class,
                 )></div>
                 <div class=format!(
-                    "pointer-events-none absolute -bottom-[5px] -left-[5px] h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
                     fixture_class,
                 )></div>
                 <div class=format!(
-                    "pointer-events-none absolute -bottom-[5px] -right-[5px] h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
+                    "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
                     fixture_class,
                 )></div>
 
