@@ -1,3 +1,4 @@
+use frontend::assets::img_asset;
 use leptos::prelude::*;
 use leptos_use::use_interval_fn;
 
@@ -11,7 +12,7 @@ pub fn UiTestsPage() -> impl IntoView {
             "Hello There"
             <Card class="w-3xl">
                 <div class="w-full grid grid-cols-5 gap-2">
-                    {(0..20)
+                    {(0..3)
                         .map(|_| {
                             let trigger_reset_progress = RwSignal::new(false);
                             let reset_progress = Signal::derive(move || {
@@ -120,18 +121,28 @@ pub fn Card(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <div class=format!(
-            "max-h-full flex flex-col relative
-            bg-zinc-800 
-            rounded-[6px] xl:rounded-[8px]
-                 
-            ring-1 ring-zinc-700/50
-            shadow-[0_6px_15px_rgba(0,0,0,0.35),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
-            {} {} {}",
-            class.unwrap_or_default(),
-            if gap { "gap-1 xl:gap-2" } else { "" },
-            if pad { "p-1 xl:p-3" } else { "" },
-        )>{children()}</div>
+        <div
+            class=format!(
+                "max-h-full flex flex-col relative
+                bg-zinc-900
+                rounded-[6px] xl:rounded-[8px]
+                    
+                shadow-[0_6px_15px_rgba(0,0,0,0.35),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
+                {} {} {}",
+                class.unwrap_or_default(),
+                if gap { "gap-1 xl:gap-2" } else { "" },
+                if pad { "p-1 xl:p-3" } else { "" },
+            )
+            style=format!(
+                "
+                background-image: url('{}'); 
+                background-blend-mode: luminosity;
+                ",
+                img_asset("ui/dark_stone.webp"),
+            )
+        >
+            {children()}
+        </div>
     }
 }
 
@@ -199,10 +210,27 @@ pub fn CircularProgressBar(
     view! {
         <div class="circular-progress-bar">
             <div
-                class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden
-                xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)] ring-1 ring-zinc-700/20"
-                style="contain: strict;"
+                class="relative w-full h-full aspect-square rounded-full overflow-hidden
+                xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]
+                border border-[#7a6137]
+                shadow-[0_8px_18px_rgba(0,0,0,0.48),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                style=format!(
+                    "
+                    contain: strict;
+                    background-image:
+                        linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
+                        linear-gradient(180deg, rgba(34,32,37,0.96), rgba(15,14,18,1)),
+                        url('{}');
+                    background-size: auto, auto, 180px 180px;
+                    background-position: center, center, center;
+                    background-blend-mode: screen, normal, soft-light;
+                    ",
+                    img_asset("ui/dark_stone.webp"),
+                )
             >
+                <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
+                <div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_10%,rgba(229,194,120,0.08),transparent_38%),radial-gradient(circle_at_50%_100%,rgba(0,0,0,0.22),transparent_44%)]"></div>
+
                 <div
                     class="absolute inset-0 will-change-(--progress) will-change-opacity
                     transition-circular-progress-bar"
@@ -239,10 +267,25 @@ pub fn CircularProgressBar(
                 // Hole in the middle
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        bg-radial from-stone-600 to-zinc-950 to-70% 
-                         ring-1 ring-zinc-700/20",
+                        border border-[#6d532e]/70
+                        shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                     bar_width / 2,
-                )></div>
+                )
+                    style=format!(
+                        "
+                        background-image:
+                            radial-gradient(circle at 50% 35%, rgba(74,69,78,0.92), rgba(16,15,20,0.98) 72%),
+                            url('{}');
+                        background-size: auto, 160px 160px;
+                        background-position: center, center;
+                        background-blend-mode: normal, soft-light;
+                        ",
+                        img_asset("ui/dark_stone.webp"),
+                    )
+                >
+                    <div class="pointer-events-none absolute inset-[2px] rounded-full border border-[#d6b978]/12"></div>
+                    <div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_18%,rgba(233,203,131,0.08),transparent_34%),radial-gradient(circle_at_50%_100%,rgba(0,0,0,0.3),transparent_52%)]"></div>
+                </div>
 
                 // Icon
                 <div
@@ -266,25 +309,42 @@ pub fn FancyButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn
-            tracking-wide
-            text-white font-extrabold text-shadow shadow-neutral-950
-            px-2 xl:px-3 rounded shadow-md
-            text-sm xl:text-base 
-            border border-zinc-700/50
-            bg-gradient-to-t from-zinc-900 to-zinc-800 
-            overflow-hidden
-            hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
-            active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+            class="btn relative isolate overflow-hidden
+            tracking-[0.08em]
+            text-stone-100 font-extrabold text-shadow shadow-black/90
+            px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
+            text-sm xl:text-base
+            border border-[#7a6137]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:rounded-[3px] xl:before:rounded-[5px]
+            before:border before:border-[#d5b16d]/18
+            before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+            bg-[#1b191d]
+            hover:border-[#a27f46]
+            hover:text-[#f3ead2]
+            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:translate-y-[1px]
-            disabled:from-zinc-700 disabled:to-zinc-600
-            disabled:text-zinc-400
+            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            disabled:text-zinc-500
+            disabled:border-[#4b4030]
             disabled:opacity-60 disabled:shadow-none
-            "
+            disabled:before:hidden"
+            style=format!(
+                "
+                background-image:
+                    linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+                    linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+                background-size: auto, auto, 180px 180px;
+                background-position: center, center, center;
+                background-blend-mode: screen, normal, soft-light;
+                ",
+            )
             disabled=disabled
         >
-            // disabled=disabled
-            {children()}
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+            <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }
@@ -306,33 +366,48 @@ pub fn Toggle(
 
     let toggle_class = move || {
         if checked.get() {
-            "shadow-md text-white"
-            // "ring-2 ring-amber-600/20 shadow-md text-white "
+            "text-[#f6edd8] border-[#b28a4f] shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
         } else {
-            "opacity-60 shadow-none text-zinc-400"
+            "text-zinc-400 border-[#65533a] shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]"
         }
     };
 
     view! {
         <button
             on:click=switch_value
+            style=format!(
+                "
+                background-image:
+                    linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
+                    linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1)),
+                    url('{}');
+                background-size: auto, auto, 180px 180px;
+                background-position: center, center, center;
+                background-blend-mode: screen, normal, soft-light;
+                ",
+                img_asset("ui/dark_stone.webp"),
+            )
             class=move || {
                 format!(
-                    "btn
-                    tracking-wide
+                    "btn relative isolate overflow-hidden
+                    tracking-[0.08em]
                     px-2 xl:px-3
-                    text-sm xl:text-base 
-                    font-extrabold text-shadow shadow-neutral-950
-                    border border-zinc-700/50 rounded 
-                    bg-gradient-to-t from-zinc-900 to-zinc-800 
-                    hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700
-                    active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950
+                    text-sm xl:text-base
+                    font-extrabold text-shadow shadow-black/90
+                    rounded-[4px] xl:rounded-[6px]
+                    before:pointer-events-none before:absolute before:inset-[1px]
+                    before:rounded-[3px] xl:before:rounded-[5px]
+                    before:border before:border-[#d5b16d]/16
+                    before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]
+                    hover:border-[#a27f46]
+                    hover:text-[#f1e4c4]
                     active:translate-y-[1px]
-                    disabled:from-zinc-700 disabled:to-zinc-600
-                    disabled:text-zinc-400
+                    active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+                    disabled:text-zinc-500
+                    disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
+                    disabled:before:hidden
                     transition-all duration-200
-                    relative
                     group
                     {}
                     ",
@@ -341,7 +416,13 @@ pub fn Toggle(
             }
             disabled=disabled
         >
-            {children()}
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
+            <span
+                class="pointer-events-none absolute inset-0 rounded-[4px] xl:rounded-[6px] opacity-0 transition-opacity duration-200"
+                class:opacity-100=move || checked.get()
+                style="background: radial-gradient(circle at 50% 0%, rgba(229, 194, 120, 0.18), transparent 58%);"
+            ></span>
+            <span class="relative z-10">{children()}</span>
         </button>
     }
 }
