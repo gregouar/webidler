@@ -351,7 +351,7 @@ pub fn CircularProgressBar(
            <div
                 class="relative w-full h-full aspect-square rounded-full overflow-hidden
                 xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]
-                border border-[#7a6137]
+                border border-[#6c5329]
                 shadow-[0_8px_18px_rgba(0,0,0,0.48),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]"
                 style=
                     "
@@ -437,7 +437,7 @@ pub fn MenuButton(
             text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
             py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
             text-sm xl:text-base
-            border border-[#7a6137]
+            border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
             before:pointer-events-none before:absolute before:inset-[1px]
             before:rounded-[3px] xl:before:rounded-[5px]
@@ -526,7 +526,7 @@ pub fn FancyButton(
             text-stone-100 font-extrabold text-shadow shadow-black/90
             px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
             text-sm xl:text-base
-            border border-[#7a6137]
+            border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
             before:pointer-events-none before:absolute before:inset-[1px]
             before:rounded-[3px] xl:before:rounded-[5px]
@@ -886,7 +886,7 @@ pub fn HorizontalProgressBar(
             relative flex w-full
             rounded-[4px] xl:rounded-[6px]
             overflow-hidden
-            border border-[#7a6137]
+            border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             {}
             ",
@@ -968,7 +968,7 @@ pub fn VerticalProgressBar(
             relative flex flex-col justify-end h-full
             rounded-[4px] xl:rounded-[6px]
             overflow-hidden
-            border border-[#7a6137]
+            border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             "
             style="
