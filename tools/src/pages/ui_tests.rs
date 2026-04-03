@@ -10,6 +10,8 @@ pub fn UiTestsPage() -> impl IntoView {
         <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
             <HeaderMenu />
             "Hello There"
+            <MenuButton>"Passives"</MenuButton>
+            <MenuButton>"Ui Tests"</MenuButton>
             <Card class="w-3xl">
                 <div class="w-full grid grid-cols-5 gap-2">
                     {(0..3)
@@ -290,6 +292,96 @@ pub fn CircularProgressBar(
 }
 
 #[component]
+pub fn MenuButton(
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    #[prop(optional)] button_type: Option<&'static str>,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <button
+            class="btn relative isolate overflow-hidden
+            tracking-[0.08em]
+            text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
+            py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
+            text-sm xl:text-base
+            border border-[#7a6137]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:rounded-[3px] xl:before:rounded-[5px]
+            before:border before:border-[#d5b16d]/18
+            before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+            hover:border-[#a27f46]
+            hover:text-[#f3ead2]
+            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            active:translate-y-[1px]
+            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            w-auto
+            disabled:text-zinc-500
+            disabled:border-[#4b4030]
+            disabled:opacity-60 disabled:shadow-none
+            disabled:before:hidden"
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
+            "
+            type=button_type
+            disabled=disabled
+        >
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+            <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+            <span class="relative z-10">{children()}</span>
+        </button>
+    }
+}
+
+#[component]
+pub fn MenuButtonRed(
+    #[prop(optional)] disabled: Option<Signal<bool>>,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <button
+            class="btn relative isolate overflow-hidden
+            tracking-[0.08em]
+            text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
+            py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
+            text-sm xl:text-base
+            border border-[#8e4538]
+            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,210,184,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:rounded-[3px] xl:before:rounded-[5px]
+            before:border before:border-[#d78b78]/16
+            before:bg-[linear-gradient(180deg,rgba(239,170,142,0.08),transparent_36%)]
+            hover:border-[#b55d4c]
+            hover:text-[#ffd8d0]
+            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,220,198,0.24),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            active:translate-y-[1px]
+            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(34,10,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            disabled:text-zinc-500
+            disabled:border-[#4f312d]
+            disabled:opacity-60 disabled:shadow-none
+            disabled:before:hidden"
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(230,164,125,0.14), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(72,28,26,0.98), rgba(35,11,13,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
+            "
+            disabled=disabled
+        >
+            <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#ffc1ad]/40 to-transparent"></span>
+            <span class="relative z-10">{children()}</span>
+        </button>
+    }
+}
+
+#[component]
 pub fn FancyButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
     children: Children,
@@ -362,18 +454,14 @@ pub fn Toggle(
     view! {
         <button
             on:click=switch_value
-            style=format!(
-                "
-                background-image:
-                    linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
-                    linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1)),
-                    url('{}');
-                background-size: auto, auto, 180px 180px;
-                background-position: center, center, center;
-                background-blend-mode: screen, normal, soft-light;
-                ",
-                img_asset("ui/dark_stone.webp"),
-            )
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1));
+            background-size: auto, auto;
+            background-position: center, center;
+            background-blend-mode: screen, normal;
+            "
             class=move || {
                 format!(
                     "btn relative isolate overflow-hidden
@@ -407,6 +495,86 @@ pub fn Toggle(
             <span
                 class="pointer-events-none absolute inset-0 rounded-[4px] xl:rounded-[6px] opacity-0 transition-opacity duration-200"
                 class:opacity-100=move || checked.get()
+                style="background: radial-gradient(circle at 50% 0%, rgba(229, 194, 120, 0.18), transparent 58%);"
+            ></span>
+            <span class="relative z-10">{children()}</span>
+        </button>
+    }
+}
+
+#[component]
+pub fn TabButton(
+    children: Children,
+    #[prop(into)] is_active: Signal<bool>,
+    #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    #[prop(optional)] title: Option<&'static str>,
+) -> impl IntoView {
+    let active_class = |active| {
+        if active {
+            "
+            text-[#f5ecd6]
+            border-[#b28a4f]
+            shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_4px_rgba(0,0,0,0.42)]
+            translate-y-[2px]
+            "
+        } else {
+            "
+            cursor-pointer
+            text-zinc-300
+            border-[#6d5737]
+            shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]
+            hover:border-[#a27f46]
+            hover:text-[#f1e4c4]
+            hover:shadow-[0_6px_14px_rgba(0,0,0,0.5),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.2),inset_0_-1px_0_rgba(0,0,0,0.45)]
+            active:shadow-[0_2px_6px_rgba(0,0,0,0.55),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45)]
+            disabled:text-zinc-500
+            disabled:border-[#4b4030]
+            disabled:opacity-60
+            "
+        }
+    };
+
+    let disable_button = Signal::derive(move || {
+        is_active.get() || disabled.map(|disabled| disabled.get()).unwrap_or_default()
+    });
+
+    view! {
+        <button
+            title=title
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+            linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+            background-size: auto, auto, 180px 180px;
+            background-position: center, center, center;
+            background-blend-mode: screen, normal, soft-light;
+            "
+            class=move || {
+                format!(
+                    "btn relative isolate overflow-hidden
+                    tracking-[0.08em]
+                    flex-1
+                    px-2 xl:px-3 py-1 xl:py-2
+                    text-sm xl:text-base
+                    font-extrabold text-shadow shadow-black/90
+                    border-t border-l border-r rounded-t-[6px]
+                    before:pointer-events-none before:absolute before:inset-[1px]
+                    before:rounded-t-[5px]
+                    before:border-t before:border-l before:border-r before:border-[#d5b16d]/16
+                    before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]
+                    transition-all duration-200
+                    group
+                    {}
+                    ",
+                    active_class(is_active.get()),
+                )
+            }
+            disabled=disable_button
+        >
+            <span class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
+            <span
+                class="pointer-events-none absolute inset-0 rounded-t-[6px] opacity-0 transition-opacity duration-200"
+                class:opacity-100=move || is_active.get()
                 style="background: radial-gradient(circle at 50% 0%, rgba(229, 194, 120, 0.18), transparent 58%);"
             ></span>
             <span class="relative z-10">{children()}</span>
