@@ -123,10 +123,9 @@ pub fn Card(
     view! {
         <div
             class=format!(
-                "max-h-full flex flex-col relative
+                "max-h-full flex flex-col relative overflow-hidden
                 bg-zinc-900
-                rounded-[6px] xl:rounded-[8px]
-                    
+                border border-[#6c5734]/45
                 shadow-[0_6px_15px_rgba(0,0,0,0.35),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                 {} {} {}",
                 class.unwrap_or_default(),
@@ -135,13 +134,21 @@ pub fn Card(
             )
             style=format!(
                 "
+                clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                 background-image: url('{}'); 
                 background-blend-mode: luminosity;
                 ",
                 img_asset("ui/dark_stone.webp"),
             )
         >
-            {children()}
+            <div
+                class="pointer-events-none absolute inset-[1px] border border-white/6"
+                style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
+            ></div>
+            // <div class="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white/6 via-white/2 to-transparent"></div>
+            // <div class="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
+
+            <div class="relative z-10 flex max-h-full flex-col">{children()}</div>
         </div>
     }
 }
