@@ -126,7 +126,7 @@ pub fn Card(
             rounded-[6px] xl:rounded-[8px]
                  
             ring-1 ring-zinc-700/50
-            shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
+            shadow-[0_6px_15px_rgba(0,0,0,0.35),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
             {} {} {}",
             class.unwrap_or_default(),
             if gap { "gap-1 xl:gap-2" } else { "" },
