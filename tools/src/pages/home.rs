@@ -201,7 +201,8 @@ pub fn CircularProgressBar(
     view! {
         <div class="circular-progress-bar">
             <div
-                class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden"
+                class="relative w-full h-full aspect-square rounded-full bg-stone-900 overflow-hidden
+                xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)] ring-1 ring-zinc-700/20"
                 style="contain: strict;"
             >
                 <div
@@ -240,14 +241,15 @@ pub fn CircularProgressBar(
                 // Hole in the middle
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        bg-radial from-stone-600 to-zinc-950 to-70%",
+                        bg-radial from-stone-600 to-zinc-950 to-70% 
+                         ring-1 ring-zinc-700/20",
                     bar_width / 2,
                 )></div>
 
                 // Icon
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    scale-125
+                    scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
                     will-change-transform transition-transform duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
