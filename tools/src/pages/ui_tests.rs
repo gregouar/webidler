@@ -31,7 +31,7 @@ pub fn UiTestsPage() -> impl IntoView {
                                         character_name="player".to_string()
                                     />
                                 </div>
-                                <FancyButton>
+                                <FancyButton disabled=Signal::derive(|| true)>
                                     <span class="text-base xl:text-lg">"Level Up"</span>
                                 </FancyButton>
                             </div>
@@ -387,23 +387,11 @@ pub fn CircularProgressBar(
         <div class="circular-progress-bar">
            <div
                 class="relative w-full h-full aspect-square rounded-full overflow-hidden
-                xl:drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]
                 border border-[#6c5329]
-                shadow-[0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]"
-                style=
-                    "
-                    contain: strict;
-                    background-image:
-                        linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)),
-                        linear-gradient(180deg, rgba(34,32,37,0.96), rgba(15,14,18,1));
-                    background-size: auto, auto;
-                    background-position: center, center;
-                    background-blend-mode: screen, normal;
-                    "
+                bg-stone-900
+                shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
             >
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
-                <div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_10%,rgba(229,194,120,0.08),transparent_38%),radial-gradient(circle_at_50%_100%,rgba(0,0,0,0.22),transparent_44%)]"></div>
-
                 <div
                     class="absolute inset-0 will-change-(--progress) will-change-opacity
                     transition-circular-progress-bar"
