@@ -311,7 +311,7 @@ impl ItemModifiers {
     pub fn count_nonunique_affixes(&self) -> usize {
         self.affixes
             .iter()
-            .filter(|affix| affix.affix_type != AffixType::Unique)
+            .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
             .count()
     }
 

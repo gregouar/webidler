@@ -22,7 +22,7 @@ use crate::{
             item_card::ItemCard,
             tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
         },
-        town::TownContext,
+        town::{TownContext, items_browser::BrowserEmptyItemSlot},
         ui::{
             Separator,
             buttons::{CloseButton, MenuButton},
@@ -375,7 +375,7 @@ fn GrindingAreaCard(
             <div
                 class=move || {
                     format!(
-                        "relative z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
+                        "relative z-10 p-[2px] flex flex-col h-full transition-all overflow-hidden {}",
                         if locked() {
                             "opacity-60 cursor-default"
                         } else if view_only {
@@ -496,41 +496,33 @@ pub fn StartGrindPanel(
             })
     });
 
-    let map_details = move || {
-        match selected_map.get() {
-            Some(selected_map) => {
-                view! {
-                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <ItemCard
-                            item_specs=selected_map.clone()
-                            class:pointer-events-none
-                            max_item_level
-                        />
-                    </div>
+    let map_details = move || match selected_map.get() {
+        Some(selected_map) => view! {
+            <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
+                <ItemCard
+                    item_specs=selected_map.clone()
+                    class:pointer-events-none
+                    max_item_level
+                />
+            </div>
 
-                    <div class="flex-1 w-full max-h-full overflow-y-auto">
-                        <ItemTooltipContent
-                            item_specs=selected_map.clone()
-                            class:select-text
-                            max_item_level
-                        />
-                    </div>
-                }
-                .into_any()
-            }
-           None => {
-                view! {
-                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <div class="
-                        relative group flex items-center justify-center w-full h-full
-                        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
-                        "></div>
-                    </div>
-
-                    <div class="flex-1 text-gray-400">"Proclaim Edict"</div>
-                }.into_any()
-            }
+            <div class="flex-1 w-full max-h-full overflow-y-auto">
+                <ItemTooltipContent
+                    item_specs=selected_map.clone()
+                    class:select-text
+                    max_item_level
+                />
+            </div>
         }
+        .into_any(),
+        None => view! {
+            <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
+                <BrowserEmptyItemSlot />
+            </div>
+
+            <div class="flex-1 text-gray-400 text-center xl:text-left">"Proclaim Edict"</div>
+        }
+        .into_any(),
     };
 
     let choose_map = move |_| {

@@ -323,7 +323,7 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
                     node_ref=node_ref
                     class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4"
                 >
-                    <h2 class="text-xl font-bold text-amber-300">"Forgot Password"</h2>
+                    <h2 class="text-xl font-bold text-amber-300 font-display">"Forgot Password"</h2>
 
                     <Show when=move || !success.get()>
                         <p class="text-gray-400 text-sm leading-relaxed">
@@ -488,7 +488,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                             node_ref=node_ref
                             class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4"
                         >
-                            <h2 class="text-xl font-bold text-amber-300">"Guest"</h2>
+                            <h2 class="text-xl font-bold text-amber-300 font-display">"Guest"</h2>
 
                             <p class="text-gray-400 text-sm leading-relaxed">
                                 "Playing as guest will create a new account with random username and password stored locally in your browser.

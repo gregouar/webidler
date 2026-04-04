@@ -50,6 +50,19 @@ pub struct SelectedMarketItem {
 }
 
 #[component]
+pub fn BrowserEmptyItemSlot() -> impl IntoView {
+    view! {
+        <div class="relative isolate flex items-center justify-center w-full h-full overflow-hidden rounded-[6px]
+        border border-[#56462f]/80
+        bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]
+        shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)]">
+            <div class="pointer-events-none absolute inset-[1px] rounded-[5px] border border-white/5 shadow-[inset_0_-10px_16px_rgba(0,0,0,0.2)]"></div>
+            <div class="relative z-10 flex h-full w-full items-center justify-center p-1 text-center"></div>
+        </div>
+    }
+}
+
+#[component]
 pub fn ItemsBrowser(
     selected_item: RwSignal<SelectedItem>,
     #[prop(into)] items_list: Signal<Vec<SelectedMarketItem>>,
@@ -122,18 +135,38 @@ pub fn ItemRow(
     view! {
         <div class=move || {
             format!(
-                "relative flex w-full items-center justify-between p-3 gap-2 cursor-pointer mb-2 shadow-sm transition-colors duration-150 rounded-lg
-                bg-neutral-800 hover:bg-neutral-700 {} {} {}",
-                if highlight() { "ring-2 ring-amber-400" } else { "ring-1 ring-zinc-950" },
-                if special_offer { "border-2 border-pink-400" } else { "" },
-                if rejected { "border-2 border-red-500" } else { "" },
+                "relative mb-2 flex w-full items-center justify-between gap-3 rounded-[8px] border px-3 py-3
+                bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
+                shadow-[0_4px_10px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03)]
+                transition-colors duration-150 cursor-pointer
+                hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent),linear-gradient(135deg,rgba(46,45,52,0.98),rgba(21,21,25,1))]
+                {} {} {}",
+                if highlight() {
+                    "border-[#b28a4f] shadow-[0_4px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_0_0_1px_rgba(214,177,102,0.18)]"
+                } else if rejected {
+                    "border-red-700/70 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03),inset_0_0_0_1px_rgba(239,68,68,0.12)]"
+                } else if special_offer {
+                    "border-fuchsia-700/70 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03),inset_0_0_0_1px_rgba(217,70,239,0.14)]"
+                } else {
+                    "border-zinc-800"
+                },
+                if special_offer {
+                    "before:absolute before:inset-y-[8px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-fuchsia-400/80 before:to-transparent"
+                } else {
+                    ""
+                },
+                if rejected {
+                    "after:absolute after:inset-y-[8px] after:left-[5px] after:w-[2px] after:rounded-full after:bg-gradient-to-b after:from-transparent after:via-red-400/85 after:to-transparent"
+                } else {
+                    ""
+                },
             )
         }>
-            <div class="relative h-32 aspect-[2/3] flex-shrink-0">
+            <div class="relative h-28 xl:h-32 aspect-[2/3] flex-shrink-0">
                 <ItemCard item_specs=item_specs.clone() class:pointer-events-none max_item_level />
             </div>
 
-            <div class="flex flex-col w-full">
+            <div class="min-w-0 flex flex-col w-full">
                 <ItemTooltipContent
                     item_specs=item_specs.clone()
                     hide_description=true
@@ -146,8 +179,8 @@ pub fn ItemRow(
             {(price > 0.0)
                 .then(|| {
                     view! {
-                        <div class="absolute flex bottom-2 right-2 gap-1 items-center">
-                            <span class="text-gray-400">"Price:"</span>
+                        <div class="absolute flex bottom-2 right-2 gap-1 items-center rounded-[4px] border border-fuchsia-500/25 px-2 py-1 bg-black/20">
+                            <span class="text-gray-400 text-xs xl:text-sm">"Price:"</span>
                             <span class="text-fuchsia-300 font-semibold">
                                 {format!("{:.0}", price)}
                             </span>
@@ -172,49 +205,46 @@ pub fn ItemDetails(
     let town_context: TownContext = expect_context();
     let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
 
-    let item_details = move || {
-        match selected_item.get() {
-            SelectedItem::InMarket(selected_item) => {
-                view! {
-                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <ItemCard
-                            item_specs=selected_item.item_specs.clone()
-                            class:pointer-events-none
-                            max_item_level
-                        />
-                    </div>
+    let item_details = move || match selected_item.get() {
+        SelectedItem::InMarket(selected_item) => view! {
+            <div class="relative flex-shrink-0 w-1/4 max-w-[12rem] aspect-[2/3]">
+                <ItemCard
+                    item_specs=selected_item.item_specs.clone()
+                    class:pointer-events-none
+                    max_item_level
+                />
+            </div>
 
-                    <div class="flex-1 w-full max-h-full overflow-y-auto">
-                        <ItemTooltipContent
-                            item_specs=selected_item.item_specs.clone()
-                            class:select-text
-                            show_affixes
-                            max_item_level
-                        />
-                    </div>
-                }
-                .into_any()
-            }
-           SelectedItem:: None | SelectedItem::Removed(_) => {
-                view! {
-                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <div class="
-                        relative group flex items-center justify-center w-full h-full
-                        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
-                        "></div>
-                    </div>
-
-                    <div class="flex-1 text-gray-400">"No Item Selected"</div>
-                }.into_any()
-            }
+            <div class="flex-1 min-w-0 w-full max-h-full overflow-y-auto pr-1">
+                <ItemTooltipContent
+                    item_specs=selected_item.item_specs.clone()
+                    class:select-text
+                    show_affixes
+                    max_item_level
+                />
+            </div>
         }
+        .into_any(),
+        SelectedItem::None | SelectedItem::Removed(_) => view! {
+            <div class="relative flex-shrink-0 w-1/4 max-w-[12rem] aspect-[2/3]">
+                <BrowserEmptyItemSlot />
+            </div>
+
+            <div class="flex-1 min-w-0 text-center text-gray-400 text-sm xl:text-base">
+                "No Item Selected"
+            </div>
+        }
+        .into_any(),
     };
 
     view! {
         <div class="w-full h-full flex items-center justify-center">
-            <div class="flex flex-row gap-6 items-center
+            <div class="flex flex-row gap-4 xl:gap-6 items-center
             w-full h-auto aspect-5/2 overflow-y-auto
-            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2">{item_details}</div>
+            rounded-[10px] border border-zinc-800
+            bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
+            shadow-[0_6px_16px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.03)]
+            p-3 xl:p-4">{item_details}</div>
         </div>
     }
 }
@@ -259,7 +289,7 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
 
     view! {
         <div
-            class="absolute flex top-2 right-2 p-1 rounded-sm items-center bg-zinc-900 hover:bg-zinc-800"
+            class="absolute flex top-2 right-2 px-2 py-1 rounded-[4px] items-center border border-zinc-700/80 bg-black/45 hover:bg-black/60"
 
             on:touchstart=move |_| { show_tooltip() }
             on:contextmenu=move |ev| {
@@ -272,7 +302,7 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
             }
             on:mouseleave=move |_| hide_tooltip()
         >
-            <span class="text-gray-400">"Compare"</span>
+            <span class="text-gray-400 text-xs xl:text-sm">"Compare"</span>
         </div>
     }
 }
