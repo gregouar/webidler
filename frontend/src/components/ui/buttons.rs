@@ -275,7 +275,7 @@ pub fn TabButton(
                 format!(
                     "btn relative isolate overflow-hidden
                     tracking-[0.08em]
-                    flex-1
+                    inline-flex shrink-0 items-center justify-center
                     px-2 xl:px-3 py-1 xl:py-2
                     text-sm xl:text-base
                     font-extrabold text-shadow shadow-black/90

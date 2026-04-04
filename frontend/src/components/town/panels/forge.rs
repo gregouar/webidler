@@ -81,7 +81,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             on:click=move |_| { switch_tab(ForgeTab::Gamble) }
                             class:py-3
                         >
-                            <div class="mx-1 mb-2">"Gamble"</div>
+                            <div class="mx-1">"Gamble"</div>
                         </TabButton>
                     </div>
                     <div class="flex-1" />
