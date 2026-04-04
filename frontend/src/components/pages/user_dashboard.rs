@@ -778,18 +778,24 @@ fn NewsCard(news: NewsEntry) -> impl IntoView {
     let body = lines.collect::<Vec<_>>().join("\n");
 
     view! {
-        <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-lg
+        <div class="rounded-[10px] border border-[#5f5137]/60
+        bg-[linear-gradient(180deg,rgba(214,177,102,0.035),rgba(0,0,0,0.08)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
+        shadow-[0_6px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.035)]
         p-4 flex flex-col gap-3">
+            <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
+            <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/25 to-transparent"></span>
 
-            <div class="flex items-center justify-between">
-                <span class="text-amber-300 font-semibold text-base font-display text-shadow-lg/100 shadow-gray-950">
+            <div class="relative z-10 flex items-start justify-between gap-3">
+                <span class="text-amber-300 font-semibold text-base font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
                     {title}
                 </span>
 
-                <span class="text-xs text-gray-400">{format_datetime(news.timestamp)}</span>
+                <span class="shrink-0 text-xs text-gray-500 uppercase tracking-[0.08em]">
+                    {format_datetime(news.timestamp)}
+                </span>
             </div>
 
-            <p class="text-gray-300 text-sm text-justify whitespace-pre-line leading-relaxed">
+            <p class="relative z-10 text-gray-300 text-sm whitespace-pre-line leading-relaxed">
                 {body}
             </p>
         </div>
