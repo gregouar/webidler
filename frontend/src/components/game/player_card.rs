@@ -23,7 +23,6 @@ use crate::{
                 CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
                 predictive_cooldown,
             },
-            toast::*,
             tooltip::{
                 DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
             },

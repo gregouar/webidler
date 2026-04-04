@@ -77,7 +77,7 @@ pub fn UiTestsPage() -> impl IntoView {
                                     view! {
                                         <div class="flex flex-col gap-1">
                                             <CircularProgressBar
-                                                bar_color="oklch(55.5% 0.163 48.998)"
+                                                bar_color="oklch(55.4% 0.135 66.442)"
                                                 value=progress_value
                                                 reset=reset_progress
                                                 bar_width=4
