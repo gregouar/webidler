@@ -33,31 +33,80 @@ pub fn ItemTooltip(
     #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
-    let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
-        ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
-        ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
-        ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Masterwork => (
-            "border-fuchsia-400",
-            "ring-fuchsia-300",
-            "shadow-fuchsia-600",
-        ),
-        ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
-    };
+    let (border_color, inner_border, shadow_color, rarity_wash, rarity_core, frame_shine) =
+        tooltip_rarity_palette(item_specs.modifiers.rarity);
 
     view! {
-        <div class=format!(
-            "max-w-xs p-2 xl:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black text-center",
-            border_color,
-            ring_color,
-            shadow_color,
-        )>
-            <ItemTooltipContent
-                item_specs=item_specs.clone()
-                show_affixes
-                comparable
-                max_item_level
-            />
+        <div class="relative isolate max-w-xs text-center">
+            <div
+                class="pointer-events-none absolute inset-0"
+                aria-hidden="true"
+                style=format!(
+                    "filter: drop-shadow(0 10px 20px {}) drop-shadow(0 3px 5px rgba(0,0,0,0.45));",
+                    shadow_color,
+                )
+            >
+                <div
+                    class="absolute inset-0 bg-black/90"
+                    style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);"
+                ></div>
+            </div>
+
+            <div
+                class=format!(
+                    "relative overflow-hidden border {} shadow-[inset_0_1px_0_rgba(240,215,159,0.18),inset_0_-1px_0_rgba(0,0,0,0.5)]",
+                    border_color,
+                )
+                style=format!(
+                    "clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+                    background-image:
+                        linear-gradient(180deg, rgba(214,177,102,0.06), rgba(0,0,0,0.22)),
+                        radial-gradient(circle at 50% 22%, {}, transparent 62%),
+                        linear-gradient(180deg, {}, transparent 36%),
+                        linear-gradient(135deg, rgba(30,29,34,0.985), rgba(9,9,12,1));
+                    background-blend-mode: screen, soft-light, soft-light, normal;",
+                    rarity_core,
+                    rarity_wash,
+                )
+            >
+                <div
+                    class=format!(
+                        "pointer-events-none absolute inset-[1px] border {}",
+                        inner_border,
+                    )
+                    style="clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);"
+                ></div>
+                <span
+                    class="pointer-events-none absolute inset-x-[6px] top-[2px] h-[2px]"
+                    style=format!(
+                        "background: linear-gradient(90deg, transparent, {}, transparent);",
+                        frame_shine,
+                    )
+                ></span>
+                <span
+                    class="pointer-events-none absolute inset-y-[5px] left-[1px] w-[2px]"
+                    style=format!(
+                        "background: linear-gradient(180deg, transparent, {}, transparent);",
+                        frame_shine,
+                    )
+                ></span>
+                <span
+                    class="pointer-events-none absolute inset-y-[5px] right-[1px] w-[2px]"
+                    style=format!(
+                        "background: linear-gradient(180deg, transparent, {}, transparent);",
+                        frame_shine,
+                    )
+                ></span>
+                <span class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
+                <div class="relative p-2 xl:p-4">
+                    <ItemTooltipContent
+                        item_specs=item_specs.clone()
+                        show_affixes
+                        comparable
+                        max_item_level
+                    />
+                </div>
+            </div>
         </div>
     }
 }
@@ -71,6 +120,7 @@ pub fn ItemTooltipContent(
     max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
+    let section_label_class = "text-[11px] xl:text-xs uppercase tracking-[0.08em] text-stone-400/90";
     let (has_effects, effects) = if show_affixes {
         let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
         let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
@@ -216,7 +266,7 @@ pub fn ItemTooltipContent(
                     )
                 }
                 _ => None,
-            }} <strong class=format!("text-sm xl:text-base font-bold  font-display {}", name_color)>
+            }} <strong class=format!("text-sm xl:text-base font-bold font-display tracking-[0.03em] text-shadow-md/80 {}", name_color)>
                 <ul class="list-none xl:space-y-1 mb-2">
                     <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
@@ -232,9 +282,9 @@ pub fn ItemTooltipContent(
                 {(max_upgrade_level > 0)
                     .then(|| {
                         view! {
-                            <li class="text-xs xl:text-sm text-gray-400">
+                            <li class=section_label_class>
                                 "Empower level: "
-                                <span class="font-bold text-orange-400">
+                                <span class="font-bold text-[#f0b36b]">
                                     {item_specs.modifiers.upgrade_level}
                                 </span>"/"{max_upgrade_level}
                             </li>
@@ -259,22 +309,22 @@ pub fn ItemTooltipContent(
                 .then(|| {
                     view! {
                         <Separator />
-                        <span class="text-xs xl:text-sm text-gray-400">"Empower effects:"</span>
+                        <span class=section_label_class>"Empower effects:"</span>
                         <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{upgrades}</ul>
                     }
                 })} <Separator /> <ul class="list-none xl:space-y-1">
-                <li class="text-xs xl:text-sm text-gray-400">
+                <li class=section_label_class>
                     "Required Power Level: "
                     <span class=move || {
                         if max_item_level.get() < required_level {
                             "font-bold text-red-500"
                         } else {
-                            "text-white"
+                            "text-stone-100"
                         }
                     }>{required_level}</span>
                 </li>
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
-                    "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
+                <li class=section_label_class>
+                    "Item Level: " <span class="text-stone-100">{item_specs.modifiers.level}</span>
                 </li>
             </ul>
             {(!hide_description)
@@ -311,11 +361,65 @@ pub fn ItemTooltipContent(
 
 pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
     match item_rarity {
-        ItemRarity::Normal => "text-white",
-        ItemRarity::Magic => "text-blue-400",
-        ItemRarity::Rare => "text-yellow-400",
-        ItemRarity::Masterwork => "text-fuchsia-400",
-        ItemRarity::Unique => "text-orange-700",
+        ItemRarity::Normal => "text-stone-100",
+        ItemRarity::Magic => "text-blue-300",
+        ItemRarity::Rare => "text-[#f0cd78]",
+        ItemRarity::Masterwork => "text-fuchsia-300",
+        ItemRarity::Unique => "text-[#ff9d67]",
+    }
+}
+
+fn tooltip_rarity_palette(
+    item_rarity: ItemRarity,
+) -> (
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static str,
+    &'static str,
+) {
+    match item_rarity {
+        ItemRarity::Normal => (
+            "border-[#6c5329]/85",
+            "border-white/8",
+            "rgba(0,0,0,0.5)",
+            "rgba(210,215,224,0.05)",
+            "rgba(255,255,255,0.02)",
+            "rgba(230,230,236,0.2)",
+        ),
+        ItemRarity::Magic => (
+            "border-[#6c5329]/85",
+            "border-blue-200/18",
+            "rgba(23,44,89,0.52)",
+            "rgba(75,126,235,0.14)",
+            "rgba(48,86,196,0.1)",
+            "rgba(144,205,255,0.44)",
+        ),
+        ItemRarity::Rare => (
+            "border-[#7a5d29]/90",
+            "border-[#f3db9d]/18",
+            "rgba(67,47,11,0.55)",
+            "rgba(173,124,26,0.16)",
+            "rgba(108,76,8,0.12)",
+            "rgba(255,226,145,0.5)",
+        ),
+        ItemRarity::Masterwork => (
+            "border-[#74528a]/88",
+            "border-fuchsia-200/18",
+            "rgba(61,24,99,0.52)",
+            "rgba(143,78,220,0.15)",
+            "rgba(90,44,150,0.11)",
+            "rgba(228,183,255,0.46)",
+        ),
+        ItemRarity::Unique => (
+            "border-[#8c5628]/92",
+            "border-[#ffd1af]/18",
+            "rgba(104,34,8,0.62)",
+            "rgba(188,72,28,0.2)",
+            "rgba(114,18,8,0.16)",
+            "rgba(255,170,116,0.54)",
+        ),
     }
 }
 

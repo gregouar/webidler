@@ -228,8 +228,14 @@ fn EquippedItemEquippedSlot(
             />
 
             <Show when=move || is_being_unequipped.get()>
-                <div class="absolute inset-0 z-30 w-full rounded-md
-                bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+                <div
+                    class="absolute inset-0 z-30 w-full"
+                    style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+                    background:
+                        linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
+                        linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
+                    box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
+                ></div>
             </Show>
 
             <Show when=move || show_menu.get()>
@@ -308,6 +314,11 @@ pub fn EquippedItemContextMenu(
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
 ) -> impl IntoView {
+    let (success_text, success_border, success_sheen) =
+        action_menu_button_tone(ActionMenuTone::Success);
+    let (neutral_text, neutral_border, neutral_sheen) =
+        action_menu_button_tone(ActionMenuTone::Neutral);
+
     view! {
         <ContextMenu on_close=on_close>
             {inventory
@@ -315,7 +326,12 @@ pub fn EquippedItemContextMenu(
                 .map(|on_unequip| {
                     view! {
                         <button
-                            class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
+                            class=format!(
+                                "{} {}",
+                                action_menu_button_class(),
+                                success_text,
+                            )
+                            style=action_menu_button_style(success_border, success_sheen)
                             on:click=move |_| {
                                 on_unequip(item_slot);
                                 on_close.run(());
@@ -331,7 +347,8 @@ pub fn EquippedItemContextMenu(
                     }
                 })}
             <button
-                class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
+                class=format!("{} {}", action_menu_button_class(), neutral_text)
+                style=action_menu_button_style(neutral_border, neutral_sheen)
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -558,7 +575,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 />
 
                                 <Show when=is_queued_for_sale>
-                                    <div class="absolute top-1 right-1 px-2 py-0.5 text-xs font-semibold bg-red-500 text-white rounded shadow">
+                                    <div class="absolute top-1 right-1 z-20 px-1.5 xl:px-2 py-0.5 text-[10px] xl:text-xs font-black tracking-[0.08em] text-[#ffe0d3] border border-[#8e4538] rounded-[3px] shadow-[0_3px_8px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,214,194,0.18)] bg-[linear-gradient(180deg,rgba(230,164,125,0.12),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(72,28,26,0.98),rgba(35,11,13,1))]">
                                         {match inventory.sell_type {
                                             SellType::Sell => "SELL",
                                             SellType::Discard => "DISC.",
@@ -567,8 +584,14 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 </Show>
 
                                 <Show when=move || is_being_equipped.get()>
-                                    <div class="absolute inset-0 z-30 w-full rounded-md
-                                    bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+                                    <div
+                                        class="absolute inset-0 z-30 w-full"
+                                        style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+                                        background:
+                                            linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
+                                            linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
+                                        box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
+                                    ></div>
                                 </Show>
 
                                 <Show when=move || { show_menu.get() }>
@@ -617,6 +640,12 @@ pub fn BagItemContextMenu(
     can_equip: Signal<bool>,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
+    let (success_text, success_border, success_sheen) =
+        action_menu_button_tone(ActionMenuTone::Success);
+    let (warning_text, warning_border, warning_sheen) =
+        action_menu_button_tone(ActionMenuTone::Warning);
+    let (neutral_text, neutral_border, neutral_sheen) =
+        action_menu_button_tone(ActionMenuTone::Neutral);
 
     let toggle_sell_mark = {
         move || {
@@ -640,7 +669,12 @@ pub fn BagItemContextMenu(
                             .then(|| {
                                 view! {
                                     <button
-                                        class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
+                                        class=format!(
+                                            "{} {}",
+                                            action_menu_button_class(),
+                                            success_text,
+                                        )
+                                        style=action_menu_button_style(success_border, success_sheen)
                                         on:click=move |_| {
                                             on_equip(item_index as u8);
                                             sell_queue.write().remove(&item_index);
@@ -662,7 +696,12 @@ pub fn BagItemContextMenu(
                 .then(|| {
                     view! {
                         <button
-                            class="btn w-full text-sm xl:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 xl:py-2"
+                            class=format!(
+                                "{} {}",
+                                action_menu_button_class(),
+                                warning_text,
+                            )
+                            style=action_menu_button_style(warning_border, warning_sheen)
                             on:click=move |_| toggle_sell_mark()
                         >
                             {move || {
@@ -682,7 +721,8 @@ pub fn BagItemContextMenu(
                     }
                 })}
             <button
-                class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
+                class=format!("{} {}", action_menu_button_class(), neutral_text)
+                style=action_menu_button_style(neutral_border, neutral_sheen)
                 on:click=move |_| on_close.run(())
             >
                 "Cancel"
@@ -694,10 +734,34 @@ pub fn BagItemContextMenu(
 #[component]
 fn EmptySlot(children: Children) -> impl IntoView {
     view! {
-        <div class="
-        relative group flex items-center justify-center w-full h-full
-        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
-        ">{children()}</div>
+        <div class="relative isolate flex items-center justify-center w-full h-full opacity-80">
+            <div
+                class="pointer-events-none absolute inset-0"
+                style="filter: drop-shadow(0 6px 10px rgba(0,0,0,0.32));"
+            >
+                <div
+                    class="absolute inset-0 bg-black/85"
+                    style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);"
+                ></div>
+            </div>
+            <div
+                class="absolute inset-0 overflow-hidden border border-[#56462f]/85 shadow-[inset_0_1px_0_rgba(214,177,102,0.08),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+                background:
+                    linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.12)),
+                    linear-gradient(135deg, rgba(39,38,44,0.94), rgba(15,15,18,1));"
+            >
+                <div
+                    class="pointer-events-none absolute inset-[1px]"
+                    style="clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
+                    border: 1px solid rgba(214,177,102,0.1);
+                    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -12px 18px rgba(0,0,0,0.24);"
+                ></div>
+            </div>
+            <div class="relative z-10 flex h-full w-full items-center justify-center p-1">
+                {children()}
+            </div>
+        </div>
     }
 }
 
@@ -713,18 +777,75 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
         <div
             node_ref=node_ref
             class="
-            absolute inset-0 z-30 flex flex-col justify-center items-center
+            absolute inset-0 z-30 flex flex-col justify-center items-center gap-1 xl:gap-2
             w-full
-            rounded-md  shadow-lg shadow-gray-900
-            bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black
-            border border-gray-600 ring-2 ring-gray-700
+            p-1 xl:p-1.5
             text-center
             "
-            style="animation: fade-in 0.2s ease-out forwards"
+            style="
+            animation: fade-in 0.2s ease-out forwards;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+            background:
+                linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
+                linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
+            border: 1px solid rgba(108,83,41,0.88);
+            box-shadow:
+                0 10px 22px rgba(0,0,0,0.52),
+                inset 0 1px 0 rgba(240,215,159,0.16),
+                inset 0 -1px 0 rgba(0,0,0,0.45);
+            "
         >
             {children()}
         </div>
     }
+}
+
+#[derive(Clone, Copy)]
+enum ActionMenuTone {
+    Success,
+    Warning,
+    Neutral,
+}
+
+fn action_menu_button_tone(tone: ActionMenuTone) -> (&'static str, &'static str, &'static str) {
+    match tone {
+        ActionMenuTone::Success => (
+            "text-green-300 hover:text-green-100",
+            "#4c6a42",
+            "rgba(178,228,173,0.12)",
+        ),
+        ActionMenuTone::Warning => (
+            "text-amber-300 hover:text-amber-100",
+            "#7b6032",
+            "rgba(239,205,133,0.14)",
+        ),
+        ActionMenuTone::Neutral => (
+            "text-stone-200 hover:text-white",
+            "#665840",
+            "rgba(240,215,159,0.08)",
+        ),
+    }
+}
+
+fn action_menu_button_class() -> &'static str {
+    "btn relative isolate w-full overflow-hidden px-2 xl:px-2.5 py-1 xl:py-1.5
+    text-sm xl:text-base font-extrabold tracking-[0.08em] text-shadow shadow-black/90
+    border transition-all duration-150
+    shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(240,215,159,0.12),inset_0_-1px_0_rgba(0,0,0,0.45)]
+    before:pointer-events-none before:absolute before:inset-[1px] before:border before:border-white/5
+    before:bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_36%)]
+    hover:border-[#a27f46] active:translate-y-[1px] active:before:opacity-0 active:brightness-90
+    active:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.5),inset_0_-1px_0_rgba(0,0,0,0.22)]"
+}
+
+fn action_menu_button_style(border: &'static str, sheen: &'static str) -> String {
+    format!(
+        "border-color: {};
+        background:
+            linear-gradient(180deg, {}, rgba(0,0,0,0.16)),
+            linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));",
+        border, sheen,
+    )
 }
 
 #[component]

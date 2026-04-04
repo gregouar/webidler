@@ -449,12 +449,38 @@ pub fn NodeTooltip(
     show_upgrade: bool,
 ) -> impl IntoView {
     view! {
-        <div class="
-        max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
-        shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
-        text-center
-        ">
-            <NodeTooltipContent node_specs node_level show_upgrade />
+        <div class="relative isolate max-w-xs text-center">
+            <div
+                class="pointer-events-none absolute inset-0"
+                aria-hidden="true"
+                style="filter: drop-shadow(0 10px 20px rgba(13,88,88,0.42)) drop-shadow(0 3px 5px rgba(0,0,0,0.45));"
+            >
+                <div
+                    class="absolute inset-0 bg-black/90"
+                    style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);"
+                ></div>
+            </div>
+            <div
+                class="relative overflow-hidden border border-teal-700/90 shadow-[inset_0_1px_0_rgba(240,215,159,0.16),inset_0_-1px_0_rgba(0,0,0,0.5)]"
+                style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+                background-image:
+                    linear-gradient(180deg, rgba(214,177,102,0.05), rgba(0,0,0,0.2)),
+                    radial-gradient(circle at 50% 20%, rgba(60,180,180,0.16), transparent 64%),
+                    linear-gradient(180deg, rgba(92,212,204,0.12), transparent 34%),
+                    linear-gradient(135deg, rgba(31,33,36,0.985), rgba(9,9,12,1));
+                background-blend-mode: screen, soft-light, screen, normal;"
+            >
+                <div
+                    class="pointer-events-none absolute inset-[1px] border border-teal-200/10"
+                    style="clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);"
+                ></div>
+                <span class="pointer-events-none absolute inset-x-[6px] top-[2px] h-[2px] bg-gradient-to-r from-transparent via-[rgba(153,244,234,0.45)] to-transparent"></span>
+                <span class="pointer-events-none absolute inset-y-[5px] left-[1px] w-[2px] bg-gradient-to-b from-transparent via-[rgba(153,244,234,0.35)] to-transparent"></span>
+                <span class="pointer-events-none absolute inset-y-[5px] right-[1px] w-[2px] bg-gradient-to-b from-transparent via-[rgba(153,244,234,0.35)] to-transparent"></span>
+                <div class="space-y-2 p-2 xl:p-4">
+                    <NodeTooltipContent node_specs node_level show_upgrade />
+                </div>
+            </div>
         </div>
     }
 }
@@ -593,7 +619,7 @@ pub fn NodeTooltipContent(
     };
 
     view! {
-        <strong class="text-sm xl:text-base font-bold text-teal-300 font-display">
+        <strong class="text-sm xl:text-base font-bold text-teal-300 font-display text-shadow-md/80">
             <ul class="list-none xl:space-y-1 mb-2">
                 <li class=" whitespace-pre-line">{node_specs.name.clone()}</li>
             </ul>
