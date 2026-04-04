@@ -11,6 +11,7 @@ use crate::components::{
     pages::{privacy::PrivacyContent, terms::TermsContent},
     ui::{
         buttons::MenuButton,
+        card::{Card, CardTitle},
         input::{Input, ValidatedInput},
         toast::*,
     },
@@ -95,87 +96,93 @@ pub fn SignUpPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto max-w-2xl text-center flex flex-col justify-center p-6">
-            <h1 class="text-amber-200 text-4xl font-extrabold mb-6">"Create Account"</h1>
+            <Card>
+                <div class="px-4 relative z-10 flex items-center justify-between">
+                    <CardTitle>"Create Account"</CardTitle>
 
-            <div class="space-y-4 text-left text-white">
-                <ValidatedInput
-                    label="Username"
-                    id="username"
-                    input_type="text"
-                    placeholder="Enter your username"
-                    bind=username
-                />
+                    <div class="flex-1" />
 
-                <ValidatedInput
-                    label="Email"
-                    id="email"
-                    input_type="text"
-                    placeholder="Optionally enter your email for password recovery"
-                    bind=email
-                />
+                    <div>
+                        <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
+                    </div>
+                </div>
 
-                <ValidatedInput
-                    label="Password"
-                    id="password"
-                    input_type="password"
-                    placeholder="Enter your password"
-                    bind=password
-                />
-
-                <Input
-                    id="confirm-password"
-                    input_type="password"
-                    placeholder="Confirm your password"
-                    bind=confirm_password
-                    invalid=passwords_mismatch
-                />
-
-                <div class="flex items-start mt-4">
-                    <input
-                        id="terms"
-                        type="checkbox"
-                        class="mt-1 mr-2"
-                        prop:checked=accepted_terms
-                        on:input=move |ev| {
-                            accepted_terms.set(event_target_checked(&ev));
-                        }
+                <div class="space-y-4 text-left text-white">
+                    <ValidatedInput
+                        label="Username"
+                        id="username"
+                        input_type="text"
+                        placeholder="Enter your username"
+                        bind=username
                     />
-                    <label for="terms" class="text-sm text-gray-400">
-                        "I agree to the "
-                        <button
-                            type="button"
-                            class="btn text-amber-400 underline hover:text-amber-300"
-                            on:click=move |_| show_terms.set(true)
-                        >
-                            "Terms & Conditions"
-                        </button>
-                        " and I have read the "
-                        <button
-                            type="button"
-                            class="btn text-amber-400 underline hover:text-amber-300"
-                            on:click=move |_| show_privacy.set(true)
-                        >
-                            "Privacy Notice"
-                        </button>
-                        "."
-                    </label>
-                </div>
 
-                <div class="w-full flex justify-center">
-                    <Captcha token=captcha_token />
-                </div>
+                    <ValidatedInput
+                        label="Email"
+                        id="email"
+                        input_type="text"
+                        placeholder="Optionally enter your email for password recovery"
+                        bind=email
+                    />
 
+                    <ValidatedInput
+                        label="Password"
+                        id="password"
+                        input_type="password"
+                        placeholder="Enter your password"
+                        bind=password
+                    />
+
+                    <Input
+                        id="confirm-password"
+                        input_type="password"
+                        placeholder="Confirm your password"
+                        bind=confirm_password
+                        invalid=passwords_mismatch
+                    />
+
+                    <div class="w-full flex justify-center items-start mt-4">
+                        <input
+                            id="terms"
+                            type="checkbox"
+                            class="mt-1 mr-2"
+                            prop:checked=accepted_terms
+                            on:input=move |ev| {
+                                accepted_terms.set(event_target_checked(&ev));
+                            }
+                        />
+                        <label for="terms" class="text-sm text-gray-400">
+                            "I agree to the "
+                            <button
+                                type="button"
+                                class="btn text-amber-400 underline hover:text-amber-300"
+                                on:click=move |_| show_terms.set(true)
+                            >
+                                "Terms & Conditions"
+                            </button>
+                            " and I have read the "
+                            <button
+                                type="button"
+                                class="btn text-amber-400 underline hover:text-amber-300"
+                                on:click=move |_| show_privacy.set(true)
+                            >
+                                "Privacy Notice"
+                            </button>
+                            "."
+                        </label>
+                    </div>
+
+                    <div class="w-full flex justify-center">
+                        <Captcha token=captcha_token />
+                    </div>
+                </div>
                 <MenuButton class:w-full on:click=on_submit disabled=disable_submit>
                     "Confirm"
                 </MenuButton>
-            </div>
 
-            <p class="mt-6 text-xs text-gray-400 text-left">
-                "By signing up, you consent to the storage and processing of your data in accordance with GDPR. You can request data deletion at any time via the account page."
-            </p>
-            <div>
-                <MenuButton on:click=navigate_to_menu>"Back"</MenuButton>
-            </div>
+                <p class="mt-6 text-xs text-gray-400 text-left">
+                    "By signing up, you consent to the storage and processing of your data in accordance with GDPR. You can request data deletion at any time via the account page."
+                </p>
+            </Card>
 
             <Show when=move || show_terms.get()>
                 <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">

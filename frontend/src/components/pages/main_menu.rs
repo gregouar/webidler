@@ -17,6 +17,7 @@ use crate::components::{
     ui::{
         ALink,
         buttons::MenuButton,
+        card::Card,
         input::{Input, ValidatedInput},
         toast::*,
     },
@@ -131,7 +132,8 @@ fn MainMenu() -> impl IntoView {
             <LeaderboardPanel open=open_leaderboard />
             <div>
                 <Logo />
-                <div class="flex flex-col space-y-2">
+                // <div class="flex flex-col space-y-2">
+                <Card>
                     // <form>
                     <div class="w-full mx-auto text-left">
                         <label class="block mb-2 text-sm font-medium text-gray-400">
@@ -190,7 +192,7 @@ fn MainMenu() -> impl IntoView {
 
                     <ForgotPasswordModal open=show_forgot_password_modal />
                     <GuestModal open=show_guest_modal captcha_token />
-                </div>
+                </Card>
             </div>
 
             <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner space-y-4">
