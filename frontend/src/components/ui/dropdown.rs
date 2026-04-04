@@ -27,17 +27,37 @@ where
                 on:click=toggle
                 class=move || {
                     format!(
-                        "btn w-full flex items-center justify-between gap-2
-                        px-1 xl:px-3 py-1 xl:py-2 rounded-md
-                        shadow-md border border-zinc-950 focus:outline-none {}",
+                        "btn relative isolate overflow-hidden
+                        w-full flex items-center justify-between gap-2
+                        px-1 xl:px-3 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
+                        tracking-[0.08em] text-stone-100 font-extrabold text-shadow shadow-black/90
+                        border border-[#6c5329]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
+                        before:pointer-events-none before:absolute before:inset-[1px]
+                        before:rounded-[3px] xl:before:rounded-[5px]
+                        before:border before:border-[#d5b16d]/18
+                        before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+                        focus:outline-none {}",
                         if is_open.get() {
-                            "bg-gradient-to-t from-zinc-900 to-zinc-950 "
+                            "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100
+                            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]"
                         } else {
-                            "bg-gradient-to-t from-zinc-900 to-zinc-800 hover:from-zinc-800 hover:to-zinc-700"
+                            "hover:border-[#a27f46] hover:text-[#f3ead2]
+                            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]"
                         },
                     )
                 }
+                style="
+                background-image:
+                linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+                linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+                background-size: auto, auto, 180px 180px;
+                background-position: center, center, center;
+                background-blend-mode: screen, normal, soft-light;
+                "
             >
+                <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+                <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
                 <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
@@ -59,18 +79,30 @@ where
 
             <ul class=move || {
                 format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950
-                    shadow-lg max-h-80 overflow-auto z-20 {}",
+                    "dropdown-transition absolute mt-1 w-full rounded-[6px]
+                    border border-[#6c5329]
+                    shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]
+                    max-h-80 overflow-auto z-20 {}",
                     if is_open.get() { "open" } else { "" },
                 )
-            }>
+            }
+                style="
+                background-image:
+                linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
+                linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1));
+                background-size: auto, auto, 180px 180px;
+                background-position: center, center, center;
+                background-blend-mode: screen, normal, soft-light;
+                "
+            >
                 {options
                     .into_iter()
                     .map(|(opt, text)| {
                         view! {
                             <li
                                 on:click=move |_| select_option(opt.clone())
-                                class="cursor-pointer px-4 py-2 hover:bg-zinc-700"
+                                class="cursor-pointer px-4 py-2 text-zinc-200 border-b border-black/20
+                                hover:bg-[#3a3430] hover:text-[#f1e4c4] last:border-b-0"
                             >
                                 {text}
                             </li>
@@ -131,17 +163,37 @@ where
                 on:click=toggle
                 class=move || {
                     format!(
-                        "btn w-full flex items-center justify-between gap-2
-                        px-1 xl:px-3 py-1 xl:py-2 rounded-md
-                        shadow-md border border-zinc-950 focus:outline-none {}",
+                        "btn relative isolate overflow-hidden
+                        w-full flex items-center justify-between gap-2
+                        px-1 xl:px-3 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
+                        tracking-[0.08em] text-stone-100 font-extrabold text-shadow shadow-black/90
+                        border border-[#6c5329]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
+                        before:pointer-events-none before:absolute before:inset-[1px]
+                        before:rounded-[3px] xl:before:rounded-[5px]
+                        before:border before:border-[#d5b16d]/18
+                        before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+                        focus:outline-none {}",
                         if is_open.get() {
-                            "bg-gradient-to-t from-zinc-900 to-zinc-950 "
+                            "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100
+                            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]"
                         } else {
-                            "bg-gradient-to-t from-zinc-900 to-zinc-800 hover:from-zinc-800 hover:to-zinc-700"
+                            "hover:border-[#a27f46] hover:text-[#f3ead2]
+                            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]"
                         },
                     )
                 }
+                style="
+                background-image:
+                linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
+                linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
+                background-size: auto, auto, 180px 180px;
+                background-position: center, center, center;
+                background-blend-mode: screen, normal, soft-light;
+                "
             >
+                <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+                <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
                 <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
@@ -163,15 +215,26 @@ where
 
             <div class=move || {
                 format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950
-                    shadow-lg z-20 {}",
+                    "dropdown-transition absolute mt-1 w-full rounded-[6px]
+                    border border-[#6c5329]
+                    shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]
+                    z-20 {}",
                     if is_open.get() { "open" } else { "" },
                 )
-            }>
-                <div class="px-1 xl:px-3 py-1 xl:py-2 border-b border-zinc-700 bg-gray-800">
+            }
+                style="
+                background-image:
+                linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
+                linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1));
+                background-size: auto, auto, 180px 180px;
+                background-position: center, center, center;
+                background-blend-mode: screen, normal, soft-light;
+                "
+            >
+                <div class="px-1 xl:px-3 py-1 xl:py-2 border-b border-black/25 bg-black/10">
                     <input
                         node_ref=search_ref
-                        class="w-full bg-gray-800 focus:outline-none"
+                        class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
                         placeholder="Search..."
                         prop:value=move || search.get()
                         on:input=move |ev| search.set(event_target_value(&ev))
@@ -198,7 +261,8 @@ where
                                 view! {
                                     <li
                                         on:click=move |_| select_option(opt.clone())
-                                        class="cursor-pointer px-4 py-2 hover:bg-zinc-700"
+                                        class="cursor-pointer px-4 py-2 text-zinc-200 border-b border-black/20
+                                        hover:bg-[#3a3430] hover:text-[#f1e4c4] last:border-b-0"
                                     >
                                         {text}
                                     </li>
@@ -210,9 +274,7 @@ where
                         filtered_options
                             .read()
                             .is_empty()
-                            .then(|| {
-                                view! { <li class="px-4 py-2">"No elements found."</li> }
-                            })
+                            .then(|| view! { <li class="px-4 py-2 text-zinc-500">"No elements found."</li> })
                     }}
                 </ul>
             </div>
