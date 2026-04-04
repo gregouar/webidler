@@ -190,9 +190,9 @@ fn MainMenu() -> impl IntoView {
                         open_leaderboard.set(true)
                     }>"Leaderboard"</MenuButton>
 
-                    <ForgotPasswordModal open=show_forgot_password_modal />
-                    <GuestModal open=show_guest_modal captcha_token />
                 </Card>
+                <ForgotPasswordModal open=show_forgot_password_modal />
+                <GuestModal open=show_guest_modal captcha_token />
             </div>
 
             <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner space-y-4">
