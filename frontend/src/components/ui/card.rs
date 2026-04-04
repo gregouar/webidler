@@ -82,9 +82,9 @@ pub fn MenuCard(
                 "
                     clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                     background-image:
-                        /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
+                        linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
                         url('{}');
-                    background-blend-mode: /*screen,*/ multiply;
+                    background-blend-mode: screen, multiply;
                     ",
                 img_asset("ui/dark_stone.webp"),
             )

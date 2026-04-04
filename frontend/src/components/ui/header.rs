@@ -12,9 +12,9 @@ pub fn BaseHeaderMenu(children: Children) -> impl IntoView {
             style=format!(
                 "
                 background-image:
-                    /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
+                    linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
                     url('{}');
-                background-blend-mode: /*screen,*/ multiply;
+                background-blend-mode: screen, multiply;
                 ",
                 img_asset("ui/dark_stone.webp"),
             )
