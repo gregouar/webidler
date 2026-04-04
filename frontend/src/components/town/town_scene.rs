@@ -306,7 +306,7 @@ fn GrindingAreaCard(
 
     view! {
         <div
-            class="relative flex flex-col max-h-full"
+            class="relative flex flex-col max-h-full transition-all active:scale-95"
             on:click=select_area
             style=move || {
                 format!(
@@ -354,7 +354,7 @@ fn GrindingAreaCard(
                         } else if view_only {
                             "cursor-default"
                         } else {
-                            "cursor-pointer hover:brightness-110 active:scale-95"
+                            "cursor-pointer hover:brightness-110"
                         },
                     )
                 }
