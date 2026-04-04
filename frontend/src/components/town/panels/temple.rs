@@ -17,6 +17,7 @@ use crate::components::{
         buttons::MenuButton,
         card::{CardHeader, CardInset, CardTitle, MenuCard},
         confirm::ConfirmContext,
+        list_row::MenuListRow,
         menu_panel::MenuPanel,
         number::{format_number, format_number_without_context},
         toast::*,
@@ -249,71 +250,66 @@ fn BenedictionRow(
     let benediction_title = format_benediction_title(&benediction_specs.effect);
 
     view! {
-        <div class="p-4 rounded-lg bg-neutral-800 border border-zinc-700
-        shadow-inner flex flex-row gap-6 items-start
-        transition-colors">
+        <MenuListRow>
+            <div class="flex flex-row gap-6 items-start p-4">
+                <div class="flex flex-col flex-1 gap-1">
+                    <div class="flex items-center justify-between">
+                        <CardTitle>{benediction_title}</CardTitle>
 
-            <div class="flex flex-col flex-1 gap-1">
-
-                <div class="flex items-center justify-between">
-                    <CardTitle>{benediction_title}</CardTitle>
-
-                    <div class="text-sm text-gray-400">
-                        "Level " {move || upgrade_level.get()}
-                        {benediction_specs
-                            .max_upgrade_level
-                            .map(|max_upgrade_level| format!("/{}", max_upgrade_level))}
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 mt-1">
-
-                    <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
-                        <div class="text-xs text-gray-400 mb-1">"Current"</div>
-                        <EffectDescription
-                            benediction_specs=benediction_specs.clone()
-                            upgrade_level=Signal::derive(move || upgrade_level.get())
-                        />
-                    </div>
-
-                    <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
-                        <div class="text-xs text-gray-400 mb-1">"Next"</div>
-                        <EffectDescription
-                            benediction_specs=benediction_specs.clone()
-                            upgrade_level=Signal::derive(move || {
-                                upgrade_level.get().saturating_add(1)
-                            })
-                        />
-                    </div>
-
-                </div>
-            </div>
-
-            {(!view_only)
-                .then(|| {
-                    view! {
-                        <div class="flex flex-col h-full items-end justify-center min-w-[140px]">
-                            <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                                <span class="text-amber-200 font-bold font-number">
-                                    {move || {
-                                        if max_level() {
-                                            "0".to_string()
-                                        } else {
-                                            format_number(price.get())
-                                        }
-                                    }}
-                                </span>
-                                <GoldIcon />
-                            </div>
-
-                            <MenuButton disabled class:h-full on:click=upgrade>
-                                {move || if max_level() { "Max" } else { "Pray" }}
-                            </MenuButton>
+                        <div class="text-sm text-gray-400">
+                            "Level " {move || upgrade_level.get()}
+                            {benediction_specs
+                                .max_upgrade_level
+                                .map(|max_upgrade_level| format!("/{}", max_upgrade_level))}
                         </div>
-                    }
-                })}
+                    </div>
 
-        </div>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        <div class="rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
+                            <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                            <EffectDescription
+                                benediction_specs=benediction_specs.clone()
+                                upgrade_level=Signal::derive(move || upgrade_level.get())
+                            />
+                        </div>
+
+                        <div class="rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
+                            <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                            <EffectDescription
+                                benediction_specs=benediction_specs.clone()
+                                upgrade_level=Signal::derive(move || {
+                                    upgrade_level.get().saturating_add(1)
+                                })
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {(!view_only)
+                    .then(|| {
+                        view! {
+                            <div class="flex flex-col h-full items-end justify-center min-w-[140px]">
+                                <div class="flex items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
+                                    <span class="text-amber-200 font-bold font-number">
+                                        {move || {
+                                            if max_level() {
+                                                "0".to_string()
+                                            } else {
+                                                format_number(price.get())
+                                            }
+                                        }}
+                                    </span>
+                                    <GoldIcon />
+                                </div>
+
+                                <MenuButton disabled class:h-full on:click=upgrade>
+                                    {move || if max_level() { "Max" } else { "Pray" }}
+                                </MenuButton>
+                            </div>
+                        }
+                    })}
+            </div>
+        </MenuListRow>
     }
 }
 

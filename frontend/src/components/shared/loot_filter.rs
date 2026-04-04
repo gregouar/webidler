@@ -29,6 +29,7 @@ use crate::components::{
         confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
+        list_row::MenuListRow,
         menu_panel::MenuPanel,
     },
     utils::file_loader::{save_json, use_json_loader},
@@ -216,6 +217,13 @@ fn RuleRow(
     loot_filter: RwSignal<LootFilter>,
     selected_rule: RwSignal<Option<Uuid>>,
 ) -> impl IntoView {
+    let is_selected = Signal::derive(move || {
+        selected_rule
+            .read()
+            .map(|selected_rule| selected_rule == rule_id)
+            .unwrap_or_default()
+    });
+
     let rule_name = move || {
         loot_filter
             .read()
@@ -278,29 +286,11 @@ fn RuleRow(
             .unwrap_or(false)
     });
 
-    // TODO: Move up, down, delete
     view! {
-        <div
-            class=move || {
-                format!(
-                    "relative flex w-full items-center justify-between p-2 gap-2 cursor-pointer shadow-sm transition-colors duration-150 rounded-sm
-                bg-neutral-800 hover:bg-neutral-700 {}",
-                    if selected_rule
-                        .read()
-                        .map(|selected_rule| { selected_rule == rule_id })
-                        .unwrap_or_default()
-                    {
-                        "ring-2 ring-amber-400"
-                    } else {
-                        "ring-1 ring-zinc-950"
-                    },
-                )
-            }
-            on:click=move |_| { selected_rule.set(Some(rule_id)) }
-        >
-            <div class="flex flex-col flex-1 gap-1">
+        <MenuListRow selected=is_selected on_click=move || { selected_rule.set(Some(rule_id)) }>
+            <div class="flex flex-col flex-1 gap-1 p-2">
 
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between gap-2">
                     <div>
                         {move || {
                             match loot_filter
@@ -320,9 +310,11 @@ fn RuleRow(
                         }}
                     </div>
 
-                    <div class="text-sm xl:text-base font-semibold text-white">{rule_name}</div>
+                    <div class="min-w-0 flex-1 px-2 text-center text-sm xl:text-base font-semibold text-white truncate">
+                        {rule_name}
+                    </div>
 
-                    <div class="flex items-center gap-1">
+                    <div class="flex items-center gap-1 shrink-0">
                         <FancyButton on:click=move_up disabled=is_first>
                             "↑"
                         </FancyButton>
@@ -348,7 +340,7 @@ fn RuleRow(
                 </div>
 
             </div>
-        </div>
+        </MenuListRow>
     }
 }
 

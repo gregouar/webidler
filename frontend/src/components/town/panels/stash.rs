@@ -28,6 +28,7 @@ use crate::components::{
         buttons::{MenuButton, TabButton},
         card::{CardHeader, CardInset, CardTitle, MenuCard},
         input::ValidatedInput,
+        list_row::MenuListRow,
         menu_panel::MenuPanel,
         number::{format_datetime, format_number},
         toast::*,
@@ -197,31 +198,24 @@ fn stash_type_str(stash_type: StashType) -> &'static str {
 
 #[component]
 fn StashTypeRow(stash: RwSignal<Stash>, selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
-    view! {
-        <div
-            class=move || {
-                format!(
-                    "relative flex w-full items-center justify-between p-3 gap-2 cursor-pointer mb-2 shadow-sm transition-colors duration-150 rounded-lg
-                bg-neutral-800 hover:bg-neutral-700 {}",
-                    if selected_stash
-                        .read()
-                        .as_ref()
-                        .map(|selected_stash| {
-                            selected_stash.stash_id == stash.read().stash_id
-                                && selected_stash.stash_type == stash.read().stash_type
-                        })
-                        .unwrap_or_default()
-                    {
-                        "ring-2 ring-amber-400"
-                    } else {
-                        "ring-1 ring-zinc-950"
-                    },
-                )
-            }
-            on:click=move |_| { selected_stash.set(Some(stash.get())) }
-        >
-            <div class="flex flex-col flex-1 gap-1">
+    let is_selected = Signal::derive(move || {
+        selected_stash
+            .read()
+            .as_ref()
+            .map(|selected_stash| {
+                selected_stash.stash_id == stash.read().stash_id
+                    && selected_stash.stash_type == stash.read().stash_type
+            })
+            .unwrap_or_default()
+    });
 
+    view! {
+        <MenuListRow
+            class="mb-2"
+            selected=is_selected
+            on_click=move || { selected_stash.set(Some(stash.get())) }
+        >
+            <div class="flex flex-col flex-1 gap-1 p-3">
                 <div class="flex items-center justify-between">
                     <div class="text-lg font-semibold text-white capitalize">
                         {stash_type_str(stash.read_untracked().stash_type)}
@@ -237,9 +231,8 @@ fn StashTypeRow(stash: RwSignal<Stash>, selected_stash: RwSignal<Option<Stash>>)
                         }}
                     </div>
                 </div>
-
             </div>
-        </div>
+        </MenuListRow>
     }
 }
 

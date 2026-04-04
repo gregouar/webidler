@@ -6,6 +6,7 @@ pub mod dropdown;
 pub mod fullscreen;
 pub mod header;
 pub mod input;
+pub mod list_row;
 mod link;
 pub mod menu_panel;
 pub mod number;

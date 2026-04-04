@@ -233,7 +233,7 @@ fn CharactersSelection(
     let characters_len = characters.len();
 
     view! {
-        <MenuCard class="h-full w-2xl">
+        <Card class="h-full w-2xl">
             <div class="flex flex-row justify-between items-center px-4">
                 <CardTitle>"Your Characters"</CardTitle>
                 <span class="text-sm text-gray-400 font-medium">
@@ -277,7 +277,7 @@ fn CharactersSelection(
                     }}
                 </div>
             </CardInset>
-        </MenuCard>
+        </Card>
     }
 }
 
