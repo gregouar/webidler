@@ -72,8 +72,8 @@ pub fn MenuCard(
             class=format!(
                 "max-h-full flex flex-col relative
                 bg-zinc-800 border border-[#6c5734]/45
-             shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
-             relative z-10 flex h-full flex-col {} {} {}",
+                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
+                 {} {} {}",
                 if gap { "gap-1 xl:gap-2" } else { "" },
                 if pad { "p-1 xl:p-3" } else { "p-[2px]" },
                 class.unwrap_or_default(),

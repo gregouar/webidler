@@ -174,33 +174,6 @@ fn PlayerCard() -> impl IntoView {
     }
 }
 
-// #[component]
-// pub fn CharacterPortrait() -> impl IntoView {
-//     let town_context = expect_context::<TownContext>();
-
-//     let image_uri = move || img_asset(&town_context.character.read().portrait);
-
-//     view! {
-//         <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-//             <div class="border-6 xl:border-8 border-double border-stone-500 h-full w-full">
-//                 <div
-//                     class="h-full w-full"
-//                     style=format!(
-//                         "background-image: url('{}');",
-//                         img_asset("ui/paper_background.webp"),
-//                     )
-//                 >
-//                     <img
-//                         draggable="false"
-//                         src=image_uri
-//                         alt="portrait"
-//                         class="object-cover h-full w-full transition-all duration-[5s]"
-//                     />
-//                 </div>
-//             </div>
-//         </div>
-//     }
-// }
 #[component]
 pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();

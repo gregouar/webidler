@@ -4,7 +4,7 @@ use leptos::prelude::*;
 pub struct TooltipFramePalette {
     pub border_class: &'static str,
     pub inner_border_class: &'static str,
-    pub shadow_color: &'static str,
+    pub shadow_color: &'static str, // TODO: Remove
     pub wash_color: &'static str,
     pub core_color: &'static str,
     pub shine_color: &'static str,
@@ -19,13 +19,13 @@ pub fn TooltipFrame(
     view! {
         <div class=format!("relative isolate text-center {}", class.unwrap_or("max-w-xs"))>
             <div
-                class="pointer-events-none absolute inset-0"
+                class="pointer-events-none absolute inset-0 shadow-[0_0_10px_rgba(0,0,0,0.45)]"
                 aria-hidden="true"
-                style=format!(
-                    "filter: drop-shadow(0 10px 20px {}) drop-shadow(0 3px 5px rgba(0,0,0,0.45));",
-                    palette.shadow_color,
-                )
             >
+                // style=format!(
+                // "filter: drop-shadow(0 10px 20px {}) drop-shadow(0 3px 5px rgba(0,0,0,0.45));",
+                // palette.shadow_color,
+                // )
                 <div
                     class="absolute inset-0 bg-black/90"
                     style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);"
