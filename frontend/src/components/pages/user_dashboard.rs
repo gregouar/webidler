@@ -372,11 +372,15 @@ fn CharacterSlot(
     };
 
     view! {
-        <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md
+        <div class="relative overflow-hidden rounded-[10px] border border-[#6c5329]/70
+        bg-[linear-gradient(180deg,rgba(214,177,102,0.05),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
+        shadow-[0_6px_16px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.32)]
         flex flex-row items-stretch h-full">
+            <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
+            <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></span>
 
             <div
-                class="w-28 min-h-0 rounded-l-xl overflow-hidden"
+                class="relative z-10 w-28 min-h-0 overflow-hidden border-r border-[#6c5329]/45"
                 style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
             >
                 <img
@@ -387,13 +391,13 @@ fn CharacterSlot(
                 />
             </div>
 
-            <div class="flex flex-col justify-between flex-grow p-1 xl:p-3 relative h-full">
+            <div class="relative z-10 flex flex-col justify-between flex-grow p-2 xl:p-3 h-full min-w-0">
                 <div class="flex gap-2 absolute top-3 right-3 z-10">
                     <MenuButton on:click=try_delete_character>"❌"</MenuButton>
                 </div>
 
-                <div class="xl:space-y-1 overflow-x-hidden text-left">
-                    <div class="text-lg font-semibold  text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
+                <div class="xl:space-y-1 overflow-x-hidden text-left pr-10">
+                    <div class="text-lg font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
                         {character.name.clone()}
                     </div>
 
@@ -425,7 +429,7 @@ fn CharacterSlot(
                     </div>
                 </div>
 
-                <div class="mt-2 flex gap-2">
+                <div class="mt-3 flex gap-2">
                     <MenuButton on:click=edit_character>"Edit"</MenuButton>
                     <MenuButton class:flex-grow on:click=play_character.clone()>
                         "Play"
@@ -439,24 +443,37 @@ fn CharacterSlot(
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
     view! {
-        <div class="bg-neutral-800 rounded-xl border border-zinc-700 shadow-md
-        flex flex-row items-center gap-4 p-4 cursor-pointer
-        hover:border-amber-400 hover:shadow-lg transition active:scale-95">
+        <div class="relative overflow-hidden rounded-[10px] border border-[#6c5329]/65
+        bg-[linear-gradient(180deg,rgba(214,177,102,0.04),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
+        shadow-[0_6px_16px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04)]
+        flex flex-row items-stretch min-h-[7.5rem] cursor-pointer
+        hover:border-[#a27f46] hover:shadow-[0_8px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)]
+        transition active:translate-y-[1px] active:brightness-95">
+            <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
+            <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></span>
 
-            <div class="h-12 w-12 flex items-center justify-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-12 w-12 text-amber-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
+            <div class="relative z-10 w-24 xl:w-28 min-h-0 border-r border-[#6c5329]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06)),linear-gradient(135deg,rgba(31,30,36,0.98),rgba(15,15,18,1))]">
+                <div class="relative flex h-full w-full items-center justify-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 text-amber-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                </div>
             </div>
 
-            <span class="text-lg font-semibold text-amber-300">"Create Character"</span>
+            <div class="relative z-10 flex min-w-0 flex-1 items-center px-4 xl:px-5 text-left">
+                <div class="flex flex-col justify-center">
+                    <div class="text-lg xl:text-xl font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
+                        "Create Character"
+                    </div>
+                </div>
+            </div>
         </div>
     }
 }

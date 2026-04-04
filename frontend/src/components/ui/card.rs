@@ -50,7 +50,7 @@ pub fn Card(
                 class=format!(
                     "relative z-10 flex h-full flex-col {} {}",
                     if gap { "gap-1 xl:gap-2" } else { "" },
-                    if pad { "p-1 xl:p-3" } else { "p-[2px]" },
+                    if pad { "p-1 xl:p-3" } else { "m-[2px] overflow-hidden" },
                 )
                 style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
             >
