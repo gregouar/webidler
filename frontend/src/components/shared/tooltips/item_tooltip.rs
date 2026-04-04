@@ -120,7 +120,6 @@ pub fn ItemTooltipContent(
     max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
-    let section_label_class = "text-[11px] xl:text-xs uppercase tracking-[0.08em] text-stone-400/90";
     let (has_effects, effects) = if show_affixes {
         let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
         let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
@@ -282,7 +281,7 @@ pub fn ItemTooltipContent(
                 {(max_upgrade_level > 0)
                     .then(|| {
                         view! {
-                            <li class=section_label_class>
+                            <li class="text-xs xl:text-sm text-gray-400">
                                 "Empower level: "
                                 <span class="font-bold text-[#f0b36b]">
                                     {item_specs.modifiers.upgrade_level}
@@ -309,11 +308,11 @@ pub fn ItemTooltipContent(
                 .then(|| {
                     view! {
                         <Separator />
-                        <span class=section_label_class>"Empower effects:"</span>
+                        <span class="text-xs xl:text-sm text-gray-400">"Empower effects:"</span>
                         <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{upgrades}</ul>
                     }
                 })} <Separator /> <ul class="list-none xl:space-y-1">
-                <li class=section_label_class>
+                <li class="text-xs xl:text-sm text-gray-400">
                     "Required Power Level: "
                     <span class=move || {
                         if max_item_level.get() < required_level {
@@ -323,7 +322,7 @@ pub fn ItemTooltipContent(
                         }
                     }>{required_level}</span>
                 </li>
-                <li class=section_label_class>
+                <li class="text-xs xl:text-sm text-gray-400">
                     "Item Level: " <span class="text-stone-100">{item_specs.modifiers.level}</span>
                 </li>
             </ul>

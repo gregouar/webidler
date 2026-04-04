@@ -734,30 +734,8 @@ pub fn BagItemContextMenu(
 #[component]
 fn EmptySlot(children: Children) -> impl IntoView {
     view! {
-        <div class="relative isolate flex items-center justify-center w-full h-full opacity-80">
-            <div
-                class="pointer-events-none absolute inset-0"
-                style="filter: drop-shadow(0 6px 10px rgba(0,0,0,0.32));"
-            >
-                <div
-                    class="absolute inset-0 bg-black/85"
-                    style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);"
-                ></div>
-            </div>
-            <div
-                class="absolute inset-0 overflow-hidden border border-[#56462f]/85 shadow-[inset_0_1px_0_rgba(214,177,102,0.08),inset_0_-1px_0_rgba(0,0,0,0.45)]"
-                style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
-                background:
-                    linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.12)),
-                    linear-gradient(135deg, rgba(39,38,44,0.94), rgba(15,15,18,1));"
-            >
-                <div
-                    class="pointer-events-none absolute inset-[1px]"
-                    style="clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
-                    border: 1px solid rgba(214,177,102,0.1);
-                    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), inset 0 -12px 18px rgba(0,0,0,0.24);"
-                ></div>
-            </div>
+        <div class="relative isolate flex items-center justify-center w-full h-full overflow-hidden rounded-[4px] xl:rounded-[6px] opacity-80 border border-[#56462f]/80 shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)] bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]">
+            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-white/5 shadow-[inset_0_-10px_16px_rgba(0,0,0,0.2)]"></div>
             <div class="relative z-10 flex h-full w-full items-center justify-center p-1">
                 {children()}
             </div>

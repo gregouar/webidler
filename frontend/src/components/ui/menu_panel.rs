@@ -78,7 +78,7 @@ pub fn MenuPanel(
             class:hidden=move || !is_visible.get()
         >
             <div
-                class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
+                class="z-41 w-fit mx-auto max-h-full flex flex-col transform-gpu will-change-transform"
                 class:w-full=w_full
                 class:h-full=h_full
                 class:my-auto=center

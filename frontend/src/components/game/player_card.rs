@@ -416,7 +416,7 @@ fn BuySkillButton() -> impl IntoView {
                     disabled=disable_buy_skill
                 >
                     <CircularProgressBar
-                        bar_color="oklch(55.5% 0.163 48.998)"
+                        bar_color="oklch(55.4% 0.135 66.442)"
                         value=Signal::derive(|| 0.0)
                         bar_width=4
                     >
