@@ -12,7 +12,11 @@ use shared::data::{
 
 use crate::components::{
     data_context::DataContext,
-    shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
+    shared::tooltips::{
+        effects_tooltip::scope_str,
+        frame::{TooltipFrame, TooltipFramePalette},
+        trigger_tooltip::format_trigger,
+    },
     ui::{Separator, number},
 };
 
@@ -33,81 +37,18 @@ pub fn ItemTooltip(
     #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
-    let (border_color, inner_border, shadow_color, rarity_wash, rarity_core, frame_shine) =
-        tooltip_rarity_palette(item_specs.modifiers.rarity);
+    let palette = tooltip_rarity_palette(item_specs.modifiers.rarity);
 
     view! {
-        <div class="relative isolate max-w-xs text-center">
-            <div
-                class="pointer-events-none absolute inset-0"
-                aria-hidden="true"
-                style=format!(
-                    "filter: drop-shadow(0 10px 20px {}) drop-shadow(0 3px 5px rgba(0,0,0,0.45));",
-                    shadow_color,
-                )
-            >
-                <div
-                    class="absolute inset-0 bg-black/90"
-                    style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);"
-                ></div>
-            </div>
-
-            <div
-                class=format!(
-                    "relative overflow-hidden border {} shadow-[inset_0_1px_0_rgba(240,215,159,0.18),inset_0_-1px_0_rgba(0,0,0,0.5)]",
-                    border_color,
-                )
-                style=format!(
-                    "clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-                    background-image:
-                        linear-gradient(180deg, rgba(214,177,102,0.06), rgba(0,0,0,0.22)),
-                        radial-gradient(circle at 50% 22%, {}, transparent 62%),
-                        linear-gradient(180deg, {}, transparent 36%),
-                        linear-gradient(135deg, rgba(30,29,34,0.985), rgba(9,9,12,1));
-                    background-blend-mode: screen, soft-light, soft-light, normal;",
-                    rarity_core,
-                    rarity_wash,
-                )
-            >
-                <div
-                    class=format!(
-                        "pointer-events-none absolute inset-[1px] border {}",
-                        inner_border,
-                    )
-                    style="clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);"
-                ></div>
-                <span
-                    class="pointer-events-none absolute inset-x-[6px] top-[2px] h-[2px]"
-                    style=format!(
-                        "background: linear-gradient(90deg, transparent, {}, transparent);",
-                        frame_shine,
-                    )
-                ></span>
-                <span
-                    class="pointer-events-none absolute inset-y-[5px] left-[1px] w-[2px]"
-                    style=format!(
-                        "background: linear-gradient(180deg, transparent, {}, transparent);",
-                        frame_shine,
-                    )
-                ></span>
-                <span
-                    class="pointer-events-none absolute inset-y-[5px] right-[1px] w-[2px]"
-                    style=format!(
-                        "background: linear-gradient(180deg, transparent, {}, transparent);",
-                        frame_shine,
-                    )
-                ></span>
-                <span class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
-                <div class="relative p-2 xl:p-4">
-                    <ItemTooltipContent
-                        item_specs=item_specs.clone()
-                        show_affixes
-                        comparable
-                        max_item_level
-                    />
-                </div>
-            </div>
-        </div>
+        <TooltipFrame palette class="max-w-xs">
+            <span class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
+            <ItemTooltipContent
+                item_specs=item_specs.clone()
+                show_affixes
+                comparable
+                max_item_level
+            />
+        </TooltipFrame>
     }
 }
 
@@ -370,55 +311,48 @@ pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
 
 fn tooltip_rarity_palette(
     item_rarity: ItemRarity,
-) -> (
-    &'static str,
-    &'static str,
-    &'static str,
-    &'static str,
-    &'static str,
-    &'static str,
-) {
+) -> TooltipFramePalette {
     match item_rarity {
-        ItemRarity::Normal => (
-            "border-[#6c5329]/85",
-            "border-white/8",
-            "rgba(0,0,0,0.5)",
-            "rgba(210,215,224,0.05)",
-            "rgba(255,255,255,0.02)",
-            "rgba(230,230,236,0.2)",
-        ),
-        ItemRarity::Magic => (
-            "border-[#6c5329]/85",
-            "border-blue-200/18",
-            "rgba(23,44,89,0.52)",
-            "rgba(75,126,235,0.14)",
-            "rgba(48,86,196,0.1)",
-            "rgba(144,205,255,0.44)",
-        ),
-        ItemRarity::Rare => (
-            "border-[#7a5d29]/90",
-            "border-[#f3db9d]/18",
-            "rgba(67,47,11,0.55)",
-            "rgba(173,124,26,0.16)",
-            "rgba(108,76,8,0.12)",
-            "rgba(255,226,145,0.5)",
-        ),
-        ItemRarity::Masterwork => (
-            "border-[#74528a]/88",
-            "border-fuchsia-200/18",
-            "rgba(61,24,99,0.52)",
-            "rgba(143,78,220,0.15)",
-            "rgba(90,44,150,0.11)",
-            "rgba(228,183,255,0.46)",
-        ),
-        ItemRarity::Unique => (
-            "border-[#8c5628]/92",
-            "border-[#ffd1af]/18",
-            "rgba(104,34,8,0.62)",
-            "rgba(188,72,28,0.2)",
-            "rgba(114,18,8,0.16)",
-            "rgba(255,170,116,0.54)",
-        ),
+        ItemRarity::Normal => TooltipFramePalette {
+            border_class: "border-[#6c5329]/85",
+            inner_border_class: "border-white/8",
+            shadow_color: "rgba(0,0,0,0.5)",
+            wash_color: "rgba(210,215,224,0.05)",
+            core_color: "rgba(255,255,255,0.02)",
+            shine_color: "rgba(230,230,236,0.2)",
+        },
+        ItemRarity::Magic => TooltipFramePalette {
+            border_class: "border-[#6c5329]/85",
+            inner_border_class: "border-blue-200/18",
+            shadow_color: "rgba(23,44,89,0.52)",
+            wash_color: "rgba(75,126,235,0.14)",
+            core_color: "rgba(48,86,196,0.1)",
+            shine_color: "rgba(144,205,255,0.44)",
+        },
+        ItemRarity::Rare => TooltipFramePalette {
+            border_class: "border-[#7a5d29]/90",
+            inner_border_class: "border-[#f3db9d]/18",
+            shadow_color: "rgba(67,47,11,0.55)",
+            wash_color: "rgba(173,124,26,0.16)",
+            core_color: "rgba(108,76,8,0.12)",
+            shine_color: "rgba(255,226,145,0.5)",
+        },
+        ItemRarity::Masterwork => TooltipFramePalette {
+            border_class: "border-[#74528a]/88",
+            inner_border_class: "border-fuchsia-200/18",
+            shadow_color: "rgba(61,24,99,0.52)",
+            wash_color: "rgba(143,78,220,0.15)",
+            core_color: "rgba(90,44,150,0.11)",
+            shine_color: "rgba(228,183,255,0.46)",
+        },
+        ItemRarity::Unique => TooltipFramePalette {
+            border_class: "border-[#8c5628]/92",
+            inner_border_class: "border-[#ffd1af]/18",
+            shadow_color: "rgba(104,34,8,0.62)",
+            wash_color: "rgba(188,72,28,0.2)",
+            core_color: "rgba(114,18,8,0.16)",
+            shine_color: "rgba(255,170,116,0.54)",
+        },
     }
 }
 

@@ -25,6 +25,7 @@ use crate::components::{
             self, damage_over_time_type_value_str, formatted_effects_list, min_max_str,
             stat_skill_effect_type_str, status_type_str,
         },
+        frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip,
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
@@ -71,6 +72,15 @@ pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
 
 #[component]
 pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
+    let palette = TooltipFramePalette {
+        border_class: "border-[#70508a]/92",
+        inner_border_class: "border-fuchsia-200/10",
+        shadow_color: "rgba(66,31,105,0.42)",
+        wash_color: "rgba(150,116,255,0.14)",
+        core_color: "rgba(128,88,204,0.18)",
+        shine_color: "rgba(228,183,255,0.42)",
+    };
+
     let targets_lines = skill_specs
         .targets
         .clone()
@@ -95,139 +105,109 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .collect();
 
     view! {
-        <div class="relative isolate max-w-xs text-center">
-            <div
-                class="pointer-events-none absolute inset-0"
-                aria-hidden="true"
-                style="filter: drop-shadow(0 10px 20px rgba(66,31,105,0.42)) drop-shadow(0 3px 5px rgba(0,0,0,0.45));"
-            >
-                <div
-                    class="absolute inset-0 bg-black/90"
-                    style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);"
-                ></div>
-            </div>
-            <div
-                class="relative overflow-hidden border border-[#70508a]/92 shadow-[inset_0_1px_0_rgba(240,215,159,0.16),inset_0_-1px_0_rgba(0,0,0,0.5)]"
-                style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-                background-image:
-                    linear-gradient(180deg, rgba(214,177,102,0.05), rgba(0,0,0,0.2)),
-                    radial-gradient(circle at 50% 20%, rgba(128,88,204,0.18), transparent 64%),
-                    linear-gradient(180deg, rgba(150,116,255,0.14), transparent 34%),
-                    linear-gradient(135deg, rgba(31,29,36,0.985), rgba(9,9,12,1));
-                background-blend-mode: screen, soft-light, screen, normal;"
-            >
-                <div
-                    class="pointer-events-none absolute inset-[1px] border border-fuchsia-200/10"
-                    style="clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);"
-                ></div>
-                <span class="pointer-events-none absolute inset-x-[6px] top-[2px] h-[2px] bg-gradient-to-r from-transparent via-[rgba(228,183,255,0.52)] to-transparent"></span>
-                <span class="pointer-events-none absolute inset-y-[5px] left-[1px] w-[2px] bg-gradient-to-b from-transparent via-[rgba(228,183,255,0.42)] to-transparent"></span>
-                <span class="pointer-events-none absolute inset-y-[5px] right-[1px] w-[2px] bg-gradient-to-b from-transparent via-[rgba(228,183,255,0.42)] to-transparent"></span>
-                <div class="space-y-2 p-2 xl:p-4">
-                    <strong class="text-sm xl:text-base font-bold text-violet-300 font-display text-shadow-md/80">
-                        <ul class="list-none xl:space-y-1 mb-2">
-                            <li class=" whitespace-pre-line">{skill_specs.base.name.clone()}</li>
-                        </ul>
-                    </strong>
+        <TooltipFrame palette class="max-w-xs">
+            <strong class="text-sm xl:text-base font-bold text-violet-300 font-display text-shadow-md/80">
+                <ul class="list-none xl:space-y-1 mb-2">
+                    <li class=" whitespace-pre-line">{skill_specs.base.name.clone()}</li>
+                </ul>
+            </strong>
 
-                    <Separator />
+            <Separator />
 
-                    <p class="text-xs xl:text-sm text-stone-400 ">
-                        {skill_type_str(Some(skill_specs.base.skill_type))} "| "
-                        {if skill_specs.cooldown.get() > 0.0 {
-                            view! {
-                                "Cooldown: "
-                                <span class="text-stone-100">
-                                    {format!("{:.1}s", skill_specs.cooldown.get())}
-                                </span>
-                            }
-                                .into_any()
-                        } else {
-                            view! { "Permanent" }.into_any()
-                        }}
-                        {(skill_specs.mana_cost.get() > 0.0)
-                            .then(|| {
-                                view! {
-                                    " | Mana Cost: "
-                                    <span class="text-stone-100">{skill_specs.mana_cost.get().round()}</span>
-                                }
-                            })}
-                    </p>
+            <p class="text-xs xl:text-sm text-stone-400 ">
+                {skill_type_str(Some(skill_specs.base.skill_type))} "| "
+                {if skill_specs.cooldown.get() > 0.0 {
+                    view! {
+                        "Cooldown: "
+                        <span class="text-stone-100">
+                            {format!("{:.1}s", skill_specs.cooldown.get())}
+                        </span>
+                    }
+                        .into_any()
+                } else {
+                    view! { "Permanent" }.into_any()
+                }}
+                {(skill_specs.mana_cost.get() > 0.0)
+                    .then(|| {
+                        view! {
+                            " | Mana Cost: "
+                            <span class="text-stone-100">{skill_specs.mana_cost.get().round()}</span>
+                        }
+                    })}
+            </p>
 
-                    {(!skill_specs.base.auto_use_conditions.is_empty())
-                        .then(|| {
-                            view! {
-                                <Separator />
-                                <ul class="text-xs xl:text-sm ">
-                                    <li>
-                                        <span class="text-stone-400 ">
-                                            "Auto-use only when "
-                                            {conditions_tooltip::format_skill_modifier_conditions_pre(
-                                                &skill_specs.base.auto_use_conditions,
-                                                "",
-                                            )}
-                                            {conditions_tooltip::format_skill_modifier_conditions_post(
-                                                &skill_specs.base.auto_use_conditions,
-                                            )}
-                                        </span>
-                                    </li>
-                                </ul>
-                            }
-                        })}
-
-                    <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
-                        {targets_lines}{trigger_lines}
-                        {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
-                    </ul>
-
-                    {(skill_specs.next_upgrade_cost > 0.0)
-                        .then(|| {
-                            view! {
-                                <Separator />
-                                <ul class="text-xs xl:text-sm ">
-                                    <li>
-                                        <span class="text-stone-400 ">"Next upgrade:"</span>
-                                    </li>
-                                    {effects_tooltip::formatted_effects_list(
-                                        skill_specs.base.upgrade_effects.clone(),
+            {(!skill_specs.base.auto_use_conditions.is_empty())
+                .then(|| {
+                    view! {
+                        <Separator />
+                        <ul class="text-xs xl:text-sm ">
+                            <li>
+                                <span class="text-stone-400 ">
+                                    "Auto-use only when "
+                                    {conditions_tooltip::format_skill_modifier_conditions_pre(
+                                        &skill_specs.base.auto_use_conditions,
+                                        "",
                                     )}
-                                </ul>
+                                    {conditions_tooltip::format_skill_modifier_conditions_post(
+                                        &skill_specs.base.auto_use_conditions,
+                                    )}
+                                </span>
+                            </li>
+                        </ul>
+                    }
+                })}
 
-                                <Separator />
-                                <p class="text-xs xl:text-sm text-stone-400 ">
-                                    "Level: "
-                                    {if skill_specs.level_modifier > 0 {
-                                        view! {
-                                            <span class="text-blue-300">
-                                                {skill_specs
-                                                    .upgrade_level
-                                                    .saturating_add(skill_specs.level_modifier)}
-                                            </span>
-                                        }
-                                    } else {
-                                        view! {
-                                            <span class="text-stone-100">{skill_specs.upgrade_level}</span>
-                                        }
-                                    }} " | Upgrade Cost: "
-                                    <span class="text-stone-100">
-                                        {format_number(skill_specs.next_upgrade_cost)}" Gold"
+            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                {targets_lines}{trigger_lines}
+                {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
+            </ul>
+
+            {(skill_specs.next_upgrade_cost > 0.0)
+                .then(|| {
+                    view! {
+                        <Separator />
+                        <ul class="text-xs xl:text-sm ">
+                            <li>
+                                <span class="text-stone-400 ">"Next upgrade:"</span>
+                            </li>
+                            {effects_tooltip::formatted_effects_list(
+                                skill_specs.base.upgrade_effects.clone(),
+                            )}
+                        </ul>
+
+                        <Separator />
+                        <p class="text-xs xl:text-sm text-stone-400 ">
+                            "Level: "
+                            {if skill_specs.level_modifier > 0 {
+                                view! {
+                                    <span class="text-blue-300">
+                                        {skill_specs
+                                            .upgrade_level
+                                            .saturating_add(skill_specs.level_modifier)}
                                     </span>
-                                </p>
-                            }
-                        })}
+                                }
+                            } else {
+                                view! {
+                                    <span class="text-stone-100">{skill_specs.upgrade_level}</span>
+                                }
+                            }} " | Upgrade Cost: "
+                            <span class="text-stone-100">
+                                {format_number(skill_specs.next_upgrade_cost)}" Gold"
+                            </span>
+                        </p>
+                    }
+                })}
 
-                    {(!skill_specs.base.description.is_empty())
-                        .then(|| {
-                            view! {
-                                <Separator />
-                                <p class="text-xs xl:text-sm italic text-stone-400 ">
-                                    {skill_specs.base.description.clone()}
-                                </p>
-                            }
-                        })}
-                </div>
-            </div>
-        </div>
+            {(!skill_specs.base.description.is_empty())
+                .then(|| {
+                    view! {
+                        <Separator />
+                        <p class="text-xs xl:text-sm italic text-stone-400 ">
+                            {skill_specs.base.description.clone()}
+                        </p>
+                    }
+                })}
+        </TooltipFrame>
     }
 }
 

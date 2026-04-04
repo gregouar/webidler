@@ -232,8 +232,8 @@ fn EquippedItemEquippedSlot(
                     class="absolute inset-0 z-30 w-full"
                     style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
                     background:
-                        linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
-                        linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
+                    linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
+                    linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
                     box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
                 ></div>
             </Show>
@@ -326,11 +326,7 @@ pub fn EquippedItemContextMenu(
                 .map(|on_unequip| {
                     view! {
                         <button
-                            class=format!(
-                                "{} {}",
-                                action_menu_button_class(),
-                                success_text,
-                            )
+                            class=format!("{} {}", action_menu_button_class(), success_text)
                             style=action_menu_button_style(success_border, success_sheen)
                             on:click=move |_| {
                                 on_unequip(item_slot);
@@ -588,8 +584,8 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         class="absolute inset-0 z-30 w-full"
                                         style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
                                         background:
-                                            linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
-                                            linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
+                                        linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
+                                        linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
                                         box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
                                     ></div>
                                 </Show>
@@ -674,7 +670,10 @@ pub fn BagItemContextMenu(
                                             action_menu_button_class(),
                                             success_text,
                                         )
-                                        style=action_menu_button_style(success_border, success_sheen)
+                                        style=action_menu_button_style(
+                                            success_border,
+                                            success_sheen,
+                                        )
                                         on:click=move |_| {
                                             on_equip(item_index as u8);
                                             sell_queue.write().remove(&item_index);
@@ -696,11 +695,7 @@ pub fn BagItemContextMenu(
                 .then(|| {
                     view! {
                         <button
-                            class=format!(
-                                "{} {}",
-                                action_menu_button_class(),
-                                warning_text,
-                            )
+                            class=format!("{} {}", action_menu_button_class(), warning_text)
                             style=action_menu_button_style(warning_border, warning_sheen)
                             on:click=move |_| toggle_sell_mark()
                         >
@@ -763,14 +758,14 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
             style="
             animation: fade-in 0.2s ease-out forwards;
             clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
-            background:
-                linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
-                linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
-            border: 1px solid rgba(108,83,41,0.88);
+            /*background:
+            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
+            linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
+            border: 1px solid rgba(108,83,41,0.88);*/
             box-shadow:
-                0 10px 22px rgba(0,0,0,0.52),
-                inset 0 1px 0 rgba(240,215,159,0.16),
-                inset 0 -1px 0 rgba(0,0,0,0.45);
+            0 10px 22px rgba(0,0,0,0.52),
+            inset 0 1px 0 rgba(240,215,159,0.16),
+            inset 0 -1px 0 rgba(0,0,0,0.45);
             "
         >
             {children()}

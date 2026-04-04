@@ -713,7 +713,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             disabled=move || !is_ready.get()
                         >
                             <CircularProgressBar
-                                bar_color="oklch(55.5% 0.163 48.998)"
+                                bar_color="oklch(55.4% 0.135 66.442)"
                                 value=progress_value
                                 reset=just_triggered
                                 disabled=is_dead
