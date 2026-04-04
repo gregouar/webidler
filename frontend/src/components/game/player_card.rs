@@ -213,18 +213,18 @@ pub fn PlayerCard() -> impl IntoView {
             || max_level()
     });
 
-    Effect::new({
-        let toaster = expect_context::<Toasts>();
-        move || {
-            if is_dead.get() && just_hurt.get() {
-                show_toast(
-                    toaster,
-                    "You are dead, going back one area level...",
-                    ToastVariant::Normal,
-                );
-            }
-        }
-    });
+    // Effect::new({
+    //     let toaster = expect_context::<Toasts>();
+    //     move || {
+    //         if is_dead.get() && just_hurt.get() {
+    //             show_toast(
+    //                 toaster,
+    //                 "You are dead, going back one area level...",
+    //                 ToastVariant::Normal,
+    //             );
+    //         }
+    //     }
+    // });
 
     view! {
         <Card class="w-1/3">

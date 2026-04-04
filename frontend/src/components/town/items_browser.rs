@@ -18,7 +18,10 @@ use crate::{
             tooltips::{ItemTooltip, item_tooltip::ItemTooltipContent},
         },
         town::TownContext,
-        ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+        ui::{
+            list_row::MenuListRow,
+            tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+        },
     },
 };
 
@@ -91,15 +94,20 @@ pub fn ItemsBrowser(
                 key=|item| (item.index,item.created_at)
                 let:(item)
             >
-                <ItemRow
-                    item_specs=item.item_specs.clone()
-                    on:click=move |_| selected_item.set(SelectedItem::InMarket(item.clone()))
-                    price=item.price
-                    highlight=move || selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index))
-                    special_offer=item.recipient.is_some()
-                    rejected=item.rejected
-                    max_item_level
-                />
+                {{
+                    let clicked_item = item.clone();
+                    view! {
+                        <ItemRow
+                            item_specs=item.item_specs.clone()
+                            on_click=move || selected_item.set(SelectedItem::InMarket(clicked_item.clone()))
+                            price=item.price
+                            highlight=move || selected_item.with(|selected_item| matches!(selected_item, SelectedItem::InMarket(selected_market_item) if selected_market_item.index == item.index))
+                            special_offer=item.recipient.is_some()
+                            rejected=item.rejected
+                            max_item_level
+                        />
+                    }
+                }}
             </For>
             {move || (items_list.read().is_empty() && !has_more.map(|has_more| has_more.get()).unwrap_or_default()).then(|| view!{
                 <div class="w-full h-full flex items-center justify-center">
@@ -126,74 +134,91 @@ pub fn ItemsBrowser(
 pub fn ItemRow(
     item_specs: Arc<ItemSpecs>,
     price: f64,
+    #[prop(optional, into)] on_click: Option<Callback<()>>,
     highlight: impl Fn() -> bool + Send + Sync + 'static,
     #[prop(default = false)] special_offer: bool,
     #[prop(default = false)] rejected: bool,
     max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
     let slot = item_specs.base.slot;
+    let is_highlighted = Signal::derive(move || highlight());
+    let row_state_class = Signal::derive(move || {
+        let mut classes = String::new();
+
+        if is_highlighted.get() {
+            classes.push_str(
+                "border-[#b28a4f] shadow-[0_4px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_0_0_1px_rgba(214,177,102,0.18)] ",
+            );
+        } else if rejected {
+            classes.push_str(
+                "border-red-700/70 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03),inset_0_0_0_1px_rgba(239,68,68,0.12)] ",
+            );
+        } else if special_offer {
+            classes.push_str(
+                "border-fuchsia-700/70 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03),inset_0_0_0_1px_rgba(217,70,239,0.14)] ",
+            );
+        }
+
+        if special_offer {
+            classes.push_str(
+                "before:absolute before:inset-y-[8px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-fuchsia-400/80 before:to-transparent ",
+            );
+        }
+
+        if rejected {
+            classes.push_str(
+                "after:absolute after:inset-y-[8px] after:left-[5px] after:w-[2px] after:rounded-full after:bg-gradient-to-b after:from-transparent after:via-red-400/85 after:to-transparent",
+            );
+        }
+
+        classes
+    });
+
     view! {
-        <div class=move || {
-            format!(
-                "relative mb-2 flex w-full items-center justify-between gap-3 rounded-[8px] border px-3 py-3
-                bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
-                shadow-[0_4px_10px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03)]
-                transition-colors duration-150 cursor-pointer
-                hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent),linear-gradient(135deg,rgba(46,45,52,0.98),rgba(21,21,25,1))]
-                {} {} {}",
-                if highlight() {
-                    "border-[#b28a4f] shadow-[0_4px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_0_0_1px_rgba(214,177,102,0.18)]"
-                } else if rejected {
-                    "border-red-700/70 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03),inset_0_0_0_1px_rgba(239,68,68,0.12)]"
-                } else if special_offer {
-                    "border-fuchsia-700/70 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.03),inset_0_0_0_1px_rgba(217,70,239,0.14)]"
-                } else {
-                    "border-zinc-800"
-                },
-                if special_offer {
-                    "before:absolute before:inset-y-[8px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-fuchsia-400/80 before:to-transparent"
-                } else {
-                    ""
-                },
-                if rejected {
-                    "after:absolute after:inset-y-[8px] after:left-[5px] after:w-[2px] after:rounded-full after:bg-gradient-to-b after:from-transparent after:via-red-400/85 after:to-transparent"
-                } else {
-                    ""
-                },
-            )
-        }>
-            <div class="relative h-28 xl:h-32 aspect-[2/3] flex-shrink-0">
-                <ItemCard item_specs=item_specs.clone() class:pointer-events-none max_item_level />
+        <MenuListRow
+            class="mb-2"
+            state_class=row_state_class
+            selected=is_highlighted
+            on_click=move || {
+                if let Some(on_click) = on_click.clone() {
+                    on_click.run(());
+                }
+            }
+        >
+            <div class="flex w-full items-center justify-between gap-3 px-3 py-3">
+                <div class="relative h-28 xl:h-32 aspect-[2/3] flex-shrink-0">
+                    <ItemCard item_specs=item_specs.clone() class:pointer-events-none max_item_level />
+                </div>
+
+                <div class="min-w-0 flex flex-col w-full">
+                    <ItemTooltipContent
+                        item_specs=item_specs.clone()
+                        hide_description=true
+                        max_item_level
+                    />
+                </div>
+
+                {slot.map(|slot| view! { <ItemCompare item_slot=slot max_item_level /> })}
+
+                {(price > 0.0)
+                    .then(|| {
+                        view! {
+                            <div class="absolute flex bottom-2 right-2 gap-1 items-center rounded-[4px] border border-fuchsia-500/25 px-2 py-1 bg-black/20">
+                                <span class="text-gray-400 text-xs xl:text-sm">"Price:"</span>
+                                <span class="text-fuchsia-300 font-semibold">
+                                    {format!("{:.0}", price)}
+                                </span>
+                                <img
+                                    draggable="false"
+                                    src=img_asset("ui/gems.webp")
+                                    alt="Gems"
+                                    class="h-[2em] aspect-square mr-1"
+                                />
+                            </div>
+                        }
+                    })}
             </div>
-
-            <div class="min-w-0 flex flex-col w-full">
-                <ItemTooltipContent
-                    item_specs=item_specs.clone()
-                    hide_description=true
-                    max_item_level
-                />
-            </div>
-
-            {slot.map(|slot| view! { <ItemCompare item_slot=slot max_item_level /> })}
-
-            {(price > 0.0)
-                .then(|| {
-                    view! {
-                        <div class="absolute flex bottom-2 right-2 gap-1 items-center rounded-[4px] border border-fuchsia-500/25 px-2 py-1 bg-black/20">
-                            <span class="text-gray-400 text-xs xl:text-sm">"Price:"</span>
-                            <span class="text-fuchsia-300 font-semibold">
-                                {format!("{:.0}", price)}
-                            </span>
-                            <img
-                                draggable="false"
-                                src=img_asset("ui/gems.webp")
-                                alt="Gems"
-                                class="h-[2em] aspect-square mr-1"
-                            />
-                        </div>
-                    }
-                })}
-        </div>
+        </MenuListRow>
     }
 }
 
