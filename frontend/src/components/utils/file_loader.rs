@@ -51,9 +51,7 @@ pub fn save_json<T: Serialize>(data: &T, filename: &str) {
 
     let array = web_sys::js_sys::Array::new();
     array.push(&JsValue::from_str(&json));
-    let blob_property = web_sys::BlobPropertyBag::new();
-    blob_property.set_type("application/json");
-    let blob = web_sys::Blob::new_with_str_sequence_and_options(&array, &blob_property).unwrap();
+    let blob = web_sys::Blob::new_with_str_sequence(&array).unwrap();
 
     let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
     let document = web_sys::window().unwrap().document().unwrap();

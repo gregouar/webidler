@@ -9,23 +9,19 @@ use shared::{
     },
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        events::{EventsContext, Key},
-        game::websocket::WebsocketContext,
-        shared::tooltips::SkillTooltip,
-        ui::{
-            buttons::{FancyButton, Toggle},
-            card::Card,
-            number::{Number, format_number},
-            progress_bars::{
-                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
-                predictive_cooldown,
-            },
-            tooltip::{
-                DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
-            },
+use crate::components::{
+    events::{EventsContext, Key},
+    game::websocket::WebsocketContext,
+    shared::{skills::SkillProgressBar, tooltips::SkillTooltip},
+    ui::{
+        buttons::{FancyButton, Toggle},
+        card::Card,
+        number::{Number, format_number},
+        progress_bars::{
+            CircularProgressBar, HorizontalProgressBar, VerticalProgressBar, predictive_cooldown,
+        },
+        tooltip::{
+            DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
         },
     },
 };
@@ -392,18 +388,6 @@ fn BuySkillButton() -> impl IntoView {
 
     view! {
         <div class="flex flex-col">
-            // <div class="flex flex-col items-center justify-center">
-            // <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
-            // <FancyButton
-            // class:aspect-square
-            // on:click=move |_| game_context.open_skills.set(true)
-            // disabled=disable_buy_skill
-            // >
-            // "Buy Skill"
-            // </FancyButton>
-            // </StaticTooltip>
-            // </div>
-
             <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
                 <button
                     class="btn p-1 w-full h-full
@@ -462,24 +446,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let rush_mode = Memo::new(move |_| game_context.area_state.read().rush_mode);
-
-    let icon_asset = Memo::new(move |_| {
-        if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
-            img_asset(&skill_specs.base.icon)
-        } else {
-            "".to_string()
-        }
-    });
-
-    let skill_name = Memo::new(move |_| {
-        game_context
-            .player_specs
-            .read()
-            .skills_specs
-            .get(index)
-            .map(|x| x.base.name.clone())
-            .unwrap_or_default()
-    });
 
     let skill_cooldown = Signal::derive(move || {
         (1.0 - (game_context
@@ -642,30 +608,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         }
     };
 
-    // let tooltip_context = expect_context::<DynamicTooltipContext>();
-    // let show_tooltip = move || {
-    //     if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
-    //         let skill_specs = Arc::new(skill_specs.clone());
-    //         tooltip_context.set_content(
-    //             move || {
-    //                 let skill_specs = skill_specs.clone();
-    //                 view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
-    //             },
-    //             DynamicTooltipPosition::TopRight,
-    //         );
-    //     }
-    // };
-
-    // let tooltip_context = expect_context::<DynamicTooltipContext>();
-    // let hide_tooltip = move || tooltip_context.hide();
-
     let skill_specs = Memo::new(move |_| {
         game_context
             .player_specs
             .read()
             .skills_specs
             .get(index)
-            .map(|x| Arc::new(x.clone()))
+            .cloned()
     });
 
     let tooltip = {
@@ -673,7 +622,9 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             view! {
                 {skill_specs
                     .get()
+                    .as_ref()
                     .map(|skill_specs| {
+                        let skill_specs = Arc::new(skill_specs.clone());
                         view! { <SkillTooltip skill_specs=skill_specs /> }
                     })}
             }
@@ -693,15 +644,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
-                // <div
-                // on:touchstart=move |_| { show_tooltip() }
-                // on:contextmenu=move |ev| {
-                // ev.prevent_default();
-                // }
-                // on:mouseenter=move |_| show_tooltip()
-                // on:mouseleave=move |_| hide_tooltip()
-                // on:click=move |_| hide_tooltip()
-                // >
                 {
                     let use_skill = use_skill.clone();
                     view! {
@@ -711,25 +653,25 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             on:click=move |_| use_skill()
                             disabled=move || !is_ready.get()
                         >
-                            <CircularProgressBar
-                                bar_color="oklch(55.4% 0.135 66.442)"
-                                value=progress_value
-                                reset=just_triggered
-                                disabled=is_dead
-                                bar_width=4
-                            >
-                                <img
-                                    draggable="false"
-                                    src=icon_asset
-                                    alt=skill_name
-                                    class="w-full h-full flex-no-shrink fill-current
-                                    xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                                />
-                            </CircularProgressBar>
+                            {move || {
+                                skill_specs
+                                    .get()
+                                    .map(|skill_specs| {
+                                        view! {
+                                            <SkillProgressBar
+                                                skill_specs=skill_specs
+                                                value=progress_value
+                                                reset=just_triggered
+                                                disabled=is_dead
+                                                bar_width=4
+                                            />
+                                        }
+                                            .into_any()
+                                    })
+                            }}
                         </button>
                     }
                 }
-            // </div>
             </DynamicTooltipTarget>
 
             <div class="flex justify-around">

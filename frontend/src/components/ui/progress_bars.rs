@@ -193,6 +193,7 @@ pub fn CircularProgressBar(
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
+    #[prop(optional)] tint_background: Option<&'static str>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
@@ -290,9 +291,10 @@ pub fn CircularProgressBar(
 
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        bg-radial from-stone-600 to-zinc-950 to-70% 
+                        bg-radial {} to-zinc-950 to-70% 
                         border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                     bar_width / 2,
+                    tint_background.unwrap_or("from-stone-600"),
                 )>
                 </div>
 

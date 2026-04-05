@@ -17,14 +17,15 @@ use crate::{
         data_context::DataContext,
         game::portrait::CharacterPortrait,
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
-        shared::{inventory::InventoryEquipFilter, tooltips::SkillTooltip},
+        shared::{
+            inventory::InventoryEquipFilter, skills::SkillProgressBar, tooltips::SkillTooltip,
+        },
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
             Separator,
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
-            progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
     },
@@ -186,23 +187,12 @@ pub fn PlayerName() -> impl IntoView {
 fn PlayerSkill(index: usize) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let icon_asset = Memo::new(move |_| {
+    let skill_specs = Memo::new(move |_| {
         town_context.last_grind.with(|last_grind| {
             last_grind
                 .as_ref()
                 .and_then(|last_grind| last_grind.skills_specs.get(index))
-                .map(|skill_specs| img_asset(&skill_specs.base.icon))
-                .unwrap_or_default()
-        })
-    });
-
-    let skill_name = Memo::new(move |_| {
-        town_context.last_grind.with(|last_grind| {
-            last_grind
-                .as_ref()
-                .and_then(|last_grind| last_grind.skills_specs.get(index))
-                .map(|skill_specs| img_asset(&skill_specs.base.name))
-                .unwrap_or_default()
+                .cloned()
         })
     });
 
@@ -241,25 +231,28 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                 on:mouseleave=move |_| hide_tooltip()
                 on:click=move |_| hide_tooltip()
             >
-                <button
-                    class="btn p-1 w-full h-full
-                    active:brightness-50 active:sepia"
-                    disabled=true
-                >
-                    <CircularProgressBar
-                        bar_color="oklch(55.5% 0.163 48.998)"
-                        value=Signal::derive(|| 0.0)
-                        bar_width=4
-                    >
-                        <img
-                            draggable="false"
-                            src=icon_asset
-                            alt=skill_name
-                            class="w-full h-full flex-no-shrink fill-current
-                            xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                        />
-                    </CircularProgressBar>
-                </button>
+                // <button
+                // class="btn p-1 w-full h-full
+                // active:brightness-50 active:sepia"
+                // disabled=true
+                // >
+                <div class="p-1 w-full h-full">
+                    {move || {
+                        skill_specs
+                            .get()
+                            .map(|skill_specs| {
+                                view! {
+                                    <SkillProgressBar
+                                        skill_specs=skill_specs
+                                        value=Signal::derive(|| 0.0)
+                                        bar_width=4
+                                    />
+                                }
+                                    .into_any()
+                            })
+                    }}
+                </div>
+            // </button>
             </div>
         </div>
     }

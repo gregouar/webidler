@@ -15,6 +15,7 @@ use crate::assets::img_asset;
 use crate::components::icons::monster_tags::{
     ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
 };
+use crate::components::shared::skills::SkillProgressBar;
 use crate::components::shared::tooltips::effects_tooltip;
 use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
 use crate::components::ui::progress_bars::predictive_cooldown;
@@ -22,7 +23,7 @@ use crate::components::{
     shared::tooltips::SkillTooltip,
     ui::{
         number::format_number,
-        progress_bars::{CircularProgressBar, HorizontalProgressBar},
+        progress_bars::HorizontalProgressBar,
         tooltip::{
             DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
         },
@@ -757,9 +758,6 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
 fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let icon_asset = img_asset(&skill_specs.base.icon);
-    let skill_name = skill_specs.base.name.clone();
-
     let is_dead = Memo::new(move |_| {
         game_context
             .monster_states
@@ -799,15 +797,18 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let show_tooltip = move || {
+    let show_tooltip = {
         let skill_specs = Arc::new(skill_specs.clone());
-        tooltip_context.set_content(
-            move || {
-                let skill_specs = skill_specs.clone();
-                view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
-            },
-            DynamicTooltipPosition::Auto,
-        );
+        move || {
+            let skill_specs = skill_specs.clone();
+            tooltip_context.set_content(
+                move || {
+                    let skill_specs = skill_specs.clone();
+                    view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+                },
+                DynamicTooltipPosition::Auto,
+            );
+        }
     };
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
@@ -841,12 +842,13 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     );
 
     view! {
-        <CircularProgressBar
-            bar_color="oklch(55.4% 0.135 66.442)"
+        <SkillProgressBar
+            skill_specs=skill_specs
             value=progress_value
             reset=just_triggered
             disabled=is_dead
             bar_width=2
+            icon_class="w-full h-full flex-no-shrink fill-current xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
@@ -858,14 +860,6 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
-        >
-            <img
-                draggable="false"
-                src=icon_asset
-                alt=skill_name
-                class="w-full h-full flex-no-shrink fill-current
-                xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
-            />
-        </CircularProgressBar>
+        />
     }
 }

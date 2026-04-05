@@ -130,7 +130,64 @@ pub fn UiTestsPage() -> impl IntoView {
                                 <MenuButton>"Export"</MenuButton>
                             </div>
                         </CardHeader>
-                        <CardInset class="w-full h-full">"bouh"</CardInset>
+                        <CardInset class="w-full h-full">
+                            "bouh"
+                            <div class="w-full grid grid-cols-10 gap-2">
+                                {(0..45)
+                                    .map(|_| {
+                                        let trigger_reset_progress = RwSignal::new(false);
+                                        let reset_progress = Signal::derive(move || {
+                                            trigger_reset_progress.get()
+                                        });
+                                        let progress_value = predictive_cooldown(
+                                            Signal::derive(move || 2.0),
+                                            reset_progress,
+                                            Signal::derive(move || false),
+                                            0.0,
+                                        );
+                                        Effect::new(move || {
+                                            if progress_value.get() >= 1.0 {
+                                                trigger_reset_progress.set(true)
+                                            } else {
+                                                trigger_reset_progress.set(false)
+                                            }
+                                        });
+
+                                        view! {
+                                            <div class="flex flex-col gap-1">
+                                                <CircularProgressBar
+                                                    bar_color="oklch(55.4% 0.135 66.442)"
+                                                    value=progress_value
+                                                    reset=reset_progress
+                                                    bar_width=2
+                                                >
+                                                    <img
+                                                        draggable="false"
+                                                        src="assets/images/skills/attack.svg"
+                                                        alt="attack"
+                                                        class="w-full h-full flex-no-shrink fill-current
+                                                        xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                                                    />
+                                                </CircularProgressBar>
+
+                                                <div class="flex justify-around">
+                                                    <Toggle toggle_callback=|_| {}>
+                                                        <span class="inline xl:hidden">"A"</span>
+                                                        <span class="hidden xl:inline font-variant:small-caps">
+                                                            "Auto"
+                                                        </span>
+                                                    </Toggle>
+                                                    <FancyButton>
+                                                        <span class="text-base xl:text-2xl">"+"</span>
+                                                    </FancyButton>
+                                                </div>
+                                            </div>
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()}
+                            </div>
+
+                        </CardInset>
                     </Card>
                 </div>
             </div>

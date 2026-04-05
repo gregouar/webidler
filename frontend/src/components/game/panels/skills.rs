@@ -286,7 +286,7 @@ fn skill_type_title_color(skill_type: SkillType) -> &'static str {
     match skill_type {
         SkillType::Attack => "text-red-300",
         SkillType::Spell => "text-sky-300",
-        SkillType::Curse => "text-violet-300",
+        SkillType::Curse => "text-purple-300",
         SkillType::Blessing => "text-amber-200",
         SkillType::Other => "text-slate-300",
     }
@@ -296,7 +296,7 @@ fn skill_type_glow(skill_type: SkillType) -> &'static str {
     match skill_type {
         SkillType::Attack => "via-red-400/70",
         SkillType::Spell => "via-sky-400/70",
-        SkillType::Curse => "via-violet-400/70",
+        SkillType::Curse => "via-purple-400/70",
         SkillType::Blessing => "via-amber-300/75",
         SkillType::Other => "via-slate-300/60",
     }
@@ -316,7 +316,7 @@ fn skill_type_inner_glow(skill_type: SkillType) -> &'static str {
     match skill_type {
         SkillType::Attack => "from-red-400/18",
         SkillType::Spell => "from-sky-400/18",
-        SkillType::Curse => "from-violet-400/18",
+        SkillType::Curse => "from-purple-400/18",
         SkillType::Blessing => "from-amber-300/18",
         SkillType::Other => "from-slate-300/14",
     }
@@ -326,7 +326,7 @@ fn skill_type_top_glow(skill_type: SkillType) -> &'static str {
     match skill_type {
         SkillType::Attack => "via-red-400/40",
         SkillType::Spell => "via-sky-400/40",
-        SkillType::Curse => "via-violet-400/40",
+        SkillType::Curse => "via-purple-400/40",
         SkillType::Blessing => "via-amber-300/40",
         SkillType::Other => "via-slate-300/40",
     }
