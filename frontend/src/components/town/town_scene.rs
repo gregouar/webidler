@@ -17,10 +17,7 @@ use crate::{
         data_context::DataContext,
         game::portrait::CharacterPortrait,
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
-        shared::{
-            inventory::InventoryEquipFilter,
-            tooltips::SkillTooltip,
-        },
+        shared::{inventory::InventoryEquipFilter, tooltips::SkillTooltip},
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
             Separator,
@@ -359,18 +356,16 @@ fn GrindingAreaCard(
                 }
                 style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
             >
-                <div
-                    class=move || {
-                        format!(
-                            "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",
-                            if locked() {
-                                "blur-[3px] scale-[1.015] saturate-75 brightness-75"
-                            } else {
-                                ""
-                            },
-                        )
-                    }
-                >
+                <div class=move || {
+                    format!(
+                        "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",
+                        if locked() {
+                            "blur-[3px] scale-[1.015] saturate-75 brightness-75"
+                        } else {
+                            ""
+                        },
+                    )
+                }>
                     <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
                         <img
                             draggable="false"
@@ -554,7 +549,9 @@ pub fn StartGrindPanel(
                                             max_item_level
                                             empty_label="Proclaim Edict"
                                             empty_label_class="text-center xl:text-left"
-                                            selected=Signal::derive(move || selected_map.get().is_some())
+                                            selected=Signal::derive(move || {
+                                                selected_map.get().is_some()
+                                            })
                                             on_click=choose_map
                                         />
                                     </div>

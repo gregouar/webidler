@@ -410,8 +410,8 @@ where
                         >
                             <div class="
                             px-2 py-1 xl:px-3 xl:py-1
-                            text-xs xl:text-sm text-white font-normal
-                            bg-zinc-900 border border-neutral-200
+                            text-xs xl:text-sm text-zinc-300 font-normal
+                            bg-zinc-900 border border-zinc-300
                             rounded shadow-lg/30 whitespace-nowrap
                             select-none text-center
                             ">
