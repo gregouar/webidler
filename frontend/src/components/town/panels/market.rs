@@ -34,6 +34,7 @@ use crate::components::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
     },
     ui::{
+        Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         dropdown::{DropdownMenu, SearchableDropdownMenu},
@@ -604,46 +605,51 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-center p-4 border-t border-zinc-700">
-                <div class="flex items-center gap-1 text-lg text-gray-400">
-                    {move || {
-                        price()
-                            .map(|price| {
-                                if price > 0.0 {
-                                    view! {
-                                        "Price: "
-                                        <span class="text-fuchsia-300 font-bold">
-                                            {format!("{:.0}", price)}
-                                        </span>
-                                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-center p-4">
+                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                        {move || {
+                            price()
+                                .map(|price| {
+                                    if price > 0.0 {
+                                        view! {
+                                            "Price: "
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {format!("{:.0}", price)}
+                                            </span>
+                                            <GemsIcon />
+                                        }
+                                            .into_any()
+                                    } else {
+                                        view! {
+                                            <span class="text-fuchsia-300 font-bold">"Free"</span>
+                                        }
+                                            .into_any()
                                     }
-                                        .into_any()
-                                } else {
-                                    view! { <span class="text-fuchsia-300 font-bold">"Free"</span> }
-                                        .into_any()
-                                }
+                                })
+                        }}
+                    </div>
+
+                    {move || {
+                        (private_offer())
+                            .then(|| {
+                                view! { <MenuButtonRed on:click=do_reject>"Reject"</MenuButtonRed> }
                             })
                     }}
+
+                    <MenuButton on:click=do_buy disabled=disabled>
+                        {move || {
+                            if own_item() {
+                                "Remove Item"
+                            } else if price().unwrap_or(1.0) > 0.0 {
+                                "Buy Item"
+                            } else {
+                                "Take Item"
+                            }
+                        }}
+                    </MenuButton>
                 </div>
-
-                {move || {
-                    (private_offer())
-                        .then(|| {
-                            view! { <MenuButtonRed on:click=do_reject>"Reject"</MenuButtonRed> }
-                        })
-                }}
-
-                <MenuButton on:click=do_buy disabled=disabled>
-                    {move || {
-                        if own_item() {
-                            "Remove Item"
-                        } else if price().unwrap_or(1.0) > 0.0 {
-                            "Buy Item"
-                        } else {
-                            "Take Item"
-                        }
-                    }}
-                </MenuButton>
             </div>
         </div>
     }
@@ -714,29 +720,32 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
             <ItemDetails selected_item show_affixes=true />
 
-            <div class="flex justify-between items-end border-t border-zinc-700 p-1 xl:p-4">
-                <div class="flex items-end gap-1 text-lg text-gray-400 ">
-                    <ValidatedInput
-                        id="price"
-                        label="Price:"
-                        input_type="number"
-                        placeholder="Enter Price"
-                        bind=price
-                    />
-                    <div class="flex items-center">
-                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-end p-1 xl:p-4">
+                    <div class="flex items-end gap-1 text-lg text-gray-400 ">
+                        <ValidatedInput
+                            id="price"
+                            label="Price:"
+                            input_type="number"
+                            placeholder="Enter Price"
+                            bind=price
+                        />
+                        <div class="flex items-center">
+                            <GemsIcon />
+                        </div>
                     </div>
-                </div>
 
-                <MenuButton on:click=do_sell disabled=disabled>
-                    {move || {
-                        if price.get().map(|price| price.into_inner()).unwrap_or(1.0) > 0.0 {
-                            "Sell Item"
-                        } else {
-                            "Give Item"
-                        }
-                    }}
-                </MenuButton>
+                    <MenuButton on:click=do_sell disabled=disabled>
+                        {move || {
+                            if price.get().map(|price| price.into_inner()).unwrap_or(1.0) > 0.0 {
+                                "Sell Item"
+                            } else {
+                                "Give Item"
+                            }
+                        }}
+                    </MenuButton>
+                </div>
             </div>
         </div>
     }
@@ -894,28 +903,33 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-end p-1 xl:p-4 border-t border-zinc-700">
-                <div class="flex items-end gap-1 text-lg text-gray-400 ">
-                    <ValidatedInput
-                        id="price"
-                        label="Price:"
-                        input_type="number"
-                        placeholder="Enter Price"
-                        bind=price
-                    />
-                    <div class="flex items-center">
-                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-end p-1 xl:p-4">
+                    <div class="flex items-end gap-1 text-lg text-gray-400 ">
+                        <ValidatedInput
+                            id="price"
+                            label="Price:"
+                            input_type="number"
+                            placeholder="Enter Price"
+                            bind=price
+                        />
+                        <div class="flex items-center">
+                            <GemsIcon />
+                        </div>
+                        <MenuButton on:click=do_edit disabled=disabled>
+                            <span class="inline xl:hidden">"Edit"</span>
+                            <span class="hidden xl:inline font-variant:small-caps">
+                                "Edit Price"
+                            </span>
+                        </MenuButton>
                     </div>
-                    <MenuButton on:click=do_edit disabled=disabled>
-                        <span class="inline xl:hidden">"Edit"</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Edit Price"</span>
+
+                    <MenuButton on:click=do_remove disabled=disabled>
+                        <span class="inline xl:hidden">"Remove"</span>
+                        <span class="hidden xl:inline font-variant:small-caps">"Remove Item"</span>
                     </MenuButton>
                 </div>
-
-                <MenuButton on:click=do_remove disabled=disabled>
-                    <span class="inline xl:hidden">"Remove"</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Remove Item"</span>
-                </MenuButton>
             </div>
         </div>
     }
@@ -984,26 +998,31 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
-                <div class="flex items-center gap-1 text-lg text-gray-400">
-                    {move || {
-                        price()
-                            .map(|price| {
-                                if price > 0.0 {
-                                    view! {
-                                        "Price: "
-                                        <span class="text-fuchsia-300 font-bold">
-                                            {format!("{:.0}", price)}
-                                        </span>
-                                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-end p-4">
+                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                        {move || {
+                            price()
+                                .map(|price| {
+                                    if price > 0.0 {
+                                        view! {
+                                            "Price: "
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {format!("{:.0}", price)}
+                                            </span>
+                                            <GemsIcon />
+                                        }
+                                            .into_any()
+                                    } else {
+                                        view! {
+                                            <span class="text-fuchsia-300 font-bold">"Free"</span>
+                                        }
+                                            .into_any()
                                     }
-                                        .into_any()
-                                } else {
-                                    view! { <span class="text-fuchsia-300 font-bold">"Free"</span> }
-                                        .into_any()
-                                }
-                            })
-                    }}
+                                })
+                        }}
+                    </div>
                 </div>
             </div>
         </div>

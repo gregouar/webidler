@@ -206,7 +206,11 @@ pub fn ItemTooltipContent(
                     )
                 }
                 _ => None,
-            }} <strong class=format!("text-sm xl:text-base font-bold font-display tracking-[0.03em] text-shadow-md/80 {}", name_color)>
+            }}
+            <strong class=format!(
+                "text-sm xl:text-base font-bold font-display tracking-[0.03em] text-shadow-md/80 {}",
+                name_color,
+            )>
                 <ul class="list-none xl:space-y-1 mb-2">
                     <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
@@ -302,16 +306,14 @@ pub fn ItemTooltipContent(
 pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
     match item_rarity {
         ItemRarity::Normal => "text-stone-100",
-        ItemRarity::Magic => "text-blue-300",
-        ItemRarity::Rare => "text-[#f0cd78]",
-        ItemRarity::Masterwork => "text-fuchsia-300",
-        ItemRarity::Unique => "text-[#ff9d67]",
+        ItemRarity::Magic => "text-blue-400",
+        ItemRarity::Rare => "text-[#f0bf48]",
+        ItemRarity::Masterwork => "text-fuchsia-400",
+        ItemRarity::Unique => "text-[#ff8c4d]",
     }
 }
 
-fn tooltip_rarity_palette(
-    item_rarity: ItemRarity,
-) -> TooltipFramePalette {
+fn tooltip_rarity_palette(item_rarity: ItemRarity) -> TooltipFramePalette {
     match item_rarity {
         ItemRarity::Normal => TooltipFramePalette {
             border_class: "border-[#6c5329]/85",

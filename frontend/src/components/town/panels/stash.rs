@@ -25,6 +25,7 @@ use crate::components::{
         panels::market::{MainFilters, StatsFilters},
     },
     ui::{
+        Separator,
         buttons::{MenuButton, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         input::ValidatedInput,
@@ -317,51 +318,65 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                         }
                     }}
                 </div>
-                <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
-                    <div class="text-xs text-gray-400 mb-1">"Current"</div>
-                    <div class="text-blue-400">
-                        {move || {
-                            selected_stash
-                                .read()
-                                .as_ref()
-                                .map(|selected_stash| {
-                                    if selected_stash.max_items > 0 {
-                                        format!("Storage Space: {}", selected_stash.max_items)
-                                    } else {
-                                        "".into()
-                                    }
-                                })
-                                .unwrap_or_default()
-                        }}
+                <div class="relative isolate overflow-hidden rounded-[8px] border border-[#3b3428]
+                bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
+                shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)] p-3">
+                    <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
+                    <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></div>
+                    <div class="relative z-10">
+                        <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                        <div class="text-blue-400 font-medium">
+                            {move || {
+                                selected_stash
+                                    .read()
+                                    .as_ref()
+                                    .map(|selected_stash| {
+                                        if selected_stash.max_items > 0 {
+                                            format!("Storage Space: {}", selected_stash.max_items)
+                                        } else {
+                                            "".into()
+                                        }
+                                    })
+                                    .unwrap_or_default()
+                            }}
+                        </div>
                     </div>
-
                 </div>
 
-                <div class="p-2 bg-zinc-900 rounded border border-zinc-700">
-                    <div class="text-xs text-gray-400 mb-1">"Next"</div>
-                    <div class="text-blue-400">
-                        {move || { format!("Storage Space: {}", upgrade.get().0) }}
+                <div class="relative isolate overflow-hidden rounded-[8px] border border-[#3b3428]
+                bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
+                shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)] p-3">
+                    <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
+                    <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></div>
+                    <div class="relative z-10">
+                        <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                        <div class="text-blue-400 font-medium">
+                            {move || { format!("Storage Space: {}", upgrade.get().0) }}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center p-4 border-t border-zinc-700">
-                <div class="flex items-center gap-1 text-lg text-gray-400">
-                    {move || {
-                        view! {
-                            "Price: "
-                            <span class="text-amber-300 font-bold">
-                                {format_number(upgrade.get().1).to_string()}
-                            </span>
-                            <GoldIcon />
-                        }
-                    }}
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-center p-4">
+                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                        {move || {
+                            view! {
+                                "Price: "
+                                <span class="text-amber-300 font-bold">
+                                    {format_number(upgrade.get().1).to_string()}
+                                </span>
+                                <GoldIcon />
+                            }
+                        }}
+                    </div>
+                    <MenuButton on:click=do_upgrade disabled=disabled>
+                        {move || {
+                            if current_max_size() == 0 { "Buy Stash" } else { "Upgrade Stash" }
+                        }}
+                    </MenuButton>
                 </div>
-                <MenuButton on:click=do_upgrade disabled=disabled>
-                    {move || {
-                        if current_max_size() == 0 { "Buy Stash" } else { "Upgrade Stash" }
-                    }}
-                </MenuButton>
             </div>
         </div>
     }
@@ -553,10 +568,13 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
                 </div>
             </div>
 
-            <div class="flex justify-end items-center p-4 border-t border-zinc-700">
-                <MenuButton on:click=do_take disabled=disabled>
-                    "Take Item"
-                </MenuButton>
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-end items-center p-4">
+                    <MenuButton on:click=do_take disabled=disabled>
+                        "Take Item"
+                    </MenuButton>
+                </div>
             </div>
         </div>
     }
@@ -615,10 +633,13 @@ pub fn StoreDetails(
 
             <ItemDetails selected_item show_affixes=true />
 
-            <div class="flex justify-end items-end p-4 border-t border-zinc-700">
-                <MenuButton on:click=do_store disabled=disabled>
-                    "Store Item"
-                </MenuButton>
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-end items-end p-4">
+                    <MenuButton on:click=do_store disabled=disabled>
+                        "Store Item"
+                    </MenuButton>
+                </div>
             </div>
         </div>
     }
