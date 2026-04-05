@@ -1,6 +1,9 @@
 use leptos::{html::*, prelude::*};
 
-use crate::{assets::img_asset, components::ui::buttons::CloseButton};
+use crate::{
+    assets::img_asset,
+    components::ui::{buttons::CloseButton, separator::TitleSeparator},
+};
 
 #[component]
 pub fn Card(
@@ -139,6 +142,18 @@ pub fn CardHeader(
             <CardTitle>{title}</CardTitle>
             {children.map(|children| children())}
             <CloseButton on:click=move |_| on_close() />
+        </div>
+    }
+}
+
+#[component]
+pub fn CardInsetTitle(children: Children) -> impl IntoView {
+    view! {
+        <div class="w-full flex flex-col mt-1 mb-2 gap-1">
+            <span class="text-shadow-md/50 shadow-gray-950 text-amber-200
+            text-sm xl:text-base font-display
+            font-semibold tracking-[0.08em]">{children()}</span>
+            <TitleSeparator />
         </div>
     }
 }

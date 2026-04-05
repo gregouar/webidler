@@ -35,7 +35,7 @@ use crate::components::{
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
-        card::{CardHeader, CardInset, CardTitle, MenuCard},
+        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
@@ -570,7 +570,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between">
-            <CardTitle>"Buy from Market"</CardTitle>
+            <CardInsetTitle>"Buy from Market"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 p-2 font-bold">
@@ -702,7 +702,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Sell from Bag"</CardTitle>
+            <CardInsetTitle>"Sell from Bag"</CardInsetTitle>
 
             <ValidatedInput
                 id="private_offer"
@@ -867,7 +867,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Remove from Market"</CardTitle>
+            <CardInsetTitle>"Remove from Market"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="p-2">
@@ -967,7 +967,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Item Sold"</CardTitle>
+            <CardInsetTitle>"Item Sold"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
@@ -1122,7 +1122,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     };
                 }>"Reset"</MenuButton>
             </div>
-            <CardTitle>"Main Filters"</CardTitle>
+            <CardInsetTitle>"Main Filters"</CardInsetTitle>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
@@ -1280,7 +1280,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
     view! {
         <div class="w-full min-h-0 flex-1 flex flex-col gap-2 xl:gap-4 relative">
-            <CardTitle>"Stat Filters"</CardTitle>
+            <CardInsetTitle>"Stat Filters"</CardInsetTitle>
 
             <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
                 {stat_filters

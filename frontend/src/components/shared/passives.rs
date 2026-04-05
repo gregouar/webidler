@@ -19,6 +19,7 @@ use crate::{
         },
         ui::{
             Separator,
+            card::CardInsetTitle,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
     },
@@ -668,12 +669,9 @@ pub fn PassiveSkillStats(
             p-2 xl:p-3">
                 <div class="pointer-events-none absolute inset-[1px] border-r border-white/5"></div>
 
-                <h2 class="text-shadow-md/50 shadow-gray-950 text-amber-200
-                text-sm xl:text-base mb-1 mt-1 font-display
-                font-semibold tracking-[0.08em]">"Total Effects"</h2>
-                <Separator />
+                <CardInsetTitle>"Total Effects"</CardInsetTitle>
 
-                <ul class="list-none xl:space-y-1 text-xs xl:text-sm mt-2">
+                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
                     {move || {
                         let stats = stats.with(|stats| stats.into());
                         effects_tooltip::formatted_effects_list(stats)

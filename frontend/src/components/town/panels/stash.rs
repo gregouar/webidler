@@ -26,7 +26,7 @@ use crate::components::{
     },
     ui::{
         buttons::{MenuButton, TabButton},
-        card::{CardHeader, CardInset, CardTitle, MenuCard},
+        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         input::ValidatedInput,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
@@ -305,7 +305,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Upgrade Stashes"</CardTitle>
+            <CardInsetTitle>"Upgrade Stashes"</CardInsetTitle>
 
             <div class="flex flex-col gap-2">
                 <div class="text-lg font-semibold text-white capitalize">
@@ -543,7 +543,7 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Take from Stash"</CardTitle>
+            <CardInsetTitle>"Take from Stash"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
@@ -611,7 +611,7 @@ pub fn StoreDetails(
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Store from Inventory"</CardTitle>
+            <CardInsetTitle>"Store from Inventory"</CardInsetTitle>
 
             <ItemDetails selected_item show_affixes=true />
 

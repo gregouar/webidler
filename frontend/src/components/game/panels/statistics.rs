@@ -18,7 +18,7 @@ use crate::components::{
     },
     ui::{
         Separator,
-        card::{CardHeader, CardInset, MenuCard},
+        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         menu_panel::MenuPanel,
         number::{format_duration, format_number},
     },
@@ -602,9 +602,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     view! {
         <CardInset pad=false>
-            <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
-                {title}
-            </h2>
+            // <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
+            // {title}
+            // </h2>
+            <CardInsetTitle>{title}</CardInsetTitle>
             <div class="flex flex-col gap-1 stat-list">{children()}</div>
         </CardInset>
     }
