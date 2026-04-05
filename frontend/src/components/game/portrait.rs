@@ -34,9 +34,9 @@ pub fn CharacterPortrait(
 ) -> impl IntoView {
     let is_dead_portrait_effect = move || {
         if is_dead.get() {
-            "transition-all duration-1000 saturate-0 brightness-50"
+            "transition-[filter,opacity] duration-1000 saturate-0 brightness-50"
         } else {
-            "transition-all duration-1000"
+            "transition-[filter,opacity] duration-1000"
         }
     };
 
@@ -213,9 +213,7 @@ pub fn CharacterPortrait(
 
                 <div
                     class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714]
-                    shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)] 
-                    transition-transform duration-1000"
-
+                    shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                     style=format!(
                         "
                         background-image:
@@ -384,9 +382,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/block.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
-                                style="animation: shield_flash 0.5s ease-out;
-                                image-rendering: pixelated; will-change: transform, opacity;
-                                "
+                                style="animation: shield_flash 0.5s ease-out;"
                             />
                         },
                     )
@@ -404,9 +400,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/evade.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_evade_effect.set(false)
-                                style="animation: evade_flash 0.5s;
-                                image-rendering: pixelated; will-change: transform, opacity;
-                                "
+                                style="animation: evade_flash 0.5s;"
                             />
                         },
                     )
@@ -559,7 +553,7 @@ fn StatusIcon(
                     draggable="false"
                     src=move || img_asset(&icon_uri())
                     alt=description
-                    class="w-full h-full xl:drop-shadow-md invert"
+                    class="w-full h-full xl:drop-shadow-md/50 invert"
                 />
                 <Show when=move || { stack.read().0 > 1 }>
                     <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">

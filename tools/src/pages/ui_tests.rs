@@ -133,7 +133,7 @@ pub fn UiTestsPage() -> impl IntoView {
                         <CardInset class="w-full h-full">
                             "bouh"
                             <div class="w-full grid grid-cols-10 gap-2">
-                                {(0..45)
+                                {(0..5)
                                     .map(|_| {
                                         let trigger_reset_progress = RwSignal::new(false);
                                         let reset_progress = Signal::derive(move || {
@@ -388,6 +388,7 @@ pub fn CircularProgressBar(
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
+    #[prop(optional)] tint_background: Option<&'static str>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
@@ -450,8 +451,7 @@ pub fn CircularProgressBar(
             >
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity
-                    transition-circular-progress-bar"
+                    class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || active_buffer.get()
                     style=format!(
@@ -467,8 +467,7 @@ pub fn CircularProgressBar(
                 ></div>
 
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity
-                    transition-circular-progress-bar"
+                    class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || !active_buffer.get()
                     style=format!(
@@ -485,9 +484,10 @@ pub fn CircularProgressBar(
 
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        bg-radial from-stone-600 to-zinc-950 to-70% 
+                        bg-radial {} to-zinc-950 to-70% 
                         border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                     bar_width / 2,
+                    tint_background.unwrap_or("from-stone-600"),
                 )>
                 </div>
 

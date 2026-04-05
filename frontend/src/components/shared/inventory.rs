@@ -430,16 +430,12 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
 
     let maybe_item = Signal::derive({
         let inventory = inventory.clone();
-        move || {
-            is_being_equipped.set(false);
-            inventory
-                .player_inventory
-                .read()
-                .bag
-                .get(item_index)
-                .cloned()
-                .map(Arc::new)
-        }
+        move || inventory.player_inventory.read().bag.get(item_index).cloned().map(Arc::new)
+    });
+
+    Effect::new(move |_| {
+        let _ = maybe_item.get();
+        is_being_equipped.set(false);
     });
 
     let can_equip = Signal::derive(move || {
@@ -475,41 +471,6 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let show_menu = RwSignal::new(false);
 
     let item_ref = NodeRef::new();
-    let tooltip_ref = NodeRef::new();
-
-    let tooltip_size = Memo::new(move |_| {
-        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref.get();
-        tooltip_div
-            .map(|tooltip_div| {
-                let rect = tooltip_div.get_bounding_client_rect();
-                (rect.width(), rect.height())
-            })
-            .unwrap_or_default()
-    });
-
-    let tooltip_pos = move || {
-        let item_div: web_sys::HtmlDivElement = item_ref.get().unwrap();
-        let item_rect = item_div.get_bounding_client_rect();
-
-        let (tooltip_width, tooltip_height) = tooltip_size.get();
-
-        let window_height = web_sys::window()
-            .unwrap()
-            .inner_height()
-            .unwrap()
-            .as_f64()
-            .unwrap();
-
-        if tooltip_width > 0.0 {
-            (
-                (item_rect.left() - tooltip_width).max(0.0),
-                item_rect.top().min(window_height - tooltip_height),
-            )
-        } else {
-            (0.0, 0.0)
-        }
-    };
-
     view! {
         <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
             {move || {
@@ -599,21 +560,83 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         can_equip
                                     />
 
-                                    <Portal>
-                                        <div
-                                            node_ref=tooltip_ref
-                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
-                                            style=move || {
-                                                let (x, y) = tooltip_pos();
-                                                format!("left:{}px; top:{}px;", x, y)
-                                            }
-                                        >
-                                            <ItemTooltip
-                                                item_specs=maybe_item.get().unwrap().clone()
-                                                max_item_level=inventory.max_item_level
-                                            />
-                                        </div>
-                                    </Portal>
+                                    {
+                                        let inventory = inventory.clone();
+                                        view! {
+                                            <Portal>
+                                                {
+                                                    let tooltip_ref = NodeRef::new();
+                                                    let tooltip_size = Memo::new(move |_| {
+                                                        let tooltip_div: Option<
+                                                            web_sys::HtmlDivElement,
+                                                        > = tooltip_ref.get();
+                                                        tooltip_div
+                                                            .map(|tooltip_div| {
+                                                                let rect = tooltip_div
+                                                                    .get_bounding_client_rect();
+                                                                (rect.width(), rect.height())
+                                                            })
+                                                            .unwrap_or_default()
+                                                    });
+                                                    let tooltip_pos = move || {
+                                                        let item_div: web_sys::HtmlDivElement =
+                                                            item_ref.get().unwrap();
+                                                        let item_rect = item_div
+                                                            .get_bounding_client_rect();
+
+                                                        let (tooltip_width, tooltip_height) =
+                                                            tooltip_size.get();
+
+                                                        let window_height = web_sys::window()
+                                                            .unwrap()
+                                                            .inner_height()
+                                                            .unwrap()
+                                                            .as_f64()
+                                                            .unwrap();
+
+                                                        if tooltip_width > 0.0 {
+                                                            (
+                                                                (item_rect.left() - tooltip_width)
+                                                                    .max(0.0),
+                                                                item_rect
+                                                                    .top()
+                                                                    .min(
+                                                                        window_height
+                                                                            - tooltip_height,
+                                                                    ),
+                                                            )
+                                                        } else {
+                                                            (0.0, 0.0)
+                                                        }
+                                                    };
+
+                                                    view! {
+                                                        <div
+                                                            node_ref=tooltip_ref
+                                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
+                                                            style=move || {
+                                                                let (x, y) = tooltip_pos();
+                                                                format!(
+                                                                    "left:{}px; top:{}px;",
+                                                                    x,
+                                                                    y,
+                                                                )
+                                                            }
+                                                        >
+                                                            <ItemTooltip
+                                                                item_specs=maybe_item
+                                                                    .get()
+                                                                    .unwrap()
+                                                                    .clone()
+                                                                max_item_level=inventory
+                                                                    .max_item_level
+                                                            />
+                                                        </div>
+                                                    }
+                                                }
+                                            </Portal>
+                                        }
+                                    }
 
                                 </Show>
                             </div>

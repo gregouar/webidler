@@ -80,7 +80,7 @@ pub fn HorizontalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-left will-change-transform rounded-[2px] xl:rounded-[4px]
+                            "h-full origin-left rounded-[2px] xl:rounded-[4px]
                             shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]
                             before:absolute before:inset-0 before:bg-[linear-gradient(90deg,rgba(255,255,255,0.16),transparent_22%,transparent_78%,rgba(0,0,0,0.12))]
                             {} {}",
@@ -158,7 +158,7 @@ pub fn VerticalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-bottom will-change-transform rounded-[2px] xl:rounded-[4px]
+                            "h-full origin-bottom rounded-[2px] xl:rounded-[4px]
                             shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]
                             before:absolute before:inset-0 before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16),transparent_20%,transparent_80%,rgba(0,0,0,0.12))]
                             {}",
@@ -256,8 +256,7 @@ pub fn CircularProgressBar(
             >
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity
-                    transition-circular-progress-bar"
+                    class="absolute inset-0 transition-circular-progress-bar will-change-(--progress)"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || active_buffer.get()
                     style=format!(
@@ -273,8 +272,7 @@ pub fn CircularProgressBar(
                 ></div>
 
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity
-                    transition-circular-progress-bar"
+                    class="absolute inset-0 transition-circular-progress-bar will-change-(--progress)"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || !active_buffer.get()
                     style=format!(

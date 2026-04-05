@@ -15,7 +15,7 @@ pub fn SkillProgressBar(
 ) -> impl IntoView {
     let tint_background = skill_type_progress_tint(skill_specs.base.skill_type);
     let icon_class = icon_class.unwrap_or(
-        "w-full h-full flex-no-shrink fill-current xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert",
+        "w-full h-full flex-no-shrink fill-current invert",
     );
 
     view! {

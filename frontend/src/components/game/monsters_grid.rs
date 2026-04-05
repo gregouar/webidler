@@ -72,7 +72,7 @@ pub fn MonstersGrid() -> impl IntoView {
                 "flex-1 min-h-0
                 grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
                 items-center
-                {} will-change-transform-opacity
+                {}
                 ",
                 if all_monsters_dead.get() {
                     "animate-monster-fade-out pointer-events-none"
@@ -385,7 +385,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
             gap-1 xl:gap-2 p-1 xl:p-2"
             style=format!(
-                "contain: strict;
+                "contain: layout paint;
                     clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                     background-image:
                         /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
@@ -427,7 +427,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
+                    reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
                     font-number">
@@ -443,7 +443,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
+                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
                     font-number">
@@ -848,7 +848,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             reset=just_triggered
             disabled=is_dead
             bar_width=2
-            icon_class="w-full h-full flex-no-shrink fill-current xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
+            icon_class="w-full h-full flex-no-shrink fill-current invert"
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
