@@ -182,8 +182,7 @@ fn SkillCard(
                     px-3 py-3 xl:px-4 xl:py-4 flex flex-col items-center gap-3
                     bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                     shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
-                    transition-all duration-150 cursor-pointer {}",
-                    skill_type_card_tint(skill_type),
+                    transition-all duration-150 cursor-pointer",
                 );
                 if is_selected.get() {
                     format!(
@@ -217,7 +216,10 @@ fn SkillCard(
             on:mouseleave=move |_| hide_tooltip()
         >
             <div class="pointer-events-none absolute inset-[1px] rounded-[8px] border border-white/5"></div>
-            <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
+            <div class=format!(
+                "pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent {} to-transparent",
+                skill_type_top_glow(skill_type),
+            )></div>
 
             <div
                 class=format!(
@@ -320,22 +322,12 @@ fn skill_type_inner_glow(skill_type: SkillType) -> &'static str {
     }
 }
 
-fn skill_type_card_tint(skill_type: SkillType) -> &'static str {
+fn skill_type_top_glow(skill_type: SkillType) -> &'static str {
     match skill_type {
-        SkillType::Attack => {
-            "before:absolute before:inset-y-[14px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-red-400/70 before:to-transparent"
-        }
-        SkillType::Spell => {
-            "before:absolute before:inset-y-[14px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-sky-400/70 before:to-transparent"
-        }
-        SkillType::Curse => {
-            "before:absolute before:inset-y-[14px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-violet-400/70 before:to-transparent"
-        }
-        SkillType::Blessing => {
-            "before:absolute before:inset-y-[14px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-amber-300/75 before:to-transparent"
-        }
-        SkillType::Other => {
-            "before:absolute before:inset-y-[14px] before:left-0 before:w-[2px] before:rounded-full before:bg-gradient-to-b before:from-transparent before:via-slate-300/60 before:to-transparent"
-        }
+        SkillType::Attack => "via-red-400/40",
+        SkillType::Spell => "via-sky-400/40",
+        SkillType::Curse => "via-violet-400/40",
+        SkillType::Blessing => "via-amber-300/40",
+        SkillType::Other => "via-slate-300/40",
     }
 }
