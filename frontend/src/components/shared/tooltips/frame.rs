@@ -19,8 +19,9 @@ pub fn TooltipFrame(
     view! {
         <div class=format!("relative isolate text-center {}", class.unwrap_or("max-w-xs"))>
             <div
-                class="pointer-events-none absolute inset-0 shadow-[0_0_10px_rgba(0,0,0,0.45)]"
+                class="pointer-events-none absolute inset-0"
                 aria-hidden="true"
+                style="filter: drop-shadow(0 0px 10px rgba(0,0,0,0.45));"
             >
                 // style=format!(
                 // "filter: drop-shadow(0 10px 20px {}) drop-shadow(0 3px 5px rgba(0,0,0,0.45));",

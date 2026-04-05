@@ -230,46 +230,116 @@ pub fn ItemDetails(
     let town_context: TownContext = expect_context();
     let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
 
-    let item_details = move || match selected_item.get() {
-        SelectedItem::InMarket(selected_item) => view! {
-            <div class="relative flex-shrink-0 w-1/4 max-w-[12rem] aspect-[2/3]">
-                <ItemCard
-                    item_specs=selected_item.item_specs.clone()
-                    class:pointer-events-none
-                    max_item_level
-                />
-            </div>
+    let selected_specs = Signal::derive(move || match selected_item.get() {
+        SelectedItem::InMarket(selected_item) => Some(selected_item.item_specs.clone()),
+        SelectedItem::None | SelectedItem::Removed(_) => None,
+    });
 
-            <div class="flex-1 min-w-0 w-full max-h-full overflow-y-auto pr-1">
-                <ItemTooltipContent
-                    item_specs=selected_item.item_specs.clone()
-                    class:select-text
-                    show_affixes
-                    max_item_level
-                />
-            </div>
-        }
-        .into_any(),
-        SelectedItem::None | SelectedItem::Removed(_) => view! {
-            <div class="relative flex-shrink-0 w-1/4 max-w-[12rem] aspect-[2/3]">
-                <BrowserEmptyItemSlot />
-            </div>
+    view! {
+        <ItemDetailsPanel
+            item_specs=selected_specs
+            show_affixes
+            max_item_level
+            empty_label="No Item Selected"
+        />
+    }
+}
 
-            <div class="flex-1 min-w-0 text-center text-gray-400 text-sm xl:text-base">
-                "No Item Selected"
-            </div>
-        }
-        .into_any(),
-    };
+#[component]
+pub fn ItemDetailsPanel(
+    #[prop(into)] item_specs: Signal<Option<Arc<ItemSpecs>>>,
+    #[prop(default = false)] show_affixes: bool,
+    max_item_level: Signal<AreaLevel>,
+    empty_label: &'static str,
+    #[prop(optional)] empty_label_class: Option<&'static str>,
+    #[prop(optional, into)] selected: Option<Signal<bool>>,
+    #[prop(optional, into)] on_click: Option<Callback<()>>,
+) -> impl IntoView {
+    let is_selected = Signal::derive(move || selected.map(|selected| selected.get()).unwrap_or(false));
+    let is_clickable = on_click.is_some();
 
     view! {
         <div class="w-full h-full flex items-center justify-center">
-            <div class="flex flex-row gap-4 xl:gap-6 items-center
-            w-full h-auto aspect-5/2 overflow-y-auto
-            rounded-[10px] border border-zinc-800
-            bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
-            shadow-[0_6px_16px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.03)]
-            p-3 xl:p-4">{item_details}</div>
+            <div
+                class=move || {
+                    format!(
+                        "relative isolate w-full h-auto aspect-5/2 overflow-hidden rounded-[10px] border
+                        bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
+                        shadow-[0_6px_16px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
+                        transition-[border-color,background-color,box-shadow,transform] duration-150
+                        {} {}",
+                        if is_selected.get() {
+                            "border-[#b28a4f] shadow-[0_6px_18px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(244,225,181,0.07),inset_0_0_0_1px_rgba(214,177,102,0.16)]"
+                        } else {
+                            "border-[#3b3428]"
+                        },
+                        if is_clickable {
+                            "cursor-pointer hover:border-[#75603c] hover:bg-[linear-gradient(180deg,rgba(226,193,122,0.065),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(46,45,52,0.99),rgba(22,22,27,1))]"
+                        } else {
+                            ""
+                        },
+                    )
+                }
+                on:click=move |_| {
+                    if let Some(on_click) = on_click.clone() {
+                        on_click.run(());
+                    }
+                }
+            >
+                <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
+                <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
+
+                <div class="relative z-10 flex h-full w-full min-h-0 flex-row gap-4 xl:gap-6 p-3 xl:p-4">
+                    <div class="flex w-1/4 max-w-[12rem] flex-shrink-0 items-center">
+                        <div class="relative w-full aspect-[2/3]">
+                            {move || {
+                                item_specs
+                                    .get()
+                                    .map(|item_specs| {
+                                        view! {
+                                            <ItemCard
+                                                item_specs=item_specs
+                                                class:pointer-events-none
+                                                max_item_level
+                                            />
+                                        }
+                                            .into_any()
+                                    })
+                                    .unwrap_or_else(|| view! { <BrowserEmptyItemSlot /> }.into_any())
+                            }}
+                        </div>
+                    </div>
+
+                    <div class="flex-1 min-w-0 self-stretch overflow-y-auto pr-1">
+                        {move || {
+                            item_specs
+                                .get()
+                                .map(|item_specs| {
+                                    view! {
+                                        <ItemTooltipContent
+                                            item_specs
+                                            class:select-text
+                                            show_affixes
+                                            max_item_level
+                                        />
+                                    }
+                                        .into_any()
+                                })
+                                .unwrap_or_else(|| {
+                                    view! {
+                                        <div class=format!(
+                                            "flex h-full items-center justify-center text-sm xl:text-base text-gray-400 {}",
+                                            empty_label_class.unwrap_or("text-center"),
+                                        )>
+                                            {empty_label}
+                                        </div>
+                                    }
+                                        .into_any()
+                                })
+                        }}
+                    </div>
+                </div>
+            </div>
         </div>
     }
 }

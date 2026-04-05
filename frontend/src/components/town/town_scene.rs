@@ -19,10 +19,9 @@ use crate::{
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
         shared::{
             inventory::InventoryEquipFilter,
-            item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            tooltips::SkillTooltip,
         },
-        town::{TownContext, items_browser::BrowserEmptyItemSlot},
+        town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
             Separator,
             buttons::{CloseButton, MenuButton},
@@ -469,36 +468,7 @@ pub fn StartGrindPanel(
             })
     });
 
-    let map_details = move || match selected_map.get() {
-        Some(selected_map) => view! {
-            <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                <ItemCard
-                    item_specs=selected_map.clone()
-                    class:pointer-events-none
-                    max_item_level
-                />
-            </div>
-
-            <div class="flex-1 w-full max-h-full overflow-y-auto">
-                <ItemTooltipContent
-                    item_specs=selected_map.clone()
-                    class:select-text
-                    max_item_level
-                />
-            </div>
-        }
-        .into_any(),
-        None => view! {
-            <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                <BrowserEmptyItemSlot />
-            </div>
-
-            <div class="flex-1 text-gray-400 text-center xl:text-left">"Proclaim Edict"</div>
-        }
-        .into_any(),
-    };
-
-    let choose_map = move |_| {
+    let choose_map = move || {
         town_context.selected_item_index.set(None);
         town_context.equip_filter.set(InventoryEquipFilter::Map(
             selected_area
@@ -566,16 +536,14 @@ pub fn StartGrindPanel(
                                     </ul>
 
                                     <div class="w-full h-full px-4 flex items-center justify-center">
-                                        <div
-                                            class="flex flex-row gap-6 items-center
-                                            w-full h-auto aspect-5/2 overflow-y-auto
-                                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
-                                            hover:ring-amber-400 hover:shadow-lg active:scale-95 
-                                            active:ring-amber-500 cursor-pointer transition"
-                                            on:click=choose_map
-                                        >
-                                            {map_details}
-                                        </div>
+                                        <ItemDetailsPanel
+                                            item_specs=selected_map
+                                            max_item_level
+                                            empty_label="Proclaim Edict"
+                                            empty_label_class="text-center xl:text-left"
+                                            selected=Signal::derive(move || selected_map.get().is_some())
+                                            on_click=choose_map
+                                        />
                                     </div>
 
                                 </CardInset>
