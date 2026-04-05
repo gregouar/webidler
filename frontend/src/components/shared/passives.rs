@@ -662,13 +662,18 @@ pub fn PassiveSkillStats(
             )
         }>
             <div class="h-full w-md overflow-y-auto
-            bg-neutral-950 border-r border-zinc-800
-            p-1 xl:p-3">
-                <h2 class="text-shadow-md/50 shadow-gray-950 text-amber-300
-                text-sm xl:text-base mb-2 mt-2 font-display
-                font-bold leading-none tracking-tight">"Total Effects"</h2>
+            border-r border-[#5a4a30]/70
+            bg-[linear-gradient(180deg,rgba(226,193,122,0.04),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.14)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]
+            shadow-[inset_0_1px_0_rgba(255,255,255,0.03),inset_-1px_0_0_rgba(0,0,0,0.35)]
+            p-2 xl:p-3">
+                <div class="pointer-events-none absolute inset-[1px] border-r border-white/5"></div>
 
-                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                <h2 class="text-shadow-md/50 shadow-gray-950 text-amber-200
+                text-sm xl:text-base mb-1 mt-1 font-display
+                font-semibold tracking-[0.08em]">"Total Effects"</h2>
+                <Separator />
+
+                <ul class="list-none xl:space-y-1 text-xs xl:text-sm mt-2">
                     {move || {
                         let stats = stats.with(|stats| stats.into());
                         effects_tooltip::formatted_effects_list(stats)
@@ -687,7 +692,7 @@ pub fn PassiveSkillStats(
                                 .cloned()
                                 .map(|trigger_specs| {
                                     view! {
-                                        <div class="relative pb-2 list-none">
+                                        <div class="pb-2 list-none">
                                             <Separator />
                                             {trigger_tooltip::format_trigger(trigger_specs)}
                                         </div>
@@ -700,12 +705,13 @@ pub fn PassiveSkillStats(
 
             <button
                 class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-full
-                rounded-r-md flex items-center justify-center
-                w-6 h-16 font-extrabold shadow-md
-                border border-zinc-800
-                bg-gradient-to-t from-zinc-900 to-zinc-800 
-                hover:bg-gradient-to-tr hover:from-zinc-900 hover:to-neutral-700 
-                active:bg-gradient-to-t active:from-zinc-900 active:to-zinc-950 
+                rounded-r-[7px] flex items-center justify-center
+                w-7 h-18 font-extrabold text-stone-200 text-shadow shadow-black/80
+                border border-[#5a4a30]/75 border-l-0
+                bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.14)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))]
+                shadow-[0_4px_10px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(236,210,148,0.12),inset_0_-1px_0_rgba(0,0,0,0.35)]
+                hover:text-[#f1e4c4] hover:border-[#7b6440]
+                active:brightness-90
                 "
                 on:click=move |_| {
                     set_panel_open.update(|v| *v = !*v);
