@@ -141,8 +141,6 @@ pub fn LootQueue() -> impl IntoView {
                                 class="
                                 absolute bottom-0 w-[12%] aspect-[2/3]
                                 transition-all duration-500 ease
-                                will-change-opacity
-                                will-change-transform
                                 pointer-events-none
                                 "
                                 style=move || {
@@ -158,6 +156,7 @@ pub fn LootQueue() -> impl IntoView {
                                     relative
                                     transition-all duration-200 ease-in-out 
                                     translate-y-1/2 hover:translate-y-1/4
+                                    shadow-[0_0_10px_rgba(0,0,0,0.45)]
                                     pointer-events-auto
                                     "
                                     on:click={

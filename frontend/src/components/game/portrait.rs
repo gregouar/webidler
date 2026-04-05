@@ -553,7 +553,7 @@ fn StatusIcon(
                     draggable="false"
                     src=move || img_asset(&icon_uri())
                     alt=description
-                    class="w-full h-full xl:drop-shadow-md/50 invert"
+                    class="w-full h-full xl:drop-shadow-sm/80 invert"
                 />
                 <Show when=move || { stack.read().0 > 1 }>
                     <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">

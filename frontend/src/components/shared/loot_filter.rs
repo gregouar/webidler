@@ -291,7 +291,13 @@ fn RuleRow(
             <div class="flex flex-col flex-1 gap-1 p-2">
 
                 <div class="flex items-center justify-between gap-2">
-                    <div>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <FancyButton on:click=move_up disabled=is_first>
+                            "↑"
+                        </FancyButton>
+                        <FancyButton on:click=move_down disabled=is_last>
+                            "↓"
+                        </FancyButton>
                         {move || {
                             match loot_filter
                                 .read()
@@ -301,10 +307,12 @@ fn RuleRow(
                                 .unwrap_or_default()
                             {
                                 FilterRuleType::Pickup => {
-                                    view! { <span class="text-emerald-400">"Pickup"</span> }
+                                    view! {
+                                        <span class="ml-2 w-12 text-emerald-400">"Pickup"</span>
+                                    }
                                 }
                                 FilterRuleType::Sell => {
-                                    view! { <span class="text-orange-400">"Sell"</span> }
+                                    view! { <span class="ml-2 w-12 text-orange-400">"Sell"</span> }
                                 }
                             }
                         }}
@@ -315,13 +323,7 @@ fn RuleRow(
                     </div>
 
                     <div class="flex items-center gap-1 shrink-0">
-                        <FancyButton on:click=move_up disabled=is_first>
-                            "↑"
-                        </FancyButton>
-                        <FancyButton on:click=move_down disabled=is_last>
-                            "↓"
-                        </FancyButton>
-                        <Toggle initial=is_enabled toggle_callback=enable_toggle>
+                        <Toggle class:w-6 initial=is_enabled toggle_callback=enable_toggle>
                             {move || {
                                 if loot_filter
                                     .read()

@@ -62,7 +62,7 @@ pub fn MenuPanel(
 
         // <Show when=move || is_visible.get()>
         <div
-            class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center will-change-opacity"
+            class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center"
             style=move || {
                 if open.try_get().unwrap_or_default() {
                     "animation: fadeIn 0.3s ease-out forwards;"
@@ -78,7 +78,7 @@ pub fn MenuPanel(
             class:hidden=move || !is_visible.get()
         >
             <div
-                class="z-41 w-fit mx-auto max-h-full flex flex-col transform-gpu will-change-transform"
+                class="z-41 w-fit mx-auto max-h-full flex flex-col transform-gpu"
                 class:w-full=w_full
                 class:h-full=h_full
                 class:my-auto=center

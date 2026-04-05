@@ -256,7 +256,7 @@ pub fn CircularProgressBar(
             >
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div
-                    class="absolute inset-0 transition-circular-progress-bar will-change-(--progress)"
+                    class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || active_buffer.get()
                     style=format!(
@@ -272,7 +272,7 @@ pub fn CircularProgressBar(
                 ></div>
 
                 <div
-                    class="absolute inset-0 transition-circular-progress-bar will-change-(--progress)"
+                    class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || !active_buffer.get()
                     style=format!(
@@ -300,7 +300,7 @@ pub fn CircularProgressBar(
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
                     scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
-                    will-change-transform transition-transform duration-500"
+                    transition-transform duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >
