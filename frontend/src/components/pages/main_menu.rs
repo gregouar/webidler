@@ -139,7 +139,7 @@ fn MainMenu() -> impl IntoView {
                 <Card>
                     // <form>
                     <div class="w-full mx-auto text-left">
-                        <label class="block mb-2 text-sm font-medium text-zinc-300">
+                        <label class="block mb-2 text-sm font-medium text-zinc-400">
                             "Sign In:"
                         </label>
                         <Input
@@ -271,12 +271,15 @@ fn LogoWord(
 ) -> impl IntoView {
     view! {
         <span class=format!(
-            "relative inline-grid place-items-center font-extrabold [font-variant:small-caps] {} drop-shadow-[0_5px_3px_rgba(0,0,0,0.58)] {}",
+            "relative inline-grid place-items-center font-extrabold [font-variant:small-caps] drop-shadow-[0_5px_3px_rgba(0,0,0,0.58)]
+            {}",
             class,
-            shadow,
         )>
             <span
-                class="col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text"
+                class=format!(
+                    "col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text {}",
+                    shadow,
+                )
                 style=format!(
                     "background-image: {}; -webkit-text-fill-color: transparent;",
                     base_gradient,
@@ -285,9 +288,9 @@ fn LogoWord(
                 {text}
             </span>
             <span
-                class="col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text opacity-[0.7] mix-blend-hard-light"
+                class="col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text opacity-[0.9] mix-blend-soft-light"
                 style=format!(
-                    "background-image: url('{}'); background-size: {}; background-position: center; background-repeat: repeat; filter: contrast(1.55) brightness(1.12); -webkit-text-fill-color: transparent;",
+                    "background-image: url('{}'); background-size: {}; background-position: center; background-repeat: repeat; -webkit-text-fill-color: transparent;",
                     img_asset("ui/metal_rust.webp"),
                     texture_size,
                 )
@@ -295,7 +298,10 @@ fn LogoWord(
                 {text}
             </span>
             <span
-                class="col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text opacity-[0.45]"
+                class=format!(
+                    "col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text opacity-[0.45] {}",
+                    shadow,
+                )
                 style=format!(
                     "background-image: {}; -webkit-text-fill-color: transparent;",
                     highlight_gradient,
