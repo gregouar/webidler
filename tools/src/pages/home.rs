@@ -75,7 +75,7 @@ fn LogoWord(
                 {text}
             </span>
             <span
-                class="col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text opacity-[0.7] mix-blend-hard-light"
+                class="col-start-1 row-start-1 inline-block whitespace-pre text-transparent bg-clip-text mix-blend-hard-light"
                 style=format!(
                     "background-image: url('{}'); background-size: {}; background-position: center; background-repeat: repeat; filter: contrast(1.55) brightness(1.12); -webkit-text-fill-color: transparent;",
                     img_asset("ui/metal_rust.webp"),
