@@ -177,16 +177,23 @@ pub fn ItemCard(
                     inner_border,
                 )
             ></div>
-            <div class="pointer-events-none absolute inset-0">
-                <span
-                    class="absolute inset-x-[5px] top-[1px] h-[1px]"
-                    style=format!(
-                        "background: linear-gradient(90deg, transparent, {}, transparent);",
-                        frame_shine,
-                    )
-                ></span>
-                <span class="absolute inset-x-3 top-[2px] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></span>
-            </div>
+            <span
+                class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px rounded-full"
+                style=format!(
+                    "background: linear-gradient(90deg, transparent, {}, transparent);",
+                    frame_shine,
+                )
+            ></span>
+            // <div class="pointer-events-none absolute inset-0">
+            // <span
+            // class="absolute inset-x-[5px] top-[1px] h-[1px]"
+            // style=format!(
+            // "background: linear-gradient(90deg, transparent, {}, transparent);",
+            // frame_shine,
+            // )
+            // ></span>
+            // <span class="absolute inset-x-3 top-[2px] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></span>
+            // </div>
 
             <img
                 draggable="false"

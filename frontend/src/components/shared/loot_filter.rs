@@ -323,7 +323,7 @@ fn RuleRow(
                     </div>
 
                     <div class="flex items-center gap-1 shrink-0">
-                        <Toggle class:w-6 initial=is_enabled toggle_callback=enable_toggle>
+                        <Toggle initial=is_enabled toggle_callback=enable_toggle>
                             {move || {
                                 if loot_filter
                                     .read()
