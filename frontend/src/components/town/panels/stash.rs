@@ -719,7 +719,7 @@ pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
 
     view! {
         <div class="flex gap-2 items-center">
-            <GemsCounter value />
+            <GemsCounter value w_full=true />
             <MenuButton on:click=do_store disabled=disable_store>
                 "Store"
             </MenuButton>

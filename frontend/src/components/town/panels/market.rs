@@ -320,7 +320,7 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
             <span class="hidden xl:inline text-gray-400 text-xs xl:text-base font-medium">
                 "Revenue:"
             </span>
-            <GemsCounter value />
+            <GemsCounter value w_full=true />
             <MenuButton on:click=do_take disabled>
                 "Take"
             </MenuButton>

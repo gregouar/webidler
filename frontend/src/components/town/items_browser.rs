@@ -187,7 +187,11 @@ pub fn ItemRow(
         >
             <div class="flex w-full items-center justify-between gap-3 px-3 py-3">
                 <div class="relative h-28 xl:h-32 aspect-[2/3] flex-shrink-0">
-                    <ItemCard item_specs=item_specs.clone() class:pointer-events-none max_item_level />
+                    <ItemCard
+                        item_specs=item_specs.clone()
+                        class:pointer-events-none
+                        max_item_level
+                    />
                 </div>
 
                 <div class="min-w-0 flex flex-col w-full">
@@ -203,7 +207,7 @@ pub fn ItemRow(
                 {(price > 0.0)
                     .then(|| {
                         view! {
-                            <div class="absolute flex bottom-2 right-2 gap-1 items-center rounded-[4px] border border-fuchsia-500/25 px-2 py-1 bg-black/20">
+                            <div class="absolute flex bottom-2 right-2 gap-1 items-center">
                                 <span class="text-gray-400 text-xs xl:text-sm">"Price:"</span>
                                 <span class="text-fuchsia-300 font-semibold">
                                     {format!("{:.0}", price)}
@@ -255,7 +259,8 @@ pub fn ItemDetailsPanel(
     #[prop(optional, into)] selected: Option<Signal<bool>>,
     #[prop(optional, into)] on_click: Option<Callback<()>>,
 ) -> impl IntoView {
-    let is_selected = Signal::derive(move || selected.map(|selected| selected.get()).unwrap_or(false));
+    let is_selected =
+        Signal::derive(move || selected.map(|selected| selected.get()).unwrap_or(false));
     let is_clickable = on_click.is_some();
 
     view! {
@@ -305,7 +310,9 @@ pub fn ItemDetailsPanel(
                                         }
                                             .into_any()
                                     })
-                                    .unwrap_or_else(|| view! { <BrowserEmptyItemSlot /> }.into_any())
+                                    .unwrap_or_else(|| {
+                                        view! { <BrowserEmptyItemSlot /> }.into_any()
+                                    })
                             }}
                         </div>
                     </div>
@@ -330,9 +337,7 @@ pub fn ItemDetailsPanel(
                                         <div class=format!(
                                             "flex h-full items-center justify-center text-sm xl:text-base text-gray-400 {}",
                                             empty_label_class.unwrap_or("text-center"),
-                                        )>
-                                            {empty_label}
-                                        </div>
+                                        )>{empty_label}</div>
                                     }
                                         .into_any()
                                 })
