@@ -178,7 +178,7 @@ pub fn ItemCard(
                 )
             ></div>
             <span
-                class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px rounded-full"
+                class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px"
                 style=format!(
                     "background: linear-gradient(90deg, transparent, {}, transparent);",
                     frame_shine,
