@@ -4,9 +4,6 @@ use leptos::prelude::*;
 pub struct TooltipFramePalette {
     pub border_class: &'static str,
     pub inner_border_class: &'static str,
-    pub shadow_color: &'static str, // TODO: Remove
-    pub wash_color: &'static str,
-    pub core_color: &'static str,
     pub shine_color: &'static str,
 }
 
@@ -33,16 +30,6 @@ pub fn TooltipFrame(
                 "relative overflow-hidden rounded-[3px] border {} shadow-[inset_0_1px_0_rgba(255,255,255,0.05),inset_0_-1px_0_rgba(0,0,0,0.34)]",
                 palette.border_class,
             )>
-                // style=format!(
-                // "background-image:
-                // linear-gradient(180deg, rgba(255,255,255,0.028), transparent 16%),
-                // linear-gradient(180deg, {}, transparent 24%),
-                // linear-gradient(180deg, {}, transparent 38%),
-                // linear-gradient(180deg, rgba(24,23,29,0.985), rgba(8,8,11,0.99));
-                // background-blend-mode: screen, screen, soft-light, normal;",
-                // palette.wash_color,
-                // palette.core_color,
-                // )
                 <div class=format!(
                     "pointer-events-none absolute inset-[1px] rounded-[2px] border {}",
                     palette.inner_border_class,

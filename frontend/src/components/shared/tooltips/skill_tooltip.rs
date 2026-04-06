@@ -75,9 +75,6 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
     let palette = TooltipFramePalette {
         border_class: "border-[#70508a]/92",
         inner_border_class: "border-fuchsia-200/10",
-        shadow_color: "rgba(66,31,105,0.42)",
-        wash_color: "rgba(150,116,255,0.14)",
-        core_color: "rgba(128,88,204,0.18)",
         shine_color: "rgba(228,183,255,0.42)",
     };
 
@@ -131,7 +128,9 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     .then(|| {
                         view! {
                             " | Mana Cost: "
-                            <span class="text-stone-100">{skill_specs.mana_cost.get().round()}</span>
+                            <span class="text-stone-100">
+                                {skill_specs.mana_cost.get().round()}
+                            </span>
                         }
                     })}
             </p>
