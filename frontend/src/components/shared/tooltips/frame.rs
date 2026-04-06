@@ -23,7 +23,7 @@ pub fn TooltipFrame(
                 aria-hidden="true"
                 style="filter: drop-shadow(0 0px 10px rgba(0,0,0,0.45));"
             >
-                <div class="absolute inset-0 rounded-[3px] bg-black/78"></div>
+                <div class="absolute inset-0 rounded-[3px] bg-zinc-900/88"></div>
             </div>
 
             <div class=format!(
