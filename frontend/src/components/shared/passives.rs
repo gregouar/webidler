@@ -293,7 +293,8 @@ pub fn Node(
                                         height=24 + node_size * 2
                                         preserveAspectRatio="xMidYMid slice"
                                         class="group-active:scale-90 group-active:brightness-100
-                                        xl:drop-shadow-[2px_2px_2px_black]"
+                                        "
+                                        // xl:drop-shadow-[2px_2px_2px_black]
                                         style=move || {
                                             format!(
                                                 "pointer-events: none;

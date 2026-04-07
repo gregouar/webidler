@@ -33,6 +33,7 @@ use crate::components::{
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
+        number::NumberInset,
         pannable::Pannable,
         toast::*,
     },
@@ -468,7 +469,7 @@ pub fn BuildPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400">
+                    <div class="text-sm xl:text-base text-gray-400 flex items-center">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {
@@ -481,9 +482,9 @@ pub fn BuildPanelHeader(
                             false => {
                                 view! {
                                     "Required Player Level:"
-                                    <span class="text-white font-semibold ml-2">
+                                    <NumberInset class="text-white ml-2 w-[2ch]  text-right">
                                         {move || passives_tree_build.read().len() + 1}
-                                    </span>
+                                    </NumberInset>
                                     "/"
                                     {DEFAULT_MAX_LEVEL}
                                 }
