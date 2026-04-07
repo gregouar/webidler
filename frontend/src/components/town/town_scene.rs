@@ -337,7 +337,7 @@ fn GrindingAreaCard(
             <div
                 class=move || {
                     format!(
-                        "relative z-10 p-[2px] flex flex-col h-full transition-all overflow-hidden {}",
+                        "relative z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
                         if locked() {
                             "cursor-default"
                         } else if view_only {

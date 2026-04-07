@@ -314,21 +314,16 @@ pub fn EquippedItemContextMenu(
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
 ) -> impl IntoView {
-    let (success_text, success_border, success_sheen) =
-        action_menu_button_tone(ActionMenuTone::Success);
-    let (neutral_text, neutral_border, neutral_sheen) =
-        action_menu_button_tone(ActionMenuTone::Neutral);
-
     view! {
         <ContextMenu on_close=on_close>
             {inventory
                 .on_unequip
                 .map(|on_unequip| {
                     view! {
-                        <button
-                            class=format!("{} {}", action_menu_button_class(), success_text)
-                            style=action_menu_button_style(success_border, success_sheen)
-                            on:click=move |_| {
+                        <ActionMenuRow
+                            label="Unequip"
+                            tone=ActionMenuTone::Success
+                            on_click=move || {
                                 on_unequip(item_slot);
                                 on_close.run(());
                                 is_being_unequipped.set(true);
@@ -337,18 +332,14 @@ pub fn EquippedItemContextMenu(
                                     Duration::from_millis(1000),
                                 );
                             }
-                        >
-                            "Unequip"
-                        </button>
+                        />
                     }
                 })}
-            <button
-                class=format!("{} {}", action_menu_button_class(), neutral_text)
-                style=action_menu_button_style(neutral_border, neutral_sheen)
-                on:click=move |_| on_close.run(())
-            >
-                "Cancel"
-            </button>
+            <ActionMenuRow
+                label="Cancel"
+                tone=ActionMenuTone::Neutral
+                on_click=move || on_close.run(())
+            />
         </ContextMenu>
     }
 }
@@ -431,7 +422,6 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let maybe_item = Signal::derive({
         let inventory = inventory.clone();
         move || {
-            is_being_equipped.set(false);
             inventory
                 .player_inventory
                 .read()
@@ -440,6 +430,11 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 .cloned()
                 .map(Arc::new)
         }
+    });
+
+    Effect::new(move |_| {
+        let _ = maybe_item.get();
+        is_being_equipped.set(false);
     });
 
     let can_equip = Signal::derive(move || {
@@ -475,41 +470,6 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let show_menu = RwSignal::new(false);
 
     let item_ref = NodeRef::new();
-    let tooltip_ref = NodeRef::new();
-
-    let tooltip_size = Memo::new(move |_| {
-        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref.get();
-        tooltip_div
-            .map(|tooltip_div| {
-                let rect = tooltip_div.get_bounding_client_rect();
-                (rect.width(), rect.height())
-            })
-            .unwrap_or_default()
-    });
-
-    let tooltip_pos = move || {
-        let item_div: web_sys::HtmlDivElement = item_ref.get().unwrap();
-        let item_rect = item_div.get_bounding_client_rect();
-
-        let (tooltip_width, tooltip_height) = tooltip_size.get();
-
-        let window_height = web_sys::window()
-            .unwrap()
-            .inner_height()
-            .unwrap()
-            .as_f64()
-            .unwrap();
-
-        if tooltip_width > 0.0 {
-            (
-                (item_rect.left() - tooltip_width).max(0.0),
-                item_rect.top().min(window_height - tooltip_height),
-            )
-        } else {
-            (0.0, 0.0)
-        }
-    };
-
     view! {
         <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
             {move || {
@@ -599,21 +559,63 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         can_equip
                                     />
 
-                                    <Portal>
-                                        <div
-                                            node_ref=tooltip_ref
-                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
-                                            style=move || {
-                                                let (x, y) = tooltip_pos();
-                                                format!("left:{}px; top:{}px;", x, y)
-                                            }
-                                        >
-                                            <ItemTooltip
-                                                item_specs=maybe_item.get().unwrap().clone()
-                                                max_item_level=inventory.max_item_level
-                                            />
-                                        </div>
-                                    </Portal>
+                                    {
+                                        let inventory = inventory.clone();
+                                        view! {
+                                            <Portal>
+                                                {
+                                                    let tooltip_ref = NodeRef::new();
+                                                    let tooltip_size = Memo::new(move |_| {
+                                                        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref
+                                                            .get();
+                                                        tooltip_div
+                                                            .map(|tooltip_div| {
+                                                                let rect = tooltip_div.get_bounding_client_rect();
+                                                                (rect.width(), rect.height())
+                                                            })
+                                                            .unwrap_or_default()
+                                                    });
+                                                    let tooltip_pos = move || {
+                                                        let item_div: web_sys::HtmlDivElement = item_ref
+                                                            .get()
+                                                            .unwrap();
+                                                        let item_rect = item_div.get_bounding_client_rect();
+                                                        let (tooltip_width, tooltip_height) = tooltip_size.get();
+                                                        let window_height = web_sys::window()
+                                                            .unwrap()
+                                                            .inner_height()
+                                                            .unwrap()
+                                                            .as_f64()
+                                                            .unwrap();
+                                                        if tooltip_width > 0.0 {
+                                                            (
+                                                                (item_rect.left() - tooltip_width).max(0.0),
+                                                                item_rect.top().min(window_height - tooltip_height),
+                                                            )
+                                                        } else {
+                                                            (0.0, 0.0)
+                                                        }
+                                                    };
+
+                                                    view! {
+                                                        <div
+                                                            node_ref=tooltip_ref
+                                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
+                                                            style=move || {
+                                                                let (x, y) = tooltip_pos();
+                                                                format!("left:{}px; top:{}px;", x, y)
+                                                            }
+                                                        >
+                                                            <ItemTooltip
+                                                                item_specs=maybe_item.get().unwrap().clone()
+                                                                max_item_level=inventory.max_item_level
+                                                            />
+                                                        </div>
+                                                    }
+                                                }
+                                            </Portal>
+                                        }
+                                    }
 
                                 </Show>
                             </div>
@@ -636,12 +638,6 @@ pub fn BagItemContextMenu(
     can_equip: Signal<bool>,
 ) -> impl IntoView {
     let sell_queue = expect_context::<SellQueue>();
-    let (success_text, success_border, success_sheen) =
-        action_menu_button_tone(ActionMenuTone::Success);
-    let (warning_text, warning_border, warning_sheen) =
-        action_menu_button_tone(ActionMenuTone::Warning);
-    let (neutral_text, neutral_border, neutral_sheen) =
-        action_menu_button_tone(ActionMenuTone::Neutral);
 
     let toggle_sell_mark = {
         move || {
@@ -664,17 +660,10 @@ pub fn BagItemContextMenu(
                             .get_untracked()
                             .then(|| {
                                 view! {
-                                    <button
-                                        class=format!(
-                                            "{} {}",
-                                            action_menu_button_class(),
-                                            success_text,
-                                        )
-                                        style=action_menu_button_style(
-                                            success_border,
-                                            success_sheen,
-                                        )
-                                        on:click=move |_| {
+                                    <ActionMenuRow
+                                        label="Equip"
+                                        tone=ActionMenuTone::Success
+                                        on_click=move || {
                                             on_equip(item_index as u8);
                                             sell_queue.write().remove(&item_index);
                                             is_being_equipped.set(true);
@@ -684,9 +673,7 @@ pub fn BagItemContextMenu(
                                             );
                                             on_close.run(());
                                         }
-                                    >
-                                        "Equip"
-                                    </button>
+                                    />
                                 }
                             })
                     })
@@ -694,34 +681,30 @@ pub fn BagItemContextMenu(
             {(inventory.on_sell.is_some())
                 .then(|| {
                     view! {
-                        <button
-                            class=format!("{} {}", action_menu_button_class(), warning_text)
-                            style=action_menu_button_style(warning_border, warning_sheen)
-                            on:click=move |_| toggle_sell_mark()
-                        >
-                            {move || {
+                        <ActionMenuRow
+                            label_signal=Signal::derive(move || {
                                 if sell_queue.get().contains(&item_index) {
                                     match inventory.sell_type {
-                                        SellType::Sell => "Unsell",
-                                        SellType::Discard => "Keep",
+                                        SellType::Sell => "Unsell".to_string(),
+                                        SellType::Discard => "Keep".to_string(),
                                     }
                                 } else {
                                     match inventory.sell_type {
-                                        SellType::Sell => "Sell",
-                                        SellType::Discard => "Discard",
+                                        SellType::Sell => "Sell".to_string(),
+                                        SellType::Discard => "Discard".to_string(),
                                     }
                                 }
-                            }}
-                        </button>
+                            })
+                            tone=ActionMenuTone::Warning
+                            on_click=move || toggle_sell_mark()
+                        />
                     }
                 })}
-            <button
-                class=format!("{} {}", action_menu_button_class(), neutral_text)
-                style=action_menu_button_style(neutral_border, neutral_sheen)
-                on:click=move |_| on_close.run(())
-            >
-                "Cancel"
-            </button>
+            <ActionMenuRow
+                label="Cancel"
+                tone=ActionMenuTone::Neutral
+                on_click=move || on_close.run(())
+            />
         </ContextMenu>
     }
 }
@@ -730,7 +713,7 @@ pub fn BagItemContextMenu(
 fn EmptySlot(children: Children) -> impl IntoView {
     view! {
         <div class="relative isolate flex items-center justify-center w-full h-full overflow-hidden rounded-[4px] xl:rounded-[6px] opacity-80 border border-[#56462f]/80 shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)] bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]">
-            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-white/5 shadow-[inset_0_-10px_16px_rgba(0,0,0,0.2)]"></div>
+            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-white/5"></div>
             <div class="relative z-10 flex h-full w-full items-center justify-center p-1">
                 {children()}
             </div>
@@ -750,25 +733,26 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
         <div
             node_ref=node_ref
             class="
-            absolute inset-0 z-30 flex flex-col justify-center items-center gap-1 xl:gap-2
+            absolute inset-0 z-30 flex flex-col justify-center 
             w-full
-            p-1 xl:p-1.5
+            p-1
             text-center
+            overflow-hidden
             "
             style="
             animation: fade-in 0.2s ease-out forwards;
             clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
-            /*background:
             linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
             linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
-            border: 1px solid rgba(108,83,41,0.88);*/
+            border: 1px solid rgba(108,83,41,0.72);
             box-shadow:
             0 10px 22px rgba(0,0,0,0.52),
             inset 0 1px 0 rgba(240,215,159,0.16),
             inset 0 -1px 0 rgba(0,0,0,0.45);
             "
         >
-            {children()}
+            <div class="pointer-events-none absolute inset-[1px] border border-white/5"></div>
+            <div class="relative z-10 flex flex-col">{children()}</div>
         </div>
     }
 }
@@ -780,45 +764,75 @@ enum ActionMenuTone {
     Neutral,
 }
 
-fn action_menu_button_tone(tone: ActionMenuTone) -> (&'static str, &'static str, &'static str) {
+#[derive(Clone, Copy)]
+struct ActionMenuRowTone {
+    text: &'static str,
+    hover_text: &'static str,
+    wash: &'static str,
+}
+
+fn action_menu_row_tone(tone: ActionMenuTone) -> ActionMenuRowTone {
     match tone {
-        ActionMenuTone::Success => (
-            "text-green-300 hover:text-green-100",
-            "#4c6a42",
-            "rgba(178,228,173,0.12)",
-        ),
-        ActionMenuTone::Warning => (
-            "text-amber-300 hover:text-amber-100",
-            "#7b6032",
-            "rgba(239,205,133,0.14)",
-        ),
-        ActionMenuTone::Neutral => (
-            "text-stone-200 hover:text-white",
-            "#665840",
-            "rgba(240,215,159,0.08)",
-        ),
+        ActionMenuTone::Success => ActionMenuRowTone {
+            text: "text-amber-300",
+            hover_text: "hover:text-[#f2e5bc]",
+            wash: "rgba(247, 190, 77, 0.3)",
+        },
+        ActionMenuTone::Warning => ActionMenuRowTone {
+            text: "text-[#f86c47]",
+            hover_text: "hover:text-[#ffd4c8]",
+            wash: "rgba(192,92,61,0.30)",
+        },
+        ActionMenuTone::Neutral => ActionMenuRowTone {
+            text: "text-zinc-300",
+            hover_text: "hover:text-zinc-100",
+            wash: "rgba(255,255,255,0.10)",
+        },
     }
 }
 
-fn action_menu_button_class() -> &'static str {
-    "btn relative isolate w-full overflow-hidden px-2 xl:px-2.5 py-1 xl:py-1.5
-    text-sm xl:text-base font-extrabold tracking-[0.08em] text-shadow shadow-black/90
-    border transition-all duration-150
-    shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(240,215,159,0.12),inset_0_-1px_0_rgba(0,0,0,0.45)]
-    before:pointer-events-none before:absolute before:inset-[1px] before:border before:border-white/5
-    before:bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_36%)]
-    hover:border-[#a27f46] active:translate-y-[1px] active:before:opacity-0 active:brightness-90
-    active:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.5),inset_0_-1px_0_rgba(0,0,0,0.22)]"
-}
-
-fn action_menu_button_style(border: &'static str, sheen: &'static str) -> String {
-    format!(
-        "border-color: {};
-        background:
-            linear-gradient(180deg, {}, rgba(0,0,0,0.16)),
-            linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));",
-        border, sheen,
-    )
+#[component]
+fn ActionMenuRow(
+    #[prop(optional)] label: Option<&'static str>,
+    #[prop(optional, into)] label_signal: Option<Signal<String>>,
+    tone: ActionMenuTone,
+    #[prop(into)] on_click: Callback<()>,
+) -> impl IntoView {
+    let tone = action_menu_row_tone(tone);
+    view! {
+        <button
+            class=format!(
+                "btn relative w-full overflow-hidden px-2 xl:px-2.5 py-1.5 xl:py-2
+                text-sm xl:text-base font-semibold tracking-[0.04em]
+                transition-colors duration-150 {} {}
+                bg-zinc-900/90
+                text-center active:brightness-90",
+                tone.text,
+                tone.hover_text,
+            )
+            on:click=move |_| on_click.run(())
+        >
+            <div
+                class="pointer-events-none absolute inset-0 hover:bg-white/[0.02]"
+                style=format!(
+                    "background:
+                    linear-gradient(90deg, transparent, {}, transparent);
+                 border-top: 1px solid rgba(255,255,255,0.04);",
+                    tone.wash,
+                )
+            />
+            <span class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent"></span>
+            <span class="drop-shadow-[0_2px_2px_rgba(0,0,0,0.95)]">
+                {move || {
+                    label_signal
+                        .as_ref()
+                        .map(|label_signal| label_signal.get())
+                        .or_else(|| label.map(str::to_string))
+                        .unwrap_or_default()
+                }}
+            </span>
+        </button>
+    }
 }
 
 #[component]

@@ -293,7 +293,8 @@ pub fn Node(
                                         height=24 + node_size * 2
                                         preserveAspectRatio="xMidYMid slice"
                                         class="group-active:scale-90 group-active:brightness-100
-                                        xl:drop-shadow-[2px_2px_2px_black]"
+                                        "
+                                        // xl:drop-shadow-[2px_2px_2px_black]
                                         style=move || {
                                             format!(
                                                 "pointer-events: none;
@@ -453,9 +454,6 @@ pub fn NodeTooltip(
     let palette = TooltipFramePalette {
         border_class: "border-teal-700/90",
         inner_border_class: "border-teal-200/10",
-        shadow_color: "rgba(13,88,88,0.42)",
-        wash_color: "rgba(92,212,204,0.12)",
-        core_color: "rgba(60,180,180,0.16)",
         shine_color: "rgba(153,244,234,0.35)",
     };
 

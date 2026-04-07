@@ -4,9 +4,6 @@ use leptos::prelude::*;
 pub struct TooltipFramePalette {
     pub border_class: &'static str,
     pub inner_border_class: &'static str,
-    pub shadow_color: &'static str, // TODO: Remove
-    pub wash_color: &'static str,
-    pub core_color: &'static str,
     pub shine_color: &'static str,
 }
 
@@ -17,67 +14,35 @@ pub fn TooltipFrame(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <div class=format!("relative isolate text-center {}", class.unwrap_or("max-w-xs"))>
+        <div class=format!(
+            "relative isolate text-center  backdrop-blur-sm {}",
+            class.unwrap_or("max-w-xs"),
+        )>
             <div
-                class="pointer-events-none absolute inset-0"
+                class="pointer-events-none absolute inset-0 rounded-[3px]"
                 aria-hidden="true"
                 style="filter: drop-shadow(0 0px 10px rgba(0,0,0,0.45));"
             >
-                // style=format!(
-                // "filter: drop-shadow(0 10px 20px {}) drop-shadow(0 3px 5px rgba(0,0,0,0.45));",
-                // palette.shadow_color,
-                // )
-                <div
-                    class="absolute inset-0 bg-black/90"
-                    style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);"
-                ></div>
+                <div class="absolute inset-0 rounded-[3px] bg-zinc-900/88"></div>
             </div>
 
-            <div
-                class=format!(
-                    "relative overflow-hidden border {} shadow-[inset_0_1px_0_rgba(240,215,159,0.16),inset_0_-1px_0_rgba(0,0,0,0.5)]",
-                    palette.border_class,
-                )
-                style=format!(
-                    "clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-                    background-image:
-                        linear-gradient(180deg, rgba(214,177,102,0.05), rgba(0,0,0,0.2)),
-                        radial-gradient(circle at 50% 20%, {}, transparent 64%),
-                        linear-gradient(180deg, {}, transparent 34%),
-                        linear-gradient(135deg, rgba(31,29,36,0.985), rgba(9,9,12,1));
-                    background-blend-mode: screen, soft-light, screen, normal;",
-                    palette.core_color,
-                    palette.wash_color,
-                )
-            >
-                <div
-                    class=format!(
-                        "pointer-events-none absolute inset-[1px] border {}",
-                        palette.inner_border_class,
-                    )
-                    style="clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);"
-                ></div>
+            <div class=format!(
+                "relative overflow-hidden rounded-[3px] border {} shadow-[inset_0_1px_0_rgba(255,255,255,0.05),inset_0_-1px_0_rgba(0,0,0,0.34)]",
+                palette.border_class,
+            )>
+                <div class=format!(
+                    "pointer-events-none absolute inset-[1px] rounded-[2px] border {}",
+                    palette.inner_border_class,
+                )></div>
                 <span
-                    class="pointer-events-none absolute inset-x-[6px] top-[2px] h-[2px]"
+                    class="pointer-events-none absolute inset-x-[14px] top-[2px] h-px rounded-full"
                     style=format!(
                         "background: linear-gradient(90deg, transparent, {}, transparent);",
                         palette.shine_color,
                     )
                 ></span>
-                <span
-                    class="pointer-events-none absolute inset-y-[5px] left-[1px] w-[2px]"
-                    style=format!(
-                        "background: linear-gradient(180deg, transparent, {}, transparent);",
-                        palette.shine_color,
-                    )
-                ></span>
-                <span
-                    class="pointer-events-none absolute inset-y-[5px] right-[1px] w-[2px]"
-                    style=format!(
-                        "background: linear-gradient(180deg, transparent, {}, transparent);",
-                        palette.shine_color,
-                    )
-                ></span>
+                <div class="pointer-events-none absolute inset-x-0 top-0 h-[24%] bg-[linear-gradient(180deg,rgba(255,255,255,0.024),transparent)]"></div>
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] bg-[linear-gradient(0deg,rgba(0,0,0,0.16),transparent)]"></div>
                 <div class="relative space-y-2 p-2 xl:p-4">{children()}</div>
             </div>
         </div>

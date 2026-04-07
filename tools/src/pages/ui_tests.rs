@@ -133,7 +133,7 @@ pub fn UiTestsPage() -> impl IntoView {
                         <CardInset class="w-full h-full">
                             "bouh"
                             <div class="w-full grid grid-cols-10 gap-2">
-                                {(0..45)
+                                {(0..5)
                                     .map(|_| {
                                         let trigger_reset_progress = RwSignal::new(false);
                                         let reset_progress = Signal::derive(move || {
@@ -388,6 +388,7 @@ pub fn CircularProgressBar(
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
+    #[prop(optional)] tint_background: Option<&'static str>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
@@ -450,8 +451,7 @@ pub fn CircularProgressBar(
             >
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity
-                    transition-circular-progress-bar"
+                    class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || active_buffer.get()
                     style=format!(
@@ -467,8 +467,7 @@ pub fn CircularProgressBar(
                 ></div>
 
                 <div
-                    class="absolute inset-0 will-change-(--progress) will-change-opacity
-                    transition-circular-progress-bar"
+                    class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get()
                     class:fade-out-circular-progress-bar=move || !active_buffer.get()
                     style=format!(
@@ -485,9 +484,10 @@ pub fn CircularProgressBar(
 
                 <div class=format!(
                     "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        bg-radial from-stone-600 to-zinc-950 to-70% 
+                        bg-radial {} to-zinc-950 to-70% 
                         border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                     bar_width / 2,
+                    tint_background.unwrap_or("from-stone-600"),
                 )>
                 </div>
 
@@ -495,7 +495,7 @@ pub fn CircularProgressBar(
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
                     scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
-                    will-change-transform transition-transform duration-500"
+                    transition-transform duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >
@@ -1004,7 +1004,7 @@ pub fn HorizontalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-left will-change-transform rounded-[2px] xl:rounded-[4px]
+                            "h-full origin-left rounded-[2px] xl:rounded-[4px]
                             shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]
                             before:absolute before:inset-0 before:bg-[linear-gradient(90deg,rgba(255,255,255,0.16),transparent_22%,transparent_78%,rgba(0,0,0,0.12))]
                             {} {}",
@@ -1083,7 +1083,7 @@ pub fn VerticalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-bottom will-change-transform rounded-[2px] xl:rounded-[4px]
+                            "h-full origin-bottom rounded-[2px] xl:rounded-[4px]
                             shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]
                             before:absolute before:inset-0 before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16),transparent_20%,transparent_80%,rgba(0,0,0,0.12))]
                             {}",

@@ -22,42 +22,42 @@ pub fn ItemCard(
 ) -> impl IntoView {
     let (accent, inner_border, rarity_wash, rarity_core, frame_shine) =
         match item_specs.modifiers.rarity {
-        ItemRarity::Normal => (
-            "rgba(126, 112, 82, 0.28)",
-            "rgba(214, 219, 229, 0.16)",
-            "rgba(210, 215, 224, 0.06)",
-            "rgba(255, 255, 255, 0.015)",
-            "rgba(230, 230, 236, 0.22)",
-        ),
-        ItemRarity::Magic => (
-            "rgba(126, 112, 82, 0.3)",
-            "rgba(182, 219, 255, 0.24)",
-            "rgba(75, 126, 235, 0.24)",
-            "rgba(48, 86, 196, 0.2)",
-            "rgba(144, 205, 255, 0.46)",
-        ),
-        ItemRarity::Rare => (
-            "rgba(126, 112, 82, 0.32)",
-            "rgba(255, 232, 160, 0.24)",
-            "rgba(173, 124, 26, 0.28)",
-            "rgba(108, 76, 8, 0.22)",
-            "rgba(255, 226, 145, 0.52)",
-        ),
-        ItemRarity::Masterwork => (
-            "rgba(126, 112, 82, 0.32)",
-            "rgba(236, 204, 255, 0.24)",
-            "rgba(143, 78, 220, 0.28)",
-            "rgba(90, 44, 150, 0.22)",
-            "rgba(228, 183, 255, 0.48)",
-        ),
-        ItemRarity::Unique => (
-            "rgba(126, 112, 82, 0.34)",
-            "rgba(255, 226, 186, 0.24)",
-            "rgba(188, 72, 28, 0.38)",
-            "rgba(114, 18, 8, 0.34)",
-            "rgba(255, 170, 116, 0.56)",
-        ),
-    };
+            ItemRarity::Normal => (
+                "rgba(126, 112, 82, 0.28)",
+                "rgba(214, 219, 229, 0.16)",
+                "rgba(210, 215, 224, 0.06)",
+                "rgba(255, 255, 255, 0.015)",
+                "rgba(230, 230, 236, 0.22)",
+            ),
+            ItemRarity::Magic => (
+                "rgba(126, 112, 82, 0.3)",
+                "rgba(182, 219, 255, 0.24)",
+                "rgba(75, 126, 235, 0.24)",
+                "rgba(48, 86, 196, 0.2)",
+                "rgba(144, 205, 255, 0.46)",
+            ),
+            ItemRarity::Rare => (
+                "rgba(126, 112, 82, 0.32)",
+                "rgba(255, 232, 160, 0.24)",
+                "rgba(173, 124, 26, 0.28)",
+                "rgba(108, 76, 8, 0.22)",
+                "rgba(255, 226, 145, 0.52)",
+            ),
+            ItemRarity::Masterwork => (
+                "rgba(126, 112, 82, 0.32)",
+                "rgba(236, 204, 255, 0.24)",
+                "rgba(143, 78, 220, 0.28)",
+                "rgba(90, 44, 150, 0.22)",
+                "rgba(228, 183, 255, 0.48)",
+            ),
+            ItemRarity::Unique => (
+                "rgba(126, 112, 82, 0.34)",
+                "rgba(255, 226, 186, 0.24)",
+                "rgba(188, 72, 28, 0.38)",
+                "rgba(114, 18, 8, 0.34)",
+                "rgba(255, 170, 116, 0.56)",
+            ),
+        };
 
     let icon_asset = img_asset(&item_specs.base.icon);
 
@@ -177,16 +177,23 @@ pub fn ItemCard(
                     inner_border,
                 )
             ></div>
-            <div class="pointer-events-none absolute inset-0">
-                <span
-                    class="absolute inset-x-[5px] top-[1px] h-[1px]"
-                    style=format!(
-                        "background: linear-gradient(90deg, transparent, {}, transparent);",
-                        frame_shine,
-                    )
-                ></span>
-                <span class="absolute inset-x-3 top-[2px] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></span>
-            </div>
+            <span
+                class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px"
+                style=format!(
+                    "background: linear-gradient(90deg, transparent, {}, transparent);",
+                    frame_shine,
+                )
+            ></span>
+            // <div class="pointer-events-none absolute inset-0">
+            // <span
+            // class="absolute inset-x-[5px] top-[1px] h-[1px]"
+            // style=format!(
+            // "background: linear-gradient(90deg, transparent, {}, transparent);",
+            // frame_shine,
+            // )
+            // ></span>
+            // <span class="absolute inset-x-3 top-[2px] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></span>
+            // </div>
 
             <img
                 draggable="false"
