@@ -131,7 +131,7 @@
         "ignore_quality": true
       },
       {
-        "scope": "Local",
+        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": [ 10, 20 ]
