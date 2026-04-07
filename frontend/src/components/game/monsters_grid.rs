@@ -71,7 +71,7 @@ pub fn MonstersGrid() -> impl IntoView {
             format!(
                 "flex-1 min-h-0
                 grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-                items-center
+                items-center will-change-transform
                 {}
                 ",
                 if all_monsters_dead.get() {
@@ -381,7 +381,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         <div
             class="grid grid-cols-4 h-full
             rounded-md 
-            bg-zinc-800 border border-[#6c5734]/45
+            border border-[#6c5734]/45
             shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
             gap-1 xl:gap-2 p-1 xl:p-2"
             style=format!(
@@ -390,7 +390,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     background-image:
                         /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
                         url('{}');
-                    background-blend-mode: /*screen,*/ multiply;
+                    background-blend-mode: /*screen,*/ normal;
                     ",
                 img_asset("ui/dark_stone.webp"),
             )

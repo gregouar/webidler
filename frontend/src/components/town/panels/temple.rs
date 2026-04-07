@@ -15,7 +15,7 @@ use crate::components::{
     town::TownContext,
     ui::{
         buttons::MenuButton,
-        card::{CardHeader, CardInset, CardTitle, MenuCard},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
@@ -254,7 +254,10 @@ fn BenedictionRow(
             <div class="flex flex-row gap-6 items-start p-4">
                 <div class="flex flex-col flex-1 gap-1">
                     <div class="flex items-center justify-between">
-                        <CardTitle>{benediction_title}</CardTitle>
+                        <span class="
+                        text-shadow-lg/100 shadow-gray-950 text-amber-200 font-semibold
+                        text-sm xl:text-base font-display
+                        ">{benediction_title}</span>
 
                         <div class="text-sm text-gray-400">
                             "Level " {move || upgrade_level.get()}

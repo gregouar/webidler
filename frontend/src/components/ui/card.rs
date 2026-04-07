@@ -30,7 +30,7 @@ pub fn Card(
             </div>
 
             <div
-                class="absolute inset-0 bg-zinc-800 border border-[#6c5734]/45
+                class="absolute inset-0 border border-[#6c5734]/45
                 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)] overflow-hidden"
                 style=format!(
                     "
@@ -38,7 +38,7 @@ pub fn Card(
                     background-image:
                         linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
                         url('{}');
-                    background-blend-mode: screen, multiply;
+                    background-blend-mode: screen, normal;
                     ",
                     img_asset("ui/dark_stone.webp"),
                 )
@@ -74,7 +74,7 @@ pub fn MenuCard(
         <div
             class=format!(
                 "max-h-full flex flex-col relative
-                bg-zinc-800 border border-[#6c5734]/45
+                border border-[#6c5734]/45
                 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                  {} {} {}",
                 if gap { "gap-1 xl:gap-2" } else { "" },
@@ -87,7 +87,7 @@ pub fn MenuCard(
                     background-image:
                         linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
                         url('{}');
-                    background-blend-mode: screen, multiply;
+                    background-blend-mode: screen, normal;
                     ",
                 img_asset("ui/dark_stone.webp"),
             )

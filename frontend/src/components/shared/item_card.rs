@@ -198,7 +198,7 @@ pub fn ItemCard(
             <img
                 draggable="false"
                 src=icon_asset
-                class="relative z-10 object-contain max-w-full max-h-full p-1 transform-gpu transition-transform duration-75 ease-out
+                class="relative z-10 object-contain max-w-full max-h-full p-1 transition-transform duration-75 ease-out
                 group-hover:scale-[1.045] group-hover:brightness-110
                 group-active:scale-[0.96] group-active:brightness-95
                 "

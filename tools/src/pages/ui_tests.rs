@@ -223,7 +223,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     url('{}');
                 background-blend-mode: screen, multiply;
                 ",
-                img_asset("ui/dark_stone.webp"),
+                img_asset("ui/dark_stone_multiply.webp"),
             )
         >
 
@@ -313,7 +313,7 @@ pub fn Card(
                         url('{}');
                     background-blend-mode: screen, multiply;
                     ",
-                    img_asset("ui/dark_stone.webp"),
+                    img_asset("ui/dark_stone_multiply.webp"),
                 )
             >
                 <div

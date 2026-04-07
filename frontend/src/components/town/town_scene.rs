@@ -317,7 +317,7 @@ fn GrindingAreaCard(
                     "
                     clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                     background-image: url('{}');
-                    background-blend-mode: multiply;
+                    background-blend-mode: normal;
                     {}
                     ",
                     img_asset("ui/dark_stone.webp"),
