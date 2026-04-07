@@ -1,22 +1,20 @@
 use leptos::prelude::*;
 
-use shared::data::skill::{SkillSpecs, SkillType};
+use shared::data::skill::{BaseSkillSpecs, SkillType};
 
 use crate::{assets::img_asset, components::ui::progress_bars::CircularProgressBar};
 
 #[component]
 pub fn SkillProgressBar(
-    skill_specs: SkillSpecs,
+    skill_specs_base: BaseSkillSpecs,
     #[prop(into)] value: Signal<f64>,
     #[prop(into, default = 4)] bar_width: u8,
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
     #[prop(optional)] icon_class: Option<&'static str>,
 ) -> impl IntoView {
-    let tint_background = skill_type_progress_tint(skill_specs.base.skill_type);
-    let icon_class = icon_class.unwrap_or(
-        "w-full h-full flex-no-shrink fill-current invert",
-    );
+    let tint_background = skill_type_progress_tint(skill_specs_base.skill_type);
+    let icon_class = icon_class.unwrap_or("w-full h-full flex-no-shrink fill-current invert");
 
     view! {
         <CircularProgressBar
@@ -29,8 +27,8 @@ pub fn SkillProgressBar(
         >
             <img
                 draggable="false"
-                src=img_asset(&skill_specs.base.icon)
-                alt=skill_specs.base.name.clone()
+                src=img_asset(&skill_specs_base.icon)
+                alt=skill_specs_base.name.clone()
                 class=icon_class
             />
         </CircularProgressBar>

@@ -843,7 +843,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
     view! {
         <SkillProgressBar
-            skill_specs=skill_specs
+            skill_specs_base=skill_specs.base
             value=progress_value
             reset=just_triggered
             disabled=is_dead

@@ -201,9 +201,14 @@ pub fn CircularProgressBar(
     let active_buffer = RwSignal::new(false);
     let front_progress = RwSignal::new(value.get_untracked().clamp(0.0, 1.0) * 100.0);
     let back_progress = RwSignal::new(0.0);
+    let last_reset = RwSignal::new(reset.get_untracked());
 
     Effect::new(move |_| {
-        if reset.get() {
+        let is_reset = reset.get();
+        let was_reset = last_reset.get_untracked();
+        let progress = value.get().clamp(0.0, 1.0) * 100.0;
+
+        if is_reset && !was_reset {
             if !disabled.get_untracked() {
                 reset_icon_animation.set(
                     "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
@@ -231,19 +236,15 @@ pub fn CircularProgressBar(
                     std::time::Duration::from_millis(500),
                 );
             }
-        } else {
-            let progress = if reset.get() {
-                0.0
-            } else {
-                value.get().clamp(0.0, 1.0) * 100.0
-            };
-
+        } else if !is_reset {
             if active_buffer.get() {
                 back_progress.set(progress);
             } else {
                 front_progress.set(progress);
             }
         }
+
+        last_reset.set(is_reset);
     });
 
     view! {
@@ -257,8 +258,7 @@ pub fn CircularProgressBar(
                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                 <div
                     class="absolute inset-0 transition-circular-progress-bar"
-                    class:opacity-0=move || disabled.get()
-                    class:fade-out-circular-progress-bar=move || active_buffer.get()
+                    class:opacity-0=move || disabled.get() || active_buffer.get()
                     style=format!(
                             "
                             background: conic-gradient(
@@ -273,8 +273,7 @@ pub fn CircularProgressBar(
 
                 <div
                     class="absolute inset-0 transition-circular-progress-bar"
-                    class:opacity-0=move || disabled.get()
-                    class:fade-out-circular-progress-bar=move || !active_buffer.get()
+                    class:opacity-0=move || disabled.get() || !active_buffer.get()
                     style=format!(
                             "
                             background: conic-gradient(

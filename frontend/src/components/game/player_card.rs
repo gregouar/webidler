@@ -617,6 +617,15 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .cloned()
     });
 
+    let skill_specs_base = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .get(index)
+            .map(|skill_specs| skill_specs.base.clone())
+    });
+
     let tooltip = {
         move || {
             view! {
@@ -654,12 +663,12 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             disabled=move || !is_ready.get()
                         >
                             {move || {
-                                skill_specs
+                                skill_specs_base
                                     .get()
-                                    .map(|skill_specs| {
+                                    .map(|skill_specs_base| {
                                         view! {
                                             <SkillProgressBar
-                                                skill_specs=skill_specs
+                                                skill_specs_base
                                                 value=progress_value
                                                 reset=just_triggered
                                                 disabled=is_dead

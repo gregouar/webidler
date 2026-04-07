@@ -243,7 +243,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                             .map(|skill_specs| {
                                 view! {
                                     <SkillProgressBar
-                                        skill_specs=skill_specs
+                                        skill_specs_base=skill_specs.base
                                         value=Signal::derive(|| 0.0)
                                         bar_width=4
                                     />
@@ -353,7 +353,7 @@ fn GrindingAreaCard(
                     format!(
                         "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",
                         if locked() {
-                            "blur-[3px] scale-[1.015] saturate-75 brightness-75"
+                            "blur-[5px] scale-[1.015] saturate-75 brightness-75"
                         } else {
                             ""
                         },
