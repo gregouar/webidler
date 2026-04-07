@@ -37,10 +37,10 @@ pub fn SkillProgressBar(
 
 fn skill_type_progress_tint(skill_type: SkillType) -> &'static str {
     match skill_type {
-        SkillType::Attack => "from-[oklch(0.44_0.08_27.0)]",
-        SkillType::Spell => "from-[oklch(0.44_0.07_240.0)]",
+        SkillType::Attack => "from-[oklch(0.44_0.08_17.0)]",
+        SkillType::Spell => "from-[oklch(0.44_0.04_240.0)]",
         SkillType::Curse => "from-[oklch(0.44_0.14_315.0)]",
-        SkillType::Blessing => "from-[oklch(0.60_0.07_85.0)]",
+        SkillType::Blessing => "from-[oklch(0.60_0.08_85.0)]",
         SkillType::Other => "from-stone-600",
     }
 }

@@ -385,7 +385,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
             gap-1 xl:gap-2 p-1 xl:p-2"
             style=format!(
-                "contain: layout paint;
+                "
                     clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                     background-image:
                         /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
