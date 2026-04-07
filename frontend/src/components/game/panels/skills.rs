@@ -83,7 +83,11 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                         let unbought_skills = available_skills
                             .into_iter()
                             .filter(|(skill_id, _)| {
-                                !game_context.player_specs.read().bought_skills.contains(skill_id)
+                                !game_context
+                                    .player_specs
+                                    .read_untracked()
+                                    .bought_skills
+                                    .contains(skill_id)
                             })
                             .collect::<Vec<_>>();
                         (!unbought_skills.is_empty())

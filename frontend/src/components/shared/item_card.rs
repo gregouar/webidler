@@ -149,12 +149,11 @@ pub fn ItemCard(
             // node_ref=node_ref
             class="relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-hidden
             rounded-[4px] xl:rounded-[6px] border border-[#6c5329]/85 
+            bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_44%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.12)_48%),linear-gradient(135deg,rgba(46,44,50,0.96),rgba(18,18,22,1))]
             shadow-[0_3px_7px_rgba(0,0,0,0.3),0_1px_0_rgba(26,17,10,0.88),inset_0_1px_0_rgba(240,215,159,0.14),inset_0_-1px_0_rgba(0,0,0,0.38)]"
             style=format!(
-                "background-image:
-                    linear-gradient(180deg, {}, transparent 44%),
-                    linear-gradient(180deg, {}, rgba(0,0,0,0.12) 48%),
-                    linear-gradient(135deg, rgba(46,44,50,0.96), rgba(18,18,22,1));",
+                "--item-rarity-wash: {};
+                --item-rarity-core: {};",
                 rarity_wash,
                 rarity_core,
             )
@@ -173,7 +172,7 @@ pub fn ItemCard(
                 class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px]"
                 style=format!(
                     "border: 1px solid {};
-            box-shadow: inset 0 0 0 1px {}, inset 0 8px 12px rgba(255,255,255,0.02), inset 0 -12px 16px rgba(0,0,0,0.22);",
+                    box-shadow: inset 0 0 0 1px {}, inset 0 8px 12px rgba(255,255,255,0.02), inset 0 -12px 16px rgba(0,0,0,0.22);",
                     accent,
                     inner_border,
                 )
