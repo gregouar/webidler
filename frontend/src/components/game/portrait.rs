@@ -11,6 +11,7 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
+        settings::{GraphicsQuality, SettingsContext},
         shared::tooltips::{conditions_tooltip, effects_tooltip, trigger_tooltip},
         ui::{
             number::format_number,
@@ -32,6 +33,7 @@ pub fn CharacterPortrait(
     #[prop(into)] statuses: Signal<StatusMap>,
     // enable_blink: bool,
 ) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     let is_dead_portrait_effect = move || {
         if is_dead.get() {
             "transition-[filter,opacity] duration-1000 saturate-0 brightness-50"
@@ -169,6 +171,42 @@ pub fn CharacterPortrait(
         ),
     };
 
+    let portrait_frame_class = move || {
+        match settings.graphics_quality() {
+        GraphicsQuality::High => format!(
+            "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.06),transparent_28%)]
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+            accent_class,
+        ),
+        GraphicsQuality::Medium => format!(
+            "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.045),transparent_32%)]
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+            accent_class,
+        ),
+        GraphicsQuality::Low => format!(
+            "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border before:bg-[linear-gradient(180deg,rgba(186,148,86,0.04),transparent_34%)]
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+            accent_class,
+        ),
+    }
+    };
+
     // let (hit_signal, set_hit_signal) = signal(false);
 
     // Effect::new(move || {
@@ -191,39 +229,43 @@ pub fn CharacterPortrait(
                 is_dead_portrait_effect(),
             )
         }>
-            <div
-                class=format!(
-                    "w-full h-full relative isolate
-                    border-[1.5px] xl:border-2
-                    shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
-                    before:pointer-events-none before:absolute before:inset-[1px]
-                    before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.06),transparent_28%)]
-                    after:pointer-events-none after:absolute after:inset-[4px]
-                    after:border-[1px]
-                    {}",
-                    accent_class,
-                )
-                style=crit_animation_style
-            >
+            <div class=portrait_frame_class style=crit_animation_style>
 
                 // NEW ///
 
-                <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                <Show when=move || settings.uses_heavy_effects()>
+                    <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
+                    <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                </Show>
 
                 <div
-                    class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714]
-                    shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
-                    style=format!(
-                        "
-                        background-image:
-                            linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
-                            url('{}');
-                        background-size: auto, cover;
-                        background-position: center, center;
-                        ",
-                        img_asset("ui/paper_background.webp"),
-                    )
+                    class=move || {
+                        format!(
+                            "h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] {}",
+                            if settings.uses_heavy_effects() {
+                                "shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
+                            } else {
+                                ""
+                            },
+                        )
+                    }
+                    style=move || {
+                        if settings.uses_textures() {
+                            format!(
+                                "
+                                background-image:
+                                    linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
+                                    url('{}');
+                                background-size: auto, cover;
+                                background-position: center, center;
+                                ",
+                                img_asset("ui/paper_background.webp"),
+                            )
+                        } else {
+                            "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"
+                                .to_string()
+                        }
+                    }
                 >
                     <div class="pointer-events-none absolute inset-0 border-[2px] xl:border-[3px] border-[#2a1e19]/68"></div>
                     // <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
@@ -235,8 +277,13 @@ pub fn CharacterPortrait(
                             format!(
                                 "object-cover h-full w-full
                                 [transition:transform_1s,opacity_5s]
-                                xl:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]
+                                {}
                                 {}",
+                                if settings.uses_heavy_effects() {
+                                    "xl:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]"
+                                } else {
+                                    ""
+                                },
                                 if is_dead.get() {
                                     "opacity-50 [transform:rotateY(180deg)]"
                                 } else {
@@ -286,26 +333,54 @@ pub fn CharacterPortrait(
                     </div>
                 </div>
 
-                <div class=format!(
-                    "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
-                <div class=format!(
-                    "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
-                     rotate-315 border shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)] {}",
-                    fixture_class,
-                )></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
 
                 <div
                     class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
@@ -353,7 +428,7 @@ pub fn CharacterPortrait(
                 </div>
 
                 {move || {
-                    (!is_dead.get() && !shimmer_effect.is_empty())
+                    (!is_dead.get() && !shimmer_effect.is_empty() && settings.uses_heavy_effects())
                         .then(|| {
                             view! {
                                 <div class=format!("absolute inset-0  {}", shimmer_effect)></div>

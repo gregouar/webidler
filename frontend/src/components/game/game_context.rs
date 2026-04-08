@@ -62,6 +62,7 @@ pub struct GameContext {
     pub open_statistics: RwSignal<bool>,
     pub open_skills: RwSignal<bool>,
     pub open_end_quest: RwSignal<bool>,
+    pub open_settings: RwSignal<bool>,
 
     pub last_skills_bought: RwSignal<IndexSet<String>>,
     pub loot_filter: RwSignal<LootFilter>,
@@ -109,6 +110,7 @@ impl GameContext {
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
             open_end_quest: RwSignal::new(false),
+            open_settings: RwSignal::new(false),
 
             last_skills_bought: RwSignal::new(Default::default()),
             loot_filter: Default::default(),

@@ -1,10 +1,12 @@
+use indexmap::IndexMap;
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
-    settings::SettingsContext,
+    settings::{GraphicsQuality, SettingsContext},
     ui::{
         buttons::{MenuButton, MenuButtonRed, Toggle},
-        card::{CardInset, CardTitle, MenuCard},
+        card::{CardInset, CardInsetTitle, CardTitle, MenuCard},
+        dropdown::DropdownMenu,
         menu_panel::MenuPanel,
     },
 };
@@ -19,35 +21,53 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
             <MenuCard class="w-xl mx-auto">
                 <CardTitle>"Game Settings"</CardTitle>
 
-                <SettingsSection title="Numbers">
-                    <SettingToggle
-                        label="Scientific notation"
-                        value=Signal::derive(move || { settings_data.read().scientific_notation })
-                        on_toggle=move |v| {
-                            settings_data.write().scientific_notation = v;
-                        }
-                    />
-                </SettingsSection>
+                <CardInset class="space-y-2 xl:space-y-4">
 
-                <SettingsSection title="Items">
-                    <SettingToggle
-                        label="Always compare items on hover"
-                        value=Signal::derive(move || { settings_data.read().always_compare_items })
-                        on_toggle=move |v| {
-                            settings_data.write().always_compare_items = v;
-                        }
-                    />
+                    <SettingsSection title="Graphics">
+                        <SettingDropdown
+                            label="Graphics Quality"
+                            options=GraphicsQuality::to_options()
+                            value=Signal::derive(move || { settings_data.read().graphics_quality })
+                            on_change=move |v| {
+                                settings_data.write().graphics_quality = v;
+                            }
+                        />
+                    </SettingsSection>
 
-                    <SettingToggle
-                        label="Always display item affix tiers"
-                        value=Signal::derive(move || {
-                            settings_data.read().always_display_affix_tiers
-                        })
-                        on_toggle=move |v| {
-                            settings_data.write().always_display_affix_tiers = v;
-                        }
-                    />
-                </SettingsSection>
+                    <SettingsSection title="Numbers">
+                        <SettingToggle
+                            label="Scientific notation"
+                            value=Signal::derive(move || {
+                                settings_data.read().scientific_notation
+                            })
+                            on_toggle=move |v| {
+                                settings_data.write().scientific_notation = v;
+                            }
+                        />
+                    </SettingsSection>
+
+                    <SettingsSection title="Items">
+                        <SettingToggle
+                            label="Always compare items on hover"
+                            value=Signal::derive(move || {
+                                settings_data.read().always_compare_items
+                            })
+                            on_toggle=move |v| {
+                                settings_data.write().always_compare_items = v;
+                            }
+                        />
+
+                        <SettingToggle
+                            label="Always display item affix tiers"
+                            value=Signal::derive(move || {
+                                settings_data.read().always_display_affix_tiers
+                            })
+                            on_toggle=move |v| {
+                                settings_data.write().always_display_affix_tiers = v;
+                            }
+                        />
+                    </SettingsSection>
+                </CardInset>
 
                 <div class="flex justify-between px-4">
                     <MenuButtonRed on:click=move |_| {
@@ -67,10 +87,8 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn SettingsSection(title: &'static str, children: Children) -> impl IntoView {
     view! {
-        <CardInset class="space-y-2 xl:space-y-4">
-            <h3 class="text-base xl:text-lg font-semibold text-amber-300">{title}</h3>
-            <div class="space-y-3">{children()}</div>
-        </CardInset>
+        <CardInsetTitle>{title}</CardInsetTitle>
+        <div class="space-y-3">{children()}</div>
     }
 }
 
@@ -91,6 +109,33 @@ fn SettingToggle(
             <Toggle initial=value.get_untracked() toggle_callback=move |v| on_toggle(v)>
                 {move || if value.get() { "On" } else { "Off" }}
             </Toggle>
+        </div>
+    }
+}
+
+#[component]
+fn SettingDropdown<T>(
+    label: &'static str,
+    options: IndexMap<T, String>,
+    value: Signal<T>,
+    on_change: impl Fn(T) + 'static,
+) -> impl IntoView
+where
+    T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
+{
+    let chosen_option = RwSignal::new(value.get_untracked());
+
+    Effect::new(move || on_change(chosen_option.get()));
+
+    view! {
+        <div class="
+        flex items-center justify-between
+        bg-zinc-800 border border-zinc-700 rounded-lg p-2 px-3
+        gap-2 xl:gap-4
+        ">
+            <span class="text-sm font-normal text-white">{label}</span>
+
+            <DropdownMenu options chosen_option />
         </div>
     }
 }

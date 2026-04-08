@@ -2,6 +2,8 @@ use indexmap::IndexMap;
 use leptos::{prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
+use crate::components::settings::{GraphicsQuality, SettingsContext};
+
 #[component]
 pub fn DropdownMenu<T>(
     options: IndexMap<T, String>,
@@ -13,6 +15,7 @@ where
 {
     let node_ref = NodeRef::new();
     let is_open = RwSignal::new(false);
+    let settings: SettingsContext = expect_context();
 
     let toggle = move |_| is_open.update(|open| *open = !*open);
     let _ = on_click_outside(node_ref, move |_| is_open.set(false));
@@ -26,38 +29,50 @@ where
             <button
                 on:click=toggle
                 class=move || {
+                    let quality = settings.graphics_quality();
                     format!(
                         "btn relative isolate overflow-hidden
                         w-full flex items-center justify-between gap-2
                         px-1 xl:px-3 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
-                        tracking-[0.08em] text-stone-100 font-extrabold text-shadow shadow-black/90
-                        border border-[#6c5329]
-                        shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
-                        before:pointer-events-none before:absolute before:inset-[1px]
-                        before:rounded-[3px] xl:before:rounded-[5px]
-                        before:border before:border-[#d5b16d]/18
-                        before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+                        tracking-[0.08em] text-stone-100 font-extrabold
+                        {}
+                        {}
                         focus:outline-none {}",
+                        if quality.uses_surface_effects() { "text-shadow shadow-black/90" } else { "" },
+                        match quality {
+                            GraphicsQuality::High => "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/18 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]",
+                            GraphicsQuality::Medium => "border border-[#6c5329]",
+                            GraphicsQuality::Low => "border border-[#5f5035]",
+                        },
                         if is_open.get() {
-                            "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100
-                            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]"
+                            match quality {
+                                GraphicsQuality::High => "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100 shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]",
+                                GraphicsQuality::Medium => "border-[#9c7841] brightness-95 text-zinc-100",
+                                GraphicsQuality::Low => "border-[#8b7347] brightness-95 text-zinc-100",
+                            }
                         } else {
-                            "hover:border-[#a27f46] hover:text-[#f3ead2]
-                            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                            match quality {
+                                GraphicsQuality::High => "hover:border-[#a27f46] hover:text-[#f3ead2] hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]",
+                                GraphicsQuality::Medium => "hover:border-[#a27f46] hover:text-[#f3ead2]",
+                                GraphicsQuality::Low => "hover:border-[#8b7347] hover:text-[#efe1bf]",
+                            }
                         },
                     )
                 }
-                style="
-                background-image:
-                linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
-                linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
-                background-size: auto, auto, 180px 180px;
-                background-position: center, center, center;
-                background-blend-mode: screen, normal, soft-light;
-                "
+                style:background-image=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
+                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
+                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string(),
+                    }
+                }
             >
-                <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
-                <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+                <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                    <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+                </Show>
+                <Show when=move || settings.uses_heavy_effects()>
+                    <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+                </Show>
                 <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
@@ -78,22 +93,25 @@ where
             </button>
 
             <ul class=move || {
+                let quality = settings.graphics_quality();
                 format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-[6px]
-                    border border-[#6c5329]
-                    shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]
+                    "dropdown-transition absolute mt-1 w-full rounded-[6px] {} 
                     max-h-80 overflow-auto z-20 {}",
+                    match quality {
+                        GraphicsQuality::High => "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]",
+                        GraphicsQuality::Medium => "border border-[#6c5329]",
+                        GraphicsQuality::Low => "border border-[#5a4c34]",
+                    },
                     if is_open.get() { "open" } else { "" },
                 )
             }
-                style="
-                background-image:
-                linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
-                linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1));
-                background-size: auto, auto, 180px 180px;
-                background-position: center, center, center;
-                background-blend-mode: screen, normal, soft-light;
-                "
+                style:background-image=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
+                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
+                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(52,50,55,0.97), rgba(30,29,33,1))".to_string(),
+                    }
+                }
             >
                 {options
                     .into_iter()
@@ -128,6 +146,7 @@ where
 
     let is_open = RwSignal::new(false);
     let search = RwSignal::new(String::new());
+    let settings: SettingsContext = expect_context();
 
     let toggle = move |_| {
         is_open.update(|open| {
@@ -162,38 +181,50 @@ where
             <button
                 on:click=toggle
                 class=move || {
+                    let quality = settings.graphics_quality();
                     format!(
                         "btn relative isolate overflow-hidden
                         w-full flex items-center justify-between gap-2
                         px-1 xl:px-3 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
-                        tracking-[0.08em] text-stone-100 font-extrabold text-shadow shadow-black/90
-                        border border-[#6c5329]
-                        shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)]
-                        before:pointer-events-none before:absolute before:inset-[1px]
-                        before:rounded-[3px] xl:before:rounded-[5px]
-                        before:border before:border-[#d5b16d]/18
-                        before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
+                        tracking-[0.08em] text-stone-100 font-extrabold
+                        {}
+                        {}
                         focus:outline-none {}",
+                        if quality.uses_surface_effects() { "text-shadow shadow-black/90" } else { "" },
+                        match quality {
+                            GraphicsQuality::High => "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/18 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]",
+                            GraphicsQuality::Medium => "border border-[#6c5329]",
+                            GraphicsQuality::Low => "border border-[#5f5035]",
+                        },
                         if is_open.get() {
-                            "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100
-                            shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]"
+                            match quality {
+                                GraphicsQuality::High => "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100 shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]",
+                                GraphicsQuality::Medium => "border-[#9c7841] brightness-95 text-zinc-100",
+                                GraphicsQuality::Low => "border-[#8b7347] brightness-95 text-zinc-100",
+                            }
                         } else {
-                            "hover:border-[#a27f46] hover:text-[#f3ead2]
-                            hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                            match quality {
+                                GraphicsQuality::High => "hover:border-[#a27f46] hover:text-[#f3ead2] hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]",
+                                GraphicsQuality::Medium => "hover:border-[#a27f46] hover:text-[#f3ead2]",
+                                GraphicsQuality::Low => "hover:border-[#8b7347] hover:text-[#efe1bf]",
+                            }
                         },
                     )
                 }
-                style="
-                background-image:
-                linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
-                linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
-                background-size: auto, auto, 180px 180px;
-                background-position: center, center, center;
-                background-blend-mode: screen, normal, soft-light;
-                "
+                style:background-image=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
+                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
+                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string(),
+                    }
+                }
             >
-                <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
-                <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+                <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                    <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
+                </Show>
+                <Show when=move || settings.uses_heavy_effects()>
+                    <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+                </Show>
                 <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
@@ -214,24 +245,32 @@ where
             </button>
 
             <div class=move || {
+                let quality = settings.graphics_quality();
                 format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-[6px]
-                    border border-[#6c5329]
-                    shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]
+                    "dropdown-transition absolute mt-1 w-full rounded-[6px] {}
                     z-20 {}",
+                    match quality {
+                        GraphicsQuality::High => "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]",
+                        GraphicsQuality::Medium => "border border-[#6c5329]",
+                        GraphicsQuality::Low => "border border-[#5a4c34]",
+                    },
                     if is_open.get() { "open" } else { "" },
                 )
             }
-                style="
-                background-image:
-                linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
-                linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1));
-                background-size: auto, auto, 180px 180px;
-                background-position: center, center, center;
-                background-blend-mode: screen, normal, soft-light;
-                "
+                style:background-image=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
+                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
+                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(52,50,55,0.97), rgba(30,29,33,1))".to_string(),
+                    }
+                }
             >
-                <div class="px-1 xl:px-3 py-1 xl:py-2 border-b border-black/25 bg-black/10">
+                <div class=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::Low => "px-1 xl:px-3 py-1 xl:py-2 border-b border-[#5a4c34] bg-transparent",
+                        _ => "px-1 xl:px-3 py-1 xl:py-2 border-b border-black/25 bg-black/10",
+                    }
+                }>
                     <input
                         node_ref=search_ref
                         class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-500 focus:outline-none"

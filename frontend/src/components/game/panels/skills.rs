@@ -133,7 +133,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         </CardInset>
 
         <div class="flex items-center justify-center">
-            <FancyButton disabled=disable_confirm on:click=buy_skill class:py-2 class:px-4>
+            <FancyButton disabled=disable_confirm on:click=buy_skill class="py-2 px-4">
                 <span class="flex items-center gap-2">
                     "Confirm buying selected skill for"
                     <GoldCounter value=Signal::derive(move || {

@@ -123,6 +123,15 @@ pub fn HeaderMenu() -> impl IntoView {
                 >
                     "Chat"
                 </MenuButton>
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        game_context.open_settings.set(!game_context.open_settings.get_untracked())
+                    }
+                >
+                    "Settings"
+                </MenuButton>
                 <MenuButton on:click=move |_| open_inventory()>
                     <span class="inline xl:hidden">"Inv."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
