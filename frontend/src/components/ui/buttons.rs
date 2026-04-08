@@ -6,6 +6,7 @@ use crate::components::settings::{GraphicsQuality, SettingsContext};
 pub fn MenuButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
     #[prop(optional)] button_type: Option<&'static str>,
+    #[prop(optional)] class: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
@@ -13,7 +14,7 @@ pub fn MenuButton(
     view! {
         <button
             class=move || {
-                match settings.graphics_quality() {
+                let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
@@ -36,7 +37,7 @@ pub fn MenuButton(
                     disabled:text-zinc-500
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
-                    disabled:before:hidden".to_string(),
+                    disabled:before:hidden",
                     GraphicsQuality::Medium => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
@@ -54,7 +55,7 @@ pub fn MenuButton(
                     w-auto
                     disabled:text-zinc-500
                     disabled:border-[#4b4030]
-                    disabled:opacity-60".to_string(),
+                    disabled:opacity-60",
                     GraphicsQuality::Low => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
@@ -67,8 +68,9 @@ pub fn MenuButton(
                     hover:border-[#8b7347] hover:text-[#efe1bf]
                     active:translate-y-[1px] active:brightness-95
                     w-auto
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60".to_string(),
-                }
+                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60",
+                };
+                format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
@@ -112,6 +114,7 @@ pub fn MenuButton(
 #[component]
 pub fn MenuButtonRed(
     #[prop(optional)] disabled: Option<Signal<bool>>,
+    #[prop(optional)] class: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
@@ -119,7 +122,7 @@ pub fn MenuButtonRed(
     view! {
         <button
             class=move || {
-                match settings.graphics_quality() {
+                let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
@@ -141,7 +144,7 @@ pub fn MenuButtonRed(
                     disabled:text-zinc-500
                     disabled:border-[#4f312d]
                     disabled:opacity-60 disabled:shadow-none
-                    disabled:before:hidden".to_string(),
+                    disabled:before:hidden",
                     GraphicsQuality::Medium => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
@@ -153,7 +156,7 @@ pub fn MenuButtonRed(
                     before:border before:border-[#d78b78]/10
                     hover:border-[#b55d4c] hover:text-[#ffd8d0]
                     active:translate-y-[1px] active:brightness-90 active:text-[#d7aca2]
-                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60".to_string(),
+                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60",
                     GraphicsQuality::Low => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold
@@ -165,8 +168,9 @@ pub fn MenuButtonRed(
                     before:border before:border-[#c08a78]/10
                     hover:border-[#b55d4c] hover:text-[#ffd8d0]
                     active:translate-y-[1px] active:brightness-95
-                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60".to_string(),
-                }
+                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60",
+                };
+                format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
@@ -188,6 +192,7 @@ pub fn MenuButtonRed(
 #[component]
 pub fn FancyButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    #[prop(optional)] class: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
@@ -195,7 +200,7 @@ pub fn FancyButton(
     view! {
         <button
             class=move || {
-                match settings.graphics_quality() {
+                let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
@@ -218,7 +223,7 @@ pub fn FancyButton(
                     disabled:text-zinc-500
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
-                    disabled:before:hidden".to_string(),
+                    disabled:before:hidden",
                     GraphicsQuality::Medium => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
@@ -231,7 +236,7 @@ pub fn FancyButton(
                     before:border before:border-[#d5b16d]/10
                     hover:border-[#a27f46] hover:text-[#f3ead2]
                     active:translate-y-[1px] active:brightness-90 active:text-white
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60".to_string(),
+                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60",
                     GraphicsQuality::Low => "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
@@ -243,8 +248,9 @@ pub fn FancyButton(
                     before:border before:border-[#a88a53]/10
                     hover:border-[#8b7347] hover:text-[#efe1bf]
                     active:translate-y-[1px] active:brightness-95
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60".to_string(),
-                }
+                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60",
+                };
+                format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {

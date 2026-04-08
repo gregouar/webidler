@@ -474,7 +474,7 @@ fn CharacterSlot(
 
                 <div class="mt-3 flex gap-2">
                     <MenuButton on:click=edit_character>"Edit"</MenuButton>
-                    <MenuButton class:flex-1 on:click=play_character.clone()>
+                    <MenuButton class="flex-1" on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
                 </div>

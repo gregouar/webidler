@@ -6,6 +6,7 @@ use leptos::prelude::{
 };
 use leptos_use::storage;
 use serde::{Deserialize, Serialize};
+use web_sys::Event;
 
 #[derive(Serialize, Deserialize, Default, Clone, PartialEq)]
 pub struct SettingsData {
@@ -85,9 +86,28 @@ impl SettingsContext {
     }
 
     pub fn save_settings(&self, new_settings: SettingsData) {
+        let graphics_quality_changed =
+            self.settings_data.read_untracked().graphics_quality != new_settings.graphics_quality;
         self.settings_data.set(new_settings.clone());
         self.set_settings.set(new_settings);
+
+        if graphics_quality_changed {
+            request_layout_refresh();
+        }
     }
+}
+
+fn request_layout_refresh() {
+    let dispatch_resize = || {
+        if let Some(window) = web_sys::window() && let Ok(event) = Event::new("resize") {
+            let _ = window.dispatch_event(&event);
+        }
+    };
+
+    dispatch_resize();
+
+    set_timeout(dispatch_resize, std::time::Duration::from_millis(16));
+    set_timeout(dispatch_resize, std::time::Duration::from_millis(80));
 }
 
 pub fn provide_settings_context() {

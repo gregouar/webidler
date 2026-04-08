@@ -182,10 +182,10 @@ fn MainMenu() -> impl IntoView {
                     <Captcha token=captcha_token />
                     // </form>
 
-                    <MenuButton on:click=move |_| signin() disabled=disable_connect class:mb-4>
+                    <MenuButton on:click=move |_| signin() disabled=disable_connect class="mb-4">
                         {move || if connecting.get() { "Connecting..." } else { "Connect" }}
                     </MenuButton>
-                    <MenuButton on:click=move |_| guest_signin() disabled=disable_guest class:mb-4>
+                    <MenuButton on:click=move |_| guest_signin() disabled=disable_guest class="mb-4">
                         "Play as Guest"
                     </MenuButton>
                     <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>

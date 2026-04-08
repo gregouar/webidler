@@ -233,8 +233,7 @@ pub fn PlayerCard() -> impl IntoView {
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
-                        class:w-6
-                        class:xl:w-8
+                        class="w-6 xl:w-8"
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
                         value=life_percent
                     />
@@ -267,8 +266,7 @@ pub fn PlayerCard() -> impl IntoView {
 
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                     <VerticalProgressBar
-                        class:w-6
-                        class:xl:w-8
+                        class="w-6 xl:w-8"
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
                     >
@@ -307,8 +305,7 @@ pub fn PlayerCard() -> impl IntoView {
 
             <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
                 <HorizontalProgressBar
-                    class:h-2
-                    class:xl:h-4
+                    class="h-2 xl:h-4"
                     bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     value=xp_percent
                     reset=just_leveled_up

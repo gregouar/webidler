@@ -156,6 +156,7 @@ pub fn VerticalProgressBar(
     bar_color: &'static str,
     // Instant reset
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(optional)] class: Option<&'static str>,
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
@@ -182,7 +183,7 @@ pub fn VerticalProgressBar(
         <div
             class=move || {
                 format!(
-                    "relative flex flex-col justify-end h-full rounded-[4px] xl:rounded-[6px] {}",
+                    "relative flex flex-col justify-end h-full rounded-[4px] xl:rounded-[6px] {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
@@ -190,6 +191,7 @@ pub fn VerticalProgressBar(
                         GraphicsQuality::Medium => "border border-[#6c5329]",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
                     },
+                    class.unwrap_or_default(),
                 )
             }
             style:background-image=move || {
@@ -283,6 +285,7 @@ pub fn CircularProgressBar(
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
     #[prop(optional)] tint_background: Option<&'static str>,
+    #[prop(optional)] class: Option<&'static str>,
     // Inside the circular bar
     children: Children,
 ) -> impl IntoView {
@@ -342,12 +345,13 @@ pub fn CircularProgressBar(
            <div
                 class=move || {
                     format!(
-                        "relative w-full h-full aspect-square rounded-full overflow-hidden {}",
+                        "relative w-full h-full aspect-square rounded-full overflow-hidden {} {}",
                         match settings.graphics_quality() {
                             GraphicsQuality::High => "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]",
                             GraphicsQuality::Medium => "border border-[#6c5329] bg-stone-900",
                             GraphicsQuality::Low => "border border-[#5c4a2e] bg-zinc-900",
                         },
+                        class.unwrap_or_default(),
                     )
                 }
             >
