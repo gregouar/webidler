@@ -171,7 +171,8 @@ pub fn CharacterPortrait(
         ),
     };
 
-    let portrait_frame_class = move || match settings.graphics_quality() {
+    let portrait_frame_class = move || {
+        match settings.graphics_quality() {
         GraphicsQuality::High => format!(
             "w-full h-full relative isolate
             border-[1.5px] xl:border-2
@@ -203,6 +204,7 @@ pub fn CharacterPortrait(
             {}",
             accent_class,
         ),
+    }
     };
 
     // let (hit_signal, set_hit_signal) = signal(false);
@@ -227,10 +229,7 @@ pub fn CharacterPortrait(
                 is_dead_portrait_effect(),
             )
         }>
-            <div
-                class=portrait_frame_class
-                style=crit_animation_style
-            >
+            <div class=portrait_frame_class style=crit_animation_style>
 
                 // NEW ///
 
@@ -263,7 +262,8 @@ pub fn CharacterPortrait(
                                 img_asset("ui/paper_background.webp"),
                             )
                         } else {
-                            "background-image: linear-gradient(180deg, rgba(76,68,56,0.22), rgba(20,18,16,0.22));".to_string()
+                            "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"
+                                .to_string()
                         }
                     }
                 >

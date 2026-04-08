@@ -60,7 +60,9 @@ pub fn HorizontalProgressBar(
                 format!(
                     "relative flex w-full rounded-[4px] xl:rounded-[6px] {} {}",
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]",
+                        GraphicsQuality::High => {
+                            "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                        }
                         GraphicsQuality::Medium => "border border-[#6c5329]",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
                     },
@@ -69,9 +71,16 @@ pub fn HorizontalProgressBar(
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
-                    GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string(),
-                    GraphicsQuality::Medium => "linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string(),
-                    GraphicsQuality::Low => "linear-gradient(180deg, rgba(41,39,45,0.98), rgba(20,19,24,1))".to_string(),
+                    GraphicsQuality::High => {
+                        "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Medium => {
+                        "linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string()
+                    }
+                    GraphicsQuality::Low => {
+                        "linear-gradient(180deg, rgba(41,39,45,0.98), rgba(20,19,24,1))".to_string()
+                    }
                 }
             }
         >
@@ -93,7 +102,7 @@ pub fn HorizontalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-left rounded-[2px] xl:rounded-[4px]
+                            "relative block h-full w-full origin-left rounded-[2px] xl:rounded-[4px]
                             {} {} {} {}",
                             if settings.uses_heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]"
@@ -161,7 +170,9 @@ pub fn VerticalProgressBar(
                 format!(
                     "relative flex flex-col justify-end h-full rounded-[4px] xl:rounded-[6px] {}",
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]",
+                        GraphicsQuality::High => {
+                            "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                        }
                         GraphicsQuality::Medium => "border border-[#6c5329]",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
                     },
@@ -169,9 +180,16 @@ pub fn VerticalProgressBar(
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
-                    GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string(),
-                    GraphicsQuality::Medium => "linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string(),
-                    GraphicsQuality::Low => "linear-gradient(180deg, rgba(41,39,45,0.98), rgba(20,19,24,1))".to_string(),
+                    GraphicsQuality::High => {
+                        "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Medium => {
+                        "linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string()
+                    }
+                    GraphicsQuality::Low => {
+                        "linear-gradient(180deg, rgba(41,39,45,0.98), rgba(20,19,24,1))".to_string()
+                    }
                 }
             }
         >
@@ -193,7 +211,7 @@ pub fn VerticalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "h-full origin-bottom rounded-[2px] xl:rounded-[4px]
+                            "relative block h-full w-full origin-bottom rounded-[2px] xl:rounded-[4px]
                             {} {} {}",
                             if settings.uses_heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]"

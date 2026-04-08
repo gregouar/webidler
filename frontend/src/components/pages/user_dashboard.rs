@@ -24,6 +24,7 @@ use crate::{
         auth::AuthContext,
         backend_client::BackendClient,
         chat::{chat_context::ChatContext, chat_panel::ChatPanel},
+        settings::SettingsContext,
         shared::{
             account::AccountSettingsPanel, leaderboard::LeaderboardPanel,
             player_count::PlayerCount, settings::SettingsModal,
@@ -291,6 +292,7 @@ fn CharacterSlot(
     selected_character_name: RwSignal<Option<Username>>,
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
         let auth_context = expect_context::<AuthContext>();
@@ -372,16 +374,57 @@ fn CharacterSlot(
     };
 
     view! {
-        <div class="relative overflow-hidden rounded-[10px] border border-[#6c5329]/70
-        bg-[linear-gradient(180deg,rgba(214,177,102,0.05),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
-        shadow-[0_6px_16px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.32)]
-        flex flex-row items-stretch h-full">
-            <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
-            <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></span>
+        <div class=move || {
+            format!(
+                "relative overflow-hidden rounded-[10px] flex flex-row items-stretch h-full border {} {} {}",
+                if settings.uses_heavy_effects() {
+                    "border-[#6c5329]/70"
+                } else if settings.uses_surface_effects() {
+                    "border-[#665131]/75"
+                } else {
+                    "border-[#5c4a2e]/80"
+                },
+                if settings.uses_surface_effects() {
+                    "bg-[linear-gradient(180deg,rgba(214,177,102,0.05),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]"
+                } else {
+                    "bg-[linear-gradient(180deg,rgba(181,147,87,0.04),rgba(0,0,0,0.1)),linear-gradient(135deg,rgba(36,35,40,0.98),rgba(19,19,23,1))]"
+                },
+                if settings.uses_heavy_effects() {
+                    "shadow-[0_6px_16px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.32)]"
+                } else {
+                    ""
+                },
+            )
+        }>
+            <Show when=move || settings.uses_surface_effects()>
+                <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-[#d4b57a]/8"></div>
+            </Show>
+            <Show when=move || settings.uses_heavy_effects()>
+                <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></span>
+            </Show>
 
             <div
-                class="relative z-10 w-28 min-h-0 overflow-hidden border-r border-[#6c5329]/45"
-                style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
+                class=move || {
+                    format!(
+                        "relative z-10 w-28 min-h-0 overflow-hidden border-r {}",
+                        if settings.uses_surface_effects() {
+                            "border-[#6c5329]/45"
+                        } else {
+                            "border-[#5c4a2e]/60"
+                        },
+                    )
+                }
+                style=move || {
+                    if settings.uses_textures() {
+                        format!(
+                            "background-image: url('{}');",
+                            img_asset("ui/paper_background.webp"),
+                        )
+                    } else {
+                        "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"
+                            .to_string()
+                    }
+                }
             >
                 <img
                     draggable="false"
@@ -431,7 +474,7 @@ fn CharacterSlot(
 
                 <div class="mt-3 flex gap-2">
                     <MenuButton on:click=edit_character>"Edit"</MenuButton>
-                    <MenuButton class:flex-grow on:click=play_character.clone()>
+                    <MenuButton class:flex-1 on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
                 </div>
@@ -442,17 +485,59 @@ fn CharacterSlot(
 
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     view! {
-        <div class="relative overflow-hidden rounded-[10px] border border-[#6c5329]/65
-        bg-[linear-gradient(180deg,rgba(214,177,102,0.04),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
-        shadow-[0_6px_16px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04)]
-        flex flex-row items-stretch min-h-[7.5rem] cursor-pointer
-        hover:border-[#a27f46] hover:shadow-[0_8px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)]
-        transition active:translate-y-[1px] active:brightness-95">
-            <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
-            <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></span>
+        <div class=move || {
+            format!(
+                "relative overflow-hidden rounded-[10px] flex flex-row items-stretch min-h-[7.5rem] cursor-pointer transition active:translate-y-[1px] active:brightness-95 border {} {} {} {}",
+                if settings.uses_heavy_effects() {
+                    "border-[#6c5329]/65"
+                } else if settings.uses_surface_effects() {
+                    "border-[#665131]/70"
+                } else {
+                    "border-[#5c4a2e]/75"
+                },
+                if settings.uses_surface_effects() {
+                    "bg-[linear-gradient(180deg,rgba(214,177,102,0.04),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]"
+                } else {
+                    "bg-[linear-gradient(180deg,rgba(181,147,87,0.04),rgba(0,0,0,0.1)),linear-gradient(135deg,rgba(36,35,40,0.98),rgba(19,19,23,1))]"
+                },
+                if settings.uses_heavy_effects() {
+                    "shadow-[0_6px_16px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04)] hover:shadow-[0_8px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)]"
+                } else {
+                    ""
+                },
+                if settings.uses_heavy_effects() {
+                    "hover:border-[#a27f46]"
+                } else if settings.uses_surface_effects() {
+                    "hover:border-[#947542]"
+                } else {
+                    "hover:border-[#85683d]"
+                },
+            )
+        }>
+            <Show when=move || settings.uses_surface_effects()>
+                <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-[#d4b57a]/8"></div>
+            </Show>
+            <Show when=move || settings.uses_heavy_effects()>
+                <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></span>
+            </Show>
 
-            <div class="relative z-10 w-24 xl:w-28 min-h-0 border-r border-[#6c5329]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06)),linear-gradient(135deg,rgba(31,30,36,0.98),rgba(15,15,18,1))]">
+            <div class=move || {
+                format!(
+                    "relative z-10 w-24 xl:w-28 min-h-0 border-r {} {}",
+                    if settings.uses_surface_effects() {
+                        "border-[#6c5329]/45"
+                    } else {
+                        "border-[#5c4a2e]/60"
+                    },
+                    if settings.uses_surface_effects() {
+                        "bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06)),linear-gradient(135deg,rgba(31,30,36,0.98),rgba(15,15,18,1))]"
+                    } else {
+                        "bg-[linear-gradient(180deg,rgba(185,150,87,0.03),rgba(0,0,0,0.04)),linear-gradient(135deg,rgba(32,31,36,0.98),rgba(16,16,19,1))]"
+                    },
+                )
+            }>
                 <div class="relative flex h-full w-full items-center justify-center">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

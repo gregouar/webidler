@@ -690,10 +690,8 @@ fn TriggersStats() -> impl IntoView {
     // xl:[&:nth-last-child(-n+3)]:after:hidden
     // [&:nth-last-child(-n+2)]:after:hidden
     view! {
-        <CardInset pad=false>
-            <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
-                "Triggered Effects"
-            </h2>
+        <CardInset pad=false class="w-full">
+            <CardInsetTitle>"Triggered Effects"</CardInsetTitle>
             <div class="columns-2 xl:columns-3 gap-1">
                 {move || {
                     let mut triggers = game_context

@@ -20,6 +20,7 @@ use crate::{
         shared::{
             inventory::InventoryEquipFilter, skills::SkillProgressBar, tooltips::SkillTooltip,
         },
+        settings::SettingsContext,
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
             Separator,
@@ -266,6 +267,7 @@ fn GrindingAreaCard(
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
     let data_context: DataContext = expect_context();
+    let settings: SettingsContext = expect_context();
 
     let area_specs = Memo::new({
         let area_id = area.area_id.clone();
@@ -299,8 +301,13 @@ fn GrindingAreaCard(
             on:click=select_area
             style=move || {
                 format!(
-                    "pointer-events: {}; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.45));",
+                    "pointer-events: {}; {}",
                     if locked() { "none" } else { "auto" },
+                    if settings.uses_heavy_effects() {
+                        "filter: drop-shadow(0 10px 25px rgba(0,0,0,0.45));"
+                    } else {
+                        ""
+                    },
                 )
             }
         >
@@ -311,27 +318,47 @@ fn GrindingAreaCard(
             ></div>
 
             <div
-                class="absolute inset-0 border border-[#6c5734]/45
-                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
-                style=format!(
-                    "
-                    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
-                    background-image: url('{}');
-                    background-blend-mode: normal;
-                    {}
-                    ",
-                    img_asset("ui/dark_stone.webp"),
-                    if locked() {
-                        "background-color: rgba(0, 0, 0, 0.7);"
-                    } else {
-                        "background-color: rgb(39, 39, 42);"
-                    },
-                )
+                class=move || {
+                    format!(
+                        "absolute inset-0 border {}",
+                        if settings.uses_heavy_effects() {
+                            "border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                        } else if settings.uses_surface_effects() {
+                            "border-[#665131]/50"
+                        } else {
+                            "border-[#5c4a2e]/60"
+                        },
+                    )
+                }
+                style=move || {
+                    format!(
+                        "
+                        clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                        {};
+                        {}
+                        ",
+                        if settings.uses_textures() {
+                            format!(
+                                "background-image: url('{}'); background-blend-mode: normal;",
+                                img_asset("ui/dark_stone.webp"),
+                            )
+                        } else {
+                            "background-image: linear-gradient(180deg, rgba(74,69,76,0.98), rgba(30,29,34,1));".to_string()
+                        },
+                        if locked() {
+                            "background-color: rgba(0, 0, 0, 0.7);"
+                        } else {
+                            "background-color: rgb(39, 39, 42);"
+                        },
+                    )
+                }
             >
-                <div
-                    class="pointer-events-none absolute inset-[1px] border border-white/6"
-                    style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
-                ></div>
+                <Show when=move || settings.uses_surface_effects()>
+                    <div
+                        class="pointer-events-none absolute inset-[1px] border border-[#d4b57a]/8"
+                        style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
+                    ></div>
+                </Show>
             </div>
 
             <div
@@ -343,7 +370,11 @@ fn GrindingAreaCard(
                         } else if view_only {
                             "cursor-default"
                         } else {
-                            "cursor-pointer hover:brightness-110"
+                            if settings.uses_heavy_effects() {
+                                "cursor-pointer hover:brightness-110"
+                            } else {
+                                "cursor-pointer hover:brightness-105"
+                            }
                         },
                     )
                 }
