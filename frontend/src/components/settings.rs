@@ -1,4 +1,5 @@
 use codee::string::JsonSerdeCodec;
+use indexmap::IndexMap;
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
     *,
@@ -11,6 +12,29 @@ pub struct SettingsData {
     pub scientific_notation: bool,
     pub always_compare_items: bool,
     pub always_display_affix_tiers: bool,
+
+    #[serde(default)]
+    pub graphics_quality: GraphicsQuality,
+}
+
+#[derive(Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum GraphicsQuality {
+    Low,
+    Medium,
+    #[default]
+    High,
+}
+
+impl GraphicsQuality {
+    pub fn to_options() -> IndexMap<GraphicsQuality, String> {
+        use GraphicsQuality::*;
+        [
+            (Low, "Low".to_string()),
+            (Medium, "Medium".to_string()),
+            (High, "High".to_string()),
+        ]
+        .into()
+    }
 }
 
 #[derive(Clone, Copy)]
