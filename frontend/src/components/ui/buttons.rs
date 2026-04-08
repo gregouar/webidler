@@ -290,12 +290,33 @@ pub fn Toggle(
 
     let toggle_class = move || {
         if checked.get() {
-            "text-zinc-100 
-            border-[#b28a4f] 
-            shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
+            match settings.graphics_quality() {
+                GraphicsQuality::High => {
+                    "text-zinc-100 
+                    border-[#b28a4f] 
+                    shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
+                }
+                GraphicsQuality::Medium => {
+                    "text-zinc-100
+                    border-[#a88449]
+                    saturate-90"
+                }
+                GraphicsQuality::Low => {
+                    "text-zinc-100
+                    border-[#927444]
+                    saturate-85"
+                }
+            }
         } else {
-            "opacity-60 shadow-none text-zinc-400"
-            // "text-zinc-400 border-[#65533a] shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(216,186,122,0.12),inset_0_-1px_0_rgba(0,0,0,0.42)]"
+            match settings.graphics_quality() {
+                GraphicsQuality::High => "opacity-60 shadow-none text-zinc-400 saturate-75",
+                GraphicsQuality::Medium => {
+                    "opacity-75 shadow-none text-zinc-400 saturate-50 border-[#5f5035]"
+                }
+                GraphicsQuality::Low => {
+                    "opacity-80 shadow-none text-zinc-400 saturate-35 border-[#584a33]"
+                }
+            }
         }
     };
 
