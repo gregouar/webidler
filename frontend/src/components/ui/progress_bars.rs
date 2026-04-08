@@ -84,20 +84,34 @@ pub fn HorizontalProgressBar(
                 }
             }
         >
-            <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
-                <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-            </Show>
-            <Show when=move || settings.uses_heavy_effects()>
-                <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
-            </Show>
-            <Show when=move || settings.graphics_quality() == GraphicsQuality::Medium>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
-            </Show>
-            <Show when=move || settings.graphics_quality() == GraphicsQuality::Low>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 bg-[linear-gradient(180deg,rgba(14,14,17,0.8),rgba(28,26,31,0.92))]"></div>
-            </Show>
+            {move || match settings.graphics_quality() {
+                GraphicsQuality::High => {
+                    view! {
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+                        </>
+                    }
+                        .into_any()
+                }
+                GraphicsQuality::Medium => {
+                    view! {
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        </>
+                    }
+                        .into_any()
+                }
+                GraphicsQuality::Low => {
+                    view! {
+                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 bg-[linear-gradient(180deg,rgba(14,14,17,0.8),rgba(28,26,31,0.92))]"></div>
+                    }
+                        .into_any()
+                }
+            }}
             <div class="w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
@@ -193,20 +207,34 @@ pub fn VerticalProgressBar(
                 }
             }
         >
-            <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
-                <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-            </Show>
-            <Show when=move || settings.uses_heavy_effects()>
-                <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
-            </Show>
-            <Show when=move || settings.graphics_quality() == GraphicsQuality::Medium>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
-            </Show>
-            <Show when=move || settings.graphics_quality() == GraphicsQuality::Low>
-                <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 bg-[linear-gradient(180deg,rgba(14,14,17,0.8),rgba(28,26,31,0.92))]"></div>
-            </Show>
+            {move || match settings.graphics_quality() {
+                GraphicsQuality::High => {
+                    view! {
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
+                        </>
+                    }
+                        .into_any()
+                }
+                GraphicsQuality::Medium => {
+                    view! {
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        </>
+                    }
+                        .into_any()
+                }
+                GraphicsQuality::Low => {
+                    view! {
+                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 bg-[linear-gradient(180deg,rgba(14,14,17,0.8),rgba(28,26,31,0.92))]"></div>
+                    }
+                        .into_any()
+                }
+            }}
             <div class="h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
@@ -323,9 +351,15 @@ pub fn CircularProgressBar(
                     )
                 }
             >
-                <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
-                    <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
-                </Show>
+                {move || match settings.graphics_quality() {
+                    GraphicsQuality::High | GraphicsQuality::Medium => {
+                        view! {
+                            <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
+                        }
+                            .into_any()
+                    }
+                    GraphicsQuality::Low => view! { <></> }.into_any(),
+                }}
                 <div
                     class="absolute inset-0 transition-circular-progress-bar"
                     class:opacity-0=move || disabled.get() || active_buffer.get()
