@@ -7,7 +7,7 @@ use shared::data::item::{ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
 use crate::components::events::{EventsContext, Key};
-use crate::components::settings::SettingsContext;
+use crate::components::settings::{GraphicsQuality, SettingsContext};
 use crate::components::shared::tooltips::item_tooltip::ComparableType;
 use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition};
 
@@ -20,6 +20,7 @@ pub fn ItemCard(
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
     #[prop(default=Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     let (accent, inner_border, rarity_wash, rarity_core, frame_shine) =
         match item_specs.modifiers.rarity {
             ItemRarity::Normal => (
@@ -123,7 +124,6 @@ pub fn ItemCard(
     let is_inside = RwSignal::new(false);
 
     let events_context: EventsContext = expect_context();
-    let settings_context: SettingsContext = expect_context();
 
     Effect::new({
         let show_tooltip = show_tooltip.clone();
@@ -133,9 +133,9 @@ pub fn ItemCard(
                 tooltip_in_use = true;
                 show_tooltip(
                     events_context.key_pressed(Key::Alt)
-                        || settings_context.read_settings().always_display_affix_tiers,
+                        || settings.read_settings().always_display_affix_tiers,
                     events_context.key_pressed(Key::Ctrl)
-                        || settings_context.read_settings().always_compare_items,
+                        || settings.read_settings().always_compare_items,
                 );
             } else if tooltip_in_use {
                 tooltip_in_use = false;
@@ -147,10 +147,27 @@ pub fn ItemCard(
     view! {
         <div
             // node_ref=node_ref
-            class="relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-hidden
-            rounded-[4px] xl:rounded-[6px] border border-[#6c5329]/85 
-            bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_44%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.12)_48%),linear-gradient(135deg,rgba(46,44,50,0.96),rgba(18,18,22,1))]
-            shadow-[0_3px_7px_rgba(0,0,0,0.3),0_1px_0_rgba(26,17,10,0.88),inset_0_1px_0_rgba(240,215,159,0.14),inset_0_-1px_0_rgba(0,0,0,0.38)]"
+            class=move || {
+                format!(
+                    "relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-hidden
+                    rounded-[4px] xl:rounded-[6px] border {} {} {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "border-[#6c5329]/85",
+                        GraphicsQuality::Medium => "border-[#665131]/85",
+                        GraphicsQuality::Low => "border-[#5c4a2e]/85",
+                    },
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_44%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.12)_48%),linear-gradient(135deg,rgba(46,44,50,0.96),rgba(18,18,22,1))]",
+                        GraphicsQuality::Medium => "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_46%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.1)_50%),linear-gradient(135deg,rgba(42,40,46,0.96),rgba(18,18,22,1))]",
+                        GraphicsQuality::Low => "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_48%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.08)_52%),linear-gradient(135deg,rgba(39,38,43,0.98),rgba(19,19,23,1))]",
+                    },
+                    if settings.uses_heavy_effects() {
+                        "shadow-[0_3px_7px_rgba(0,0,0,0.3),0_1px_0_rgba(26,17,10,0.88),inset_0_1px_0_rgba(240,215,159,0.14),inset_0_-1px_0_rgba(0,0,0,0.38)]"
+                    } else {
+                        ""
+                    },
+                )
+            }
             style=format!(
                 "--item-rarity-wash: {};
                 --item-rarity-core: {};",
@@ -170,20 +187,38 @@ pub fn ItemCard(
         >
             <div
                 class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px]"
-                style=format!(
-                    "border: 1px solid {};
-                    box-shadow: inset 0 0 0 1px {}, inset 0 8px 12px rgba(255,255,255,0.02), inset 0 -12px 16px rgba(0,0,0,0.22);",
-                    accent,
-                    inner_border,
-                )
+                style=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => format!(
+                            "border: 1px solid {};
+                            box-shadow: inset 0 0 0 1px {}, inset 0 8px 12px rgba(255,255,255,0.02), inset 0 -12px 16px rgba(0,0,0,0.22);",
+                            accent,
+                            inner_border,
+                        ),
+                        GraphicsQuality::Medium => format!(
+                            "border: 1px solid {};
+                            box-shadow: inset 0 0 0 1px {};",
+                            accent,
+                            inner_border,
+                        ),
+                        GraphicsQuality::Low => format!(
+                            "border: 1px solid {};
+                            box-shadow: inset 0 0 0 1px {};",
+                            accent,
+                            inner_border,
+                        ),
+                    }
+                }
             ></div>
-            <span
-                class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px"
-                style=format!(
-                    "background: linear-gradient(90deg, transparent, {}, transparent);",
-                    frame_shine,
-                )
-            ></span>
+            <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                <span
+                    class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px"
+                    style=format!(
+                        "background: linear-gradient(90deg, transparent, {}, transparent);",
+                        frame_shine,
+                    )
+                ></span>
+            </Show>
             // // <div class="pointer-events-none absolute inset-0">
             // // <span
             // // class="absolute inset-x-[5px] top-[1px] h-[1px]"

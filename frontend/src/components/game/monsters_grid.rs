@@ -15,6 +15,7 @@ use crate::assets::img_asset;
 use crate::components::icons::monster_tags::{
     ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
 };
+use crate::components::settings::{GraphicsQuality, SettingsContext};
 use crate::components::shared::skills::SkillProgressBar;
 use crate::components::shared::tooltips::effects_tooltip;
 use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
@@ -174,7 +175,8 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
 #[component]
 fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+    let game_context: GameContext = expect_context();
+    let settings: SettingsContext = expect_context();
 
     let monster_name = specs.character_specs.name.clone();
     let is_big = match specs.character_specs.size {
@@ -379,21 +381,49 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
     view! {
         <div
-            class="grid grid-cols-4 h-full
-            rounded-md 
-            border border-[#6c5734]/45
-            shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
-            gap-1 xl:gap-2 p-1 xl:p-2"
-            style=format!(
-                "
-                    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
-                    background-image:
-                        /*linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),*/
-                        url('{}');
-                    background-blend-mode: /*screen,*/ normal;
-                    ",
-                img_asset("ui/dark_stone.webp"),
-            )
+            class=move || {
+                format!(
+                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                        }
+                        GraphicsQuality::Medium => "border border-[#6c5734]/50",
+                        GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
+                    },
+                )
+            }
+            style=move || {
+                match settings.graphics_quality() {
+                    GraphicsQuality::High => {
+                        format!(
+                            "
+                        clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                        background-image:
+                            linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
+                            url('{}');
+                        background-blend-mode: screen, normal;
+                        ",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    }
+                    GraphicsQuality::Medium => {
+                        format!(
+                            "
+                        clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                        background-image: url('{}');
+                        ",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    }
+                    GraphicsQuality::Low => {
+                        "
+                        clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                    "
+                            .to_string()
+                    }
+                }
+            }
         >
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>

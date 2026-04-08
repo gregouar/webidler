@@ -20,6 +20,7 @@ use crate::components::{
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
+    shared::settings::SettingsModal,
     ui::toast::*,
 };
 
@@ -75,6 +76,7 @@ pub fn GameInstance() -> impl IntoView {
                     <StatisticsPanel open=game_context.open_statistics />
                     <GameInventoryPanel open=game_context.open_inventory />
                     <EndQuestPanel />
+                    <SettingsModal open=game_context.open_settings />
                 </div>
             </Show>
             <ChatPanel />

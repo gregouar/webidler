@@ -19,21 +19,33 @@ pub struct SettingsData {
 
 #[derive(Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GraphicsQuality {
-    Low,
-    Medium,
     #[default]
     High,
+    Medium,
+    Low,
 }
 
 impl GraphicsQuality {
     pub fn to_options() -> IndexMap<GraphicsQuality, String> {
         use GraphicsQuality::*;
         [
-            (Low, "Low".to_string()),
-            (Medium, "Medium".to_string()),
             (High, "High".to_string()),
+            (Medium, "Medium".to_string()),
+            (Low, "Low".to_string()),
         ]
         .into()
+    }
+
+    pub fn uses_heavy_effects(self) -> bool {
+        matches!(self, Self::High)
+    }
+
+    pub fn uses_surface_effects(self) -> bool {
+        !matches!(self, Self::Low)
+    }
+
+    pub fn uses_textures(self) -> bool {
+        !matches!(self, Self::Low)
     }
 }
 
@@ -50,6 +62,26 @@ impl SettingsContext {
 
     pub fn read_settings_untracked(&self) -> ReadGuard<SettingsData, Plain<SettingsData>> {
         self.settings_data.read_untracked()
+    }
+
+    pub fn graphics_quality(&self) -> GraphicsQuality {
+        self.settings_data.read().graphics_quality
+    }
+
+    pub fn graphics_quality_untracked(&self) -> GraphicsQuality {
+        self.settings_data.read_untracked().graphics_quality
+    }
+
+    pub fn uses_heavy_effects(&self) -> bool {
+        self.graphics_quality().uses_heavy_effects()
+    }
+
+    pub fn uses_surface_effects(&self) -> bool {
+        self.graphics_quality().uses_surface_effects()
+    }
+
+    pub fn uses_textures(&self) -> bool {
+        self.graphics_quality().uses_textures()
     }
 
     pub fn save_settings(&self, new_settings: SettingsData) {
