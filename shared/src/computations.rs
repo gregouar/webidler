@@ -71,7 +71,7 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
 }
 
 pub fn gamble_price(item_level: AreaLevel) -> f64 {
-    (item_level as f64 / 10.0).floor()
+    (item_level as f64 / 20.0).floor() + 10.0
 }
 
 pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
