@@ -19,7 +19,7 @@ pub fn MenuListRow(
             class=move || {
                 let quality = settings.graphics_quality();
                 format!(
-                    "relative isolate overflow-hidden rounded-[8px] border
+                    "relative rounded-[8px] border
                     {}
                     {}
                     transition-[border-color,background-color,box-shadow,transform] duration-150
@@ -87,7 +87,7 @@ pub fn MenuListRow(
             <Show when=move || settings.uses_heavy_effects()>
                 <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
             </Show>
-            <div class="relative z-10">{children()}</div>
+            <div class="relative z-10 w-full">{children()}</div>
         </div>
     }
 }

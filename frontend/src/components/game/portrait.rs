@@ -428,7 +428,8 @@ pub fn CharacterPortrait(
                 </div>
 
                 {move || {
-                    (!is_dead.get() && !shimmer_effect.is_empty() && settings.uses_heavy_effects())
+                    (!is_dead.get() && !shimmer_effect.is_empty()
+                        && settings.uses_surface_effects())
                         .then(|| {
                             view! {
                                 <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
