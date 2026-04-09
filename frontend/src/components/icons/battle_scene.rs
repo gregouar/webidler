@@ -152,3 +152,22 @@ pub fn EdictIcon(map_item: ItemSpecs) -> impl IntoView {
         </div>
     }
 }
+
+#[component]
+pub fn RushIcon() -> impl IntoView {
+    view! {
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            class="h-[1.2em] xl:h-[1.3em] aspect-square"
+        >
+            <g class="" style="" transform="translate(-1,0)">
+                <path
+                    d="M376 211H256V16L136 301h120v195z"
+                    fill="currentColor"
+                    fill-opacity="1"
+                ></path>
+            </g>
+        </svg>
+    }
+}

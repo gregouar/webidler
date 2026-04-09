@@ -15,7 +15,7 @@ use crate::{
         },
         icons::{
             area::{BossAreaIcon, CrucibleAreaIcon},
-            battle_scene::{EdictIcon, ThreatIcon},
+            battle_scene::{EdictIcon, RushIcon, ThreatIcon},
         },
         ui::{
             card::Card,
@@ -199,7 +199,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                         class:grayscale=disable_rush
                         disabled=disable_rush
                     >
-                        "⚡"
+                        <RushIcon />
                     </button>
                 </StaticTooltip>
 
@@ -378,7 +378,9 @@ fn RushOverlay() -> impl IntoView {
             <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-sky-500/10 animate-pulse" />
 
             <div class="z-10 flex flex-col items-center gap-4">
-                <div class="text-6xl text-yellow-400 animate-pulse">"⚡"</div>
+                <div class="text-6xl text-yellow-400 animate-pulse">
+                    <RushIcon />
+                </div>
 
                 <div class=" text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
                     "Stamina Left:"
