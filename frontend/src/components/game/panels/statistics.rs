@@ -27,8 +27,6 @@ use crate::components::{
 #[component]
 pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
-
-    let stats = move || game_context.game_stats.read();
     // let effect = move |stat: StatType, modifier: Modifier| {
     //     game_context
     //         .player_specs
@@ -43,27 +41,30 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open h_full=false center=false>
-            <MenuCard>
-                <CardHeader title="Statistics" on_close=move || open.set(false) />
+            <Show when=move || open.get()>
+                <MenuCard>
+                    <CardHeader title="Statistics" on_close=move || open.set(false) />
 
-                <div class="grid grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-4 overflow-y-auto">
+                    <div class="grid grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-4 overflow-y-auto">
 
-                    <StatCategory title="Game">
-                        <Stat
-                            label="Elapsed Time"
-                            value=move || format_duration(stats().elapsed_time, true)
-                        />
+                        <StatCategory title="Game">
+                            <Stat
+                                label="Elapsed Time"
+                                value=move || {
+                                    format_duration(game_context.game_stats.read().elapsed_time, true)
+                                }
+                            />
                         <Stat
                             label="Areas Completed"
-                            value=move || stats().areas_completed.to_string()
+                            value=move || game_context.game_stats.read().areas_completed.to_string()
                         />
                         <Stat
                             label="Monsters Killed"
-                            value=move || stats().monsters_killed.to_string()
+                            value=move || game_context.game_stats.read().monsters_killed.to_string()
                         />
                         <Stat
                             label="Player Deaths"
-                            value=move || stats().player_deaths.to_string()
+                            value=move || game_context.game_stats.read().player_deaths.to_string()
                         />
                         <Stat
                             label="Highest Area Level (this grind)"
@@ -591,10 +592,11 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         )} {make_opt_stat(StatType::CritDamage(None), Modifier::More, 0.0)}
                     </StatCategory>
 
-                    <TriggersStats class:col-span-2 class:xl:col-span-3 />
-                </div>
+                        <TriggersStats class="col-span-2 xl:col-span-3" />
+                    </div>
 
-            </MenuCard>
+                </MenuCard>
+            </Show>
         </MenuPanel>
     }
 }

@@ -31,6 +31,8 @@ use super::{GameContext, portrait::CharacterPortrait};
 #[component]
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let quantize_ratio = |value: f64| (value.clamp(0.0, 1.0) * 200.0).round() / 200.0;
+    let quantize_percent = |value: f64| (value.clamp(0.0, 100.0) * 2.0).round() / 2.0;
 
     let max_life = Memo::new(move |_| {
         game_context
@@ -54,7 +56,7 @@ pub fn PlayerCard() -> impl IntoView {
     let life_percent = Signal::derive(move || {
         let max_life = max_life.get();
         if max_life > 0.0 {
-            life.get() / max_life
+            quantize_ratio(life.get() / max_life)
         } else {
             0.0
         }
@@ -110,7 +112,7 @@ pub fn PlayerCard() -> impl IntoView {
     let mana_percent = Signal::derive(move || {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            mana.get() / max_mana
+            quantize_ratio(mana.get() / max_mana)
         } else {
             0.0
         }
@@ -118,7 +120,7 @@ pub fn PlayerCard() -> impl IntoView {
     let reserved_mana_percent = Memo::new(move |_| {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            reserved_mana.get() / max_mana
+            quantize_ratio(reserved_mana.get() / max_mana)
         } else {
             0.0
         }
@@ -185,7 +187,7 @@ pub fn PlayerCard() -> impl IntoView {
     let xp_percent = Signal::derive(move || {
         let max_xp = max_xp.get();
         if max_xp > 0.0 {
-            (xp.get() / max_xp * 100.0) as f32
+            quantize_percent(xp.get() / max_xp * 100.0) as f32
         } else {
             0.0
         }
