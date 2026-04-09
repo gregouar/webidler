@@ -7,6 +7,7 @@ use crate::components::{
         buttons::{MenuButton, MenuButtonRed, Toggle},
         card::{CardInset, CardInsetTitle, CardTitle, MenuCard},
         dropdown::DropdownMenu,
+        list_row::MenuListRow,
         menu_panel::MenuPanel,
     },
 };
@@ -96,20 +97,21 @@ fn SettingsSection(title: &'static str, children: Children) -> impl IntoView {
 fn SettingToggle(
     label: &'static str,
     value: Signal<bool>,
-    on_toggle: impl Fn(bool) + 'static,
+    on_toggle: impl Fn(bool) + Send + 'static,
 ) -> impl IntoView {
     view! {
-        <div class="
-        flex items-center justify-between
-        bg-zinc-800 border border-zinc-700 rounded-lg p-2 px-3
-        gap-2 xl:gap-4
-        ">
-            <span class="text-sm font-normal text-white">{label}</span>
+        <MenuListRow>
+            <div class="w-full
+            flex items-center justify-between
+            p-2 px-3 gap-2 xl:gap-4
+            ">
+                <span class="text-sm font-normal text-white">{label}</span>
 
-            <Toggle initial=value.get_untracked() toggle_callback=move |v| on_toggle(v)>
-                {move || if value.get() { "On" } else { "Off" }}
-            </Toggle>
-        </div>
+                <Toggle initial=value.get_untracked() toggle_callback=move |v| on_toggle(v)>
+                    {move || if value.get() { "On" } else { "Off" }}
+                </Toggle>
+            </div>
+        </MenuListRow>
     }
 }
 
@@ -128,14 +130,15 @@ where
     Effect::new(move || on_change(chosen_option.get()));
 
     view! {
-        <div class="
-        flex items-center justify-between
-        bg-zinc-800 border border-zinc-700 rounded-lg p-2 px-3
-        gap-2 xl:gap-4
-        ">
-            <span class="text-sm font-normal text-white">{label}</span>
+        <MenuListRow class="flex items-center justify-between">
+            <div class="w-full
+            flex items-center justify-between
+            p-2 px-3 gap-2 xl:gap-4
+            ">
+                <span class="text-sm font-normal text-white">{label}</span>
 
-            <DropdownMenu options chosen_option />
-        </div>
+                <DropdownMenu options chosen_option />
+            </div>
+        </MenuListRow>
     }
 }
