@@ -6,6 +6,21 @@ use leptos::{prelude::*, wasm_bindgen::JsValue, web_sys::js_sys::Date};
 use crate::components::settings::SettingsContext;
 
 #[component]
+pub fn NumberInset(
+    #[prop(optional)] class: Option<&'static str>,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <div class=format!(
+            "relative px-1.5 py-0.5 rounded-[6px] font-number font-semibold
+            bg-[linear-gradient(180deg,rgba(255,255,255,0.012),rgba(0,0,0,0.16)),linear-gradient(180deg,rgba(20,19,23,0.32),rgba(8,8,10,0.42))]
+            shadow-[inset_0_1px_0_rgba(255,255,255,0.02),inset_0_2px_4px_rgba(0,0,0,0.24),inset_0_-1px_0_rgba(0,0,0,0.24)] {}",
+            class.unwrap_or_default(),
+        )>{children()}</div>
+    }
+}
+
+#[component]
 pub fn Number(#[prop(into)] value: Signal<f64>) -> impl IntoView {
     let settings_context: SettingsContext = expect_context();
     view! {

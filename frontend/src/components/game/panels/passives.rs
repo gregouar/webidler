@@ -19,7 +19,7 @@ use crate::components::{
     },
     ui::{
         buttons::MenuButton,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
@@ -52,7 +52,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <Card>
+                <MenuCard>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
                         <div class="flex px-2 xl:px-4">
                             <Input
@@ -89,7 +89,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
                     <CardInset pad=false class="relative">
                         <PassiveSkillTree search_node />
                     </CardInset>
-                </Card>
+                </MenuCard>
             </div>
         </MenuPanel>
     }

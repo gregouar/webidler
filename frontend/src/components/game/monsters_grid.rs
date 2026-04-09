@@ -15,6 +15,8 @@ use crate::assets::img_asset;
 use crate::components::icons::monster_tags::{
     ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
 };
+use crate::components::settings::{GraphicsQuality, SettingsContext};
+use crate::components::shared::skills::SkillProgressBar;
 use crate::components::shared::tooltips::effects_tooltip;
 use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
 use crate::components::ui::progress_bars::predictive_cooldown;
@@ -22,7 +24,7 @@ use crate::components::{
     shared::tooltips::SkillTooltip,
     ui::{
         number::format_number,
-        progress_bars::{CircularProgressBar, HorizontalProgressBar},
+        progress_bars::HorizontalProgressBar,
         tooltip::{
             DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
         },
@@ -70,8 +72,8 @@ pub fn MonstersGrid() -> impl IntoView {
             format!(
                 "flex-1 min-h-0
                 grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-                items-center
-                {} will-change-transform-opacity
+                items-center will-change-transform-opacity transform-gpu
+                {}
                 ",
                 if all_monsters_dead.get() {
                     "animate-monster-fade-out pointer-events-none"
@@ -173,7 +175,8 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 
 #[component]
 fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+    let game_context: GameContext = expect_context();
+    let settings: SettingsContext = expect_context();
 
     let monster_name = specs.character_specs.name.clone();
     let is_big = match specs.character_specs.size {
@@ -378,24 +381,60 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
     view! {
         <div
-            class="grid grid-cols-4 h-full
-            rounded-md bg-zinc-800
-            ring-1 ring-zinc-900/80
-            shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
-            gap-1 xl:gap-2 p-1 xl:p-2"
-            style="contain: strict;"
+            class=move || {
+                format!(
+                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                        }
+                        GraphicsQuality::Medium => "border border-[#6c5734]/50",
+                        GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
+                    },
+                )
+            }
+            style=move || {
+                match settings.graphics_quality() {
+                    GraphicsQuality::High => {
+                        format!(
+                            "
+                            clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                            background-image:
+                                linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
+                                url('{}');
+                            background-blend-mode: screen, normal;
+                            ",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    }
+                    GraphicsQuality::Medium => {
+                        format!(
+                            "
+                            clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                            background-image: url('{}');
+                            ",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    }
+                    GraphicsQuality::Low => {
+                        "
+                            clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                            "
+                            .to_string()
+                    }
+                }
+            }
         >
             <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
-                        class=if is_big { "h-5 xl:h-8" } else { "h-4 xl:h-5" }
+                        class=if is_big { "h-6 xl:h-10" } else { "h-4 xl:h-7" }
                         bar_color="bg-gradient-to-b from-red-500 to-red-700"
                         value=life_percent
                     >
                         <span class=title_style>{monster_name}</span>
                     </HorizontalProgressBar>
                 </StaticTooltip>
-
                 <div class="flex-1 min-h-0">
                     <CharacterPortrait
                         image_uri=specs.character_specs.portrait.clone()
@@ -417,7 +456,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gold_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
+                    reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
                     absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
                     font-number">
@@ -433,7 +472,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 
                 <Show when=move || { gems_reward.get() > 0.0 }>
                     <div class="
-                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
+                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
                     absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
                     pointer-events-none z-30 flex items-center gap-1
                     font-number">
@@ -748,9 +787,6 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
 fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let icon_asset = img_asset(&skill_specs.base.icon);
-    let skill_name = skill_specs.base.name.clone();
-
     let is_dead = Memo::new(move |_| {
         game_context
             .monster_states
@@ -790,15 +826,18 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let show_tooltip = move || {
+    let show_tooltip = {
         let skill_specs = Arc::new(skill_specs.clone());
-        tooltip_context.set_content(
-            move || {
-                let skill_specs = skill_specs.clone();
-                view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
-            },
-            DynamicTooltipPosition::Auto,
-        );
+        move || {
+            let skill_specs = skill_specs.clone();
+            tooltip_context.set_content(
+                move || {
+                    let skill_specs = skill_specs.clone();
+                    view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+                },
+                DynamicTooltipPosition::Auto,
+            );
+        }
     };
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
@@ -832,12 +871,13 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     );
 
     view! {
-        <CircularProgressBar
-            bar_color="oklch(55.5% 0.163 48.998)"
+        <SkillProgressBar
+            skill_specs_base=skill_specs.base
             value=progress_value
             reset=just_triggered
             disabled=is_dead
             bar_width=2
+            icon_class="w-full h-full flex-no-shrink fill-current invert"
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
@@ -849,14 +889,6 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
-        >
-            <img
-                draggable="false"
-                src=icon_asset
-                alt=skill_name
-                class="w-full h-full flex-no-shrink fill-current
-                xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
-            />
-        </CircularProgressBar>
+        />
     }
 }

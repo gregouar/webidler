@@ -1,6 +1,8 @@
 use leptos::{prelude::*, web_sys};
 use serde_plain;
 
+use crate::components::settings::{GraphicsQuality, SettingsContext};
+
 #[component]
 pub fn Input<T>(
     id: &'static str,
@@ -13,6 +15,7 @@ pub fn Input<T>(
 where
     T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
+    let settings: SettingsContext = expect_context();
     let prop_value = RwSignal::new(String::new());
     Effect::new(move || {
         if let Some(value) = bind.get() {
@@ -40,16 +43,32 @@ where
 
             class=move || {
                 format!(
-                    "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
-                    text-sm xl:text-base
-                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
+                    "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
+                    border text-white placeholder:text-zinc-500
+                    text-sm xl:text-base {}
+                    focus:outline-none {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "shadow-[0_4px_10px_rgba(0,0,0,0.35),0_1px_0_rgba(26,17,10,0.9),inset_0_2px_6px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.03)]"
+                        }
+                        GraphicsQuality::Medium => "shadow_md",
+                        GraphicsQuality::Low => "",
+                    },
                     if invalid.map(|invalid| invalid.get()).unwrap_or_default() {
-                        "border-red-500 focus:ring-red-500"
+                        "border-[#9b453c] focus:border-[#c35d52]"
                     } else {
-                        "border-gray-700"
+                        "border-[#6c5329] focus:border-[#a27f46]"
                     },
                 )
             }
+            style="
+            background-image:
+            linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
+            linear-gradient(180deg, rgba(14,14,17,0.94), rgba(31,29,35,0.98));
+            background-size: auto, auto;
+            background-position: center, center;
+            background-blend-mode: screen, normal;
+            "
             node_ref=node_ref
         />
     }
@@ -73,6 +92,8 @@ where
         + Sync
         + 'static,
 {
+    let settings: SettingsContext = expect_context();
+
     let node_ref = NodeRef::<leptos::html::Input>::new();
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
@@ -93,10 +114,10 @@ where
                 .then(|| {
                     view! {
                         <div class="flex justify-between items-center mb-1">
-                            <label for=id class="text-xs xl:text-sm font-medium text-gray-400">
+                            <label for=id class="text-xs xl:text-sm font-medium text-zinc-400">
                                 {label}
                             </label>
-                            <span class="text-red-500 text-xs">
+                            <span class="text-[#c66d61] text-xs">
                                 {move || validation_error.get().unwrap_or_default()}
                             </span>
                         </div>
@@ -107,16 +128,33 @@ where
                 type=input_type
                 class=move || {
                     format!(
-                        "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-xl border bg-gray-800 text-white placeholder-gray-400
+                        "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px] border
+                        text-white placeholder:text-zinc-500
                         text-sm xl:text-base
-                        focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-md {}",
+                        {}
+                        focus:outline-none {}",
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                "shadow-[0_4px_10px_rgba(0,0,0,0.35),0_1px_0_rgba(26,17,10,0.9),inset_0_2px_6px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.03)]"
+                            }
+                            GraphicsQuality::Medium => "shadow_md",
+                            GraphicsQuality::Low => "",
+                        },
                         if is_invalid.get() {
-                            "border-red-500 focus:ring-red-500"
+                            "border-[#9b453c] focus:border-[#c35d52]"
                         } else {
-                            "border-gray-700"
+                            "border-[#6c5329] focus:border-[#a27f46]"
                         },
                     )
                 }
+                style="
+                background-image:
+                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
+                linear-gradient(180deg, rgba(14,14,17,0.94), rgba(31,29,35,0.98));
+                background-size: auto, auto;
+                background-position: center, center;
+                background-blend-mode: screen, normal;
+                "
                 placeholder=placeholder
                 step=step
                 prop:value=move || prop_value.get()

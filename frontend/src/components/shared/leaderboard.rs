@@ -6,7 +6,8 @@ use crate::components::{
     backend_client::BackendClient,
     ui::{
         ALink,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
+        list_row::MenuListRow,
         menu_panel::MenuPanel,
         number::{format_datetime, format_duration},
     },
@@ -16,10 +17,10 @@ use crate::components::{
 pub fn LeaderboardPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open>
-            <Card>
+            <MenuCard>
                 <CardHeader title="Leaderboard" on_close=move || open.set(false) />
                 <LeaderboardContent />
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }
@@ -80,60 +81,64 @@ fn LeaderboardContent() -> impl IntoView {
                                             .unwrap_or(area_id.clone())
                                     };
                                     view! {
-                                        <CardInset>
+                                        <CardInset pad=false>
                                             <h2 class=" text-shadow-lg/100 shadow-gray-950 text-amber-300
                                             text-sm xl:text-base mb-2 font-display
-                                            font-bold leading-none tracking-tight">{area_name}</h2>
-                                            {leaderboard
-                                                .into_iter()
-                                                .enumerate()
-                                                .map(|(i, entry)| {
-                                                    view! {
-                                                        // TODO: display all infos and better
-                                                        <div class="bg-zinc-800 border border-zinc-700 rounded-xl p-2 shadow-lg transition-shadow duration-200">
-                                                            <div class="flex justify-between items-center mb-2">
-                                                                <div class="flex items-center space-x-3">
-                                                                    <div class="text-2xl font-bold text-amber-300">
-                                                                        #{i + 1}
+                                            font-bold leading-none tracking-tight my-2">{area_name}</h2>
+                                            <div class="h-full overflow-y-auto px-2">
+                                                {leaderboard
+                                                    .into_iter()
+                                                    .enumerate()
+                                                    .map(|(i, entry)| {
+                                                        view! {
+                                                            <MenuListRow class="mb-2">
+                                                                <div class="p-3">
+                                                                    <div class="flex justify-between items-center mb-2">
+                                                                        <div class="flex items-center space-x-3">
+                                                                            <div class="text-2xl font-bold text-amber-300">
+                                                                                #{i + 1}
+                                                                            </div>
+                                                                            <ALink
+                                                                                href=format!("/view-character/{}", &entry.character_name)
+                                                                                underline=false
+                                                                            >
+                                                                                <span class="text-white font-semibold text-lg font-display text-shadow-lg/100 shadow-gray-950">
+                                                                                    {entry.character_name.clone()}
+                                                                                </span>
+                                                                            </ALink>
+                                                                        </div>
+                                                                        <div class="text-sm text-gray-400">{entry.username}</div>
                                                                     </div>
-                                                                    <ALink
-                                                                        href=format!("/view-character/{}", &entry.character_name)
-                                                                        underline=false
-                                                                    >
-                                                                        <span class="text-white font-semibold text-lg font-display text-shadow-lg/100 shadow-gray-950">
-                                                                            {entry.character_name.clone()}
-                                                                        </span>
-                                                                    </ALink>
-                                                                </div>
-                                                                <div class="text-sm text-gray-400">{entry.username}</div>
-                                                            </div>
-                                                            <div class="flex justify-between items-center">
-                                                                <div class="text-sm text-zinc-300">
-                                                                    "Level "
-                                                                    <span class="font-semibold text-white">
-                                                                        {entry.area_level}
-                                                                    </span>
-                                                                </div>
-                                                                <div class="text-sm text-zinc-300">
-                                                                    {entry
-                                                                        .elapsed_time
-                                                                        .map(|elapsed_time| format_duration(elapsed_time, true))}
-                                                                </div>
-                                                            </div>
 
-                                                            <div class="mt-2 text-xs text-left italic text-zinc-400 border-t border-zinc-700 pt-2 flex flex-col">
-                                                                <span>
-                                                                    {format!(
-                                                                        "Reached on {}",
-                                                                        format_datetime(entry.created_at),
-                                                                    )}
-                                                                </span>
-                                                                <span>{entry.comments.clone()}</span>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                })
-                                                .collect::<Vec<_>>()}
+                                                                    <div class="flex justify-between items-center">
+                                                                        <div class="text-sm text-zinc-300">
+                                                                            "Level "
+                                                                            <span class="font-semibold text-white">
+                                                                                {entry.area_level}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="text-sm text-zinc-300">
+                                                                            {entry
+                                                                                .elapsed_time
+                                                                                .map(|elapsed_time| format_duration(elapsed_time, true))}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="mt-2 text-xs text-left italic text-zinc-400 pt-2 flex flex-col">
+                                                                        <span>
+                                                                            {format!(
+                                                                                "Reached on {}",
+                                                                                format_datetime(entry.created_at),
+                                                                            )}
+                                                                        </span>
+                                                                        <span>{entry.comments.clone()}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </MenuListRow>
+                                                        }
+                                                    })
+                                                    .collect::<Vec<_>>()}
+                                            </div>
                                         </CardInset>
                                     }
                                 })

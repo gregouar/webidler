@@ -26,7 +26,7 @@ use crate::components::{
     },
     ui::{
         buttons::{MenuButton, MenuButtonRed, TabButton},
-        card::{Card, CardHeader, CardInset, CardTitle},
+        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
         toast::*,
@@ -53,7 +53,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <Card class="h-full">
+            <MenuCard class="h-full">
                 <CardHeader title="Forge" on_close=move || open.set(false)>
                     <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-hidden">
                         <TabButton
@@ -81,7 +81,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             on:click=move |_| { switch_tab(ForgeTab::Gamble) }
                             class:py-3
                         >
-                            <div class="mx-1 mb-2">"Gamble"</div>
+                            <div class="mx-1">"Gamble"</div>
                         </TabButton>
                     </div>
                     <div class="flex-1" />
@@ -114,7 +114,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                     </CardInset>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }
@@ -348,7 +348,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Forge Item"</CardTitle>
+            <CardInsetTitle>"Forge Item"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">
@@ -547,7 +547,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Empower Unique Item"</CardTitle>
+            <CardInsetTitle>"Empower Unique Item"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">
@@ -712,7 +712,7 @@ pub fn GambleDetails(
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Gamble"</CardTitle>
+            <CardInsetTitle>"Gamble"</CardInsetTitle>
 
             <div class="flex flex-col w-full">
                 <div class="w-full flex items-center justify-center text-sm xl:text-base text-gray-400 font-bold gap-2">

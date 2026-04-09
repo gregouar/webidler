@@ -3,7 +3,7 @@ use leptos::{html::*, prelude::*};
 use crate::{
     assets::img_asset,
     components::ui::{
-        number::Number,
+        number::{Number, NumberInset},
         tooltip::{StaticTooltip, StaticTooltipPosition},
     },
 };
@@ -24,7 +24,12 @@ pub fn ResourceIcon(
     };
     view! {
         <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Bottom>
-            <img draggable="false" src=img_asset(icon) alt=name class="h-[2em] aspect-square" />
+            <img
+                draggable="false"
+                src=img_asset(icon)
+                alt=name
+                class="h-[2em] aspect-square drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] "
+            />
         </StaticTooltip>
     }
 }
@@ -41,12 +46,14 @@ pub fn ResourceCounter(
         <div class="flex-1 text-shadow-md shadow-gray-950
         text-sm xl:text-xl 
         flex justify-center items-center space-x-1">
-            <div class=format!(
-                "font-number font-semibold {} text-right",
-                if w_full { "w-[8ch]" } else { "" },
-            )>
-                <Number value=value />
-            </div>
+            <NumberInset>
+                <div class=format!(
+                    "font-number font-semibold text-right {}",
+                    if w_full { "w-[8ch]" } else { "" },
+                )>
+                    <Number value=value />
+                </div>
+            </NumberInset>
             <ResourceIcon icon name description />
         </div>
     }

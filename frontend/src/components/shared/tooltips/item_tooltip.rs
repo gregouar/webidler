@@ -12,7 +12,11 @@ use shared::data::{
 
 use crate::components::{
     data_context::DataContext,
-    shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
+    shared::tooltips::{
+        effects_tooltip::scope_str,
+        frame::{TooltipFrame, TooltipFramePalette},
+        trigger_tooltip::format_trigger,
+    },
     ui::{Separator, number},
 };
 
@@ -33,32 +37,18 @@ pub fn ItemTooltip(
     #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
-    let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
-        ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
-        ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
-        ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Masterwork => (
-            "border-fuchsia-400",
-            "ring-fuchsia-300",
-            "shadow-fuchsia-600",
-        ),
-        ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
-    };
+    let palette = tooltip_rarity_palette(item_specs.modifiers.rarity);
 
     view! {
-        <div class=format!(
-            "max-w-xs p-2 xl:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black text-center",
-            border_color,
-            ring_color,
-            shadow_color,
-        )>
+        <TooltipFrame palette class="max-w-xs">
+            <span class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
             <ItemTooltipContent
                 item_specs=item_specs.clone()
                 show_affixes
                 comparable
                 max_item_level
             />
-        </div>
+        </TooltipFrame>
     }
 }
 
@@ -216,7 +206,11 @@ pub fn ItemTooltipContent(
                     )
                 }
                 _ => None,
-            }} <strong class=format!("text-sm xl:text-base font-bold  font-display {}", name_color)>
+            }}
+            <strong class=format!(
+                "text-sm xl:text-base font-bold font-display tracking-[0.03em] text-shadow-md/80 {}",
+                name_color,
+            )>
                 <ul class="list-none xl:space-y-1 mb-2">
                     <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
@@ -234,7 +228,7 @@ pub fn ItemTooltipContent(
                         view! {
                             <li class="text-xs xl:text-sm text-gray-400">
                                 "Empower level: "
-                                <span class="font-bold text-orange-400">
+                                <span class="font-bold text-[#f0b36b]">
                                     {item_specs.modifiers.upgrade_level}
                                 </span>"/"{max_upgrade_level}
                             </li>
@@ -269,12 +263,12 @@ pub fn ItemTooltipContent(
                         if max_item_level.get() < required_level {
                             "font-bold text-red-500"
                         } else {
-                            "text-white"
+                            "text-stone-100"
                         }
                     }>{required_level}</span>
                 </li>
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
-                    "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
+                <li class="text-xs xl:text-sm text-gray-400">
+                    "Item Level: " <span class="text-stone-100">{item_specs.modifiers.level}</span>
                 </li>
             </ul>
             {(!hide_description)
@@ -311,11 +305,41 @@ pub fn ItemTooltipContent(
 
 pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
     match item_rarity {
-        ItemRarity::Normal => "text-white",
+        ItemRarity::Normal => "text-stone-100",
         ItemRarity::Magic => "text-blue-400",
-        ItemRarity::Rare => "text-yellow-400",
+        ItemRarity::Rare => "text-[#f0bf48]",
         ItemRarity::Masterwork => "text-fuchsia-400",
-        ItemRarity::Unique => "text-orange-700",
+        ItemRarity::Unique => "text-[#ff8c4d]",
+    }
+}
+
+fn tooltip_rarity_palette(item_rarity: ItemRarity) -> TooltipFramePalette {
+    match item_rarity {
+        ItemRarity::Normal => TooltipFramePalette {
+            border_class: "border-[#6c5329]/85",
+            inner_border_class: "border-white/8",
+            shine_color: "rgba(230,230,236,0.2)",
+        },
+        ItemRarity::Magic => TooltipFramePalette {
+            border_class: "border-[#6c5329]/85",
+            inner_border_class: "border-blue-200/18",
+            shine_color: "rgba(144,205,255,0.44)",
+        },
+        ItemRarity::Rare => TooltipFramePalette {
+            border_class: "border-[#7a5d29]/90",
+            inner_border_class: "border-[#f3db9d]/18",
+            shine_color: "rgba(255,226,145,0.5)",
+        },
+        ItemRarity::Masterwork => TooltipFramePalette {
+            border_class: "border-[#74528a]/88",
+            inner_border_class: "border-fuchsia-200/18",
+            shine_color: "rgba(228,183,255,0.46)",
+        },
+        ItemRarity::Unique => TooltipFramePalette {
+            border_class: "border-[#8c5628]/92",
+            inner_border_class: "border-[#ffd1af]/18",
+            shine_color: "rgba(255,170,116,0.54)",
+        },
     }
 }
 

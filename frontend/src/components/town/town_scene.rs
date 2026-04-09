@@ -15,19 +15,18 @@ use crate::{
     assets::img_asset,
     components::{
         data_context::DataContext,
+        game::portrait::CharacterPortrait,
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
         shared::{
-            inventory::InventoryEquipFilter,
-            item_card::ItemCard,
-            tooltips::{SkillTooltip, item_tooltip::ItemTooltipContent},
+            inventory::InventoryEquipFilter, skills::SkillProgressBar, tooltips::SkillTooltip,
         },
-        town::TownContext,
+        settings::SettingsContext,
+        town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
             Separator,
             buttons::{CloseButton, MenuButton},
-            card::{Card, CardInset, CardTitle},
+            card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
-            progress_bars::CircularProgressBar,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
     },
@@ -133,7 +132,20 @@ fn PlayerCard() -> impl IntoView {
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
-                        <CharacterPortrait />
+                        {move || {
+                            view! {
+                                <CharacterPortrait
+                                    image_uri=town_context.character.read().portrait.clone()
+                                    character_name="Player".into()
+                                    just_hurt=Signal::derive(|| false)
+                                    just_hurt_crit=Signal::derive(|| false)
+                                    just_blocked=Signal::derive(|| false)
+                                    just_evaded=Signal::derive(|| false)
+                                    is_dead=Signal::derive(|| false)
+                                    statuses=Signal::derive(|| Default::default())
+                                />
+                            }
+                        }}
                     </div>
                 </div>
             </div>
@@ -161,33 +173,6 @@ fn PlayerCard() -> impl IntoView {
 }
 
 #[component]
-pub fn CharacterPortrait() -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
-
-    let image_uri = move || img_asset(&town_context.character.read().portrait);
-
-    view! {
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-            <div class="border-6 xl:border-8 border-double border-stone-500 h-full w-full">
-                <div
-                    class="h-full w-full"
-                    style=format!(
-                        "background-image: url('{}');",
-                        img_asset("ui/paper_background.webp"),
-                    )
-                >
-                    <img
-                        draggable="false"
-                        src=image_uri
-                        alt="portrait"
-                        class="object-cover h-full w-full transition-all duration-[5s]"
-                    />
-                </div>
-            </div>
-        </div>
-    }
-}
-#[component]
 pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
@@ -203,23 +188,12 @@ pub fn PlayerName() -> impl IntoView {
 fn PlayerSkill(index: usize) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let icon_asset = Memo::new(move |_| {
+    let skill_specs = Memo::new(move |_| {
         town_context.last_grind.with(|last_grind| {
             last_grind
                 .as_ref()
                 .and_then(|last_grind| last_grind.skills_specs.get(index))
-                .map(|skill_specs| img_asset(&skill_specs.base.icon))
-                .unwrap_or_default()
-        })
-    });
-
-    let skill_name = Memo::new(move |_| {
-        town_context.last_grind.with(|last_grind| {
-            last_grind
-                .as_ref()
-                .and_then(|last_grind| last_grind.skills_specs.get(index))
-                .map(|skill_specs| img_asset(&skill_specs.base.name))
-                .unwrap_or_default()
+                .cloned()
         })
     });
 
@@ -258,25 +232,28 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                 on:mouseleave=move |_| hide_tooltip()
                 on:click=move |_| hide_tooltip()
             >
-                <button
-                    class="btn p-1 w-full h-full
-                    active:brightness-50 active:sepia"
-                    disabled=true
-                >
-                    <CircularProgressBar
-                        bar_color="oklch(55.5% 0.163 48.998)"
-                        value=Signal::derive(|| 0.0)
-                        bar_width=4
-                    >
-                        <img
-                            draggable="false"
-                            src=icon_asset
-                            alt=skill_name
-                            class="w-full h-full flex-no-shrink fill-current
-                            xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                        />
-                    </CircularProgressBar>
-                </button>
+                // <button
+                // class="btn p-1 w-full h-full
+                // active:brightness-50 active:sepia"
+                // disabled=true
+                // >
+                <div class="p-1 w-full h-full">
+                    {move || {
+                        skill_specs
+                            .get()
+                            .map(|skill_specs| {
+                                view! {
+                                    <SkillProgressBar
+                                        skill_specs_base=skill_specs.base
+                                        value=Signal::derive(|| 0.0)
+                                        bar_width=4
+                                    />
+                                }
+                                    .into_any()
+                            })
+                    }}
+                </div>
+            // </button>
             </div>
         </div>
     }
@@ -290,6 +267,7 @@ fn GrindingAreaCard(
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
     let data_context: DataContext = expect_context();
+    let settings: SettingsContext = expect_context();
 
     let area_specs = Memo::new({
         let area_id = area.area_id.clone();
@@ -319,77 +297,163 @@ fn GrindingAreaCard(
 
     view! {
         <div
-            class=move || {
+            class="relative flex flex-col max-h-full transition-all active:scale-95"
+            on:click=select_area
+            style=move || {
                 format!(
-                    "relative flex flex-col rounded-xl border overflow-hidden shadow-md transition {}",
-                    if locked() {
-                        "bg-neutral-900 border-zinc-800 opacity-60"
-                    } else if view_only {
-                        "bg-neutral-800 border-zinc-700"
+                    "pointer-events: {}; {}",
+                    if locked() { "none" } else { "auto" },
+                    if settings.uses_heavy_effects() {
+                        "filter: drop-shadow(0 10px 25px rgba(0,0,0,0.45));"
                     } else {
-                        "bg-neutral-800 border-zinc-700 cursor-pointer hover:border-amber-400 hover:shadow-lg active:scale-95 active:border-amber-500"
+                        ""
                     },
                 )
             }
-            on:click=select_area
         >
-            <div class="h-10 xl:h-16 w-full relative">
-                <img
-                    draggable="false"
-                    src=move || img_asset(&area_specs.read().header_background)
-                    class="object-cover w-full h-full"
-                />
-            </div>
+            <div
+                class="absolute inset-0 bg-black"
+                style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
+                aria-hidden="true"
+            ></div>
 
-            <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
-                <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
-                    {move || area_specs.read().name.clone()}
-                </div>
-
-                <div class="text-xs xl:text-sm text-gray-400">
-                    {move || {
-                        format!(
-                            "Power level: +{}",
-                            *area_specs.read().power_level + *area_specs.read().item_level_modifier,
-                        )
-                    }}
-                </div>
-
-                <div class="text-xs xl:text-sm text-gray-400">
-                    {if area.max_level_reached > 0 {
-                        format!("Level Reached: {}", area.max_level_reached)
-                    } else {
-                        "New Grind!".to_string()
-                    }}
-                </div>
-            </div>
-
-            <div class="h-10 xl:h-16 w-full relative">
-                <img
-                    draggable="false"
-                    src=move || img_asset(&area_specs.read().footer_background)
-                    class="object-cover w-full h-full"
-                />
-            </div>
-
-            <Show when=move || locked()>
-                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-center p-2">
-                    <div class="text-amber-400 text-lg font-bold tracking-wide">
-                        {if area_specs.read().coming_soon { "Coming Soon..." } else { "Locked" }}
-                    </div>
-                    <div class="text-gray-300 text-xs mt-1">
-                        {format!("Requires Level {}", area_specs.read().required_level)}
-                    </div>
-                    <div class="mt-2 text-xs text-gray-500 italic">
-                        {if area_specs.read().coming_soon {
-                            "Wait for a future update!"
+            <div
+                class=move || {
+                    format!(
+                        "absolute inset-0 border {}",
+                        if settings.uses_heavy_effects() {
+                            "border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                        } else if settings.uses_surface_effects() {
+                            "border-[#665131]/50"
                         } else {
-                            "Keep grinding to unlock this area!"
-                        }}
+                            "border-[#5c4a2e]/60"
+                        },
+                    )
+                }
+                style=move || {
+                    format!(
+                        "
+                        clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                        {};
+                        {}
+                        ",
+                        if settings.uses_textures() {
+                            format!(
+                                "background-image: url('{}'); background-blend-mode: normal;",
+                                img_asset("ui/dark_stone.webp"),
+                            )
+                        } else {
+                            "background-image: linear-gradient(180deg, rgba(74,69,76,0.98), rgba(30,29,34,1));".to_string()
+                        },
+                        if locked() {
+                            "background-color: rgba(0, 0, 0, 0.7);"
+                        } else {
+                            "background-color: rgb(39, 39, 42);"
+                        },
+                    )
+                }
+            >
+                <Show when=move || settings.uses_surface_effects()>
+                    <div
+                        class="pointer-events-none absolute inset-[1px] border border-[#d4b57a]/8"
+                        style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
+                    ></div>
+                </Show>
+            </div>
 
+            <div
+                class=move || {
+                    format!(
+                        "relative z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
+                        if locked() {
+                            "cursor-default"
+                        } else if view_only {
+                            "cursor-default"
+                        } else {
+                            if settings.uses_heavy_effects() {
+                                "cursor-pointer hover:brightness-110"
+                            } else {
+                                "cursor-pointer hover:brightness-105"
+                            }
+                        },
+                    )
+                }
+                style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
+            >
+                <div class=move || {
+                    format!(
+                        "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",
+                        if locked() {
+                            "blur-[5px] scale-[1.015] saturate-75 brightness-75"
+                        } else {
+                            ""
+                        },
+                    )
+                }>
+                    <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
+                        <img
+                            draggable="false"
+                            src=move || img_asset(&area_specs.read().header_background)
+                            class="object-cover w-full h-full"
+                        />
+                    </div>
+
+                    <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
+                        <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
+                            {move || area_specs.read().name.clone()}
+                        </div>
+
+                        <div class="text-xs xl:text-sm text-gray-400">
+                            {move || {
+                                format!(
+                                    "Power level: +{}",
+                                    *area_specs.read().power_level
+                                        + *area_specs.read().item_level_modifier,
+                                )
+                            }}
+                        </div>
+
+                        <div class="text-xs xl:text-sm text-gray-400">
+                            {if area.max_level_reached > 0 {
+                                format!("Level Reached: {}", area.max_level_reached)
+                            } else {
+                                "New Grind!".to_string()
+                            }}
+                        </div>
+                    </div>
+
+                    <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
+                        <img
+                            draggable="false"
+                            src=move || img_asset(&area_specs.read().footer_background)
+                            class="object-cover w-full h-full"
+                        />
                     </div>
                 </div>
-            </Show>
+
+                <Show when=move || locked()>
+                    <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/65 text-center p-2">
+                        <div class="text-amber-400 text-lg font-bold tracking-wide">
+                            {if area_specs.read().coming_soon {
+                                "Coming Soon..."
+                            } else {
+                                "Locked"
+                            }}
+                        </div>
+                        <div class="text-gray-300 text-xs mt-1">
+                            {format!("Requires Level {}", area_specs.read().required_level)}
+                        </div>
+                        <div class="mt-2 text-xs text-gray-500 italic">
+                            {if area_specs.read().coming_soon {
+                                "Wait for a future update!"
+                            } else {
+                                "Keep grinding to unlock this area!"
+                            }}
+
+                        </div>
+                    </div>
+                </Show>
+            </div>
         </div>
     }
 }
@@ -436,44 +500,7 @@ pub fn StartGrindPanel(
             })
     });
 
-    let map_details = move || {
-        match selected_map.get() {
-            Some(selected_map) => {
-                view! {
-                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <ItemCard
-                            item_specs=selected_map.clone()
-                            class:pointer-events-none
-                            max_item_level
-                        />
-                    </div>
-
-                    <div class="flex-1 w-full max-h-full overflow-y-auto">
-                        <ItemTooltipContent
-                            item_specs=selected_map.clone()
-                            class:select-text
-                            max_item_level
-                        />
-                    </div>
-                }
-                .into_any()
-            }
-           None => {
-                view! {
-                    <div class="relative flex-shrink-0 w-1/4 aspect-[2/3]">
-                        <div class="
-                        relative group flex items-center justify-center w-full h-full
-                        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
-                        "></div>
-                    </div>
-
-                    <div class="flex-1 text-gray-400">"Proclaim Edict"</div>
-                }.into_any()
-            }
-        }
-    };
-
-    let choose_map = move |_| {
+    let choose_map = move || {
         town_context.selected_item_index.set(None);
         town_context.equip_filter.set(InventoryEquipFilter::Map(
             selected_area
@@ -502,7 +529,7 @@ pub fn StartGrindPanel(
                 area_specs()
                     .map(|area_specs| {
                         view! {
-                            <Card class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
+                            <MenuCard class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
                                 <div class="h-10 xl:h-16 w-full relative">
                                     <img
                                         draggable="false"
@@ -541,16 +568,16 @@ pub fn StartGrindPanel(
                                     </ul>
 
                                     <div class="w-full h-full px-4 flex items-center justify-center">
-                                        <div
-                                            class="flex flex-row gap-6 items-center
-                                            w-full h-auto aspect-5/2 overflow-y-auto
-                                            bg-neutral-800 rounded-lg  ring-1 ring-zinc-950  p-2
-                                            hover:ring-amber-400 hover:shadow-lg active:scale-95 
-                                            active:ring-amber-500 cursor-pointer transition"
-                                            on:click=choose_map
-                                        >
-                                            {map_details}
-                                        </div>
+                                        <ItemDetailsPanel
+                                            item_specs=selected_map
+                                            max_item_level
+                                            empty_label="Proclaim Edict"
+                                            empty_label_class="text-center xl:text-left"
+                                            selected=Signal::derive(move || {
+                                                selected_map.get().is_some()
+                                            })
+                                            on_click=choose_map
+                                        />
                                     </div>
 
                                 </CardInset>
@@ -589,7 +616,7 @@ pub fn StartGrindPanel(
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
+                            </MenuCard>
                         }
                     })
             }}

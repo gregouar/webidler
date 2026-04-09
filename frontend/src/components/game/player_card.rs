@@ -9,24 +9,19 @@ use shared::{
     },
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        events::{EventsContext, Key},
-        game::websocket::WebsocketContext,
-        shared::tooltips::SkillTooltip,
-        ui::{
-            buttons::{FancyButton, Toggle},
-            card::Card,
-            number::{Number, format_number},
-            progress_bars::{
-                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
-                predictive_cooldown,
-            },
-            toast::*,
-            tooltip::{
-                DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
-            },
+use crate::components::{
+    events::{EventsContext, Key},
+    game::websocket::WebsocketContext,
+    shared::{skills::SkillProgressBar, tooltips::SkillTooltip},
+    ui::{
+        buttons::{FancyButton, Toggle},
+        card::Card,
+        number::{Number, format_number},
+        progress_bars::{
+            CircularProgressBar, HorizontalProgressBar, VerticalProgressBar, predictive_cooldown,
+        },
+        tooltip::{
+            DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
         },
     },
 };
@@ -36,6 +31,8 @@ use super::{GameContext, portrait::CharacterPortrait};
 #[component]
 pub fn PlayerCard() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let quantize_ratio = |value: f64| (value.clamp(0.0, 1.0) * 200.0).round() / 200.0;
+    let quantize_percent = |value: f64| (value.clamp(0.0, 100.0) * 2.0).round() / 2.0;
 
     let max_life = Memo::new(move |_| {
         game_context
@@ -59,7 +56,7 @@ pub fn PlayerCard() -> impl IntoView {
     let life_percent = Signal::derive(move || {
         let max_life = max_life.get();
         if max_life > 0.0 {
-            life.get() / max_life
+            quantize_ratio(life.get() / max_life)
         } else {
             0.0
         }
@@ -115,7 +112,7 @@ pub fn PlayerCard() -> impl IntoView {
     let mana_percent = Signal::derive(move || {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            mana.get() / max_mana
+            quantize_ratio(mana.get() / max_mana)
         } else {
             0.0
         }
@@ -123,7 +120,7 @@ pub fn PlayerCard() -> impl IntoView {
     let reserved_mana_percent = Memo::new(move |_| {
         let max_mana = max_mana.get();
         if max_mana > 0.0 {
-            reserved_mana.get() / max_mana
+            quantize_ratio(reserved_mana.get() / max_mana)
         } else {
             0.0
         }
@@ -190,7 +187,7 @@ pub fn PlayerCard() -> impl IntoView {
     let xp_percent = Signal::derive(move || {
         let max_xp = max_xp.get();
         if max_xp > 0.0 {
-            (xp.get() / max_xp * 100.0) as f32
+            quantize_percent(xp.get() / max_xp * 100.0) as f32
         } else {
             0.0
         }
@@ -213,18 +210,18 @@ pub fn PlayerCard() -> impl IntoView {
             || max_level()
     });
 
-    Effect::new({
-        let toaster = expect_context::<Toasts>();
-        move || {
-            if is_dead.get() && just_hurt.get() {
-                show_toast(
-                    toaster,
-                    "You are dead, going back one area level...",
-                    ToastVariant::Normal,
-                );
-            }
-        }
-    });
+    // Effect::new({
+    //     let toaster = expect_context::<Toasts>();
+    //     move || {
+    //         if is_dead.get() && just_hurt.get() {
+    //             show_toast(
+    //                 toaster,
+    //                 "You are dead, going back one area level...",
+    //                 ToastVariant::Normal,
+    //             );
+    //         }
+    //     }
+    // });
 
     view! {
         <Card class="w-1/3">
@@ -238,8 +235,7 @@ pub fn PlayerCard() -> impl IntoView {
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
-                        class:w-6
-                        class:xl:w-8
+                        class="w-6 xl:w-8"
                         bar_color="bg-gradient-to-l from-red-500 to-red-700"
                         value=life_percent
                     />
@@ -272,8 +268,7 @@ pub fn PlayerCard() -> impl IntoView {
 
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                     <VerticalProgressBar
-                        class:w-6
-                        class:xl:w-8
+                        class="w-6 xl:w-8"
                         bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
                         value=mana_percent
                     >
@@ -312,8 +307,7 @@ pub fn PlayerCard() -> impl IntoView {
 
             <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
                 <HorizontalProgressBar
-                    class:h-2
-                    class:xl:h-4
+                    class="h-2 xl:h-4"
                     bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     value=xp_percent
                     reset=just_leveled_up
@@ -393,18 +387,6 @@ fn BuySkillButton() -> impl IntoView {
 
     view! {
         <div class="flex flex-col">
-            // <div class="flex flex-col items-center justify-center">
-            // <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
-            // <FancyButton
-            // class:aspect-square
-            // on:click=move |_| game_context.open_skills.set(true)
-            // disabled=disable_buy_skill
-            // >
-            // "Buy Skill"
-            // </FancyButton>
-            // </StaticTooltip>
-            // </div>
-
             <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
                 <button
                     class="btn p-1 w-full h-full
@@ -416,7 +398,7 @@ fn BuySkillButton() -> impl IntoView {
                     disabled=disable_buy_skill
                 >
                     <CircularProgressBar
-                        bar_color="oklch(55.5% 0.163 48.998)"
+                        bar_color="oklch(55.4% 0.135 66.442)"
                         value=Signal::derive(|| 0.0)
                         bar_width=4
                     >
@@ -463,24 +445,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let rush_mode = Memo::new(move |_| game_context.area_state.read().rush_mode);
-
-    let icon_asset = Memo::new(move |_| {
-        if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
-            img_asset(&skill_specs.base.icon)
-        } else {
-            "".to_string()
-        }
-    });
-
-    let skill_name = Memo::new(move |_| {
-        game_context
-            .player_specs
-            .read()
-            .skills_specs
-            .get(index)
-            .map(|x| x.base.name.clone())
-            .unwrap_or_default()
-    });
 
     let skill_cooldown = Signal::derive(move || {
         (1.0 - (game_context
@@ -643,30 +607,22 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         }
     };
 
-    // let tooltip_context = expect_context::<DynamicTooltipContext>();
-    // let show_tooltip = move || {
-    //     if let Some(skill_specs) = game_context.player_specs.read().skills_specs.get(index) {
-    //         let skill_specs = Arc::new(skill_specs.clone());
-    //         tooltip_context.set_content(
-    //             move || {
-    //                 let skill_specs = skill_specs.clone();
-    //                 view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
-    //             },
-    //             DynamicTooltipPosition::TopRight,
-    //         );
-    //     }
-    // };
-
-    // let tooltip_context = expect_context::<DynamicTooltipContext>();
-    // let hide_tooltip = move || tooltip_context.hide();
-
     let skill_specs = Memo::new(move |_| {
         game_context
             .player_specs
             .read()
             .skills_specs
             .get(index)
-            .map(|x| Arc::new(x.clone()))
+            .cloned()
+    });
+
+    let skill_specs_base = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .skills_specs
+            .get(index)
+            .map(|skill_specs| skill_specs.base.clone())
     });
 
     let tooltip = {
@@ -674,7 +630,9 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             view! {
                 {skill_specs
                     .get()
+                    .as_ref()
                     .map(|skill_specs| {
+                        let skill_specs = Arc::new(skill_specs.clone());
                         view! { <SkillTooltip skill_specs=skill_specs /> }
                     })}
             }
@@ -694,15 +652,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     view! {
         <div class="flex flex-col">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
-                // <div
-                // on:touchstart=move |_| { show_tooltip() }
-                // on:contextmenu=move |ev| {
-                // ev.prevent_default();
-                // }
-                // on:mouseenter=move |_| show_tooltip()
-                // on:mouseleave=move |_| hide_tooltip()
-                // on:click=move |_| hide_tooltip()
-                // >
                 {
                     let use_skill = use_skill.clone();
                     view! {
@@ -712,25 +661,25 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             on:click=move |_| use_skill()
                             disabled=move || !is_ready.get()
                         >
-                            <CircularProgressBar
-                                bar_color="oklch(55.5% 0.163 48.998)"
-                                value=progress_value
-                                reset=just_triggered
-                                disabled=is_dead
-                                bar_width=4
-                            >
-                                <img
-                                    draggable="false"
-                                    src=icon_asset
-                                    alt=skill_name
-                                    class="w-full h-full flex-no-shrink fill-current
-                                    xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
-                                />
-                            </CircularProgressBar>
+                            {move || {
+                                skill_specs_base
+                                    .get()
+                                    .map(|skill_specs_base| {
+                                        view! {
+                                            <SkillProgressBar
+                                                skill_specs_base
+                                                value=progress_value
+                                                reset=just_triggered
+                                                disabled=is_dead
+                                                bar_width=4
+                                            />
+                                        }
+                                            .into_any()
+                                    })
+                            }}
                         </button>
                     }
                 }
-            // </div>
             </DynamicTooltipTarget>
 
             <div class="flex justify-around">

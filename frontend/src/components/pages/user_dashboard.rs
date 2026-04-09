@@ -24,14 +24,16 @@ use crate::{
         auth::AuthContext,
         backend_client::BackendClient,
         chat::{chat_context::ChatContext, chat_panel::ChatPanel},
+        settings::SettingsContext,
         shared::{
             account::AccountSettingsPanel, leaderboard::LeaderboardPanel,
             player_count::PlayerCount, settings::SettingsModal,
         },
         ui::{
             buttons::{MenuButton, MenuButtonRed},
-            card::{Card, CardInset, CardTitle},
+            card::{Card, CardInset, CardTitle, MenuCard},
             confirm::ConfirmContext,
+            header::BaseHeaderMenu,
             input::ValidatedInput,
             menu_panel::MenuPanel,
             number::format_datetime,
@@ -119,8 +121,7 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
-            <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
-            bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
+            <BaseHeaderMenu>
                 <div class="flex gap-2">
                     <MenuButton on:click=move |_| {
                         open_settings.set(!open_settings.get_untracked());
@@ -162,7 +163,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                     }>"Account Settings"</MenuButton>
                     <MenuButtonRed on:click=move |_| sign_out()>"Sign Out"</MenuButtonRed>
                 </div>
-            </div>
+            </BaseHeaderMenu>
 
             <PlayerCount />
             <DiscordInviteBanner />
@@ -291,6 +292,7 @@ fn CharacterSlot(
     selected_character_name: RwSignal<Option<Username>>,
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
         let auth_context = expect_context::<AuthContext>();
@@ -372,12 +374,57 @@ fn CharacterSlot(
     };
 
     view! {
-        <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-md
-        flex flex-row items-stretch h-full">
+        <div class=move || {
+            format!(
+                "relative overflow-hidden rounded-[10px] flex flex-row items-stretch h-full border {} {} {}",
+                if settings.uses_heavy_effects() {
+                    "border-[#6c5329]/70"
+                } else if settings.uses_surface_effects() {
+                    "border-[#665131]/75"
+                } else {
+                    "border-[#5c4a2e]/80"
+                },
+                if settings.uses_surface_effects() {
+                    "bg-[linear-gradient(180deg,rgba(214,177,102,0.05),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]"
+                } else {
+                    "bg-[linear-gradient(180deg,rgba(181,147,87,0.04),rgba(0,0,0,0.1)),linear-gradient(135deg,rgba(36,35,40,0.98),rgba(19,19,23,1))]"
+                },
+                if settings.uses_heavy_effects() {
+                    "shadow-[0_6px_16px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.32)]"
+                } else {
+                    ""
+                },
+            )
+        }>
+            <Show when=move || settings.uses_surface_effects()>
+                <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-[#d4b57a]/8"></div>
+            </Show>
+            <Show when=move || settings.uses_heavy_effects()>
+                <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></span>
+            </Show>
 
             <div
-                class="w-28 min-h-0 rounded-l-xl overflow-hidden"
-                style=format!("background-image: url('{}');", img_asset("ui/paper_background.webp"))
+                class=move || {
+                    format!(
+                        "relative z-10 w-28 min-h-0 overflow-hidden border-r {}",
+                        if settings.uses_surface_effects() {
+                            "border-[#6c5329]/45"
+                        } else {
+                            "border-[#5c4a2e]/60"
+                        },
+                    )
+                }
+                style=move || {
+                    if settings.uses_textures() {
+                        format!(
+                            "background-image: url('{}');",
+                            img_asset("ui/paper_background.webp"),
+                        )
+                    } else {
+                        "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"
+                            .to_string()
+                    }
+                }
             >
                 <img
                     draggable="false"
@@ -387,13 +434,13 @@ fn CharacterSlot(
                 />
             </div>
 
-            <div class="flex flex-col justify-between flex-grow p-1 xl:p-3 relative h-full">
+            <div class="relative z-10 flex flex-col justify-between flex-grow p-2 xl:p-3 h-full min-w-0">
                 <div class="flex gap-2 absolute top-3 right-3 z-10">
                     <MenuButton on:click=try_delete_character>"❌"</MenuButton>
                 </div>
 
-                <div class="xl:space-y-1 overflow-x-hidden text-left">
-                    <div class="text-lg font-semibold  text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
+                <div class="xl:space-y-1 overflow-x-hidden text-left pr-10">
+                    <div class="text-lg font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
                         {character.name.clone()}
                     </div>
 
@@ -425,9 +472,9 @@ fn CharacterSlot(
                     </div>
                 </div>
 
-                <div class="mt-2 flex gap-2">
+                <div class="mt-3 flex gap-2">
                     <MenuButton on:click=edit_character>"Edit"</MenuButton>
-                    <MenuButton class:flex-grow on:click=play_character.clone()>
+                    <MenuButton class="flex-1" on:click=play_character.clone()>
                         "Play"
                     </MenuButton>
                 </div>
@@ -438,25 +485,80 @@ fn CharacterSlot(
 
 #[component]
 fn CreateCharacterSlot() -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     view! {
-        <div class="bg-neutral-800 rounded-xl border border-zinc-700 shadow-md
-        flex flex-row items-center gap-4 p-4 cursor-pointer
-        hover:border-amber-400 hover:shadow-lg transition active:scale-95">
+        <div class=move || {
+            format!(
+                "relative overflow-hidden rounded-[10px] flex flex-row items-stretch min-h-[7.5rem] cursor-pointer transition active:translate-y-[1px] active:brightness-95 border {} {} {} {}",
+                if settings.uses_heavy_effects() {
+                    "border-[#6c5329]/65"
+                } else if settings.uses_surface_effects() {
+                    "border-[#665131]/70"
+                } else {
+                    "border-[#5c4a2e]/75"
+                },
+                if settings.uses_surface_effects() {
+                    "bg-[linear-gradient(180deg,rgba(214,177,102,0.04),rgba(0,0,0,0.14)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]"
+                } else {
+                    "bg-[linear-gradient(180deg,rgba(181,147,87,0.04),rgba(0,0,0,0.1)),linear-gradient(135deg,rgba(36,35,40,0.98),rgba(19,19,23,1))]"
+                },
+                if settings.uses_heavy_effects() {
+                    "shadow-[0_6px_16px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04)] hover:shadow-[0_8px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.05)]"
+                } else {
+                    ""
+                },
+                if settings.uses_heavy_effects() {
+                    "hover:border-[#a27f46]"
+                } else if settings.uses_surface_effects() {
+                    "hover:border-[#947542]"
+                } else {
+                    "hover:border-[#85683d]"
+                },
+            )
+        }>
+            <Show when=move || settings.uses_surface_effects()>
+                <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-[#d4b57a]/8"></div>
+            </Show>
+            <Show when=move || settings.uses_heavy_effects()>
+                <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></span>
+            </Show>
 
-            <div class="h-12 w-12 flex items-center justify-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-12 w-12 text-amber-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
+            <div class=move || {
+                format!(
+                    "relative z-10 w-24 xl:w-28 min-h-0 border-r {} {}",
+                    if settings.uses_surface_effects() {
+                        "border-[#6c5329]/45"
+                    } else {
+                        "border-[#5c4a2e]/60"
+                    },
+                    if settings.uses_surface_effects() {
+                        "bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06)),linear-gradient(135deg,rgba(31,30,36,0.98),rgba(15,15,18,1))]"
+                    } else {
+                        "bg-[linear-gradient(180deg,rgba(185,150,87,0.03),rgba(0,0,0,0.04)),linear-gradient(135deg,rgba(32,31,36,0.98),rgba(16,16,19,1))]"
+                    },
+                )
+            }>
+                <div class="relative flex h-full w-full items-center justify-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8 text-amber-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                </div>
             </div>
 
-            <span class="text-lg font-semibold text-amber-300">"Create Character"</span>
+            <div class="relative z-10 flex min-w-0 flex-1 items-center px-4 xl:px-5 text-left">
+                <div class="flex flex-col justify-center">
+                    <div class="text-lg xl:text-xl font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
+                        "Create Character"
+                    </div>
+                </div>
+            </div>
         </div>
     }
 }
@@ -570,7 +672,7 @@ pub fn CreateCharacterPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <Card class="w-full max-w-lg xl:max-w-xl mx-auto">
+            <MenuCard class="w-full max-w-lg xl:max-w-xl mx-auto">
                 <CardTitle>
                     {move || match selected_character_id.read().is_some() {
                         true => "Edit Character",
@@ -637,7 +739,7 @@ pub fn CreateCharacterPanel(
                         "Confirm"
                     </MenuButton>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }
@@ -761,18 +863,24 @@ fn NewsCard(news: NewsEntry) -> impl IntoView {
     let body = lines.collect::<Vec<_>>().join("\n");
 
     view! {
-        <div class="bg-neutral-800 rounded-xl border border-neutral-700 shadow-lg
+        <div class="rounded-[10px] border border-[#5f5137]/60
+        bg-[linear-gradient(180deg,rgba(214,177,102,0.035),rgba(0,0,0,0.08)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
+        shadow-[0_6px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.035)]
         p-4 flex flex-col gap-3">
+            // <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
+            // <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/25 to-transparent"></span>
 
-            <div class="flex items-center justify-between">
-                <span class="text-amber-300 font-semibold text-base font-display text-shadow-lg/100 shadow-gray-950">
+            <div class="relative z-10 flex items-start justify-between gap-3">
+                <span class="text-amber-300 font-semibold text-base font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
                     {title}
                 </span>
 
-                <span class="text-xs text-gray-400">{format_datetime(news.timestamp)}</span>
+                <span class="shrink-0 text-xs text-gray-500 uppercase tracking-[0.08em]">
+                    {format_datetime(news.timestamp)}
+                </span>
             </div>
 
-            <p class="text-gray-300 text-sm text-justify whitespace-pre-line leading-relaxed">
+            <p class="relative z-10 text-gray-300 text-sm whitespace-pre-line leading-relaxed">
                 {body}
             </p>
         </div>

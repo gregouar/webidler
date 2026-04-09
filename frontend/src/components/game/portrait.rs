@@ -11,6 +11,7 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
+        settings::{GraphicsQuality, SettingsContext},
         shared::tooltips::{conditions_tooltip, effects_tooltip, trigger_tooltip},
         ui::{
             number::format_number,
@@ -32,12 +33,12 @@ pub fn CharacterPortrait(
     #[prop(into)] statuses: Signal<StatusMap>,
     // enable_blink: bool,
 ) -> impl IntoView {
-    let is_dead_img_effect = move || {
+    let settings: SettingsContext = expect_context();
+    let is_dead_portrait_effect = move || {
         if is_dead.get() {
-            "transition-all duration-1000 saturate-0 brightness-50
-            [transform:rotateY(180deg)]"
+            "transition-[filter,opacity] duration-1000 saturate-0 brightness-50"
         } else {
-            "transition-all duration-1000"
+            "transition-[filter,opacity] duration-1000"
         }
     };
 
@@ -129,30 +130,81 @@ pub fn CharacterPortrait(
     //     ),
     // };
 
-    let (border_class, shimmer_effect) = match rarity {
+    let (accent_class, shimmer_effect, fixture_class) = match rarity {
         MonsterRarity::Normal => (
             "
-            shadow-[0_0_0_2px_#78716c,0_0_0_4px_#2e2926,0_0_0_6px_#78716c]
-            xl:shadow-[0_0_0_3px_#78716c,0_0_0_6px_#2e2926,0_0_0_8px_#78716c]
+            border-[#7f6744]
+            before:border-[#d0b173]/12
+            after:border-[#5a4427]/45
             ",
             "",
+            "
+            border-[#b89458]
+            bg-[linear-gradient(180deg,rgb(214,184,126),rgb(111,78,33))]
+            ",
         ),
 
         MonsterRarity::Champion => (
             "
-            shadow-[0_0_0_2px_#4338ca,0_0_0_4px_#1e1b4b,0_0_0_6px_#4338ca]
-            xl:shadow-[0_0_0_3px_#4338ca,0_0_0_6px_#1e1b4b,0_0_0_8px_#4338ca]
+            border-[#4f5fbe]
+            before:border-[#97a7ff]/14
+            after:border-[#2c356d]/55
             ",
             "champion-shimmer",
+            "
+            border-[#7a87d8]
+            bg-[linear-gradient(180deg,rgb(154,170,255),rgb(57,69,137))]
+            ",
         ),
 
         MonsterRarity::Boss => (
             "
-            shadow-[0_0_0_2px_#b91c1c,0_0_0_4px_#2b0a0a,0_0_0_8px_#b91c1c]
-            xl:shadow-[0_0_0_4px_#b91c1c,0_0_0_9px_#2b0a0a,0_0_0_12px_#b91c1c]
+            border-[#ab473c]
+            before:border-[#f2a18c]/20
+            after:border-[#6d2119]/60
             ",
             "boss-shimmer",
+            "
+            border-[#d77a68]
+            bg-[linear-gradient(180deg,rgb(247,167,145),rgb(116,38,30))]
+            ",
         ),
+    };
+
+    let portrait_frame_class = move || {
+        match settings.graphics_quality() {
+        GraphicsQuality::High => format!(
+            "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.06),transparent_28%)]
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+            accent_class,
+        ),
+        GraphicsQuality::Medium => format!(
+            "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.045),transparent_32%)]
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+            accent_class,
+        ),
+        GraphicsQuality::Low => format!(
+            "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border before:bg-[linear-gradient(180deg,rgba(186,148,86,0.04),transparent_34%)]
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+            accent_class,
+        ),
+    }
     };
 
     // let (hit_signal, set_hit_signal) = signal(false);
@@ -171,34 +223,77 @@ pub fn CharacterPortrait(
     // });
 
     view! {
-        <style>"color: #2e2926;"</style>
         <div class=move || {
             format!(
                 "flex items-center justify-center h-full w-full relative p-1 xl:p-2 {}",
-                is_dead_img_effect(),
+                is_dead_portrait_effect(),
             )
         }>
-            <div class=format!("h-full w-full {}", border_class) style=crit_animation_style>
+            <div class=portrait_frame_class style=crit_animation_style>
+
+                // NEW ///
+
+                <Show when=move || settings.uses_heavy_effects()>
+                    <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
+                    <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                </Show>
+
                 <div
-                    class="h-full w-full relative xl:shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]"
-                    style=format!(
-                        "background-image: url('{}');",
-                        img_asset("ui/paper_background.webp"),
-                    )
+                    class=move || {
+                        format!(
+                            "h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] {}",
+                            if settings.uses_heavy_effects() {
+                                "shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
+                            } else {
+                                ""
+                            },
+                        )
+                    }
+                    style=move || {
+                        if settings.uses_textures() {
+                            format!(
+                                "
+                                background-image:
+                                    linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
+                                    url('{}');
+                                background-size: auto, cover;
+                                background-position: center, center;
+                                ",
+                                img_asset("ui/paper_background.webp"),
+                            )
+                        } else {
+                            "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"
+                                .to_string()
+                        }
+                    }
                 >
+                    <div class="pointer-events-none absolute inset-0 border-[2px] xl:border-[3px] border-[#2a1e19]/68"></div>
+                    // <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
                     <img
                         draggable="false"
                         src=img_asset(&image_uri)
                         alt=character_name
                         class=move || {
                             format!(
-                                "object-cover h-full w-full transition-all duration-[5s]
-                                xl:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]
+                                "object-cover h-full w-full
+                                [transition:transform_1s,opacity_5s]
+                                {}
                                 {}",
-                                if is_dead.get() { "opacity-50 " } else { "" },
+                                if settings.uses_heavy_effects() {
+                                    "xl:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]"
+                                } else {
+                                    ""
+                                },
+                                if is_dead.get() {
+                                    "opacity-50 [transform:rotateY(180deg)]"
+                                } else {
+                                    ""
+                                },
                             )
                         }
                     />
+
+                    // /////////
                     // class:hit-blink=hit_signal
 
                     <div class="absolute inset-0 flex flex-wrap items-start justify-start pointer-events-none">
@@ -237,6 +332,55 @@ pub fn CharacterPortrait(
                         </For>
                     </div>
                 </div>
+
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
 
                 <div
                     class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
@@ -284,7 +428,8 @@ pub fn CharacterPortrait(
                 </div>
 
                 {move || {
-                    (!is_dead.get() && !shimmer_effect.is_empty())
+                    (!is_dead.get() && !shimmer_effect.is_empty()
+                        && settings.uses_surface_effects())
                         .then(|| {
                             view! {
                                 <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
@@ -313,9 +458,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/block.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
-                                style="animation: shield_flash 0.5s ease-out;
-                                image-rendering: pixelated; will-change: transform, opacity;
-                                "
+                                style="animation: shield_flash 0.5s ease-out;"
                             />
                         },
                     )
@@ -333,9 +476,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/evade.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_evade_effect.set(false)
-                                style="animation: evade_flash 0.5s;
-                                image-rendering: pixelated; will-change: transform, opacity;
-                                "
+                                style="animation: evade_flash 0.5s;"
                             />
                         },
                     )
@@ -488,7 +629,7 @@ fn StatusIcon(
                     draggable="false"
                     src=move || img_asset(&icon_uri())
                     alt=description
-                    class="w-full h-full xl:drop-shadow-md invert"
+                    class="w-full h-full xl:drop-shadow-sm/80 invert"
                 />
                 <Show when=move || { stack.read().0 > 1 }>
                     <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">

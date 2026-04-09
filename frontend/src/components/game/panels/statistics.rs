@@ -18,7 +18,7 @@ use crate::components::{
     },
     ui::{
         Separator,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         menu_panel::MenuPanel,
         number::{format_duration, format_number},
     },
@@ -27,8 +27,6 @@ use crate::components::{
 #[component]
 pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
-
-    let stats = move || game_context.game_stats.read();
     // let effect = move |stat: StatType, modifier: Modifier| {
     //     game_context
     //         .player_specs
@@ -43,27 +41,30 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open h_full=false center=false>
-            <Card>
-                <CardHeader title="Statistics" on_close=move || open.set(false) />
+            <Show when=move || open.get()>
+                <MenuCard>
+                    <CardHeader title="Statistics" on_close=move || open.set(false) />
 
-                <div class="grid grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-4 overflow-y-auto">
+                    <div class="grid grid-cols-2 xl:grid-cols-3 gap-2 xl:gap-4 overflow-y-auto">
 
-                    <StatCategory title="Game">
-                        <Stat
-                            label="Elapsed Time"
-                            value=move || format_duration(stats().elapsed_time, true)
-                        />
+                        <StatCategory title="Game">
+                            <Stat
+                                label="Elapsed Time"
+                                value=move || {
+                                    format_duration(game_context.game_stats.read().elapsed_time, true)
+                                }
+                            />
                         <Stat
                             label="Areas Completed"
-                            value=move || stats().areas_completed.to_string()
+                            value=move || game_context.game_stats.read().areas_completed.to_string()
                         />
                         <Stat
                             label="Monsters Killed"
-                            value=move || stats().monsters_killed.to_string()
+                            value=move || game_context.game_stats.read().monsters_killed.to_string()
                         />
                         <Stat
                             label="Player Deaths"
-                            value=move || stats().player_deaths.to_string()
+                            value=move || game_context.game_stats.read().player_deaths.to_string()
                         />
                         <Stat
                             label="Highest Area Level (this grind)"
@@ -591,10 +592,11 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         )} {make_opt_stat(StatType::CritDamage(None), Modifier::More, 0.0)}
                     </StatCategory>
 
-                    <TriggersStats class:col-span-2 class:xl:col-span-3 />
-                </div>
+                        <TriggersStats class="col-span-2 xl:col-span-3" />
+                    </div>
 
-            </Card>
+                </MenuCard>
+            </Show>
         </MenuPanel>
     }
 }
@@ -602,9 +604,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     view! {
         <CardInset pad=false>
-            <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
-                {title}
-            </h2>
+            // <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
+            // {title}
+            // </h2>
+            <CardInsetTitle>{title}</CardInsetTitle>
             <div class="flex flex-col gap-1 stat-list">{children()}</div>
         </CardInset>
     }
@@ -680,7 +683,7 @@ pub fn format_effect_value(value: f64) -> String {
 }
 
 #[component]
-fn TriggersStats() -> impl IntoView {
+fn TriggersStats(#[prop(optional)] class: Option<&'static str>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     // after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px
@@ -689,41 +692,41 @@ fn TriggersStats() -> impl IntoView {
     // xl:[&:nth-last-child(-n+3)]:after:hidden
     // [&:nth-last-child(-n+2)]:after:hidden
     view! {
-        <CardInset pad=false>
-            <h2 class="text-amber-300 text-sm xl:text-base font-bold mb-1 xl:mb-2 tracking-wide">
-                "Triggered Effects"
-            </h2>
-            <div class="columns-2 xl:columns-3 gap-1">
-                {move || {
-                    let mut triggers = game_context
-                        .player_specs
-                        .read()
-                        .character_specs
-                        .triggers
-                        .clone();
-                    triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
+        <div class=class.unwrap_or("w-full")>
+            <CardInset pad=false class="w-full">
+                <CardInsetTitle>"Triggered Effects"</CardInsetTitle>
+                <div class="columns-2 xl:columns-3 gap-1">
+                    {move || {
+                        let mut triggers = game_context
+                            .player_specs
+                            .read()
+                            .character_specs
+                            .triggers
+                            .clone();
+                        triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
 
-                    view! {
-                        <For
-                            each=move || triggers.clone().into_iter()
-                            key=|triggered_effect| triggered_effect.trigger_id.clone()
-                            let(triggered_effect)
-                        >
-                            <div class="relative pb-2 list-none break-inside-avoid">
-                                {trigger_tooltip::format_trigger(TriggerSpecs {
-                                    name: None,
-                                    icon: None,
-                                    description: None,
-                                    triggered_effect: triggered_effect.clone(),
-                                    is_debuff: false,
-                                })} <Separator />
-                            </div>
-                        </For>
-                    }
-                }}
+                        view! {
+                            <For
+                                each=move || triggers.clone().into_iter()
+                                key=|triggered_effect| triggered_effect.trigger_id.clone()
+                                let(triggered_effect)
+                            >
+                                <div class="relative pb-2 list-none break-inside-avoid">
+                                    {trigger_tooltip::format_trigger(TriggerSpecs {
+                                        name: None,
+                                        icon: None,
+                                        description: None,
+                                        triggered_effect: triggered_effect.clone(),
+                                        is_debuff: false,
+                                    })} <Separator />
+                                </div>
+                            </For>
+                        }
+                    }}
 
-            </div>
-        </CardInset>
+                </div>
+            </CardInset>
+        </div>
     }
 }
 

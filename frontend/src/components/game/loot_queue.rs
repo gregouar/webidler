@@ -17,6 +17,7 @@ use shared::{
 use crate::components::{
     accessibility::AccessibilityContext,
     game::{GameContext, websocket::WebsocketContext},
+    settings::SettingsContext,
     shared::{
         item_card::ItemCard,
         loot_filter::{FilterRule, FilterRuleType, LootFilter},
@@ -28,7 +29,8 @@ use crate::components::{
 pub fn LootQueue() -> impl IntoView {
     let conn: WebsocketContext = expect_context();
     let accessibility: AccessibilityContext = expect_context();
-    let game_context = expect_context::<GameContext>();
+    let settings: SettingsContext = expect_context();
+    let game_context: GameContext = expect_context();
 
     let pickup_loot = {
         let conn = conn.clone();
@@ -141,8 +143,6 @@ pub fn LootQueue() -> impl IntoView {
                                 class="
                                 absolute bottom-0 w-[12%] aspect-[2/3]
                                 transition-all duration-500 ease
-                                will-change-opacity
-                                will-change-transform
                                 pointer-events-none
                                 "
                                 style=move || {
@@ -154,12 +154,22 @@ pub fn LootQueue() -> impl IntoView {
                                 }
                             >
                                 <div
-                                    class="
-                                    relative
-                                    transition-all duration-200 ease-in-out 
-                                    translate-y-1/2 hover:translate-y-1/4
-                                    pointer-events-auto
-                                    "
+                                    class=move || {
+                                        format!(
+                                            "
+                                            relative
+                                            transition-all duration-200 ease-in-out 
+                                            translate-y-1/2 hover:translate-y-1/4
+                                            pointer-events-auto
+                                            {}
+                                            ",
+                                            if settings.uses_surface_effects() {
+                                                "drop-shadow-[0_0_10px_rgba(0,0,0,0.45)]"
+                                            } else {
+                                                ""
+                                            },
+                                        )
+                                    }
                                     on:click={
                                         let pickup_loot = pickup_loot.clone();
                                         move |_| pickup_loot(loot.identifier)

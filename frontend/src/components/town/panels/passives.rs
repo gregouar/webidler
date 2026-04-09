@@ -29,10 +29,11 @@ use crate::components::{
     town::TownContext,
     ui::{
         buttons::{MenuButton, TabButton},
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
+        number::NumberInset,
         pannable::Pannable,
         toast::*,
     },
@@ -159,7 +160,7 @@ pub fn PassivesPanel(
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <Card>
+                <MenuCard>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
                         <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-hidden">
                             <TabButton
@@ -225,7 +226,7 @@ pub fn PassivesPanel(
                             view_only
                         />
                     </CardInset>
-                </Card>
+                </MenuCard>
             </div>
         </MenuPanel>
     }
@@ -468,7 +469,7 @@ pub fn BuildPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400">
+                    <div class="text-sm xl:text-base text-gray-400 flex items-center">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {
@@ -481,9 +482,9 @@ pub fn BuildPanelHeader(
                             false => {
                                 view! {
                                     "Required Player Level:"
-                                    <span class="text-white font-semibold ml-2">
+                                    <NumberInset class="text-white ml-2 w-[2ch]  text-right">
                                         {move || passives_tree_build.read().len() + 1}
-                                    </span>
+                                    </NumberInset>
                                     "/"
                                     {DEFAULT_MAX_LEVEL}
                                 }
