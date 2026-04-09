@@ -63,7 +63,7 @@ pub fn HorizontalProgressBar(
                         GraphicsQuality::High => {
                             "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
                         }
-                        GraphicsQuality::Medium => "border border-[#6c5329]",
+                        GraphicsQuality::Medium => "border border-[#6c5329] shadow-md",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
                     },
                     class.unwrap_or_default(),
@@ -188,7 +188,7 @@ pub fn VerticalProgressBar(
                         GraphicsQuality::High => {
                             "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
                         }
-                        GraphicsQuality::Medium => "border border-[#6c5329]",
+                        GraphicsQuality::Medium => "border border-[#6c5329] shadow-md",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
                     },
                     class.unwrap_or_default(),

@@ -38,32 +38,59 @@ where
                         {}
                         {}
                         focus:outline-none {}",
-                        if quality.uses_surface_effects() { "text-shadow shadow-black/90" } else { "" },
+                        if quality.uses_surface_effects() {
+                            "text-shadow shadow-black/90"
+                        } else {
+                            ""
+                        },
                         match quality {
-                            GraphicsQuality::High => "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/18 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]",
-                            GraphicsQuality::Medium => "border border-[#6c5329]",
+                            GraphicsQuality::High => {
+                                "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/18 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]"
+                            }
+                            GraphicsQuality::Medium => "border border-[#6c5329] shadow-md",
                             GraphicsQuality::Low => "border border-[#5f5035]",
                         },
                         if is_open.get() {
                             match quality {
-                                GraphicsQuality::High => "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100 shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]",
-                                GraphicsQuality::Medium => "border-[#9c7841] brightness-95 text-zinc-100",
-                                GraphicsQuality::Low => "border-[#8b7347] brightness-95 text-zinc-100",
+                                GraphicsQuality::High => {
+                                    "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100 shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]"
+                                }
+                                GraphicsQuality::Medium => {
+                                    "border-[#9c7841] brightness-95 text-zinc-100 shadow-md"
+                                }
+                                GraphicsQuality::Low => {
+                                    "border-[#8b7347] brightness-95 text-zinc-100"
+                                }
                             }
                         } else {
                             match quality {
-                                GraphicsQuality::High => "hover:border-[#a27f46] hover:text-[#f3ead2] hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]",
-                                GraphicsQuality::Medium => "hover:border-[#a27f46] hover:text-[#f3ead2]",
-                                GraphicsQuality::Low => "hover:border-[#8b7347] hover:text-[#efe1bf]",
+                                GraphicsQuality::High => {
+                                    "hover:border-[#a27f46] hover:text-[#f3ead2] hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                                }
+                                GraphicsQuality::Medium => {
+                                    "hover:border-[#a27f46] hover:text-[#f3ead2] shadow-mds"
+                                }
+                                GraphicsQuality::Low => {
+                                    "hover:border-[#8b7347] hover:text-[#efe1bf]"
+                                }
                             }
                         },
                     )
                 }
                 style:background-image=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string(),
+                        GraphicsQuality::High => {
+                            "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Medium => {
+                            "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Low => {
+                            "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))"
+                                .to_string()
+                        }
                     }
                 }
             >
@@ -92,24 +119,36 @@ where
                 }>"▼"</span>
             </button>
 
-            <ul class=move || {
-                let quality = settings.graphics_quality();
-                format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-[6px] {} 
+            <ul
+                class=move || {
+                    let quality = settings.graphics_quality();
+                    format!(
+                        "dropdown-transition absolute mt-1 w-full rounded-[6px] {}
                     max-h-80 overflow-auto z-20 {}",
-                    match quality {
-                        GraphicsQuality::High => "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]",
-                        GraphicsQuality::Medium => "border border-[#6c5329]",
-                        GraphicsQuality::Low => "border border-[#5a4c34]",
-                    },
-                    if is_open.get() { "open" } else { "" },
-                )
-            }
+                        match quality {
+                            GraphicsQuality::High => {
+                                "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]"
+                            }
+                            GraphicsQuality::Medium => "border border-[#6c5329]",
+                            GraphicsQuality::Low => "border border-[#5a4c34]",
+                        },
+                        if is_open.get() { "open" } else { "" },
+                    )
+                }
                 style:background-image=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
-                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
-                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(52,50,55,0.97), rgba(30,29,33,1))".to_string(),
+                        GraphicsQuality::High => {
+                            "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Medium => {
+                            "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Low => {
+                            "linear-gradient(180deg, rgba(176,145,86,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(52,50,55,0.97), rgba(30,29,33,1))"
+                                .to_string()
+                        }
                     }
                 }
             >
@@ -190,32 +229,59 @@ where
                         {}
                         {}
                         focus:outline-none {}",
-                        if quality.uses_surface_effects() { "text-shadow shadow-black/90" } else { "" },
+                        if quality.uses_surface_effects() {
+                            "text-shadow shadow-black/90"
+                        } else {
+                            ""
+                        },
                         match quality {
-                            GraphicsQuality::High => "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/18 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]",
-                            GraphicsQuality::Medium => "border border-[#6c5329]",
+                            GraphicsQuality::High => {
+                                "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45)] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/18 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]"
+                            }
+                            GraphicsQuality::Medium => "border border-[#6c5329] shadow-md",
                             GraphicsQuality::Low => "border border-[#5f5035]",
                         },
                         if is_open.get() {
                             match quality {
-                                GraphicsQuality::High => "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100 shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]",
-                                GraphicsQuality::Medium => "border-[#9c7841] brightness-95 text-zinc-100",
-                                GraphicsQuality::Low => "border-[#8b7347] brightness-95 text-zinc-100",
+                                GraphicsQuality::High => {
+                                    "border-[#9c7841] before:opacity-0 brightness-90 text-zinc-100 shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]"
+                                }
+                                GraphicsQuality::Medium => {
+                                    "border-[#9c7841] brightness-95 text-zinc-100 shadow-md"
+                                }
+                                GraphicsQuality::Low => {
+                                    "border-[#8b7347] brightness-95 text-zinc-100"
+                                }
                             }
                         } else {
                             match quality {
-                                GraphicsQuality::High => "hover:border-[#a27f46] hover:text-[#f3ead2] hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]",
-                                GraphicsQuality::Medium => "hover:border-[#a27f46] hover:text-[#f3ead2]",
-                                GraphicsQuality::Low => "hover:border-[#8b7347] hover:text-[#efe1bf]",
+                                GraphicsQuality::High => {
+                                    "hover:border-[#a27f46] hover:text-[#f3ead2] hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                                }
+                                GraphicsQuality::Medium => {
+                                    "hover:border-[#a27f46] hover:text-[#f3ead2] shadow-md"
+                                }
+                                GraphicsQuality::Low => {
+                                    "hover:border-[#8b7347] hover:text-[#efe1bf]"
+                                }
                             }
                         },
                     )
                 }
                 style:background-image=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string(),
+                        GraphicsQuality::High => {
+                            "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Medium => {
+                            "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Low => {
+                            "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))"
+                                .to_string()
+                        }
                     }
                 }
             >
@@ -244,30 +310,44 @@ where
                 }>"▼"</span>
             </button>
 
-            <div class=move || {
-                let quality = settings.graphics_quality();
-                format!(
-                    "dropdown-transition absolute mt-1 w-full rounded-[6px] {}
+            <div
+                class=move || {
+                    let quality = settings.graphics_quality();
+                    format!(
+                        "dropdown-transition absolute mt-1 w-full rounded-[6px] {}
                     z-20 {}",
-                    match quality {
-                        GraphicsQuality::High => "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]",
-                        GraphicsQuality::Medium => "border border-[#6c5329]",
-                        GraphicsQuality::Low => "border border-[#5a4c34]",
-                    },
-                    if is_open.get() { "open" } else { "" },
-                )
-            }
+                        match quality {
+                            GraphicsQuality::High => {
+                                "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]"
+                            }
+                            GraphicsQuality::Medium => "border border-[#6c5329]",
+                            GraphicsQuality::Low => "border border-[#5a4c34]",
+                        },
+                        if is_open.get() { "open" } else { "" },
+                    )
+                }
                 style:background-image=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
-                        GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))".to_string(),
-                        GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(52,50,55,0.97), rgba(30,29,33,1))".to_string(),
+                        GraphicsQuality::High => {
+                            "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Medium => {
+                            "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(35,33,39,0.98), rgba(17,16,20,1))"
+                                .to_string()
+                        }
+                        GraphicsQuality::Low => {
+                            "linear-gradient(180deg, rgba(176,145,86,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(52,50,55,0.97), rgba(30,29,33,1))"
+                                .to_string()
+                        }
                     }
                 }
             >
                 <div class=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::Low => "px-1 xl:px-3 py-1 xl:py-2 border-b border-[#5a4c34] bg-transparent",
+                        GraphicsQuality::Low => {
+                            "px-1 xl:px-3 py-1 xl:py-2 border-b border-[#5a4c34] bg-transparent"
+                        }
                         _ => "px-1 xl:px-3 py-1 xl:py-2 border-b border-black/25 bg-black/10",
                     }
                 }>
@@ -313,7 +393,11 @@ where
                         filtered_options
                             .read()
                             .is_empty()
-                            .then(|| view! { <li class="px-4 py-2 text-zinc-500">"No elements found."</li> })
+                            .then(|| {
+                                view! {
+                                    <li class="px-4 py-2 text-zinc-500">"No elements found."</li>
+                                }
+                            })
                     }}
                 </ul>
             </div>

@@ -15,7 +15,8 @@ pub fn MenuButton(
         <button
             class=move || {
                 let quality_class = match settings.graphics_quality() {
-                    GraphicsQuality::High => "btn relative isolate overflow-hidden
+                    GraphicsQuality::High => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -37,13 +38,16 @@ pub fn MenuButton(
                     disabled:text-zinc-500
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
-                    disabled:before:hidden",
-                    GraphicsQuality::Medium => "btn relative isolate overflow-hidden
+                    disabled:before:hidden"
+                    }
+                    GraphicsQuality::Medium => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
                     text-sm xl:text-base
                     border border-[#6c5329]
+                    shadow-md
                     before:pointer-events-none before:absolute before:inset-[1px]
                     before:rounded-[3px] xl:before:rounded-[5px]
                     before:border before:border-[#d5b16d]/10
@@ -55,8 +59,11 @@ pub fn MenuButton(
                     w-auto
                     disabled:text-zinc-500
                     disabled:border-[#4b4030]
-                    disabled:opacity-60",
-                    GraphicsQuality::Low => "btn relative isolate overflow-hidden
+                    disabled:opacity-60
+                     disabled:shadow-none"
+                    }
+                    GraphicsQuality::Low => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -68,7 +75,8 @@ pub fn MenuButton(
                     hover:border-[#8b7347] hover:text-[#efe1bf]
                     active:translate-y-[1px] active:brightness-95
                     w-auto
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60",
+                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60"
+                    }
                 };
                 format!("{quality_class} {}", class.unwrap_or_default())
             }
@@ -76,23 +84,29 @@ pub fn MenuButton(
                 match settings.graphics_quality() {
                     GraphicsQuality::High => {
                         if disabled.map(|d| d.get()).unwrap_or(false) {
-                            "linear-gradient(180deg, rgba(110,104,96,0.08), rgba(0,0,0,0.12)), linear-gradient(180deg, rgba(58,55,60,0.92), rgba(34,33,37,1))".to_string()
+                            "linear-gradient(180deg, rgba(110,104,96,0.08), rgba(0,0,0,0.12)), linear-gradient(180deg, rgba(58,55,60,0.92), rgba(34,33,37,1))"
+                                .to_string()
                         } else {
-                            "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string()
+                            "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                                .to_string()
                         }
                     }
                     GraphicsQuality::Medium => {
                         if disabled.map(|d| d.get()).unwrap_or(false) {
-                            "linear-gradient(180deg, rgba(88,83,78,0.18), rgba(28,28,32,0.94))".to_string()
+                            "linear-gradient(180deg, rgba(88,83,78,0.18), rgba(28,28,32,0.94))"
+                                .to_string()
                         } else {
-                            "linear-gradient(180deg, rgba(170,140,84,0.09), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(45,42,48,0.98), rgba(23,22,26,1))".to_string()
+                            "linear-gradient(180deg, rgba(170,140,84,0.09), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(45,42,48,0.98), rgba(23,22,26,1))"
+                                .to_string()
                         }
                     }
                     GraphicsQuality::Low => {
                         if disabled.map(|d| d.get()).unwrap_or(false) {
-                            "linear-gradient(180deg, rgba(130,113,77,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(62,59,63,0.95), rgba(39,38,42,1))".to_string()
+                            "linear-gradient(180deg, rgba(130,113,77,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(62,59,63,0.95), rgba(39,38,42,1))"
+                                .to_string()
                         } else {
-                            "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string()
+                            "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))"
+                                .to_string()
                         }
                     }
                 }
@@ -123,7 +137,8 @@ pub fn MenuButtonRed(
         <button
             class=move || {
                 let quality_class = match settings.graphics_quality() {
-                    GraphicsQuality::High => "btn relative isolate overflow-hidden
+                    GraphicsQuality::High => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -144,20 +159,26 @@ pub fn MenuButtonRed(
                     disabled:text-zinc-500
                     disabled:border-[#4f312d]
                     disabled:opacity-60 disabled:shadow-none
-                    disabled:before:hidden",
-                    GraphicsQuality::Medium => "btn relative isolate overflow-hidden
+                    disabled:before:hidden"
+                    }
+                    GraphicsQuality::Medium => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
                     text-sm xl:text-base
+                    shadow-md
                     border border-[#8e4538]
                     before:pointer-events-none before:absolute before:inset-[1px]
                     before:rounded-[3px] xl:before:rounded-[5px]
                     before:border before:border-[#d78b78]/10
                     hover:border-[#b55d4c] hover:text-[#ffd8d0]
                     active:translate-y-[1px] active:brightness-90 active:text-[#d7aca2]
-                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60",
-                    GraphicsQuality::Low => "btn relative isolate overflow-hidden
+                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60
+                    disabled:shadow-none"
+                    }
+                    GraphicsQuality::Low => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -168,15 +189,25 @@ pub fn MenuButtonRed(
                     before:border before:border-[#c08a78]/10
                     hover:border-[#b55d4c] hover:text-[#ffd8d0]
                     active:translate-y-[1px] active:brightness-95
-                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60",
+                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60"
+                    }
                 };
                 format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
-                    GraphicsQuality::High => "linear-gradient(180deg, rgba(230,164,125,0.14), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(72,28,26,0.98), rgba(35,11,13,1))".to_string(),
-                    GraphicsQuality::Medium => "linear-gradient(180deg, rgba(209,126,96,0.10), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(78,32,31,0.98), rgba(40,15,17,1))".to_string(),
-                    GraphicsQuality::Low => "linear-gradient(180deg, rgba(171,104,83,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(73,45,45,0.97), rgba(43,29,31,1))".to_string(),
+                    GraphicsQuality::High => {
+                        "linear-gradient(180deg, rgba(230,164,125,0.14), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(72,28,26,0.98), rgba(35,11,13,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Medium => {
+                        "linear-gradient(180deg, rgba(209,126,96,0.10), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(78,32,31,0.98), rgba(40,15,17,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Low => {
+                        "linear-gradient(180deg, rgba(171,104,83,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(73,45,45,0.97), rgba(43,29,31,1))"
+                            .to_string()
+                    }
                 }
             }
             disabled=disabled
@@ -201,7 +232,8 @@ pub fn FancyButton(
         <button
             class=move || {
                 let quality_class = match settings.graphics_quality() {
-                    GraphicsQuality::High => "btn relative isolate overflow-hidden
+                    GraphicsQuality::High => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -223,21 +255,27 @@ pub fn FancyButton(
                     disabled:text-zinc-500
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
-                    disabled:before:hidden",
-                    GraphicsQuality::Medium => "btn relative isolate overflow-hidden
+                    disabled:before:hidden"
+                    }
+                    GraphicsQuality::Medium => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
                     text-sm xl:text-base
                     border border-[#6c5329]
                     bg-[#1b191d]
+                    shadow-md
                     before:pointer-events-none before:absolute before:inset-[1px]
                     before:rounded-[3px] xl:before:rounded-[5px]
                     before:border before:border-[#d5b16d]/10
                     hover:border-[#a27f46] hover:text-[#f3ead2]
                     active:translate-y-[1px] active:brightness-90 active:text-white
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60",
-                    GraphicsQuality::Low => "btn relative isolate overflow-hidden
+                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60
+                    disabled:shadow-none"
+                    }
+                    GraphicsQuality::Low => {
+                        "btn relative isolate overflow-hidden
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -248,15 +286,25 @@ pub fn FancyButton(
                     before:border before:border-[#a88a53]/10
                     hover:border-[#8b7347] hover:text-[#efe1bf]
                     active:translate-y-[1px] active:brightness-95
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60",
+                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60"
+                    }
                 };
                 format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
-                    GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                    GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(45,42,48,0.98), rgba(23,22,26,1))".to_string(),
-                    GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string(),
+                    GraphicsQuality::High => {
+                        "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Medium => {
+                        "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(45,42,48,0.98), rgba(23,22,26,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Low => {
+                        "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))"
+                            .to_string()
+                    }
                 }
             }
             disabled=disabled
@@ -299,6 +347,7 @@ pub fn Toggle(
                 GraphicsQuality::Medium => {
                     "text-zinc-100
                     border-[#a88449]
+                    shadow-md
                     saturate-90"
                 }
                 GraphicsQuality::Low => {
@@ -325,20 +374,30 @@ pub fn Toggle(
             on:click=switch_value
             style:background-image=move || {
                 match settings.graphics_quality() {
-                    GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1))".to_string(),
-                    GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1))".to_string(),
-                    GraphicsQuality::Low => "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(72,72,78,0.95), rgba(45,45,50,1))".to_string(),
+                    GraphicsQuality::High => {
+                        "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Medium => {
+                        "linear-gradient(180deg, rgba(170,140,84,0.06), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(42,39,45,0.95), rgba(18,17,22,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Low => {
+                        "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(72,72,78,0.95), rgba(45,45,50,1))"
+                            .to_string()
+                    }
                 }
             }
             class=move || {
                 format!(
-                    "btn relative {} 
+                    "btn relative {}
                     tracking-[0.08em]
                     px-2 xl:px-3
                     text-sm xl:text-base
                     font-extrabold {}
                     rounded-[4px] xl:rounded-[6px]
                     {}
+                    shadow-md
                     hover:border-[#a27f46]
                     hover:text-[#f1e4c4]
                     active:text-white
@@ -351,11 +410,21 @@ pub fn Toggle(
                     {}
                     ",
                     "isolate overflow-hidden",
-                    if settings.uses_surface_effects() { "text-shadow shadow-black/90" } else { "" },
+                    if settings.uses_surface_effects() {
+                        "text-shadow shadow-black/90"
+                    } else {
+                        ""
+                    },
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/16 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]",
-                        GraphicsQuality::Medium => "border border-[#6c5329] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/10",
-                        GraphicsQuality::Low => "border border-[#5f5035] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#a88a53]/10 hover:border-[#8b7347] hover:text-[#efe1bf] active:brightness-95 disabled:border-[#4b4030]",
+                        GraphicsQuality::High => {
+                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/16 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]"
+                        }
+                        GraphicsQuality::Medium => {
+                            "border border-[#6c5329] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/10"
+                        }
+                        GraphicsQuality::Low => {
+                            "border border-[#5f5035] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#a88a53]/10 hover:border-[#8b7347] hover:text-[#efe1bf] active:brightness-95 disabled:border-[#4b4030]"
+                        }
                     },
                     toggle_class(),
                 )
@@ -424,14 +493,23 @@ pub fn TabButton(
             "
             style:background-image=move || {
                 match settings.graphics_quality() {
-                    GraphicsQuality::High => "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                    GraphicsQuality::Medium => "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))".to_string(),
-                    GraphicsQuality::Low => "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))".to_string(),
+                    GraphicsQuality::High => {
+                        "linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Medium => {
+                        "linear-gradient(180deg, rgba(170,140,84,0.08), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1))"
+                            .to_string()
+                    }
+                    GraphicsQuality::Low => {
+                        "linear-gradient(180deg, rgba(176,145,86,0.05), rgba(0,0,0,0.08)), linear-gradient(180deg, rgba(56,53,58,0.97), rgba(31,30,34,1))"
+                            .to_string()
+                    }
                 }
             }
             class=move || {
                 format!(
-                    "btn relative {} 
+                    "btn relative {}
                     tracking-[0.08em]
                     inline-flex shrink-0 items-center justify-center
                     px-2 xl:px-3 py-1 xl:py-2
@@ -442,11 +520,21 @@ pub fn TabButton(
                     {}
                     ",
                     "isolate overflow-hidden",
-                    if settings.uses_surface_effects() { "text-shadow shadow-black/90" } else { "" },
+                    if settings.uses_surface_effects() {
+                        "text-shadow shadow-black/90"
+                    } else {
+                        ""
+                    },
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/16 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]",
-                        GraphicsQuality::Medium => "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/10",
-                        GraphicsQuality::Low => "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#a88a53]/10",
+                        GraphicsQuality::High => {
+                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/16 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]"
+                        }
+                        GraphicsQuality::Medium => {
+                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/10"
+                        }
+                        GraphicsQuality::Low => {
+                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#a88a53]/10"
+                        }
                     },
                     active_class(is_active.get()),
                 )

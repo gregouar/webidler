@@ -1,6 +1,8 @@
 use leptos::{prelude::*, web_sys};
 use serde_plain;
 
+use crate::components::settings::{GraphicsQuality, SettingsContext};
+
 #[component]
 pub fn Input<T>(
     id: &'static str,
@@ -13,6 +15,7 @@ pub fn Input<T>(
 where
     T: serde::de::DeserializeOwned + serde::ser::Serialize + Clone + Send + Sync + 'static,
 {
+    let settings: SettingsContext = expect_context();
     let prop_value = RwSignal::new(String::new());
     Effect::new(move || {
         if let Some(value) = bind.get() {
@@ -42,9 +45,15 @@ where
                 format!(
                     "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
                     border text-white placeholder:text-zinc-500
-                    text-sm xl:text-base
-                    shadow-[0_4px_10px_rgba(0,0,0,0.35),0_1px_0_rgba(26,17,10,0.9),inset_0_2px_6px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.03)]
+                    text-sm xl:text-base {}
                     focus:outline-none {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "shadow-[0_4px_10px_rgba(0,0,0,0.35),0_1px_0_rgba(26,17,10,0.9),inset_0_2px_6px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.03)]"
+                        }
+                        GraphicsQuality::Medium => "shadow_md",
+                        GraphicsQuality::Low => "",
+                    },
                     if invalid.map(|invalid| invalid.get()).unwrap_or_default() {
                         "border-[#9b453c] focus:border-[#c35d52]"
                     } else {
@@ -54,8 +63,8 @@ where
             }
             style="
             background-image:
-                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
-                linear-gradient(180deg, rgba(14,14,17,0.94), rgba(31,29,35,0.98));
+            linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
+            linear-gradient(180deg, rgba(14,14,17,0.94), rgba(31,29,35,0.98));
             background-size: auto, auto;
             background-position: center, center;
             background-blend-mode: screen, normal;
@@ -83,6 +92,8 @@ where
         + Sync
         + 'static,
 {
+    let settings: SettingsContext = expect_context();
+
     let node_ref = NodeRef::<leptos::html::Input>::new();
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
@@ -120,8 +131,15 @@ where
                         "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px] border
                         text-white placeholder:text-zinc-500
                         text-sm xl:text-base
-                        shadow-[0_4px_10px_rgba(0,0,0,0.35),0_1px_0_rgba(26,17,10,0.9),inset_0_2px_6px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.03)]
+                        {}
                         focus:outline-none {}",
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                "shadow-[0_4px_10px_rgba(0,0,0,0.35),0_1px_0_rgba(26,17,10,0.9),inset_0_2px_6px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.03)]"
+                            }
+                            GraphicsQuality::Medium => "shadow_md",
+                            GraphicsQuality::Low => "",
+                        },
                         if is_invalid.get() {
                             "border-[#9b453c] focus:border-[#c35d52]"
                         } else {
@@ -131,8 +149,8 @@ where
                 }
                 style="
                 background-image:
-                    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
-                    linear-gradient(180deg, rgba(14,14,17,0.94), rgba(31,29,35,0.98));
+                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
+                linear-gradient(180deg, rgba(14,14,17,0.94), rgba(31,29,35,0.98));
                 background-size: auto, auto;
                 background-position: center, center;
                 background-blend-mode: screen, normal;
