@@ -157,9 +157,15 @@ pub fn ItemCard(
                         GraphicsQuality::Low => "border-[#5c4a2e]/85",
                     },
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_44%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.12)_48%),linear-gradient(135deg,rgba(46,44,50,0.96),rgba(18,18,22,1))]",
-                        GraphicsQuality::Medium => "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_46%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.1)_50%),linear-gradient(135deg,rgba(42,40,46,0.96),rgba(18,18,22,1))]",
-                        GraphicsQuality::Low => "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_48%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.08)_52%),linear-gradient(135deg,rgba(39,38,43,0.98),rgba(19,19,23,1))]",
+                        GraphicsQuality::High => {
+                            "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_44%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.12)_48%),linear-gradient(135deg,rgba(46,44,50,0.96),rgba(18,18,22,1))]"
+                        }
+                        GraphicsQuality::Medium => {
+                            "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_46%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.1)_50%),linear-gradient(135deg,rgba(42,40,46,0.96),rgba(18,18,22,1))]"
+                        }
+                        GraphicsQuality::Low => {
+                            "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_48%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.08)_52%),linear-gradient(135deg,rgba(39,38,43,0.98),rgba(19,19,23,1))]"
+                        }
                     },
                     if settings.uses_heavy_effects() {
                         "shadow-[0_3px_7px_rgba(0,0,0,0.3),0_1px_0_rgba(26,17,10,0.88),inset_0_1px_0_rgba(240,215,159,0.14),inset_0_-1px_0_rgba(0,0,0,0.38)]"
@@ -189,24 +195,30 @@ pub fn ItemCard(
                 class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px]"
                 style=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => format!(
-                            "border: 1px solid {};
+                        GraphicsQuality::High => {
+                            format!(
+                                "border: 1px solid {};
                             box-shadow: inset 0 0 0 1px {}, inset 0 8px 12px rgba(255,255,255,0.02), inset 0 -12px 16px rgba(0,0,0,0.22);",
-                            accent,
-                            inner_border,
-                        ),
-                        GraphicsQuality::Medium => format!(
-                            "border: 1px solid {};
+                                accent,
+                                inner_border,
+                            )
+                        }
+                        GraphicsQuality::Medium => {
+                            format!(
+                                "border: 1px solid {};
                             box-shadow: inset 0 0 0 1px {};",
-                            accent,
-                            inner_border,
-                        ),
-                        GraphicsQuality::Low => format!(
-                            "border: 1px solid {};
+                                accent,
+                                inner_border,
+                            )
+                        }
+                        GraphicsQuality::Low => {
+                            format!(
+                                "border: 1px solid {};
                             box-shadow: inset 0 0 0 1px {};",
-                            accent,
-                            inner_border,
-                        ),
+                                accent,
+                                inner_border,
+                            )
+                        }
                     }
                 }
             ></div>
@@ -233,10 +245,19 @@ pub fn ItemCard(
             <img
                 draggable="false"
                 src=icon_asset
-                class="relative z-10 object-contain max-w-full max-h-full p-1 transition-transform duration-75 ease-out
+                class=move || {
+                    format!(
+                        "relative z-10 object-contain max-w-full max-h-full p-1 transition-transform duration-75 ease-out
                 group-hover:scale-[1.045] group-hover:brightness-110
                 group-active:scale-[0.96] group-active:brightness-95
-                "
+                {}",
+                        if settings.uses_surface_effects() {
+                            "xl:drop-shadow-[0px_6px_6px_black]"
+                        } else {
+                            ""
+                        },
+                    )
+                }
             />
         </div>
     }
