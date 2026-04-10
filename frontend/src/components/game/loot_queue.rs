@@ -144,6 +144,7 @@ pub fn LootQueue() -> impl IntoView {
                                 absolute bottom-0 w-[12%] aspect-[2/3]
                                 transition-all duration-500 ease
                                 pointer-events-none
+                                will-change-transform
                                 "
                                 style=move || {
                                     format!(

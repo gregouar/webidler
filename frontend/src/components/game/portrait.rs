@@ -222,6 +222,42 @@ pub fn CharacterPortrait(
     //     }
     // });
 
+    let activate_bleeding = RwSignal::new(false);
+    let is_bleeding = Memo::new(move |_| {
+        active_debuffs.read().contains(&StatusId::DamageOverTime {
+            damage_type: DamageType::Physical,
+        })
+    });
+    Effect::new(move || {
+        if is_bleeding.get() {
+            activate_bleeding.set(true)
+        }
+    });
+
+    let activate_burning = RwSignal::new(false);
+    let is_burning = Memo::new(move |_| {
+        active_debuffs.read().contains(&StatusId::DamageOverTime {
+            damage_type: DamageType::Fire,
+        })
+    });
+    Effect::new(move || {
+        if is_burning.get() {
+            activate_burning.set(true)
+        }
+    });
+
+    let activate_poisoned = RwSignal::new(false);
+    let is_poisoned = Memo::new(move |_| {
+        active_debuffs.read().contains(&StatusId::DamageOverTime {
+            damage_type: DamageType::Poison,
+        })
+    });
+    Effect::new(move || {
+        if is_poisoned.get() {
+            activate_poisoned.set(true)
+        }
+    });
+
     view! {
         <div class=move || {
             format!(
@@ -382,50 +418,32 @@ pub fn CharacterPortrait(
                     )
                 }></div>
 
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
-                    class:opacity-100=move || {
-                        active_debuffs
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Physical,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-bleed"></div>
-                </div>
+                <Show when=move || activate_bleeding.get()>
+                    <div
+                        class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
+                        class:opacity-100=move || is_bleeding.get()
+                    >
+                        <div class="absolute inset-0 status-bleed"></div>
+                    </div>
+                </Show>
 
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
-                    class:opacity-100=move || {
-                        active_debuffs
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Fire,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-burn"></div>
-                </div>
+                <Show when=move || activate_burning.get()>
+                    <div
+                        class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
+                        class:opacity-100=move || is_burning.get()
+                    >
+                        <div class="absolute inset-0 status-burn"></div>
+                    </div>
+                </Show>
 
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
-                    class:opacity-100=move || {
-                        active_debuffs
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Poison,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-poison"></div>
-                </div>
+                <Show when=move || activate_poisoned.get()>
+                    <div
+                        class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
+                        class:opacity-100=move || is_poisoned.get()
+                    >
+                        <div class="absolute inset-0 status-poison"></div>
+                    </div>
+                </Show>
 
                 {move || {
                     (!is_dead.get() && !shimmer_effect.is_empty()
