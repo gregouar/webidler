@@ -25,9 +25,11 @@ use crate::components::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
     },
     ui::{
+        Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         confirm::ConfirmContext,
+        dropdown::SearchableDropdownMenu,
         menu_panel::MenuPanel,
         toast::*,
     },
@@ -715,36 +717,56 @@ pub fn GambleDetails(
             <CardInsetTitle>"Gamble"</CardInsetTitle>
 
             <div class="flex flex-col w-full">
-                <div class="w-full flex items-center justify-center text-sm xl:text-base text-gray-400 font-bold gap-2">
-                    "Gamble <<"
-                    <span class="text-white">
-                        {move || { loot_filter_category_to_str(gamble_category.get()) }}
-                    </span> ">> for" <span class="text-fuchsia-300 font-bold">{gamble_price}</span>
-                    <GemsIcon />
+                // <div class="w-full flex items-center justify-center text-sm xl:text-base text-amber-400 font-bold gap-2">
+                // {move || { loot_filter_category_to_str(gamble_category.get()) }}
+                // </div>
+                <div class="w-full p-2 gap-2 flex items-center justify-center text-gray-300 text-sm">
+                    <span>"Item Category:"</span>
+                    <SearchableDropdownMenu
+                        options=GAMBLE_ITEM_CATEGORIES
+                            .iter()
+                            .map(|item_category| (
+                                *item_category,
+                                loot_filter_category_to_str(*item_category).to_string(),
+                            ))
+                            .collect()
+                        chosen_option=gamble_category
+                    />
                 </div>
                 <ItemDetails selected_item show_affixes=true />
             </div>
 
-            <div class="flex gap-1 xl:gap-2 w-full text-white mb-2">
-                <MenuButton
-                    on:click=move |_| do_gamble()
-                    disabled=Signal::derive({ move || gamble_price() > user_gems() })
-                    class:w-full
-                >
-                    {move || {
-                        if selected_item.read().is_empty() { "Gamble" } else { "Keep & Retry" }
-                    }}
-                </MenuButton>
+            <div class="flex flex-col gap-2 w-full">
+                <Separator />
+                <div class="w-full flex items-center gap-1 text-lg text-gray-400 p-2">
+                    "Price: "
+                    <span class="text-fuchsia-300 font-bold">
+                        {format!("{:.0}", gamble_price())}
+                    </span> <GemsIcon />
+                </div>
+                <div class="flex gap-1 xl:gap-2 w-full text-white mb-2">
+                    <MenuButton
+                        on:click=move |_| do_gamble()
+                        disabled=Signal::derive({ move || gamble_price() > user_gems() })
+                        class:w-full
+                    >
+                        {move || {
+                            if selected_item.read().is_empty() { "Gamble" } else { "Keep & Retry" }
+                        }}
+                    </MenuButton>
 
-                <MenuButtonRed
-                    on:click=move |_| do_sell_and_gamble()
-                    disabled=Signal::derive({
-                        move || { gamble_price() > user_gems() || selected_item.read().is_empty() }
-                    })
-                    class:w-full
-                >
-                    "Discard & Retry"
-                </MenuButtonRed>
+                    <MenuButtonRed
+                        on:click=move |_| do_sell_and_gamble()
+                        disabled=Signal::derive({
+                            move || {
+                                gamble_price() > user_gems() || selected_item.read().is_empty()
+                            }
+                        })
+                        class:w-full
+                    >
+                        "Discard & Retry"
+                    </MenuButtonRed>
+                </div>
             </div>
         </div>
     }

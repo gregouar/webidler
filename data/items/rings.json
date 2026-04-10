@@ -348,5 +348,22 @@
       }
     ],
     "min_area_level": 400
+  },
+  "witch_ring": {
+    "name": "The Brood Sigil",
+    "icon": "items/rings/witch_ring.webp",
+    "description": "You did not end the ritual. You became part of it.",
+    "slot": "Ring",
+    "categories": [ "Jewelry", "Ring" ],
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "scope": "Global",
+        "stat": "GoldFind",
+        "modifier": "More",
+        "value": 160
+      }
+    ],
+    "min_area_level": 400
   }
 }

@@ -4,15 +4,15 @@
     "icon": "items/helmets/cloth_hood.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 15.0,
@@ -21,23 +21,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "leather_cap": {
     "name": "Leather Cap",
     "icon": "items/helmets/leather_cap.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 30.0,
@@ -46,15 +46,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "leather_cap_unique": {
     "name": "Skullcap of the Provoker",
     "icon": "items/helmets/skullcap.webp",
     "description": "In the wild, to show your kills is to invite a fight, and to prove you're ready for it.",
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
@@ -122,7 +122,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 30.0,
@@ -179,15 +179,15 @@
     "icon": "items/helmets/iron_cap.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 45.0,
@@ -196,15 +196,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "iron_cap_unique": {
     "name": "The Seamstress's Folly",
     "icon": "items/helmets/witch_hat.webp",
     "description": "No spellbook could teach what she learned from her own undoing.",
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
@@ -276,7 +276,7 @@
           "damage_type": null
         },
         "target": "Source",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
@@ -308,8 +308,8 @@
               ],
               "duration": 5.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -325,23 +325,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "mail_coif": {
     "name": "Mail Coif",
     "icon": "items/helmets/mail_coif.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 60.0,
@@ -350,23 +350,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "nasal_helm": {
     "name": "Nasal Helm",
     "icon": "items/helmets/nasal_helm.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 75.0,
@@ -375,23 +375,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "bascinet": {
     "name": "Bascinet",
     "icon": "items/helmets/bascinet.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 90.0,
@@ -400,15 +400,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_crown": {
     "name": "Crown of Tides Storm",
     "icon": "items/helmets/treasure_crown.webp",
     "description": "What crowns you is not the ocean... but what sleeps beneath it.",
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
@@ -489,7 +489,7 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 90.0,
@@ -498,23 +498,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "helmet_7": {
     "name": "Barbute",
     "icon": "items/helmets/barbute.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 105.0,
@@ -523,23 +523,48 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
+  },
+  "oni_mask": {
+    "name": "Grin of the Oni",
+    "icon": "items/helmets/oni_mask.webp",
+    "description": "It grins as the world around you melts in fire.",
+    "slot": "Helmet",
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 320,
+    "rarity": "Unique",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 105.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "helmet_8": {
     "name": "Helm",
     "icon": "items/helmets/helm.webp",
     "description": null,
     "slot": "Helmet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Helmet"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 120.0,
@@ -548,7 +573,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }
