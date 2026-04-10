@@ -156,12 +156,6 @@ body {
     }
   }
 
-  @property --progress {
-    syntax: "<percentage>";
-    inherits: false;
-    initial-value: 0%;
-  }
-
   /* Portraits */
   .champion-shimmer {
     background: linear-gradient(
@@ -528,8 +522,7 @@ body {
 }
 @utility transition-circular-progress-bar {
   transition:
-    opacity 0.5s linear,
-    --progress 0.19s linear;
+    opacity 0.5s linear;
 }
 
 
