@@ -4,7 +4,7 @@ use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     computations, constants,
-    data::{forge::affix_operation_price, player::EquippedSlot},
+    data::forge::affix_operation_price,
     http::{
         client::{ForgeAffixOperation, ForgeAffixRequest, ForgeUpgradeRequest, GambleItemRequest},
         server::{ForgeAffixResponse, ForgeUpgradeResponse, GambleItemResponse},
@@ -58,20 +58,9 @@ pub async fn post_affix(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    let item = if payload.item_index < 9 {
-        inventory
-            .equipped
-            .get_mut(&(payload.item_index as usize).try_into()?)
-            .and_then(|equipped_item| match equipped_item {
-                EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_mut()),
-                _ => None,
-            })
-    } else {
-        inventory
-            .bag
-            .get_mut(payload.item_index.saturating_sub(9) as usize)
-    }
-    .ok_or(AppError::NotFound)?;
+    let item = inventory
+        .nth_mut(payload.item_index as usize)
+        .ok_or(AppError::NotFound)?;
 
     let price = affix_operation_price(payload.operation, item.modifiers.count_nonunique_affixes())
         .ok_or(AppError::UserError("forge operation unavailable".into()))?;
@@ -142,20 +131,9 @@ pub async fn post_upgrade(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    let item = if payload.item_index < 9 {
-        inventory
-            .equipped
-            .get_mut(&(payload.item_index as usize).try_into()?)
-            .and_then(|equipped_item| match equipped_item {
-                EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_mut()),
-                _ => None,
-            })
-    } else {
-        inventory
-            .bag
-            .get_mut(payload.item_index.saturating_sub(9) as usize)
-    }
-    .ok_or(AppError::NotFound)?;
+    let item = inventory
+        .nth_mut(payload.item_index as usize)
+        .ok_or(AppError::NotFound)?;
 
     let price = computations::upgrade_item_price(item).ok_or(AppError::UserError(
         "maximum upgrade level reached for that item".into(),

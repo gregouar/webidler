@@ -123,4 +123,30 @@ impl PlayerInventory {
                 .map(|(_, item_specs)| item_specs.as_mut()),
         )
     }
+
+    pub fn nth(&self, index: usize) -> Option<&ItemSpecs> {
+        if index < 9 {
+            self.equipped
+                .get(&index.try_into().ok()?)
+                .and_then(|equipped_item| match equipped_item {
+                    EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_ref()),
+                    _ => None,
+                })
+        } else {
+            self.bag.get(index.saturating_sub(9))
+        }
+    }
+
+    pub fn nth_mut(&mut self, index: usize) -> Option<&mut ItemSpecs> {
+        if index < 9 {
+            self.equipped
+                .get_mut(&index.try_into().ok()?)
+                .and_then(|equipped_item| match equipped_item {
+                    EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_mut()),
+                    _ => None,
+                })
+        } else {
+            self.bag.get_mut(index.saturating_sub(9))
+        }
+    }
 }

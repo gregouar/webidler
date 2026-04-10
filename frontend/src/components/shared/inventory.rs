@@ -5,7 +5,7 @@ use leptos_use::on_click_outside;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemSlot, ItemSpecs},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -40,6 +40,10 @@ pub enum InventoryEquipFilter {
     Slot,
     Map(String),
     Rune,
+    Market {
+        item_rarity: Option<ItemRarity>,
+        not: bool,
+    },
 }
 
 #[derive(Clone, Default)]
@@ -208,9 +212,26 @@ fn EquippedItemEquippedSlot(
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
+    let equipped_item_rarity = item_specs.modifiers.rarity;
+    let can_unequip = Signal::derive(move || {
+        inventory
+            .equip_filter
+            .with(|equip_filter| match equip_filter {
+                InventoryEquipFilter::Slot => true,
+                InventoryEquipFilter::Map(_) | InventoryEquipFilter::Rune => false,
+                InventoryEquipFilter::Market { item_rarity, not } => item_rarity
+                    .map(|item_rarity| (equipped_item_rarity == item_rarity) != *not)
+                    .unwrap_or(true),
+            })
+    });
+
     let is_being_unequipped = RwSignal::new(false);
     view! {
-        <div node_ref=item_ref class="relative w-full h-full overflow-visible">
+        <div
+            node_ref=item_ref
+            class="relative w-full h-full overflow-visible"
+            class:brightness-50=move || !can_unequip.get()
+        >
             <ItemCard
                 item_specs=item_specs.clone()
                 on:click={
@@ -244,6 +265,7 @@ fn EquippedItemEquippedSlot(
                     item_slot=item_slot
                     is_being_unequipped=is_being_unequipped
                     on_close=Callback::new(move |_| show_menu.set(false))
+                    can_unequip
                 />
                 {
                     let item_specs = item_specs.clone();
@@ -313,27 +335,40 @@ pub fn EquippedItemContextMenu(
     item_slot: ItemSlot,
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
+    can_unequip: Signal<bool>,
 ) -> impl IntoView {
     view! {
         <ContextMenu on_close=on_close>
             {inventory
                 .on_unequip
                 .map(|on_unequip| {
-                    view! {
-                        <ActionMenuRow
-                            label="Unequip"
-                            tone=ActionMenuTone::Success
-                            on_click=move || {
-                                on_unequip(item_slot);
-                                on_close.run(());
-                                is_being_unequipped.set(true);
-                                set_timeout(
-                                    move || is_being_unequipped.set(false),
-                                    Duration::from_millis(1000),
-                                );
+                    can_unequip
+                        .get_untracked()
+                        .then(|| {
+
+                            view! {
+                                <ActionMenuRow
+                                    label=if let InventoryEquipFilter::Slot = inventory
+                                        .equip_filter
+                                        .get()
+                                    {
+                                        "Unequip"
+                                    } else {
+                                        "Use"
+                                    }
+                                    tone=ActionMenuTone::Success
+                                    on_click=move || {
+                                        on_unequip(item_slot);
+                                        on_close.run(());
+                                        is_being_unequipped.set(true);
+                                        set_timeout(
+                                            move || is_being_unequipped.set(false),
+                                            Duration::from_millis(1000),
+                                        );
+                                    }
+                                />
                             }
-                        />
-                    }
+                        })
                 })}
             <ActionMenuRow
                 label="Cancel"
@@ -459,6 +494,9 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                             })
                             .unwrap_or_default(),
                         InventoryEquipFilter::Rune => item_specs.base.rune_specs.is_some(),
+                        InventoryEquipFilter::Market { item_rarity, not } => item_rarity
+                            .map(|item_rarity| (item_specs.modifiers.rarity == item_rarity) != *not)
+                            .unwrap_or(true),
                     })
             })
             .unwrap_or_default()
@@ -661,7 +699,14 @@ pub fn BagItemContextMenu(
                             .then(|| {
                                 view! {
                                     <ActionMenuRow
-                                        label="Equip"
+                                        label=if let InventoryEquipFilter::Slot = inventory
+                                            .equip_filter
+                                            .get()
+                                        {
+                                            "Equip"
+                                        } else {
+                                            "Use"
+                                        }
                                         tone=ActionMenuTone::Success
                                         on_click=move || {
                                             on_equip(item_index as u8);

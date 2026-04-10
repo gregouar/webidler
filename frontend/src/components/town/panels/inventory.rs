@@ -59,32 +59,48 @@ pub fn TownInventoryPanel(
                     town_context.selected_item_index.set(Some(item_index));
                     town_context.open_inventory.set(false);
                 }
+                InventoryEquipFilter::Market { .. } => {
+                    town_context
+                        .selected_item_index
+                        .set(Some(item_index.saturating_add(9)));
+                    town_context.open_inventory.set(false);
+                }
             })
     };
 
     let on_unequip = move |item_slot| {
         let character_id = town_context.character.read_untracked().character_id;
-        spawn_local({
-            async move {
-                match backend
-                    .inventory_unequip(
-                        &auth_context.token(),
-                        &InventoryUnequipRequest {
-                            character_id,
-                            item_slot,
-                        },
-                    )
-                    .await
-                {
-                    Ok(response) => town_context.inventory.set(response.inventory),
-                    Err(e) => show_toast(
-                        toaster,
-                        format!("Failed to unequip item: {e}"),
-                        ToastVariant::Error,
-                    ),
+        town_context
+            .equip_filter
+            .with(|equip_filter| match equip_filter {
+                InventoryEquipFilter::Slot => spawn_local({
+                    async move {
+                        match backend
+                            .inventory_unequip(
+                                &auth_context.token(),
+                                &InventoryUnequipRequest {
+                                    character_id,
+                                    item_slot,
+                                },
+                            )
+                            .await
+                        {
+                            Ok(response) => town_context.inventory.set(response.inventory),
+                            Err(e) => show_toast(
+                                toaster,
+                                format!("Failed to unequip item: {e}"),
+                                ToastVariant::Error,
+                            ),
+                        }
+                    }
+                }),
+                InventoryEquipFilter::Map(_) | InventoryEquipFilter::Rune => {}
+                InventoryEquipFilter::Market { .. } => {
+                    let item_index: usize = item_slot.into();
+                    town_context.selected_item_index.set(Some(item_index as u8));
+                    town_context.open_inventory.set(false);
                 }
-            }
-        })
+            })
     };
 
     let on_sell = move |item_indexes: Vec<u8>| {

@@ -19,7 +19,10 @@ use std::sync::Arc;
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
-    shared::{inventory::loot_filter_category_to_str, resources::GemsIcon},
+    shared::{
+        inventory::{InventoryEquipFilter, loot_filter_category_to_str},
+        resources::GemsIcon,
+    },
     town::{
         TownContext,
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
@@ -131,6 +134,40 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
+    let select_from_inventory = move |_| {
+        town_context.selected_item_index.set(None);
+        town_context.equip_filter.set(InventoryEquipFilter::Market {
+            item_rarity: Some(ItemRarity::Unique),
+            not: !filter_unique,
+        });
+        town_context.open_inventory.set(true);
+    };
+
+    Effect::new(move || {
+        if let Some(item_index) = town_context.selected_item_index.get() {
+            let item_specs = town_context
+                .inventory
+                .read()
+                .nth(item_index as usize)
+                .cloned();
+
+            if let Some(item_specs) = item_specs {
+                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
+                    index: item_index as usize,
+                    item_specs: Arc::new(item_specs),
+                    price: 0.0,
+                    owner_id: None,
+                    owner_name: None,
+                    recipient: None,
+                    rejected: false,
+                    created_at: Utc::now(),
+                    deleted_at: None,
+                    deleted_by: None,
+                }));
+            }
+        }
+    });
+
     let items_list = Signal::derive({
         move || {
             town_context.inventory.with(|inventory| {
@@ -177,7 +214,14 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
         }
     });
 
-    view! { <ItemsBrowser selected_item items_list /> }
+    view! {
+        <div class="w-full px-2 pt-2">
+            <MenuButton class="w-full" on:click=select_from_inventory>
+                "Pick from Inventory"
+            </MenuButton>
+        </div>
+        <ItemsBrowser selected_item items_list />
+    }
 }
 
 #[component]
