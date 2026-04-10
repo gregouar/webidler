@@ -17,10 +17,10 @@ use crate::{
         data_context::DataContext,
         game::portrait::CharacterPortrait,
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
+        settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter, skills::SkillProgressBar, tooltips::SkillTooltip,
         },
-        settings::SettingsContext,
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
             Separator,
@@ -142,7 +142,7 @@ fn PlayerCard() -> impl IntoView {
                                     just_blocked=Signal::derive(|| false)
                                     just_evaded=Signal::derive(|| false)
                                     is_dead=Signal::derive(|| false)
-                                    statuses=Signal::derive(|| Default::default())
+                                    statuses=Signal::derive(Default::default)
                                 />
                             }
                         }}
@@ -343,7 +343,8 @@ fn GrindingAreaCard(
                                 img_asset("ui/dark_stone.webp"),
                             )
                         } else {
-                            "background-image: linear-gradient(180deg, rgba(74,69,76,0.98), rgba(30,29,34,1));".to_string()
+                            "background-image: linear-gradient(180deg, rgba(74,69,76,0.98), rgba(30,29,34,1));"
+                                .to_string()
                         },
                         if locked() {
                             "background-color: rgba(0, 0, 0, 0.7);"
@@ -365,16 +366,10 @@ fn GrindingAreaCard(
                 class=move || {
                     format!(
                         "relative z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
-                        if locked() {
-                            "cursor-default"
-                        } else if view_only {
+                        if locked() || view_only {
                             "cursor-default"
                         } else {
-                            if settings.uses_heavy_effects() {
-                                "cursor-pointer hover:brightness-110"
-                            } else {
-                                "cursor-pointer hover:brightness-105"
-                            }
+                            "cursor-pointer hover:brightness-110"
                         },
                     )
                 }

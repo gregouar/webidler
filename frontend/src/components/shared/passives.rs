@@ -300,9 +300,7 @@ pub fn Node(
                                         class=move || {
                                             format!(
                                                 "group-active:scale-90 group-active:brightness-100 {}",
-                                                if settings.graphics_quality()
-                                                    == GraphicsQuality::High
-                                                {
+                                                if settings.graphics_quality() == GraphicsQuality::High {
                                                     "xl:drop-shadow-[2px_2px_2px_black]"
                                                 } else {
                                                     ""
@@ -685,9 +683,15 @@ pub fn PassiveSkillStats(
                         GraphicsQuality::Low => "border-[#54462f]/80",
                     },
                     match settings.graphics_quality() {
-                        GraphicsQuality::High => "bg-[linear-gradient(180deg,rgba(226,193,122,0.04),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.14)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]",
-                        GraphicsQuality::Medium => "bg-[linear-gradient(180deg,rgba(204,172,105,0.035),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.12)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]",
-                        GraphicsQuality::Low => "bg-[linear-gradient(180deg,rgba(174,145,88,0.03),rgba(0,0,0,0.03)_26%,rgba(0,0,0,0.1)_100%),linear-gradient(180deg,rgba(20,20,24,0.98),rgba(11,11,13,1))]",
+                        GraphicsQuality::High => {
+                            "bg-[linear-gradient(180deg,rgba(226,193,122,0.04),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.14)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]"
+                        }
+                        GraphicsQuality::Medium => {
+                            "bg-[linear-gradient(180deg,rgba(204,172,105,0.035),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.12)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]"
+                        }
+                        GraphicsQuality::Low => {
+                            "bg-[linear-gradient(180deg,rgba(174,145,88,0.03),rgba(0,0,0,0.03)_26%,rgba(0,0,0,0.1)_100%),linear-gradient(180deg,rgba(20,20,24,0.98),rgba(11,11,13,1))]"
+                        }
                     },
                     if settings.graphics_quality() == GraphicsQuality::High {
                         "shadow-[inset_0_1px_0_rgba(255,255,255,0.03),inset_-1px_0_0_rgba(0,0,0,0.35)]"
@@ -738,21 +742,22 @@ pub fn PassiveSkillStats(
                         "absolute top-1/2 right-0 -translate-y-1/2 translate-x-full
                         rounded-r-[7px] flex items-center justify-center
                         w-7 h-18 font-extrabold text-stone-200 text-shadow shadow-black/80
-                        border border-l-0 active:brightness-90 {} {} {}",
+                        border border-l-0 active:brightness-90 {} {}",
                         match settings.graphics_quality() {
                             GraphicsQuality::High => "border-[#5a4a30]/75",
                             GraphicsQuality::Medium => "border-[#5a4a30]/75",
                             GraphicsQuality::Low => "border-[#54462f]/80",
                         },
                         match settings.graphics_quality() {
-                            GraphicsQuality::High => "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.14)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))] shadow-[0_4px_10px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(236,210,148,0.12),inset_0_-1px_0_rgba(0,0,0,0.35)] hover:text-[#f1e4c4] hover:border-[#7b6440]",
-                            GraphicsQuality::Medium => "bg-[linear-gradient(180deg,rgba(199,166,101,0.06),rgba(0,0,0,0.12)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))] hover:text-[#f1e4c4] hover:border-[#7b6440]",
-                            GraphicsQuality::Low => "bg-[linear-gradient(180deg,rgba(174,145,88,0.05),rgba(0,0,0,0.1)),linear-gradient(180deg,rgba(37,36,42,0.99),rgba(18,18,22,1))] hover:text-[#e8d8b0] hover:border-[#6d5a3c]",
-                        },
-                        if settings.graphics_quality() == GraphicsQuality::Low {
-                            ""
-                        } else {
-                            ""
+                            GraphicsQuality::High => {
+                                "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.14)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))] shadow-[0_4px_10px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(236,210,148,0.12),inset_0_-1px_0_rgba(0,0,0,0.35)] hover:text-[#f1e4c4] hover:border-[#7b6440]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "bg-[linear-gradient(180deg,rgba(199,166,101,0.06),rgba(0,0,0,0.12)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))] hover:text-[#f1e4c4] hover:border-[#7b6440]"
+                            }
+                            GraphicsQuality::Low => {
+                                "bg-[linear-gradient(180deg,rgba(174,145,88,0.05),rgba(0,0,0,0.1)),linear-gradient(180deg,rgba(37,36,42,0.99),rgba(18,18,22,1))] hover:text-[#e8d8b0] hover:border-[#6d5a3c]"
+                            }
                         },
                     )
                 }

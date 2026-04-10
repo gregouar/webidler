@@ -362,7 +362,10 @@ pub fn CircularProgressBar(
                         }
                             .into_any()
                     }
-                    GraphicsQuality::Low => view! { <></> }.into_any(),
+                    GraphicsQuality::Low => {
+                        let _: () = view! { <></> };
+                        ().into_any()
+                    },
                 }}
                 <div
                     class="absolute inset-0 transition-circular-progress-bar"

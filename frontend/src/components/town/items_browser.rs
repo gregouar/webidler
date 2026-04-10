@@ -141,7 +141,7 @@ pub fn ItemRow(
     max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
     let slot = item_specs.base.slot;
-    let is_highlighted = Signal::derive(move || highlight());
+    let is_highlighted = Signal::derive(highlight);
     let row_state_class = Signal::derive(move || {
         let mut classes = String::new();
 
@@ -180,7 +180,7 @@ pub fn ItemRow(
             state_class=row_state_class
             selected=is_highlighted
             on_click=move || {
-                if let Some(on_click) = on_click.clone() {
+                if let Some(on_click) = on_click {
                     on_click.run(());
                 }
             }
@@ -286,7 +286,7 @@ pub fn ItemDetailsPanel(
                     )
                 }
                 on:click=move |_| {
-                    if let Some(on_click) = on_click.clone() {
+                    if let Some(on_click) = on_click {
                         on_click.run(());
                     }
                 }
