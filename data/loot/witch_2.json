@@ -1,0 +1,10 @@
+{
+  "entries": [
+    {
+      "item_id": "witch_ring",
+      "weight": 499,
+      "min_area_level": 1,
+      "boss_only": true
+    }
+  ]
+}
