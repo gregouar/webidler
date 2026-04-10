@@ -94,7 +94,13 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 
                         {move || match active_tab.get() {
                             ForgeTab::Affix | ForgeTab::UniqueUpgrade => {
-                                view! { <InventoryBrowser selected_item /> }.into_any()
+                                view! {
+                                    <InventoryBrowser
+                                        selected_item
+                                        filter_unique=active_tab.get() == ForgeTab::UniqueUpgrade
+                                    />
+                                }
+                                    .into_any()
                             }
                             ForgeTab::Gamble => {
                                 view! { <GambleBrowser gamble_category /> }.into_any()
@@ -122,7 +128,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     let items_list = Signal::derive({
@@ -163,6 +169,9 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                             deleted_by: None,
                         }
                     }))
+                    .filter(|market_item| {
+                        (market_item.item_specs.base.rarity == ItemRarity::Unique) == filter_unique
+                    })
                     .collect::<Vec<_>>()
             })
         }

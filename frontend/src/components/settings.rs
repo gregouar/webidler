@@ -16,6 +16,8 @@ pub struct SettingsData {
 
     #[serde(default)]
     pub graphics_quality: GraphicsQuality,
+    #[serde(default = "default_true")]
+    pub shake_on_crit: bool,
 }
 
 #[derive(Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash)]
@@ -99,7 +101,9 @@ impl SettingsContext {
 
 fn request_layout_refresh() {
     let dispatch_resize = || {
-        if let Some(window) = web_sys::window() && let Ok(event) = Event::new("resize") {
+        if let Some(window) = web_sys::window()
+            && let Ok(event) = Event::new("resize")
+        {
             let _ = window.dispatch_event(&event);
         }
     };
@@ -119,4 +123,8 @@ pub fn provide_settings_context() {
         settings_data,
         set_settings,
     });
+}
+
+fn default_true() -> bool {
+    true
 }

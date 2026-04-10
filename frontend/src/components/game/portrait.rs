@@ -45,7 +45,7 @@ pub fn CharacterPortrait(
     let crit_hit = RwSignal::new(false);
 
     Effect::new(move |_| {
-        if just_hurt_crit.get() {
+        if just_hurt_crit.get() && settings.read_settings().shake_on_crit {
             crit_hit.set(true);
             set_timeout(move || crit_hit.set(false), Duration::from_millis(500));
         }

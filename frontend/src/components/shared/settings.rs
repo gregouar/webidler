@@ -26,11 +26,18 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
 
                     <SettingsSection title="Graphics">
                         <SettingDropdown
-                            label="Graphics Quality"
+                            label="Graphics quality"
                             options=GraphicsQuality::to_options()
                             value=Signal::derive(move || { settings_data.read().graphics_quality })
                             on_change=move |v| {
                                 settings_data.write().graphics_quality = v;
+                            }
+                        />
+                        <SettingToggle
+                            label="Shake on critical hit"
+                            value=Signal::derive(move || { settings_data.read().shake_on_crit })
+                            on_toggle=move |v| {
+                                settings_data.write().shake_on_crit = v;
                             }
                         />
                     </SettingsSection>
