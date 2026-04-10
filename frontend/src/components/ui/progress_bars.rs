@@ -3,6 +3,20 @@ use leptos_use::use_interval_fn;
 
 use crate::components::settings::{GraphicsQuality, SettingsContext};
 
+#[derive(Clone, Copy)]
+pub struct CooldownClock(RwSignal<u64>);
+
+pub fn provide_cooldown_clock() {
+    let tick = RwSignal::new(0u64);
+    use_interval_fn(
+        move || {
+            tick.update(|value| *value = value.wrapping_add(1));
+        },
+        200,
+    );
+    provide_context(CooldownClock(tick));
+}
+
 #[component]
 pub fn HorizontalProgressBar(
     /// Percent value, must be between 0 and 100.
@@ -447,6 +461,7 @@ pub fn predictive_cooldown(
 ) -> RwSignal<f64> {
     let progress_value = RwSignal::new(starting_value);
     let rate = RwSignal::new(0.0);
+    let cooldown_clock = expect_context::<CooldownClock>();
 
     Effect::new(move || {
         let remaining_time = remaining_time.get();
@@ -462,22 +477,20 @@ pub fn predictive_cooldown(
         }
     });
 
-    use_interval_fn(
-        move || {
-            let rate = rate.get_untracked();
-            if !disabled.get_untracked() && rate > 0.0 {
-                progress_value.update(|progress_value| {
-                    if *progress_value < 1.2 {
-                        *progress_value += rate * 0.2;
-                    }
-                    if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
-                        *progress_value = 1.0;
-                    }
-                });
-            }
-        },
-        200,
-    );
+    Effect::new(move |_| {
+        cooldown_clock.0.get();
+        let rate = rate.get_untracked();
+        if !disabled.get_untracked() && rate > 0.0 {
+            progress_value.update(|progress_value| {
+                if *progress_value < 1.2 {
+                    *progress_value += rate * 0.2;
+                }
+                if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
+                    *progress_value = 1.0;
+                }
+            });
+        }
+    });
 
     progress_value
 }

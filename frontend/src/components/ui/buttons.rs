@@ -441,7 +441,7 @@ pub fn Toggle(
                     style="background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%, rgba(0,0,0,0.04));"
                 ></span>
             </Show>
-            <span class="relative z-10">{children()}</span>
+            <span class="relative z-1">{children()}</span>
         </button>
     }
 }

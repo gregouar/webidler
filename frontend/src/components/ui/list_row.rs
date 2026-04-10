@@ -87,7 +87,7 @@ pub fn MenuListRow(
             <Show when=move || settings.uses_heavy_effects()>
                 <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
             </Show>
-            <div class="relative z-10 w-full">{children()}</div>
+            <div class="relative z-1 w-full">{children()}</div>
         </div>
     }
 }

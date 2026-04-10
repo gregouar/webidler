@@ -529,7 +529,7 @@ body {
 @utility transition-circular-progress-bar {
   transition:
     opacity 0.5s linear,
-    --progress 0.25s linear;
+    --progress 0.19s linear;
 }
 
 

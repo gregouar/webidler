@@ -45,7 +45,7 @@ pub struct GameContext {
     pub player_resources: Syncable<PlayerResources>,
     pub player_stamina: RwSignal<Duration>,
 
-    pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
+    // pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
@@ -95,7 +95,7 @@ impl GameContext {
             player_resources: Default::default(),
             player_stamina: Default::default(),
 
-            monster_wave: RwSignal::new(0),
+            // monster_wave: RwSignal::new(0),
             monster_specs: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
 

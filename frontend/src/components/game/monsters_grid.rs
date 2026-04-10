@@ -87,25 +87,39 @@ pub fn MonstersGrid() -> impl IntoView {
             )
         }>
             <For
-                each=move || game_context.monster_specs.get().into_iter().enumerate()
-                key=move |(index, _)| (game_context.monster_wave.get(), *index)
-                children=move |(index, specs)| {
-                    let (x_size, y_size) = specs.character_specs.size.get_xy_size();
-                    let (x_pos, y_pos) = (
-                        specs.character_specs.position_x,
-                        specs.character_specs.position_y,
-                    );
-
+                each=move || 0..6
+                key=|index| *index
+                children=move |index| {
                     view! {
-                        <div class=format!(
-                            "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full ",
-                            x_size,
-                            y_size,
-                            x_pos,
-                            y_pos,
-                        )>
-                            <MonsterCard specs=specs index=index />
-                        </div>
+                        <Show when=move || {
+                            game_context.monster_specs.read().get(index).is_some()
+                        }>
+                            {move || {
+                                let specs = game_context
+                                    .monster_specs
+                                    .read()
+                                    .get(index)
+                                    .cloned()
+                                    .expect("checked by Show");
+                                let (x_size, y_size) = specs.character_specs.size.get_xy_size();
+                                let (x_pos, y_pos) = (
+                                    specs.character_specs.position_x,
+                                    specs.character_specs.position_y,
+                                );
+
+                                view! {
+                                    <div class=format!(
+                                        "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full ",
+                                        x_size,
+                                        y_size,
+                                        x_pos,
+                                        y_pos,
+                                    )>
+                                        <MonsterCard specs=specs index=index />
+                                    </div>
+                                }
+                            }}
+                        </Show>
                     }
                 }
             />

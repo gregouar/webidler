@@ -21,6 +21,7 @@ use crate::components::{
         websocket::WebsocketContext,
     },
     shared::settings::SettingsModal,
+    ui::progress_bars::provide_cooldown_clock,
     ui::toast::*,
 };
 
@@ -28,6 +29,7 @@ use crate::components::{
 pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context);
+    provide_cooldown_clock();
 
     let auth_context = expect_context::<AuthContext>();
 
@@ -170,7 +172,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.player_state.set(player_state);
     game_context.player_stamina.set(player_stamina);
     if let Some(monster_specs) = monster_specs {
-        *game_context.monster_wave.write() += 1; // TODO: Overflow
+        // *game_context.monster_wave.write() += 1; // TODO: Overflow
         game_context.monster_specs.set(monster_specs);
     }
     game_context.monster_states.set(monster_states);
