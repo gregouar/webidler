@@ -413,10 +413,7 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let select_from_inventory = move |_| {
         town_context.selected_item_index.set(None);
-        town_context.equip_filter.set(InventoryEquipFilter::Market {
-            item_rarity: None,
-            not: false,
-        });
+        town_context.equip_filter.set(InventoryEquipFilter::Bag);
         town_context.open_inventory.set(true);
     };
 
@@ -425,7 +422,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             let item_specs = town_context
                 .inventory
                 .read()
-                .nth(item_index as usize)
+                .bag
+                .get(item_index as usize)
                 .cloned();
 
             if let Some(item_specs) = item_specs {

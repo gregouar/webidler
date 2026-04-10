@@ -40,10 +40,12 @@ pub enum InventoryEquipFilter {
     Slot,
     Map(String),
     Rune,
-    Market {
-        item_rarity: Option<ItemRarity>,
+    Rarity {
+        // Maybe later rename to Any, and not_item_rarity
+        item_rarity: ItemRarity,
         not: bool,
     },
+    Bag,
 }
 
 #[derive(Clone, Default)]
@@ -218,10 +220,12 @@ fn EquippedItemEquippedSlot(
             .equip_filter
             .with(|equip_filter| match equip_filter {
                 InventoryEquipFilter::Slot => true,
-                InventoryEquipFilter::Map(_) | InventoryEquipFilter::Rune => false,
-                InventoryEquipFilter::Market { item_rarity, not } => item_rarity
-                    .map(|item_rarity| (equipped_item_rarity == item_rarity) != *not)
-                    .unwrap_or(true),
+                InventoryEquipFilter::Map(_)
+                | InventoryEquipFilter::Rune
+                | InventoryEquipFilter::Bag => false,
+                InventoryEquipFilter::Rarity { item_rarity, not } => {
+                    (equipped_item_rarity == *item_rarity) != *not
+                }
             })
     });
 
@@ -350,7 +354,7 @@ pub fn EquippedItemContextMenu(
                                 <ActionMenuRow
                                     label=if let InventoryEquipFilter::Slot = inventory
                                         .equip_filter
-                                        .get()
+                                        .get_untracked()
                                     {
                                         "Unequip"
                                     } else {
@@ -494,9 +498,10 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                             })
                             .unwrap_or_default(),
                         InventoryEquipFilter::Rune => item_specs.base.rune_specs.is_some(),
-                        InventoryEquipFilter::Market { item_rarity, not } => item_rarity
-                            .map(|item_rarity| (item_specs.modifiers.rarity == item_rarity) != *not)
-                            .unwrap_or(true),
+                        InventoryEquipFilter::Rarity { item_rarity, not } => {
+                            (item_specs.modifiers.rarity == *item_rarity) != *not
+                        }
+                        InventoryEquipFilter::Bag => true,
                     })
             })
             .unwrap_or_default()
@@ -701,7 +706,7 @@ pub fn BagItemContextMenu(
                                     <ActionMenuRow
                                         label=if let InventoryEquipFilter::Slot = inventory
                                             .equip_filter
-                                            .get()
+                                            .get_untracked()
                                         {
                                             "Equip"
                                         } else {

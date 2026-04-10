@@ -136,8 +136,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
 
     let select_from_inventory = move |_| {
         town_context.selected_item_index.set(None);
-        town_context.equip_filter.set(InventoryEquipFilter::Market {
-            item_rarity: Some(ItemRarity::Unique),
+        town_context.equip_filter.set(InventoryEquipFilter::Rarity {
+            item_rarity: ItemRarity::Unique,
             not: !filter_unique,
         });
         town_context.open_inventory.set(true);
