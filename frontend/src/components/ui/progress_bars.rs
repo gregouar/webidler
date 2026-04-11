@@ -75,7 +75,7 @@ pub fn HorizontalProgressBar(
                     "relative flex w-full rounded-[4px] xl:rounded-[6px] {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
-                            "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                            "border border-[#6c5329] shadow-[0_3px_8px_rgba(0,0,0,0.42)]"
                         }
                         GraphicsQuality::Medium => "border border-[#6c5329] shadow-md",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
@@ -104,7 +104,7 @@ pub fn HorizontalProgressBar(
                         <>
                             <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
                             <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
                             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
                         </>
                     }
@@ -133,7 +133,7 @@ pub fn HorizontalProgressBar(
                             "relative block h-full w-full origin-left rounded-[2px] xl:rounded-[4px]
                             {} {} {} {}",
                             if settings.uses_heavy_effects() {
-                                "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]"
+                                "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
                             } else {
                                 ""
                             },
@@ -200,7 +200,7 @@ pub fn VerticalProgressBar(
                     "relative flex flex-col justify-end h-full rounded-[4px] xl:rounded-[6px] {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
-                            "border border-[#6c5329] shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]"
+                            "border border-[#6c5329] shadow-[0_3px_8px_rgba(0,0,0,0.42)]"
                         }
                         GraphicsQuality::Medium => "border border-[#6c5329] shadow-md",
                         GraphicsQuality::Low => "border border-[#5c4a2e]",
@@ -229,7 +229,7 @@ pub fn VerticalProgressBar(
                         <>
                             <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
                             <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
                             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
                         </>
                     }
@@ -258,7 +258,7 @@ pub fn VerticalProgressBar(
                             "relative block h-full w-full origin-bottom rounded-[2px] xl:rounded-[4px]
                             {} {} {}",
                             if settings.uses_heavy_effects() {
-                                "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.18),0_0_10px_rgba(255,255,255,0.05)]"
+                                "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
                             } else {
                                 ""
                             },
@@ -304,6 +304,7 @@ pub fn CircularProgressBar(
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+
     let reset_icon_animation = RwSignal::new("");
     let active_buffer = RwSignal::new(false);
     let front_progress = RwSignal::new(value.get_untracked().clamp(0.0, 1.0) * 100.0);
@@ -409,7 +410,9 @@ pub fn CircularProgressBar(
     let front_left_deg = move || (front_progress.get() - 50.0).clamp(0.0, 50.0) * 3.6 - 180.0;
     let back_right_deg = move || back_progress.get().clamp(0.0, 50.0) * 3.6 - 180.0;
     let back_left_deg = move || (back_progress.get() - 50.0).clamp(0.0, 50.0) * 3.6 - 180.0;
-    const RING_INSET_DEPTH: &str = "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.14) 28%, rgba(0,0,0,0.34) 62%, rgba(0,0,0,0.74) 100%)";
+    // const RING_INSET_DEPTH: &str =
+    //     "radial-gradient(circle at 50% 50%, rgba(0,0,0,0.0) 60%, rgba(0,0,0,0.5) 73%),";
+    const RING_INSET_DEPTH: &str = "";
 
     view! {
         <div class="circular-progress-bar">
@@ -442,7 +445,10 @@ pub fn CircularProgressBar(
                     class="absolute inset-0 transition-opacity duration-500"
                     class:opacity-0=move || disabled.get() || active_buffer.get()
                 >
-                    <div class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+                    <div
+                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-hidden"
+                        class:invisible=move || front_progress.get() <= 0.0
+                    >
                         <div
                             class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
@@ -456,13 +462,13 @@ pub fn CircularProgressBar(
                                     )
                                 } else {
                                     format!(
-                                        "{}, linear-gradient(90deg, transparent 50%, {} 50%)",
+                                        "{} linear-gradient(90deg, transparent 50%, {} 50%)",
                                         RING_INSET_DEPTH,
                                         bar_color,
                                     )
                                 };
                                 format!(
-                                    "background: {}; mask-image: linear-gradient(90deg, transparent 49.5%, #000 50%); -webkit-mask-image: linear-gradient(90deg, transparent 49.5%, #000 50%); transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%); -webkit-mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear;",
                                     background,
                                     front_right_deg(),
                                     front_right_transition_ms.get(),
@@ -487,13 +493,13 @@ pub fn CircularProgressBar(
                                     )
                                 } else {
                                     format!(
-                                        "{}, linear-gradient(90deg, {} 50%, transparent 50%)",
+                                        "{} linear-gradient(90deg, {} 50%, transparent 50%)",
                                         RING_INSET_DEPTH,
                                         bar_color,
                                     )
                                 };
                                 format!(
-                                    "background: {}; mask-image: linear-gradient(90deg, #000 50%, transparent 50.5%); -webkit-mask-image: linear-gradient(90deg, #000 50%, transparent 50.5%); transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
                                     background,
                                     front_left_deg(),
                                     front_left_transition_ms.get(),
@@ -507,7 +513,10 @@ pub fn CircularProgressBar(
                     class="absolute inset-0 transition-opacity duration-500"
                     class:opacity-0=move || disabled.get() || !active_buffer.get()
                 >
-                    <div class="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+                    <div
+                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-hidden"
+                        class:invisible=move || back_progress.get() <= 0.0
+                    >
                         <div
                             class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
@@ -521,13 +530,13 @@ pub fn CircularProgressBar(
                                     )
                                 } else {
                                     format!(
-                                        "{}, linear-gradient(90deg, transparent 50%, {} 50%)",
+                                        "{} linear-gradient(90deg, transparent 50%, {} 50%)",
                                         RING_INSET_DEPTH,
                                         bar_color,
                                     )
                                 };
                                 format!(
-                                    "background: {}; mask-image: linear-gradient(90deg, transparent 49.5%, #000 50%); -webkit-mask-image: linear-gradient(90deg, transparent 49.5%, #000 50%); transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%); -webkit-mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear;",
                                     background,
                                     back_right_deg(),
                                     back_right_transition_ms.get(),
@@ -552,13 +561,13 @@ pub fn CircularProgressBar(
                                     )
                                 } else {
                                     format!(
-                                        "{}, linear-gradient(90deg, {} 50%, transparent 50%)",
+                                        "{} linear-gradient(90deg, {} 50%, transparent 50%)",
                                         RING_INSET_DEPTH,
                                         bar_color,
                                     )
                                 };
                                 format!(
-                                    "background: {}; mask-image: linear-gradient(90deg, #000 50%, transparent 50.5%); -webkit-mask-image: linear-gradient(90deg, #000 50%, transparent 50.5%); transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
                                     background,
                                     back_left_deg(),
                                     back_left_transition_ms.get(),
@@ -598,7 +607,8 @@ pub fn CircularProgressBar(
                             )
                         }
                     }
-                }></div> // Icon
+                }>// Icon
+                </div>
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
                     scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]

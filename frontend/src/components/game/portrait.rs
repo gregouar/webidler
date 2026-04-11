@@ -271,7 +271,7 @@ pub fn CharacterPortrait(
 
                 <Show when=move || settings.uses_heavy_effects()>
                     <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                    <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                // <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
                 </Show>
 
                 <div
@@ -289,11 +289,9 @@ pub fn CharacterPortrait(
                         if settings.uses_textures() {
                             format!(
                                 "
-                                background-image:
-                                    linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
-                                    url('{}');
-                                background-size: auto, cover;
-                                background-position: center, center;
+                                background-image: url('{}');
+                                background-size: cover;
+                                background-position: center;
                                 ",
                                 img_asset("ui/paper_background.webp"),
                             )
