@@ -122,7 +122,7 @@ body {
       filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));
     }
     50% {
-      filter: drop-shadow(0 0 25px oklch(92.4% 0.12 95.746));
+      filter: drop-shadow(0 0 25px rgb(254, 230, 133));
     }
     100% {
       opacity: 0;
@@ -135,7 +135,7 @@ body {
       filter: drop-shadow(0 0 0px rgba(59, 130, 246, 0));
     }
     50% {
-      filter: drop-shadow(0 0 25px oklch(92.4% 0.12 95.746));
+      filter: drop-shadow(0 0 25px rgb(254, 230, 133));
     }
     100% {
       opacity: 0;

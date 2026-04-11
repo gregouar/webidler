@@ -12,7 +12,10 @@ use shared::{
 use crate::components::{
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
-    shared::{skills::SkillProgressBar, tooltips::SkillTooltip},
+    shared::{
+        skills::{SKILL_PROGRESS_RING_COLOR, SkillProgressBar},
+        tooltips::SkillTooltip,
+    },
     ui::{
         buttons::{FancyButton, Toggle},
         card::Card,
@@ -398,7 +401,7 @@ fn BuySkillButton() -> impl IntoView {
                     disabled=disable_buy_skill
                 >
                     <CircularProgressBar
-                        bar_color="oklch(55.4% 0.135 66.442)"
+                        bar_color=SKILL_PROGRESS_RING_COLOR
                         value=Signal::derive(|| 0.0)
                         bar_width=4
                     >
@@ -408,7 +411,7 @@ fn BuySkillButton() -> impl IntoView {
                             viewBox="0 0 24 24"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            class="xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] text-zinc-300"
+                            class="xl:drop-shadow-[0px_4px_black] text-zinc-300"
                         >
                             <path
                                 d="M12 5V19"

@@ -261,7 +261,8 @@ pub fn CharacterPortrait(
     view! {
         <div class=move || {
             format!(
-                "flex items-center justify-center h-full w-full relative p-1 xl:p-2 {}",
+                "flex items-center justify-center h-full w-full relative p-1 xl:p-2
+                overflow-hidden {}",
                 is_dead_portrait_effect(),
             )
         }>

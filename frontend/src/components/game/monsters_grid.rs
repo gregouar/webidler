@@ -69,21 +69,22 @@ pub fn MonstersGrid() -> impl IntoView {
 
     view! {
         <div class=move || {
+            let animation_class = if all_monsters_dead.get() {
+                "animate-monster-fade-out pointer-events-none will-change-transform-opacity transform-gpu"
+            } else if flee.get() {
+                "animate-monster-flee pointer-events-none will-change-transform-opacity transform-gpu"
+            } else if !game_context.monster_states.read().is_empty() {
+                "animate-monster-fade-in will-change-transform-opacity transform-gpu"
+            } else {
+                ""
+            };
             format!(
                 "flex-1 min-h-0
-                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-                items-center will-change-transform-opacity transform-gpu
+                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
+                items-center
                 {}
                 ",
-                if all_monsters_dead.get() {
-                    "animate-monster-fade-out pointer-events-none"
-                } else if flee.get() {
-                    "animate-monster-flee pointer-events-none"
-                } else if !game_context.monster_states.read().is_empty() {
-                    "animate-monster-fade-in"
-                } else {
-                    ""
-                },
+                animation_class,
             )
         }>
             <For

@@ -33,3 +33,4 @@ Cargo.lock
 .venv
 
 logs
+.codex*
