@@ -40,14 +40,14 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
                 <div
                     node_ref=node_ref
-                    class="relative isolate w-full max-w-md overflow-hidden
+                    class="relative isolate clip-octagon w-full max-w-md overflow-hidden
                     border border-[#6c5734]/45
                     shadow-[0_18px_42px_rgba(0,0,0,0.5),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                     animate-[modal-fade_0.18s_ease-out]"
-                    style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+                    style="
                     background-image:
-                        linear-gradient(180deg, rgba(214,177,102,0.05), rgba(0,0,0,0)),
-                        linear-gradient(135deg, rgba(39,38,44,0.96), rgba(15,15,18,1));
+                    linear-gradient(180deg, rgba(214,177,102,0.05), rgba(0,0,0,0)),
+                    linear-gradient(135deg, rgba(39,38,44,0.96), rgba(15,15,18,1));
                     background-blend-mode: screen, normal;"
                 >
                     <style>
@@ -58,33 +58,32 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
                         }
                         "
                     </style>
-                    <div
-                        class="pointer-events-none absolute inset-[1px] border border-white/6"
-                        style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
-                    ></div>
+                    <div class="pointer-events-none clip-octagon [--cut:11px] absolute inset-[1px] border border-white/6"></div>
                     <div class="pointer-events-none absolute inset-x-5 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
                     <div class="relative z-10 flex flex-col gap-4 p-5 xl:p-6 text-center">
                         <CardTitle>"Confirm Action"</CardTitle>
 
                         <p class="px-2 text-sm xl:text-base text-stone-200 leading-relaxed">
                             {move || {
-                                state.read().as_ref().map(|(msg, _)| msg.clone()).unwrap_or_default()
+                                state
+                                    .read()
+                                    .as_ref()
+                                    .map(|(msg, _)| msg.clone())
+                                    .unwrap_or_default()
                             }}
                         </p>
 
                         <div class="flex justify-center gap-3">
-                            <MenuButtonRed on:click=move |_| state.set(None)>
-                                "Cancel"
-                            </MenuButtonRed>
+                            <MenuButtonRed on:click=move |_| {
+                                state.set(None)
+                            }>"Cancel"</MenuButtonRed>
 
                             <MenuButton on:click=move |_| {
                                 if let Some((_, cb)) = state.get() {
                                     state.set(None);
                                     cb();
                                 }
-                            }>
-                                "Confirm"
-                            </MenuButton>
+                            }>"Confirm"</MenuButton>
                         </div>
                     </div>
                 </div>

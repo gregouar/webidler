@@ -255,7 +255,7 @@ fn EquippedItemEquippedSlot(
             <Show when=move || is_being_unequipped.get()>
                 <div
                     class="absolute inset-0 z-30 w-full"
-                    style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+                    style="
                     background:
                     linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
                     linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
@@ -585,7 +585,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 <Show when=move || is_being_equipped.get()>
                                     <div
                                         class="absolute inset-0 z-30 w-full"
-                                        style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+                                        style="
                                         background:
                                         linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
                                         linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
@@ -791,7 +791,6 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
             "
             style="
             animation: fade-in 0.2s ease-out forwards;
-            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
             linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
             linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
             border: 1px solid rgba(108,83,41,0.72);

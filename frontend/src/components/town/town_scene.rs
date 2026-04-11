@@ -311,16 +311,12 @@ fn GrindingAreaCard(
                 )
             }
         >
-            <div
-                class="absolute inset-0 bg-black"
-                style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
-                aria-hidden="true"
-            ></div>
+            <div class="absolute inset-0 bg-black clip-octagon" aria-hidden="true"></div>
 
             <div
                 class=move || {
                     format!(
-                        "absolute inset-0 border {}",
+                        "clip-octagon absolute inset-0 border {}",
                         if settings.uses_heavy_effects() {
                             "border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
                         } else if settings.uses_surface_effects() {
@@ -333,7 +329,6 @@ fn GrindingAreaCard(
                 style=move || {
                     format!(
                         "
-                        clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
                         {};
                         {}
                         ",
@@ -355,26 +350,20 @@ fn GrindingAreaCard(
                 }
             >
                 <Show when=move || settings.uses_surface_effects()>
-                    <div
-                        class="pointer-events-none absolute inset-[1px] border border-[#d4b57a]/8"
-                        style="clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0 calc(100% - 11px), 0 11px);"
-                    ></div>
+                    <div class="pointer-events-none clip-octagon [--cut:11px] absolute inset-[1px] border border-[#d4b57a]/8"></div>
                 </Show>
             </div>
 
-            <div
-                class=move || {
-                    format!(
-                        "relative z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
-                        if locked() || view_only {
-                            "cursor-default"
-                        } else {
-                            "cursor-pointer hover:brightness-110"
-                        },
-                    )
-                }
-                style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
-            >
+            <div class=move || {
+                format!(
+                    "relative clip-octagon z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
+                    if locked() || view_only {
+                        "cursor-default"
+                    } else {
+                        "cursor-pointer hover:brightness-110"
+                    },
+                )
+            }>
                 <div class=move || {
                     format!(
                         "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",

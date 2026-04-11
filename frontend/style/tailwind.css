@@ -15,6 +15,20 @@ body {
   font-family: var(--font-sans);
 }
 
+@utility clip-octagon {
+  clip-path: polygon(
+    var(--cut, 12px) 0,
+    calc(100% - var(--cut, 12px)) 0,
+    100% var(--cut, 12px),
+    100% calc(100% - var(--cut, 12px)),
+    calc(100% - var(--cut, 12px)) 100%,
+    var(--cut, 12px) 100%,
+    0 calc(100% - var(--cut, 12px)),
+    0 var(--cut, 12px)
+  );
+}
+
+
 @theme {
   --text-shadow-sm: 0 1px 2px rgb(0, 0, 0);
   --text-shadow: 0 2px 4px rgb(0, 0, 0);
