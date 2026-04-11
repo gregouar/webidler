@@ -178,7 +178,7 @@ pub fn CharacterPortrait(
             border-[1.5px] xl:border-2
             shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
             before:pointer-events-none before:absolute before:inset-[1px]
-            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.06),transparent_28%)]
+            before:border
             after:pointer-events-none after:absolute after:inset-[4px]
             after:border-[1px]
             {}",
@@ -188,7 +188,7 @@ pub fn CharacterPortrait(
             "w-full h-full relative isolate
             border-[1.5px] xl:border-2
             before:pointer-events-none before:absolute before:inset-[1px]
-            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.045),transparent_32%)]
+            before:border
             after:pointer-events-none after:absolute after:inset-[4px]
             after:border-[1px]
             {}",
@@ -198,7 +198,7 @@ pub fn CharacterPortrait(
             "w-full h-full relative isolate
             border-[1.5px] xl:border-2
             before:pointer-events-none before:absolute before:inset-[1px]
-            before:border before:bg-[linear-gradient(180deg,rgba(186,148,86,0.04),transparent_34%)]
+            before:border 
             after:pointer-events-none after:absolute after:inset-[4px]
             after:border-[1px]
             {}",
