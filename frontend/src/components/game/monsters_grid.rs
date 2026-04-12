@@ -70,18 +70,19 @@ pub fn MonstersGrid() -> impl IntoView {
     view! {
         <div class=move || {
             let animation_class = if all_monsters_dead.get() {
-                "animate-monster-fade-out pointer-events-none will-change-transform-opacity transform-gpu"
+                "animate-monster-fade-out pointer-events-none"
             } else if flee.get() {
-                "animate-monster-flee pointer-events-none will-change-transform-opacity transform-gpu"
+                "animate-monster-flee pointer-events-none"
             } else if !game_context.monster_states.read().is_empty() {
-                "animate-monster-fade-in will-change-transform-opacity transform-gpu"
+                "animate-monster-fade-in"
             } else {
                 ""
             };
             format!(
                 "flex-1 min-h-0
                 grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
-                items-center
+                items-center 
+                will-change-transform-opacity transform-gpu
                 {}
                 ",
                 animation_class,
@@ -195,19 +196,16 @@ fn MonsterFeedbackOverlay(
     gems_reward: RwSignal<f64>,
 ) -> impl IntoView {
     view! {
-        <div
-            class="absolute inset-0 z-30 pointer-events-none"
-            style="contain: paint;"
-        >
+        <div class="absolute inset-0 z-30 pointer-events-none" style="contain: paint;">
             <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
                 <DamageNumber tick />
             </For>
 
             <Show when=move || { gold_reward.get() > 0.0 }>
                 <div class="
-                    reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
-                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                    flex items-center gap-1 font-number">
+                reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
+                absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number">
                     <span>+{format_number(gold_reward.get())}</span>
                     <img
                         draggable="false"
@@ -220,9 +218,9 @@ fn MonsterFeedbackOverlay(
 
             <Show when=move || { gems_reward.get() > 0.0 }>
                 <div class="
-                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
-                    absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
-                    flex items-center gap-1 font-number">
+                reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
+                absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number">
                     <span>+{format_number(gems_reward.get())}</span>
                     <img
                         draggable="false"
@@ -461,9 +459,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     GraphicsQuality::High => {
                         format!(
                             "
-                            /*clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);*/
-                            background-image:
-                                url('{}');
+                            background-image: url('{}');
                             ",
                             img_asset("ui/dark_stone.webp"),
                         )
@@ -471,18 +467,12 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     GraphicsQuality::Medium => {
                         format!(
                             "
-                            /*clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);*/
                             background-image: url('{}');
                             ",
                             img_asset("ui/dark_stone.webp"),
                         )
                     }
-                    GraphicsQuality::Low => {
-                        "
-                            /*clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);*/
-                        "
-                            .to_string()
-                    }
+                    GraphicsQuality::Low => "".to_string(),
                 };
                 format!("contain: layout paint style; {background_style}")
             }
@@ -517,10 +507,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 <MonsterFeedbackOverlay damage_ticks gold_reward gems_reward />
             </div>
 
-            <div
-                class="w-full flex flex-col justify-center gap-1"
-                style="contain: layout paint;"
-            >
+            <div class="w-full flex flex-col justify-center gap-1" style="contain: layout paint;">
                 <MonsterTags specs=specs.character_specs />
                 <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For
@@ -906,8 +893,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     view! {
         <SkillProgressBar
             skill_specs_base=skill_specs.base
-            value=progress_value.start_value
-            predictive_animation=progress_value
+            value=progress_value
             reset=just_triggered
             disabled=is_dead
             bar_width=2

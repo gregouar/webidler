@@ -2,10 +2,7 @@ use leptos::prelude::*;
 
 use shared::data::skill::{BaseSkillSpecs, SkillType};
 
-use crate::{
-    assets::img_asset,
-    components::ui::progress_bars::{CircularProgressBar, PredictiveCooldownAnimation},
-};
+use crate::{assets::img_asset, components::ui::progress_bars::CircularProgressBar};
 
 pub const SKILL_PROGRESS_RING_COLOR: &str = "#a65f00";
 
@@ -16,56 +13,27 @@ pub fn SkillProgressBar(
     #[prop(into, default = 4)] bar_width: u8,
     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
-    #[prop(optional)] predictive_animation: Option<PredictiveCooldownAnimation>,
     #[prop(optional)] icon_class: Option<&'static str>,
 ) -> impl IntoView {
     let tint_background = skill_type_progress_tint(skill_specs_base.skill_type);
     let icon_class = icon_class.unwrap_or("w-full h-full flex-no-shrink fill-current invert");
 
     view! {
-        {match predictive_animation {
-            Some(predictive_animation) => {
-                view! {
-                    <CircularProgressBar
-                        value=value
-                        bar_color=SKILL_PROGRESS_RING_COLOR
-                        reset=reset
-                        disabled=disabled
-                        bar_width=bar_width
-                        predictive_animation=predictive_animation
-                        tint_background=tint_background
-                    >
-                        <img
-                            draggable="false"
-                            src=img_asset(&skill_specs_base.icon)
-                            alt=skill_specs_base.name.clone()
-                            class=icon_class
-                        />
-                    </CircularProgressBar>
-                }
-                    .into_any()
-            }
-            None => {
-                view! {
-                    <CircularProgressBar
-                        value=value
-                        bar_color=SKILL_PROGRESS_RING_COLOR
-                        reset=reset
-                        disabled=disabled
-                        bar_width=bar_width
-                        tint_background=tint_background
-                    >
-                        <img
-                            draggable="false"
-                            src=img_asset(&skill_specs_base.icon)
-                            alt=skill_specs_base.name.clone()
-                            class=icon_class
-                        />
-                    </CircularProgressBar>
-                }
-                    .into_any()
-            }
-        }}
+        <CircularProgressBar
+            value=value
+            bar_color=SKILL_PROGRESS_RING_COLOR
+            reset=reset
+            disabled=disabled
+            bar_width=bar_width
+            tint_background=tint_background
+        >
+            <img
+                draggable="false"
+                src=img_asset(&skill_specs_base.icon)
+                alt=skill_specs_base.name.clone()
+                class=icon_class
+            />
+        </CircularProgressBar>
     }
 }
 

@@ -134,14 +134,17 @@ pub fn HeaderMenu() -> impl IntoView {
 
     view! {
         <BaseHeaderMenu>
-            <div class="flex justify-around w-full items-center">
-                <GoldCounter value=gold w_full=true />
-                <GemsCounter value=gems w_full=true />
-                <ShardsCounter value=shards w_full=true />
-            </div>
-            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+            <div class="flex justify-start space-x-1 xl:space-x-2">
                 <FullscreenButton />
-                <WikiButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        town_context.open_settings.set(!town_context.open_settings.get_untracked())
+                    }
+                >
+                    "⚙"
+                </MenuButton>
                 <MenuButton
                     class:hidden
                     class:xl:inline
@@ -149,8 +152,16 @@ pub fn HeaderMenu() -> impl IntoView {
                         chat_context.opened.set(!chat_context.opened.get_untracked())
                     }
                 >
-                    "Chat"
+                    "🗪"
                 </MenuButton>
+                <WikiButton />
+            </div>
+            <div class="flex-1 flex justify-around items-center">
+                <GoldCounter value=gold w_full=true />
+                <GemsCounter value=gems w_full=true />
+                <ShardsCounter value=shards w_full=true />
+            </div>
+            <div class="flex justify-end space-x-1 xl:space-x-2">
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
                     "Inventory"
                 </MenuButton>

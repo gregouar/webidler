@@ -684,8 +684,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                                         view! {
                                             <SkillProgressBar
                                                 skill_specs_base
-                                                value=progress_value.start_value
-                                                predictive_animation=progress_value
+                                                value=progress_value
                                                 reset=just_triggered
                                                 disabled=is_dead
                                                 bar_width=4

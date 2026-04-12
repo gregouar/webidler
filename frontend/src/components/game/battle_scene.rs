@@ -38,7 +38,7 @@ pub fn BattleScene() -> impl IntoView {
                     <BattleSceneHeader />
                     <div
                         class="flex relative w-full flex-1 min-h-0 isolate
-                    bg-stone-800 overflow-clip shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]"
+                        bg-stone-800 overflow-clip shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]"
                         style="contain: layout paint;"
                     >
                         <Show when=move || !game_context.area_state.read().rush_mode>
@@ -364,9 +364,8 @@ pub fn ThreatMeter() -> impl IntoView {
             <div class="h-full py-1 pr-2 xl:pr-3 z-2">
                 <VerticalProgressBar
                     class="z-2 w-4 xl:w-8"
-                    value=progress_value.start_value
-                    predictive_animation=progress_value
-                    reset=threat_increase
+                    value=progress_value
+                    reset
                     bar_color="bg-gradient-to-l from-yellow-500 to-yellow-700"
                 />
             </div>
