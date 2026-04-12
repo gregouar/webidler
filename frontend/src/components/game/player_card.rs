@@ -235,7 +235,10 @@ pub fn PlayerCard() -> impl IntoView {
 
             <PlayerName />
 
-            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+            <div
+                class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2"
+                style="contain: layout paint;"
+            >
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class="w-6 xl:w-8"
@@ -319,7 +322,10 @@ pub fn PlayerCard() -> impl IntoView {
                 </HorizontalProgressBar>
             </StaticTooltip>
 
-            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
+            <div
+                class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2"
+                style="contain: layout paint;"
+            >
                 <For
                     each=move || {
                         0..game_context
@@ -659,14 +665,15 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     );
 
     view! {
-        <div class="flex flex-col">
+        <div class="flex flex-col" style="contain: layout paint;">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
                 {
                     let use_skill = use_skill.clone();
                     view! {
                         <button
-                            class="btn p-1 w-full h-full
+                            class="btn p-1 w-full h-full isolate
                             active:brightness-50 active:sepia"
+                            style="contain: paint;"
                             on:click=move |_| use_skill()
                             disabled=move || !is_ready.get()
                         >
@@ -677,7 +684,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                                         view! {
                                             <SkillProgressBar
                                                 skill_specs_base
-                                                value=progress_value
+                                                value=progress_value.start_value
+                                                predictive_animation=progress_value
                                                 reset=just_triggered
                                                 disabled=is_dead
                                                 bar_width=4

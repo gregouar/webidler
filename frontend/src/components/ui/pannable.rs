@@ -189,7 +189,7 @@ pub fn Pannable(
             on:touchmove=on_touch_move
             on:touchend=on_touch_end
             on:contextmenu=|ev| ev.prevent_default()
-            class="flex items-center justify-center w-full h-full touch-none overflow-hidden "
+            class="flex items-center justify-center w-full h-full touch-none overflow-clip "
         >
             // xl:drop-shadow-[0_2px_4px_black]"
             <svg

@@ -31,7 +31,7 @@ where
                 class=move || {
                     let quality = settings.graphics_quality();
                     format!(
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                         w-full flex items-center justify-between gap-2
                         px-1 xl:px-3 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
                         tracking-[0.08em] text-stone-100 font-extrabold
@@ -223,7 +223,7 @@ where
                 class=move || {
                     let quality = settings.graphics_quality();
                     format!(
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                         w-full flex items-center justify-between gap-2
                         px-1 xl:px-3 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
                         tracking-[0.08em] text-stone-100 font-extrabold

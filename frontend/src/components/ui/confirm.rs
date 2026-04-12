@@ -40,7 +40,7 @@ pub fn ConfirmationModal(state: RwSignal<Option<(String, ArcFn)>>) -> impl IntoV
             <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
                 <div
                     node_ref=node_ref
-                    class="relative isolate clip-octagon w-full max-w-md overflow-hidden
+                    class="relative isolate clip-octagon w-full max-w-md overflow-clip
                     border border-[#6c5734]/45
                     shadow-[0_18px_42px_rgba(0,0,0,0.5),inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]
                     animate-[modal-fade_0.18s_ease-out]"

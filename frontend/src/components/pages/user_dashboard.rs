@@ -376,7 +376,7 @@ fn CharacterSlot(
     view! {
         <div class=move || {
             format!(
-                "relative overflow-hidden rounded-[10px] flex flex-row items-stretch h-full border {} {} {}",
+                "relative overflow-clip rounded-[10px] flex flex-row items-stretch h-full border {} {} {}",
                 if settings.uses_heavy_effects() {
                     "border-[#6c5329]/70"
                 } else if settings.uses_surface_effects() {
@@ -406,7 +406,7 @@ fn CharacterSlot(
             <div
                 class=move || {
                     format!(
-                        "relative z-10 w-28 min-h-0 overflow-hidden border-r {}",
+                        "relative z-10 w-28 min-h-0 overflow-clip border-r {}",
                         if settings.uses_surface_effects() {
                             "border-[#6c5329]/45"
                         } else {
@@ -489,7 +489,7 @@ fn CreateCharacterSlot() -> impl IntoView {
     view! {
         <div class=move || {
             format!(
-                "relative overflow-hidden rounded-[10px] flex flex-row items-stretch min-h-[7.5rem] cursor-pointer transition active:translate-y-[1px] active:brightness-95 border {} {} {} {}",
+                "relative overflow-clip rounded-[10px] flex flex-row items-stretch min-h-[7.5rem] cursor-pointer transition active:translate-y-[1px] active:brightness-95 border {} {} {} {}",
                 if settings.uses_heavy_effects() {
                     "border-[#6c5329]/65"
                 } else if settings.uses_surface_effects() {
@@ -706,7 +706,7 @@ pub fn CreateCharacterPanel(
                                 view! {
                                     <div
                                         class="relative aspect-square rounded-lg
-                                        overflow-hidden border-2 cursor-pointer 
+                                        overflow-clip border-2 cursor-pointer 
                                         transition hover:scale-105 active:scale-95"
                                         style=format!(
                                             "background-image: url('{}');",

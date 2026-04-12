@@ -762,7 +762,7 @@ pub fn BagItemContextMenu(
 #[component]
 fn EmptySlot(children: Children) -> impl IntoView {
     view! {
-        <div class="relative isolate flex items-center justify-center w-full h-full overflow-hidden rounded-[4px] xl:rounded-[6px] opacity-80 border border-[#56462f]/80 shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)] bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]">
+        <div class="relative isolate flex items-center justify-center w-full h-full overflow-clip rounded-[4px] xl:rounded-[6px] opacity-80 border border-[#56462f]/80 shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)] bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]">
             <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-white/5"></div>
             <div class="relative z-10 flex h-full w-full items-center justify-center p-1">
                 {children()}
@@ -787,7 +787,7 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
             w-full
             p-1
             text-center
-            overflow-hidden
+            overflow-clip
             "
             style="
             animation: fade-in 0.2s ease-out forwards;
@@ -851,7 +851,7 @@ fn ActionMenuRow(
     view! {
         <button
             class=format!(
-                "btn relative w-full overflow-hidden px-2 xl:px-2.5 py-1.5 xl:py-2
+                "btn relative w-full overflow-clip px-2 xl:px-2.5 py-1.5 xl:py-2
                 text-sm xl:text-base font-semibold tracking-[0.04em]
                 transition-colors duration-150 {} {}
                 bg-zinc-900/90

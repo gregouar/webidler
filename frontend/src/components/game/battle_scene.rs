@@ -34,10 +34,13 @@ pub fn BattleScene() -> impl IntoView {
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
                 <PlayerCard />
                 <Card class="w-2/3 aspect-[12/8]" pad=false gap=false>
-                    // <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-hidden">
+                    // <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-clip">
                     <BattleSceneHeader />
-                    <div class="flex relative w-full flex-1 min-h-0
-                    bg-stone-800 overflow-hidden shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]">
+                    <div
+                        class="flex relative w-full flex-1 min-h-0 isolate
+                    bg-stone-800 overflow-clip shadow-[inset_0_0_32px_rgba(0,0,0,0.6)]"
+                        style="contain: layout paint;"
+                    >
                         <Show when=move || !game_context.area_state.read().rush_mode>
                             <MonstersGrid />
                             <ThreatMeter />
@@ -47,6 +50,7 @@ pub fn BattleScene() -> impl IntoView {
                         <div
                             class="absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none"
                             class:opacity-100=move || game_context.area_state.read().rush_mode
+                            style="contain: layout paint;"
                         >
                             <RushOverlay />
                         </div>
@@ -116,7 +120,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
     view! {
         <div
-            class="h-8 xl:h-16 relative overflow-hidden w-full
+            class="h-8 xl:h-16 relative overflow-clip w-full
             bg-center bg-repeat-x flex items-center justify-between px-4"
             style=header_background
         >
@@ -360,7 +364,8 @@ pub fn ThreatMeter() -> impl IntoView {
             <div class="h-full py-1 pr-2 xl:pr-3 z-2">
                 <VerticalProgressBar
                     class="z-2 w-4 xl:w-8"
-                    value=progress_value
+                    value=progress_value.start_value
+                    predictive_animation=progress_value
                     reset=threat_increase
                     bar_color="bg-gradient-to-l from-yellow-500 to-yellow-700"
                 />

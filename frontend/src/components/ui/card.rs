@@ -35,7 +35,7 @@ pub fn Card(
                 class=move || {
                     let quality = settings.graphics_quality();
                     format!(
-                        "clip-octagon absolute inset-0 overflow-hidden border {} {}",
+                        "clip-octagon absolute inset-0 overflow-clip border {} {}",
                         match quality {
                             GraphicsQuality::High => {
                                 "border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
@@ -74,7 +74,7 @@ pub fn Card(
             <div class=format!(
                 "relative z-10 flex h-full flex-col clip-octagon {} {}",
                 if gap { "gap-1 xl:gap-2" } else { "" },
-                if pad { "p-1 xl:p-3" } else { "m-[2px] overflow-hidden" },
+                if pad { "p-1 xl:p-3" } else { "m-[2px] overflow-clip" },
             )>{children()}</div>
         </div>
     }

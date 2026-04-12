@@ -55,7 +55,7 @@ pub struct SelectedMarketItem {
 #[component]
 pub fn BrowserEmptyItemSlot() -> impl IntoView {
     view! {
-        <div class="relative isolate flex items-center justify-center w-full h-full overflow-hidden rounded-[6px]
+        <div class="relative isolate flex items-center justify-center w-full h-full overflow-clip rounded-[6px]
         border border-[#56462f]/80
         bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]
         shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)]">
@@ -268,7 +268,7 @@ pub fn ItemDetailsPanel(
             <div
                 class=move || {
                     format!(
-                        "relative isolate w-full h-auto aspect-5/2 overflow-hidden rounded-[10px] border
+                        "relative isolate w-full h-auto aspect-5/2 overflow-clip rounded-[10px] border
                         bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                         shadow-[0_6px_16px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
                         transition-[border-color,background-color,box-shadow,transform] duration-150

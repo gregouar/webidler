@@ -356,7 +356,7 @@ fn GrindingAreaCard(
 
             <div class=move || {
                 format!(
-                    "relative clip-octagon z-10 p-[3px] flex flex-col h-full transition-all overflow-hidden {}",
+                    "relative clip-octagon z-10 p-[3px] flex flex-col h-full transition-all overflow-clip {}",
                     if locked() || view_only {
                         "cursor-default"
                     } else {
@@ -513,7 +513,7 @@ pub fn StartGrindPanel(
                 area_specs()
                     .map(|area_specs| {
                         view! {
-                            <MenuCard class="max-w-4xl mx-auto overflow-hidden" pad=false gap=false>
+                            <MenuCard class="max-w-4xl mx-auto overflow-clip" pad=false gap=false>
                                 <div class="h-10 xl:h-16 w-full relative">
                                     <img
                                         draggable="false"

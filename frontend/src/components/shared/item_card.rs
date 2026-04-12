@@ -149,7 +149,7 @@ pub fn ItemCard(
             // node_ref=node_ref
             class=move || {
                 format!(
-                    "relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-hidden
+                    "relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-clip
                     rounded-[4px] xl:rounded-[6px] border {} {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => "border-[#6c5329]/85",

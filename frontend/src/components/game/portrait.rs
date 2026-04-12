@@ -264,10 +264,10 @@ pub fn CharacterPortrait(
         <div class=move || {
             format!(
                 "flex items-center justify-center h-full w-full relative p-1 xl:p-2
-                overflow-hidden {}",
+                overflow-clip {}",
                 is_dead_portrait_effect(),
             )
-        }>
+        } style="contain: layout paint style;">
             <div class=portrait_frame_class style=crit_animation_style>
                 // <Show when=move || settings.uses_heavy_effects()>
                 // <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
@@ -276,7 +276,7 @@ pub fn CharacterPortrait(
                 <div
                     class=move || {
                         format!(
-                            "h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] {}",
+                            "h-full z-0 overflow-clip border border-black/40 bg-[#1c1714] {}",
                             if heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                             } else {
@@ -329,7 +329,10 @@ pub fn CharacterPortrait(
                     // /////////
                     // class:hit-blink=hit_signal
 
-                    <div class="absolute inset-0 flex flex-wrap content-start justify-start pointer-events-none">
+                    <div
+                        class="absolute inset-0 flex flex-wrap content-start justify-start pointer-events-none"
+                        style="contain: paint;"
+                    >
                         <For
                             each=move || { active_debuffs.get().into_iter() }
                             key=|k| k.clone()
@@ -347,7 +350,10 @@ pub fn CharacterPortrait(
                         </For>
                     </div>
 
-                    <div class="absolute inset-0 flex flex-wrap-reverse content-start justify-start pointer-events-none">
+                    <div
+                        class="absolute inset-0 flex flex-wrap-reverse content-start justify-start pointer-events-none"
+                        style="contain: paint;"
+                    >
                         <For
                             each=move || { active_buffs.get().into_iter() }
                             key=|k| k.clone()
@@ -419,6 +425,7 @@ pub fn CharacterPortrait(
                     <div
                         class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
                         class:opacity-100=move || is_bleeding.get()
+                        style="contain: paint;"
                     >
                         <div class="absolute inset-0 status-bleed"></div>
                     </div>
@@ -428,6 +435,7 @@ pub fn CharacterPortrait(
                     <div
                         class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
                         class:opacity-100=move || is_burning.get()
+                        style="contain: paint;"
                     >
                         <div class="absolute inset-0 status-burn"></div>
                     </div>
@@ -437,6 +445,7 @@ pub fn CharacterPortrait(
                     <div
                         class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
                         class:opacity-100=move || is_poisoned.get()
+                        style="contain: paint;"
                     >
                         <div class="absolute inset-0 status-poison"></div>
                     </div>

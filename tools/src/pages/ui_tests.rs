@@ -115,7 +115,7 @@ pub fn UiTestsPage() -> impl IntoView {
 
                     <Card class="w-2/3 h-full">
                         <CardHeader title="Inventory" on_close=|| {}>
-                            <div class="flex gap-2 -mb-3 mx-4 overflow-hidden">
+                            <div class="flex gap-2 -mb-3 mx-4 overflow-clip">
                                 <TabButton
                                     is_active=Signal::derive(move || active_tab.get())
                                     on:click=move |_| active_tab.set(true)
@@ -349,7 +349,7 @@ pub fn Card(
 
             <div
                 class="absolute inset-0 bg-zinc-800 border border-[#6c5734]/45
-                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)] overflow-hidden"
+                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)] overflow-clip"
                 style=format!(
                     "
                     clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
@@ -489,7 +489,7 @@ pub fn CircularProgressBar(
     view! {
         <div class="circular-progress-bar">
            <div
-                class="relative w-full h-full aspect-square rounded-full overflow-hidden
+                class="relative w-full h-full aspect-square rounded-full overflow-clip
                 border border-[#6c5329]
                 bg-stone-900
                 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
@@ -680,7 +680,7 @@ pub fn CircularProgressBarGpu(
         <div class="circular-progress-bar">
             <div class=move || {
                 format!(
-                    "relative w-full h-full aspect-square rounded-full overflow-hidden {} {}",
+                    "relative w-full h-full aspect-square rounded-full overflow-clip {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
@@ -708,7 +708,7 @@ pub fn CircularProgressBarGpu(
                     class:opacity-0=move || disabled.get() || active_buffer.get()
                 >
                     <div
-                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-hidden"
+                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-clip"
                         class:invisible=move || front_progress.get() <= 0.0
                     >
                         <div
@@ -739,7 +739,7 @@ pub fn CircularProgressBarGpu(
                         ></div>
                     </div>
                     <div
-                        class="absolute inset-y-0 left-0 w-1/2 overflow-hidden"
+                        class="absolute inset-y-0 left-0 w-1/2 overflow-clip"
                         class:invisible=move || front_progress.get() <= 50.0
                     >
                         <div
@@ -776,7 +776,7 @@ pub fn CircularProgressBarGpu(
                     class:opacity-0=move || disabled.get() || !active_buffer.get()
                 >
                     <div
-                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-hidden"
+                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-clip"
                         class:invisible=move || back_progress.get() <= 0.0
                     >
                         <div
@@ -807,7 +807,7 @@ pub fn CircularProgressBarGpu(
                         ></div>
                     </div>
                     <div
-                        class="absolute inset-y-0 left-0 w-1/2 overflow-hidden"
+                        class="absolute inset-y-0 left-0 w-1/2 overflow-clip"
                         class:invisible=move || back_progress.get() <= 50.0
                     >
                         <div
@@ -893,7 +893,7 @@ pub fn MenuButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn relative isolate overflow-hidden
+            class="btn relative isolate overflow-clip
             tracking-[0.08em]
             text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
             py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -950,7 +950,7 @@ pub fn MenuButtonRed(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn relative isolate overflow-hidden
+            class="btn relative isolate overflow-clip
             tracking-[0.08em]
             text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
             py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -995,7 +995,7 @@ pub fn FancyButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn relative isolate overflow-hidden
+            class="btn relative isolate overflow-clip
             tracking-[0.08em]
             text-stone-100 font-extrabold text-shadow shadow-black/90
             px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -1072,7 +1072,7 @@ pub fn Toggle(
             "
             class=move || {
                 format!(
-                    "btn relative isolate overflow-hidden
+                    "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     px-2 xl:px-3
                     text-sm xl:text-base
@@ -1158,7 +1158,7 @@ pub fn TabButton(
             "
             class=move || {
                 format!(
-                    "btn relative isolate overflow-hidden
+                    "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     flex-1
                     px-2 xl:px-3 py-1 xl:py-2
@@ -1255,7 +1255,7 @@ pub fn CharacterPortrait(
                 <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
 
                 <div
-                    class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
+                    class="h-full z-0 overflow-clip border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                     style=format!(
                         "
                         background-image:
@@ -1359,7 +1359,7 @@ pub fn HorizontalProgressBar(
                 "
             relative flex w-full
             rounded-[4px] xl:rounded-[6px]
-            overflow-hidden
+            overflow-clip
             border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             {}
@@ -1379,7 +1379,7 @@ pub fn HorizontalProgressBar(
             <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
-            <div class="overflow-hidden w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
+            <div class="overflow-clip w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
                         format!(
@@ -1400,7 +1400,7 @@ pub fn HorizontalProgressBar(
                 class=format!("absolute inset-0 z-1 rounded-[4px] xl:rounded-[6px] {}", bar_color)
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden text-shadow shadow-black/90">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-clip text-shadow shadow-black/90">
                 {children()}
             </div>
         </div>
@@ -1441,7 +1441,7 @@ pub fn VerticalProgressBar(
             class="
             relative flex flex-col justify-end h-full
             rounded-[4px] xl:rounded-[6px]
-            overflow-hidden
+            overflow-clip
             border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             "
@@ -1458,7 +1458,7 @@ pub fn VerticalProgressBar(
             <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
-            <div class="overflow-hidden h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
+            <div class="overflow-clip h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
                         format!(
@@ -1481,7 +1481,7 @@ pub fn VerticalProgressBar(
                 )
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] overflow-hidden text-shadow shadow-black/90">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] overflow-clip text-shadow shadow-black/90">
                 {children.map(|children| children())}
             </div>
         </div>
