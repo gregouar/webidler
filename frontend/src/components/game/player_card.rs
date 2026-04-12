@@ -644,12 +644,18 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     };
 
     let reset_progress =
-        Signal::derive(move || just_triggered.get() || !is_dead.get() || rush_mode.get());
+        Signal::derive(move || just_triggered.get() || is_dead.get() || rush_mode.get());
     let progress_value = predictive_cooldown(
         skill_cooldown,
         reset_progress,
         Signal::derive(move || is_dead.get() || rush_mode.get()),
-        0.0,
+        game_context
+            .player_state
+            .read_untracked()
+            .skills_states
+            .get(index)
+            .map(|x| x.elapsed_cooldown.get())
+            .unwrap_or_default(),
     );
 
     view! {

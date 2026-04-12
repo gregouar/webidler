@@ -96,10 +96,11 @@ where
             >
                 <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                     <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
-                </Show>
-                <Show when=move || settings.uses_heavy_effects()>
                     <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
                 </Show>
+                // <Show when=move || settings.uses_heavy_effects()>
+                // <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+                // </Show>
                 <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
@@ -287,10 +288,11 @@ where
             >
                 <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                     <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
-                </Show>
-                <Show when=move || settings.uses_heavy_effects()>
                     <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
                 </Show>
+                // <Show when=move || settings.uses_heavy_effects()>
+                // <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+                // </Show>
                 <span class="truncate flex-1 min-w-0">
                     {
                         let options = options.clone();
