@@ -25,7 +25,8 @@ pub fn HorizontalProgressBar(
     /// Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     /// Text
-    children: Children,
+    #[prop(optional)]
+    children: Option<Children>,
     // Instant reset
     #[prop(into,default = RwSignal::new(false))] reset: RwSignal<bool>,
     #[prop(optional)] class: Option<&'static str>,
@@ -152,7 +153,7 @@ pub fn HorizontalProgressBar(
                 style=reset_bar_animation
             ></div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none text-shadow shadow-black/90">
-                {children()}
+                {children.map(|children| children())}
             </div>
         </div>
     }

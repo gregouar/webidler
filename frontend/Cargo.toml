@@ -8,10 +8,10 @@ shared = { path = "../shared", features=[] }
 shared_chat = { path = "../shared_chat", features=[] }
 
 anyhow = "1.0.97"
-leptos = { version = "0.7.7", features = ["csr"] }
-leptos_router = "0.7.8"
-leptos_meta = "0.7.8"
-leptos-use = { version = "0.15.7", features = [
+leptos = { version = "0.8.17", features = ["csr"] }
+leptos_router = "0.8.13"
+leptos_meta = "0.8.6"
+leptos-use = { version = "0.18.3", features = [
     "use_document",
     "use_mouse",
     "use_mouse_in_element",
@@ -21,7 +21,6 @@ leptos-use = { version = "0.15.7", features = [
     "use_infinite_scroll",
     "storage",
 ] }
-leptos_toaster = "0.2.0"
 web-sys = { version = "0.3", features = ["Performance", "Selection"] }
 
 console_error_panic_hook = "0.1.7"

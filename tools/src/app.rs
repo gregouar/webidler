@@ -5,6 +5,7 @@ use frontend::components::{
     settings::provide_settings_context,
     ui::{
         confirm::{ConfirmationModal, provide_confirm_context},
+        toast::{Toaster, ToasterPosition, provide_toasts},
         tooltip::DynamicTooltip,
     },
 };
@@ -14,7 +15,6 @@ use leptos_router::{
     components::{Route, Router, Routes},
     path,
 };
-use leptos_toaster::*;
 
 use crate::pages;
 
@@ -26,6 +26,7 @@ pub fn App() -> impl IntoView {
     provide_settings_context();
     provide_events_context();
     provide_data_context();
+    provide_toasts();
 
     let confirm_state = provide_confirm_context();
 

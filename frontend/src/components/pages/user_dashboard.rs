@@ -864,6 +864,7 @@ fn NewsCard(news: NewsEntry) -> impl IntoView {
 
     view! {
         <div class="rounded-[10px] border border-[#5f5137]/60
+        select-text
         bg-[linear-gradient(180deg,rgba(214,177,102,0.035),rgba(0,0,0,0.08)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
         shadow-[0_6px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.035)]
         p-4 flex flex-col gap-3">

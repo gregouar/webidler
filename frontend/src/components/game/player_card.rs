@@ -317,9 +317,7 @@ pub fn PlayerCard() -> impl IntoView {
                     bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     value=xp_percent
                     reset=just_leveled_up
-                >
-                    {}
-                </HorizontalProgressBar>
+                />
             </StaticTooltip>
 
             <div

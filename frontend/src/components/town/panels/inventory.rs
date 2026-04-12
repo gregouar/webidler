@@ -1,5 +1,4 @@
 use leptos::{prelude::*, task::spawn_local};
-use leptos_toaster::Toasts;
 use std::sync::Arc;
 
 use shared::http::client::{

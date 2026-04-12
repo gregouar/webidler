@@ -236,7 +236,7 @@ pub fn LogoCog() -> impl IntoView {
         <svg
             class="h-full w-full overflow-visible"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="18 6 488 488"
+            viewBox="14 6 488 488"
             aria-hidden="true"
         >
             <defs>
@@ -315,7 +315,8 @@ pub fn Logo() -> impl IntoView {
     view! {
         <div class="relative isolate flex flex-col items-center leading-none select-none py-4 xl:py-6">
             // <div class="pointer-events-none absolute inset-x-10 top-1/2 h-24 xl:h-32 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.44),transparent_72%)] blur-xl"></div>
-            <div class="pointer-events-none absolute left-1/2 top-1/2 h-[12rem] w-[12rem] xl:h-[17rem] xl:w-[17rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.42]">
+            <div class="pointer-events-none absolute left-1/2 top-1/2 h-[12rem] w-[12rem] xl:h-[17rem] xl:w-[17rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.42]
+            drop-shadow-[0_4px_18px_rgba(0,0,0,0.8)]">
                 <LogoCog />
             </div>
 
@@ -331,7 +332,7 @@ pub fn Logo() -> impl IntoView {
 
                 <LogoWord
                     text="to"
-                    class="text-[1.15rem] xl:text-[1.9rem] -mt-2 xl:-mt-3 -mb-3 xl:-mb-6 tracking-[0.28em]"
+                    class="text-[1.15rem] xl:text-[1.9rem] -mt-2 xl:-mt-3 -mb-3 xl:-mb-6 tracking-[0.08em]"
                     texture_size="90px 90px"
                     base_gradient="linear-gradient(180deg, rgba(251,243,224,0.99), rgba(222,181,103,0.96) 38%, rgba(108,69,33,0.99) 100%)"
                     highlight_gradient="linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,246,221,0.15) 20%, rgba(0,0,0,0.18) 100%)"
