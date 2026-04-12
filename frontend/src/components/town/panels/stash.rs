@@ -77,7 +77,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open=open>
             <MenuCard class="h-full" gap=false>
                 <CardHeader title="Stash" on_close=move || open.set(false)>
-                    <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-hidden">
+                    <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-clip">
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == StashTab::Filters
@@ -321,7 +321,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                         }
                     }}
                 </div>
-                <div class="relative isolate overflow-hidden rounded-[8px] border border-[#3b3428]
+                <div class="relative isolate overflow-clip rounded-[8px] border border-[#3b3428]
                 bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)] p-3">
                     <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
@@ -346,7 +346,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                     </div>
                 </div>
 
-                <div class="relative isolate overflow-hidden rounded-[8px] border border-[#3b3428]
+                <div class="relative isolate overflow-clip rounded-[8px] border border-[#3b3428]
                 bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                 shadow-[0_4px_12px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)] p-3">
                     <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>

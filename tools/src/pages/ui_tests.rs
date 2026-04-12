@@ -1,4 +1,7 @@
-use frontend::assets::img_asset;
+use frontend::{
+    assets::img_asset,
+    components::settings::{GraphicsQuality, SettingsContext},
+};
 use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
 use leptos_use::use_interval_fn;
@@ -7,6 +10,7 @@ use shared::data::monster::MonsterRarity;
 #[component]
 pub fn UiTestsPage() -> impl IntoView {
     let active_tab = RwSignal::new(true);
+    provide_cooldown_clock();
     view! {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <HeaderMenu />
@@ -49,9 +53,7 @@ pub fn UiTestsPage() -> impl IntoView {
                             class:xl:h-4
                             bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                             value=Signal::derive(|| 70.0)
-                        >
-                            {}
-                        </HorizontalProgressBar>
+                        />
 
                         <div class="w-full grid grid-cols-4 gap-2">
                             {(0..3)
@@ -61,7 +63,7 @@ pub fn UiTestsPage() -> impl IntoView {
                                         trigger_reset_progress.get()
                                     });
                                     let progress_value = predictive_cooldown(
-                                        Signal::derive(move || 2.0),
+                                        Signal::derive(move || 0.0),
                                         reset_progress,
                                         Signal::derive(move || false),
                                         0.0,
@@ -76,7 +78,7 @@ pub fn UiTestsPage() -> impl IntoView {
 
                                     view! {
                                         <div class="flex flex-col gap-1">
-                                            <CircularProgressBar
+                                            <CircularProgressBarGpu
                                                 bar_color="oklch(55.4% 0.135 66.442)"
                                                 value=progress_value
                                                 reset=reset_progress
@@ -89,7 +91,7 @@ pub fn UiTestsPage() -> impl IntoView {
                                                     class="w-full h-full flex-no-shrink fill-current
                                                     xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                                                 />
-                                            </CircularProgressBar>
+                                            </CircularProgressBarGpu>
 
                                             <div class="flex justify-around">
                                                 <Toggle toggle_callback=|_| {}>
@@ -111,7 +113,7 @@ pub fn UiTestsPage() -> impl IntoView {
 
                     <Card class="w-2/3 h-full">
                         <CardHeader title="Inventory" on_close=|| {}>
-                            <div class="flex gap-2 -mb-3 mx-4 overflow-hidden">
+                            <div class="flex gap-2 -mb-3 mx-4 overflow-clip">
                                 <TabButton
                                     is_active=Signal::derive(move || active_tab.get())
                                     on:click=move |_| active_tab.set(true)
@@ -132,8 +134,8 @@ pub fn UiTestsPage() -> impl IntoView {
                         </CardHeader>
                         <CardInset class="w-full h-full">
                             "bouh"
-                            <div class="w-full grid grid-cols-10 gap-2">
-                                {(0..5)
+                            <div class="w-full grid grid-cols-8 gap-2">
+                                {(0..16)
                                     .map(|_| {
                                         let trigger_reset_progress = RwSignal::new(false);
                                         let reset_progress = Signal::derive(move || {
@@ -155,11 +157,11 @@ pub fn UiTestsPage() -> impl IntoView {
 
                                         view! {
                                             <div class="flex flex-col gap-1">
-                                                <CircularProgressBar
+                                                <CircularProgressBarGpu
                                                     bar_color="oklch(55.4% 0.135 66.442)"
                                                     value=progress_value
                                                     reset=reset_progress
-                                                    bar_width=2
+                                                    bar_width=4
                                                 >
                                                     <img
                                                         draggable="false"
@@ -168,7 +170,35 @@ pub fn UiTestsPage() -> impl IntoView {
                                                         class="w-full h-full flex-no-shrink fill-current
                                                         xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
                                                     />
-                                                </CircularProgressBar>
+                                                </CircularProgressBarGpu>
+
+                                                <div class="flex justify-around">
+                                                    <Toggle toggle_callback=|_| {}>
+                                                        <span class="inline xl:hidden">"A"</span>
+                                                        <span class="hidden xl:inline font-variant:small-caps">
+                                                            "Auto"
+                                                        </span>
+                                                    </Toggle>
+                                                    <FancyButton>
+                                                        <span class="text-base xl:text-2xl">"+"</span>
+                                                    </FancyButton>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col gap-1">
+                                                <CircularProgressBarGpu
+                                                    bar_color="oklch(55.4% 0.135 66.442)"
+                                                    value=progress_value
+                                                    reset=reset_progress
+                                                    bar_width=4
+                                                >
+                                                    <img
+                                                        draggable="false"
+                                                        src="assets/images/skills/attack.svg"
+                                                        alt="attack"
+                                                        class="w-full h-full flex-no-shrink fill-current
+                                                        xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert"
+                                                    />
+                                                </CircularProgressBarGpu>
 
                                                 <div class="flex justify-around">
                                                     <Toggle toggle_callback=|_| {}>
@@ -235,6 +265,20 @@ pub fn HeaderMenu() -> impl IntoView {
     }
 }
 
+#[derive(Clone, Copy)]
+pub struct CooldownClock(RwSignal<u64>);
+
+pub fn provide_cooldown_clock() {
+    let tick = RwSignal::new(0u64);
+    use_interval_fn(
+        move || {
+            tick.update(|value| *value = value.wrapping_add(1));
+        },
+        200,
+    );
+    provide_context(CooldownClock(tick));
+}
+
 pub fn predictive_cooldown(
     remaining_time: Signal<f64>,
     reset: Signal<bool>,
@@ -243,6 +287,7 @@ pub fn predictive_cooldown(
 ) -> RwSignal<f64> {
     let progress_value = RwSignal::new(starting_value);
     let rate = RwSignal::new(0.0);
+    let cooldown_clock = expect_context::<CooldownClock>();
 
     Effect::new(move || {
         let remaining_time = remaining_time.get();
@@ -258,22 +303,20 @@ pub fn predictive_cooldown(
         }
     });
 
-    use_interval_fn(
-        move || {
-            let rate = rate.get_untracked();
-            if !disabled.get_untracked() && rate > 0.0 {
-                progress_value.update(|progress_value| {
-                    if *progress_value < 1.2 {
-                        *progress_value += rate * 0.2;
-                    }
-                    if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
-                        *progress_value = 1.0;
-                    }
-                });
-            }
-        },
-        200,
-    );
+    Effect::new(move |_| {
+        cooldown_clock.0.get();
+        let rate = rate.get_untracked();
+        if !disabled.get_untracked() && rate > 0.0 {
+            progress_value.update(|progress_value| {
+                if *progress_value < 1.2 {
+                    *progress_value += rate * 0.2;
+                }
+                if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
+                    *progress_value = 1.0;
+                }
+            });
+        }
+    });
 
     progress_value
 }
@@ -304,7 +347,7 @@ pub fn Card(
 
             <div
                 class="absolute inset-0 bg-zinc-800 border border-[#6c5734]/45
-                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)] overflow-hidden"
+                shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)] overflow-clip"
                 style=format!(
                     "
                     clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
@@ -444,7 +487,7 @@ pub fn CircularProgressBar(
     view! {
         <div class="circular-progress-bar">
            <div
-                class="relative w-full h-full aspect-square rounded-full overflow-hidden
+                class="relative w-full h-full aspect-square rounded-full overflow-clip
                 border border-[#6c5329]
                 bg-stone-900
                 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
@@ -507,6 +550,340 @@ pub fn CircularProgressBar(
 }
 
 #[component]
+pub fn CircularProgressBarGpu(
+    // Percent value, must be between 0 and 100.
+    #[prop(into)] value: Signal<f64>,
+    bar_color: &'static str,
+    bar_width: u8,
+    // Instant reset
+    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+    #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
+    #[prop(optional)] tint_background: Option<&'static str>,
+    #[prop(optional)] class: Option<&'static str>,
+    // Inside the circular bar
+    children: Children,
+) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
+
+    let reset_icon_animation = RwSignal::new("");
+    let active_buffer = RwSignal::new(false);
+    let front_progress = RwSignal::new(value.get_untracked().clamp(0.0, 1.0) * 100.0);
+    let back_progress = RwSignal::new(0.0);
+    let last_reset = RwSignal::new(reset.get_untracked());
+    let front_right_transition_ms = RwSignal::new(200u16);
+    let front_left_transition_ms = RwSignal::new(200u16);
+    let front_left_delay_ms = RwSignal::new(0u16);
+    let back_right_transition_ms = RwSignal::new(200u16);
+    let back_left_transition_ms = RwSignal::new(200u16);
+    let back_left_delay_ms = RwSignal::new(0u16);
+
+    let set_half_transition_timing =
+        |previous: f64,
+         next: f64,
+         right_transition: RwSignal<u16>,
+         left_transition: RwSignal<u16>,
+         left_delay: RwSignal<u16>| {
+            const BASE_MS: f64 = 200.0;
+
+            if next > previous && previous < 50.0 && next > 50.0 {
+                let handoff_ratio = ((50.0 - previous) / (next - previous)).clamp(0.0, 1.0);
+                let right_ms = (BASE_MS * handoff_ratio).round().clamp(1.0, BASE_MS) as u16;
+                let left_ms = (BASE_MS - f64::from(right_ms)).round().clamp(1.0, BASE_MS) as u16;
+                right_transition.set(right_ms);
+                left_transition.set(left_ms);
+                left_delay.set(right_ms);
+            } else {
+                right_transition.set(200);
+                left_transition.set(200);
+                left_delay.set(0);
+            }
+        };
+
+    Effect::new(move |_| {
+        let is_reset = reset.get();
+        let was_reset = last_reset.get_untracked();
+        let progress = value.get().clamp(0.0, 1.0) * 100.0;
+
+        if is_reset && !was_reset {
+            front_right_transition_ms.set(200);
+            front_left_transition_ms.set(200);
+            front_left_delay_ms.set(0);
+            back_right_transition_ms.set(200);
+            back_left_transition_ms.set(200);
+            back_left_delay_ms.set(0);
+
+            if !disabled.get_untracked() {
+                reset_icon_animation.set(
+                    "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
+                );
+            }
+
+            if active_buffer.get_untracked() {
+                active_buffer.set(false);
+
+                set_timeout(
+                    move || {
+                        reset_icon_animation.set("");
+                        back_progress.set(0.0);
+                    },
+                    std::time::Duration::from_millis(500),
+                );
+            } else {
+                active_buffer.set(true);
+
+                set_timeout(
+                    move || {
+                        reset_icon_animation.set("");
+                        front_progress.set(0.0);
+                    },
+                    std::time::Duration::from_millis(500),
+                );
+            }
+        } else if !is_reset {
+            if active_buffer.get() {
+                let previous = back_progress.get_untracked();
+                set_half_transition_timing(
+                    previous,
+                    progress,
+                    back_right_transition_ms,
+                    back_left_transition_ms,
+                    back_left_delay_ms,
+                );
+                back_progress.set(progress);
+            } else {
+                let previous = front_progress.get_untracked();
+                set_half_transition_timing(
+                    previous,
+                    progress,
+                    front_right_transition_ms,
+                    front_left_transition_ms,
+                    front_left_delay_ms,
+                );
+                front_progress.set(progress);
+            }
+        }
+
+        last_reset.set(is_reset);
+    });
+
+    let front_right_deg = move || front_progress.get().clamp(0.0, 50.0) * 3.6 - 180.0;
+    let front_left_deg = move || (front_progress.get() - 50.0).clamp(0.0, 50.0) * 3.6 - 180.0;
+    let back_right_deg = move || back_progress.get().clamp(0.0, 50.0) * 3.6 - 180.0;
+    let back_left_deg = move || (back_progress.get() - 50.0).clamp(0.0, 50.0) * 3.6 - 180.0;
+    // const RING_INSET_DEPTH: &str =
+    //     "radial-gradient(circle at 50% 50%, rgba(0,0,0,0.0) 60%, rgba(0,0,0,0.5) 73%),";
+    const RING_INSET_DEPTH: &str = "";
+
+    view! {
+        <div class="circular-progress-bar">
+            <div class=move || {
+                format!(
+                    "relative w-full h-full aspect-square rounded-full overflow-clip {} {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
+                        }
+                        GraphicsQuality::Medium => "border border-[#6c5329] bg-stone-900",
+                        GraphicsQuality::Low => "border border-[#5c4a2e] bg-zinc-900",
+                    },
+                    class.unwrap_or_default(),
+                )
+            }>
+                {move || match settings.graphics_quality() {
+                    GraphicsQuality::High | GraphicsQuality::Medium => {
+                        view! {
+                            <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
+                        }
+                            .into_any()
+                    }
+                    GraphicsQuality::Low => {
+                        let _: () = view! { <></> };
+                        ().into_any()
+                    }
+                }}
+                <div
+                    class="absolute inset-0 transition-opacity duration-500"
+                    class:opacity-0=move || disabled.get() || active_buffer.get()
+                >
+                    <div
+                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-clip"
+                        class:invisible=move || front_progress.get() <= 0.0
+                    >
+                        <div
+                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            style=move || {
+                                let background = if matches!(
+                                    settings.graphics_quality(),
+                                    GraphicsQuality::Low
+                                ) {
+                                    format!(
+                                        "linear-gradient(90deg, transparent 50%, {} 50%)",
+                                        bar_color,
+                                    )
+                                } else {
+                                    format!(
+                                        "{} linear-gradient(90deg, transparent 50%, {} 50%)",
+                                        RING_INSET_DEPTH,
+                                        bar_color,
+                                    )
+                                };
+                                format!(
+                                    "background: {}; /*mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%); -webkit-mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear;",
+                                    background,
+                                    front_right_deg(),
+                                    front_right_transition_ms.get(),
+                                )
+                            }
+                        ></div>
+                    </div>
+                    <div
+                        class="absolute inset-y-0 left-0 w-1/2 overflow-clip"
+                        class:invisible=move || front_progress.get() <= 50.0
+                    >
+                        <div
+                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            style=move || {
+                                let background = if matches!(
+                                    settings.graphics_quality(),
+                                    GraphicsQuality::Low
+                                ) {
+                                    format!(
+                                        "linear-gradient(90deg, {} 50%, transparent 50%)",
+                                        bar_color,
+                                    )
+                                } else {
+                                    format!(
+                                        "{} linear-gradient(90deg, {} 50%, transparent 50%)",
+                                        RING_INSET_DEPTH,
+                                        bar_color,
+                                    )
+                                };
+                                format!(
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    background,
+                                    front_left_deg(),
+                                    front_left_transition_ms.get(),
+                                    front_left_delay_ms.get(),
+                                )
+                            }
+                        ></div>
+                    </div>
+                </div>
+                <div
+                    class="absolute inset-0 transition-opacity duration-500"
+                    class:opacity-0=move || disabled.get() || !active_buffer.get()
+                >
+                    <div
+                        class="absolute inset-y-0 right-0 w-[calc(50%+1px)] overflow-clip"
+                        class:invisible=move || back_progress.get() <= 0.0
+                    >
+                        <div
+                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            style=move || {
+                                let background = if matches!(
+                                    settings.graphics_quality(),
+                                    GraphicsQuality::Low
+                                ) {
+                                    format!(
+                                        "linear-gradient(90deg, transparent 50%, {} 50%)",
+                                        bar_color,
+                                    )
+                                } else {
+                                    format!(
+                                        "{} linear-gradient(90deg, transparent 50%, {} 50%)",
+                                        RING_INSET_DEPTH,
+                                        bar_color,
+                                    )
+                                };
+                                format!(
+                                    "background: {}; /*mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%); -webkit-mask-image: linear-gradient(90deg, transparent 49%, #000 49.2%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear;",
+                                    background,
+                                    back_right_deg(),
+                                    back_right_transition_ms.get(),
+                                )
+                            }
+                        ></div>
+                    </div>
+                    <div
+                        class="absolute inset-y-0 left-0 w-1/2 overflow-clip"
+                        class:invisible=move || back_progress.get() <= 50.0
+                    >
+                        <div
+                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            style=move || {
+                                let background = if matches!(
+                                    settings.graphics_quality(),
+                                    GraphicsQuality::Low
+                                ) {
+                                    format!(
+                                        "linear-gradient(90deg, {} 50%, transparent 50%)",
+                                        bar_color,
+                                    )
+                                } else {
+                                    format!(
+                                        "{} linear-gradient(90deg, {} 50%, transparent 50%)",
+                                        RING_INSET_DEPTH,
+                                        bar_color,
+                                    )
+                                };
+                                format!(
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    background,
+                                    back_left_deg(),
+                                    back_left_transition_ms.get(),
+                                    back_left_delay_ms.get(),
+                                )
+                            }
+                        ></div>
+                    </div>
+                </div>
+                <div class=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            format!(
+                                "absolute inset-{} xl:inset-{bar_width} rounded-full
+                            bg-radial {} to-zinc-950 to-70%
+                            border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
+                                bar_width / 2,
+                                tint_background.unwrap_or("from-stone-600"),
+                            )
+                        }
+                        GraphicsQuality::Medium => {
+                            format!(
+                                "absolute inset-{} xl:inset-{bar_width} rounded-full
+                            bg-radial {} to-zinc-950 to-70%
+                            border border-[#6d532e]/70",
+                                bar_width / 2,
+                                tint_background.unwrap_or("from-stone-600"),
+                            )
+                        }
+                        GraphicsQuality::Low => {
+                            format!(
+                                "absolute inset-{} xl:inset-{bar_width} rounded-full
+                            bg-radial {} to-zinc-950 to-70%
+                            border border-[#5c4a2e]",
+                                bar_width / 2,
+                                tint_background.unwrap_or("from-stone-600"),
+                            )
+                        }
+                    }
+                }>// Icon
+                </div>
+                <div
+                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
+                    transition-transform duration-500"
+                    style=reset_icon_animation
+                    class:brightness-50=move || disabled.get()
+                >
+                    {children()}
+                </div>
+            </div>
+        </div>
+    }
+}
+
+#[component]
 pub fn MenuButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
     #[prop(optional)] button_type: Option<&'static str>,
@@ -514,7 +891,7 @@ pub fn MenuButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn relative isolate overflow-hidden
+            class="btn relative isolate overflow-clip
             tracking-[0.08em]
             text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
             py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -571,7 +948,7 @@ pub fn MenuButtonRed(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn relative isolate overflow-hidden
+            class="btn relative isolate overflow-clip
             tracking-[0.08em]
             text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
             py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -616,7 +993,7 @@ pub fn FancyButton(
 ) -> impl IntoView {
     view! {
         <button
-            class="btn relative isolate overflow-hidden
+            class="btn relative isolate overflow-clip
             tracking-[0.08em]
             text-stone-100 font-extrabold text-shadow shadow-black/90
             px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -693,7 +1070,7 @@ pub fn Toggle(
             "
             class=move || {
                 format!(
-                    "btn relative isolate overflow-hidden
+                    "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     px-2 xl:px-3
                     text-sm xl:text-base
@@ -779,7 +1156,7 @@ pub fn TabButton(
             "
             class=move || {
                 format!(
-                    "btn relative isolate overflow-hidden
+                    "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     flex-1
                     px-2 xl:px-3 py-1 xl:py-2
@@ -876,7 +1253,7 @@ pub fn CharacterPortrait(
                 <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
 
                 <div
-                    class="h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
+                    class="h-full z-0 overflow-clip border border-black/40 bg-[#1c1714] shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                     style=format!(
                         "
                         background-image:
@@ -932,7 +1309,8 @@ pub fn HorizontalProgressBar(
     /// Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     /// Text
-    children: Children,
+    #[prop(optional)]
+    children: Option<Children>,
     // Instant reset
     #[prop(into,default = RwSignal::new(false))] reset: RwSignal<bool>,
     #[prop(optional)] class: Option<&'static str>,
@@ -980,7 +1358,7 @@ pub fn HorizontalProgressBar(
                 "
             relative flex w-full
             rounded-[4px] xl:rounded-[6px]
-            overflow-hidden
+            overflow-clip
             border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             {}
@@ -1000,7 +1378,7 @@ pub fn HorizontalProgressBar(
             <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
-            <div class="overflow-hidden w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
+            <div class="overflow-clip w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
                         format!(
@@ -1021,8 +1399,8 @@ pub fn HorizontalProgressBar(
                 class=format!("absolute inset-0 z-1 rounded-[4px] xl:rounded-[6px] {}", bar_color)
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-hidden text-shadow shadow-black/90">
-                {children()}
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none overflow-clip text-shadow shadow-black/90">
+                {children.map(|children| children())}
             </div>
         </div>
     }
@@ -1062,7 +1440,7 @@ pub fn VerticalProgressBar(
             class="
             relative flex flex-col justify-end h-full
             rounded-[4px] xl:rounded-[6px]
-            overflow-hidden
+            overflow-clip
             border border-[#6c5329]
             shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.45)]
             "
@@ -1079,7 +1457,7 @@ pub fn VerticalProgressBar(
             <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
             <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
-            <div class="overflow-hidden h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
+            <div class="overflow-clip h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
                 <div
                     class=move || {
                         format!(
@@ -1102,7 +1480,7 @@ pub fn VerticalProgressBar(
                 )
                 style=reset_bar_animation
             ></div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] overflow-hidden text-shadow shadow-black/90">
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] overflow-clip text-shadow shadow-black/90">
                 {children.map(|children| children())}
             </div>
         </div>

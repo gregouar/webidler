@@ -12,7 +12,10 @@ use shared::{
 use crate::components::{
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
-    shared::{skills::SkillProgressBar, tooltips::SkillTooltip},
+    shared::{
+        skills::{SKILL_PROGRESS_RING_COLOR, SkillProgressBar},
+        tooltips::SkillTooltip,
+    },
     ui::{
         buttons::{FancyButton, Toggle},
         card::Card,
@@ -232,7 +235,10 @@ pub fn PlayerCard() -> impl IntoView {
 
             <PlayerName />
 
-            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+            <div
+                class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2"
+                style="contain: layout paint;"
+            >
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class="w-6 xl:w-8"
@@ -311,12 +317,13 @@ pub fn PlayerCard() -> impl IntoView {
                     bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
                     value=xp_percent
                     reset=just_leveled_up
-                >
-                    {}
-                </HorizontalProgressBar>
+                />
             </StaticTooltip>
 
-            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
+            <div
+                class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2"
+                style="contain: layout paint;"
+            >
                 <For
                     each=move || {
                         0..game_context
@@ -398,7 +405,7 @@ fn BuySkillButton() -> impl IntoView {
                     disabled=disable_buy_skill
                 >
                     <CircularProgressBar
-                        bar_color="oklch(55.4% 0.135 66.442)"
+                        bar_color=SKILL_PROGRESS_RING_COLOR
                         value=Signal::derive(|| 0.0)
                         bar_width=4
                     >
@@ -408,7 +415,7 @@ fn BuySkillButton() -> impl IntoView {
                             viewBox="0 0 24 24"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            class="xl:drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] text-zinc-300"
+                            class="xl:drop-shadow-[0px_4px_black] text-zinc-300"
                         >
                             <path
                                 d="M12 5V19"
@@ -641,23 +648,30 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     };
 
     let reset_progress =
-        Signal::derive(move || just_triggered.get() || !is_dead.get() || rush_mode.get());
+        Signal::derive(move || just_triggered.get() || is_dead.get() || rush_mode.get());
     let progress_value = predictive_cooldown(
         skill_cooldown,
         reset_progress,
         Signal::derive(move || is_dead.get() || rush_mode.get()),
-        0.0,
+        game_context
+            .player_state
+            .read_untracked()
+            .skills_states
+            .get(index)
+            .map(|x| x.elapsed_cooldown.get())
+            .unwrap_or_default(),
     );
 
     view! {
-        <div class="flex flex-col">
+        <div class="flex flex-col" style="contain: layout paint;">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
                 {
                     let use_skill = use_skill.clone();
                     view! {
                         <button
-                            class="btn p-1 w-full h-full
+                            class="btn p-1 w-full h-full isolate
                             active:brightness-50 active:sepia"
+                            style="contain: paint;"
                             on:click=move |_| use_skill()
                             disabled=move || !is_ready.get()
                         >

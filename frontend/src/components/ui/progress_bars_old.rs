@@ -25,8 +25,7 @@ pub fn HorizontalProgressBar(
     /// Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     /// Text
-    #[prop(optional)]
-    children: Option<Children>,
+    children: Children,
     // Instant reset
     #[prop(into,default = RwSignal::new(false))] reset: RwSignal<bool>,
     #[prop(optional)] class: Option<&'static str>,
@@ -102,17 +101,21 @@ pub fn HorizontalProgressBar(
             {move || match settings.graphics_quality() {
                 GraphicsQuality::High => {
                     view! {
-                        <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-                        <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+                        </>
                     }
                         .into_any()
                 }
                 GraphicsQuality::Medium => {
                     view! {
-                        <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        </>
                     }
                         .into_any()
                 }
@@ -153,7 +156,7 @@ pub fn HorizontalProgressBar(
                 style=reset_bar_animation
             ></div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none text-shadow shadow-black/90">
-                {children.map(|children| children())}
+                {children()}
             </div>
         </div>
     }
@@ -415,7 +418,7 @@ pub fn CircularProgressBar(
         <div class="circular-progress-bar">
             <div class=move || {
                 format!(
-                    "relative w-full h-full aspect-square rounded-full {} {}",
+                    "relative w-full h-full aspect-square rounded-full overflow-clip {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"

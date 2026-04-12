@@ -102,7 +102,29 @@ pub fn HeaderMenu() -> impl IntoView {
 
     view! {
         <BaseHeaderMenu>
-            <div class="flex justify-around w-full items-center">
+            <div class="flex justify-start space-x-1 xl:space-x-2">
+                <FullscreenButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        game_context.open_settings.set(!game_context.open_settings.get_untracked())
+                    }
+                >
+                    "⚙"
+                </MenuButton>
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        chat_context.opened.set(!chat_context.opened.get_untracked())
+                    }
+                >
+                    "🗪"
+                </MenuButton>
+                <WikiButton />
+            </div>
+            <div class="flex-1 flex justify-around w-full items-center">
                 <GoldCounter value=gold w_full=true />
                 <GemsCounter value=gems w_full=true />
                 <ShardsCounter
@@ -111,27 +133,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     disabled=Signal::derive(move || game_context.area_specs.read().disable_shards)
                 />
             </div>
-            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
-                <FullscreenButton />
-                <WikiButton />
-                <MenuButton
-                    class:hidden
-                    class:xl:inline
-                    on:click=move |_| {
-                        chat_context.opened.set(!chat_context.opened.get_untracked())
-                    }
-                >
-                    "Chat"
-                </MenuButton>
-                <MenuButton
-                    class:hidden
-                    class:xl:inline
-                    on:click=move |_| {
-                        game_context.open_settings.set(!game_context.open_settings.get_untracked())
-                    }
-                >
-                    "Settings"
-                </MenuButton>
+            <div class="flex justify-end space-x-1 xl:space-x-2">
                 <MenuButton on:click=move |_| open_inventory()>
                     <span class="inline xl:hidden">"Inv."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>

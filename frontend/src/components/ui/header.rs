@@ -14,7 +14,7 @@ pub fn BaseHeaderMenu(children: Children) -> impl IntoView {
         <div
             class=move || {
                 format!(
-                    "relative z-50 flex justify-between items-center p-1 xl:p-2 h-auto border-b {}",
+                    "relative w-full z-50 flex justify-between items-center p-1 xl:p-2 h-auto border-b {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border-[#6c5734]/45 shadow-[0_8px_18px_rgba(0,0,0,0.45),inset_0_-1px_0_rgba(0,0,0,0.18)]"

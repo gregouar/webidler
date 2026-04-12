@@ -3,8 +3,19 @@ use leptos_use::use_interval_fn;
 
 use crate::components::settings::{GraphicsQuality, SettingsContext};
 
+const COOLDOWN_TICK_MS: u64 = 200;
+const COOLDOWN_TICK_SECONDS: f64 = COOLDOWN_TICK_MS as f64 / 1000.0;
+const COOLDOWN_PROGRESS_STEPS: f64 = 200.0;
+
 #[derive(Clone, Copy)]
 pub struct CooldownClock(RwSignal<u64>);
+
+#[derive(Clone, Copy)]
+struct CooldownAnchor {
+    tick: u64,
+    progress: f64,
+    rate_per_second: f64,
+}
 
 pub fn provide_cooldown_clock() {
     let tick = RwSignal::new(0u64);
@@ -12,9 +23,28 @@ pub fn provide_cooldown_clock() {
         move || {
             tick.update(|value| *value = value.wrapping_add(1));
         },
-        200,
+        COOLDOWN_TICK_MS,
     );
     provide_context(CooldownClock(tick));
+}
+
+fn quantize_cooldown_progress(value: f64) -> f64 {
+    (value.clamp(0.0, 1.0) * COOLDOWN_PROGRESS_STEPS).round() / COOLDOWN_PROGRESS_STEPS
+}
+
+fn progress_from_anchor(anchor: CooldownAnchor, tick: u64) -> f64 {
+    let elapsed_ticks = tick.wrapping_sub(anchor.tick) as f64;
+    quantize_cooldown_progress(
+        anchor.progress + anchor.rate_per_second * elapsed_ticks * COOLDOWN_TICK_SECONDS,
+    )
+}
+
+fn cooldown_rate(progress: f64, remaining_time: f64) -> f64 {
+    if remaining_time > 0.0 {
+        (1.0 - progress).clamp(0.0, 1.0) / remaining_time
+    } else {
+        0.0
+    }
 }
 
 #[component]
@@ -25,13 +55,14 @@ pub fn HorizontalProgressBar(
     /// Bar color, must be of format "bg-XXXX-NNN"
     bar_color: &'static str,
     /// Text
-    #[prop(optional)]
-    children: Option<Children>,
+    children: Children,
     // Instant reset
     #[prop(into,default = RwSignal::new(false))] reset: RwSignal<bool>,
     #[prop(optional)] class: Option<&'static str>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let quality = move || settings.graphics_quality();
+    let heavy_effects = move || settings.uses_heavy_effects();
     let set_value = move || {
         if reset.get() {
             0.0
@@ -74,7 +105,7 @@ pub fn HorizontalProgressBar(
             class=move || {
                 format!(
                     "relative flex w-full rounded-[4px] xl:rounded-[6px] {} {}",
-                    match settings.graphics_quality() {
+                    match quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5329] shadow-[0_3px_8px_rgba(0,0,0,0.42)]"
                         }
@@ -85,7 +116,7 @@ pub fn HorizontalProgressBar(
                 )
             }
             style:background-image=move || {
-                match settings.graphics_quality() {
+                match quality() {
                     GraphicsQuality::High => {
                         "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
                             .to_string()
@@ -102,17 +133,21 @@ pub fn HorizontalProgressBar(
             {move || match settings.graphics_quality() {
                 GraphicsQuality::High => {
                     view! {
-                        <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-                        <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+                        </>
                     }
                         .into_any()
                 }
                 GraphicsQuality::Medium => {
                     view! {
-                        <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        <>
+                            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
+                            <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        </>
                     }
                         .into_any()
                 }
@@ -129,12 +164,12 @@ pub fn HorizontalProgressBar(
                         format!(
                             "relative block h-full w-full origin-left rounded-[2px] xl:rounded-[4px]
                             {} {} {} {}",
-                            if settings.uses_heavy_effects() {
+                            if heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
                             } else {
                                 ""
                             },
-                            if settings.uses_heavy_effects() {
+                            if heavy_effects() {
                                 "before:absolute before:inset-0 before:bg-[linear-gradient(90deg,rgba(255,255,255,0.16),transparent_22%,transparent_78%,rgba(0,0,0,0.12))]"
                             } else {
                                 ""
@@ -153,7 +188,7 @@ pub fn HorizontalProgressBar(
                 style=reset_bar_animation
             ></div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none text-shadow shadow-black/90">
-                {children.map(|children| children())}
+                {children()}
             </div>
         </div>
     }
@@ -171,6 +206,8 @@ pub fn VerticalProgressBar(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let quality = move || settings.graphics_quality();
+    let heavy_effects = move || settings.uses_heavy_effects();
     let set_value = move || {
         if reset.get() { 0.0 } else { value.get() }
     };
@@ -195,7 +232,7 @@ pub fn VerticalProgressBar(
             class=move || {
                 format!(
                     "relative flex flex-col justify-end h-full rounded-[4px] xl:rounded-[6px] {} {}",
-                    match settings.graphics_quality() {
+                    match quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5329] shadow-[0_3px_8px_rgba(0,0,0,0.42)]"
                         }
@@ -206,7 +243,7 @@ pub fn VerticalProgressBar(
                 )
             }
             style:background-image=move || {
-                match settings.graphics_quality() {
+                match quality() {
                     GraphicsQuality::High => {
                         "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
                             .to_string()
@@ -254,12 +291,12 @@ pub fn VerticalProgressBar(
                         format!(
                             "relative block h-full w-full origin-bottom rounded-[2px] xl:rounded-[4px]
                             {} {} {}",
-                            if settings.uses_heavy_effects() {
+                            if heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
                             } else {
                                 ""
                             },
-                            if settings.uses_heavy_effects() {
+                            if heavy_effects() {
                                 "before:absolute before:inset-0 before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16),transparent_20%,transparent_80%,rgba(0,0,0,0.12))]"
                             } else {
                                 ""
@@ -301,6 +338,7 @@ pub fn CircularProgressBar(
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let quality = move || settings.graphics_quality();
 
     let reset_icon_animation = RwSignal::new("");
     let active_buffer = RwSignal::new(false);
@@ -407,6 +445,32 @@ pub fn CircularProgressBar(
     let front_left_deg = move || (front_progress.get() - 50.0).clamp(0.0, 50.0) * 3.6 - 180.0;
     let back_right_deg = move || back_progress.get().clamp(0.0, 50.0) * 3.6 - 180.0;
     let back_left_deg = move || (back_progress.get() - 50.0).clamp(0.0, 50.0) * 3.6 - 180.0;
+    // let front_buffer_visible = move || !disabled.get() && !active_buffer.get();
+    // let back_buffer_visible = move || !disabled.get() && active_buffer.get();
+    // let front_right_will_change = move || {
+    //     front_buffer_visible() && {
+    //         let progress = front_progress.get();
+    //         progress > 0.0 && progress < 50.0
+    //     }
+    // };
+    // let front_left_will_change = move || {
+    //     front_buffer_visible() && {
+    //         let progress = front_progress.get();
+    //         progress > 50.0 && progress < 100.0
+    //     }
+    // };
+    // let back_right_will_change = move || {
+    //     back_buffer_visible() && {
+    //         let progress = back_progress.get();
+    //         progress > 0.0 && progress < 50.0
+    //     }
+    // };
+    // let back_left_will_change = move || {
+    //     back_buffer_visible() && {
+    //         let progress = back_progress.get();
+    //         progress > 50.0 && progress < 100.0
+    //     }
+    // };
     // const RING_INSET_DEPTH: &str =
     //     "radial-gradient(circle at 50% 50%, rgba(0,0,0,0.0) 60%, rgba(0,0,0,0.5) 73%),";
     const RING_INSET_DEPTH: &str = "";
@@ -415,8 +479,8 @@ pub fn CircularProgressBar(
         <div class="circular-progress-bar">
             <div class=move || {
                 format!(
-                    "relative w-full h-full aspect-square rounded-full {} {}",
-                    match settings.graphics_quality() {
+                    "relative w-full h-full aspect-square rounded-full overflow-clip {} {}",
+                    match quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
                         }
@@ -426,17 +490,14 @@ pub fn CircularProgressBar(
                     class.unwrap_or_default(),
                 )
             }>
-                {move || match settings.graphics_quality() {
+                {move || match quality() {
                     GraphicsQuality::High | GraphicsQuality::Medium => {
                         view! {
                             <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
                         }
                             .into_any()
                     }
-                    GraphicsQuality::Low => {
-                        let _: () = view! { <></> };
-                        ().into_any()
-                    }
+                    GraphicsQuality::Low => view! { <></> }.into_any(),
                 }}
                 <div
                     class="absolute inset-0 transition-opacity duration-500"
@@ -447,12 +508,10 @@ pub fn CircularProgressBar(
                         class:invisible=move || front_progress.get() <= 0.0
                     >
                         <div
-                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu"
+                            // class:will-change-transform=front_right_will_change
                             style=move || {
-                                let background = if matches!(
-                                    settings.graphics_quality(),
-                                    GraphicsQuality::Low
-                                ) {
+                                let background = if matches!(quality(), GraphicsQuality::Low) {
                                     format!(
                                         "linear-gradient(90deg, transparent 50%, {} 50%)",
                                         bar_color,
@@ -478,12 +537,10 @@ pub fn CircularProgressBar(
                         class:invisible=move || front_progress.get() <= 50.0
                     >
                         <div
-                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu"
+                            // class:will-change-transform=front_left_will_change
                             style=move || {
-                                let background = if matches!(
-                                    settings.graphics_quality(),
-                                    GraphicsQuality::Low
-                                ) {
+                                let background = if matches!(quality(), GraphicsQuality::Low) {
                                     format!(
                                         "linear-gradient(90deg, {} 50%, transparent 50%)",
                                         bar_color,
@@ -515,12 +572,10 @@ pub fn CircularProgressBar(
                         class:invisible=move || back_progress.get() <= 0.0
                     >
                         <div
-                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu"
+                            // class:will-change-transform=back_right_will_change
                             style=move || {
-                                let background = if matches!(
-                                    settings.graphics_quality(),
-                                    GraphicsQuality::Low
-                                ) {
+                                let background = if matches!(quality(), GraphicsQuality::Low) {
                                     format!(
                                         "linear-gradient(90deg, transparent 50%, {} 50%)",
                                         bar_color,
@@ -546,12 +601,10 @@ pub fn CircularProgressBar(
                         class:invisible=move || back_progress.get() <= 50.0
                     >
                         <div
-                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu"
+                            // class:will-change-transform=back_left_will_change
                             style=move || {
-                                let background = if matches!(
-                                    settings.graphics_quality(),
-                                    GraphicsQuality::Low
-                                ) {
+                                let background = if matches!(quality(), GraphicsQuality::Low) {
                                     format!(
                                         "linear-gradient(90deg, {} 50%, transparent 50%)",
                                         bar_color,
@@ -604,12 +657,12 @@ pub fn CircularProgressBar(
                             )
                         }
                     }
-                }>// Icon
+                }>
+                // Icon
                 </div>
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
-                    transition-transform duration-500"
+                    scale-120 transition-transform duration-500"
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >
@@ -625,39 +678,80 @@ pub fn predictive_cooldown(
     reset: Signal<bool>,
     disabled: Signal<bool>,
     starting_value: f64,
-) -> RwSignal<f64> {
-    let progress_value = RwSignal::new(starting_value);
-    let rate = RwSignal::new(0.0);
+) -> Signal<f64> {
     let cooldown_clock = expect_context::<CooldownClock>();
-
-    Effect::new(move || {
-        let remaining_time = remaining_time.get();
-        if remaining_time > 0.0 {
-            let remaining: f64 = (1.0f64 - progress_value.get_untracked()).clamp(0.0, 1.0);
-            rate.set(remaining / remaining_time);
-        }
+    let anchor = RwSignal::new(CooldownAnchor {
+        tick: cooldown_clock.0.get_untracked(),
+        progress: quantize_cooldown_progress(starting_value),
+        rate_per_second: 0.0,
     });
-
-    Effect::new(move || {
-        if reset.get() {
-            progress_value.set(0.0);
-        }
-    });
+    let last_reset = RwSignal::new(reset.get_untracked());
+    let last_disabled = RwSignal::new(disabled.get_untracked());
+    let last_remaining = RwSignal::new(None::<f64>);
 
     Effect::new(move |_| {
-        cooldown_clock.0.get();
-        let rate = rate.get_untracked();
-        if !disabled.get_untracked() && rate > 0.0 {
-            progress_value.update(|progress_value| {
-                if *progress_value < 1.2 {
-                    *progress_value += rate * 0.2;
-                }
-                if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
-                    *progress_value = 1.0;
-                }
+        let is_reset = reset.get();
+        let is_disabled = disabled.get();
+        let remaining = remaining_time.get();
+        let clock_tick = cooldown_clock.0.get_untracked();
+        let current_anchor = anchor.get_untracked();
+        let current_progress = if last_disabled.get_untracked() {
+            current_anchor.progress
+        } else {
+            progress_from_anchor(current_anchor, clock_tick)
+        };
+
+        if is_reset {
+            anchor.set(CooldownAnchor {
+                tick: clock_tick,
+                progress: 0.0,
+                rate_per_second: 0.0,
             });
+        } else {
+            let should_reanchor = last_reset.get_untracked()
+                || last_disabled.get_untracked() != is_disabled
+                || last_remaining
+                    .get_untracked()
+                    .is_none_or(|previous| (previous - remaining).abs() > f64::EPSILON);
+
+            if should_reanchor {
+                let anchored_progress = if remaining <= 0.0 {
+                    1.0
+                } else {
+                    current_progress
+                };
+                anchor.set(CooldownAnchor {
+                    tick: clock_tick,
+                    progress: anchored_progress,
+                    rate_per_second: if is_disabled {
+                        0.0
+                    } else {
+                        cooldown_rate(anchored_progress, remaining)
+                    },
+                });
+            }
         }
+
+        last_reset.set(is_reset);
+        last_disabled.set(is_disabled);
+        last_remaining.set(Some(remaining));
     });
 
-    progress_value
+    Signal::derive(move || {
+        if reset.get() {
+            return 0.0;
+        }
+
+        let remaining = remaining_time.get();
+        let current_anchor = anchor.get();
+        if disabled.get() {
+            return current_anchor.progress;
+        }
+
+        if remaining <= 0.0 {
+            return 1.0;
+        }
+
+        progress_from_anchor(current_anchor, cooldown_clock.0.get())
+    })
 }

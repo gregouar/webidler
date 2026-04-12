@@ -13,7 +13,7 @@ use crate::components::{
     backend_client::{BackendClient, BackendError},
     chat::chat_panel::ChatPanel,
     data_context::DataContext,
-    shared::player_count::PlayerCount,
+    shared::{player_count::PlayerCount, settings::SettingsModal},
     town::{
         TownContext,
         header_menu::HeaderMenu,
@@ -130,6 +130,7 @@ pub fn TownPage() -> impl IntoView {
                             <PassivesPanel open=town_context.open_ascend />
                             <ForgePanel open=town_context.open_forge />
                             <TownInventoryPanel open=town_context.open_inventory />
+                            <SettingsModal open=town_context.open_settings />
                         </div>
                     }
                 })}

@@ -27,7 +27,7 @@ pub fn TooltipFrame(
             </div>
 
             <div class=format!(
-                "relative overflow-hidden rounded-[3px] border {} shadow-[inset_0_1px_0_rgba(255,255,255,0.05),inset_0_-1px_0_rgba(0,0,0,0.34)]",
+                "relative overflow-clip rounded-[3px] border {} shadow-[inset_0_1px_0_rgba(255,255,255,0.05),inset_0_-1px_0_rgba(0,0,0,0.34)]",
                 palette.border_class,
             )>
                 <div class=format!(

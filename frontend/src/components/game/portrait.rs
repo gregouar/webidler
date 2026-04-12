@@ -34,6 +34,7 @@ pub fn CharacterPortrait(
     // enable_blink: bool,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let heavy_effects = move || settings.uses_heavy_effects();
     let is_dead_portrait_effect = move || {
         if is_dead.get() {
             "transition-[filter,opacity] duration-1000 saturate-0 brightness-50"
@@ -173,38 +174,39 @@ pub fn CharacterPortrait(
 
     let portrait_frame_class = move || {
         match settings.graphics_quality() {
-        GraphicsQuality::High => format!(
-            "w-full h-full relative isolate
+            /*shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]*/
+            GraphicsQuality::High => format!(
+                "w-full h-full relative isolate
             border-[1.5px] xl:border-2
-            shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]
+            shadow-[0_2px_8px_rgba(0,0,0,0.28)]
             before:pointer-events-none before:absolute before:inset-[1px]
-            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.06),transparent_28%)]
+            before:border
             after:pointer-events-none after:absolute after:inset-[4px]
             after:border-[1px]
             {}",
-            accent_class,
-        ),
-        GraphicsQuality::Medium => format!(
-            "w-full h-full relative isolate
+                accent_class,
+            ),
+            GraphicsQuality::Medium => format!(
+                "w-full h-full relative isolate
             border-[1.5px] xl:border-2
             before:pointer-events-none before:absolute before:inset-[1px]
-            before:border before:bg-[linear-gradient(180deg,rgba(228,194,119,0.045),transparent_32%)]
+            before:border
             after:pointer-events-none after:absolute after:inset-[4px]
             after:border-[1px]
             {}",
-            accent_class,
-        ),
-        GraphicsQuality::Low => format!(
-            "w-full h-full relative isolate
+                accent_class,
+            ),
+            GraphicsQuality::Low => format!(
+                "w-full h-full relative isolate
             border-[1.5px] xl:border-2
             before:pointer-events-none before:absolute before:inset-[1px]
-            before:border before:bg-[linear-gradient(180deg,rgba(186,148,86,0.04),transparent_34%)]
+            before:border 
             after:pointer-events-none after:absolute after:inset-[4px]
             after:border-[1px]
             {}",
-            accent_class,
-        ),
-    }
+                accent_class,
+            ),
+        }
     };
 
     // let (hit_signal, set_hit_signal) = signal(false);
@@ -261,24 +263,21 @@ pub fn CharacterPortrait(
     view! {
         <div class=move || {
             format!(
-                "flex items-center justify-center h-full w-full relative p-1 xl:p-2 {}",
+                "flex items-center justify-center h-full w-full relative p-1 xl:p-2
+                overflow-clip {}",
                 is_dead_portrait_effect(),
             )
-        }>
+        } style="contain: layout paint style;">
             <div class=portrait_frame_class style=crit_animation_style>
-
-                // NEW ///
-
-                <Show when=move || settings.uses_heavy_effects()>
-                    <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                    <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
-                </Show>
-
+                // <Show when=move || settings.uses_heavy_effects()>
+                // <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
+                // // <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                // </Show>
                 <div
                     class=move || {
                         format!(
-                            "h-full z-0 overflow-hidden border border-black/40 bg-[#1c1714] {}",
-                            if settings.uses_heavy_effects() {
+                            "h-full z-0 overflow-clip border border-black/40 bg-[#1c1714] {}",
+                            if heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
                             } else {
                                 ""
@@ -289,11 +288,9 @@ pub fn CharacterPortrait(
                         if settings.uses_textures() {
                             format!(
                                 "
-                                background-image:
-                                    linear-gradient(180deg, rgba(255,236,194,0.05), rgba(0,0,0,0.1)),
-                                    url('{}');
-                                background-size: auto, cover;
-                                background-position: center, center;
+                                background-image: url('{}');
+                                background-size: cover;
+                                background-position: center;
                                 ",
                                 img_asset("ui/paper_background.webp"),
                             )
@@ -332,7 +329,10 @@ pub fn CharacterPortrait(
                     // /////////
                     // class:hit-blink=hit_signal
 
-                    <div class="absolute inset-0 flex flex-wrap content-start justify-start pointer-events-none">
+                    <div
+                        class="absolute inset-0 flex flex-wrap content-start justify-start pointer-events-none"
+                        style="contain: paint;"
+                    >
                         <For
                             each=move || { active_debuffs.get().into_iter() }
                             key=|k| k.clone()
@@ -350,7 +350,10 @@ pub fn CharacterPortrait(
                         </For>
                     </div>
 
-                    <div class="absolute inset-0 flex flex-wrap-reverse content-start justify-start pointer-events-none">
+                    <div
+                        class="absolute inset-0 flex flex-wrap-reverse content-start justify-start pointer-events-none"
+                        style="contain: paint;"
+                    >
                         <For
                             each=move || { active_buffs.get().into_iter() }
                             key=|k| k.clone()
@@ -422,6 +425,7 @@ pub fn CharacterPortrait(
                     <div
                         class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
                         class:opacity-100=move || is_bleeding.get()
+                        style="contain: paint;"
                     >
                         <div class="absolute inset-0 status-bleed"></div>
                     </div>
@@ -431,6 +435,7 @@ pub fn CharacterPortrait(
                     <div
                         class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
                         class:opacity-100=move || is_burning.get()
+                        style="contain: paint;"
                     >
                         <div class="absolute inset-0 status-burn"></div>
                     </div>
@@ -440,6 +445,7 @@ pub fn CharacterPortrait(
                     <div
                         class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
                         class:opacity-100=move || is_poisoned.get()
+                        style="contain: paint;"
                     >
                         <div class="absolute inset-0 status-poison"></div>
                     </div>

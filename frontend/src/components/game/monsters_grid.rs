@@ -69,21 +69,23 @@ pub fn MonstersGrid() -> impl IntoView {
 
     view! {
         <div class=move || {
+            let animation_class = if all_monsters_dead.get() {
+                "animate-monster-fade-out pointer-events-none"
+            } else if flee.get() {
+                "animate-monster-flee pointer-events-none"
+            } else if !game_context.monster_states.read().is_empty() {
+                "animate-monster-fade-in"
+            } else {
+                ""
+            };
             format!(
                 "flex-1 min-h-0
-                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-                items-center will-change-transform-opacity transform-gpu
+                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
+                items-center 
+                will-change-transform-opacity transform-gpu
                 {}
                 ",
-                if all_monsters_dead.get() {
-                    "animate-monster-fade-out pointer-events-none"
-                } else if flee.get() {
-                    "animate-monster-flee pointer-events-none"
-                } else if !game_context.monster_states.read().is_empty() {
-                    "animate-monster-fade-in"
-                } else {
-                    ""
-                },
+                animation_class,
             )
         }>
             <For
@@ -183,6 +185,51 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
                     if tick.is_crit { "!" } else { "" },
                 )
             }}
+        </div>
+    }
+}
+
+#[component]
+fn MonsterFeedbackOverlay(
+    damage_ticks: ArcRwSignal<Vec<DamageTick>>,
+    gold_reward: RwSignal<f64>,
+    gems_reward: RwSignal<f64>,
+) -> impl IntoView {
+    view! {
+        <div class="absolute inset-0 z-30 pointer-events-none" style="contain: paint;">
+            <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
+                <DamageNumber tick />
+            </For>
+
+            <Show when=move || { gold_reward.get() > 0.0 }>
+                <div class="
+                reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
+                absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number">
+                    <span>+{format_number(gold_reward.get())}</span>
+                    <img
+                        draggable="false"
+                        src=img_asset("ui/gold.webp")
+                        alt="Gold"
+                        class="h-[2em] aspect-square"
+                    />
+                </div>
+            </Show>
+
+            <Show when=move || { gems_reward.get() > 0.0 }>
+                <div class="
+                reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
+                absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number">
+                    <span>+{format_number(gems_reward.get())}</span>
+                    <img
+                        draggable="false"
+                        src=img_asset("ui/gems.webp")
+                        alt="Gems"
+                        class="h-[1.2em] aspect-square"
+                    />
+                </div>
+            </Show>
         </div>
     }
 }
@@ -397,7 +444,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         <div
             class=move || {
                 format!(
-                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 {}",
+                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
@@ -408,15 +455,11 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 )
             }
             style=move || {
-                match settings.graphics_quality() {
+                let background_style = match settings.graphics_quality() {
                     GraphicsQuality::High => {
                         format!(
                             "
-                            /*clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);*/
-                            background-image:
-                                linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
-                                url('{}');
-                            background-blend-mode: screen, normal;
+                            background-image: url('{}');
                             ",
                             img_asset("ui/dark_stone.webp"),
                         )
@@ -424,22 +467,20 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     GraphicsQuality::Medium => {
                         format!(
                             "
-                            /*clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);*/
                             background-image: url('{}');
                             ",
                             img_asset("ui/dark_stone.webp"),
                         )
                     }
-                    GraphicsQuality::Low => {
-                        "
-                            /*clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);*/
-                            "
-                            .to_string()
-                    }
-                }
+                    GraphicsQuality::Low => "".to_string(),
+                };
+                format!("contain: layout paint style; {background_style}")
             }
         >
-            <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
+            <div
+                class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0"
+                style="contain: layout paint;"
+            >
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
                         class=if is_big { "h-6 xl:h-10" } else { "h-4 xl:h-7" }
@@ -463,45 +504,10 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     />
                 // enable_blink=true
                 </div>
-
-                <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
-                    <DamageNumber tick />
-                </For>
-
-                <Show when=move || { gold_reward.get() > 0.0 }>
-                    <div class="
-                    reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
-                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-30 flex items-center gap-1
-                    font-number">
-                        <span>+{format_number(gold_reward.get())}</span>
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gold.webp")
-                            alt="Gold"
-                            class="h-[2em] aspect-square"
-                        />
-                    </div>
-                </Show>
-
-                <Show when=move || { gems_reward.get() > 0.0 }>
-                    <div class="
-                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
-                    absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-30 flex items-center gap-1
-                    font-number">
-                        <span>+{format_number(gems_reward.get())}</span>
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gems.webp")
-                            alt="Gems"
-                            class="h-[1.2em] aspect-square"
-                        />
-                    </div>
-                </Show>
+                <MonsterFeedbackOverlay damage_ticks gold_reward gems_reward />
             </div>
 
-            <div class="w-full flex flex-col justify-center gap-1">
+            <div class="w-full flex flex-col justify-center gap-1" style="contain: layout paint;">
                 <MonsterTags specs=specs.character_specs />
                 <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For

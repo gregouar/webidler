@@ -198,7 +198,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                 </span>
             </div>
 
-            <div class="relative isolate w-full overflow-hidden rounded-[10px] border border-[#3b3428]
+            <div class="relative isolate w-full overflow-clip rounded-[10px] border border-[#3b3428]
             bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
             shadow-[0_6px_16px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]">
                 <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
@@ -264,7 +264,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                                 >
                                                     <div class=move || {
                                                         format!(
-                                                            "relative isolate overflow-hidden rounded-[8px]
+                                                            "relative isolate overflow-clip rounded-[8px]
                                                                 border
                                                                 bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                                                                 shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
@@ -288,7 +288,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                                     <div class="
                                                     absolute inset-0
                                                     backface-hidden
-                                                    isolate overflow-hidden rounded-[8px]
+                                                    isolate overflow-clip rounded-[8px]
                                                     border border-[#6c5329]/85
                                                     bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
                                                     shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]

@@ -181,11 +181,12 @@ fn SkillCard(
     view! {
         <div
             class=move || {
-                let base = "relative isolate overflow-hidden group border rounded-[9px]
+                let base = "relative isolate overflow-clip group border rounded-[9px]
                     px-3 py-3 xl:px-4 xl:py-4 flex flex-col items-center gap-3
                     bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                     shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
-                    transition-all duration-150 cursor-pointer".to_string();
+                    transition-all duration-150 cursor-pointer"
+                    .to_string();
                 if is_selected.get() {
                     format!(
                         "{} border-[#b28a4f] shadow-[0_8px_18px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(244,225,181,0.08),inset_0_0_0_1px_rgba(214,177,102,0.18)] -translate-y-[1px]",
@@ -226,7 +227,7 @@ fn SkillCard(
             <div
                 class=format!(
                     "relative flex h-20 w-20 xl:h-24 xl:w-24 items-center justify-center rounded-full
-                    overflow-hidden
+                    overflow-clip
                     border {}
                     bg-stone-900
                     shadow-[0_0_15px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.75)]",
@@ -252,7 +253,7 @@ fn SkillCard(
                     class=move || {
                         format!(
                             "relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current
-                            drop-shadow-[0px_4px_oklch(13% 0.028 261.692)] invert
+                            drop-shadow-[0px_4px_black] invert
                             transition-all ease-in-out duration-150
                             {}",
                             if is_selected.get() {

@@ -187,14 +187,13 @@ where
     where
         S: Serializer,
     {
-        if serializer.is_human_readable()
-            && self.lucky_chance == Default::default() {
-                if self.min == self.max {
-                    return self.min.serialize(serializer);
-                } else {
-                    return [self.min, self.max].serialize(serializer);
-                }
+        if serializer.is_human_readable() && self.lucky_chance == Default::default() {
+            if self.min == self.max {
+                return self.min.serialize(serializer);
+            } else {
+                return [self.min, self.max].serialize(serializer);
             }
+        }
 
         ChanceRangeDefFull {
             min: self.min,

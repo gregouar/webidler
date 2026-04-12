@@ -21,7 +21,6 @@ use crate::components::{
         websocket::WebsocketContext,
     },
     shared::settings::SettingsModal,
-    ui::progress_bars::provide_cooldown_clock,
     ui::toast::*,
 };
 
@@ -29,7 +28,6 @@ use crate::components::{
 pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context);
-    provide_cooldown_clock();
 
     let auth_context = expect_context::<AuthContext>();
 

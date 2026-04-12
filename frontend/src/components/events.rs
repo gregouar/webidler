@@ -28,9 +28,10 @@ pub fn provide_events_context() {
         }
 
         if let Ok(Some(selection)) = window().get_selection()
-            && !selection.is_collapsed() {
-                return;
-            }
+            && !selection.is_collapsed()
+        {
+            return;
+        }
 
         if ev.alt_key() || ev.code() == "AltLeft" || ev.code() == "AltRight" || ev.ctrl_key() {
             ev.prevent_default();

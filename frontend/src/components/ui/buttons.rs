@@ -16,7 +16,7 @@ pub fn MenuButton(
             class=move || {
                 let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -41,7 +41,7 @@ pub fn MenuButton(
                     disabled:before:hidden"
                     }
                     GraphicsQuality::Medium => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -63,7 +63,7 @@ pub fn MenuButton(
                      disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -116,10 +116,11 @@ pub fn MenuButton(
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                 <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
-            </Show>
-            <Show when=move || settings.uses_heavy_effects()>
                 <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
             </Show>
+            // <Show when=move || settings.uses_heavy_effects()>
+            // <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+            // </Show>
             <span class="relative z-10">{children()}</span>
         </button>
     }
@@ -138,7 +139,7 @@ pub fn MenuButtonRed(
             class=move || {
                 let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -162,7 +163,7 @@ pub fn MenuButtonRed(
                     disabled:before:hidden"
                     }
                     GraphicsQuality::Medium => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold text-shadow shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -178,7 +179,7 @@ pub fn MenuButtonRed(
                     disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-[#f2c4bb] font-extrabold
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -214,6 +215,7 @@ pub fn MenuButtonRed(
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                 <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#ffc1ad]/40 to-transparent"></span>
+                <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#ffc1ad]/35 via-transparent to-black/40"></span>
             </Show>
             <span class="relative z-10">{children()}</span>
         </button>
@@ -233,7 +235,7 @@ pub fn FancyButton(
             class=move || {
                 let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -258,7 +260,7 @@ pub fn FancyButton(
                     disabled:before:hidden"
                     }
                     GraphicsQuality::Medium => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -275,7 +277,7 @@ pub fn FancyButton(
                     disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
-                        "btn relative isolate overflow-hidden
+                        "btn relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -311,10 +313,11 @@ pub fn FancyButton(
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                 <span class="pointer-events-none absolute inset-x-2 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/55 to-transparent"></span>
-            </Show>
-            <Show when=move || settings.uses_heavy_effects()>
                 <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
             </Show>
+            // <Show when=move || settings.uses_heavy_effects()>
+            // <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
+            // </Show>
             <span class="relative z-10">{children()}</span>
         </button>
     }
@@ -346,14 +349,12 @@ pub fn Toggle(
                 }
                 GraphicsQuality::Medium => {
                     "text-zinc-100
-                    border-[#a88449]
-                    shadow-md
-                    saturate-90"
+                    border-[#b28a4f]
+                    shadow-md"
                 }
                 GraphicsQuality::Low => {
                     "text-zinc-100
-                    border-[#927444]
-                    saturate-85"
+                    border-[#b28a4f]"
                 }
             }
         } else {
@@ -409,7 +410,7 @@ pub fn Toggle(
                     group
                     {}
                     ",
-                    "isolate overflow-hidden",
+                    "isolate overflow-clip",
                     if settings.uses_surface_effects() {
                         "text-shadow shadow-black/90"
                     } else {
@@ -519,7 +520,7 @@ pub fn TabButton(
                     group
                     {}
                     ",
-                    "isolate overflow-hidden",
+                    "isolate overflow-clip",
                     if settings.uses_surface_effects() {
                         "text-shadow shadow-black/90"
                     } else {

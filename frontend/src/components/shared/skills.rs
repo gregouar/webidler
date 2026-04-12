@@ -4,6 +4,8 @@ use shared::data::skill::{BaseSkillSpecs, SkillType};
 
 use crate::{assets::img_asset, components::ui::progress_bars::CircularProgressBar};
 
+pub const SKILL_PROGRESS_RING_COLOR: &str = "#a65f00";
+
 #[component]
 pub fn SkillProgressBar(
     skill_specs_base: BaseSkillSpecs,
@@ -19,7 +21,7 @@ pub fn SkillProgressBar(
     view! {
         <CircularProgressBar
             value=value
-            bar_color="oklch(55.4% 0.135 66.442)"
+            bar_color=SKILL_PROGRESS_RING_COLOR
             reset=reset
             disabled=disabled
             bar_width=bar_width
@@ -37,10 +39,10 @@ pub fn SkillProgressBar(
 
 fn skill_type_progress_tint(skill_type: SkillType) -> &'static str {
     match skill_type {
-        SkillType::Attack => "from-[oklch(0.44_0.08_17.0)]",
-        SkillType::Spell => "from-[oklch(0.44_0.04_240.0)]",
-        SkillType::Curse => "from-[oklch(0.44_0.14_315.0)]",
-        SkillType::Blessing => "from-[oklch(0.60_0.08_85.0)]",
+        SkillType::Attack => "from-[#783f42]",
+        SkillType::Spell => "from-[#3e5667]",
+        SkillType::Curse => "from-[#6f3486]",
+        SkillType::Blessing => "from-[#967d46]",
         SkillType::Other => "from-stone-600",
     }
 }
