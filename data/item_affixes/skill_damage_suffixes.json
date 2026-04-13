@@ -187,7 +187,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
@@ -211,7 +211,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
@@ -235,7 +235,7 @@
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
@@ -259,7 +259,7 @@
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
@@ -283,7 +283,7 @@
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
@@ -307,7 +307,7 @@
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 225,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
@@ -331,7 +331,7 @@
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 200,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
@@ -355,7 +355,7 @@
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 100,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
@@ -379,7 +379,7 @@
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 50,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
@@ -403,7 +403,7 @@
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 25,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {
@@ -609,7 +609,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
@@ -633,7 +633,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
@@ -657,7 +657,7 @@
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
@@ -681,7 +681,7 @@
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
@@ -705,7 +705,7 @@
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
@@ -729,7 +729,7 @@
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 225,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
@@ -753,7 +753,7 @@
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 200,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
@@ -777,7 +777,7 @@
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 100,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
@@ -801,7 +801,7 @@
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 50,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
@@ -825,7 +825,7 @@
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 25,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {
