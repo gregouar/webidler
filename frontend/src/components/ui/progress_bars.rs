@@ -84,35 +84,22 @@ pub fn HorizontalProgressBar(
                     class.unwrap_or_default(),
                 )
             }
-            style:background-image=move || {
-                match settings.graphics_quality() {
-                    GraphicsQuality::High => {
-                        "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
-                            .to_string()
-                    }
-                    GraphicsQuality::Medium => {
-                        "linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string()
-                    }
-                    GraphicsQuality::Low => {
-                        "linear-gradient(180deg, rgba(41,39,45,0.98), rgba(20,19,24,1))".to_string()
-                    }
-                }
-            }
+            style:background-image="linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
         >
             {move || match settings.graphics_quality() {
                 GraphicsQuality::High => {
                     view! {
                         <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
                         <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
+                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px]
+                        border border-black/45 bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))]"></div>
                     }
                         .into_any()
                 }
                 GraphicsQuality::Medium => {
                     view! {
                         <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45  bg-[linear-gradient(180deg,rgba(14,14,17,0.8),rgba(28,26,31,0.92))]"></div>
                     }
                         .into_any()
                 }
@@ -127,7 +114,7 @@ pub fn HorizontalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "relative block h-full w-full origin-left rounded-[2px] xl:rounded-[4px]
+                            "relative block h-full w-full origin-left
                             {} {} {} {}",
                             if settings.uses_heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
@@ -145,13 +132,13 @@ pub fn HorizontalProgressBar(
                     }
                     style=move || format!("transform: scaleX({});", set_value())
                 ></div>
+                // Fake copy for glow effect on reset
+                <div
+                    class=format!("absolute  h-full w-full inset-0 z-1 {}", bar_color)
+                    style=reset_bar_animation
+                ></div>
             </div>
 
-            // Fake copy for glow effect on reset
-            <div
-                class=format!("absolute inset-0 z-1 rounded-[4px] xl:rounded-[6px] {}", bar_color)
-                style=reset_bar_animation
-            ></div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none text-shadow shadow-black/90">
                 {children.map(|children| children())}
             </div>
@@ -205,28 +192,14 @@ pub fn VerticalProgressBar(
                     class.unwrap_or_default(),
                 )
             }
-            style:background-image=move || {
-                match settings.graphics_quality() {
-                    GraphicsQuality::High => {
-                        "linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
-                            .to_string()
-                    }
-                    GraphicsQuality::Medium => {
-                        "linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))".to_string()
-                    }
-                    GraphicsQuality::Low => {
-                        "linear-gradient(180deg, rgba(41,39,45,0.98), rgba(20,19,24,1))".to_string()
-                    }
-                }
-            }
+            style:background-image="linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.14)), linear-gradient(180deg, rgba(35,33,39,0.96), rgba(17,16,20,1))"
         >
             {move || match settings.graphics_quality() {
                 GraphicsQuality::High => {
                     view! {
                         <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
                         <div class="pointer-events-none absolute inset-x-[2px] top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
+                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 bg-[linear-gradient(180deg,rgba(10,10,12,0.82),rgba(28,26,32,0.92))]"></div>
                     }
                         .into_any()
                 }
@@ -234,7 +207,7 @@ pub fn VerticalProgressBar(
 
                     view! {
                         <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-[#d5b16d]/18"></div>
-                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45"></div>
+                        <div class="pointer-events-none absolute inset-[3px] xl:inset-[4px] rounded-[2px] xl:rounded-[4px] border border-black/45 bg-[linear-gradient(180deg,rgba(14,14,17,0.8),rgba(28,26,31,0.92))]"></div>
                     }
                         .into_any()
                 }
@@ -250,7 +223,8 @@ pub fn VerticalProgressBar(
                 <div
                     class=move || {
                         format!(
-                            "relative block h-full w-full origin-bottom rounded-[2px] xl:rounded-[4px]
+                            "relative block h-full w-full origin-bottom
+                            transition-progress-bar
                             {} {} {}",
                             if settings.uses_heavy_effects() {
                                 "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
@@ -268,15 +242,13 @@ pub fn VerticalProgressBar(
                     class:transition-progress-bar=move || !reset.get()
                     style=move || format!("transform: scaleY({});", set_value())
                 ></div>
+
+                // Fake copy for glow effect on reset
+                <div
+                    class=format!("absolute inset-0 z-1 h-full w-full {}", bar_color)
+                    style=reset_bar_animation
+                ></div>
             </div>
-            // Fake copy for glow effect on reset
-            <div
-                class=format!(
-                    "absolute rounded-[4px] xl:rounded-[6px] inset-0 z-1 h-full {}",
-                    bar_color,
-                )
-                style=reset_bar_animation
-            ></div>
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] text-shadow shadow-black/90">
                 {children.map(|children| children())}
             </div>
@@ -418,7 +390,9 @@ pub fn CircularProgressBar(
                         GraphicsQuality::High => {
                             "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
                         }
-                        GraphicsQuality::Medium => "border border-[#6c5329] bg-stone-900",
+                        GraphicsQuality::Medium => {
+                            "border border-[#6c5329] bg-stone-900 shadow-[0_0_15px_rgba(0,0,0,0.95)]"
+                        }
                         GraphicsQuality::Low => "border border-[#5c4a2e] bg-zinc-900",
                     },
                     class.unwrap_or_default(),

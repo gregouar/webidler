@@ -103,7 +103,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
 
     let header_background = move || {
         format!(
-            "background-image: url('{}');",
+            "background-image: url('{}'); contain: layout paint;",
             img_asset(&game_context.area_specs.read().header_background)
         )
     };
@@ -239,7 +239,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
 
     let footer_background = move || {
         format!(
-            "background-image: url('{}');",
+            "background-image: url('{}'); contain: layout paint;",
             img_asset(&game_context.area_specs.read().footer_background)
         )
     };

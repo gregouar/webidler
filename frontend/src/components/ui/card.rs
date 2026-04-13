@@ -74,7 +74,7 @@ pub fn Card(
             <div class=format!(
                 "relative z-10 flex h-full flex-col clip-octagon {} {}",
                 if gap { "gap-1 xl:gap-2" } else { "" },
-                if pad { "p-1 xl:p-3" } else { "m-[2px] overflow-clip" },
+                if pad { "p-1 xl:p-3" } else { "m-[2px] overflow-hidden" },
             )>{children()}</div>
         </div>
     }

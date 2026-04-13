@@ -320,10 +320,8 @@ pub fn PlayerCard() -> impl IntoView {
                 />
             </StaticTooltip>
 
-            <div
-                class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2"
-                style="contain: layout paint;"
-            >
+            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
+                // style="contain: layout paint;"
                 <For
                     each=move || {
                         0..game_context
@@ -663,7 +661,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     );
 
     view! {
-        <div class="flex flex-col" style="contain: layout paint;">
+        <div class="flex flex-col">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
                 {
                     let use_skill = use_skill.clone();
@@ -671,7 +669,6 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                         <button
                             class="btn p-1 w-full h-full isolate
                             active:brightness-50 active:sepia"
-                            style="contain: paint;"
                             on:click=move |_| use_skill()
                             disabled=move || !is_ready.get()
                         >

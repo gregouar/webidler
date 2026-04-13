@@ -507,7 +507,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 <MonsterFeedbackOverlay damage_ticks gold_reward gems_reward />
             </div>
 
-            <div class="w-full flex flex-col justify-center gap-1" style="contain: layout paint;">
+            <div class="w-full flex flex-col justify-center gap-1">
                 <MonsterTags specs=specs.character_specs />
                 <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For
