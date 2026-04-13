@@ -132,7 +132,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     tooltip=|| "Go Back one Area Level & Pause Progression"
                 >
                     <button
-                        class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                        class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
                         hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
                         active:scale-90 active:brightness-125 transition"
                         title="Go Back One Level"
@@ -194,7 +194,8 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     }
                 >
                     <button
-                        class="btn text-xl xl:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                        class="btn text-xl xl:text-3xl text-amber-300 font-bold
+                        drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
                         hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
                         active:scale-90 active:brightness-125 transition
                         items-center"
@@ -218,7 +219,8 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     }
                 >
                     <button
-                        class="btn text-xl xl:text-3xl text-amber-300 font-bold drop-shadow-[0_0_6px_rgba(0,0,10,0.8)]
+                        class="btn text-xl xl:text-3xl text-amber-300 font-bold
+                        drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
                         hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
                         active:scale-90 active:brightness-125 transition
                         items-center"
@@ -270,13 +272,13 @@ pub fn BattleSceneFooter() -> impl IntoView {
                 <div class="relative px-4 py-1 xl:py-2">
                     <div class="absolute inset-0 blur-lg
                     bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
-                    <p class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
+                    <p class="relative text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
                         {wave_info}
                     </p>
                 </div>
             </div>
 
-            <div class="relative flex items-center justify-center h-full px-2 text-base xl:text-2xl">
+            <div class="relative flex items-center justify-center h-full px-2 text-base xl:text-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
                 <GemsLoot />
             </div>
 
@@ -284,7 +286,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
                 <div class="relative px-1 py-1 xl:py-2">
                     <div class="absolute inset-0 blur-lg
                     bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
-                    <div class="relative text-shadow-md/30 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold
+                    <div class="relative text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold
                     flex items-center gap-1 leading-none">
                         <span>{threat_level}</span>
                         <span class="text-yellow-500">
@@ -366,7 +368,7 @@ pub fn ThreatMeter() -> impl IntoView {
                     class="z-2 w-4 xl:w-8"
                     value=progress_value
                     reset=threat_increase
-                    bar_color="bg-gradient-to-l from-yellow-500 to-yellow-700"
+                    bar_color="bg-gradient-to-l from-[#d1a24b] to-[#9b7429]"
                 />
             </div>
         </StaticTooltip>

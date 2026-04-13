@@ -20,12 +20,14 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "cloth_wraps_unique": {
     "name": "Baker's Embrace",
     "icon": "items/gloves/oven_mitts.webp",
-    "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven— they cradle the fury of molten magic.",
+    "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven.",
     "slot": "Gloves",
     "extra_slots": [],
     "categories": [
@@ -35,6 +37,16 @@
     "min_area_level": 0,
     "rarity": "Unique",
     "affixes": [
+      {
+        "stat": "Life",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
       {
         "stat": {
           "Damage": {
@@ -46,20 +58,10 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          40.0,
-          60.0
+          30.0,
+          50.0
         ],
-        "ignore_quality": false
-      },
-      {
-        "stat": "Life",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          20.0,
-          40.0
-        ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -68,10 +70,22 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": [
-          100.0,
-          150.0
+          30.0,
+          50.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "DamageResistance": {
+            "skill_type": null,
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -82,7 +96,48 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [
+      50,
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "leather_gloves": {
     "name": "Leather Gloves",
@@ -105,7 +160,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_gloves_unique": {
     "name": "Fangbreaker",
@@ -135,7 +192,7 @@
           40.0,
           60.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -147,7 +204,7 @@
           40.0,
           60.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "LifeRegen",
@@ -157,7 +214,7 @@
           4.0,
           6.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -169,7 +226,7 @@
           10.0,
           15.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -184,7 +241,7 @@
           4.0,
           8.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -193,7 +250,7 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -251,7 +308,8 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
     "weapon_specs": {
@@ -276,7 +334,29 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "studded_gloves": {
     "name": "Studded Gloves",
@@ -299,7 +379,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "chain_gloves": {
     "name": "Chain Gloves",
@@ -322,7 +404,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "chain_gloves_unique": {
     "name": "Petalweave Gloves",
@@ -390,7 +474,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_gauntlets": {
     "name": "Boiled Leather Gauntlets",
@@ -413,7 +499,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "lamellar_gauntlets": {
     "name": "Lamellar Gauntlets",
@@ -436,7 +524,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "lamellar_gauntlets_unique": {
     "name": "Twinbound Grasp",
@@ -573,7 +663,8 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false
+        "inherit_modifiers": false,
+        "is_debuff": false
       }
     ],
     "weapon_specs": null,
@@ -583,7 +674,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "gloves_7": {
     "name": "Plated Gauntlets",
@@ -606,7 +699,9 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "gloves_8": {
     "name": "Runic Gauntlets",
@@ -629,6 +724,8 @@
     },
     "rune_specs": null,
     "map_specs": null,
-    "ignore_quality": false
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

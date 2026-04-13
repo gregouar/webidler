@@ -90,7 +90,7 @@
           40.0,
           60.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ManaRegen",
@@ -100,7 +100,7 @@
           3.0,
           5.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -112,7 +112,7 @@
           40.0,
           60.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -198,6 +198,28 @@
           "stat": "Mana",
           "modifier": "Flat",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "damage_type": "Poison",
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
         }
       }
     ]
@@ -508,7 +530,7 @@
       {
         "name": null,
         "icon": null,
-        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per second for the same Duration. You deal 20% more Poison Damage per stack of Venom.",
+        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per second for 10 seconds. You deal 30% more Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
         "OnApplyStatus": {
           "skill_type": null,
@@ -520,28 +542,7 @@
           "is_triggered": null
         },
         "target": "Me",
-        "modifiers": [
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": null,
-                "skill_type": null
-              }
-            },
-            "modifier": "Flat",
-            "factor": 1.0,
-            "source": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null
-              }
-            }
-          }
-        ],
+        "modifiers": [],
         "skill_range": "Any",
         "skill_type": "Other",
         "effects": [
@@ -558,7 +559,7 @@
                       "damage_type": "Poison"
                     }
                   },
-                  "value": 5.0,
+                  "value": 20.0,
                   "cumulate": true,
                   "replace_on_value_only": false,
                   "unavoidable": false
@@ -583,7 +584,7 @@
                   "unavoidable": false
                 }
               ],
-              "duration": 0.0
+              "duration": 10.0
             },
             "ignore_stat_effects": [
               {
@@ -594,6 +595,12 @@
                 }
               },
               {
+                "StatusDuration": {
+                  "status_type": null,
+                  "skill_type": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_type": null,
                   "skill_type": null,
@@ -601,26 +608,7 @@
                 }
               }
             ],
-            "conditional_modifiers": [
-              {
-                "conditions": [
-                  "LowLife"
-                ],
-                "effects": [
-                  {
-                    "stat": {
-                      "StatusDuration": {
-                        "status_type": null,
-                        "skill_type": null
-                      }
-                    },
-                    "modifier": "More",
-                    "value": -1e300
-                  }
-                ],
-                "conditions_duration": 0
-              }
-            ]
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -648,6 +636,14 @@
           "stat": "Mana",
           "modifier": "Flat",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
         }
       }
     ]
@@ -703,8 +699,8 @@
       {
         "stat": {
           "Damage": {
-            "skill_type": null,
-            "damage_type": "Storm",
+            "skill_type": "Spell",
+            "damage_type": null,
             "min_max": null
           }
         },
@@ -737,25 +733,6 @@
         "value": [
           150.0,
           200.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SuccessChance": {
-            "skill_type": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_type": null
-              }
-            }
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          40.0
         ],
         "ignore_quality": true
       },
@@ -795,6 +772,20 @@
           "stat": "Mana",
           "modifier": "Flat",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "damage_type": null,
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
         }
       }
     ]

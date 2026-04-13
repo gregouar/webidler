@@ -837,7 +837,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             if value.unwrap_or_default() >= 0.0 {
                 format!(
-                    "Resist {}% of {}{}Damage",
+                    "Take {}% Less {}{}Damage",
                     format_flat_number(value, false),
                     damage_type_str(*damage_type),
                     skill_type_str(*skill_type)

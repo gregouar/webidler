@@ -470,9 +470,12 @@
             "min_max": null
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": [
+          50.0,
+          100.0
+        ],
         "ignore_quality": true
       },
       {
@@ -569,9 +572,12 @@
             "min_max": null
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": [
+          50.0,
+          100.0
+        ],
         "ignore_quality": true
       },
       {

@@ -130,7 +130,7 @@
         "scope": "Global",
         "value": [
           20.0,
-          50.0
+          40.0
         ],
         "ignore_quality": true
       },
@@ -214,7 +214,7 @@
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 20.0
         }
       },
       {
@@ -232,7 +232,7 @@
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 20.0
         }
       }
     ]

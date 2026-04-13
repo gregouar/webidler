@@ -228,7 +228,7 @@ pub fn ItemTooltipContent(
                         view! {
                             <li class="text-xs xl:text-sm text-gray-400">
                                 "Empower level: "
-                                <span class="font-bold text-[#f0b36b]">
+                                <span class="font-bold text-[#ff8c4d]">
                                     {item_specs.modifiers.upgrade_level}
                                 </span>"/"{max_upgrade_level}
                             </li>

@@ -681,6 +681,92 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "wand_prism": {
+    "name": "The Refracting Rod",
+    "icon": "items/weapons_spell/prism.webp",
+    "description": "A single line, broken into obedience.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 260,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "damage_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 120.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "damage_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          160.0
+        ],
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Fire",
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillTargetModifier": {
+            "skill_type": null,
+            "range": null,
+            "shape": null,
+            "repeat": {
+              "min_value": 3,
+              "max_value": 3,
+              "target": "Any"
+            },
+            "skill_id": "burning_ray"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "weapon_spell_7": {
     "name": "Mage Wand",
     "icon": "items/weapons_spell/mage_wand.webp",

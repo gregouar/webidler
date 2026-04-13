@@ -4,7 +4,7 @@
     "icon": "items/cloaks/wool_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -40,21 +40,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hooded_wrap": {
     "name": "Hooded Wrap",
     "icon": "items/cloaks/hooded_wrap.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -90,21 +90,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hooded_wrap_unique": {
     "name": "Stormfeast Shroud",
     "icon": "items/cloaks/stormfeast_shroud.webp",
     "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -182,18 +182,6 @@
       },
       {
         "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          -90.0,
-          -60.0
-        ],
-        "ignore_quality": false
-      },
-      {
-        "stat": {
           "Armor": "Fire"
         },
         "modifier": "Flat",
@@ -229,7 +217,65 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "drink_storm",
+        "OnTakeHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": "Storm"
+        },
+        "target": "SameTarget",
+        "modifiers": [ ],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "damage_type": "Fire",
+                          "min_max": null
+                        }
+                      },
+                      "modifier": "More",
+                      "debuff": false
+                    }
+                  },
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false,
+        "is_debuff": false
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -270,6 +316,16 @@
         "scope": "Global",
         "stat_effect": {
           "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
             "Damage": {
               "skill_type": null,
               "damage_type": "Fire",
@@ -287,7 +343,7 @@
     "icon": "items/cloaks/heavy_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -323,21 +379,71 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
+  },
+  "cloak_backstab": {
+    "name": "Gareth's Misdirection",
+    "icon": "items/cloaks/cloak_backstab.webp",
+    "description": "He insisted it wasn't betrayal, just better positioning.",
+    "slot": "Accessory",
+    "extra_slots": [ ],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "fur_cloak": {
     "name": "Fur-lined Cloak",
     "icon": "items/cloaks/fur_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -373,21 +479,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "fur_cloak_unique": {
     "name": "Shadowmoth Embrace",
     "icon": "items/cloaks/princess_cloak.webp",
     "description": "Spread your wings, let the world fear what follows.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -443,8 +549,8 @@
         "modifier": "Increased",
         "scope": "Global",
         "value": [
-          30.0,
-          50.0
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       },
@@ -459,14 +565,14 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          80.0,
-          120.0
+          100.0,
+          150.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
-          "CritChance": "Spell"
+          "CritChance": null
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -475,9 +581,21 @@
           60.0
         ],
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Evade": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          5.0,
+          10.0
+        ],
+        "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -521,6 +639,30 @@
           "modifier": "Flat",
           "value": 25.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "damage_type": "Poison",
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Evade": null
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
       }
     ]
   },
@@ -529,7 +671,7 @@
     "icon": "items/cloaks/reinforced_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -565,21 +707,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "great_cloak": {
     "name": "Great Cloak",
     "icon": "items/cloaks/great_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -615,21 +757,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_chest": {
     "name": "Gilded Chest",
     "icon": "items/cloaks/treasure_chest.webp",
     "description": "You finally found it. Now what will it take from you?",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory"
     ],
@@ -666,7 +808,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -694,7 +836,7 @@
     "icon": "items/cloaks/elven_cape.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -730,21 +872,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "cloak_8": {
     "name": "Regal Mantle",
     "icon": "items/cloaks/regal_mantle.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -780,13 +922,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

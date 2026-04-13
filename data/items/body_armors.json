@@ -54,7 +54,7 @@
         "scope": "Global",
         "value": [
           1.0,
-          6.0
+          7.0
         ],
         "ignore_quality": true
       }
@@ -122,17 +122,17 @@
           30.0,
           50.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "LifeRegen",
         "modifier": "Increased",
         "scope": "Global",
         "value": [
-          20.0,
-          30.0
+          30.0,
+          50.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "Life",
@@ -142,7 +142,7 @@
           8.0,
           10.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -154,7 +154,7 @@
           40.0,
           60.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "Mana",
@@ -164,7 +164,7 @@
           20.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -176,8 +176,54 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Increased",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "chain_shirt": {
     "name": "Chain Shirt",
@@ -257,7 +303,10 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 10.0,
+        "value": [
+          10.0,
+          20.0
+        ],
         "ignore_quality": true
       },
       {
@@ -266,7 +315,22 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 10.0,
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Evade": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
         "ignore_quality": true
       },
       {
@@ -299,8 +363,32 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "LifeRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "brigandine": {
     "name": "Brigandine",
@@ -364,7 +452,7 @@
           80.0,
           120.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -373,10 +461,10 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": [
-          100.0,
-          140.0
+          90.0,
+          150.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -388,7 +476,7 @@
           60.0,
           100.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -400,7 +488,7 @@
           60.0,
           100.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -412,8 +500,65 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 30.0
+        }
+      }
+    ]
   },
   "breastplate": {
     "name": "Breastplate",
@@ -460,8 +605,8 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": [
-          150.0,
-          200.0
+          100.0,
+          150.0
         ],
         "ignore_quality": true
       },
@@ -482,8 +627,8 @@
         "modifier": "Increased",
         "scope": "Global",
         "value": [
-          10.0,
-          15.0
+          8.0,
+          12.0
         ],
         "ignore_quality": true
       },
@@ -549,8 +694,52 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Increased",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "body_7": {
     "name": "Cavalry Armor",

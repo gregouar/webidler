@@ -47,7 +47,6 @@ pub fn HorizontalProgressBar(
             "transition-transform ease-linear duration-250 "
         }
     };
-
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     Effect::new(move |_| {
@@ -111,32 +110,29 @@ pub fn HorizontalProgressBar(
                 }
             }}
             <div class="w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
-                <div
-                    class=move || {
-                        format!(
-                            "relative block h-full w-full origin-left
-                            {} {} {} {}",
-                            if settings.uses_heavy_effects() {
-                                "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
-                            } else {
-                                ""
-                            },
-                            if settings.uses_heavy_effects() {
-                                "before:absolute before:inset-0 before:bg-[linear-gradient(90deg,rgba(255,255,255,0.16),transparent_22%,transparent_78%,rgba(0,0,0,0.12))]"
-                            } else {
-                                ""
-                            },
-                            bar_color,
-                            transition(),
-                        )
-                    }
-                    style=move || format!("transform: scaleX({});", set_value())
-                ></div>
-                // Fake copy for glow effect on reset
-                <div
-                    class=format!("absolute  h-full w-full inset-0 z-1 {}", bar_color)
-                    style=reset_bar_animation
-                ></div>
+                <div class="relative h-full w-full overflow-hidden rounded-[2px] xl:rounded-[4px]">
+                    <div
+                        class=move || {
+                            format!(
+                                "relative block h-full w-full origin-left
+                                {} {} {}",
+                                if settings.uses_heavy_effects() {
+                                    "shadow-[inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(0,0,0,0.18)]"
+                                } else {
+                                    ""
+                                },
+                                bar_color,
+                                transition(),
+                            )
+                        }
+                        style=move || format!("transform: scaleX({});", set_value())
+                    ></div>
+                    // Fake copy for glow effect on reset
+                    <div
+                        class=format!("absolute h-full w-full inset-0 z-1 {}", bar_color)
+                        style=reset_bar_animation
+                    ></div>
+                </div>
             </div>
 
             <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm pointer-events-none text-shadow shadow-black/90">
@@ -161,7 +157,6 @@ pub fn VerticalProgressBar(
     let set_value = move || {
         if reset.get() { 0.0 } else { value.get() }
     };
-
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");
     Effect::new(move |_| {
@@ -220,38 +215,34 @@ pub fn VerticalProgressBar(
                 }
             }}
             <div class="h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
-                <div
-                    class=move || {
-                        format!(
-                            "relative block h-full w-full origin-bottom
-                            transition-progress-bar
-                            {} {} {}",
-                            if settings.uses_heavy_effects() {
-                                "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.2)]"
-                            } else {
-                                ""
-                            },
-                            if settings.uses_heavy_effects() {
-                                "before:absolute before:inset-0 before:bg-[linear-gradient(180deg,rgba(255,255,255,0.16),transparent_20%,transparent_80%,rgba(0,0,0,0.12))]"
-                            } else {
-                                ""
-                            },
-                            bar_color,
-                        )
-                    }
-                    class:transition-progress-bar=move || !reset.get()
-                    style=move || format!("transform: scaleY({});", set_value())
-                ></div>
+                <div class="relative h-full w-full overflow-hidden rounded-[2px] xl:rounded-[4px]">
+                    <div
+                        class=move || {
+                            format!(
+                                "relative block h-full w-full origin-bottom
+                                transition-progress-bar
+                                {} {}",
+                                if settings.uses_heavy_effects() {
+                                    "shadow-[inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(0,0,0,0.18)]"
+                                } else {
+                                    ""
+                                },
+                                bar_color,
+                            )
+                        }
+                        class:transition-progress-bar=move || !reset.get()
+                        style=move || format!("transform: scaleY({});", set_value())
+                    ></div>
 
-                // Fake copy for glow effect on reset
-                <div
-                    class=format!("absolute inset-0 z-1 h-full w-full {}", bar_color)
-                    style=reset_bar_animation
-                ></div>
+                    // Fake copy for glow effect on reset
+                    <div
+                        class=format!("absolute inset-0 z-1 h-full w-full {}", bar_color)
+                        style=reset_bar_animation
+                    ></div>
+                </div>
             </div>
-            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] text-shadow shadow-black/90">
-                {children.map(|children| children())}
-            </div>
+            <div class="absolute inset-0 z-1 flex items-center justify-center text-white text-xs xl:text-sm rounded-[4px] xl:rounded-[6px] text-shadow shadow-black/90
+            overflow-clip">{children.map(|children| children())}</div>
         </div>
     }
 }

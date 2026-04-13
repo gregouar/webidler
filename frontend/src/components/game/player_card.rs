@@ -242,7 +242,7 @@ pub fn PlayerCard() -> impl IntoView {
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class="w-6 xl:w-8"
-                        bar_color="bg-gradient-to-l from-red-500 to-red-700"
+                        bar_color="bg-gradient-to-l from-[#c44a3d] to-[#6b221d]"
                         value=life_percent
                     />
                 </StaticTooltip>
@@ -275,7 +275,7 @@ pub fn PlayerCard() -> impl IntoView {
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                     <VerticalProgressBar
                         class="w-6 xl:w-8"
-                        bar_color="bg-gradient-to-l from-blue-500 to-blue-700"
+                        bar_color="bg-gradient-to-l from-[#3f79c2] to-[#224173]"
                         value=mana_percent
                     >
                         <div
@@ -304,7 +304,7 @@ pub fn PlayerCard() -> impl IntoView {
                                 class:w-full
                                 class:h-full
                             >
-                                <div class="w-full h-full bg-blue-950 opacity-50 "></div>
+                                <div class="w-full h-full bg-[#1b2f52] opacity-55 "></div>
                             </StaticTooltip>
                         </div>
                     </VerticalProgressBar>
