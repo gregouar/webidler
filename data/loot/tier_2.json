@@ -1,6 +1,10 @@
 {
   "entries": [
     {
+      "item_id": "padded_tunic_unique",
+      "weight": 3
+    },
+    {
       "item_id": "shortsword",
       "weight": 2000
     },

@@ -19,7 +19,7 @@ pub fn Card(
     let settings: SettingsContext = expect_context();
     let stone_texture = img_asset("ui/dark_stone.webp");
 
-    let enable_texture = enable_texture && settings.uses_textures();
+    let enable_texture = move || enable_texture && settings.uses_textures();
 
     view! {
         <div class=format!("max-h-full flex flex-col relative {}", class.unwrap_or_default())>
@@ -48,7 +48,7 @@ pub fn Card(
                 }
                 style=move || {
                     match settings.graphics_quality() {
-                        GraphicsQuality::High if enable_texture => {
+                        GraphicsQuality::High if enable_texture() => {
                             format!(
                                 "
                                 background-image:
@@ -59,7 +59,7 @@ pub fn Card(
                                 stone_texture,
                             )
                         }
-                        GraphicsQuality::Medium if enable_texture => {
+                        GraphicsQuality::Medium if enable_texture() => {
                             format!("background-image: url('{}');", stone_texture)
                         }
                         _ => String::new(),

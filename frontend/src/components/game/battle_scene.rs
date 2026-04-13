@@ -365,7 +365,7 @@ pub fn ThreatMeter() -> impl IntoView {
                 <VerticalProgressBar
                     class="z-2 w-4 xl:w-8"
                     value=progress_value
-                    reset
+                    reset=threat_increase
                     bar_color="bg-gradient-to-l from-yellow-500 to-yellow-700"
                 />
             </div>
