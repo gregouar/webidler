@@ -45,7 +45,7 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
                 status_type,
                 skill_type,
             } => format!(
-                " per {} stack",
+                " per {}",
                 effects_tooltip::skill_status_type_str(*skill_type, status_type.as_ref(), false),
             ),
             Condition::MaximumLife => " on Maximum Life".into(),

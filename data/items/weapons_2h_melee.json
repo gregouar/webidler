@@ -341,6 +341,145 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "curse_reaper": {
+    "name": "Doomreaper",
+    "icon": "items/weapons_2h/curse_reaper.webp",
+    "description": "It feeds on what clings to the soul.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Poison",
+            "min_max": "Min"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "damage_type": "Poison",
+            "min_max": "Max"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": [
+          15.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Mana",
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 3.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusDuration": {
+            "status_type": null,
+            "skill_type": "Curse"
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null,
+                "min_max": null
+              }
+            },
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_type": null,
+                  "skill_type": "Curse"
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 150.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          10.0,
+          34.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "bardiche": {
     "name": "Bardiche",
     "icon": "items/weapons_2h/bardiche.webp",
@@ -508,17 +647,17 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": null
-              },
-              {
-                "CritDamage": null
-              },
-              {
                 "Damage": {
                   "skill_type": "Attack",
                   "damage_type": "Physical",
                   "min_max": null
                 }
+              },
+              {
+                "CritDamage": null
+              },
+              {
+                "CritChance": null
               }
             ],
             "conditional_modifiers": []

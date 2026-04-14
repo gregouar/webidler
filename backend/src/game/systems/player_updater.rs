@@ -98,7 +98,10 @@ pub fn update_player_specs(
     let effects_map = EffectsMap::combine_all(
         player_inventory
             .equipped_items()
-            .map(|(_, i)| i.modifiers.aggregate_effects(AffixEffectScope::Global))
+            .map(|(_, i)| {
+                i.modifiers
+                    .aggregate_effects(AffixEffectScope::Global, false)
+            })
             .chain(iter::once(benedictions_effects.clone()))
             .chain(iter::once(passive::generate_effects_map_from_passives(
                 passives_tree_specs,

@@ -114,13 +114,13 @@ pub fn ItemTooltipContent(
         let mut effects = effects_tooltip::formatted_effects_list(
             (&item_specs
                 .modifiers
-                .aggregate_effects(AffixEffectScope::Local))
+                .aggregate_effects(AffixEffectScope::Local, false))
                 .into(),
         );
         effects.extend(effects_tooltip::formatted_effects_list(
             (&item_specs
                 .modifiers
-                .aggregate_effects(AffixEffectScope::Global))
+                .aggregate_effects(AffixEffectScope::Global, false))
                 .into(),
         ));
         (!effects.is_empty(), view! { {effects} }.into_any())
@@ -367,7 +367,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm ">
-                                "Armor: "
+                                "Physical Defense: "
                                 <span class=format!(
                                     "{} font-semibold",
                                     armor_color,

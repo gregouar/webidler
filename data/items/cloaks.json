@@ -14,25 +14,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 15.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 15.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -64,25 +46,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -114,25 +78,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -296,27 +242,7 @@
         "scope": "Global",
         "stat_effect": {
           "stat": {
-            "Armor": "Fire"
-          },
-          "modifier": "Flat",
-          "value": 25.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Armor": "Poison"
-          },
-          "modifier": "Flat",
-          "value": 25.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Armor": "Storm"
+            "Armor": "Elemental"
           },
           "modifier": "Flat",
           "value": 25.0
@@ -353,25 +279,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -403,7 +311,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -412,21 +320,32 @@
       },
       {
         "stat": {
-          "Armor": "Poison"
+          "Speed": "Attack"
         },
-        "modifier": "Flat",
+        "modifier": "Increased",
         "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
+        "value": [
+          8.0,
+          12.0
+        ],
+        "ignore_quality": true
       },
       {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
+        "stat": "MovementSpeed",
+        "modifier": "Increased",
         "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
+        "value": 10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -509,8 +428,45 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Speed": "Attack"
+          },
+          "modifier": "Increased",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 25.0
+        }
+      }
+    ]
   },
   "fur_cloak": {
     "name": "Fur-lined Cloak",
@@ -527,25 +483,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 75.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 75.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -577,25 +515,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 75.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 75.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -688,27 +608,7 @@
         "scope": "Global",
         "stat_effect": {
           "stat": {
-            "Armor": "Fire"
-          },
-          "modifier": "Flat",
-          "value": 25.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Armor": "Poison"
-          },
-          "modifier": "Flat",
-          "value": 25.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Armor": "Storm"
+            "Armor": "Elemental"
           },
           "modifier": "Flat",
           "value": 25.0
@@ -755,25 +655,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -805,25 +687,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 125.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 125.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -920,25 +784,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 150.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 150.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -955,6 +801,108 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "cloak_exorcist": {
+    "name": "Veil of a Thousand Seals",
+    "icon": "items/cloaks/cloak_exorcist.webp",
+    "description": "Each seal binds a whisper. Together, they silence the chorus.",
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 330,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 150.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "StatusResistance": {
+            "skill_type": "Curse",
+            "status_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": null,
+            "skill_type": "Curse",
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "damage_type": null,
+                "min_max": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_type": null,
+                  "skill_type": "Blessing",
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          250.0
+        ],
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      }
+    ]
+  },
   "cloak_8": {
     "name": "Regal Mantle",
     "icon": "items/cloaks/regal_mantle.webp",
@@ -970,25 +918,7 @@
     "affixes": [
       {
         "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 175.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 175.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
+          "Armor": "Elemental"
         },
         "modifier": "Flat",
         "scope": "Global",

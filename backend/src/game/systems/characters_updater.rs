@@ -161,12 +161,18 @@ fn compute_character_specs(
             StatType::LifeRegen => character_specs.life_regen.apply_effect(effect),
             StatType::Mana => character_specs.max_mana.apply_effect(effect),
             StatType::ManaRegen => character_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(damage_type) => match damage_type {
-                Some(damage_type) => character_specs
-                    .armor
-                    .entry(*damage_type)
-                    .or_default()
-                    .apply_effect(effect),
+            StatType::Armor(armor_type) => match armor_type {
+                Some(armor_type) => {
+                    for damage_type in DamageType::iter() {
+                        if armor_type.is_match(damage_type) {
+                            character_specs
+                                .armor
+                                .entry(damage_type)
+                                .or_default()
+                                .apply_effect(effect)
+                        }
+                    }
+                }
                 None => {
                     for damage_type in DamageType::iter() {
                         character_specs

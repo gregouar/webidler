@@ -64,7 +64,7 @@ pub enum StatType {
     ItemRarity,
     ItemLevel,
     SkillLevel(#[serde(default)] Option<SkillType>),
-    Armor(Option<DamageType>),
+    Armor(Option<ArmorStatType>),
     DamageResistance {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -325,6 +325,27 @@ pub struct StatSkillRepeat {
     pub min_value: u8,
     pub max_value: u8,
     pub target: SkillRepeatTarget,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum ArmorStatType {
+    Physical,
+    Fire,
+    Poison,
+    Storm,
+    Elemental,
+}
+
+impl ArmorStatType {
+    pub fn is_match(&self, damage_type: DamageType) -> bool {
+        match (self, damage_type) {
+            (ArmorStatType::Physical, DamageType::Physical) => true,
+            (ArmorStatType::Fire | ArmorStatType::Elemental, DamageType::Fire) => true,
+            (ArmorStatType::Poison | ArmorStatType::Elemental, DamageType::Poison) => true,
+            (ArmorStatType::Storm | ArmorStatType::Elemental, DamageType::Storm) => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]

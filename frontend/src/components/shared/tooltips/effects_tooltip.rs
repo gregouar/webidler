@@ -9,7 +9,7 @@ use shared::data::{
     modifier::Modifier,
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
-        LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
+        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
         StatStatusType, StatType,
     },
 };
@@ -63,6 +63,19 @@ pub fn min_max_str(min_max: Option<MinMax>) -> &'static str {
         Some(MinMax::Min) => "Minimum ",
         Some(MinMax::Max) => "Maximum ",
         None => "",
+    }
+}
+
+pub fn armor_type_str(armor_type: &Option<ArmorStatType>) -> &'static str {
+    match armor_type {
+        Some(armor_type) => match armor_type {
+            ArmorStatType::Physical => "Physical Defense",
+            ArmorStatType::Fire => "Fire Defense",
+            ArmorStatType::Poison => "Poison Defense",
+            ArmorStatType::Storm => "Storm Defense",
+            ArmorStatType::Elemental => "Elemental Defenses",
+        },
+        None => "All Defenses",
     }
 }
 
@@ -465,11 +478,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::ManaCost { skill_type } => {
             format!("{}Mana cost", skill_type_str(*skill_type))
         }
-        StatType::Armor(armor_type) => match armor_type {
-            Some(DamageType::Physical) => "Armor".to_string(),
-            None => "Resistances and Armor".to_string(),
-            _ => format!("{}Resistance", damage_type_str(*armor_type)),
-        },
+        StatType::Armor(armor_type) => armor_type_str(armor_type).to_string(),
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::TakeFromLifeBeforeMana => "Life spent instead of Mana".to_string(),
         StatType::Block(skill_type) => format!("{}Block Chance", skill_type_str(*skill_type)),
@@ -645,11 +654,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::Armor(armor_type) => format!(
             "{} {}",
             format_adds_removes(value, false, ""),
-            match armor_type {
-                Some(DamageType::Physical) => "Armor".to_string(),
-                None => "Resistances and Armor".to_string(),
-                _ => format!("{}Resistance", damage_type_str(*armor_type)),
-            }
+            armor_type_str(armor_type)
         ),
         StatType::TakeFromManaBeforeLife => {
             format!(
@@ -769,12 +774,20 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             status_type,
             skill_type,
         } => {
-            format!(
-                "{}% Resilience to {}{}",
-                format_adds_removes(value, false, ""),
-                skill_type_str(*skill_type),
-                status_type_value_str(status_type.as_ref())
-            )
+            if value.unwrap_or_default() >= 100.0 {
+                format!(
+                    "Immune to {}{}",
+                    skill_type_str(*skill_type),
+                    status_type_value_str(status_type.as_ref())
+                )
+            } else {
+                format!(
+                    "{}% Resilience to {}{}",
+                    format_adds_removes(value, false, ""),
+                    skill_type_str(*skill_type),
+                    status_type_value_str(status_type.as_ref())
+                )
+            }
         }
         StatType::Speed(skill_type) => {
             if value.unwrap_or_default() >= 0.0 {

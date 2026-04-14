@@ -688,7 +688,7 @@ fn PassiveSkillTree(
             let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
             node_specs.effects = (&(item_specs
                 .modifiers
-                .aggregate_effects(AffixEffectScope::Global)))
+                .aggregate_effects(AffixEffectScope::Global, false)))
                 .into();
             node_specs.triggers = item_specs.base.triggers.clone();
         }
@@ -783,7 +783,7 @@ fn AscendNode(
                 node_specs.icon = item_specs.base.icon.clone();
                 node_specs.effects = (&(item_specs
                     .modifiers
-                    .aggregate_effects(AffixEffectScope::Global)))
+                    .aggregate_effects(AffixEffectScope::Global, false)))
                     .into(); // TODO: Better copy, don't aggregate?
                 node_specs.triggers = item_specs.base.triggers.clone();
                 node_specs.root_node |= item_specs

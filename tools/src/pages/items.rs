@@ -21,7 +21,7 @@ use shared::data::{
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
     skill::{DamageType, SkillType},
-    stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
+    stat_effect::{ArmorStatType, LuckyRollType, MinMax, StatEffect, StatType},
 };
 use strum::IntoEnumIterator;
 
@@ -276,7 +276,8 @@ pub fn create_item_specs(
 ) -> ItemSpecs {
     compute_upgrade_effects(&base, &mut modifiers);
 
-    let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
+    let effects: Vec<StatEffect> =
+        (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
 
     ItemSpecs {
         required_level: base.min_area_level.max(
@@ -384,7 +385,9 @@ fn compute_armor_specs(
         .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
-            StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
+            StatType::Armor(Some(ArmorStatType::Physical)) => {
+                armor_specs.armor.apply_effect(effect)
+            }
             StatType::Block(Some(SkillType::Attack) | None) => {
                 armor_specs.block.apply_effect(effect);
             }

@@ -11,7 +11,7 @@ use shared::data::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{LuckyRollType, MinMax, StatEffect, StatType},
+    stat_effect::{ArmorStatType, LuckyRollType, MinMax, StatEffect, StatType},
     values::NonNegative,
 };
 
@@ -44,7 +44,8 @@ pub fn create_item_specs(
 ) -> ItemSpecs {
     compute_upgrade_effects(&base, &mut modifiers);
 
-    let effects: Vec<StatEffect> = (&modifiers.aggregate_effects(AffixEffectScope::Local)).into();
+    let effects: Vec<StatEffect> =
+        (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
     // TODO: compute triggers with local effects applied to it
@@ -163,7 +164,9 @@ fn compute_armor_specs(
         .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
-            StatType::Armor(Some(DamageType::Physical)) => armor_specs.armor.apply_effect(effect),
+            StatType::Armor(Some(ArmorStatType::Physical)) => {
+                armor_specs.armor.apply_effect(effect)
+            }
             StatType::Block(Some(SkillType::Attack) | None) => {
                 armor_specs.block.apply_effect(effect);
             }

@@ -507,7 +507,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     let effects = item_specs
         .modifiers
-        .aggregate_effects(AffixEffectScope::Global)
+        .aggregate_effects(AffixEffectScope::Global, true)
         .0;
     for stat_filter in stat_filters {
         if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref()

@@ -46,12 +46,12 @@ pub fn init_area_specs(
             std::iter::once(
                 map_item
                     .modifiers
-                    .aggregate_effects(AffixEffectScope::Local),
+                    .aggregate_effects(AffixEffectScope::Local, false),
             )
             .chain(std::iter::once(
                 map_item
                     .modifiers
-                    .aggregate_effects(AffixEffectScope::Global),
+                    .aggregate_effects(AffixEffectScope::Global, false),
             )),
         )
     } else {
