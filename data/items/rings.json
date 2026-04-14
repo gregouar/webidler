@@ -4,7 +4,7 @@
     "icon": "items/rings/copper_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -20,21 +20,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "silver_ring": {
     "name": "Silver Ring",
     "icon": "items/rings/silver_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -50,21 +50,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "silver_ring_unique": {
     "name": "Gambler's Luck",
     "icon": "items/rings/gamblers_ring.webp",
     "description": "It does not favor you, it does not curse you, it simply spins the wheel and dares you to wear it.",
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -96,7 +96,7 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -115,7 +115,7 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -134,7 +134,7 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -153,7 +153,7 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -168,7 +168,7 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -183,7 +183,7 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -202,24 +202,24 @@
           -40.0,
           40.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "gold_ring": {
     "name": "Gold Ring",
     "icon": "items/rings/gold_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -235,21 +235,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "signet_ring": {
     "name": "Signet Ring",
     "icon": "items/rings/signet_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -265,21 +265,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "signet_ring_unique": {
     "name": "Heartstone Band",
     "icon": "items/rings/princess_ring.webp",
     "description": "Who says battle can't be fabulous?",
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -308,7 +308,7 @@
           80.0,
           120.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -324,7 +324,7 @@
           100.0,
           140.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -336,7 +336,7 @@
           60.0,
           100.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -348,7 +348,7 @@
           60.0,
           100.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "GoldFind",
@@ -358,7 +358,7 @@
           100.0,
           140.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -377,7 +377,7 @@
           "damage_type": null
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -394,8 +394,8 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -409,15 +409,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "inlaid_ring": {
     "name": "Inlaid Ring",
     "icon": "items/rings/inlaid_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -433,21 +433,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "inlaid_ring_unique": {
     "name": "Band of Blessing",
     "icon": "items/rings/band_blessing.webp",
     "description": "In devotion, there is no room for doubt, nor for curses.",
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -520,7 +520,7 @@
           100.0,
           140.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -532,24 +532,24 @@
           80.0,
           120.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "inlaid_ring_unique_2": {
     "name": "Band of Cursing",
     "icon": "items/rings/band_cursing.webp",
     "description": "Every blessing denied leaves space for something far worse.",
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -622,7 +622,7 @@
           100.0,
           140.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -634,24 +634,24 @@
           80.0,
           120.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "jewelled_ring": {
     "name": "Jewelled Ring",
     "icon": "items/rings/jewelled_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -667,21 +667,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "ring_7": {
     "name": "Runic Ring",
     "icon": "items/rings/runic_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -697,21 +697,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "ring_8": {
     "name": "Regal Ring",
     "icon": "items/rings/runic_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -727,21 +727,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "witch_ring": {
     "name": "The Brood Sigil",
     "icon": "items/rings/witch_ring.webp",
     "description": "You did not end the ritual. You became one with it.",
     "slot": "Ring",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Ring"
@@ -782,7 +782,7 @@
           "damage_type": null
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
@@ -811,8 +811,8 @@
               ],
               "duration": 3.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -826,7 +826,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

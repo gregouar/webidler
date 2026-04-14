@@ -72,7 +72,7 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ItemRarity",
@@ -82,21 +82,21 @@
           50.0,
           80.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 10.0,
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -117,7 +117,7 @@
         "target": "SameTarget",
         "modifiers": [],
         "skill_range": "Melee",
-        "skill_type": "Spell",
+        "skill_type": "Curse",
         "effects": [
           {
             "success_chance": {
@@ -190,7 +190,7 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ItemRarity",
@@ -200,21 +200,21 @@
           100.0,
           150.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 30.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Local",
         "value": 500.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -227,7 +227,7 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -240,7 +240,7 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -331,21 +331,21 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
         "value": 50.0,
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "ItemRarity",
@@ -355,7 +355,7 @@
           100.0,
           150.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [

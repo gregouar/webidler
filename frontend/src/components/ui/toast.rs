@@ -28,6 +28,12 @@ struct ToastData {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct ToastId(u64);
 
+impl Default for ToastId {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ToastId {
     pub fn new() -> Self {
         Self(NEXT_TOAST_ID.fetch_add(1, Ordering::Relaxed))

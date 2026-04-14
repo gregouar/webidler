@@ -14,8 +14,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -36,8 +36,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "woodcutter_axe": {
     "name": "Woodcutter's Axe",
@@ -54,8 +54,8 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -76,8 +76,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "woodcutter_axe_unique": {
     "name": "Sootreaver",
@@ -100,13 +100,13 @@
           "Damage": {
             "skill_type": null,
             "damage_type": "Physical",
-            "min_max": "Min"
+            "min_max": null
           }
         },
-        "modifier": "Flat",
+        "modifier": "More",
         "scope": "Local",
-        "value": -6.0,
-        "ignore_quality": false
+        "value": -1e300,
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -119,19 +119,6 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 6.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "damage_type": "Physical",
-            "min_max": "Max"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": -18.0,
         "ignore_quality": false
       },
       {
@@ -161,7 +148,7 @@
           50.0,
           100.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -229,7 +216,7 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -258,8 +245,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "glaive": {
     "name": "Glaive",
@@ -276,8 +263,8 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -298,8 +285,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "halberd": {
     "name": "Halberd",
@@ -316,8 +303,8 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -338,8 +325,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "curse_reaper": {
     "name": "Doomreaper",
@@ -456,7 +443,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -477,8 +464,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "bardiche": {
     "name": "Bardiche",
@@ -495,8 +482,8 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -517,8 +504,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "bardiche_unique": {
     "name": "Tidesbreaker Anchor",
@@ -575,7 +562,7 @@
           4.0,
           8.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -591,7 +578,7 @@
           15.0,
           20.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -660,7 +647,7 @@
                 "CritChance": null
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "All",
@@ -689,8 +676,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "flamberge": {
     "name": "Flamberge",
@@ -707,8 +694,8 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -729,8 +716,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "kerden_dance": {
     "name": "Kerden's Dance",
@@ -793,7 +780,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -880,8 +867,8 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -902,8 +889,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "weapon_2h_8": {
     "name": "Zweihander",
@@ -920,8 +907,8 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -942,7 +929,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

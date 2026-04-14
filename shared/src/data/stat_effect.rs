@@ -338,13 +338,22 @@ pub enum ArmorStatType {
 
 impl ArmorStatType {
     pub fn is_match(&self, damage_type: DamageType) -> bool {
-        match (self, damage_type) {
-            (ArmorStatType::Physical, DamageType::Physical) => true,
-            (ArmorStatType::Fire | ArmorStatType::Elemental, DamageType::Fire) => true,
-            (ArmorStatType::Poison | ArmorStatType::Elemental, DamageType::Poison) => true,
-            (ArmorStatType::Storm | ArmorStatType::Elemental, DamageType::Storm) => true,
-            _ => false,
-        }
+        matches!(
+            (self, damage_type),
+            (ArmorStatType::Physical, DamageType::Physical)
+                | (
+                    ArmorStatType::Fire | ArmorStatType::Elemental,
+                    DamageType::Fire
+                )
+                | (
+                    ArmorStatType::Poison | ArmorStatType::Elemental,
+                    DamageType::Poison
+                )
+                | (
+                    ArmorStatType::Storm | ArmorStatType::Elemental,
+                    DamageType::Storm
+                )
+        )
     }
 }
 

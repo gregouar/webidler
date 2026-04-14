@@ -620,7 +620,7 @@
           200.0,
           300.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": "Life",
@@ -640,7 +640,7 @@
           200.0,
           300.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [

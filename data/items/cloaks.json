@@ -4,7 +4,7 @@
     "icon": "items/cloaks/wool_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -22,21 +22,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hooded_wrap": {
     "name": "Hooded Wrap",
     "icon": "items/cloaks/hooded_wrap.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -54,21 +54,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hooded_wrap_unique": {
     "name": "Stormfeast Shroud",
     "icon": "items/cloaks/stormfeast_shroud.webp",
     "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -124,7 +124,7 @@
           50.0,
           100.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -136,7 +136,7 @@
           30.0,
           60.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       },
       {
         "stat": {
@@ -179,7 +179,7 @@
           "damage_type": "Storm"
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -212,8 +212,8 @@
               ],
               "duration": 5.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -269,7 +269,7 @@
     "icon": "items/cloaks/heavy_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -287,21 +287,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "cloak_backstab": {
     "name": "Gareth's Misdirection",
     "icon": "items/cloaks/cloak_backstab.webp",
     "description": "He insisted it wasn't betrayal, just better positioning.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -365,7 +365,7 @@
           "is_evaded": true
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -413,8 +413,8 @@
               ],
               "duration": 10.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -473,7 +473,7 @@
     "icon": "items/cloaks/fur_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -491,21 +491,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "fur_cloak_unique": {
     "name": "Shadowmoth Embrace",
     "icon": "items/cloaks/princess_cloak.webp",
     "description": "Spread your wings, let the world fear what follows.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -589,7 +589,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -645,7 +645,7 @@
     "icon": "items/cloaks/reinforced_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -663,21 +663,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "great_cloak": {
     "name": "Great Cloak",
     "icon": "items/cloaks/great_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -695,21 +695,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_chest": {
     "name": "Gilded Chest",
     "icon": "items/cloaks/treasure_chest.webp",
     "description": "You finally found it. Now what will it take from you?",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory"
     ],
@@ -746,7 +746,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -774,7 +774,7 @@
     "icon": "items/cloaks/elven_cape.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -792,21 +792,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "cloak_exorcist": {
     "name": "Veil of a Thousand Seals",
     "icon": "items/cloaks/cloak_exorcist.webp",
     "description": "Each seal binds a whisper. Together, they silence the chorus.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -874,12 +874,12 @@
         "scope": "Global",
         "value": [
           150.0,
-          250.0
+          200.0
         ],
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -900,6 +900,34 @@
           "modifier": "Flat",
           "value": 25.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "damage_type": null,
+                  "min_max": null
+                }
+              },
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": null,
+                    "skill_type": "Blessing",
+                    "not": false
+                  }
+                }
+              ],
+              "conditions_duration": 0
+            }
+          },
+          "modifier": "More",
+          "value": 40.0
+        }
       }
     ]
   },
@@ -908,7 +936,7 @@
     "icon": "items/cloaks/regal_mantle.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -926,13 +954,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

@@ -76,10 +76,13 @@ pub struct AffixEffectBlueprint {
     pub scope: AffixEffectScope,
     pub value: ChanceRange<f64>,
 
-    #[serde(default)]
+    #[serde(default = "default_true")]
     pub ignore_quality: bool,
 }
 
+fn default_true() -> bool {
+    true
+}
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemAffix {
     pub name: String,
