@@ -1831,7 +1831,7 @@
   },
   "retaliate": {
     "name": "Retaliate",
-    "description": "A defensive technique that punishes enemies when you block their attacks.",
+    "description": "A defensive technique that punishes enemies when you block or evade their attacks.",
     "icon": "skills/retaliate.svg",
     "skill_type": "Attack",
     "cooldown": 0,
@@ -1885,6 +1885,52 @@
         "skill_type": "Attack",
         "OnTakeHit": {
           "is_blocked": true
+        },
+        "target": "Source",
+        "inherit_modifiers": true,
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [
+                  5,
+                  10
+                ]
+              },
+              "crit_chance": 5,
+              "crit_damage": 100
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "trigger_id": "retaliate_evade",
+        "skill_type": "Attack",
+        "OnReceiveStatus": {
+          "skill_type": null,
+          "status_type": {
+            "DamageOverTime": {
+              "damage_type": null
+            }
+          },
+          "is_triggered": null,
+          "is_evaded": true
         },
         "target": "Source",
         "inherit_modifiers": true,
