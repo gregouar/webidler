@@ -4,7 +4,7 @@
     "icon": "items/focuses/grigri.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -19,21 +19,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "spellbook": {
     "name": "Spellbook",
     "icon": "items/focuses/spellbook.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -48,21 +48,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "spellbook_unique": {
     "name": "Vile Codex",
     "icon": "items/focuses/vile_codex.webp",
     "description": "Each cursed name written in its pages rots faster than flesh should.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -133,7 +133,7 @@
           ]
         },
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Blessing",
         "effects": [
@@ -166,8 +166,8 @@
               ],
               "duration": 10.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -229,7 +229,7 @@
     "icon": "items/focuses/focus_stone.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -244,21 +244,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "sandal": {
     "name": "Eternal Flame Slipper",
     "icon": "items/focuses/sandal.webp",
     "description": "The otter swore it was a masterpiece of wizardry.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -328,7 +328,7 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -393,7 +393,7 @@
     "icon": "items/focuses/engraved_tablet.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -408,21 +408,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "seer_lens": {
     "name": "Seer's Lens",
     "icon": "items/focuses/seer_lens.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -437,21 +437,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_idol": {
     "name": "Idol of the Serpent Queen",
     "icon": "items/focuses/treasure_idol.webp",
     "description": "Her children drank the poison willingly. The wise died quickly.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -539,10 +539,11 @@
               "damage_type": "Poison"
             }
           },
-          "is_triggered": null
+          "is_triggered": null,
+          "is_evaded": false
         },
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Any",
         "skill_type": "Other",
         "effects": [
@@ -608,7 +609,7 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -653,7 +654,7 @@
     "icon": "items/focuses/ritual_orb.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -668,21 +669,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "ritual_orb_unique": {
     "name": "Zael's Eye",
     "icon": "items/focuses/dragon_eye.webp",
     "description": "Zael's gaze weighed the sky and found it wanting.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -753,7 +754,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -795,7 +796,7 @@
     "icon": "items/focuses/grimoire.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -810,21 +811,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "focus_8": {
     "name": "Astrolabe",
     "icon": "items/focuses/astrolabe.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Focus"
     ],
@@ -839,13 +840,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

@@ -161,6 +161,10 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnApplyStatus(status_trigger) => {
             format!("On Applying {}", format_status_trigger(status_trigger))
         }
+        EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
+            Some(true) => format!("On Evaded {}", format_status_trigger(status_trigger)),
+            _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+        },
     }
 }
 

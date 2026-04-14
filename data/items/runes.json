@@ -205,7 +205,8 @@
             "DamageOverTime": {
               "damage_type": "Poison"
             }
-          }
+          },
+          "is_evaded": false
         },
         "skill_type": "Other",
         "effects": [

@@ -22,8 +22,8 @@ pub struct SettingsData {
 
 #[derive(Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GraphicsQuality {
-    #[default]
     High,
+    #[default]
     Medium,
     Low,
 }

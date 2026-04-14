@@ -55,6 +55,7 @@ pub fn apply_trigger_effects(
                                 status_type: status_specs.into(),
                                 value: status_state.value,
                                 duration: status_state.duration,
+                                is_evaded: false,
                             })
                             .collect(),
                         CharacterId::Monster(index) => game_data
@@ -73,6 +74,7 @@ pub fn apply_trigger_effects(
                                         status_type: status_specs.into(),
                                         value: status_state.value,
                                         duration: status_state.duration,
+                                        is_evaded: false,
                                     })
                                     .collect()
                             })

@@ -220,7 +220,8 @@
         "trigger_id": "kite_shield_unique",
         "OnApplyStatus": {
           "skill_type": "Curse",
-          "is_triggered": false
+          "is_triggered": false,
+          "is_evaded": false
         },
         "target": "Me",
         "skill_type": "Curse",

@@ -148,14 +148,14 @@ fn handle_status_event<'a>(
         for triggered_effects in character_specs.triggers.iter() {
             match triggered_effects.trigger {
                 EventTrigger::OnApplyStatus(_) if status_event.source == character_id => {}
-                // EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
+                EventTrigger::OnReceiveStatus(_) if status_event.target == character_id => {}
                 _ => continue,
             };
 
             let status_trigger = match &triggered_effects.trigger {
-                EventTrigger::OnApplyStatus(trigger)
-                // | EventTrigger::OnTakeHit(ht) 
-                => trigger,
+                EventTrigger::OnApplyStatus(trigger) | EventTrigger::OnReceiveStatus(trigger) => {
+                    trigger
+                }
                 _ => continue,
             };
 
@@ -181,6 +181,7 @@ fn handle_status_event<'a>(
                     &status_trigger.status_type.as_ref(),
                     &Some(&status_event.status_type),
                 )
+                && compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
                 && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {

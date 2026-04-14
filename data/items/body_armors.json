@@ -4,15 +4,15 @@
     "icon": "items/body_armors/padded_tunic.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 20.0,
@@ -21,15 +21,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "padded_tunic_unique": {
     "name": "A Simple Shirt",
     "icon": "items/body_armors/shirt.webp",
     "description": "Who needs more?",
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
@@ -59,7 +59,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 20.0,
@@ -68,23 +68,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "leather_armor": {
     "name": "Leather Armor",
     "icon": "items/body_armors/leather_armor.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -93,15 +93,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "leather_armor_unique": {
     "name": "Wildheart Vest",
     "icon": "items/body_armors/wildheart.webp",
     "description": "Life feeds on life, this is no cruelty, only the forest's way",
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
@@ -167,7 +167,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -230,15 +230,15 @@
     "icon": "items/body_armors/chain_shirt.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 60.0,
@@ -247,23 +247,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "scale_vest": {
     "name": "Scale Vest",
     "icon": "items/body_armors/scale_vest.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 80.0,
@@ -272,15 +272,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "scale_vest_unique": {
     "name": "Mirrorshroud Dress",
     "icon": "items/body_armors/princess_robe.webp",
     "description": "It whispers: you may strike, but you may not touch.",
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
@@ -354,7 +354,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 80.0,
@@ -395,15 +395,15 @@
     "icon": "items/body_armors/brigandine.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 100.0,
@@ -412,15 +412,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "brigandine_unique": {
     "name": "Crustback Bulwark",
     "icon": "items/body_armors/crab_armor.webp",
     "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
@@ -491,7 +491,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 100.0,
@@ -565,15 +565,15 @@
     "icon": "items/body_armors/breastplate.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 120.0,
@@ -582,15 +582,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "breastplate_unique": {
     "name": "Heart of the Wyrm",
     "icon": "items/body_armors/dragon_armor.webp",
     "description": "Abal's heart did not burn out, it learned to endure.",
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
@@ -656,10 +656,11 @@
               "damage_type": "Fire"
             }
           },
-          "is_triggered": null
+          "is_triggered": null,
+          "is_evaded": false
         },
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -676,8 +677,8 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -746,15 +747,15 @@
     "icon": "items/body_armors/cavalry_armor.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 120.0,
@@ -763,23 +764,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "body_8": {
     "name": "Plate Armor",
     "icon": "items/body_armors/plate_armor.webp",
     "description": null,
     "slot": "Body",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Armor",
       "Body"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 140.0,
@@ -788,7 +789,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

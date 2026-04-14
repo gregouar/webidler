@@ -335,14 +335,10 @@ pub fn apply_status(
 
     let value = value * evade_factor;
 
-    match status_specs {
-        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
-            if value.get() <= 0.0 {
-                return false;
-            }
-        }
-        StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
-    }
+    let try_apply = match status_specs {
+        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => value.get() > 0.0,
+        StatusSpecs::Trigger(_) | StatusSpecs::Stun => true,
+    };
 
     // Long duration are considered as forever
     let duration = match duration {
@@ -355,55 +351,11 @@ pub fn apply_status(
         trigger_specs.triggered_effect.owner = Some(attacker);
     }
 
-    let mut applied = true;
-    if cumulate {
-        target_state.statuses.cumulative_statuses.push((
-            new_status_specs,
-            StatusState {
-                value,
-                duration,
-                cumulate,
-                skill_type,
-            },
-        ));
+    let mut applied = try_apply;
 
-        if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
-            let status_id: StatusId = status_specs.into();
-
-            if let Some(i) = target_state
-                .statuses
-                .cumulative_statuses
-                .iter()
-                .enumerate()
-                .rev()
-                .filter(|(_, (specs, _))| StatusId::from(specs) == status_id)
-                .nth(100)
-                .map(|(i, _)| i)
-            {
-                target_state.statuses.cumulative_statuses.remove(i);
-            }
-        }
-    } else {
-        target_state
-            .statuses
-            .unique_statuses
-            .entry((status_specs.into(), skill_type))
-            .and_modify(|(cur_status_specs, cur_status_state)| {
-                if compute_effect_weight(value, duration, false)
-                    > compute_effect_weight(
-                        cur_status_state.value,
-                        cur_status_state.duration,
-                        false,
-                    )
-                {
-                    cur_status_state.value = value;
-                    cur_status_state.duration = duration;
-                    *cur_status_specs = new_status_specs.clone();
-                } else {
-                    applied = false;
-                }
-            })
-            .or_insert((
+    if try_apply {
+        if cumulate {
+            target_state.statuses.cumulative_statuses.push((
                 new_status_specs,
                 StatusState {
                     value,
@@ -412,6 +364,53 @@ pub fn apply_status(
                     skill_type,
                 },
             ));
+
+            if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
+                let status_id: StatusId = status_specs.into();
+
+                if let Some(i) = target_state
+                    .statuses
+                    .cumulative_statuses
+                    .iter()
+                    .enumerate()
+                    .rev()
+                    .filter(|(_, (specs, _))| StatusId::from(specs) == status_id)
+                    .nth(100)
+                    .map(|(i, _)| i)
+                {
+                    target_state.statuses.cumulative_statuses.remove(i);
+                }
+            }
+        } else {
+            target_state
+                .statuses
+                .unique_statuses
+                .entry((status_specs.into(), skill_type))
+                .and_modify(|(cur_status_specs, cur_status_state)| {
+                    if compute_effect_weight(value, duration, false)
+                        > compute_effect_weight(
+                            cur_status_state.value,
+                            cur_status_state.duration,
+                            false,
+                        )
+                    {
+                        cur_status_state.value = value;
+                        cur_status_state.duration = duration;
+                        *cur_status_specs = new_status_specs.clone();
+                    } else {
+                        applied = false;
+                    }
+                })
+                .or_insert((
+                    new_status_specs,
+                    StatusState {
+                        value,
+                        duration,
+                        cumulate,
+                        skill_type,
+                    },
+                ));
+        }
     }
 
     if !applied {
@@ -426,6 +425,7 @@ pub fn apply_status(
         value,
         duration,
         trigger_id: trigger_id.map(String::from),
+        is_evaded,
     }));
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
