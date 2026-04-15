@@ -357,11 +357,11 @@ pub fn format_skill_effect(
                 Some(
                     view! {
                         <EffectLi>
-                            "Critical hit chance: "
+                            "Critical Hit Chance: "
                             <span class="font-semibold">{format_chance(&crit_chance, true)}</span>
                         </EffectLi>
                         <EffectLi>
-                            "Critical hit damage: "
+                            "Critical Hit Damage: "
                             <span class="font-semibold">
                                 {format!("+{}%", number::format_number(*crit_damage))}
                             </span>
@@ -447,9 +447,9 @@ pub fn format_skill_effect(
                                             "font-semibold {damage_color}",
                                         )>{format_min_max(status_effect.value)}</span>
                                         {trigger_modifier_damage_str}"  "
-                                        // {damage_type_str(Some(damage_type))} "Damage per second "
+                                        // {damage_type_str(Some(damage_type))} "Damage per Second "
                                         {damage_over_time_type_value_str(Some(damage_type))}
-                                        " per second " {format_duration(duration)}
+                                        " per Second " {format_duration(duration)}
                                         {trigger_modifier_duration_str}
                                     </EffectLi>
                                 }

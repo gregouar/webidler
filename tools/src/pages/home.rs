@@ -26,6 +26,9 @@ pub fn LogoCog() -> impl IntoView {
             aria-hidden="true"
         >
             <defs>
+                <clipPath id="logo-cog-clip">
+                    <path d=LOGO_COG_PATH></path>
+                </clipPath>
                 <linearGradient
                     id="logo-cog-fill"
                     x1="256"
@@ -69,7 +72,7 @@ pub fn LogoCog() -> impl IntoView {
                 </filter>
             </defs>
 
-            <g transform="translate(-1,0)">
+            <g transform="translate(-1,0)" style="isolation: isolate;">
                 <path
                     d=LOGO_COG_PATH
                     fill="#090605"
@@ -84,6 +87,17 @@ pub fn LogoCog() -> impl IntoView {
                     stroke-width="3.5"
                     filter="url(#logo-cog-shadow)"
                 ></path>
+                <image
+                    href=img_asset("ui/dark_metal.webp")
+                    x="20"
+                    y="20"
+                    width="472"
+                    height="472"
+                    preserveAspectRatio="xMidYMid slice"
+                    clip-path="url(#logo-cog-clip)"
+                    opacity="0.38"
+                    style="mix-blend-mode: soft-light;"
+                ></image>
                 <path
                     d=LOGO_COG_PATH
                     fill="none"

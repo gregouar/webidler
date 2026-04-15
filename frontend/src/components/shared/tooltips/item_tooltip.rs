@@ -382,7 +382,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm ">
-                                "Block chance: "
+                                "Block Chance: "
                                 <span class=format!(
                                     "{} font-semibold",
                                     block_color,
@@ -486,14 +486,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 <li class="text-gray-400 text-xs xl:text-sm ">{range} {shape}</li>
                 {damage_lines}
                 <li class="text-gray-400 text-xs xl:text-sm ">
-                    "Critical hit chance: "
+                    "Critical Hit Chance: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_chance_color,
                     )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm ">
-                    "Critical hit damage: "
+                    "Critical Hit Damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,

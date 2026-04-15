@@ -530,7 +530,7 @@
       {
         "name": null,
         "icon": null,
-        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per second for 10 seconds. You deal 30% more Poison Damage per stack of Venom.",
+        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for 10 seconds. You deal 30% more Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
         "OnApplyStatus": {
           "skill_type": null,

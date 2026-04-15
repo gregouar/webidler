@@ -250,19 +250,8 @@ fn SkillCard(
                     draggable="false"
                     src=img_asset(&skill_specs.base.icon)
                     alt=skill_specs.base.name.clone()
-                    class=move || {
-                        format!(
-                            "relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current
-                            drop-shadow-[0px_4px_black] invert
-                            transition-all ease-in-out duration-150
-                            {}",
-                            if is_selected.get() {
-                                "scale-105 brightness-110"
-                            } else {
-                                "group-hover:scale-105 group-hover:brightness-110"
-                            },
-                        )
-                    }
+                    class="relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current
+                      drop-shadow-[0px_4px_black] invert"
                 />
             </div>
 

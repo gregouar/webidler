@@ -260,14 +260,53 @@ pub fn CharacterPortrait(
         }
     });
 
-    view! {
-        <div class=move || {
+    let dot_overlay_class = move |blend_class: &'static str| {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 transition-opacity duration-500 opacity-0 pointer-events-none"
+                .to_string()
+        } else {
             format!(
-                "flex items-center justify-center h-full w-full relative p-1 xl:p-2
-                overflow-clip {}",
-                is_dead_portrait_effect(),
+                "absolute inset-0 transition-opacity duration-500 opacity-0 {} pointer-events-none",
+                blend_class,
             )
-        } style="contain: layout paint style;">
+        }
+    };
+
+    let bleed_overlay_class = move || {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 bg-[linear-gradient(to_bottom,rgba(150,0,0,0.52)_0%,rgba(150,0,0,0.24)_18%,rgba(150,0,0,0)_42%)]"
+        } else {
+            "absolute inset-0 status-bleed"
+        }
+    };
+
+    let burn_overlay_class = move || {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 bg-[linear-gradient(to_right,rgba(255,90,0,0.34)_0%,rgba(255,90,0,0.10)_18%,rgba(255,90,0,0.10)_82%,rgba(255,90,0,0.34)_100%)]"
+        } else {
+            "absolute inset-0 status-burn"
+        }
+    };
+
+    let poison_overlay_class = move || {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 bg-[linear-gradient(to_top,rgba(64,120,0,0.48)_0%,rgba(28,120,0,0.22)_22%,rgba(0,120,0,0)_46%)]"
+        } else {
+            "absolute inset-0 status-poison"
+        }
+    };
+
+    view! {
+        <div
+            class=move || {
+                format!(
+                    "flex items-center justify-center h-full w-full relative p-1 xl:p-2
+                overflow-clip {}",
+                    is_dead_portrait_effect(),
+                )
+            }
+            style="contain: layout paint style;"
+        >
             <div class=portrait_frame_class style=crit_animation_style>
                 // <Show when=move || settings.uses_heavy_effects()>
                 // <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
@@ -423,31 +462,31 @@ pub fn CharacterPortrait(
 
                 <Show when=move || activate_bleeding.get()>
                     <div
-                        class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
+                        class=move || dot_overlay_class("mix-blend-multiply")
                         class:opacity-100=move || is_bleeding.get()
                         style="contain: paint;"
                     >
-                        <div class="absolute inset-0 status-bleed"></div>
+                        <div class=bleed_overlay_class></div>
                     </div>
                 </Show>
 
                 <Show when=move || activate_burning.get()>
                     <div
-                        class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
+                        class=move || dot_overlay_class("mix-blend-color-burn")
                         class:opacity-100=move || is_burning.get()
                         style="contain: paint;"
                     >
-                        <div class="absolute inset-0 status-burn"></div>
+                        <div class=burn_overlay_class></div>
                     </div>
                 </Show>
 
                 <Show when=move || activate_poisoned.get()>
                     <div
-                        class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
+                        class=move || dot_overlay_class("mix-blend-hard-light")
                         class:opacity-100=move || is_poisoned.get()
                         style="contain: paint;"
                     >
-                        <div class="absolute inset-0 status-poison"></div>
+                        <div class=poison_overlay_class></div>
                     </div>
                 </Show>
 
@@ -674,7 +713,7 @@ pub fn status_description(
         StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
         StatusId::DamageOverTime { damage_type } => {
             format!(
-                "{} for {} Damage per second",
+                "{} for {} Damage per Second",
                 conditions_tooltip::damaged_over_time_str(Some(*damage_type)),
                 format_number(value)
             )

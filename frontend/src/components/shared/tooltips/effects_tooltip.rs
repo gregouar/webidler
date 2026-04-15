@@ -246,7 +246,7 @@ pub fn status_type_value_str(status_type: Option<&StatStatusType>) -> String {
         Some(status_type) => match status_type {
             StatStatusType::Stun => "Stun Effects".to_string(),
             StatStatusType::DamageOverTime { damage_type } => {
-                // format!("{}Damage per second", damage_type_str(*damage_type))
+                // format!("{}Damage per Second", damage_type_str(*damage_type))
                 damage_over_time_type_value_str(*damage_type).into()
             }
             StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
@@ -638,12 +638,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
-            "{} Life Regeneration per second",
+            "{} Life Regeneration per Second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
         StatType::Mana => format!("{} Maximum Mana", format_adds_removes(value, false, "")),
         StatType::ManaRegen => format!(
-            "{} Mana Regeneration per second",
+            "{} Mana Regeneration per Second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
         StatType::ManaCost { skill_type } => format!(

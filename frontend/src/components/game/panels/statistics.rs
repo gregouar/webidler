@@ -134,7 +134,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Life Regeneration per second"
+                                label="Life Regeneration per Second"
                                 value=move || {
                                     let value = *game_context
                                         .player_specs
@@ -158,7 +158,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }
                             />
                             <Stat
-                                label="Mana Regeneration per second"
+                                label="Mana Regeneration per Second"
                                 value=move || {
                                     let value = *game_context
                                         .player_specs
