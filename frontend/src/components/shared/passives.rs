@@ -497,7 +497,7 @@ pub fn NodeTooltipContent(
         .triggers
         .clone()
         .into_iter()
-        .map(format_trigger)
+        .map(|trigger| format_trigger(trigger, false))
         .collect();
 
     let is_locked = move || node_specs_locked && node_level() == 0;
@@ -727,7 +727,7 @@ pub fn PassiveSkillStats(
                                     view! {
                                         <div class="pb-2 list-none">
                                             <Separator />
-                                            {trigger_tooltip::format_trigger(trigger_specs)}
+                                            {trigger_tooltip::format_trigger(trigger_specs, true)}
                                         </div>
                                     }
                                 })

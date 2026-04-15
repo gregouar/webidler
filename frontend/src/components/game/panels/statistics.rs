@@ -741,13 +741,16 @@ fn TriggersStats(#[prop(optional)] class: Option<&'static str>) -> impl IntoView
                                 let(triggered_effect)
                             >
                                 <div class="relative pb-2 list-none break-inside-avoid">
-                                    {trigger_tooltip::format_trigger(TriggerSpecs {
-                                        name: None,
-                                        icon: None,
-                                        description: None,
-                                        triggered_effect: triggered_effect.clone(),
-                                        is_debuff: false,
-                                    })} <Separator />
+                                    {trigger_tooltip::format_trigger(
+                                        TriggerSpecs {
+                                            name: None,
+                                            icon: None,
+                                            description: None,
+                                            triggered_effect: triggered_effect.clone(),
+                                            is_debuff: false,
+                                        },
+                                        true,
+                                    )} <Separator />
                                 </div>
                             </For>
                         }

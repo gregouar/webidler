@@ -73,7 +73,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                     </div>
 
                     <CardInset class="min-h-0 flex-1">
-                        <div class="grid grid-cols-3 xl:grid-cols-5 gap-1 xl:gap-2 place-content-start">
+                        <div class="grid grid-cols-3 xl:grid-cols-4 gap-1 xl:gap-2 place-content-start">
                             <For
                                 each=move || {
                                     let mut areas = town_context.areas.get();
@@ -330,7 +330,7 @@ fn GrindingAreaCard(
                     format!(
                         "
                         {};
-                        {}
+                        background-color: rgb(39, 39, 42);
                         ",
                         if settings.uses_textures() {
                             format!(
@@ -340,11 +340,6 @@ fn GrindingAreaCard(
                         } else {
                             "background-image: linear-gradient(180deg, rgba(74,69,76,0.98), rgba(30,29,34,1));"
                                 .to_string()
-                        },
-                        if locked() {
-                            "background-color: rgba(0, 0, 0, 0.7);"
-                        } else {
-                            "background-color: rgb(39, 39, 42);"
                         },
                     )
                 }
@@ -356,7 +351,7 @@ fn GrindingAreaCard(
 
             <div class=move || {
                 format!(
-                    "relative clip-octagon z-10 p-[3px] flex flex-col h-full transition-all overflow-clip {}",
+                    "relative clip-octagon z-10 flex flex-col h-full transition-all overflow-clip {}",
                     if locked() || view_only {
                         "cursor-default"
                     } else {
@@ -366,7 +361,7 @@ fn GrindingAreaCard(
             }>
                 <div class=move || {
                     format!(
-                        "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",
+                        "flex flex-col p-[3px] h-full transition-[filter,transform,opacity] duration-200 {}",
                         if locked() {
                             "blur-[5px] scale-[1.015] saturate-75 brightness-75"
                         } else {
@@ -382,7 +377,7 @@ fn GrindingAreaCard(
                         />
                     </div>
 
-                    <div class="p-2 xl:p-4 xl:space-y-1 xl:space-y-2 flex-1 flex flex-col justify-around">
+                    <div class="p-2 xl:p-4 xl:space-y-1 flex-1 flex flex-col justify-around">
                         <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
                             {move || area_specs.read().name.clone()}
                         </div>

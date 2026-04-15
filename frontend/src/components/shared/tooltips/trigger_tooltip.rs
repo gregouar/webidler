@@ -18,7 +18,7 @@ use crate::components::shared::tooltips::{
     skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
 };
 
-pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
+pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoView {
     let effects = trigger
         .triggered_effect
         .effects
@@ -32,8 +32,13 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         })
         .collect::<Vec<_>>();
 
-    let target_infos = (trigger.triggered_effect.target != TriggerTarget::SameTarget)
-        .then(|| format!(", {}", trigger_target_str(trigger.triggered_effect.target)));
+    let details_infos = show_details.then(|| {
+        format!(
+            " ({}, {})",
+            skill_type_str(Some(trigger.triggered_effect.skill_type)),
+            trigger_target_str(trigger.triggered_effect.target)
+        )
+    });
 
     let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
         .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
@@ -42,8 +47,8 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         <EffectLi>
             <ul>
                 <EffectLi>
-                    {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}
-                    {shape_infos}":"
+                    {format_trigger_event(&trigger.triggered_effect.trigger)}{shape_infos}
+                    {details_infos}":"
                 </EffectLi>
                 {trigger
                     .description

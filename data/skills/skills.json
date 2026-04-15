@@ -2037,6 +2037,11 @@
     ],
     "targets": [
       {
+        "repeat": {
+          "value": 1,
+          "target": "Any",
+          "repeat_cooldown": 0.3
+        },
         "range": "Melee",
         "effects": [
           {

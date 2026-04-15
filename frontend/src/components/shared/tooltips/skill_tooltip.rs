@@ -89,7 +89,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .triggers
         .clone()
         .into_iter()
-        .map(format_trigger)
+        .map(|trigger| format_trigger(trigger, false))
         .collect::<Vec<_>>();
 
     let modifier_lines: Vec<_> = skill_specs
@@ -491,7 +491,8 @@ pub fn format_skill_effect(
                         if let Some(name) = &trigger_specs.name {
                             trigger_name = Some(name.clone());
                         }
-                        trigger_effects.push(view! { <ul>{format_trigger(*trigger_specs)}</ul> });
+                        trigger_effects
+                            .push(view! { <ul>{format_trigger(*trigger_specs, true)}</ul> });
                         ().into_any()
                     }
                 })

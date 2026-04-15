@@ -132,7 +132,7 @@ pub fn ItemTooltipContent(
             .triggers
             .clone()
             .into_iter()
-            .map(format_trigger)
+            .map(|trigger| format_trigger(trigger, show_affixes))
             .collect::<Vec<_>>();
 
         (

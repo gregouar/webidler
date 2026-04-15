@@ -973,8 +973,14 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 })
                 .unwrap_or_default();
 
+            let result_str = vec![range_str, shape_str.as_str(), repeat_str.as_str()]
+                .into_iter()
+                .filter(|s| !s.is_empty())
+                .collect::<Vec<_>>()
+                .join(", ");
+
             format!(
-                "{skill_name}{} becomes {range_str}{shape_str}{repeat_str}",
+                "{skill_name}{} becomes {result_str}",
                 skill_type_str(*skill_type),
             )
         }
