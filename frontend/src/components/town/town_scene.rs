@@ -411,7 +411,7 @@ fn GrindingAreaCard(
                 </div>
 
                 <Show when=move || locked()>
-                    <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/65 text-center p-2">
+                    <div class="absolute inset-[2px] z-20 flex flex-col items-center justify-center bg-black/65 text-center p-2">
                         <div class="text-amber-400 text-lg font-bold tracking-wide">
                             {if area_specs.read().coming_soon {
                                 "Coming Soon..."
