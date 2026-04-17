@@ -359,59 +359,61 @@ fn GrindingAreaCard(
                     },
                 )
             }>
-                <div class=move || {
-                    format!(
-                        "flex flex-col p-[3px] h-full transition-[filter,transform,opacity] duration-200 {}",
-                        if locked() {
-                            "blur-[5px] scale-[1.015] saturate-75 brightness-75"
-                        } else {
-                            ""
-                        },
-                    )
-                }>
-                    <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
-                        <img
-                            draggable="false"
-                            src=move || img_asset(&area_specs.read().header_background)
-                            class="object-cover w-full h-full"
-                        />
-                    </div>
-
-                    <div class="p-2 xl:p-4 xl:space-y-1 flex-1 flex flex-col justify-around">
-                        <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
-                            {move || area_specs.read().name.clone()}
-                        </div>
-
-                        <div class="text-xs xl:text-sm text-gray-400">
-                            {move || {
-                                format!(
-                                    "Power level: +{}",
-                                    *area_specs.read().power_level
-                                        + *area_specs.read().item_level_modifier,
-                                )
-                            }}
-                        </div>
-
-                        <div class="text-xs xl:text-sm text-gray-400">
-                            {if area.max_level_reached > 0 {
-                                format!("Level Reached: {}", area.max_level_reached)
+                <div class="m-[3px] flex-1 overflow-hidden">
+                    <div class=move || {
+                        format!(
+                            "flex flex-col h-full transition-[filter,transform,opacity] duration-200 {}",
+                            if locked() {
+                                "blur-[5px] scale-[1.1] saturate-75 brightness-75"
                             } else {
-                                "New Grind!".to_string()
-                            }}
+                                ""
+                            },
+                        )
+                    }>
+                        <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
+                            <img
+                                draggable="false"
+                                src=move || img_asset(&area_specs.read().header_background)
+                                class="object-cover w-full h-full"
+                            />
                         </div>
-                    </div>
 
-                    <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
-                        <img
-                            draggable="false"
-                            src=move || img_asset(&area_specs.read().footer_background)
-                            class="object-cover w-full h-full"
-                        />
+                        <div class="p-2 xl:p-4 xl:space-y-1 flex-1 flex flex-col justify-around">
+                            <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
+                                {move || area_specs.read().name.clone()}
+                            </div>
+
+                            <div class="text-xs xl:text-sm text-gray-400">
+                                {move || {
+                                    format!(
+                                        "Power level: +{}",
+                                        *area_specs.read().power_level
+                                            + *area_specs.read().item_level_modifier,
+                                    )
+                                }}
+                            </div>
+
+                            <div class="text-xs xl:text-sm text-gray-400">
+                                {if area.max_level_reached > 0 {
+                                    format!("Level Reached: {}", area.max_level_reached)
+                                } else {
+                                    "New Grind!".to_string()
+                                }}
+                            </div>
+                        </div>
+
+                        <div class="h-10 xl:h-16 w-full relative flex-shrink-0">
+                            <img
+                                draggable="false"
+                                src=move || img_asset(&area_specs.read().footer_background)
+                                class="object-cover w-full h-full"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <Show when=move || locked()>
-                    <div class="absolute inset-[2px] z-20 flex flex-col items-center justify-center bg-black/65 text-center p-2">
+                    <div class="absolute inset-[3px] z-20 flex flex-col items-center justify-center bg-black/65 text-center p-2">
                         <div class="text-amber-400 text-lg font-bold tracking-wide">
                             {if area_specs.read().coming_soon {
                                 "Coming Soon..."

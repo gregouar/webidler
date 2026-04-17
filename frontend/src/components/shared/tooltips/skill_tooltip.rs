@@ -46,7 +46,7 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Spell) => "Spell ",
         Some(SkillType::Curse) => "Curse ",
         Some(SkillType::Blessing) => "Blessing ",
-        Some(SkillType::Other) => "Other ",
+        Some(SkillType::Other) => "",
         None => "",
     }
 }
@@ -492,7 +492,7 @@ pub fn format_skill_effect(
                             trigger_name = Some(name.clone());
                         }
                         trigger_effects
-                            .push(view! { <ul>{format_trigger(*trigger_specs, true)}</ul> });
+                            .push(view! { <ul>{format_trigger(*trigger_specs, false)}</ul> });
                         ().into_any()
                     }
                 })

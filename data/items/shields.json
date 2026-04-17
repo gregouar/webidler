@@ -184,6 +184,16 @@
           "modifier": "Flat",
           "value": 2.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
       }
     ]
   },
@@ -263,18 +273,18 @@
             "conditions_duration": 0
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
-        "value": 150.0,
+        "value": 140.0,
         "ignore_quality": true
       },
       {
         "stat": "ThreatGain",
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
         "value": [
-          40.0,
-          60.0
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       },
@@ -283,8 +293,8 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": [
-          10.0,
-          20.0
+          8.0,
+          12.0
         ],
         "ignore_quality": true
       },
@@ -349,6 +359,46 @@
           },
           "modifier": "Flat",
           "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "LifeRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "damage_type": null,
+                  "min_max": null
+                }
+              },
+              "conditions": [
+                "ThreatLevel"
+              ],
+              "conditions_duration": 0
+            }
+          },
+          "modifier": "Increased",
+          "value": 10.0
         }
       }
     ]
@@ -602,7 +652,7 @@
             "source": {
               "StatusDuration": {
                 "status_type": null,
-                "skill_type": null
+                "skill_type": "Curse"
               }
             }
           }
@@ -654,16 +704,16 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_type": null,
+                  "skill_type": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_type": null,
                   "skill_type": null,
                   "min_max": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_type": null,
-                  "skill_type": null
                 }
               }
             ],
@@ -709,6 +759,32 @@
           },
           "modifier": "Flat",
           "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Flat",
+          "value": 20.0
         }
       }
     ]

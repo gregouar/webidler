@@ -517,7 +517,7 @@ fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
             stat: effect_blueprint.stat.clone(),
             modifier: effect_blueprint.modifier,
             value: effect_blueprint.value.roll().round(),
-            bypass_ignore: false,
+            bypass_ignore: effect_blueprint.bypass_ignore,
             // ignore_quality: effect_blueprint.ignore_quality,
         },
         scope: effect_blueprint.scope,

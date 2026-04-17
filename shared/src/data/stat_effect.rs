@@ -3,14 +3,17 @@ use std::collections::{BTreeMap, HashMap};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::ChanceRange,
-    character_status::StatusSpecs,
-    conditional_modifier::Condition,
-    item::{SkillRange, SkillShape},
-    modifier::{ModifiableValue, Modifier, compute_more_factor},
-    skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
-    values::NonNegative,
+use crate::{
+    data::{
+        chance::ChanceRange,
+        character_status::StatusSpecs,
+        conditional_modifier::Condition,
+        item::{SkillRange, SkillShape},
+        modifier::{ModifiableValue, Modifier, compute_more_factor},
+        skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
+        values::NonNegative,
+    },
+    serde_utils::is_false,
 };
 
 use super::skill::SkillType;
@@ -570,10 +573,6 @@ pub enum StatConverterSource {
     // TODO: Add others, like armor, ...
 }
 
-fn is_false(value: &bool) -> bool {
-    !*value
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatEffect {
     pub stat: StatType,
@@ -583,7 +582,6 @@ pub struct StatEffect {
     #[serde(default, skip_serializing_if = "is_false")]
     pub bypass_ignore: bool,
 }
-
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct EffectsMap(pub HashMap<(StatType, Modifier, bool), f64>);
 

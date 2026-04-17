@@ -727,7 +727,7 @@ pub fn PassiveSkillStats(
                                     view! {
                                         <div class="pb-2 list-none">
                                             <Separator />
-                                            {trigger_tooltip::format_trigger(trigger_specs, true)}
+                                            {trigger_tooltip::format_trigger(trigger_specs, false)}
                                         </div>
                                     }
                                 })
