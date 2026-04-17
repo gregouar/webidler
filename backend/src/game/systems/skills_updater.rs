@@ -124,9 +124,9 @@ pub fn apply_effects_to_skill_specs<'a>(
     });
 
     for effect in effects.clone() {
-        if effect
-            .stat
-            .is_match(&StatType::Speed(Some(skill_specs.base.skill_type)))
+        if let StatType::Speed(skill_filter) = &effect.stat
+            && skill_filter
+                .is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
         {
             skill_specs.cooldown.apply_negative_effect(effect);
         }
@@ -389,12 +389,10 @@ pub fn compute_skill_specs_effect<'a>(
 
         if let StatType::Lucky {
             skill_filter,
-            roll_type,
+            roll_type: LuckyRollType::SuccessChance { effect_type },
         } = &effect.stat
             && skill_filter.is_match_with_skill(skill_type, skill_id)
-            && roll_type.is_match(&LuckyRollType::SuccessChance {
-                effect_type: (&skill_effect.effect_type).into(),
-            })
+            && compare_options(effect_type, &(&skill_effect.effect_type).into())
         {
             skill_effect
                 .success_chance
@@ -458,16 +456,13 @@ pub fn compute_skill_specs_effect<'a>(
                         min_max,
                     } = &effect.stat
                         && skill_filter.is_match_with_skill(skill_type, skill_id)
+                        && compare_options(stat_damage_type, &Some(damage_type))
                     {
-                        if compare_options(stat_damage_type, &Some(damage_type))
-                            && compare_options(min_max, &Some(MinMax::Min))
-                        {
+                        if compare_options(min_max, &Some(MinMax::Min)) {
                             value.min.apply_effect(effect);
                         }
 
-                        if compare_options(stat_damage_type, &Some(damage_type))
-                            && compare_options(min_max, &Some(MinMax::Max))
-                        {
+                        if compare_options(min_max, &Some(MinMax::Max)) {
                             value.max.apply_effect(effect);
                         }
                     }
@@ -515,10 +510,7 @@ pub fn compute_skill_specs_effect<'a>(
                     skill_filter,
                 } = &effect.stat
                     && statuses.iter().any(|status_effect| {
-                        status_type
-                            .as_ref()
-                            .map(|st| *st == (&status_effect.status_type).into())
-                            .unwrap_or(true)
+                        compare_options(status_type, &Some((&status_effect.status_type).into()))
                     })
                     && skill_filter.is_match_with_skill(skill_type, skill_id)
                 {
@@ -534,20 +526,13 @@ pub fn compute_skill_specs_effect<'a>(
                     } = &effect.stat
                         && compare_options(status_type, &Some((&status_effect.status_type).into()))
                         && skill_filter.is_match_with_skill(skill_type, skill_id)
-                        && compare_options(min_max, &Some(MinMax::Min))
                     {
-                        status_effect.value.min.apply_effect(effect);
-                    }
-                    if let StatType::StatusPower {
-                        status_type,
-                        skill_filter,
-                        min_max,
-                    } = &effect.stat
-                        && compare_options(status_type, &Some((&status_effect.status_type).into()))
-                        && skill_filter.is_match_with_skill(skill_type, skill_id)
-                        && compare_options(min_max, &Some(MinMax::Max))
-                    {
-                        status_effect.value.max.apply_effect(effect);
+                        if compare_options(min_max, &Some(MinMax::Min)) {
+                            status_effect.value.min.apply_effect(effect);
+                        }
+                        if compare_options(min_max, &Some(MinMax::Max)) {
+                            status_effect.value.max.apply_effect(effect);
+                        }
                     }
 
                     if let StatusSpecs::DamageOverTime { damage_type, .. } =
@@ -560,21 +545,13 @@ pub fn compute_skill_specs_effect<'a>(
                         } = &effect.stat
                             && skill_filter.is_match_with_skill(skill_type, skill_id)
                             && compare_options(stat_damage_type, &Some(damage_type))
-                            && compare_options(min_max, &Some(MinMax::Min))
                         {
-                            status_effect.value.min.apply_effect(effect);
-                        }
-
-                        if let StatType::Damage {
-                            skill_filter,
-                            damage_type: stat_damage_type,
-                            min_max,
-                        } = &effect.stat
-                            && skill_filter.is_match_with_skill(skill_type, skill_id)
-                            && compare_options(stat_damage_type, &Some(damage_type))
-                            && compare_options(min_max, &Some(MinMax::Max))
-                        {
-                            status_effect.value.max.apply_effect(effect);
+                            if compare_options(min_max, &Some(MinMax::Min)) {
+                                status_effect.value.min.apply_effect(effect);
+                            }
+                            if compare_options(min_max, &Some(MinMax::Max)) {
+                                status_effect.value.max.apply_effect(effect);
+                            }
                         }
 
                         if let StatType::Lucky {
@@ -688,14 +665,14 @@ pub fn compute_skill_specs_effect<'a>(
                     // Special case, when converting damage we map on min and max respectively
                     if let None = min_max
                         && let StatType::Damage {
-                            skill_filter: skill_type,
+                            skill_filter,
                             damage_type,
                             min_max: None,
                         } = *specs.stat
                     {
                         stats_converted.push(StatEffect {
                             stat: StatType::Damage {
-                                skill_filter: skill_type,
+                                skill_filter: skill_filter.clone(),
                                 damage_type,
                                 min_max: Some(MinMax::Min),
                             },
@@ -705,7 +682,7 @@ pub fn compute_skill_specs_effect<'a>(
                         });
                         Some(StatEffect {
                             stat: StatType::Damage {
-                                skill_filter: skill_type,
+                                skill_filter,
                                 damage_type,
                                 min_max: Some(MinMax::Max),
                             },
