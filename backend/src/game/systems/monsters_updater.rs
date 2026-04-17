@@ -108,7 +108,7 @@ pub fn update_monster_specs(
         .into();
     effects.push(StatEffect {
         stat: StatType::Damage {
-            skill_type: None,
+            skill_filter: Default::default(),
             damage_type: None,
             min_max: None,
         },
@@ -163,6 +163,7 @@ pub fn update_monster_specs(
     {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
+                &trigger_specs.trigger_id,
                 trigger_specs.skill_type,
                 trigger_effect,
                 effects.iter(),

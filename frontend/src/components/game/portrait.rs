@@ -591,7 +591,7 @@ fn StatusIcon(
                 } => match stat {
                     StatType::LifeRegen => "passives/life_regen.svg".into(),
                     StatType::Damage {
-                        skill_type,
+                        skill_filter,
                         damage_type,
                         min_max,
                     } => {
@@ -632,7 +632,7 @@ fn StatusIcon(
                         ..
                     } => "statuses/stun_immune.svg".into(),
                     StatType::SuccessChance {
-                        skill_type,
+                        skill_filter,
                         effect_type,
                     } => match (skill_type, effect_type) {
                         (

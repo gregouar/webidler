@@ -1413,7 +1413,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Evade(None), Modifier::Flat),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: None,
                 damage_type: None,
                 min_max: None,
             },
@@ -1421,7 +1421,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_type: Some(SkillType::Attack),
+                skill_filter: Some(SkillType::Attack),
                 damage_type: None,
                 min_max: None,
             },
@@ -1429,7 +1429,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_type: Some(SkillType::Spell),
+                skill_filter: Some(SkillType::Spell),
                 damage_type: None,
                 min_max: None,
             },
@@ -1437,7 +1437,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: None,
                 damage_type: Some(DamageType::Physical),
                 min_max: None,
             },
@@ -1445,7 +1445,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: None,
                 damage_type: Some(DamageType::Fire),
                 min_max: None,
             },
@@ -1453,7 +1453,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: None,
                 damage_type: Some(DamageType::Poison),
                 min_max: None,
             },
@@ -1461,7 +1461,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: None,
                 damage_type: Some(DamageType::Storm),
                 min_max: None,
             },
@@ -1476,7 +1476,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusPower {
                 status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
-                skill_type: None,
+                skill_filter: None,
                 min_max: None,
             },
             Modifier::More,
@@ -1484,7 +1484,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusPower {
                 status_type: None,
-                skill_type: Some(SkillType::Curse),
+                skill_filter: Some(SkillType::Curse),
                 min_max: None,
             },
             Modifier::Increased,
@@ -1492,13 +1492,13 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusDuration {
                 status_type: None,
-                skill_type: None,
+                skill_filter: None,
             },
             Modifier::Increased,
         ),
         (
             StatType::SuccessChance {
-                skill_type: None,
+                skill_filter: None,
                 effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
             },
             Modifier::Increased,
@@ -1506,7 +1506,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Restore {
                 restore_type: Some(RestoreType::Life),
-                skill_type: None,
+                skill_filter: None,
             },
             Modifier::Increased,
         ),

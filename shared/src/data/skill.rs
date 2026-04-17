@@ -284,6 +284,7 @@ impl Matchable for RestoreType {
 #[derive(Debug, Clone)]
 pub struct RepeatedSkillEffect {
     // Could we avoid to clone each time?
+    pub skill_id: String,
     pub skill_type: SkillType,
     pub targets_group: SkillTargetsGroup,
 

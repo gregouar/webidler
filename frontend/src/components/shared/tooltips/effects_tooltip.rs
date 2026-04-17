@@ -336,7 +336,7 @@ pub fn formatted_effects_list(
             (
                 Modifier::Flat,
                 Damage {
-                    skill_type,
+                    skill_filter: skill_type,
                     damage_type,
                     min_max: Some(MinMax::Min),
                 },
@@ -349,7 +349,7 @@ pub fn formatted_effects_list(
             (
                 Modifier::Flat,
                 Damage {
-                    skill_type,
+                    skill_filter: skill_type,
                     damage_type,
                     min_max: Some(MinMax::Max),
                 },
@@ -475,7 +475,9 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::LifeRegen => "Life Regeneration".to_string(),
         StatType::Mana => "Maximum Mana".to_string(),
         StatType::ManaRegen => "Mana Regeneration".to_string(),
-        StatType::ManaCost { skill_type } => {
+        StatType::ManaCost {
+            skill_filter: skill_type,
+        } => {
             format!("{}Mana cost", skill_type_str(*skill_type))
         }
         StatType::Armor(armor_type) => armor_type_str(armor_type).to_string(),
@@ -491,7 +493,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             )
         }
         StatType::Damage {
-            skill_type,
+            skill_filter: skill_type,
             damage_type,
             min_max,
         } => format!(
@@ -502,7 +504,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         ),
         StatType::Restore {
             restore_type,
-            skill_type,
+            skill_filter: skill_type,
         } => {
             format!(
                 "Restore{} Effects{}",
@@ -518,7 +520,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         }
         StatType::StatusPower {
             status_type,
-            skill_type,
+            skill_filter: skill_type,
             min_max,
         } => {
             format!(
@@ -530,7 +532,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         }
         StatType::StatusDuration {
             status_type,
-            skill_type,
+            skill_filter: skill_type,
         } => {
             format!(
                 "{} Duration",
@@ -573,7 +575,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         ),
         StatType::ThreatGain => "Threat Gain".into(),
         StatType::Lucky {
-            skill_type,
+            skill_filter: skill_type,
             roll_type,
         } => format!(
             "Luck {}{}",
@@ -581,7 +583,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             to_skill_type_str(*skill_type),
         ),
         StatType::SuccessChance {
-            skill_type,
+            skill_filter: skill_type,
             effect_type,
         } => format!(
             "Chance to {}{}",
@@ -591,7 +593,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::SkillLevel(skill_type) => format!("{} Skill Level", skill_type_str(*skill_type)),
         StatType::SkillConditionalModifier {
             stat,
-            skill_type,
+            skill_filter: skill_type,
             conditions,
         } => format!(
             "{}{} against {}Enemies{}",
@@ -646,7 +648,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             "{} Mana Regeneration per Second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
-        StatType::ManaCost { skill_type } => format!(
+        StatType::ManaCost {
+            skill_filter: skill_type,
+        } => format!(
             "{} Mana Cost{}",
             format_adds_removes(value, false, ""),
             to_skill_type_str(*skill_type)
@@ -691,7 +695,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Damage {
-            skill_type,
+            skill_filter: skill_type,
             damage_type,
             min_max,
         } => format!(
@@ -703,7 +707,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         ),
         StatType::Restore {
             restore_type,
-            skill_type,
+            skill_filter: skill_type,
         } => {
             format!(
                 "Restore {} more{}{}",
@@ -734,7 +738,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         ),
         StatType::StatusPower {
             status_type,
-            skill_type,
+            skill_filter: skill_type,
             min_max,
         } => {
             format!(
@@ -755,7 +759,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         }
         StatType::StatusDuration {
             status_type,
-            skill_type,
+            skill_filter: skill_type,
         } => {
             if value.unwrap_or_default() >= 99999.0 {
                 format!(
@@ -865,7 +869,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             }
         }
         StatType::Lucky {
-            skill_type,
+            skill_filter: skill_type,
             roll_type,
         } => {
             let luck_type = skill_type_str(*skill_type).to_string() + &lucky_roll_str(roll_type);
@@ -894,7 +898,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::SuccessChance {
-            skill_type,
+            skill_filter: skill_type,
             effect_type,
         } => {
             let unwrap_value = value.unwrap_or_default();
@@ -929,7 +933,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
 
         StatType::SkillTargetModifier {
             skill_id,
-            skill_type,
+            skill_filter: skill_type,
             range,
             shape,
             repeat,
@@ -986,7 +990,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         }
         StatType::SkillConditionalModifier {
             stat,
-            skill_type,
+            skill_filter: skill_type,
             conditions,
         } => format!(
             "{}{} against {}Enemies{}",

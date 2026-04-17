@@ -316,7 +316,7 @@ fn compute_weapon_specs(
                 weapon_specs.cooldown.apply_negative_effect(effect)
             }
             StatType::Damage {
-                skill_type: Some(SkillType::Attack) | None,
+                skill_filter: Some(SkillType::Attack) | None,
                 damage_type,
                 min_max,
             } => match damage_type {
