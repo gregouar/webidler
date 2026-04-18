@@ -245,7 +245,7 @@
         },
         "modifier": "Increased",
         "scope": "Global",
-        "value": 500.0,
+        "value": 200.0,
         "ignore_quality": true,
         "bypass_ignore": true
       }

@@ -375,7 +375,7 @@ pub fn formatted_effects_list(
                 format_number(*min_flat),
                 format_number(*max_flat),
                 damage_type_str(*damage_type),
-                skill_filter_str(&skill_filter, "to ", true)
+                skill_filter_str(skill_filter, "to ", true)
             ));
         } else {
             let (skill_filter, damage_type, positive) = k;
@@ -384,7 +384,7 @@ pub fn formatted_effects_list(
                 positive_str(*positive),
                 format_number(*min_flat),
                 damage_type_str(*damage_type),
-                skill_filter_str(&skill_filter, "to ", true)
+                skill_filter_str(skill_filter, "to ", true)
             ));
         }
     }
@@ -397,7 +397,7 @@ pub fn formatted_effects_list(
                 positive_str(*positive),
                 format_number(*max_flat),
                 damage_type_str(*damage_type),
-                skill_filter_str(&skill_filter, "to ", true)
+                skill_filter_str(skill_filter, "to ", true)
             ));
         }
     }
@@ -532,7 +532,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 "{} Resilience",
                 skill_status_type_str(
                     &StatSkillFilter {
-                        skill_type: skill_type.clone(),
+                        skill_type: *skill_type,
                         ..Default::default()
                     },
                     status_type.as_ref(),

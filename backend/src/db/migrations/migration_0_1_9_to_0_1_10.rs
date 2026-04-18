@@ -653,7 +653,7 @@ pub struct OldStatConverterSpecs {
 impl From<OldStatConverterSpecs> for StatConverterSpecs {
     fn from(value: OldStatConverterSpecs) -> Self {
         Self {
-            source: value.source.into(),
+            source: value.source,
             stat: Box::new((*value.target_stat).into()),
             is_extra: value.is_extra,
             skill_type: value.skill_type,
