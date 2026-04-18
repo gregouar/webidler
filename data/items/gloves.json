@@ -193,7 +193,7 @@
       },
       {
         "stat": {
-          "Speed": "Attack"
+          "Speed": { "skill_type": "Attack" }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -727,7 +727,7 @@
                 }
               },
               {
-                "CritChance": null
+                "CritChance": { }
               }
             ],
             "conditional_modifiers": [ ]

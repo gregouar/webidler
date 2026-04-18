@@ -60,13 +60,52 @@ impl Matchable for MinMax {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatSkillFilter {
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+
+    #[serde(default)]
+    pub skill_id: Option<String>,
+    // TODO: This is awful....
+    #[serde(default)]
+    pub skill_description: Option<String>,
+}
+
+impl Matchable for StatSkillFilter {
+    fn is_match(&self, second: &StatSkillFilter) -> bool {
+        compare_options(&self.skill_type, &second.skill_type)
+            && compare_options(&self.skill_id, &second.skill_id)
+    }
+}
+
+// pub trait SkillFilterMatchable {
+//     fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool;
+// }
+
+// impl SkillFilterMatchable for StatSkillFilter {
+impl StatSkillFilter {
+    pub fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
+        compare_options(&self.skill_type, &Some(skill_type))
+            && compare_options(&self.skill_id.as_ref(), &Some(skill_id))
+    }
+}
+
+// impl SkillFilterMatchable for Option<StatSkillFilter> {
+//     fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
+//         self.as_ref()
+//             .map(|filter| filter.is_match_with_skill(skill_type, skill_id))
+//             .unwrap_or(true)
+//     }
+// }
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
     GemsFind,
     ItemRarity,
     ItemLevel,
-    SkillLevel(#[serde(default)] Option<SkillType>),
+    SkillLevel(#[serde(default)] StatSkillFilter),
     Armor(Option<ArmorStatType>),
     DamageResistance {
         #[serde(default)]
@@ -85,36 +124,36 @@ pub enum StatType {
         status_type: Option<StatStatusType>,
     },
     Damage {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
         #[serde(default)]
         damage_type: Option<DamageType>,
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    CritChance(#[serde(default)] Option<SkillType>),
-    CritDamage(#[serde(default)] Option<SkillType>),
+    CritChance(#[serde(default)] StatSkillFilter),
+    CritDamage(#[serde(default)] StatSkillFilter),
     StatusPower {
         #[serde(default)]
         status_type: Option<StatStatusType>,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
         #[serde(default)]
         min_max: Option<MinMax>,
     },
     StatusDuration {
         #[serde(default)]
         status_type: Option<StatStatusType>,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
     },
     SuccessChance {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
         #[serde(default)]
         effect_type: Option<StatSkillEffectType>,
     },
-    Speed(#[serde(default)] Option<SkillType>),
+    Speed(#[serde(default)] StatSkillFilter),
     RestoreOnHit {
         restore_type: RestoreType,
         #[serde(default)]
@@ -123,30 +162,30 @@ pub enum StatType {
     Restore {
         #[serde(default)]
         restore_type: Option<RestoreType>,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
     },
     Life,
     LifeRegen,
     Mana,
     ManaRegen,
     ManaCost {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
     },
     TakeFromManaBeforeLife,
     TakeFromLifeBeforeMana,
     MovementSpeed,
     ThreatGain,
     Lucky {
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
         roll_type: LuckyRollType,
     },
     SkillConditionalModifier {
         stat: Box<StatType>,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
         #[serde(default)]
         conditions: Vec<Condition>,
     },
@@ -159,16 +198,14 @@ pub enum StatType {
     StatConverter(StatConverterSpecs),
     SkillTargetModifier {
         // TODO: More control and options?
-        #[serde(default)]
-        skill_type: Option<SkillType>,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
         #[serde(default)]
         range: Option<SkillRange>,
         #[serde(default)]
         shape: Option<SkillShape>,
         #[serde(default)]
         repeat: Option<StatSkillRepeat>,
-        #[serde(default)]
-        skill_id: Option<String>,
     },
     GoldFind,
     PowerLevel,
@@ -181,17 +218,17 @@ impl Matchable for StatType {
         match (self, stat_type) {
             (
                 Damage {
-                    skill_type,
+                    skill_filter,
                     damage_type,
                     min_max,
                 },
                 Damage {
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                     damage_type: damage_type_2,
                     min_max: min_max_2,
                 },
             ) => {
-                compare_options(skill_type, skill_type_2)
+                skill_filter.is_match(skill_filter_2)
                     && compare_options(damage_type, damage_type_2)
                     && compare_options(min_max, min_max_2)
             }
@@ -210,78 +247,80 @@ impl Matchable for StatType {
             }
             (
                 Lucky {
-                    skill_type,
+                    skill_filter,
                     roll_type,
                 },
                 Lucky {
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                     roll_type: roll_type_2,
                 },
-            ) => compare_options(skill_type, skill_type_2) && roll_type.is_match(roll_type_2),
+            ) => skill_filter.is_match(skill_filter_2) && roll_type.is_match(roll_type_2),
             (
                 SuccessChance {
-                    skill_type,
+                    skill_filter,
                     effect_type,
                 },
                 SuccessChance {
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                     effect_type: effect_type_2,
                 },
             ) => {
-                compare_options(skill_type, skill_type_2)
-                    && compare_options(effect_type, effect_type_2)
+                skill_filter.is_match(skill_filter_2) && compare_options(effect_type, effect_type_2)
             }
             (
-                ManaCost { skill_type },
+                ManaCost { skill_filter },
                 ManaCost {
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                 },
-            ) => compare_options(skill_type, skill_type_2),
+            ) => skill_filter.is_match(skill_filter_2),
             (
                 Restore {
                     restore_type,
-                    skill_type,
+                    skill_filter,
                 },
                 Restore {
                     restore_type: restore_type_2,
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                 },
             ) => {
                 compare_options(restore_type, restore_type_2)
-                    && compare_options(skill_type, skill_type_2)
+                    && skill_filter.is_match(skill_filter_2)
             }
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
-            | (Speed(first), Speed(second))
-            | (Block(first), Block(second)) => compare_options(first, second),
+            | (Speed(first), Speed(second)) => first.is_match(second),
+            (Block(first), Block(second)) => compare_options(first, second),
             (Evade(first), Evade(second)) => compare_options(first, second),
             (
                 StatusPower {
                     status_type,
-                    skill_type,
+                    skill_filter,
                     min_max,
                 },
                 StatusPower {
                     status_type: status_type_2,
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                     min_max: min_max_2,
                 },
             ) => {
                 compare_options(status_type, status_type_2)
-                    && compare_options(skill_type, skill_type_2)
+                    && skill_filter.is_match(skill_filter_2)
                     && compare_options(min_max, min_max_2)
             }
+
             (
                 StatusDuration {
                     status_type,
-                    skill_type,
+                    skill_filter,
                 },
                 StatusDuration {
                     status_type: status_type_2,
-                    skill_type: skill_type_2,
+                    skill_filter: skill_filter_2,
                 },
-            )
-            | (
+            ) => {
+                compare_options(status_type, status_type_2) && skill_filter.is_match(skill_filter_2)
+            }
+            (
                 StatusResistance {
                     status_type,
                     skill_type,
@@ -294,15 +333,14 @@ impl Matchable for StatType {
                 compare_options(status_type, status_type_2)
                     && compare_options(skill_type, skill_type_2)
             }
-            (SkillLevel(first), SkillLevel(second)) => compare_options(first, second),
+            (SkillLevel(first), SkillLevel(second)) => first.is_match(second),
             (
+                SkillConditionalModifier { skill_filter, .. },
                 SkillConditionalModifier {
-                    skill_type: first, ..
+                    skill_filter: skill_filter_2,
+                    ..
                 },
-                SkillConditionalModifier {
-                    skill_type: second, ..
-                },
-            ) => compare_options(first, second),
+            ) => skill_filter.is_match(skill_filter_2),
             _ => self == stat_type,
         }
     }

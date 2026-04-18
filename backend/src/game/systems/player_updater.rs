@@ -201,6 +201,7 @@ pub fn update_player_specs(
     {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
+                &trigger_specs.trigger_id,
                 trigger_specs.skill_type,
                 trigger_effect,
                 effects.iter(),

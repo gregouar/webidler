@@ -24,7 +24,7 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "Speed": null }
+                        "stat": { "Speed": { } }
                       }
                     },
                     "value": 100

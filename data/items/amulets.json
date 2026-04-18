@@ -4,7 +4,7 @@
     "icon": "items/amulets/wooden_beads.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -20,21 +20,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "medallion": {
     "name": "Brass Medallion",
     "icon": "items/amulets/medallion.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -50,21 +50,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "medallion_unique": {
     "name": "Burning Desire",
     "icon": "items/amulets/burning_desire.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -178,7 +178,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -242,7 +242,7 @@
     "icon": "items/amulets/silver_chain.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -258,21 +258,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "silver_chain_unique": {
     "name": "Arachnid Heart",
     "icon": "items/amulets/amulet_spider.webp",
     "description": "When her heart stopped, the storm did not. It only found a new host.",
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -289,7 +289,7 @@
       },
       {
         "stat": {
-          "CritChance": null
+          "CritChance": { }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -301,7 +301,7 @@
       },
       {
         "stat": {
-          "CritDamage": null
+          "CritDamage": { }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -340,7 +340,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -395,7 +395,7 @@
     "icon": "items/amulets/gold_pendant.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -411,21 +411,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "crest_pendant": {
     "name": "Crest Pendant",
     "icon": "items/amulets/crest_pendant.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -441,21 +441,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "amulet": {
     "name": "Amulet",
     "icon": "items/amulets/amulet.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -471,21 +471,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "amulet_7": {
     "name": "Sacred Talisman",
     "icon": "items/amulets/sacred_talisman.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -501,21 +501,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "amulet_7_unique": {
     "name": "Cross of the Deep Well",
     "icon": "items/amulets/amulet_unique_cross.webp",
     "description": "The faithful did not pray for power. They prayed for endurance.",
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -550,7 +550,7 @@
       },
       {
         "stat": {
-          "SkillLevel": null
+          "SkillLevel": { }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -597,7 +597,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -654,7 +654,7 @@
     "icon": "items/amulets/royal_parure.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -670,13 +670,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

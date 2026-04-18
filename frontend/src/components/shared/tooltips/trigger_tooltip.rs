@@ -4,8 +4,8 @@ use leptos::prelude::*;
 use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
-    skill::TargetType,
-    stat_effect::{StatEffect, StatType},
+    skill::{SkillType, TargetType},
+    stat_effect::{StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
@@ -33,11 +33,15 @@ pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoVie
         .collect::<Vec<_>>();
 
     let details_infos = show_details.then(|| {
-        format!(
-            " ({}, {})",
-            skill_type_str(Some(trigger.triggered_effect.skill_type)),
-            trigger_target_str(trigger.triggered_effect.target)
-        )
+        if matches!(trigger.triggered_effect.skill_type, SkillType::Other) {
+            format!(" ({})", trigger_target_str(trigger.triggered_effect.target))
+        } else {
+            format!(
+                " ({}, {})",
+                skill_type_str(Some(trigger.triggered_effect.skill_type)),
+                trigger_target_str(trigger.triggered_effect.target)
+            )
+        }
     });
 
     let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
@@ -136,7 +140,14 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         } => {
             format!(
                 "{} Duration",
-                skill_status_type_str(*skill_type, status_type.as_ref(), false)
+                skill_status_type_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_type.as_ref(),
+                    false
+                )
             )
         }
         TriggerEffectModifierSource::StatusStacks {
@@ -145,7 +156,14 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         } => {
             format!(
                 "{} Stacks",
-                skill_status_type_str(*skill_type, status_type.as_ref(), false)
+                skill_status_type_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_type.as_ref(),
+                    false
+                )
             )
         }
     }
@@ -201,7 +219,10 @@ fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     skill_status_type_str(
-        status_trigger.skill_type,
+        &StatSkillFilter {
+            skill_type: status_trigger.skill_type,
+            ..Default::default()
+        },
         status_trigger.status_type.as_ref(),
         false,
     )

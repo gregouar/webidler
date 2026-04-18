@@ -13,12 +13,15 @@ use shared::data::{
         RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{Matchable, StatEffect, StatSkillEffectType, StatStatusType, StatType},
+    stat_effect::{
+        Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType, StatType,
+    },
     trigger::TriggerEffectModifier,
 };
 use strum::IntoEnumIterator;
 
 use crate::components::{
+    data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
@@ -60,6 +63,40 @@ pub fn skills_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Other) => "Others ",
         None => "",
     }
+}
+
+pub fn skill_filter_str(skill_filter: &StatSkillFilter, prefix: &str, plural: bool) -> String {
+    let skill_name = skill_filter
+        .skill_id
+        .as_ref()
+        .map(|skill_id| {
+            let data_context: DataContext = expect_context();
+            format!(
+                "{} ",
+                skill_filter
+                    .skill_description
+                    .clone()
+                    .unwrap_or(data_context.skill_name(skill_id))
+            )
+        })
+        .unwrap_or_default();
+
+    let prefix = if skill_name.is_empty() && skill_filter.skill_type.is_none() {
+        ""
+    } else {
+        prefix
+    };
+
+    format!(
+        "{}{}{}",
+        prefix,
+        skill_name,
+        if plural {
+            skills_type_str(skill_filter.skill_type)
+        } else {
+            skill_type_str(skill_filter.skill_type)
+        }
+    )
 }
 
 pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
@@ -327,7 +364,7 @@ pub fn format_skill_effect(
                         find_trigger_modifier(
                             StatType::Damage {
                                 damage_type: Some(damage_type),
-                                skill_type: None,
+                                skill_filter: Default::default(),
                                 min_max: None,
                             },
                             modifiers,
@@ -390,7 +427,7 @@ pub fn format_skill_effect(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
                                     status_type: Some(StatStatusType::Stun),
-                                    skill_type: None,
+                                    skill_filter: Default::default(),
                                 },
                                 modifiers,
                             ),
@@ -411,7 +448,7 @@ pub fn format_skill_effect(
                             find_trigger_modifier(
                                 StatType::Damage {
                                     damage_type: Some(damage_type),
-                                    skill_type: None,
+                                    skill_filter: Default::default(),
                                     min_max: None,
                                 },
                                 modifiers,
@@ -424,7 +461,7 @@ pub fn format_skill_effect(
                                     status_type: Some(StatStatusType::DamageOverTime {
                                         damage_type: Some(damage_type),
                                     }),
-                                    skill_type: None,
+                                    skill_filter: Default::default(),
                                 },
                                 modifiers,
                             ),
@@ -504,7 +541,7 @@ pub fn format_skill_effect(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
                                     status_type: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
-                                    skill_type: None,
+                                    skill_filter:  Default::default(),
                                 },
                                 modifiers,
                             ),
@@ -565,7 +602,7 @@ pub fn format_skill_effect(
             let trigger_modifier = find_trigger_modifier(
                 StatType::Restore {
                     restore_type: Some(restore_type),
-                    skill_type: None,
+                    skill_filter: Default::default(),
                 },
                 modifiers,
             );

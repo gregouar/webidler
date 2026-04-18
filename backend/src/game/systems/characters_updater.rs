@@ -269,12 +269,12 @@ fn compute_character_specs(
                 }
             }
             StatType::Lucky {
-                skill_type,
+                skill_filter,
                 roll_type: LuckyRollType::Block,
-            } => match skill_type {
+            } => match skill_filter.skill_type {
                 Some(skill_type) => character_specs
                     .block
-                    .entry(*skill_type)
+                    .entry(skill_type)
                     .or_default()
                     .lucky_chance
                     .apply_effect(effect),
@@ -290,7 +290,7 @@ fn compute_character_specs(
                 }
             },
             StatType::Lucky {
-                skill_type: _,
+                skill_filter: _,
                 roll_type: LuckyRollType::Evade(damage_type),
             } => match damage_type {
                 Some(damage_type) => character_specs

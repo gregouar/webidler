@@ -56,7 +56,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritDamage": null
+          "CritDamage": { }
         },
         "modifier": "Increased",
         "value": [ 40, 60 ]
@@ -64,7 +64,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChance": null
+          "CritChance": { }
         },
         "modifier": "Increased",
         "value": [ 15, 30 ]
@@ -209,7 +209,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritDamage": null
+          "CritDamage": { }
         },
         "modifier": "Increased",
         "value": [ 100, 200 ],
@@ -353,7 +353,7 @@
       {
         "scope": "Local",
         "stat": {
-          "Speed": "Attack"
+          "Speed": { "skill_type": "Attack" }
         },
         "modifier": "Increased",
         "value": [ 20, 30 ],
@@ -362,7 +362,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChance": null
+          "CritChance": { }
         },
         "modifier": "Increased",
         "value": [ 40, 60 ],
@@ -452,7 +452,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritChance": null
+          "CritChance": { }
         },
         "modifier": "Flat",
         "value": 5,
@@ -461,7 +461,7 @@
       {
         "scope": "Local",
         "stat": {
-          "CritDamage": null
+          "CritDamage": { }
         },
         "modifier": "Flat",
         "value": [ 100, 200 ],

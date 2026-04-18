@@ -11,7 +11,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 20
       },
@@ -41,7 +41,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 40
       },
@@ -71,7 +71,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 60
       },
@@ -101,7 +101,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 80
       },
@@ -131,7 +131,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 100
       },
@@ -161,7 +161,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 120
       },
@@ -191,7 +191,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 140
       },
@@ -221,7 +221,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 160
       },
@@ -251,7 +251,7 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "Speed": null },
+        "stat": { "Speed": { } },
         "modifier": "Increased",
         "value": 200
       },

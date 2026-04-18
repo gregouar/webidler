@@ -222,7 +222,7 @@ fn generate_monster_specs(
     // Apply upgrade effects
     let upgrade_effects = [StatEffect {
         stat: StatType::Damage {
-            skill_type: None,
+            skill_filter: Default::default(),
             damage_type: None,
             min_max: None,
         },

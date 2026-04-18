@@ -442,7 +442,7 @@ pub fn apply_status(
             attacker,
             &StatusSpecs::StatModifier {
                 stat: StatType::StatusResistance {
-                    skill_type: None,
+                    skill_type: Default::default(),
                     status_type: Some(StatStatusType::Stun),
                 },
                 modifier: Modifier::Flat,

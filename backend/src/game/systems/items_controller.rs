@@ -11,7 +11,9 @@ use shared::data::{
         ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{ArmorStatType, LuckyRollType, MinMax, StatEffect, StatType},
+    stat_effect::{
+        ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+    },
     values::NonNegative,
 };
 
@@ -90,27 +92,27 @@ fn compute_weapon_specs(
     });
 
     for effect in effects {
-        match effect.stat {
-            StatType::Speed(Some(SkillType::Attack) | None) => {
+        match &effect.stat {
+            StatType::Speed(skill_filter)
+                if skill_filter.is_match(&StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                }) =>
+            {
                 weapon_specs.cooldown.apply_negative_effect(effect)
             }
             StatType::Damage {
-                skill_type: Some(SkillType::Attack) | None,
+                skill_filter,
                 damage_type,
                 min_max,
-            } => match damage_type {
-                Some(damage_type) => {
-                    let value = weapon_specs.damage.entry(damage_type).or_default();
-                    if let Some(MinMax::Min) | None = min_max {
-                        value.min.apply_effect(effect);
-                    }
-                    if let Some(MinMax::Max) | None = min_max {
-                        value.max.apply_effect(effect);
-                    }
-                }
-                None => {
-                    for damage_type in DamageType::iter() {
-                        let value = weapon_specs.damage.entry(damage_type).or_default();
+            } if skill_filter.is_match(&StatSkillFilter {
+                skill_type: Some(SkillType::Attack),
+                ..Default::default()
+            }) =>
+            {
+                match damage_type {
+                    Some(damage_type) => {
+                        let value = weapon_specs.damage.entry(*damage_type).or_default();
                         if let Some(MinMax::Min) | None = min_max {
                             value.min.apply_effect(effect);
                         }
@@ -118,12 +120,33 @@ fn compute_weapon_specs(
                             value.max.apply_effect(effect);
                         }
                     }
+                    None => {
+                        for damage_type in DamageType::iter() {
+                            let value = weapon_specs.damage.entry(damage_type).or_default();
+                            if let Some(MinMax::Min) | None = min_max {
+                                value.min.apply_effect(effect);
+                            }
+                            if let Some(MinMax::Max) | None = min_max {
+                                value.max.apply_effect(effect);
+                            }
+                        }
+                    }
                 }
-            },
-            StatType::CritChance(Some(SkillType::Attack) | None) => {
+            }
+            StatType::CritChance(skill_filter)
+                if skill_filter.is_match(&StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                }) =>
+            {
                 weapon_specs.crit_chance.value.apply_effect(effect)
             }
-            StatType::CritDamage(Some(SkillType::Attack) | None) => {
+            StatType::CritDamage(skill_filter)
+                if skill_filter.is_match(&StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                }) =>
+            {
                 weapon_specs.crit_damage.apply_effect(effect)
             }
             StatType::Lucky {
@@ -137,7 +160,7 @@ fn compute_weapon_specs(
             } => {
                 match damage_type {
                     Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(damage_type).or_default();
+                        let value = weapon_specs.damage.entry(*damage_type).or_default();
                         value.lucky_chance.apply_effect(effect);
                     }
                     None => {
@@ -324,7 +347,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
         upgrade_effects: vec![StatEffect {
             stat: StatType::Damage {
-                skill_type: None,
+                skill_filter: Default::default(),
                 damage_type: None,
                 min_max: None,
             },

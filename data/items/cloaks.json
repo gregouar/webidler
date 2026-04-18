@@ -140,7 +140,7 @@
       },
       {
         "stat": {
-          "Speed": "Attack"
+          "Speed": { "skill_type": "Attack" }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -152,7 +152,7 @@
       },
       {
         "stat": {
-          "Speed": "Spell"
+          "Speed": { "skill_type": "Spell" }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -320,7 +320,7 @@
       },
       {
         "stat": {
-          "Speed": "Attack"
+          "Speed": { "skill_type": "Attack" }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -380,7 +380,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "CritChance": null
+                        "CritChance": { }
                       },
                       "modifier": "More",
                       "debuff": false
@@ -452,7 +452,7 @@
         "scope": "Global",
         "stat_effect": {
           "stat": {
-            "Speed": "Attack"
+            "Speed": { "skill_type": "Attack" }
           },
           "modifier": "Increased",
           "value": 2.0
@@ -566,7 +566,7 @@
       },
       {
         "stat": {
-          "CritChance": null
+          "CritChance": { }
         },
         "modifier": "Increased",
         "scope": "Global",

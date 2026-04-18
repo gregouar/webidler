@@ -84,7 +84,7 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "CritChance": "Attack" },
+                        "stat": { "CritChance": { "skill_type": "Attack" } },
                         "modifier": "Flat"
                       }
                     },
@@ -93,7 +93,7 @@
                   {
                     "status_type": {
                       "StatModifier": {
-                        "stat": { "CritDamage": "Attack" },
+                        "stat": { "CritDamage": { "skill_type": "Attack" } },
                         "modifier": "Flat"
                       }
                     },

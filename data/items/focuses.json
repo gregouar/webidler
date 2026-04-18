@@ -290,7 +290,7 @@
       },
       {
         "stat": {
-          "CritChance": "Spell"
+          "CritChance": { "skill_type": "Spell" }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -366,7 +366,7 @@
         "scope": "Global",
         "stat_effect": {
           "stat": {
-            "CritChance": "Spell"
+            "CritChance": { "skill_type": "Spell" }
           },
           "modifier": "Increased",
           "value": 10.0
@@ -715,7 +715,7 @@
       },
       {
         "stat": {
-          "CritChance": "Spell"
+          "CritChance": { "skill_type": "Spell" }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -727,7 +727,7 @@
       },
       {
         "stat": {
-          "CritDamage": null
+          "CritDamage": { }
         },
         "modifier": "More",
         "scope": "Global",

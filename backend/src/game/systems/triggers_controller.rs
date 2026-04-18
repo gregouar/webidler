@@ -223,6 +223,7 @@ pub fn apply_trigger_effects(
                     .into_iter()
                     .map(|mut effect| {
                         skills_updater::compute_skill_specs_effect(
+                            &trigger_context.trigger.trigger_id,
                             trigger_context.trigger.skill_type,
                             &mut effect,
                             source_effects.iter(),
@@ -235,6 +236,7 @@ pub fn apply_trigger_effects(
             skills_controller::apply_skill_effects(
                 events_queue,
                 attacker,
+                &trigger_context.trigger.trigger_id,
                 trigger_context.trigger.skill_type,
                 trigger_context.trigger.skill_range,
                 &trigger_effects,

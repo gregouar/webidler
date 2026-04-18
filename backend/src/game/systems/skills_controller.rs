@@ -44,6 +44,7 @@ pub fn use_skill<'a>(
     for targets_group in skill_specs.targets.iter() {
         applied |= apply_skill_on_targets(
             events_queue,
+            &skill_specs.base.skill_id,
             skill_specs.base.skill_type,
             targets_group,
             me,
@@ -64,6 +65,7 @@ pub fn use_skill<'a>(
 
 fn apply_skill_on_targets<'a>(
     events_queue: &mut EventsQueue,
+    skill_id: &String,
     skill_type: SkillType,
     targets_group: &SkillTargetsGroup,
     me: &mut Target<'a>,
@@ -78,6 +80,7 @@ fn apply_skill_on_targets<'a>(
 
     let character_hit = apply_repeated_skill_on_targets(
         events_queue,
+        skill_id,
         skill_type,
         targets_group,
         me,
@@ -90,6 +93,7 @@ fn apply_skill_on_targets<'a>(
         Some(character_hit) => {
             if max_repeat > 1 {
                 me.1.1.repeated_skills.push(RepeatedSkillEffect {
+                    skill_id: skill_id.clone(),
                     skill_type,
                     targets_group: targets_group.clone(),
                     max_repeat,
@@ -106,6 +110,7 @@ fn apply_skill_on_targets<'a>(
 
 fn apply_repeated_skill_on_targets<'a>(
     events_queue: &mut EventsQueue,
+    skill_id: &String,
     skill_type: SkillType,
     targets_group: &SkillTargetsGroup,
     me: &mut Target<'a>,
@@ -136,6 +141,7 @@ fn apply_repeated_skill_on_targets<'a>(
     let applied = apply_skill_effects(
         events_queue,
         attacker,
+        skill_id,
         skill_type,
         targets_group.range,
         &targets_group.effects,
@@ -293,6 +299,7 @@ pub fn find_sub_targets<'a, 'b>(
 pub fn apply_skill_effects(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
+    skill_id: &String,
     skill_type: SkillType,
     range: SkillRange,
     skill_effects: &[SkillEffect],
@@ -307,7 +314,7 @@ pub fn apply_skill_effects(
             let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
                 skill_effect
             } else {
-                &apply_conditional_modifiers(target, skill_effect, skill_type)
+                &apply_conditional_modifiers(target, skill_effect, skill_id, skill_type)
             };
 
             let (applicable, effective) = apply_skill_effect_on_target(
@@ -334,11 +341,13 @@ pub fn apply_skill_effects(
 fn apply_conditional_modifiers(
     target: &mut Target,
     skill_effect: &SkillEffect,
+    skill_id: &String,
     skill_type: SkillType,
 ) -> SkillEffect {
     let mut new_skill_effect = skill_effect.clone();
 
     skills_updater::compute_skill_specs_effect(
+        skill_id,
         skill_type,
         &mut new_skill_effect,
         stats_updater::compute_conditional_modifiers(
@@ -525,6 +534,7 @@ fn repeat_skill<'a>(
 
     let character_hit = apply_repeated_skill_on_targets(
         events_queue,
+        &repeated_skill_effect.skill_id,
         repeated_skill_effect.skill_type,
         &repeated_skill_effect.targets_group,
         me,
