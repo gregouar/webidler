@@ -367,6 +367,7 @@ pub enum OldStatType {
     },
     StatConverter(OldStatConverterSpecs),
     GoldFind,
+    PowerLevel,
     Description2(String),
 }
 
@@ -559,6 +560,7 @@ impl From<OldStatType> for StatType {
                 repeat,
             },
             OldStatType::Description2(d) => Description2(d),
+            OldStatType::PowerLevel => PowerLevel,
         }
     }
 }
@@ -638,7 +640,6 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
 pub struct OldStatConverterSpecs {
     pub source: StatConverterSource,
     pub target_stat: Box<OldStatType>,
-    pub target_modifier: Modifier,
 
     #[serde(default)]
     pub is_extra: bool,
