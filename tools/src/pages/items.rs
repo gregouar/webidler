@@ -21,7 +21,9 @@ use shared::data::{
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
     skill::{DamageType, SkillType},
-    stat_effect::{ArmorStatType, LuckyRollType, MinMax, StatEffect, StatSkillFilter, StatType},
+    stat_effect::{
+        ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+    },
 };
 use strum::IntoEnumIterator;
 

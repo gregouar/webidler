@@ -263,6 +263,8 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": null,
                 "min_max": null
               }
@@ -387,6 +389,8 @@
               "stat": {
                 "Damage": {
                   "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null
                 }
@@ -455,6 +459,8 @@
         "stat": {
           "Damage": {
             "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": null,
             "min_max": null
           }
@@ -469,16 +475,32 @@
       },
       {
         "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "shield_bash",
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -33.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "SkillTargetModifier": {
             "skill_type": null,
+            "skill_id": "shield_bash",
+            "skill_description": null,
             "range": "Any",
             "shape": null,
             "repeat": {
               "min_value": 2,
               "max_value": 4,
               "target": "Different"
-            },
-            "skill_id": "shield_bash"
+            }
           }
         },
         "modifier": "Flat",
@@ -540,6 +562,8 @@
           "stat": {
             "Damage": {
               "skill_type": "Attack",
+              "skill_id": null,
+              "skill_description": null,
               "damage_type": null,
               "min_max": null
             }
@@ -644,7 +668,9 @@
             "stat": {
               "StatusDuration": {
                 "status_type": null,
-                "skill_type": null
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null
               }
             },
             "modifier": "Flat",
@@ -673,6 +699,8 @@
                       "stat": {
                         "Damage": {
                           "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
                           "damage_type": null,
                           "min_max": null
                         }
@@ -706,13 +734,17 @@
               {
                 "StatusDuration": {
                   "status_type": null,
-                  "skill_type": null
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
                 }
               },
               {
                 "StatusPower": {
                   "status_type": null,
                   "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
                   "min_max": null
                 }
               }

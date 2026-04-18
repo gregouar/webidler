@@ -176,6 +176,9 @@ pub struct OldItemModifiers {
 
     #[serde(default)]
     pub quality: f32,
+
+    #[serde(default)]
+    pub upgrade_level: u8,
 }
 
 impl From<OldItemModifiers> for ItemModifiers {
@@ -187,7 +190,7 @@ impl From<OldItemModifiers> for ItemModifiers {
             level: value.level,
             affixes: value.affixes.into_iter().map(Into::into).collect(),
             quality: value.quality,
-            upgrade_level: 0,
+            upgrade_level: value.upgrade_level,
         }
     }
 }

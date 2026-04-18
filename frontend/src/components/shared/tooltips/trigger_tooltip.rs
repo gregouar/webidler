@@ -4,7 +4,7 @@ use leptos::prelude::*;
 use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
-    skill::TargetType,
+    skill::{SkillType, TargetType},
     stat_effect::{StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
@@ -33,11 +33,15 @@ pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoVie
         .collect::<Vec<_>>();
 
     let details_infos = show_details.then(|| {
-        format!(
-            " ({}, {})",
-            skill_type_str(Some(trigger.triggered_effect.skill_type)),
-            trigger_target_str(trigger.triggered_effect.target)
-        )
+        if matches!(trigger.triggered_effect.skill_type, SkillType::Other) {
+            format!(" ({})", trigger_target_str(trigger.triggered_effect.target))
+        } else {
+            format!(
+                " ({}, {})",
+                skill_type_str(Some(trigger.triggered_effect.skill_type)),
+                trigger_target_str(trigger.triggered_effect.target)
+            )
+        }
     });
 
     let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
