@@ -36,4 +36,12 @@ impl DataContext {
 
         Ok(())
     }
+
+    pub fn skill_name(&self, skill_id: &str) -> String {
+        self.skill_specs
+            .read_untracked()
+            .get(skill_id)
+            .map(|skill| skill.base.name.clone())
+            .unwrap_or(skill_id.to_string())
+    }
 }

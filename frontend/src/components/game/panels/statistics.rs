@@ -583,7 +583,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                             {make_stat(
                                 StatType::Damage {
-                                    skill_filter: Some(SkillType::Attack),
+                                    skill_filter: StatSkillFilter {
+                                        skill_type: Some(SkillType::Attack),
+                                        ..Default::default()
+                                    },
                                     damage_type: None,
                                     min_max: None,
                                 },
@@ -591,7 +594,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                             {make_stat(
                                 StatType::Damage {
-                                    skill_filter: Some(SkillType::Spell),
+                                    skill_filter: StatSkillFilter {
+                                        skill_type: Some(SkillType::Spell),
+                                        ..Default::default()
+                                    },
                                     damage_type: None,
                                     min_max: None,
                                 },

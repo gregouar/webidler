@@ -602,7 +602,7 @@ fn StatusIcon(
                                 DamageType::Poison => "passives/scorpion_tail.svg".into(),
                                 DamageType::Storm => "passives/storm_damage.svg".into(),
                             }
-                        } else if let Some(skill_type) = skill_type {
+                        } else if let Some(skill_type) = skill_filter.skill_type {
                             match skill_type {
                                 SkillType::Attack => "passives/attack.svg".into(),
                                 SkillType::Spell => "passives/spell.svg".into(),
@@ -634,7 +634,7 @@ fn StatusIcon(
                     StatType::SuccessChance {
                         skill_filter,
                         effect_type,
-                    } => match (skill_type, effect_type) {
+                    } => match (skill_filter.skill_type, effect_type) {
                         (
                             _,
                             Some(StatSkillEffectType::ApplyStatus {

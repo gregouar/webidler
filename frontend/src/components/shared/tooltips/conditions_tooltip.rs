@@ -1,7 +1,7 @@
 use shared::data::{
     conditional_modifier::Condition,
     skill::{DamageType, SkillType},
-    stat_effect::{StatStatusType, StatType},
+    stat_effect::{StatSkillFilter, StatStatusType, StatType},
 };
 
 use crate::components::shared::tooltips::effects_tooltip;
@@ -46,7 +46,14 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
                 skill_type,
             } => format!(
                 " per {}",
-                effects_tooltip::skill_status_type_str(*skill_type, status_type.as_ref(), false),
+                effects_tooltip::skill_status_type_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_type.as_ref(),
+                    false
+                ),
             ),
             Condition::MaximumLife => " on Maximum Life".into(),
             Condition::MaximumMana => " on Maximum Mana".into(),

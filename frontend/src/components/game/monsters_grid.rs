@@ -7,7 +7,7 @@ use rand::Rng;
 use shared::data::monster::MonsterRarity;
 use shared::data::player::CharacterSpecs;
 use shared::data::skill::{DamageType, SkillType};
-use shared::data::stat_effect::StatStatusType;
+use shared::data::stat_effect::{StatSkillFilter, StatStatusType};
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 use strum::IntoEnumIterator;
 
@@ -704,7 +704,10 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                                                 {format!(
                                                     " {} Resilience",
                                                     effects_tooltip::skill_status_type_str(
-                                                        Some(skill_type),
+                                                        &StatSkillFilter {
+                                                            skill_type: Some(skill_type),
+                                                            ..Default::default()
+                                                        },
                                                         status_type.as_ref(),
                                                         true,
                                                     ),

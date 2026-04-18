@@ -11,7 +11,10 @@ use shared::{
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::{ArmorStatType, StatEffect, StatSkillEffectType, StatStatusType, StatType},
+        stat_effect::{
+            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
+            StatType,
+        },
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -1413,7 +1416,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Evade(None), Modifier::Flat),
         (
             StatType::Damage {
-                skill_filter: None,
+                skill_filter: Default::default(),
                 damage_type: None,
                 min_max: None,
             },
@@ -1421,7 +1424,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_filter: Some(SkillType::Attack),
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                },
                 damage_type: None,
                 min_max: None,
             },
@@ -1429,7 +1435,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_filter: Some(SkillType::Spell),
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Spell),
+                    ..Default::default()
+                },
                 damage_type: None,
                 min_max: None,
             },
@@ -1437,7 +1446,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_filter: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Physical),
                 min_max: None,
             },
@@ -1445,7 +1454,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_filter: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Fire),
                 min_max: None,
             },
@@ -1453,7 +1462,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_filter: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Poison),
                 min_max: None,
             },
@@ -1461,22 +1470,28 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::Damage {
-                skill_filter: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Storm),
                 min_max: None,
             },
             Modifier::More,
         ),
-        (StatType::CritDamage(None), Modifier::More),
-        (StatType::CritChance(None), Modifier::Increased),
+        (StatType::CritDamage(Default::default()), Modifier::More),
         (
-            StatType::CritChance(Some(SkillType::Spell)),
+            StatType::CritChance(Default::default()),
+            Modifier::Increased,
+        ),
+        (
+            StatType::CritChance(StatSkillFilter {
+                skill_type: Some(SkillType::Spell),
+                ..Default::default()
+            }),
             Modifier::Increased,
         ),
         (
             StatType::StatusPower {
                 status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
-                skill_filter: None,
+                skill_filter: Default::default(),
                 min_max: None,
             },
             Modifier::More,
@@ -1484,7 +1499,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusPower {
                 status_type: None,
-                skill_filter: Some(SkillType::Curse),
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Curse),
+                    ..Default::default()
+                },
                 min_max: None,
             },
             Modifier::Increased,
@@ -1492,13 +1510,13 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusDuration {
                 status_type: None,
-                skill_filter: None,
+                skill_filter: Default::default(),
             },
             Modifier::Increased,
         ),
         (
             StatType::SuccessChance {
-                skill_filter: None,
+                skill_filter: Default::default(),
                 effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
             },
             Modifier::Increased,
@@ -1506,16 +1524,25 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Restore {
                 restore_type: Some(RestoreType::Life),
-                skill_filter: None,
+                skill_filter: Default::default(),
             },
             Modifier::Increased,
         ),
-        (StatType::Speed(None), Modifier::Increased),
+        (StatType::Speed(Default::default()), Modifier::Increased),
         (
-            StatType::Speed(Some(SkillType::Attack)),
+            StatType::Speed(StatSkillFilter {
+                skill_type: Some(SkillType::Attack),
+                ..Default::default()
+            }),
             Modifier::Increased,
         ),
-        (StatType::Speed(Some(SkillType::Spell)), Modifier::Increased),
+        (
+            StatType::Speed(StatSkillFilter {
+                skill_type: Some(SkillType::Spell),
+                ..Default::default()
+            }),
+            Modifier::Increased,
+        ),
         (StatType::MovementSpeed, Modifier::Increased),
         (StatType::GoldFind, Modifier::More),
         (
@@ -1532,7 +1559,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             },
             Modifier::Flat,
         ),
-        (StatType::SkillLevel(None), Modifier::Flat),
+        (StatType::SkillLevel(Default::default()), Modifier::Flat),
         (StatType::ItemRarity, Modifier::Increased),
         (StatType::ItemLevel, Modifier::Flat),
         (StatType::GemsFind, Modifier::Increased),
