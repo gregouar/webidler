@@ -12,8 +12,8 @@ use shared::data::{
         SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        EffectsMap, LuckyRollType, Matchable, MinMax, SkillFilterMatchable, StatConverterSource,
-        StatEffect, StatType, compare_options,
+        EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
+        compare_options,
     },
 };
 

@@ -4,14 +4,14 @@
     "icon": "items/maps/edict.webp",
     "description": null,
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Map"
     ],
     "min_area_level": 100,
     "rarity": "Magic",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -19,26 +19,26 @@
       "area_id": null,
       "reward_picks": 0,
       "reward_slots": 1,
-      "loot_tables": [],
+      "loot_tables": [ ],
       "replace_area_id": null
     },
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "edict_2": {
     "name": "Grand Edict",
     "icon": "items/maps/edict_grand.webp",
     "description": null,
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Map"
     ],
     "min_area_level": 250,
     "rarity": "Magic",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -46,19 +46,19 @@
       "area_id": null,
       "reward_picks": 1,
       "reward_slots": 1,
-      "loot_tables": [],
+      "loot_tables": [ ],
       "replace_area_id": null
     },
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "edict_menu": {
     "name": "Regulars' Menu",
     "icon": "items/maps/edict_menu.webp",
     "description": "Not listed. Not advertised. Ask for it only if you know the faces at the bar.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Map"
     ],
@@ -115,7 +115,7 @@
           "damage_type": null
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
@@ -147,8 +147,8 @@
               ],
               "duration": 3.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -164,19 +164,19 @@
       "area_id": "inn_basement.json",
       "reward_picks": 0,
       "reward_slots": 1,
-      "loot_tables": [],
+      "loot_tables": [ ],
       "replace_area_id": "inn_basement_2.json"
     },
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "edict_treasure_map": {
     "name": "Cursed Treasure Map",
     "icon": "items/maps/edict_treasure_map.webp",
     "description": "It does not lead to treasure. It leads to what remains of those who sought it.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Map"
     ],
@@ -259,7 +259,7 @@
           "damage_type": null
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
@@ -286,8 +286,8 @@
               ],
               "duration": 3.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -309,15 +309,15 @@
       "replace_area_id": null
     },
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "edict_witch": {
     "name": "Forbidden Rites",
     "icon": "items/maps/edict_witch.webp",
     "description": "Amelia carved the last sigils into living flesh. Her brood waits in shadow, and the Forbidden Rite awakens.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Map"
     ],
@@ -374,7 +374,7 @@
           "damage_type": null
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
@@ -389,7 +389,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": null
+                        "Speed": { }
                       },
                       "modifier": "More",
                       "debuff": true
@@ -403,8 +403,8 @@
               ],
               "duration": 5.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -420,11 +420,11 @@
       "area_id": "witch_lair.json",
       "reward_picks": 1,
       "reward_slots": 2,
-      "loot_tables": [],
+      "loot_tables": [ ],
       "replace_area_id": "witch_lair_2.json"
     },
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

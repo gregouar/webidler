@@ -13,7 +13,6 @@ use shared::data::{
     },
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
-        compare_options,
     },
     values::NonNegative,
 };
@@ -95,14 +94,10 @@ fn compute_weapon_specs(
     for effect in effects {
         match &effect.stat {
             StatType::Speed(skill_filter)
-                if compare_options(
-                    skill_filter,
-                    &Some(StatSkillFilter {
-                        skill_type: Some(SkillType::Attack),
-                        skill_id: None,
-                        skill_description: None,
-                    }),
-                ) =>
+                if skill_filter.is_match(&StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                }) =>
             {
                 weapon_specs.cooldown.apply_negative_effect(effect)
             }
@@ -139,26 +134,18 @@ fn compute_weapon_specs(
                 }
             }
             StatType::CritChance(skill_filter)
-                if compare_options(
-                    skill_filter,
-                    &Some(StatSkillFilter {
-                        skill_type: Some(SkillType::Attack),
-                        skill_id: None,
-                        skill_description: None,
-                    }),
-                ) =>
+                if skill_filter.is_match(&StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                }) =>
             {
                 weapon_specs.crit_chance.value.apply_effect(effect)
             }
             StatType::CritDamage(skill_filter)
-                if compare_options(
-                    skill_filter,
-                    &Some(StatSkillFilter {
-                        skill_type: Some(SkillType::Attack),
-                        skill_id: None,
-                        skill_description: None,
-                    }),
-                ) =>
+                if skill_filter.is_match(&StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                }) =>
             {
                 weapon_specs.crit_damage.apply_effect(effect)
             }

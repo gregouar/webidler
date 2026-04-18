@@ -28,7 +28,7 @@
                                         "status_type": {
                                             "StatModifier": {
                                                 "stat": {
-                                                    "Speed": null
+                                                    "Speed": { }
                                                 },
                                                 "modifier": "More",
                                                 "debuff": true

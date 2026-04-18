@@ -11,7 +11,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 3, 5 ]
       }
@@ -29,7 +29,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 7, 10 ]
       }
@@ -47,7 +47,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 13, 15 ]
       }
@@ -65,7 +65,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 17, 20 ]
       }
@@ -83,7 +83,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 23, 25 ]
       }
@@ -101,7 +101,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 27, 30 ]
       }
@@ -119,7 +119,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 33, 35 ]
       }
@@ -137,7 +137,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 37, 40 ]
       }
@@ -155,7 +155,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 43, 45 ]
       }
@@ -173,7 +173,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Increased",
         "value": [ 47, 50 ]
       }

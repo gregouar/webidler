@@ -5,7 +5,7 @@ use shared::data::{
     conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatStatusType, StatType},
+    stat_effect::{StatSkillFilter, StatStatusType, StatType},
     trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
@@ -437,14 +437,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_stat(
                                 StatType::Restore {
                                     restore_type: None,
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                 },
                                 Modifier::Increased,
                             )}
                             {make_opt_stat(
                                 StatType::Restore {
                                     restore_type: Some(RestoreType::Life),
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                 },
                                 Modifier::Increased,
                                 0.0,
@@ -452,7 +452,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_opt_stat(
                                 StatType::Restore {
                                     restore_type: Some(RestoreType::Mana),
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                 },
                                 Modifier::Increased,
                                 0.0,
@@ -460,14 +460,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_stat(
                                 StatType::StatusDuration {
                                     status_type: None,
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                 },
                                 Modifier::Increased,
                             )}
                             {make_stat(
                                 StatType::StatusPower {
                                     status_type: None,
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     min_max: None,
                                 },
                                 Modifier::Increased,
@@ -476,7 +476,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_opt_stat(
                                 StatType::StatusPower {
                                     status_type: None,
-                                    skill_filter: Some(SkillType::Blessing),
+                                    skill_filter: StatSkillFilter {
+                                        skill_type: Some(SkillType::Blessing),
+                                        ..Default::default()
+                                    },
                                     min_max: None,
                                 },
                                 Modifier::Increased,
@@ -485,7 +488,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_opt_stat(
                                 StatType::StatusDuration {
                                     status_type: None,
-                                    skill_filter: Some(SkillType::Blessing),
+                                    skill_filter: StatSkillFilter {
+                                        skill_type: Some(SkillType::Blessing),
+                                        ..Default::default()
+                                    },
                                 },
                                 Modifier::Increased,
                                 0.0,
@@ -493,7 +499,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_opt_stat(
                                 StatType::StatusPower {
                                     status_type: None,
-                                    skill_filter: Some(SkillType::Curse),
+                                    skill_filter: StatSkillFilter {
+                                        skill_type: Some(SkillType::Curse),
+                                        ..Default::default()
+                                    },
                                     min_max: None,
                                 },
                                 Modifier::Increased,
@@ -502,14 +511,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             {make_opt_stat(
                                 StatType::StatusDuration {
                                     status_type: None,
-                                    skill_filter: Some(SkillType::Curse),
+                                    skill_filter: StatSkillFilter {
+                                        skill_type: Some(SkillType::Curse),
+                                        ..Default::default()
+                                    },
                                 },
                                 Modifier::Increased,
                                 0.0,
                             )}
                             {make_opt_stat(
                                 StatType::SuccessChance {
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     effect_type: None,
                                 },
                                 Modifier::Increased,
@@ -518,24 +530,37 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         </StatCategory>
 
                         <StatCategory title="Combat">
-                            {make_stat(StatType::Speed(None), Modifier::Increased)}
+                            {make_stat(StatType::Speed(Default::default()), Modifier::Increased)}
                             {make_stat(
-                                StatType::Speed(Some(SkillType::Attack)),
+                                StatType::Speed(StatSkillFilter {
+                                    skill_type: Some(SkillType::Attack),
+                                    ..Default::default()
+                                }),
                                 Modifier::Increased,
                             )}
                             {make_stat(
-                                StatType::Speed(Some(SkillType::Spell)),
+                                StatType::Speed(StatSkillFilter {
+                                    skill_type: Some(SkillType::Spell),
+                                    ..Default::default()
+                                }),
                                 Modifier::Increased,
-                            )} {make_stat(StatType::CritChance(None), Modifier::Increased)}
+                            )}
+                            {make_stat(
+                                StatType::CritChance(Default::default()),
+                                Modifier::Increased,
+                            )}
                             {make_opt_stat(
-                                StatType::CritChance(Some(SkillType::Spell)),
+                                StatType::CritChance(StatSkillFilter {
+                                    skill_type: Some(SkillType::Spell),
+                                    ..Default::default()
+                                }),
                                 Modifier::Increased,
                                 0.0,
                             )}
                             {make_opt_stat(
                                 StatType::StatConditionalModifier {
                                     stat: Box::new(StatType::Damage {
-                                        skill_filter: None,
+                                        skill_filter: Default::default(),
                                         damage_type: None,
                                         min_max: None,
                                     }),
@@ -549,7 +574,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         <StatCategory title="Damage">
                             {make_opt_stat(
                                 StatType::Damage {
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     damage_type: None,
                                     min_max: None,
                                 },
@@ -574,7 +599,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                             {make_opt_stat(
                                 StatType::Damage {
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Physical),
                                     min_max: None,
                                 },
@@ -583,7 +608,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                             {make_opt_stat(
                                 StatType::Damage {
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Fire),
                                     min_max: None,
                                 },
@@ -592,7 +617,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                             {make_opt_stat(
                                 StatType::Damage {
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Poison),
                                     min_max: None,
                                 },
@@ -601,7 +626,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             )}
                             {make_opt_stat(
                                 StatType::Damage {
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Storm),
                                     min_max: None,
                                 },
@@ -613,12 +638,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     status_type: Some(StatStatusType::DamageOverTime {
                                         damage_type: None,
                                     }),
-                                    skill_filter: None,
+                                    skill_filter: Default::default(),
                                     min_max: None,
                                 },
                                 Modifier::More,
                                 0.0,
-                            )} {make_opt_stat(StatType::CritDamage(None), Modifier::More, 0.0)}
+                            )}
+                            {make_opt_stat(
+                                StatType::CritDamage(Default::default()),
+                                Modifier::More,
+                                0.0,
+                            )}
                         </StatCategory>
 
                         <TriggersStats class="col-span-2 xl:col-span-3" />

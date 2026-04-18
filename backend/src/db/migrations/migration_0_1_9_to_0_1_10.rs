@@ -1,21 +1,21 @@
 use std::collections::{BTreeSet, HashMap};
 
+use anyhow::Context;
 use serde::{Deserialize, Serialize};
 use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
     area::AreaLevel,
     conditional_modifier::Condition,
-    item::{ItemModifiers, ItemRarity, ItemSlot},
+    item::{ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
     modifier::Modifier,
     passive::PassivesTreeAscension,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
-        LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
-        StatSkillEffectType, StatSkillFilter, StatStatusType, StatType,
+        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusType, StatType,
     },
-    trigger::HitTrigger,
     user::UserCharacterId,
 };
 
@@ -35,8 +35,12 @@ pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Re
 
     stop_all_grinds(&mut *tx).await?;
 
-    migrate_character_data(&mut tx, master_store).await?;
-    migrate_stash_items(&mut tx).await?;
+    migrate_character_data(&mut tx, master_store)
+        .await
+        .context("migrate_character_data")?;
+    migrate_stash_items(&mut tx)
+        .await
+        .context("migrate_stash_items")?;
 
     tx.commit().await?;
     Ok(())
@@ -72,8 +76,8 @@ async fn migrate_character_data(
     .await?;
 
     for character_data in characters_data {
-        let old_inventory: OldInventoryData =
-            rmp_serde::from_slice(&character_data.inventory_data)?;
+        let old_inventory: OldInventoryData = rmp_serde::from_slice(&character_data.inventory_data)
+            .context(format!("inventory of '{}'", character_data.character_id))?;
         let inventory_data: InventoryData = old_inventory.into();
         upsert_character_inventory_data(
             &mut **executor,
@@ -234,7 +238,7 @@ impl From<OldAffixEffect> for AffixEffect {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct OldStatEffect {
     pub stat: OldStatType,
-    pub modifier: OldModifier,
+    pub modifier: Modifier,
     pub value: f64,
 
     #[serde(default)]
@@ -243,15 +247,9 @@ pub struct OldStatEffect {
 
 impl From<OldStatEffect> for StatEffect {
     fn from(value: OldStatEffect) -> Self {
-        let modifier = match value.modifier {
-            OldModifier::Multiplier if value.stat.is_multiplicative() => Modifier::More,
-            OldModifier::Multiplier => Modifier::Increased,
-            OldModifier::Flat => Modifier::Flat,
-            OldModifier::More => Modifier::More,
-        };
         Self {
             stat: value.stat.into(),
-            modifier,
+            modifier: value.modifier,
             value: value.value,
             bypass_ignore: value.bypass_ignore,
         }
@@ -380,8 +378,21 @@ impl From<OldStatType> for StatType {
             OldStatType::LifeRegen => LifeRegen,
             OldStatType::Mana => Mana,
             OldStatType::ManaRegen => ManaRegen,
-            OldStatType::ManaCost { skill_type } => ManaCost { skill_type },
-            OldStatType::Armor(damage_type) => Armor(damage_type),
+            OldStatType::ManaCost { skill_type } => ManaCost {
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
+            },
+            OldStatType::Armor(damage_type) => {
+                Armor(damage_type.map(|damage_type| match damage_type {
+                    DamageType::Physical => ArmorStatType::Physical,
+                    DamageType::Fire => ArmorStatType::Fire,
+                    DamageType::Poison => ArmorStatType::Poison,
+                    DamageType::Storm => ArmorStatType::Storm,
+                }))
+            }
             OldStatType::DamageResistance {
                 skill_type,
                 damage_type,
@@ -390,65 +401,78 @@ impl From<OldStatType> for StatType {
                 damage_type,
             },
             OldStatType::TakeFromManaBeforeLife => TakeFromManaBeforeLife,
-            OldStatType::Block(skill_type) => Block(skill_type.map(|skill_type| StatSkillFilter {
-                skill_type: Some(skill_type),
-                ..Default::default()
-            })),
+            OldStatType::Block(skill_type) => Block(skill_type),
             OldStatType::BlockDamageTaken => BlockDamageTaken,
             OldStatType::Damage {
                 skill_type,
                 damage_type,
+                min_max,
             } => Damage {
-                skill_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
                 damage_type,
-                min_max: None,
+                min_max,
             },
-            OldStatType::MinDamage {
-                skill_type,
-                damage_type,
-            } => Damage {
-                skill_type,
-                damage_type,
-                min_max: Some(MinMax::Min),
-            },
-            OldStatType::MaxDamage {
-                skill_type,
-                damage_type,
-            } => Damage {
-                skill_type,
-                damage_type,
-                min_max: Some(MinMax::Max),
-            },
-            OldStatType::LifeOnHit(hit_trigger) => RestoreOnHit {
-                restore_type: RestoreType::Life,
-                skill_type: hit_trigger.skill_type,
-            },
-            OldStatType::ManaOnHit(hit_trigger) => RestoreOnHit {
-                restore_type: RestoreType::Mana,
-                skill_type: hit_trigger.skill_type,
-            },
-            OldStatType::Restore(restore_type) => Restore {
+            OldStatType::RestoreOnHit {
                 restore_type,
-                skill_type: None,
+                skill_type,
+            } => RestoreOnHit {
+                restore_type,
+                skill_type,
             },
-            OldStatType::CritChance(skill_type) => CritChance(skill_type),
-            OldStatType::CritChances(skill_type) => CritChance(skill_type),
-            OldStatType::CritDamage(skill_type) => CritDamage(skill_type),
-            OldStatType::StatusPower(stat_status_type) => StatusPower {
-                status_type: stat_status_type,
-                skill_type: None,
-                min_max: None,
+            OldStatType::Restore {
+                restore_type,
+                skill_type,
+            } => Restore {
+                restore_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
             },
-            OldStatType::StatusDuration(stat_status_type) => StatusDuration {
-                status_type: stat_status_type,
-                skill_type: None,
+            OldStatType::CritChance(skill_type) => CritChance(StatSkillFilter {
+                skill_type,
+                skill_id: None,
+                skill_description: None,
+            }),
+            OldStatType::CritDamage(skill_type) => CritDamage(StatSkillFilter {
+                skill_type,
+                skill_id: None,
+                skill_description: None,
+            }),
+            OldStatType::StatusPower {
+                status_type,
+                skill_type,
+                min_max,
+            } => StatusPower {
+                status_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
+                min_max,
             },
-            OldStatType::SpellPower => Damage {
-                skill_type: Some(SkillType::Spell),
-                damage_type: None,
-                min_max: None,
+            OldStatType::StatusDuration {
+                status_type,
+                skill_type,
+            } => StatusDuration {
+                status_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
             },
-            OldStatType::Speed(skill_type) => Speed(skill_type),
+            OldStatType::Speed(skill_type) => Speed(StatSkillFilter {
+                skill_type,
+                skill_id: None,
+                skill_description: None,
+            }),
             OldStatType::MovementSpeed => MovementSpeed,
             OldStatType::GoldFind => GoldFind,
             OldStatType::ItemRarity => ItemRarity,
@@ -457,7 +481,11 @@ impl From<OldStatType> for StatType {
                 skill_type,
                 roll_type,
             } => Lucky {
-                skill_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
                 roll_type: roll_type.into(),
             },
             OldStatType::SkillConditionalModifier {
@@ -466,44 +494,124 @@ impl From<OldStatType> for StatType {
                 conditions,
             } => SkillConditionalModifier {
                 stat: Box::new((*stat).into()),
-                skill_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
                 conditions,
             },
-            OldStatType::SkillLevel(skill_type) => SkillLevel(skill_type),
+            OldStatType::SkillLevel(skill_type) => SkillLevel(StatSkillFilter {
+                skill_type,
+                skill_id: None,
+                skill_description: None,
+            }),
             OldStatType::StatConverter(stat_converter_specs) => {
-                if let OldStatConverterSource::ThreatLevel = stat_converter_specs.source {
-                    StatConditionalModifier {
-                        stat: Box::new((*stat_converter_specs.target_stat).into()),
-                        conditions: vec![Condition::ThreatLevel],
-                        conditions_duration: 0,
-                    }
-                } else {
-                    StatConverter(stat_converter_specs.into())
-                }
+                StatConverter(stat_converter_specs.into())
             }
-            OldStatType::StatConditionalModifier { stat, conditions } => StatConditionalModifier {
+            OldStatType::StatConditionalModifier {
+                stat,
+                conditions,
+                conditions_duration,
+            } => StatConditionalModifier {
                 stat: Box::new((*stat).into()),
                 conditions,
-                conditions_duration: 0,
+                conditions_duration,
             },
             OldStatType::SuccessChance {
                 skill_type,
                 effect_type,
             } => SuccessChance {
-                skill_type,
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id: None,
+                    skill_description: None,
+                },
                 effect_type: effect_type.map(Into::into),
+            },
+            OldStatType::Description(d) => Description(d),
+            OldStatType::GemsFind => GemsFind,
+            OldStatType::ItemLevel => ItemLevel,
+            OldStatType::Evade(damage_type) => Evade(damage_type),
+            OldStatType::EvadeDamageTaken => EvadeDamageTaken,
+            OldStatType::StatusResistance {
+                skill_type,
+                status_type,
+            } => StatusResistance {
+                skill_type,
+                status_type,
+            },
+            OldStatType::TakeFromLifeBeforeMana => TakeFromLifeBeforeMana,
+            OldStatType::SkillTargetModifier {
+                skill_type,
+                range,
+                shape,
+                repeat,
+                skill_id,
+            } => SkillTargetModifier {
+                skill_filter: StatSkillFilter {
+                    skill_type,
+                    skill_id,
+                    skill_description: None,
+                },
+                range,
+                shape,
+                repeat,
+            },
+            OldStatType::Description2(d) => Description2(d),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum OldStatStatusType {
+    Stun,
+    DamageOverTime {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
+    StatModifier {
+        #[serde(default)]
+        debuff: Option<bool>,
+        #[serde(default)]
+        stat: Option<Box<OldStatType>>,
+    },
+    Trigger {
+        #[serde(default)]
+        trigger_id: Option<String>,
+        #[serde(default)]
+        trigger_description: Option<String>,
+    },
+}
+
+impl From<OldStatStatusType> for StatStatusType {
+    fn from(value: OldStatStatusType) -> Self {
+        use StatStatusType::*;
+        match value {
+            OldStatStatusType::Stun => Stun,
+            OldStatStatusType::DamageOverTime { damage_type } => DamageOverTime { damage_type },
+            OldStatStatusType::StatModifier { debuff, stat } => StatModifier {
+                debuff,
+                stat: stat.map(|stat| Box::new((*stat).into())),
+            },
+            OldStatStatusType::Trigger {
+                trigger_id,
+                trigger_description,
+            } => Trigger {
+                trigger_id,
+                trigger_description,
             },
         }
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum OldStatSkillEffectType {
     FlatDamage {
         // damage_type: Option<DamageType>,
     },
     ApplyStatus {
-        // status_type: Option<StatStatusType>,
+        status_type: Option<OldStatStatusType>,
     },
     Restore {
         #[serde(default)]
@@ -517,7 +625,9 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
         use StatSkillEffectType::*;
         match value {
             OldStatSkillEffectType::FlatDamage {} => FlatDamage {},
-            OldStatSkillEffectType::ApplyStatus {} => ApplyStatus { status_type: None },
+            OldStatSkillEffectType::ApplyStatus { status_type } => ApplyStatus {
+                status_type: status_type.map(|status_type| status_type.into()),
+            },
             OldStatSkillEffectType::Restore { restore_type } => Restore { restore_type },
             OldStatSkillEffectType::Resurrect => Resurrect,
         }
@@ -526,9 +636,9 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct OldStatConverterSpecs {
-    pub source: OldStatConverterSource,
+    pub source: StatConverterSource,
     pub target_stat: Box<OldStatType>,
-    pub target_modifier: OldModifier,
+    pub target_modifier: Modifier,
 
     #[serde(default)]
     pub is_extra: bool,
@@ -547,57 +657,7 @@ impl From<OldStatConverterSpecs> for StatConverterSpecs {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum OldStatConverterSource {
-    CritDamage,
-    MinDamage {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    MaxDamage {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    Damage {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    ThreatLevel,
-    MaxLife,
-    MaxMana,
-    ManaRegen,
-    LifeRegen,
-    Block(SkillType),
-}
-
-impl From<OldStatConverterSource> for StatConverterSource {
-    fn from(value: OldStatConverterSource) -> Self {
-        use StatConverterSource::*;
-        match value {
-            OldStatConverterSource::CritDamage => CritDamage,
-            OldStatConverterSource::MinDamage { damage_type } => Damage {
-                damage_type,
-                min_max: Some(MinMax::Min),
-            },
-            OldStatConverterSource::MaxDamage { damage_type } => Damage {
-                damage_type,
-                min_max: Some(MinMax::Max),
-            },
-            OldStatConverterSource::Damage { damage_type } => Damage {
-                damage_type,
-                min_max: None,
-            },
-            OldStatConverterSource::ThreatLevel => todo!(),
-            OldStatConverterSource::MaxLife => MaxLife,
-            OldStatConverterSource::MaxMana => MaxMana,
-            OldStatConverterSource::ManaRegen => ManaRegen,
-            OldStatConverterSource::LifeRegen => LifeRegen,
-            OldStatConverterSource::Block(skill_type) => Block(skill_type),
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum OldLuckyRollType {
     Damage {
         #[serde(default)]
@@ -606,44 +666,8 @@ pub enum OldLuckyRollType {
     Block,
     Evade(Option<DamageType>),
     CritChance,
-    CritChances,
-    SuccessChance,
-}
-
-impl From<OldLuckyRollType> for LuckyRollType {
-    fn from(value: OldLuckyRollType) -> Self {
-        use LuckyRollType::*;
-        match value {
-            OldLuckyRollType::Damage { damage_type } => Damage { damage_type },
-            OldLuckyRollType::Block => Block,
-            OldLuckyRollType::Evade(damage_type) => Evade(damage_type),
-            OldLuckyRollType::CritChance => CritChance,
-            OldLuckyRollType::CritChances => CritChance,
-            OldLuckyRollType::SuccessChance => SuccessChance { effect_type: None },
-        }
-    }
-}
-
-#[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default,
-)]
-pub enum OldModifier {
-    #[default]
-    Multiplier,
-    Flat,
-    More,
-}
-
-impl OldStatType {
-    pub fn is_multiplicative(&self) -> bool {
-        use OldStatType::*;
-
-        matches!(
-            self,
-            Damage { .. }
-                | CritDamage(_)
-                | StatusPower(Some(StatStatusType::DamageOverTime { .. }))
-                | GoldFind
-        )
-    }
+    SuccessChance {
+        #[serde(default)]
+        effect_type: Option<OldStatSkillEffectType>,
+    },
 }

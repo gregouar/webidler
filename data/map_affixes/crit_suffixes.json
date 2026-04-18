@@ -11,13 +11,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 100
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 10
       },
@@ -47,13 +47,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 140
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 12
       },
@@ -83,13 +83,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 180
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 14
       },
@@ -119,13 +119,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 220
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 16
       },
@@ -155,13 +155,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 260
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 18
       },
@@ -191,13 +191,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 300
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 20
       },
@@ -227,13 +227,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 340
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 22
       },
@@ -263,13 +263,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 380
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 24
       },
@@ -299,13 +299,13 @@
     "effects": [
       {
         "scope": "Local",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "Flat",
         "value": 420
       },
       {
         "scope": "Local",
-        "stat": { "CritChance": null },
+        "stat": { "CritChance": { } },
         "modifier": "Flat",
         "value": 30
       },

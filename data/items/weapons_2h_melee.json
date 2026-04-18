@@ -525,7 +525,7 @@
     "affixes": [
       {
         "stat": {
-          "CritDamage": null
+          "CritDamage": { }
         },
         "modifier": "Flat",
         "scope": "Local",
@@ -641,10 +641,10 @@
                 }
               },
               {
-                "CritDamage": null
+                "CritDamage": { }
               },
               {
-                "CritChance": null
+                "CritChance": { }
               }
             ],
             "conditional_modifiers": [ ]
@@ -737,7 +737,7 @@
     "affixes": [
       {
         "stat": {
-          "Speed": null
+          "Speed": { }
         },
         "modifier": "Increased",
         "scope": "Local",

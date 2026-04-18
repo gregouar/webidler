@@ -198,7 +198,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -5
       }
@@ -222,7 +222,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -10
       }
@@ -246,7 +246,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -15
       }
@@ -270,7 +270,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -20
       }
@@ -294,7 +294,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -25
       }
@@ -318,7 +318,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -30
       }
@@ -342,7 +342,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -35
       }
@@ -366,7 +366,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -40
       }
@@ -390,7 +390,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -45
       }
@@ -414,7 +414,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -50
       }

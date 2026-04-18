@@ -79,24 +79,25 @@ impl Matchable for StatSkillFilter {
     }
 }
 
-pub trait SkillFilterMatchable {
-    fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool;
-}
+// pub trait SkillFilterMatchable {
+//     fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool;
+// }
 
-impl SkillFilterMatchable for StatSkillFilter {
-    fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
+// impl SkillFilterMatchable for StatSkillFilter {
+impl StatSkillFilter {
+    pub fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
         compare_options(&self.skill_type, &Some(skill_type))
             && compare_options(&self.skill_id.as_ref(), &Some(skill_id))
     }
 }
 
-impl SkillFilterMatchable for Option<StatSkillFilter> {
-    fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
-        self.as_ref()
-            .map(|filter| filter.is_match_with_skill(skill_type, skill_id))
-            .unwrap_or(true)
-    }
-}
+// impl SkillFilterMatchable for Option<StatSkillFilter> {
+//     fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
+//         self.as_ref()
+//             .map(|filter| filter.is_match_with_skill(skill_type, skill_id))
+//             .unwrap_or(true)
+//     }
+// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
@@ -104,7 +105,7 @@ pub enum StatType {
     GemsFind,
     ItemRarity,
     ItemLevel,
-    SkillLevel(#[serde(default)] Option<StatSkillFilter>),
+    SkillLevel(#[serde(default)] StatSkillFilter),
     Armor(Option<ArmorStatType>),
     DamageResistance {
         #[serde(default)]
@@ -130,8 +131,8 @@ pub enum StatType {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    CritChance(#[serde(default)] Option<StatSkillFilter>),
-    CritDamage(#[serde(default)] Option<StatSkillFilter>),
+    CritChance(#[serde(default)] StatSkillFilter),
+    CritDamage(#[serde(default)] StatSkillFilter),
     StatusPower {
         #[serde(default)]
         status_type: Option<StatStatusType>,
@@ -152,7 +153,7 @@ pub enum StatType {
         #[serde(default)]
         effect_type: Option<StatSkillEffectType>,
     },
-    Speed(#[serde(default)] Option<StatSkillFilter>),
+    Speed(#[serde(default)] StatSkillFilter),
     RestoreOnHit {
         restore_type: RestoreType,
         #[serde(default)]
@@ -287,7 +288,7 @@ impl Matchable for StatType {
             }
             (CritChance(first), CritChance(second))
             | (CritDamage(first), CritDamage(second))
-            | (Speed(first), Speed(second)) => compare_options(first, second),
+            | (Speed(first), Speed(second)) => first.is_match(second),
             (Block(first), Block(second)) => compare_options(first, second),
             (Evade(first), Evade(second)) => compare_options(first, second),
             (
@@ -332,7 +333,7 @@ impl Matchable for StatType {
                 compare_options(status_type, status_type_2)
                     && compare_options(skill_type, skill_type_2)
             }
-            (SkillLevel(first), SkillLevel(second)) => compare_options(first, second),
+            (SkillLevel(first), SkillLevel(second)) => first.is_match(second),
             (
                 SkillConditionalModifier { skill_filter, .. },
                 SkillConditionalModifier {
