@@ -278,7 +278,7 @@ pub enum OldStatType {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_type: Option<OldStatStatusType>,
     },
     Damage {
         #[serde(default)]
@@ -292,7 +292,7 @@ pub enum OldStatType {
     CritDamage(#[serde(default)] Option<SkillType>),
     StatusPower {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_type: Option<OldStatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
@@ -300,7 +300,7 @@ pub enum OldStatType {
     },
     StatusDuration {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_type: Option<OldStatStatusType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
@@ -331,20 +331,20 @@ pub enum OldStatType {
     Lucky {
         #[serde(default)]
         skill_type: Option<SkillType>,
-        roll_type: LuckyRollType,
+        roll_type: OldLuckyRollType,
     },
     SuccessChance {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
-        effect_type: Option<StatSkillEffectType>,
+        effect_type: Option<OldStatSkillEffectType>,
     },
     SkillConditionalModifier {
-        stat: Box<StatType>,
+        stat: Box<OldStatType>,
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
-        conditions: Vec<Condition>,
+        conditions: Vec<OldCondition>,
     },
     SkillTargetModifier {
         // TODO: More control and options?
@@ -360,12 +360,12 @@ pub enum OldStatType {
         skill_id: Option<String>,
     },
     StatConditionalModifier {
-        stat: Box<StatType>,
-        conditions: Vec<Condition>,
+        stat: Box<OldStatType>,
+        conditions: Vec<OldCondition>,
         #[serde(default)]
         conditions_duration: u32,
     },
-    StatConverter(StatConverterSpecs),
+    StatConverter(OldStatConverterSpecs),
     GoldFind,
     Description2(String),
 }
@@ -449,7 +449,7 @@ impl From<OldStatType> for StatType {
                 skill_type,
                 min_max,
             } => StatusPower {
-                status_type,
+                status_type: status_type.map(|status_type| status_type.into()),
                 skill_filter: StatSkillFilter {
                     skill_type,
                     skill_id: None,
@@ -461,7 +461,7 @@ impl From<OldStatType> for StatType {
                 status_type,
                 skill_type,
             } => StatusDuration {
-                status_type,
+                status_type: status_type.map(|status_type| status_type.into()),
                 skill_filter: StatSkillFilter {
                     skill_type,
                     skill_id: None,
@@ -499,7 +499,7 @@ impl From<OldStatType> for StatType {
                     skill_id: None,
                     skill_description: None,
                 },
-                conditions,
+                conditions: conditions.into_iter().map(|c| c.into()).collect(),
             },
             OldStatType::SkillLevel(skill_type) => SkillLevel(StatSkillFilter {
                 skill_type,
@@ -515,7 +515,7 @@ impl From<OldStatType> for StatType {
                 conditions_duration,
             } => StatConditionalModifier {
                 stat: Box::new((*stat).into()),
-                conditions,
+                conditions: conditions.into_iter().map(|c| c.into()).collect(),
                 conditions_duration,
             },
             OldStatType::SuccessChance {
@@ -539,7 +539,7 @@ impl From<OldStatType> for StatType {
                 status_type,
             } => StatusResistance {
                 skill_type,
-                status_type,
+                status_type: status_type.map(|status_type| status_type.into()),
             },
             OldStatType::TakeFromLifeBeforeMana => TakeFromLifeBeforeMana,
             OldStatType::SkillTargetModifier {
@@ -670,4 +670,71 @@ pub enum OldLuckyRollType {
         #[serde(default)]
         effect_type: Option<OldStatSkillEffectType>,
     },
+}
+
+impl From<OldLuckyRollType> for LuckyRollType {
+    fn from(value: OldLuckyRollType) -> Self {
+        use LuckyRollType::*;
+        match value {
+            OldLuckyRollType::Damage { damage_type } => Damage { damage_type },
+            OldLuckyRollType::Block => Block,
+            OldLuckyRollType::Evade(damage_type) => Evade(damage_type),
+            OldLuckyRollType::CritChance => CritChance,
+            OldLuckyRollType::SuccessChance { effect_type } => SuccessChance {
+                effect_type: effect_type.map(|effect_type| effect_type.into()),
+            },
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum OldCondition {
+    HasStatus {
+        #[serde(default)]
+        status_type: Option<OldStatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        not: bool,
+    },
+    StatusStacks {
+        #[serde(default)]
+        status_type: Option<OldStatStatusType>,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    MaximumLife,
+    MaximumMana,
+    LowLife,
+    LowMana,
+    ThreatLevel,
+}
+
+impl From<OldCondition> for Condition {
+    fn from(value: OldCondition) -> Self {
+        use Condition::*;
+        match value {
+            OldCondition::HasStatus {
+                status_type,
+                skill_type,
+                not,
+            } => HasStatus {
+                status_type: status_type.map(|status_type| status_type.into()),
+                skill_type,
+                not,
+            },
+            OldCondition::StatusStacks {
+                status_type,
+                skill_type,
+            } => StatusStacks {
+                status_type: status_type.map(|status_type| status_type.into()),
+                skill_type,
+            },
+            OldCondition::MaximumLife => MaximumLife,
+            OldCondition::MaximumMana => MaximumMana,
+            OldCondition::LowLife => LowLife,
+            OldCondition::LowMana => LowMana,
+            OldCondition::ThreatLevel => ThreatLevel,
+        }
+    }
 }
