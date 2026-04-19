@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use leptos::{html::*, prelude::*};
+use shared::data::realms::Realm;
 
 use crate::components::{
     backend_client::BackendClient,
@@ -12,6 +13,12 @@ use crate::components::{
         number::{format_datetime, format_duration},
     },
 };
+
+const LEADERBOARD_REALM_TABS: [(Realm, &str); 3] = [
+    (Realm::Standard, "Standard"),
+    (Realm::StandardSSF, "Standard SSF"),
+    (Realm::Legacy, "Legacy"),
+];
 
 #[component]
 pub fn LeaderboardPanel(open: RwSignal<bool>) -> impl IntoView {
@@ -27,21 +34,49 @@ pub fn LeaderboardPanel(open: RwSignal<bool>) -> impl IntoView {
 
 #[component]
 fn LeaderboardContent() -> impl IntoView {
+    let selected_realm = RwSignal::new(Realm::Standard);
+
     let leaderboard_and_areas = LocalResource::new({
         let backend = expect_context::<BackendClient>();
-        move || async move {
-            (
-                backend.get_leaderboard().await.unwrap_or_default(),
-                backend
-                    .get_areas()
-                    .await
-                    .map(|resp| resp.areas)
-                    .unwrap_or_default(),
-            )
+        move || {
+            let selected_realm = selected_realm.get();
+            async move {
+                (
+                    backend
+                        .get_leaderboard(selected_realm)
+                        .await
+                        .unwrap_or_default(),
+                    backend
+                        .get_areas()
+                        .await
+                        .map(|resp| resp.areas)
+                        .unwrap_or_default(),
+                )
+            }
         }
     });
 
     view! {
+        <div class="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {LEADERBOARD_REALM_TABS
+                .into_iter()
+                .map(|(realm, label)| {
+                    let is_selected = Signal::derive(move || selected_realm.get() == realm);
+                    view! {
+                        <MenuListRow
+                            selected=is_selected
+                            on_click=move || selected_realm.set(realm)
+                        >
+                            <div class="px-3 py-2 text-center">
+                                <span class="text-xs sm:text-sm font-semibold uppercase tracking-[0.12em] text-amber-200/95">
+                                    {label}
+                                </span>
+                            </div>
+                        </MenuListRow>
+                    }
+                })
+                .collect::<Vec<_>>()}
+        </div>
         <Suspense fallback=move || {
             view! { "Loading..." }
         }>
@@ -118,9 +153,7 @@ fn LeaderboardContent() -> impl IntoView {
                                                                             </span>
                                                                         </div>
                                                                         <div class="text-sm text-zinc-300">
-                                                                            {entry
-                                                                                .elapsed_time
-                                                                                .map(|elapsed_time| format_duration(elapsed_time, true))}
+                                                                            {format_duration(entry.elapsed_time, true)}
                                                                         </div>
                                                                     </div>
 

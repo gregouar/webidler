@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{data::area::AreaLevel, types::Email};
+use crate::{
+    data::{area::AreaLevel, realms::Realm},
+    types::Email,
+};
 
 pub type UserId = uuid::Uuid;
 pub type UserCharacterId = uuid::Uuid;
@@ -28,11 +31,15 @@ pub enum UserCharacterActivity {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UserCharacter {
     pub user_id: UserId,
+    pub realm: Realm,
+
     pub character_id: UserCharacterId,
 
     pub name: String,
     pub portrait: String,
     pub max_area_level: AreaLevel,
+
+    pub is_ssf: bool,
 
     pub resource_gems: f64,
     pub resource_shards: f64,

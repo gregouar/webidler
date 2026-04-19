@@ -240,7 +240,29 @@ impl<'a> GameInstance<'a> {
         db::game_instances::delete_game_instance_data(&mut *tx, self.character_id).await?;
 
         if self.game_data.area_state.read().max_area_level > 0 {
-            match db::game_stats::save_game_stats(&mut *tx, self.character_id, self.game_data).await
+            if let Err(err) = db::game_stats::save_game_stats(
+                &mut *tx,
+                self.character_id,
+                &self.game_data.realm_id.clone(),
+                self.game_data,
+            )
+            .await
+            {
+                tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
+            }
+
+            match db::leaderboard::update_leaderboard(
+                &mut tx,
+                self.character_id,
+                &self.game_data.realm_id.clone(),
+                &self.game_data.area_id,
+                self.game_data.area_state.read().max_area_level as i32,
+                self.game_data
+                    .game_stats
+                    .elapsed_time_at_max_level
+                    .as_secs_f64(),
+            )
+            .await
             {
                 Ok(true) => {
                     if let Err(err) = self
@@ -260,7 +282,7 @@ impl<'a> GameInstance<'a> {
                     }
                 }
                 Err(err) => {
-                    tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
+                    tracing::error!("failed to update leaderboard '{}': {}", self.character_id, err);
                 }
                 _ => {}
             }

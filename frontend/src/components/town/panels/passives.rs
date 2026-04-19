@@ -990,7 +990,6 @@ fn AscendNode(
                         .ascended_nodes
                         .entry(node_id)
                         .or_default();
-                    // TODO: Use ascend cost
                     if *entry > 0 {
                         *entry = entry.saturating_sub(1);
                         ascension_cost.update(|ascension_cost| {
@@ -1030,20 +1029,18 @@ fn AscendConnection(
     let town_context: TownContext = expect_context();
 
     let amount_connections = Memo::new(move |_| match active_tab.get() {
-        PassivesTab::Ascend => {
+        PassivesTab::Ascend => passives_tree_ascension.with(|passives_tree_ascension| {
             passives_tree_ascension
-                .read()
                 .ascended_nodes
                 .get(&connection.from)
                 .map(|x| (*x > 0) as usize)
                 .unwrap_or_default()
                 + passives_tree_ascension
-                    .read()
                     .ascended_nodes
                     .get(&connection.to)
                     .map(|x| (*x > 0) as usize)
                     .unwrap_or_default()
-        }
+        }),
         PassivesTab::Build => {
             passives_tree_build.read().contains(&connection.from) as usize
                 + passives_tree_build.read().contains(&connection.to) as usize
@@ -1051,20 +1048,20 @@ fn AscendConnection(
     });
 
     let node_levels = Memo::new(move |_| match active_tab.get() {
-        PassivesTab::Ascend => (
-            passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&connection.from)
-                .cloned()
-                .unwrap_or_default(),
-            passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&connection.to)
-                .cloned()
-                .unwrap_or_default(),
-        ),
+        PassivesTab::Ascend => passives_tree_ascension.with(|passives_tree_ascension| {
+            (
+                passives_tree_ascension
+                    .ascended_nodes
+                    .get(&connection.from)
+                    .cloned()
+                    .unwrap_or_default(),
+                passives_tree_ascension
+                    .ascended_nodes
+                    .get(&connection.to)
+                    .cloned()
+                    .unwrap_or_default(),
+            )
+        }),
         PassivesTab::Build => (
             town_context
                 .passives_tree_ascension

@@ -2,6 +2,7 @@ use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
     market::MarketFilters,
+    realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
 };
 
@@ -48,6 +49,7 @@ pub struct MarketBuyEntry {
 
 pub async fn sell_item<'c>(
     executor: &mut Transaction<'c, Database>,
+    realm_id: &RealmId,
     stash_item_id: &StashItemId,
     recipient_id: Option<UserId>,
     price: f64,
@@ -71,9 +73,13 @@ pub async fn sell_item<'c>(
             item_damage_poison,
             item_damage_storm,
             item_crit_chance,
-            item_crit_damage
+            item_crit_damage,
+            item_cooldown,
+            item_upgrade_level,
+            item_power_level,
+            realm_id
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
         RETURNING market_id
         "#,
         stash_item_id,
@@ -92,6 +98,10 @@ pub async fn sell_item<'c>(
         stash_item_flatten_stats.item_damage_storm,
         stash_item_flatten_stats.item_crit_chance,
         stash_item_flatten_stats.item_crit_damage,
+        stash_item_flatten_stats.item_cooldown,
+        stash_item_flatten_stats.item_upgrade_level,
+        stash_item_flatten_stats.item_power_level,
+        realm_id
     )
     .fetch_one(&mut **executor)
     .await
@@ -100,6 +110,7 @@ pub async fn sell_item<'c>(
 pub async fn read_market_items<'c>(
     executor: impl DbExecutor<'c>,
     user_id: &UserId,
+    realm: Realm,
     filters: MarketFilters,
     skip: i64,
     limit: i64,
@@ -107,6 +118,8 @@ pub async fn read_market_items<'c>(
     is_deleted: bool,
 ) -> anyhow::Result<(Vec<MarketEntry>, bool)> {
     let limit_more = limit + 1;
+
+    let realm_id = realm.realm_id();
 
     let no_filter_by_name = filters.item_name.is_none();
     let item_name = filters
@@ -116,7 +129,14 @@ pub async fn read_market_items<'c>(
 
     let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
     let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
+
+    let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
+    let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
+
     let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
+
+    let no_filter_item_cooldown = filters.item_cooldown.is_none();
+    let item_cooldown = filters.item_cooldown.unwrap_or_default();
 
     let no_filter_item_damages = filters.item_damages.is_none();
     let item_damages = filters.item_damages.unwrap_or_default();
@@ -200,26 +220,32 @@ pub async fn read_market_items<'c>(
             users AS buyer ON buyer.user_id = market.deleted_by
         LEFT JOIN
             stash_items_stats AS stat1 ON stat1.stash_item_id = market.stash_item_id
+                AND stat1.realm_id = market.realm_id
                 AND stat1.item_stat = $28
                 AND stat1.stat_modifier = $29
         LEFT JOIN
             stash_items_stats AS stat2 ON stat2.stash_item_id = market.stash_item_id
+                AND stat2.realm_id = market.realm_id
                 AND stat2.item_stat = $31
                 AND stat2.stat_modifier = $32
         LEFT JOIN
             stash_items_stats AS stat3 ON stat3.stash_item_id = market.stash_item_id
+                AND stat3.realm_id = market.realm_id
                 AND stat3.item_stat = $34
                 AND stat3.stat_modifier = $35
         LEFT JOIN
             stash_items_stats AS stat4 ON stat4.stash_item_id = market.stash_item_id
+                AND stat4.realm_id = market.realm_id
                 AND stat4.item_stat = $37
                 AND stat4.stat_modifier = $38
         LEFT JOIN
             stash_items_stats AS stat5 ON stat5.stash_item_id = market.stash_item_id
+                AND stat5.realm_id = market.realm_id
                 AND stat5.item_stat = $40
                 AND stat5.stat_modifier = $41
         WHERE 
-            (
+            market.realm_id = $51
+            AND (
                 (
                     $45
                     AND market.deleted_at IS NOT NULL
@@ -246,13 +272,17 @@ pub async fn read_market_items<'c>(
             AND ($5 OR UPPER(market.item_name) LIKE $6)
             AND (market.item_level >= $7)
             AND (market.item_level <= $46)
+            AND (market.item_power_level >= $47)
+            AND (market.item_upgrade_level >= $48)
             AND ($8 = '' OR market.item_rarity = $8)
             AND ($9 = '' OR EXISTS (
                 SELECT 1
                 FROM stash_items_categories cat
                 WHERE cat.stash_item_id = market.stash_item_id
+                AND cat.realm_id = market.realm_id
                 AND cat.category = $9
             ))
+            AND ($49 OR market.item_cooldown <= $50)
             AND ($10 OR market.item_damages >= $11)
             AND ($12 OR market.item_damage_physical >= $13)
             AND ($14 OR market.item_damage_fire >= $15)
@@ -344,6 +374,11 @@ pub async fn read_market_items<'c>(
         own_listings,
         is_deleted, // $45
         max_req_level,
+        min_power_level,
+        min_upgrade_level,
+        no_filter_item_cooldown,
+        item_cooldown, // $50
+        realm_id
     )
     .fetch_all(executor)
     .await?;
@@ -394,6 +429,7 @@ pub async fn reject_item<'c>(
 
 pub async fn buy_item<'c>(
     executor: &mut Transaction<'c, Database>,
+    realm_id: &RealmId,
     market_id: MarketId,
     buyer: Option<UserId>,
 ) -> Result<Option<MarketBuyEntry>, sqlx::Error> {
@@ -406,6 +442,7 @@ pub async fn buy_item<'c>(
             deleted_by = $2
         WHERE 
             market.market_id = $1
+            AND market.realm_id = $3
             AND market.deleted_at IS NULL
         RETURNING
             market.market_id, 
@@ -414,7 +451,8 @@ pub async fn buy_item<'c>(
             market.price as "price: f64"
         "#,
         market_id,
-        buyer
+        buyer,
+        realm_id
     )
     .fetch_optional(&mut **executor)
     .await

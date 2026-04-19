@@ -31,6 +31,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     let disable_panels = Signal::derive(move || town_context.character.read().max_area_level == 0);
+    let disable_trade = Signal::derive(move || town_context.character.read().is_ssf);
 
     let open_inventory = move || {
         town_context
@@ -165,16 +166,24 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
                     "Inventory"
                 </MenuButton>
-                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
-                    "Stash"
-                </MenuButton>
-                <MenuButton on:click=move |_| open_market() disabled=disable_panels>
-                    "Market"
-                    {move || {
-                        (town_context.market_stash.read().resource_gems > 0.0).then_some(" [!]")
-                    }}
+                {move || {
+                    (!disable_trade.get())
+                        .then(|| {
+                            view! {
+                                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
+                                    "Stash"
+                                </MenuButton>
+                                <MenuButton on:click=move |_| open_market() disabled=disable_panels>
+                                    "Market"
+                                    {move || {
+                                        (town_context.market_stash.read().resource_gems > 0.0)
+                                            .then_some(" [!]")
+                                    }}
 
-                </MenuButton>
+                                </MenuButton>
+                            }
+                        })
+                }}
                 <MenuButton on:click=move |_| open_forge() disabled=disable_panels>
                     "Forge"
                 </MenuButton>

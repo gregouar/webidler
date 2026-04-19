@@ -22,6 +22,15 @@ pub fn verify_character_in_town(character: &CharacterEntry) -> Result<(), AppErr
     Ok(())
 }
 
+pub fn verify_ssf(character: &CharacterEntry) -> Result<(), AppError> {
+    if character.is_ssf {
+        return Err(AppError::UserError(
+            "SSF character cannot do that".to_string(),
+        ));
+    }
+    Ok(())
+}
+
 pub struct MsgPack<T>(pub T);
 
 impl<T> IntoResponse for MsgPack<T>
