@@ -12,6 +12,28 @@ const TOAST_EXIT_DURATION: Duration = Duration::from_millis(240);
 const STACK_PREVIEW_LIMIT: usize = 5;
 static NEXT_TOAST_ID: AtomicU64 = AtomicU64::new(1);
 
+fn schedule_timeout_detached(callback: impl FnOnce() + 'static, delay: Duration) {
+    #[cfg(target_arch = "wasm32")]
+    {
+        use leptos::wasm_bindgen::{JsCast, closure::Closure};
+
+        if let Some(window) = web_sys::window() {
+            let callback = Closure::once_into_js(callback);
+            let timeout_ms = delay.as_millis().min(i32::MAX as u128) as i32;
+            let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(
+                callback.unchecked_ref(),
+                timeout_ms,
+            );
+        }
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        let _ = callback;
+        let _ = delay;
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct Toasts {
     entries: RwSignal<Vec<ToastData>>,
@@ -22,7 +44,7 @@ struct ToastData {
     id: ToastId,
     message: String,
     variant: ToastVariant,
-    is_exiting: RwSignal<bool>,
+    is_exiting: bool,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -46,7 +68,7 @@ impl Toasts {
             id: ToastId::new(),
             message: message.into(),
             variant,
-            is_exiting: RwSignal::new(false),
+            is_exiting: false,
         };
         let toast_id = toast.id;
 
@@ -57,16 +79,14 @@ impl Toasts {
             entries.push(toast);
         });
 
-        set_timeout(move || self.dismiss(toast_id), DEFAULT_TOAST_DURATION);
+        schedule_timeout_detached(move || self.dismiss(toast_id), DEFAULT_TOAST_DURATION);
     }
 
     pub fn dismiss(self, toast_id: ToastId) {
         let should_schedule = self.entries.with_untracked(|entries| {
             entries
                 .iter()
-                .find(|toast| toast.id == toast_id)
-                .map(|toast| !toast.is_exiting.get_untracked())
-                .unwrap_or(false)
+                .any(|toast| toast.id == toast_id && !toast.is_exiting)
         });
 
         if !should_schedule {
@@ -75,11 +95,11 @@ impl Toasts {
 
         self.entries.update(|entries| {
             if let Some(toast) = entries.iter_mut().find(|toast| toast.id == toast_id) {
-                toast.is_exiting.set(true);
+                toast.is_exiting = true;
             }
         });
 
-        set_timeout(move || self.remove(toast_id), TOAST_EXIT_DURATION);
+        schedule_timeout_detached(move || self.remove(toast_id), TOAST_EXIT_DURATION);
     }
 
     fn remove(self, toast_id: ToastId) {
@@ -237,7 +257,7 @@ fn ToastIcon(variant: ToastVariant) -> impl IntoView {
 fn ToastView(
     message: String,
     variant: ToastVariant,
-    is_exiting: RwSignal<bool>,
+    is_exiting: bool,
     on_close: Callback<()>,
 ) -> impl IntoView {
     let (accent_class, label_class, text_class, title) = match variant {
@@ -271,21 +291,19 @@ fn ToastView(
     view! {
         <div
             role="status"
-            class=move || {
-                format!(
-                    "group relative overflow-hidden rounded-[8px]
-                    border border-[#6c5734]/55
-                    bg-[linear-gradient(180deg,#433f47,#27242b)]
-                    shadow-[0_8px_18px_rgba(0,0,0,0.3),inset_1px_1px_0_rgba(255,255,255,0.04),inset_-1px_-1px_0_rgba(0,0,0,0.22)]
-                    transition-[opacity,transform] duration-200 will-change-transform
-                    {}",
-                    if is_exiting.get() {
-                        "animate-[toast-slide-out_240ms_cubic-bezier(0.55,0,1,0.45)_forwards]"
-                    } else {
-                        "animate-[toast-slide-in_260ms_cubic-bezier(0.22,1,0.36,1)]"
-                    },
-                )
-            }
+            class=format!(
+                "group relative overflow-hidden rounded-[8px]
+                border border-[#6c5734]/55
+                bg-[linear-gradient(180deg,#433f47,#27242b)]
+                shadow-[0_8px_18px_rgba(0,0,0,0.3),inset_1px_1px_0_rgba(255,255,255,0.04),inset_-1px_-1px_0_rgba(0,0,0,0.22)]
+                transition-[opacity,transform] duration-200 will-change-transform
+                {}",
+                if is_exiting {
+                    "animate-[toast-slide-out_240ms_cubic-bezier(0.55,0,1,0.45)_forwards]"
+                } else {
+                    "animate-[toast-slide-in_260ms_cubic-bezier(0.22,1,0.36,1)]"
+                },
+            )
         >
             <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/6"></div>
             <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/30 to-transparent"></div>
@@ -299,12 +317,11 @@ fn ToastView(
                     <div class=format!(
                         "text-[10px] font-semibold uppercase tracking-[0.18em] {}",
                         label_class,
-                    )>
-                        {title}
-                    </div>
-                    <div class=format!("mt-0.5 text-sm font-medium leading-5 {}", text_class)>
-                        {message}
-                    </div>
+                    )>{title}</div>
+                    <div class=format!(
+                        "mt-0.5 text-sm font-medium leading-5 {}",
+                        text_class,
+                    )>{message}</div>
                 </div>
                 <div class="shrink-0 pt-0.5 opacity-70 transition-opacity duration-150 group-hover:opacity-100">
                     <CloseButton on:click=move |_| on_close.run(()) />
@@ -396,7 +413,7 @@ pub fn Toaster(#[prop(optional)] position: Option<ToasterPosition>) -> impl Into
                         transform: translate3d(0, 0, 0) scale(1);
                     }
                 }
-
+                
                 @keyframes toast-slide-out {
                     0% {
                         opacity: 1;
@@ -414,7 +431,10 @@ pub fn Toaster(#[prop(optional)] position: Option<ToasterPosition>) -> impl Into
                 container_class,
             )>
                 <div
-                    class=format!("pointer-events-auto flex w-full max-w-sm flex-col {}", stack_class)
+                    class=format!(
+                        "pointer-events-auto flex w-full max-w-sm flex-col {}",
+                        stack_class,
+                    )
                     aria-live="polite"
                     on:mouseenter=move |_| is_hovered.set(true)
                     on:mouseleave=move |_| is_hovered.set(false)
@@ -428,12 +448,15 @@ pub fn Toaster(#[prop(optional)] position: Option<ToasterPosition>) -> impl Into
                                 entries
                             };
                             let total = ordered.len();
-
                             ordered
                                 .into_iter()
                                 .enumerate()
                                 .map(|(index, toast)| {
-                                    let preview_rank = if is_top { index } else { total - index - 1 };
+                                    let preview_rank = if is_top {
+                                        index
+                                    } else {
+                                        total - index - 1
+                                    };
                                     (toast, index, preview_rank)
                                 })
                                 .collect::<Vec<_>>()
@@ -441,7 +464,6 @@ pub fn Toaster(#[prop(optional)] position: Option<ToasterPosition>) -> impl Into
                         key=|item| item.0.id
                         children=move |(toast, stack_index, preview_rank)| {
                             let toast_id = toast.id;
-                            let exit_signal = toast.is_exiting;
                             let origin_class = if is_top { "origin-top" } else { "origin-bottom" };
                             view! {
                                 <div
@@ -451,7 +473,6 @@ pub fn Toaster(#[prop(optional)] position: Option<ToasterPosition>) -> impl Into
                                         } else {
                                             collapsed_stack_item_class(preview_rank)
                                         };
-
                                         format!(
                                             "relative {} transition-[margin-top,max-height,opacity,transform] duration-200
                                             ease-[cubic-bezier(0.22,1,0.36,1)] {}",
@@ -460,13 +481,18 @@ pub fn Toaster(#[prop(optional)] position: Option<ToasterPosition>) -> impl Into
                                         )
                                     }
                                     style=move || {
-                                        stack_item_style(stack_index, preview_rank, is_hovered.get(), is_top)
+                                        stack_item_style(
+                                            stack_index,
+                                            preview_rank,
+                                            is_hovered.get(),
+                                            is_top,
+                                        )
                                     }
                                 >
                                     <ToastView
                                         message=toast.message
                                         variant=toast.variant
-                                        is_exiting=exit_signal
+                                        is_exiting=toast.is_exiting
                                         on_close=Callback::new(move |_| toasts.dismiss(toast_id))
                                     />
                                 </div>

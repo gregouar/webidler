@@ -149,6 +149,20 @@ async fn handle_connect(
         return Err(AppError::NotFound.into());
     }
 
+    if db::game_instances::is_user_instance_running(
+        &app_state.db_pool,
+        &user_character.user_id,
+        &user_character.realm_id,
+        &user_character.character_id,
+    )
+    .await?
+    {
+        return Err(AppError::UserError(
+            "Another character is already Grinding in this Realm".into(),
+        )
+        .into());
+    }
+
     // conn.send(&ConnectMessage {}.into()).await?;
 
     // Must be the last thing we do because we cannot fail after
