@@ -58,7 +58,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     flex justify-between">
                         <CardTitle>"Grinds"</CardTitle>
-                        <span class="text-shadow-md shadow-gray-950 text-base xl:text-lg">
+                        <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-base xl:text-lg">
                             {move || {
                                 (!town_context.character.read().played_time.is_zero())
                                     .then(|| {
@@ -187,7 +187,8 @@ pub fn PlayerName() -> impl IntoView {
                     .then(|| {
                         view! {
                             <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
-                                " — " <span class="font-semibold">{max_area_level()}</span>
+                                " — Power Level: "
+                                <span class="font-semibold">{max_area_level()}</span>
                             </span>
                         }
                     })
@@ -396,7 +397,7 @@ fn GrindingAreaCard(
                                 {move || area_specs.read().name.clone()}
                             </div>
 
-                            <div class="text-xs xl:text-sm text-gray-400">
+                            <div class="text-xs xl:text-sm text-zinc-400">
                                 {move || {
                                     format!(
                                         "Power level: +{}",
@@ -406,7 +407,7 @@ fn GrindingAreaCard(
                                 }}
                             </div>
 
-                            <div class="text-xs xl:text-sm text-gray-400">
+                            <div class="text-xs xl:text-sm text-zinc-400">
                                 {if area.max_level_reached > 0 {
                                     format!("Level Reached: {}", area.max_level_reached)
                                 } else {
@@ -546,12 +547,12 @@ pub fn StartGrindPanel(
                                         <span class="font-display">{area_specs.name}</span>
                                     </div>
 
-                                    <span class="block text-xs xl:text-sm font-medium text-gray-400 italic
+                                    <span class="block text-xs xl:text-sm font-medium text-zinc-400 italic
                                     xl:mb-4 max-w-xl mx-auto">{area_specs.description}</span>
 
                                     <Separator />
 
-                                    <ul class="text-xs xl:text-sm text-gray-400 list-none xl:space-y-1">
+                                    <ul class="text-xs xl:text-sm text-zinc-400 list-none xl:space-y-1">
                                         <li class=" ">
                                             "Power Level Modifier: "
                                             <span class="font-semibold text-white">
