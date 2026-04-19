@@ -92,10 +92,10 @@ pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
 pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
         Some(damage_type) => match damage_type {
-            DamageType::Physical => "Bleed ",
-            DamageType::Fire => "Burn ",
-            DamageType::Poison => "Poison ",
-            DamageType::Storm => "Weather ",
+            DamageType::Physical => "Bleed",
+            DamageType::Fire => "Burn",
+            DamageType::Poison => "Poison",
+            DamageType::Storm => "Weather",
         },
         None => "Damage over Time",
     }
@@ -103,10 +103,10 @@ pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static st
 pub fn damage_over_time_type_value_str(damage_type: Option<DamageType>) -> &'static str {
     match damage_type {
         Some(damage_type) => match damage_type {
-            DamageType::Physical => "Bleed Damage ",
-            DamageType::Fire => "Burn Damage ",
-            DamageType::Poison => "Poison Damage ",
-            DamageType::Storm => "Weather Damage ",
+            DamageType::Physical => "Bleed Damage",
+            DamageType::Fire => "Burn Damage",
+            DamageType::Poison => "Poison Damage",
+            DamageType::Storm => "Weather Damage",
         },
         None => "Damage over Time",
     }
