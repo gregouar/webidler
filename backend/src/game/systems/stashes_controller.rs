@@ -57,9 +57,14 @@ pub async fn store_stash_item<'c>(
         return Err(AppError::UserError("stash if full".to_string()));
     }
 
-    let stash_item_id =
-        db::stash_items::store_item(&mut *executor, &stash.stash_id, character_id, item_specs)
-            .await?;
+    let stash_item_id = db::stash_items::store_item(
+        &mut *executor,
+        &stash.stash_id,
+        &stash.realm_id,
+        character_id,
+        item_specs,
+    )
+    .await?;
 
     stash.items_amount += 1;
 

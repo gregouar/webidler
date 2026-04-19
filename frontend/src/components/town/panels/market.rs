@@ -379,6 +379,7 @@ fn MarketBrowser(
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
                 let user_id = town_context.character.read_untracked().character_id;
+                let realm = town_context.character.read_untracked().realm;
                 let filters = filters.get_untracked();
 
                 spawn_local(async move {
@@ -387,6 +388,7 @@ fn MarketBrowser(
                             &auth_context.token(),
                             &BrowseMarketItemsRequest {
                                 user_id,
+                                realm,
                                 skip,
                                 limit: items_per_page,
                                 filters,
@@ -1100,7 +1102,10 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(item_name);
     rule_field!(min_req_level);
     rule_field!(max_req_level);
+    rule_field!(min_power_level);
+    rule_field!(min_upgrade_level);
     rule_field!(price);
+    rule_field!(item_cooldown);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
     rule_field!(item_damage_fire);
@@ -1212,16 +1217,31 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     </div>
 
                     <ValidatedInput
-                        id="price"
-                        label="Max Price:"
+                        id="power_level"
+                        label="Min Item Level:"
                         input_type="number"
-                        placeholder="Max Price"
-                        bind=price
+                        placeholder="Minimum Item Level"
+                        bind=min_power_level
+                    />
+                    <ValidatedInput
+                        id="upgrade_level"
+                        label="Min Empower Level:"
+                        input_type="number"
+                        placeholder="Minimum Empower Level"
+                        bind=min_upgrade_level
                     />
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <ValidatedInput
+                        id="price"
+                        label="Max Price:"
+                        input_type="number"
+                        placeholder="Maximum Price"
+                        bind=price
+                    />
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Category:"</span>
                         <SearchableDropdownMenu
                             options=item_category_options
@@ -1229,12 +1249,12 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         />
                     </div>
 
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Rarity:"</span>
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                     </div>
 
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Order by:"</span>
                         <DropdownMenu options=order_by_options chosen_option=order_by />
                     </div>
@@ -1280,6 +1300,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     />
                 </div>
                 <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Max Cooldown:"
+                        input_type="number"
+                        placeholder="Maximum Cooldown"
+                        bind=item_cooldown
+                    />
                     <ValidatedInput
                         id="item_damages"
                         label="Min Critical Hit Chance:"

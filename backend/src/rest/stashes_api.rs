@@ -30,7 +30,7 @@ use crate::{
         data::inventory_data::inventory_data_to_player_inventory,
         systems::{inventory_controller, stashes_controller},
     },
-    rest::utils::{verify_character_in_town, verify_character_user},
+    rest::utils::{verify_character_in_town, verify_character_user, verify_ssf},
 };
 
 use super::AppError;
@@ -82,6 +82,7 @@ pub async fn post_upgrade_stash(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -97,6 +98,7 @@ pub async fn post_upgrade_stash(
             db::stashes::create_stash(
                 &mut *tx,
                 character.user_id,
+                character.realm_id,
                 payload.stash_type,
                 0,
                 "New stash",
@@ -146,6 +148,7 @@ pub async fn post_exchange_gems(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -233,6 +236,7 @@ pub async fn post_take_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -286,6 +290,7 @@ pub async fn post_store_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 

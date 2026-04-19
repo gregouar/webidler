@@ -12,6 +12,7 @@ use shared::{
         area::AreaLevel,
         game_stats::GrindStats,
         player::EquippedSlot,
+        realms::Realm,
         skill::SkillSpecs,
         stash::StashType,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
@@ -81,11 +82,21 @@ async fn post_create_character(
         ));
     }
 
+    let realm = if payload.is_ssf {
+        Realm::StandardSSF
+    } else if payload.legacy {
+        Realm::Legacy
+    } else {
+        Realm::Standard
+    };
+
     match db::characters::create_character(
         &db_pool,
         &user_id,
         &payload.name,
         &format!("adventurers/{}.webp", payload.portrait.into_inner()),
+        realm,
+        payload.is_ssf,
     )
     .await?
     {
@@ -296,9 +307,11 @@ impl From<db::characters::CharacterEntry> for UserCharacter {
     fn from(val: db::characters::CharacterEntry) -> Self {
         UserCharacter {
             user_id: val.user_id,
+            realm: (&val.realm_id).into(),
             character_id: val.character_id,
             name: val.character_name,
             portrait: val.portrait,
+            is_ssf: val.is_ssf,
             resource_gems: val.resource_gems,
             resource_shards: val.resource_shards,
             resource_gold: val.resource_gold,

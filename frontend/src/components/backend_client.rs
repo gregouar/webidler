@@ -4,6 +4,7 @@ use std::time::Duration;
 
 use shared::{
     data::{
+        realms::Realm,
         stash::StashId,
         user::{UserCharacterId, UserId},
     },
@@ -84,8 +85,9 @@ impl BackendClient {
         self.get("players").await
     }
 
-    pub async fn get_leaderboard(&self) -> Result<LeaderboardResponse, BackendError> {
-        self.get("leaderboard").await
+    pub async fn get_leaderboard(&self, realm: Realm) -> Result<LeaderboardResponse, BackendError> {
+        self.get(&format!("leaderboard?realm={}", realm.realm_id()))
+            .await
     }
 
     pub async fn get_news(&self) -> Result<NewsResponse, BackendError> {

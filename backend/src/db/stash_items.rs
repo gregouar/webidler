@@ -6,6 +6,7 @@ use shared::data::{
     item::ItemSpecs,
     item_affix::AffixEffectScope,
     market::MarketFilters,
+    realms::RealmId,
     skill::DamageType,
     stash::StashId,
     user::{UserCharacterId, UserId},
@@ -40,6 +41,8 @@ pub struct StashItemFlattenStats {
     pub item_name: String,
     pub item_rarity: String,
     pub item_level: i32,
+    pub item_power_level: i32,
+    pub item_upgrade_level: i32,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
     pub item_damages: Option<f64>,
@@ -49,12 +52,17 @@ pub struct StashItemFlattenStats {
     pub item_damage_storm: Option<f64>,
     pub item_crit_chance: Option<f64>,
     pub item_crit_damage: Option<f64>,
+    pub item_cooldown: Option<f64>,
 }
 
 impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
     type Error = anyhow::Error;
 
     fn try_from(value: &ItemSpecs) -> Result<Self, Self::Error> {
+        let item_cooldown = value
+            .weapon_specs
+            .as_ref()
+            .map(|weapon_specs| weapon_specs.cooldown.get());
         let item_damages = value
             .weapon_specs
             .as_ref()
@@ -81,6 +89,8 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
             item_name: format!("{} {}", value.modifiers.name, value.base.name),
             item_rarity: serde_plain::to_string(&value.modifiers.rarity)?,
             item_level: value.required_level as i32,
+            item_power_level: value.modifiers.level as i32,
+            item_upgrade_level: value.modifiers.upgrade_level as i32,
             item_armor: value
                 .armor_specs
                 .as_ref()
@@ -89,6 +99,7 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
                 .armor_specs
                 .as_ref()
                 .map(|armor_specs| armor_specs.block.get() as f64),
+            item_cooldown,
             item_damages,
             item_damage_physical,
             item_damage_fire,
@@ -109,12 +120,14 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
 pub async fn store_item<'c>(
     executor: &mut Transaction<'c, Database>,
     stash_id: &StashId,
+    realm_id: &RealmId,
     character_id: &UserCharacterId,
     item: &ItemSpecs,
 ) -> anyhow::Result<StashItemId> {
     Ok(create_stash_item(
         executor,
         stash_id,
+        realm_id,
         character_id,
         item.base
             .categories
@@ -143,6 +156,7 @@ pub async fn store_item<'c>(
 async fn create_stash_item<'c>(
     executor: &mut Transaction<'c, Database>,
     stash_id: &StashId,
+    realm_id: &RealmId,
     character_id: &UserCharacterId,
     item_categories: HashSet<String>,
     item_stats: Vec<(JsonValue, String, f64)>,
@@ -168,9 +182,12 @@ async fn create_stash_item<'c>(
             item_crit_chance,
             item_crit_damage,
             item_data,
-            data_version
+            data_version,
+            item_cooldown,
+            item_upgrade_level,
+            item_power_level
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
         RETURNING stash_item_id
         "#,
         stash_id,
@@ -189,7 +206,10 @@ async fn create_stash_item<'c>(
         stash_item_flatten_stats.item_crit_chance,
         stash_item_flatten_stats.item_crit_damage,
         item_data,
-        DATA_VERSION
+        DATA_VERSION,
+        stash_item_flatten_stats.item_cooldown,
+        stash_item_flatten_stats.item_upgrade_level,
+        stash_item_flatten_stats.item_power_level
     )
     .fetch_one(&mut **executor)
     .await?;
@@ -197,11 +217,12 @@ async fn create_stash_item<'c>(
     for item_category in item_categories {
         sqlx::query!(
             "
-        INSERT INTO stash_items_categories (stash_item_id, category)
-        VALUES ($1,$2)
+        INSERT INTO stash_items_categories (stash_item_id, category,realm_id)
+        VALUES ($1,$2,$3)
         ",
             stash_item_id,
             item_category,
+            realm_id
         )
         .execute(&mut **executor)
         .await?;
@@ -210,13 +231,14 @@ async fn create_stash_item<'c>(
     for (item_stat, stat_modifier, stat_value) in item_stats {
         sqlx::query!(
             "
-        INSERT INTO stash_items_stats (stash_item_id, item_stat, stat_modifier, stat_value)
-        VALUES ($1,$2,$3,$4)
+        INSERT INTO stash_items_stats (stash_item_id, item_stat, stat_modifier, stat_value,realm_id)
+        VALUES ($1,$2,$3,$4,$5)
         ",
             stash_item_id,
             item_stat,
             stat_modifier,
             stat_value,
+            realm_id
         )
         .execute(&mut **executor)
         .await?;
@@ -293,6 +315,12 @@ pub async fn read_stash_items<'c>(
 
     let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
     let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
+
+    let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
+    let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
+
+    let no_filter_item_cooldown = filters.item_cooldown.is_none();
+    let item_cooldown = filters.item_cooldown.unwrap_or_default();
 
     let no_filter_item_damages = filters.item_damages.is_none();
     let item_damages = filters.item_damages.unwrap_or_default();
@@ -388,6 +416,8 @@ pub async fn read_stash_items<'c>(
             AND ($5 OR UPPER(stash_items.item_name) LIKE $6)
             AND (stash_items.item_level >= $7)
             AND (stash_items.item_level <= $43)
+            AND (stash_items.item_power_level >= $44)
+            AND (stash_items.item_upgrade_level >= $45)
             AND ($8 = '' OR stash_items.item_rarity = $8)
             AND ($9 = '' OR EXISTS (
                 SELECT 1
@@ -395,6 +425,7 @@ pub async fn read_stash_items<'c>(
                 WHERE cat.stash_item_id = stash_items.stash_item_id
                 AND cat.category = $9
             ))
+            AND ($46 OR stash_items.item_cooldown <= $47)
             AND ($10 OR stash_items.item_damages >= $11)
             AND ($12 OR stash_items.item_damage_physical >= $13)
             AND ($14 OR stash_items.item_damage_fire >= $15)
@@ -475,7 +506,11 @@ pub async fn read_stash_items<'c>(
         stat_filters[4].0, // $40
         stat_filters[4].1,
         stat_filters[4].2,
-        max_req_level
+        max_req_level,
+        min_power_level,
+        min_upgrade_level, // $45
+        no_filter_item_cooldown,
+        item_cooldown
     )
     .fetch_all(executor)
     .await?;

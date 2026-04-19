@@ -11,6 +11,7 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState},
     player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    realms::RealmId,
     temple::PlayerBenedictions,
 };
 
@@ -25,6 +26,7 @@ use crate::game::{
 
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
+    pub realm_id: RealmId,
     pub area_id: String,
     pub map_item: Option<ItemSpecs>,
 
@@ -67,6 +69,7 @@ pub struct GameInstanceData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SavedGameData {
+    realm_id: RealmId,
     area_id: String,
     map_item: Option<ItemSpecs>,
     area_level: AreaLevel,
@@ -105,7 +108,8 @@ impl GameInstanceData {
     #[allow(clippy::too_many_arguments)]
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
-        area_id: &str,
+        realm_id: RealmId,
+        area_id: String,
         map_item: Option<ItemSpecs>,
         max_area_level_completed: AreaLevel,
         passives_tree_id: &str,
@@ -118,7 +122,7 @@ impl GameInstanceData {
     ) -> Result<Self> {
         let mut area_blueprint = master_store
             .area_blueprints_store
-            .get(area_id)
+            .get(&area_id)
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
 
@@ -133,7 +137,7 @@ impl GameInstanceData {
                 .as_ref()
                 .and_then(|map_item| map_item.base.map_specs.as_ref())
                 .and_then(|map_specs| map_specs.replace_area_id.as_ref())
-                .map(|replace_area_id| replace_area_id == area_id)
+                .map(|replace_area_id| replace_area_id == &area_id)
                 .unwrap_or_default()
         {
             return Err(anyhow::anyhow!("area is hidden"));
@@ -173,7 +177,8 @@ impl GameInstanceData {
         );
 
         Ok(Self {
-            area_id: area_id.to_string(),
+            realm_id,
+            area_id,
             map_item,
             area_specs,
             area_state: LazySyncer::new(area_state),
@@ -212,6 +217,7 @@ impl GameInstanceData {
 
     pub fn to_bytes(self) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(&SavedGameData {
+            realm_id: self.realm_id,
             area_id: self.area_id,
             map_item: self.map_item,
             area_level: self.area_state.read().area_level,
@@ -235,6 +241,7 @@ impl GameInstanceData {
 
     pub fn from_bytes(master_store: &master_store::MasterStore, bytes: &[u8]) -> Result<Self> {
         let SavedGameData {
+            realm_id,
             area_id,
             map_item,
             area_level,
@@ -257,7 +264,8 @@ impl GameInstanceData {
 
         let mut s = Self::init_from_store(
             master_store,
-            &area_id,
+            realm_id,
+            area_id,
             map_item,
             max_area_level_completed,
             &passives_tree_id,

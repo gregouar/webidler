@@ -110,7 +110,7 @@ pub fn HorizontalProgressBar(
                 }
             }}
             <div class="w-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
-                <div class="relative h-full w-full overflow-hidden rounded-[2px] xl:rounded-[4px]">
+                <div class="relative h-full w-full rounded-[2px] xl:rounded-[4px]">
                     <div
                         class=move || {
                             format!(
@@ -215,7 +215,7 @@ pub fn VerticalProgressBar(
                 }
             }}
             <div class="h-full rounded-[4px] xl:rounded-[6px] p-[3px] xl:p-[4px]">
-                <div class="relative h-full w-full overflow-hidden rounded-[2px] xl:rounded-[4px]">
+                <div class="relative h-full w-full rounded-[2px] xl:rounded-[4px]">
                     <div
                         class=move || {
                             format!(

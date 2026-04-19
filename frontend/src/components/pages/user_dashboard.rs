@@ -8,6 +8,7 @@ use leptos_use::storage;
 use shared::{
     data::{
         area::AreaSpecs,
+        realms::Realm,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserDetails, UserId},
     },
     http::{
@@ -32,12 +33,14 @@ use crate::{
         ui::{
             buttons::{MenuButton, MenuButtonRed},
             card::{Card, CardInset, CardTitle, MenuCard},
+            checkbox::Checkbox,
             confirm::ConfirmContext,
             header::BaseHeaderMenu,
             input::ValidatedInput,
             menu_panel::MenuPanel,
             number::format_datetime,
             toast::*,
+            tooltip::{StaticTooltip, StaticTooltipPosition},
         },
     },
 };
@@ -174,27 +177,26 @@ pub fn UserDashboardPage() -> impl IntoView {
                 <LeaderboardPanel open=open_leaderboard />
                 <AccountSettingsPanel open=open_account refresh_trigger />
 
-                <div class="absolute inset-0 p-1 xl:p-4">
-                    <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
-
-                        <Transition fallback=move || {
-                            view! { <p class="text-gray-400">"Loading..."</p> }
-                        }>
-                            {move || {
-                                Suspend::new(async move {
-                                    let (areas, user_details, characters) = async_data
-                                        .await
-                                        .unwrap_or_default();
-                                    let areas = Arc::new(areas);
-                                    view! {
-                                        <CreateCharacterPanel
-                                            open=open_character_panel
-                                            user_id=user_details.user.user_id
-                                            refresh_trigger=refresh_trigger
-                                            selected_character_id
-                                            selected_character_name
-                                            selected_character_portrait
-                                        />
+                <Transition fallback=move || {
+                    view! { <p class="text-gray-400">"Loading..."</p> }
+                }>
+                    {move || {
+                        Suspend::new(async move {
+                            let (areas, user_details, characters) = async_data
+                                .await
+                                .unwrap_or_default();
+                            let areas = Arc::new(areas);
+                            view! {
+                                <CreateCharacterPanel
+                                    open=open_character_panel
+                                    user_id=user_details.user.user_id
+                                    refresh_trigger=refresh_trigger
+                                    selected_character_id
+                                    selected_character_name
+                                    selected_character_portrait
+                                />
+                                <div class="absolute inset-0 p-1 xl:p-4">
+                                    <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
 
                                         <div class="w-full min-h-0 flex justify-center gap-2 xl:gap-4">
                                             <NewsPanel />
@@ -209,12 +211,12 @@ pub fn UserDashboardPage() -> impl IntoView {
                                                 selected_character_portrait
                                             />
                                         </div>
-                                    }
-                                })
-                            }}
-                        </Transition>
-                    </div>
-                </div>
+                                    </div>
+                                </div>
+                            }
+                        })
+                    }}
+                </Transition>
             </div>
         </main>
     }
@@ -293,6 +295,8 @@ fn CharacterSlot(
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let is_legacy = matches!(character.realm, Realm::Legacy);
+    let is_ssf = character.is_ssf || matches!(character.realm, Realm::StandardSSF);
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
         let auth_context = expect_context::<AuthContext>();
@@ -444,6 +448,38 @@ fn CharacterSlot(
                         {character.name.clone()}
                     </div>
 
+                    <div class="flex flex-wrap items-center gap-1">
+                        {if is_legacy {
+                            Some(
+                                view! {
+                                    <span class="inline-flex items-center gap-1.5 rounded-full border border-[#8a6232]/75 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#f4d9a4] bg-[linear-gradient(180deg,rgba(197,143,63,0.24),rgba(60,38,17,0.48))] shadow-[inset_0_1px_0_rgba(255,236,200,0.26),inset_0_-1px_0_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.3)]">
+                                        "Legacy"
+                                    </span>
+                                },
+                            )
+                        } else {
+                            None
+                        }}
+                        {if is_ssf {
+                            Some(
+                                view! {
+                                    <StaticTooltip
+                                        position=StaticTooltipPosition::Top
+                                        tooltip=|| {
+                                            "Solo Self Found: this character cannot trade items with other players and plays in an isolated economy."
+                                        }
+                                    >
+                                        <span class="inline-flex cursor-help items-center gap-1.5 rounded-full border border-[#3f6365]/75 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#b7eceb] bg-[linear-gradient(180deg,rgba(65,123,126,0.24),rgba(20,39,44,0.56))] shadow-[inset_0_1px_0_rgba(231,255,255,0.2),inset_0_-1px_0_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.3)]">
+                                            "SSF"
+                                        </span>
+                                    </StaticTooltip>
+                                },
+                            )
+                        } else {
+                            None
+                        }}
+                    </div>
+
                     <div class="text-sm text-gray-400 truncate">
                         {if character.max_area_level > 0 {
                             format!("Item Power Level: {}", character.max_area_level)
@@ -573,6 +609,16 @@ pub fn CreateCharacterPanel(
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let processing = RwSignal::new(false);
+    let is_ssf_character = RwSignal::new(false);
+    let is_legacy_character = RwSignal::new(false);
+
+    Effect::new(move |_| {
+        if open.get() && selected_character_id.get().is_none() {
+            is_ssf_character.set(false);
+            is_legacy_character.set(false);
+        }
+    });
+
     let disable_submit = Signal::derive(move || {
         selected_character_name.read().is_none() || selected_character_portrait.read().is_none()
     });
@@ -623,6 +669,9 @@ pub fn CreateCharacterPanel(
                                 &CreateCharacterRequest {
                                     name: selected_character_name.get_untracked().unwrap(),
                                     portrait: selected_character_portrait.get_untracked().unwrap(),
+                                    is_ssf: is_ssf_character.get_untracked(),
+                                    legacy: is_legacy_character.get_untracked()
+                                        && !is_ssf_character.get_untracked(),
                                 },
                             )
                             .await
@@ -689,6 +738,51 @@ pub fn CreateCharacterPanel(
                         placeholder="Enter a name"
                     />
                 </CardInset>
+
+                <Show when=move || selected_character_id.read().is_none()>
+                    <CardInset class="h-fit">
+                        <div class="flex flex-col gap-2 text-left">
+                            <div
+                                class:opacity-50=move || is_ssf_character.get()
+                                class:pointer-events-none=move || is_ssf_character.get()
+                            >
+                                <Checkbox
+                                    label="Legacy Character".to_string()
+                                    checked=Signal::derive(move || is_legacy_character.get())
+                                    on_change=move |checked| {
+                                        if !is_ssf_character.get_untracked() {
+                                            is_legacy_character.set(checked);
+                                        }
+                                    }
+                                />
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <Checkbox
+                                    label="SSF Character".to_string()
+                                    checked=Signal::derive(move || is_ssf_character.get())
+                                    on_change=move |checked| {
+                                        is_ssf_character.set(checked);
+                                        if checked {
+                                            is_legacy_character.set(false);
+                                        }
+                                    }
+                                />
+
+                                <StaticTooltip
+                                    position=StaticTooltipPosition::Top
+                                    tooltip=|| {
+                                        "Solo Self Found: this character cannot trade items with other players and plays in an isolated economy."
+                                    }
+                                >
+                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
+                                        "?"
+                                    </span>
+                                </StaticTooltip>
+                            </div>
+                        </div>
+                    </CardInset>
+                </Show>
 
                 <CardInset class="flex-1 min-h-0">
                     <span class="block text-sm font-medium text-gray-400">"Choose a Portrait"</span>
