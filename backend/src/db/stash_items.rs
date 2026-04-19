@@ -6,7 +6,7 @@ use shared::data::{
     item::ItemSpecs,
     item_affix::AffixEffectScope,
     market::MarketFilters,
-    realms::{Realm, RealmId},
+    realms::RealmId,
     skill::DamageType,
     stash::StashId,
     user::{UserCharacterId, UserId},
@@ -59,6 +59,10 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
     type Error = anyhow::Error;
 
     fn try_from(value: &ItemSpecs) -> Result<Self, Self::Error> {
+        let item_cooldown = value
+            .weapon_specs
+            .as_ref()
+            .map(|weapon_specs| weapon_specs.cooldown.get());
         let item_damages = value
             .weapon_specs
             .as_ref()
@@ -85,6 +89,8 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
             item_name: format!("{} {}", value.modifiers.name, value.base.name),
             item_rarity: serde_plain::to_string(&value.modifiers.rarity)?,
             item_level: value.required_level as i32,
+            item_power_level: value.modifiers.level as i32,
+            item_upgrade_level: value.modifiers.upgrade_level as i32,
             item_armor: value
                 .armor_specs
                 .as_ref()
@@ -93,6 +99,7 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
                 .armor_specs
                 .as_ref()
                 .map(|armor_specs| armor_specs.block.get() as f64),
+            item_cooldown,
             item_damages,
             item_damage_physical,
             item_damage_fire,
@@ -175,10 +182,9 @@ async fn create_stash_item<'c>(
             item_crit_chance,
             item_crit_damage,
             item_data,
-            data_version,
-            realm_id
+            data_version
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
         RETURNING stash_item_id
         "#,
         stash_id,
@@ -197,8 +203,7 @@ async fn create_stash_item<'c>(
         stash_item_flatten_stats.item_crit_chance,
         stash_item_flatten_stats.item_crit_damage,
         item_data,
-        DATA_VERSION,
-        realm_id
+        DATA_VERSION
     )
     .fetch_one(&mut **executor)
     .await?;

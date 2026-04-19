@@ -1,5 +1,5 @@
 use shared::data::{
-    realms::{Realm, RealmId},
+    realms::RealmId,
     stash::{StashId, StashType},
     user::{UserCharacterId, UserId},
 };
@@ -27,13 +27,12 @@ pub struct StashEntry {
 pub async fn create_stash<'c>(
     executor: impl DbExecutor<'c>,
     user_id: UserId,
-    realm: Realm,
+    realm_id: RealmId,
     stash_type: StashType,
     max_items: i64,
     title: &str,
 ) -> Result<StashEntry, sqlx::Error> {
     let stash_id = uuid::Uuid::new_v4();
-    let realm_id = realm.realm_id();
 
     let stash_type = Json(stash_type);
     let stash_type_value = serde_json::to_value(stash_type).unwrap();

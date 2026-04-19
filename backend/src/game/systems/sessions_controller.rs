@@ -226,7 +226,8 @@ async fn new_game_instance(
 
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        &area_id,
+        character.realm_id,
+        area_id,
         map_item,
         area_level_completed as AreaLevel,
         "default",

@@ -8,6 +8,7 @@ use crate::{
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
+        realms::Realm,
         stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
@@ -108,6 +109,7 @@ pub struct SavePassivesRequest {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsRequest {
     pub user_id: UserId,
+    pub realm: Realm,
 
     pub own_listings: bool,
     pub is_deleted: bool,

@@ -5,7 +5,7 @@ use anyhow;
 use indexmap::IndexSet;
 use sqlx::{FromRow, types::JsonValue};
 
-use shared::data::{item::ItemSlot, player::EquippedSlot, realms::Realm, user::UserCharacterId};
+use shared::data::{item::ItemSlot, player::EquippedSlot, realms::RealmId, user::UserCharacterId};
 
 use crate::{
     constants::DATA_VERSION, db::utc_datetime::UtcDateTime, game::game_data::GameInstanceData,
@@ -33,13 +33,13 @@ pub struct GameStatsEntry {
 pub async fn save_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-    realm: Realm,
+    realm_id: &RealmId,
     game_instance_data: &GameInstanceData,
 ) -> anyhow::Result<bool> {
     Ok(insert_game_stats(
         executor,
         character_id,
-        realm,
+        realm_id,
         &game_instance_data.area_id.clone(),
         game_instance_data.area_state.read().max_area_level as i32,
         game_instance_data
@@ -59,7 +59,7 @@ pub async fn save_game_stats<'c>(
 async fn insert_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
-    realm: Realm,
+    realm_id: &RealmId,
     area_id: &str,
     area_level: i32,
     elapsed_time: f64,
@@ -76,8 +76,6 @@ async fn insert_game_stats<'c>(
     //         AND gs.data_version = $5
     //         AND gs.area_level >= $3
     //     )
-
-    let realm_id = realm.realm_id();
 
     let record = sqlx::query!(
         r#"

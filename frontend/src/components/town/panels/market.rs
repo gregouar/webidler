@@ -379,6 +379,7 @@ fn MarketBrowser(
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
                 let user_id = town_context.character.read_untracked().character_id;
+                let realm = town_context.character.read_untracked().realm;
                 let filters = filters.get_untracked();
 
                 spawn_local(async move {
@@ -387,6 +388,7 @@ fn MarketBrowser(
                             &auth_context.token(),
                             &BrowseMarketItemsRequest {
                                 user_id,
+                                realm,
                                 skip,
                                 limit: items_per_page,
                                 filters,

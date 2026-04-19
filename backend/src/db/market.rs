@@ -2,7 +2,7 @@ use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
     market::MarketFilters,
-    realms::Realm,
+    realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
 };
 
@@ -49,13 +49,12 @@ pub struct MarketBuyEntry {
 
 pub async fn sell_item<'c>(
     executor: &mut Transaction<'c, Database>,
-    realm: Realm,
+    realm_id: &RealmId,
     stash_item_id: &StashItemId,
     recipient_id: Option<UserId>,
     price: f64,
     stash_item_flatten_stats: StashItemFlattenStats,
 ) -> Result<MarketId, sqlx::Error> {
-    let realm_id = realm.realm_id();
     sqlx::query_scalar!(
         r#"
         INSERT INTO market (
@@ -424,11 +423,10 @@ pub async fn reject_item<'c>(
 
 pub async fn buy_item<'c>(
     executor: &mut Transaction<'c, Database>,
-    realm: Realm,
+    realm_id: &RealmId,
     market_id: MarketId,
     buyer: Option<UserId>,
 ) -> Result<Option<MarketBuyEntry>, sqlx::Error> {
-    let realm_id = realm.realm_id();
     sqlx::query_as!(
         MarketBuyEntry,
         r#"

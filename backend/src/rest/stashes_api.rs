@@ -98,6 +98,7 @@ pub async fn post_upgrade_stash(
             db::stashes::create_stash(
                 &mut *tx,
                 character.user_id,
+                character.realm_id,
                 payload.stash_type,
                 0,
                 "New stash",
