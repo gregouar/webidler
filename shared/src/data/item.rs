@@ -290,29 +290,60 @@ impl ItemModifiers {
             .flat_map(|affix| affix.effects.iter())
             .filter(|e| e.scope == scope)
             .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
-                let stats = if split_elements {
-                    match &effect.stat_effect.stat {
-                        StatType::Armor(Some(ArmorStatType::Elemental)) => vec![
-                            StatType::Armor(Some(ArmorStatType::Fire)),
-                            StatType::Armor(Some(ArmorStatType::Poison)),
-                            StatType::Armor(Some(ArmorStatType::Storm)),
-                        ],
-                        _ => vec![effect.stat_effect.stat.clone()],
+                if split_elements
+                    && matches!(
+                        &effect.stat_effect.stat,
+                        StatType::Armor(Some(ArmorStatType::Elemental))
+                    )
+                {
+                    for stat in [
+                        StatType::Armor(Some(ArmorStatType::Fire)),
+                        StatType::Armor(Some(ArmorStatType::Poison)),
+                        StatType::Armor(Some(ArmorStatType::Storm)),
+                    ] {
+                        *effects_map
+                            .0
+                            .entry((
+                                stat,
+                                effect.stat_effect.modifier,
+                                effect.stat_effect.bypass_ignore,
+                            ))
+                            .or_default() += effect.stat_effect.value;
                     }
                 } else {
-                    vec![effect.stat_effect.stat.clone()]
-                };
-
-                for stat in stats {
                     *effects_map
                         .0
                         .entry((
-                            stat,
+                            effect.stat_effect.stat.clone(),
                             effect.stat_effect.modifier,
                             effect.stat_effect.bypass_ignore,
                         ))
                         .or_default() += effect.stat_effect.value;
                 }
+
+                // let stats = if split_elements {
+                //     match &effect.stat_effect.stat {
+                //         StatType::Armor(Some(ArmorStatType::Elemental)) => vec![
+                //             StatType::Armor(Some(ArmorStatType::Fire)),
+                //             StatType::Armor(Some(ArmorStatType::Poison)),
+                //             StatType::Armor(Some(ArmorStatType::Storm)),
+                //         ],
+                //         _ => vec![effect.stat_effect.stat.clone()],
+                //     }
+                // } else {
+                //     vec![effect.stat_effect.stat.clone()]
+                // };
+
+                // for stat in stats {
+                //     *effects_map
+                //         .0
+                //         .entry((
+                //             stat,
+                //             effect.stat_effect.modifier,
+                //             effect.stat_effect.bypass_ignore,
+                //         ))
+                //         .or_default() += effect.stat_effect.value;
+                // }
                 effects_map
             })
     }
