@@ -9,10 +9,24 @@ ALTER TABLE
 ADD
     COLUMN item_upgrade_level INT;
 
+UPDATE
+    stash_items
+SET
+    item_upgrade_level = 0
+WHERE
+    item_upgrade_level IS NULL;
+
 ALTER TABLE
     stash_items
 ADD
     COLUMN item_power_level INT;
+
+UPDATE
+    stash_items
+SET
+    item_power_level = 0
+WHERE
+    item_power_level IS NULL;
 
 ALTER TABLE
     market
@@ -24,10 +38,24 @@ ALTER TABLE
 ADD
     COLUMN item_upgrade_level INT;
 
+UPDATE
+    market
+SET
+    item_upgrade_level = 0
+WHERE
+    item_upgrade_level IS NULL;
+
 ALTER TABLE
     market
 ADD
     COLUMN item_power_level INT;
+
+UPDATE
+    market
+SET
+    item_power_level = 0
+WHERE
+    item_power_level IS NULL;
 
 -- SSF
 ALTER TABLE

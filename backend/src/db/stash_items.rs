@@ -425,7 +425,7 @@ pub async fn read_stash_items<'c>(
                 WHERE cat.stash_item_id = stash_items.stash_item_id
                 AND cat.category = $9
             ))
-            AND ($46 OR stash_items.item_cooldown >= $47)
+            AND ($46 OR stash_items.item_cooldown <= $47)
             AND ($10 OR stash_items.item_damages >= $11)
             AND ($12 OR stash_items.item_damage_physical >= $13)
             AND ($14 OR stash_items.item_damage_fire >= $15)

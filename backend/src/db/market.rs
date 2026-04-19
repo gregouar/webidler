@@ -282,7 +282,7 @@ pub async fn read_market_items<'c>(
                 AND cat.realm_id = market.realm_id
                 AND cat.category = $9
             ))
-            AND ($49 OR market.item_cooldown >= $50)
+            AND ($49 OR market.item_cooldown <= $50)
             AND ($10 OR market.item_damages >= $11)
             AND ($12 OR market.item_damage_physical >= $13)
             AND ($14 OR market.item_damage_fire >= $15)

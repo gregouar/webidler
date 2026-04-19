@@ -1102,7 +1102,10 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(item_name);
     rule_field!(min_req_level);
     rule_field!(max_req_level);
+    rule_field!(min_power_level);
+    rule_field!(min_upgrade_level);
     rule_field!(price);
+    rule_field!(item_cooldown);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
     rule_field!(item_damage_fire);
@@ -1214,10 +1217,17 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     </div>
 
                     <ValidatedInput
-                        id="price"
-                        label="Max Price:"
+                        id="power_level"
+                        label="Min Power Level:"
                         input_type="number"
-                        placeholder="Max Price"
+                        placeholder="Minimum Power Level"
+                        bind=price
+                    />
+                    <ValidatedInput
+                        id="upgrade_level"
+                        label="Min Empower Level:"
+                        input_type="number"
+                        placeholder="Minimum Empower Level"
                         bind=price
                     />
                 </div>
@@ -1240,6 +1250,14 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         <span>"Order by:"</span>
                         <DropdownMenu options=order_by_options chosen_option=order_by />
                     </div>
+
+                    <ValidatedInput
+                        id="price"
+                        label="Max Price:"
+                        input_type="number"
+                        placeholder="Maximum Price"
+                        bind=price
+                    />
                 </div>
             </div>
 
@@ -1282,6 +1300,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     />
                 </div>
                 <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Max Cooldown:"
+                        input_type="number"
+                        placeholder="Maximum Cooldown"
+                        bind=item_cooldown
+                    />
                     <ValidatedInput
                         id="item_damages"
                         label="Min Critical Hit Chance:"
