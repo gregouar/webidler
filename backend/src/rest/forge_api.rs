@@ -71,6 +71,7 @@ pub async fn post_affix(
         -price,
         0.0,
         0.0,
+        0.0,
     )
     .await?;
 
@@ -145,6 +146,7 @@ pub async fn post_upgrade(
         -price,
         0.0,
         0.0,
+        0.0,
     )
     .await?;
 
@@ -198,6 +200,7 @@ pub async fn post_gamble(
         &mut *tx,
         &payload.character_id,
         -price,
+        0.0,
         0.0,
         0.0,
     )

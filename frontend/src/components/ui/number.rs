@@ -118,6 +118,22 @@ fn comma_format(value: f64) -> String {
         .collect::<String>()
 }
 
+pub fn format_duration_in_days(duration: Duration) -> String {
+    let secs = duration.as_secs().div_ceil(60) * 60;
+    let total_hours = secs / 3600;
+    let minutes = (secs % 3600) / 60;
+
+    if secs <= 24 * 3600 {
+        return format!("{total_hours:02}:{minutes:02}");
+    }
+
+    let days = total_hours / 24;
+    let hours = total_hours % 24;
+    let day_label = if days == 1 { "Day" } else { "Days" };
+
+    format!("{days} {day_label} {hours:02}:{minutes:02}")
+}
+
 pub fn format_duration(duration: Duration, show_seconds: bool) -> String {
     let mut secs = duration.as_secs();
     if !show_seconds {
@@ -162,5 +178,20 @@ mod tests {
         assert_eq!(format_number_without_context(10000.0, true), "10,000");
         assert_eq!(format_number_without_context(999999.0, true), "999,999");
         assert_eq!(format_number_without_context(1000000.0, true), "1.00e6");
+    }
+
+    #[test]
+    fn test_duration_format_in_days() {
+        assert_eq!(format_duration_in_days(Duration::from_secs(0)), "00:00");
+        assert_eq!(format_duration_in_days(Duration::from_secs(59)), "00:01");
+        assert_eq!(
+            format_duration_in_days(Duration::from_secs(5 * 3600 + 7 * 60)),
+            "05:07"
+        );
+        assert_eq!(format_duration_in_days(Duration::from_secs(24 * 3600)), "24:00");
+        assert_eq!(
+            format_duration_in_days(Duration::from_secs(2 * 24 * 3600 + 3 * 3600 + 4 * 60)),
+            "2 Days 03:04"
+        );
     }
 }

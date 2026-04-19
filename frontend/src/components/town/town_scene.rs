@@ -27,6 +27,7 @@ use crate::{
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
+            number::format_duration_in_days,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
     },
@@ -36,8 +37,6 @@ use crate::{
 pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
     let town_context: TownContext = expect_context();
     let data_context: DataContext = expect_context();
-
-    let max_area_level = move || town_context.character.read().max_area_level;
 
     let open_grind_panel = RwSignal::new(false);
     let selected_area = RwSignal::new(None);
@@ -59,17 +58,19 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     flex justify-between">
                         <CardTitle>"Grinds"</CardTitle>
-                        {move || {
-                            (max_area_level() > 0)
-                                .then(|| {
-                                    view! {
-                                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
-                                            "Item Power Level: "
-                                            <span class="font-semibold">{max_area_level()}</span>
-                                        </span>
-                                    }
-                                })
-                        }}
+                        <span class="text-shadow-md shadow-gray-950 text-base xl:text-lg">
+                            {move || {
+                                (!town_context.character.read().played_time.is_zero())
+                                    .then(|| {
+                                        view! {
+                                            "Total Grind Time: "
+                                            {format_duration_in_days(
+                                                town_context.character.read().played_time,
+                                            )}
+                                        }
+                                    })
+                            }}
+                        </span>
                     </div>
 
                     <CardInset class="min-h-0 flex-1">
@@ -175,11 +176,23 @@ fn PlayerCard() -> impl IntoView {
 #[component]
 pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let max_area_level = move || town_context.character.read().max_area_level;
 
     let character_name = move || town_context.character.read().name.clone();
     view! {
-        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
-            <span class="font-bold">{character_name}</span>
+        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl">
+            <span class="font-bold font-display">{character_name}</span>
+            {move || {
+                (max_area_level() > 0)
+                    .then(|| {
+                        view! {
+                            <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
+                                " — " <span class="font-semibold">{max_area_level()}</span>
+                            </span>
+                        }
+                    })
+            }}
+            <span></span>
         </p>
     }
 }

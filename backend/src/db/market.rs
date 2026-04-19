@@ -107,6 +107,7 @@ pub async fn sell_item<'c>(
     .await
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn read_market_items<'c>(
     executor: impl DbExecutor<'c>,
     user_id: &UserId,

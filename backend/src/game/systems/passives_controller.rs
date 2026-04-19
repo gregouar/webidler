@@ -136,6 +136,7 @@ pub async fn update_ascension(
         0.0,
         (total_shards - cost) - resource_shards,
         0.0,
+        0.0,
     )
     .await?;
 

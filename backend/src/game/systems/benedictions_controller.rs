@@ -80,7 +80,8 @@ pub async fn update_benedictions(
         return Err(AppError::UserError("not enough gold".to_string()));
     }
 
-    db::characters::update_character_resources(&mut **tx, character_id, 0.0, 0.0, -cost).await?;
+    db::characters::update_character_resources(&mut **tx, character_id, 0.0, 0.0, -cost, 0.0)
+        .await?;
 
     db::characters_data::save_character_benedictions(&mut **tx, character_id, player_benedictions)
         .await?;

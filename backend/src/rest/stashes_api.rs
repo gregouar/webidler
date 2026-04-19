@@ -119,6 +119,7 @@ pub async fn post_upgrade_stash(
         0.0,
         0.0,
         -cost,
+        0.0,
     )
     .await?;
 
@@ -171,6 +172,7 @@ pub async fn post_exchange_gems(
         &mut *tx,
         &payload.character_id,
         -gems_difference,
+        0.0,
         0.0,
         0.0,
     )

@@ -108,6 +108,7 @@ fn apply_skill_on_targets<'a>(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn apply_repeated_skill_on_targets<'a>(
     events_queue: &mut EventsQueue,
     skill_id: &String,
@@ -296,6 +297,7 @@ pub fn find_sub_targets<'a, 'b>(
         .collect()
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn apply_skill_effects(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,

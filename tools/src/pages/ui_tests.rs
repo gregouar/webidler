@@ -422,132 +422,131 @@ pub fn CardInset(
     }
 }
 
-#[component]
-pub fn CircularProgressBar(
-    // Percent value, must be between 0 and 100.
-    #[prop(into)] value: Signal<f64>,
-    bar_color: &'static str,
-    bar_width: u8,
-    // Instant reset
-    #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
-    #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
-    #[prop(optional)] tint_background: Option<&'static str>,
-    // Inside the circular bar
-    children: Children,
-) -> impl IntoView {
-    let reset_icon_animation = RwSignal::new("");
-    let active_buffer = RwSignal::new(false);
-    let front_progress = RwSignal::new(value.get_untracked().clamp(0.0, 1.0) * 100.0);
-    let back_progress = RwSignal::new(0.0);
+// #[component]
+// pub fn CircularProgressBar(
+//     // Percent value, must be between 0 and 100.
+//     #[prop(into)] value: Signal<f64>,
+//     bar_color: &'static str,
+//     bar_width: u8,
+//     // Instant reset
+//     #[prop(into,default = Signal::derive(|| false))] reset: Signal<bool>,
+//     #[prop(into,default = Signal::derive(|| false))] disabled: Signal<bool>,
+//     #[prop(optional)] tint_background: Option<&'static str>,
+//     // Inside the circular bar
+//     children: Children,
+// ) -> impl IntoView {
+//     let reset_icon_animation = RwSignal::new("");
+//     let active_buffer = RwSignal::new(false);
+//     let front_progress = RwSignal::new(value.get_untracked().clamp(0.0, 1.0) * 100.0);
+//     let back_progress = RwSignal::new(0.0);
 
-    Effect::new(move |_| {
-        if reset.get() {
-            if !disabled.get_untracked() {
-                reset_icon_animation.set(
-                    "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
-                );
-            }
+//     Effect::new(move |_| {
+//         if reset.get() {
+//             if !disabled.get_untracked() {
+//                 reset_icon_animation.set(
+//                     "animation: circular-progress-bar-glow 0.5s ease; animation-fill-mode: both;",
+//                 );
+//             }
 
-            if active_buffer.get_untracked() {
-                active_buffer.set(false);
+//             if active_buffer.get_untracked() {
+//                 active_buffer.set(false);
 
-                set_timeout(
-                    move || {
-                        reset_icon_animation.set("");
-                        back_progress.set(0.0);
-                    },
-                    std::time::Duration::from_millis(500),
-                );
-            } else {
-                active_buffer.set(true);
+//                 set_timeout(
+//                     move || {
+//                         reset_icon_animation.set("");
+//                         back_progress.set(0.0);
+//                     },
+//                     std::time::Duration::from_millis(500),
+//                 );
+//             } else {
+//                 active_buffer.set(true);
 
-                set_timeout(
-                    move || {
-                        reset_icon_animation.set("");
-                        front_progress.set(0.0);
-                    },
-                    std::time::Duration::from_millis(500),
-                );
-            }
-        } else {
-            let progress = if reset.get() {
-                0.0
-            } else {
-                value.get().clamp(0.0, 1.0) * 100.0
-            };
+//                 set_timeout(
+//                     move || {
+//                         reset_icon_animation.set("");
+//                         front_progress.set(0.0);
+//                     },
+//                     std::time::Duration::from_millis(500),
+//                 );
+//             }
+//         } else {
+//             let progress = if reset.get() {
+//                 0.0
+//             } else {
+//                 value.get().clamp(0.0, 1.0) * 100.0
+//             };
 
-            if active_buffer.get() {
-                back_progress.set(progress);
-            } else {
-                front_progress.set(progress);
-            }
-        }
-    });
+//             if active_buffer.get() {
+//                 back_progress.set(progress);
+//             } else {
+//                 front_progress.set(progress);
+//             }
+//         }
+//     });
 
-    view! {
-        <div class="circular-progress-bar">
-           <div
-                class="relative w-full h-full aspect-square rounded-full overflow-clip
-                border border-[#6c5329]
-                bg-stone-900
-                shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
-            >
-                <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
-                <div
-                    class="absolute inset-0 transition-circular-progress-bar"
-                    class:opacity-0=move || disabled.get()
-                    class:fade-out-circular-progress-bar=move || active_buffer.get()
-                    style=format!(
-                            "
-                            background: conic-gradient(
-                                {bar_color} var(--progress),
-                                transparent var(--progress) 100%
-                            );
-                            ",
-                        )
-                    style:--progress=move || format!("{}%", front_progress.get())
+//     view! {
+//         <div class="circular-progress-bar">
+//            <div
+//                 class="relative w-full h-full aspect-square rounded-full overflow-clip
+//                 border border-[#6c5329]
+//                 bg-stone-900
+//                 shadow-[0_0_15px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.95)]"
+//             >
+//                 <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
+//                 <div
+//                     class="absolute inset-0 transition-circular-progress-bar"
+//                     class:opacity-0=move || disabled.get()
+//                     class:fade-out-circular-progress-bar=move || active_buffer.get()
+//                     style=format!(
+//                             "
+//                             background: conic-gradient(
+//                                 {bar_color} var(--progress),
+//                                 transparent var(--progress) 100%
+//                             );
+//                             ",
+//                         )
+//                     style:--progress=move || format!("{}%", front_progress.get())
 
-                ></div>
+//                 ></div>
 
-                <div
-                    class="absolute inset-0 transition-circular-progress-bar"
-                    class:opacity-0=move || disabled.get()
-                    class:fade-out-circular-progress-bar=move || !active_buffer.get()
-                    style=format!(
-                            "
-                            background: conic-gradient(
-                                {bar_color} var(--progress),
-                                transparent var(--progress) 100%
-                            );
-                            ",
-                        )
-                    style:--progress=move || format!("{}%", back_progress.get())
-                ></div>
+//                 <div
+//                     class="absolute inset-0 transition-circular-progress-bar"
+//                     class:opacity-0=move || disabled.get()
+//                     class:fade-out-circular-progress-bar=move || !active_buffer.get()
+//                     style=format!(
+//                             "
+//                             background: conic-gradient(
+//                                 {bar_color} var(--progress),
+//                                 transparent var(--progress) 100%
+//                             );
+//                             ",
+//                         )
+//                     style:--progress=move || format!("{}%", back_progress.get())
+//                 ></div>
 
+//                 <div class=format!(
+//                     "absolute inset-{} xl:inset-{bar_width} rounded-full
+//                         bg-radial {} to-zinc-950 to-70%
+//                         border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
+//                     bar_width / 2,
+//                     tint_background.unwrap_or("from-stone-600"),
+//                 )>
+//                 </div>
 
-                <div class=format!(
-                    "absolute inset-{} xl:inset-{bar_width} rounded-full
-                        bg-radial {} to-zinc-950 to-70% 
-                        border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
-                    bar_width / 2,
-                    tint_background.unwrap_or("from-stone-600"),
-                )>
-                </div>
-
-                // Icon
-                <div
-                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
-                    transition-transform duration-500"
-                    style=reset_icon_animation
-                    class:brightness-50=move || disabled.get()
-                >
-                    {children()}
-                </div>
-            </div>
-        </div>
-    }
-}
+//                 // Icon
+//                 <div
+//                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+//                     scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
+//                     transition-transform duration-500"
+//                     style=reset_icon_animation
+//                     class:brightness-50=move || disabled.get()
+//                 >
+//                     {children()}
+//                 </div>
+//             </div>
+//         </div>
+//     }
+// }
 
 #[component]
 pub fn CircularProgressBarGpu(

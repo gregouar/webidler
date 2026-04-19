@@ -216,6 +216,7 @@ impl<'a> GameInstance<'a> {
                         + *self.game_data.area_specs.power_level,
                     constants::MONSTER_REWARD_INCREASE_FACTOR,
                 ),
+            self.game_data.game_stats.elapsed_time.as_secs_f64(),
         )
         .await?;
 
@@ -282,7 +283,11 @@ impl<'a> GameInstance<'a> {
                     }
                 }
                 Err(err) => {
-                    tracing::error!("failed to update leaderboard '{}': {}", self.character_id, err);
+                    tracing::error!(
+                        "failed to update leaderboard '{}': {}",
+                        self.character_id,
+                        err
+                    );
                 }
                 _ => {}
             }

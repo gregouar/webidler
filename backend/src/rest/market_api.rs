@@ -125,6 +125,7 @@ pub async fn post_buy_market_item(
         -price,
         0.0,
         0.0,
+        0.0,
     )
     .await?;
 

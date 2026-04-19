@@ -23,6 +23,7 @@ pub struct CharacterEntry {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
+    pub played_time_seconds: f64,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -119,6 +120,7 @@ pub async fn read_character<'c>(
             resource_gems,
             resource_shards,
             resource_gold,
+            played_time_seconds,
             created_at,
             updated_at,
             deleted_at as "deleted_at?: UtcDateTime",
@@ -198,6 +200,7 @@ pub async fn read_all_user_characters<'c>(
             resource_gems,
             resource_shards,
             resource_gold,
+            played_time_seconds,
             created_at,
             updated_at,
             deleted_at as "deleted_at: UtcDateTime",
@@ -260,23 +263,25 @@ pub async fn update_character<'c>(
     }
 }
 
-/// Add/remove resources to character
+/// Add/remove resources and played time to character.
 pub async fn update_character_resources<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     resource_gems: f64,
     resource_shards: f64,
     resource_gold: f64,
+    played_time_seconds: f64,
 ) -> Result<CharacterResources, sqlx::Error> {
     sqlx::query_as!(
         CharacterResources,
         r#"
         UPDATE characters
-        SET 
-            resource_gems =  resource_gems + $2,
+        SET
+            resource_gems = resource_gems + $2,
             resource_shards = resource_shards + $3,
             resource_gold = resource_gold + $4,
-            updated_at = CURRENT_TIMESTAMP 
+            played_time_seconds = played_time_seconds + $5,
+            updated_at = CURRENT_TIMESTAMP
         WHERE character_id = $1
         RETURNING resource_gems, resource_shards, resource_gold
         "#,
@@ -284,6 +289,7 @@ pub async fn update_character_resources<'c>(
         resource_gems,
         resource_shards,
         resource_gold,
+        played_time_seconds,
     )
     .fetch_one(executor)
     .await

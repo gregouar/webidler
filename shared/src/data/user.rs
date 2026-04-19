@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -46,6 +48,7 @@ pub struct UserCharacter {
     pub resource_gold: f64,
 
     pub activity: UserCharacterActivity,
+    pub played_time: Duration,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
