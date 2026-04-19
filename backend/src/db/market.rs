@@ -220,22 +220,27 @@ pub async fn read_market_items<'c>(
             users AS buyer ON buyer.user_id = market.deleted_by
         LEFT JOIN
             stash_items_stats AS stat1 ON stat1.stash_item_id = market.stash_item_id
+                AND stat1.realm_id = market.realm_id
                 AND stat1.item_stat = $28
                 AND stat1.stat_modifier = $29
         LEFT JOIN
             stash_items_stats AS stat2 ON stat2.stash_item_id = market.stash_item_id
+                AND stat2.realm_id = market.realm_id
                 AND stat2.item_stat = $31
                 AND stat2.stat_modifier = $32
         LEFT JOIN
             stash_items_stats AS stat3 ON stat3.stash_item_id = market.stash_item_id
+                AND stat3.realm_id = market.realm_id
                 AND stat3.item_stat = $34
                 AND stat3.stat_modifier = $35
         LEFT JOIN
             stash_items_stats AS stat4 ON stat4.stash_item_id = market.stash_item_id
+                AND stat4.realm_id = market.realm_id
                 AND stat4.item_stat = $37
                 AND stat4.stat_modifier = $38
         LEFT JOIN
             stash_items_stats AS stat5 ON stat5.stash_item_id = market.stash_item_id
+                AND stat5.realm_id = market.realm_id
                 AND stat5.item_stat = $40
                 AND stat5.stat_modifier = $41
         WHERE 
@@ -274,6 +279,7 @@ pub async fn read_market_items<'c>(
                 SELECT 1
                 FROM stash_items_categories cat
                 WHERE cat.stash_item_id = market.stash_item_id
+                AND cat.realm_id = market.realm_id
                 AND cat.category = $9
             ))
             AND ($49 OR market.item_cooldown >= $50)

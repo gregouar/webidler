@@ -21,6 +21,7 @@ use crate::{
             buttons::MenuButton,
             card::Card,
             input::{Input, ValidatedInput},
+            list_row::MenuListRow,
             toast::*,
         },
     },
@@ -202,27 +203,32 @@ fn MainMenu() -> impl IntoView {
                 <GuestModal open=show_guest_modal captcha_token />
             </div>
 
-            <div class="bg-gray-800 text-gray-200 text-sm p-4 rounded-xl border border-gray-700 shadow-inner space-y-4">
-                <div>
-                    <h2 class="text-lg font-semibold mb-2">"Disclaimer"</h2>
-                    <p>
-                        "2D artworks featured in this app are generated using AI tools, with DALL·E 3 (free version via "
-                        <a
-                            href="https://chatgpt.com"
-                            class="text-amber-300 underline hover:text-amber-200"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            "chatgpt.com"
-                        </a>")."
-                    </p>
-                </div>
 
-                <div class="flex justify-center gap-6 pt-2 border-t border-zinc-700">
-                    <ALink href="/terms">"Terms & Conditions"</ALink>
-                    <ALink href="/privacy">"Privacy Notice"</ALink>
+            <MenuListRow class="mt-2 px-4 py-3 text-left">
+                <div class="space-y-3">
+                    <div class="space-y-1.5">
+                        <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-amber-300/90">
+                            "Disclaimer"
+                        </h2>
+                        <p class="text-sm leading-relaxed text-zinc-300">
+                            "2D artworks featured in this app are generated using AI tools, with DALL-E 3 (free version via "
+                            <a
+                                href="https://chatgpt.com"
+                                class="text-amber-300 underline hover:text-amber-200"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                "chatgpt.com"
+                            </a>")."
+                        </p>
+                    </div>
+
+                    <div class="flex justify-center gap-6 border-t border-[#5f4c30]/55 pt-2 text-sm">
+                        <ALink href="/terms">"Terms & Conditions"</ALink>
+                        <ALink href="/privacy">"Privacy Notice"</ALink>
+                    </div>
                 </div>
-            </div>
+            </MenuListRow>
 
         </main>
     }

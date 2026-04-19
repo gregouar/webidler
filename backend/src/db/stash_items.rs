@@ -182,9 +182,12 @@ async fn create_stash_item<'c>(
             item_crit_chance,
             item_crit_damage,
             item_data,
-            data_version
+            data_version,
+            item_cooldown,
+            item_upgrade_level,
+            item_power_level
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
         RETURNING stash_item_id
         "#,
         stash_id,
@@ -203,7 +206,10 @@ async fn create_stash_item<'c>(
         stash_item_flatten_stats.item_crit_chance,
         stash_item_flatten_stats.item_crit_damage,
         item_data,
-        DATA_VERSION
+        DATA_VERSION,
+        stash_item_flatten_stats.item_cooldown,
+        stash_item_flatten_stats.item_upgrade_level,
+        stash_item_flatten_stats.item_power_level
     )
     .fetch_one(&mut **executor)
     .await?;
