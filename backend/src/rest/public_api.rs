@@ -2,10 +2,16 @@ use std::time::Duration;
 
 use anyhow::Result;
 
-use axum::{Json, Router, extract::State, routing::get};
+use axum::{
+    Json, Router,
+    extract::{Query, State},
+    routing::get,
+};
+use serde::Deserialize;
 
 use shared::{
     data::area::AreaLevel,
+    data::realms::Realm,
     http::server::{LeaderboardEntry, LeaderboardResponse, NewsResponse, PlayersCountResponse},
 };
 
@@ -22,6 +28,11 @@ pub fn routes() -> Router<AppState> {
         .route("/leaderboard", get(get_leaderboard))
         .route("/players", get(get_players_count))
         .route("/news", get(get_news))
+}
+
+#[derive(Deserialize)]
+struct LeaderboardQuery {
+    realm: Option<Realm>,
 }
 
 async fn get_news(
@@ -47,7 +58,7 @@ async fn get_players_count(
             area_id: entry.area_id,
             area_level: entry.area_level as u16,
             created_at: entry.created_at.into(),
-            elapsed_time: None,
+            elapsed_time: Default::default(),
             comments: "".into(),
         })
         .collect();
@@ -56,9 +67,12 @@ async fn get_players_count(
 
 async fn get_leaderboard(
     State(db_pool): State<DbPool>,
+    Query(query): Query<LeaderboardQuery>,
 ) -> Result<Json<LeaderboardResponse>, AppError> {
+    let realm_id = query.realm.unwrap_or_default().realm_id();
+
     Ok(Json(LeaderboardResponse {
-        entries: db::leaderboard::get_leaderboard(&db_pool, 10)
+        entries: db::leaderboard::get_leaderboard(&db_pool, 10, &realm_id)
             .await?
             .into_iter()
             .map(|entry| entry.into())
@@ -76,7 +90,7 @@ impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
             area_id: val.area_id,
             area_level: val.area_level as AreaLevel,
             created_at: val.created_at.into(),
-            elapsed_time: val.elapsed_time.map(Duration::from_secs_f64),
+            elapsed_time: Duration::from_secs_f64(val.elapsed_time),
             comments: "".to_string(),
         }
     }

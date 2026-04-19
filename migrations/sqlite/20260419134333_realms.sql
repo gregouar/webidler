@@ -314,7 +314,7 @@ CREATE TABLE leaderboard (
     area_id TEXT NOT NULL,
     -- 
     area_level INT NOT NULL,
-    elapsed_time REAL,
+    elapsed_time REAL NOT NULL,
     --
     data_version TEXT,
     --
@@ -323,3 +323,63 @@ CREATE TABLE leaderboard (
     --
     PRIMARY KEY (character_id, realm_id, area_id)
 );
+
+CREATE INDEX idx_leaderboard_realm_area_rank ON leaderboard (
+    realm_id,
+    area_id,
+    area_level DESC,
+    elapsed_time ASC,
+    updated_at ASC
+);
+
+INSERT INTO
+    leaderboard (
+        character_id,
+        realm_id,
+        area_id,
+        area_level,
+        elapsed_time,
+        data_version,
+        created_at,
+        updated_at
+    )
+SELECT
+    best_runs.character_id,
+    'Legacy' AS realm_id,
+    best_runs.area_id,
+    best_runs.area_level,
+    best_runs.elapsed_time,
+    best_runs.data_version,
+    best_runs.created_at,
+    best_runs.created_at
+FROM
+    (
+        SELECT
+            gs.character_id,
+            gs.area_id,
+            gs.area_level,
+            gs.elapsed_time,
+            gs.data_version,
+            gs.created_at,
+            ROW_NUMBER() OVER (
+                PARTITION BY gs.area_id,
+                gs.character_id
+                ORDER BY
+                    gs.area_level DESC,
+                    gs.elapsed_time ASC,
+                    gs.created_at ASC
+            ) AS best_rank
+        FROM
+            game_stats gs
+        WHERE
+            gs.data_version >= '0.1.9'
+            OR gs.data_version = '0.1.8'
+            OR gs.data_version = '0.1.8_0.1.7'
+    ) AS best_runs
+WHERE
+    best_runs.best_rank = 1
+    AND (
+        best_runs.elapsed_time IS NOT NULL
+        AND best_runs.elapsed_time <> 0
+    )
+    AND best_runs.area_level <> 0;

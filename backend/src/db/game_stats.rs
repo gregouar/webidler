@@ -35,7 +35,7 @@ pub async fn save_game_stats<'c>(
     character_id: &UserCharacterId,
     realm_id: &RealmId,
     game_instance_data: &GameInstanceData,
-) -> anyhow::Result<bool> {
+) -> anyhow::Result<()> {
     Ok(insert_game_stats(
         executor,
         character_id,
@@ -54,7 +54,6 @@ pub async fn save_game_stats<'c>(
     .await?)
 }
 
-// TODO: Rework for new leaderboard
 #[allow(clippy::too_many_arguments)]
 async fn insert_game_stats<'c>(
     executor: impl DbExecutor<'c>,
@@ -67,32 +66,13 @@ async fn insert_game_stats<'c>(
     items_data: JsonValue,
     passives_data: JsonValue,
     skills_data: JsonValue,
-) -> Result<bool, sqlx::Error> {
-    // For some reason, I need to count 0 instead of 1
-    // 1 = (
-    //     SELECT COUNT(*)
-    //     FROM game_stats gs
-    //     WHERE gs.area_id = $2
-    //         AND gs.data_version = $5
-    //         AND gs.area_level >= $3
-    //     )
-
-    let record = sqlx::query!(
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
         r#"
         INSERT INTO game_stats
             (character_id, area_id, area_level, elapsed_time, data_version,
              stats_data, items_data, passives_data, skills_data, realm_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        RETURNING
-        NOT EXISTS (
-        SELECT 1
-        FROM game_stats gs
-        WHERE gs.area_id = $2
-            AND gs.data_version = $5
-            AND gs.realm_id =  $10
-            AND gs.area_level >= $3
-        )
-        AS "is_highscore!: bool"
         "#,
         character_id,
         area_id,
@@ -105,10 +85,10 @@ async fn insert_game_stats<'c>(
         skills_data,
         realm_id
     )
-    .fetch_one(executor)
+    .execute(executor)
     .await?;
 
-    Ok(record.is_highscore)
+    Ok(())
 }
 
 pub async fn load_last_game_stats<'c>(

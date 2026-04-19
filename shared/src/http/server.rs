@@ -38,7 +38,7 @@ pub struct LeaderboardEntry {
     pub area_id: String,
     pub area_level: AreaLevel,
     pub created_at: DateTime<Utc>,
-    pub elapsed_time: Option<Duration>,
+    pub elapsed_time: Duration,
     pub comments: String,
 }
 

@@ -44,7 +44,7 @@ struct ToastData {
     id: ToastId,
     message: String,
     variant: ToastVariant,
-    is_exiting: bool,
+    is_exiting: ArcRwSignal<bool>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -68,7 +68,7 @@ impl Toasts {
             id: ToastId::new(),
             message: message.into(),
             variant,
-            is_exiting: false,
+            is_exiting: ArcRwSignal::new(false),
         };
         let toast_id = toast.id;
 
@@ -86,7 +86,9 @@ impl Toasts {
         let should_schedule = self.entries.with_untracked(|entries| {
             entries
                 .iter()
-                .any(|toast| toast.id == toast_id && !toast.is_exiting)
+                .find(|toast| toast.id == toast_id)
+                .map(|toast| !toast.is_exiting.get_untracked())
+                .unwrap_or(false)
         });
 
         if !should_schedule {
@@ -95,7 +97,7 @@ impl Toasts {
 
         self.entries.update(|entries| {
             if let Some(toast) = entries.iter_mut().find(|toast| toast.id == toast_id) {
-                toast.is_exiting = true;
+                toast.is_exiting.set(true);
             }
         });
 
@@ -257,7 +259,7 @@ fn ToastIcon(variant: ToastVariant) -> impl IntoView {
 fn ToastView(
     message: String,
     variant: ToastVariant,
-    is_exiting: bool,
+    is_exiting: ArcRwSignal<bool>,
     on_close: Callback<()>,
 ) -> impl IntoView {
     let (accent_class, label_class, text_class, title) = match variant {
@@ -291,19 +293,21 @@ fn ToastView(
     view! {
         <div
             role="status"
-            class=format!(
-                "group relative overflow-hidden rounded-[8px]
-                border border-[#6c5734]/55
-                bg-[linear-gradient(180deg,#433f47,#27242b)]
-                shadow-[0_8px_18px_rgba(0,0,0,0.3),inset_1px_1px_0_rgba(255,255,255,0.04),inset_-1px_-1px_0_rgba(0,0,0,0.22)]
-                transition-[opacity,transform] duration-200 will-change-transform
-                {}",
-                if is_exiting {
-                    "animate-[toast-slide-out_240ms_cubic-bezier(0.55,0,1,0.45)_forwards]"
-                } else {
-                    "animate-[toast-slide-in_260ms_cubic-bezier(0.22,1,0.36,1)]"
-                },
-            )
+            class=move || {
+                format!(
+                    "group relative overflow-hidden rounded-[8px]
+                    border border-[#6c5734]/55
+                    bg-[linear-gradient(180deg,#433f47,#27242b)]
+                    shadow-[0_8px_18px_rgba(0,0,0,0.3),inset_1px_1px_0_rgba(255,255,255,0.04),inset_-1px_-1px_0_rgba(0,0,0,0.22)]
+                    transition-[opacity,transform] duration-200 will-change-transform
+                    {}",
+                    if is_exiting.get() {
+                        "animate-[toast-slide-out_240ms_cubic-bezier(0.55,0,1,0.45)_forwards]"
+                    } else {
+                        "animate-[toast-slide-in_260ms_cubic-bezier(0.22,1,0.36,1)]"
+                    },
+                )
+            }
         >
             <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/6"></div>
             <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/30 to-transparent"></div>
