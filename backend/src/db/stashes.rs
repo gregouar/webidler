@@ -1,4 +1,5 @@
 use shared::data::{
+    realms::{Realm, RealmId},
     stash::{StashId, StashType},
     user::{UserCharacterId, UserId},
 };
@@ -13,6 +14,8 @@ pub struct StashEntry {
     pub stash_id: StashId,
     pub user_id: UserId,
 
+    pub realm_id: RealmId,
+
     pub stash_type: Json<StashType>,
     pub title: Option<String>,
 
@@ -24,24 +27,27 @@ pub struct StashEntry {
 pub async fn create_stash<'c>(
     executor: impl DbExecutor<'c>,
     user_id: UserId,
+    realm: Realm,
     stash_type: StashType,
     max_items: i64,
     title: &str,
 ) -> Result<StashEntry, sqlx::Error> {
     let stash_id = uuid::Uuid::new_v4();
+    let realm_id = realm.realm_id();
 
     let stash_type = Json(stash_type);
     let stash_type_value = serde_json::to_value(stash_type).unwrap();
     sqlx::query!(
         r#"
-        INSERT INTO stashes (stash_id, user_id, stash_type, title, max_items)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO stashes (stash_id, user_id, stash_type, title, max_items, realm_id)
+        VALUES ($1, $2, $3, $4, $5, $6)
         "#,
         stash_id,
         user_id,
         stash_type_value,
         title,
-        max_items
+        max_items,
+        realm_id
     )
     .execute(executor)
     .await?;
@@ -49,6 +55,7 @@ pub async fn create_stash<'c>(
     Ok(StashEntry {
         stash_id,
         user_id,
+        realm_id,
         stash_type,
         title: Some(title.to_string()),
         items_amount: 0,
@@ -67,6 +74,7 @@ pub async fn get_stash<'c>(
         SELECT
             stash_id as "stash_id: StashId",
             user_id as "user_id: UserId",
+            realm_id as "realm_id!",
             stash_type as "stash_type: Json<StashType>",
             title as "title?",
             max_items,
@@ -99,6 +107,7 @@ pub async fn get_character_stash_by_type<'c>(
         SELECT
             stashes.stash_id as "stash_id: StashId",
             stashes.user_id as "user_id: UserId",
+            stashes.realm_id as "realm_id!",
             stashes.stash_type as "stash_type: Json<StashType>",
             stashes.title as "title?",
             stashes.max_items,
@@ -115,6 +124,7 @@ pub async fn get_character_stash_by_type<'c>(
         WHERE 
             character_id = $1
             AND stash_type = $2 
+            AND stashes.realm_id = characters.realm_id
             AND stashes.deleted_at IS NULL
         "#,
         character_id,

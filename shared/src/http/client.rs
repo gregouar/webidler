@@ -62,6 +62,9 @@ pub struct UpdateAccountRequest {
 pub struct CreateCharacterRequest {
     pub name: Username,
     pub portrait: AssetName,
+
+    pub is_ssf: bool,
+    pub legacy: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

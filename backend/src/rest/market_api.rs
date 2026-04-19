@@ -25,7 +25,7 @@ use crate::{
         systems::{inventory_controller, items_controller, stashes_controller},
     },
     integration::chat::ChatIntegration,
-    rest::utils::{verify_character_in_town, verify_character_user},
+    rest::utils::{verify_character_in_town, verify_character_user, verify_ssf},
 };
 
 use super::AppError;
@@ -84,6 +84,7 @@ pub async fn post_buy_market_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -197,6 +198,7 @@ pub async fn post_sell_market_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 
@@ -278,6 +280,7 @@ pub async fn post_edit_market_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
+    verify_ssf(&character)?;
     verify_character_user(&character, &current_user)?;
     verify_character_in_town(&character)?;
 

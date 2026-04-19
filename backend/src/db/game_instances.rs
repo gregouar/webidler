@@ -23,7 +23,7 @@ pub struct SavedGameInstance {
 
     pub saved_at: UtcDateTime,
     pub data_version: String,
-    pub game_data: Vec<u8>, // Assuming game_data is stored as a binary blob
+    pub game_data: Vec<u8>,
 }
 
 pub async fn save_game_instance_data<'c>(

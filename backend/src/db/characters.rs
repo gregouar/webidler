@@ -1,6 +1,9 @@
 use sqlx::{FromRow, Transaction};
 
-use shared::data::user::{UserCharacterId, UserId};
+use shared::data::{
+    realms::{Realm, RealmId},
+    user::{UserCharacterId, UserId},
+};
 
 use crate::db::pool::Database;
 
@@ -9,7 +12,10 @@ use super::{pool::DbExecutor, utc_datetime::UtcDateTime};
 #[derive(Debug, FromRow)]
 pub struct CharacterEntry {
     pub character_id: UserCharacterId,
+    pub realm_id: RealmId,
     pub user_id: UserId,
+
+    pub is_ssf: bool,
 
     pub character_name: String,
     pub portrait: String,
@@ -49,18 +55,24 @@ pub async fn create_character<'c>(
     user_id: &UserId,
     name: &str,
     portrait: &str,
+    realm: Realm,
+    is_ssf: bool,
 ) -> Result<Option<UserCharacterId>, sqlx::Error> {
     let character_id = uuid::Uuid::new_v4();
 
+    let realm_id = realm.realm_id();
+
     let res = sqlx::query!(
         r#"
-        INSERT INTO characters (character_id, user_id, character_name, portrait)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO characters (character_id, user_id, character_name, portrait, realm_id, is_ssf)
+        VALUES ($1, $2, $3, $4, $5 , $6)
         "#,
         character_id,
         user_id,
         name,
-        portrait
+        portrait,
+        realm_id,
+        is_ssf
     )
     .execute(executor)
     .await;
@@ -99,6 +111,8 @@ pub async fn read_character<'c>(
         SELECT
             characters.character_id as "character_id: UserCharacterId",
             user_id as "user_id: UserId",
+            realm_id as "realm_id!",
+            is_ssf as "is_ssf!",
             character_name,
             portrait,
             max_area_level as "max_area_level!: i32",
@@ -176,6 +190,8 @@ pub async fn read_all_user_characters<'c>(
         SELECT
             characters.character_id as "character_id: UserCharacterId",
             user_id as "user_id: UserId",
+            realm_id as "realm_id!",
+            is_ssf as "is_ssf!",
             character_name,
             portrait,
             max_area_level as "max_area_level!: i32",

@@ -5,7 +5,7 @@ use anyhow;
 use indexmap::IndexSet;
 use sqlx::{FromRow, types::JsonValue};
 
-use shared::data::{item::ItemSlot, player::EquippedSlot, user::UserCharacterId};
+use shared::data::{item::ItemSlot, player::EquippedSlot, realms::Realm, user::UserCharacterId};
 
 use crate::{
     constants::DATA_VERSION, db::utc_datetime::UtcDateTime, game::game_data::GameInstanceData,
@@ -33,11 +33,13 @@ pub struct GameStatsEntry {
 pub async fn save_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
+    realm: Realm,
     game_instance_data: &GameInstanceData,
 ) -> anyhow::Result<bool> {
     Ok(insert_game_stats(
         executor,
         character_id,
+        realm,
         &game_instance_data.area_id.clone(),
         game_instance_data.area_state.read().max_area_level as i32,
         game_instance_data
@@ -52,10 +54,12 @@ pub async fn save_game_stats<'c>(
     .await?)
 }
 
+// TODO: Rework for new leaderboard
 #[allow(clippy::too_many_arguments)]
 async fn insert_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
+    realm: Realm,
     area_id: &str,
     area_level: i32,
     elapsed_time: f64,
@@ -72,18 +76,22 @@ async fn insert_game_stats<'c>(
     //         AND gs.data_version = $5
     //         AND gs.area_level >= $3
     //     )
+
+    let realm_id = realm.realm_id();
+
     let record = sqlx::query!(
         r#"
         INSERT INTO game_stats
             (character_id, area_id, area_level, elapsed_time, data_version,
-             stats_data, items_data, passives_data, skills_data)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+             stats_data, items_data, passives_data, skills_data, realm_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING
         NOT EXISTS (
         SELECT 1
         FROM game_stats gs
         WHERE gs.area_id = $2
             AND gs.data_version = $5
+            AND gs.realm_id =  $10
             AND gs.area_level >= $3
         )
         AS "is_highscore!: bool"
@@ -97,43 +105,13 @@ async fn insert_game_stats<'c>(
         items_data,
         passives_data,
         skills_data,
+        realm_id
     )
     .fetch_one(executor)
     .await?;
 
     Ok(record.is_highscore)
 }
-// async fn insert_game_stats<'c>(
-//     executor: impl DbExecutor<'c>,
-//     character_id: &UserCharacterId,
-//     area_id: &str,
-//     area_level: i32,
-//     elapsed_time: f64,
-//     stats_data: JsonValue,
-//     items_data: JsonValue,
-//     passives_data: JsonValue,
-//     skills_data: JsonValue,
-// ) -> Result<(), sqlx::Error> {
-//     sqlx::query!(
-//         "INSERT INTO game_stats
-//             (character_id, area_id, area_level, elapsed_time, data_version, stats_data, items_data, passives_data, skills_data)
-//             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-//         ",
-//         character_id,
-//         area_id,
-//         area_level,
-//         elapsed_time,
-//         DATA_VERSION,
-//         stats_data,
-//         items_data,
-//         passives_data,
-//         skills_data,
-//     )
-//     .execute(executor)
-//     .await?;
-
-//     Ok(())
-// }
 
 pub async fn load_last_game_stats<'c>(
     executor: impl DbExecutor<'c>,

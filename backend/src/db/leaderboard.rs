@@ -18,6 +18,7 @@ pub struct LeaderboardEntry {
     pub elapsed_time: Option<f64>,
 }
 
+// TODO: Rework for new leaderboard
 pub async fn get_leaderboard(
     db_pool: &DbPool,
     top_n: i64,
