@@ -1218,39 +1218,21 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
                     <ValidatedInput
                         id="power_level"
-                        label="Min Power Level:"
+                        label="Min Item Level:"
                         input_type="number"
-                        placeholder="Minimum Power Level"
-                        bind=price
+                        placeholder="Minimum Item Level"
+                        bind=min_power_level
                     />
                     <ValidatedInput
                         id="upgrade_level"
                         label="Min Empower Level:"
                         input_type="number"
                         placeholder="Minimum Empower Level"
-                        bind=price
+                        bind=min_upgrade_level
                     />
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
-                        <span>"Item Category:"</span>
-                        <SearchableDropdownMenu
-                            options=item_category_options
-                            chosen_option=item_category
-                        />
-                    </div>
-
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
-                        <span>"Item Rarity:"</span>
-                        <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
-                    </div>
-
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
-                        <span>"Order by:"</span>
-                        <DropdownMenu options=order_by_options chosen_option=order_by />
-                    </div>
-
                     <ValidatedInput
                         id="price"
                         label="Max Price:"
@@ -1258,6 +1240,24 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         placeholder="Maximum Price"
                         bind=price
                     />
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Category:"</span>
+                        <SearchableDropdownMenu
+                            options=item_category_options
+                            chosen_option=item_category
+                        />
+                    </div>
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Rarity:"</span>
+                        <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
+                    </div>
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Order by:"</span>
+                        <DropdownMenu options=order_by_options chosen_option=order_by />
+                    </div>
                 </div>
             </div>
 
