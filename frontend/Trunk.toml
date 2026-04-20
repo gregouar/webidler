@@ -1,6 +1,6 @@
 [build]
 # Enable a small amount of optimization in debug mode
-rustflags = ["-C", "opt-level=0"]
+rustflags = ["-C", "opt-level=0", "--cfg", "erase_components"]
 # Clean cargo output which can help with rebuilds
 clean-dist = true
 release = false
