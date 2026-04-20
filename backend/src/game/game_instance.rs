@@ -3,7 +3,7 @@ use anyhow::Result;
 use shared::{
     computations,
     constants::{self, RUSH_MODE_SPEED_MULTIPLIER},
-    data::user::UserCharacterId,
+    data::{realms::Realm, user::UserCharacterId},
     messages::server::{ErrorMessage, ErrorType, ServerMessage},
 };
 
@@ -266,12 +266,19 @@ impl<'a> GameInstance<'a> {
             .await
             {
                 Ok(true) => {
+                    let realm: Realm = (&self.game_data.realm_id).into();
+                    let realm_label = match realm {
+                        Realm::Standard => "",
+                        Realm::StandardSSF => " [SSF]",
+                        Realm::Legacy => " [Legacy]",
+                    };
                     if let Err(err) = self
                         .chat_integration
                         .broadcast_message(
                             format!(
-                                "{} is the first to beat Area Level {:0} in \"{}\"!",
+                                "{}{} is the first to beat Area Level {:0} in \"{}\"!",
                                 self.game_data.player_specs.read().character_specs.name,
+                                realm_label,
                                 self.game_data.area_state.read().max_area_level,
                                 self.game_data.area_specs.name,
                             ),
