@@ -2,16 +2,15 @@ name: Backend_chat
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - "main"
     paths:
-      [
-        "docker-compose.yml",
-        "backend_chat/**",
-        "backend_shared/**",
-        "shared_chat/**",
-        "profanities/**",
-        ".github/workflows/vps-backend_chat-deploy.yml",
-      ]
+      - "docker-compose.yml"
+      - "backend_chat/**"
+      - "backend_shared/**"
+      - "shared_chat/**"
+      - "profanities/**"
+      - ".github/workflows/vps-backend_chat-deploy.yml"
 
 jobs:
   Pre-Build:
