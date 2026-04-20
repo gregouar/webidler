@@ -73,6 +73,10 @@
       "min_area_level": 400
     },
     {
+      "item_id": "rune_phys_fire",
+      "weight": 49900000
+    },
+    {
       "item_id": "edict_witch",
       "weight": 499
     }

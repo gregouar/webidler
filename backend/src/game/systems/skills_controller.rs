@@ -545,17 +545,15 @@ fn repeat_skill<'a>(
         Some(&repeated_skill_effect.already_hit),
     );
 
-    match character_hit {
-        Some(charater_hit) => {
-            repeated_skill_effect.already_hit.insert(charater_hit);
-            repeated_skill_effect.elapsed_cooldown =
-                (repeated_skill_effect.elapsed_cooldown.get() - 1.0).into();
-            repeated_skill_effect.amount_repeat += 1;
-
-            repeated_skill_effect.amount_repeat < repeated_skill_effect.max_repeat
-        }
-        None => false,
+    if let Some(charater_hit) = character_hit {
+        repeated_skill_effect.already_hit.insert(charater_hit);
     }
+
+    repeated_skill_effect.elapsed_cooldown =
+        (repeated_skill_effect.elapsed_cooldown.get() - 1.0).into();
+    repeated_skill_effect.amount_repeat += 1;
+
+    repeated_skill_effect.amount_repeat < repeated_skill_effect.max_repeat
 }
 
 pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut PlayerResources) {

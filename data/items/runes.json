@@ -137,6 +137,8 @@
                       "stat": {
                         "Damage": {
                           "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
                           "damage_type": null,
                           "min_max": null
                         }
@@ -197,6 +199,8 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": "Storm",
                 "min_max": "Min"
               }
@@ -214,6 +218,8 @@
         "stat": {
           "Damage": {
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Storm",
             "min_max": null
           }
@@ -272,6 +278,8 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": null,
                 "min_max": null
               }
@@ -293,7 +301,9 @@
             "stat": {
               "StatusDuration": {
                 "status_type": null,
-                "skill_type": null
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null
               }
             },
             "modifier": "Flat",
@@ -336,16 +346,11 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "damage_type": "Poison",
-                  "min_max": null
-                }
-              },
-              {
                 "StatusDuration": {
                   "status_type": null,
-                  "skill_type": null
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
                 }
               },
               {
@@ -356,6 +361,17 @@
                     }
                   },
                   "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "min_max": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Poison",
                   "min_max": null
                 }
               }
@@ -398,6 +414,8 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": null,
                 "min_max": null
               }
@@ -466,6 +484,8 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": null,
                 "min_max": null
               }
@@ -505,6 +525,8 @@
               {
                 "Damage": {
                   "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
                   "damage_type": "Storm",
                   "min_max": null
                 }
@@ -523,6 +545,89 @@
     "armor_specs": null,
     "rune_specs": {
       "root_node": false
+    },
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_phys_fire": {
+    "name": "Heart of the Pyre",
+    "icon": "items/runes/rune_phys_fire.webp",
+    "description": "The heart is weighed not for truth, but for fuel.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "StatConverter": {
+            "source": {
+              "Damage": {
+                "damage_type": "Physical",
+                "min_max": null
+              }
+            },
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": "Fire",
+                "min_max": null
+              }
+            },
+            "is_extra": true,
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 25.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConverter": {
+            "source": "MaxLife",
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": "Fire",
+                "min_max": null
+              }
+            },
+            "is_extra": true,
+            "skill_type": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 25.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          -40.0,
+          -20.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": {
+      "root_node": true
     },
     "map_specs": null,
     "ignore_quality": true,

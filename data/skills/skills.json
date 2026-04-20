@@ -384,10 +384,15 @@
       {
         "range": "Any",
         "shape": "All",
+        "repeat": {
+          "value": 4,
+          "target": "Any",
+          "repeat_cooldown": 1
+        },
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 6,
+              "duration": 2,
               "statuses": [
                 {
                   "status_type": {
