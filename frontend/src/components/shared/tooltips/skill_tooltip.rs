@@ -633,13 +633,10 @@ pub fn format_skill_effect(
             value,
             modifier,
         } => {
-            let value_str = if let RestoreModifier::Percent = modifier
+            let value_str = (matches!(modifier, RestoreModifier::Percent)
                 && *value.max == 100.0
-                && *value.min == 100.0
-            {
-                view! {}.into_any()
-            } else {
-                match modifier {
+                && *value.min == 100.0)
+                .then(|| match modifier {
                     RestoreModifier::Percent => view! {
                         {format_min_max(value)}
                         "% of "
@@ -650,8 +647,7 @@ pub fn format_skill_effect(
                         "s from "
                     }
                     .into_any(),
-                }
-            };
+                });
 
             let skill_filter_str = skill_filter_str(&skill_filter, " ", true);
             let skill_filter_str = if skill_filter_str.is_empty() {
