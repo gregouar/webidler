@@ -60,16 +60,13 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub position_y: u8,
 
+    // TODO: All the above: move elsewhere ^^^
+    // TODO: Should have CharacterComputed
     #[serde(flatten)]
     pub character_attrs: CharacterAttrs,
-
-    // TODO: All the above: move elsewhere ^^^
-    // TODO: Remove ModifiableValue and have a separate backend only struct to handle those
-    //
     #[serde(default)]
     pub skills_specs: Vec<SkillSpecs>,
 
-    // TODO: Should have CharacterComputed
     #[serde(default)]
     pub triggers: Vec<TriggeredEffect>,
     #[serde(default)]

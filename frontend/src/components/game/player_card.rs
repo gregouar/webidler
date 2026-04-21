@@ -42,6 +42,7 @@ pub fn PlayerCard() -> impl IntoView {
             .player_specs
             .read()
             .character_specs
+            .character_attrs
             .max_life
             .get()
     });
@@ -52,7 +53,9 @@ pub fn PlayerCard() -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(game_context.player_specs.read().character_specs.max_life.get())}
+            {format_number(
+                game_context.player_specs.read().character_specs.character_attrs.max_life.get(),
+            )}
         }
     };
 
@@ -70,6 +73,7 @@ pub fn PlayerCard() -> impl IntoView {
             .player_specs
             .read()
             .character_specs
+            .character_attrs
             .max_mana
             .get()
     });
@@ -78,6 +82,7 @@ pub fn PlayerCard() -> impl IntoView {
             .player_specs
             .read()
             .character_specs
+            .character_attrs
             .take_from_mana_before_life
             .get()
             > 0.0
@@ -85,6 +90,7 @@ pub fn PlayerCard() -> impl IntoView {
                 .player_specs
                 .read()
                 .character_specs
+                .character_attrs
                 .take_from_life_before_mana
                 .get()
                 > 0.0
@@ -94,6 +100,7 @@ pub fn PlayerCard() -> impl IntoView {
             game_context
                 .player_specs
                 .read()
+                .character_specs
                 .skills_specs
                 .iter()
                 .map(|s| s.mana_cost.get())
@@ -327,6 +334,7 @@ pub fn PlayerCard() -> impl IntoView {
                         0..game_context
                             .player_specs
                             .read()
+                            .character_specs
                             .skills_specs
                             .len()
                             .min(game_context.player_specs.read().max_skills as usize)
@@ -337,7 +345,7 @@ pub fn PlayerCard() -> impl IntoView {
                     <PlayerSkill index=i is_dead />
                 </For>
                 <Show when=move || {
-                    game_context.player_specs.read().skills_specs.len()
+                    game_context.player_specs.read().character_specs.skills_specs.len()
                         < game_context.player_specs.read().max_skills as usize
                 }>
                     <BuySkillButton />
@@ -455,6 +463,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         (1.0 - (game_context
             .player_state
             .read()
+            .character_state
             .skills_states
             .get(index)
             .map(|x| x.elapsed_cooldown.get())
@@ -462,6 +471,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             * game_context
                 .player_specs
                 .read()
+                .character_specs
                 .skills_specs
                 .get(index)
                 .map(|x| x.cooldown.get())
@@ -481,6 +491,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             && game_context
                 .player_state
                 .read()
+                .character_state
                 .skills_states
                 .get(index)
                 .map(|x| x.just_triggered)
@@ -492,6 +503,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             && game_context
                 .player_state
                 .read()
+                .character_state
                 .skills_states
                 .get(index)
                 .map(|x| x.is_ready)
@@ -523,6 +535,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context
             .player_specs
             .read()
+            .character_specs
             .skills_specs
             .get(index)
             .map(|x| x.next_upgrade_cost)
@@ -535,6 +548,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         if let Some(mut skill_specs) = game_context
             .player_specs
             .read()
+            .character_specs
             .skills_specs
             .get(index)
             .cloned()
@@ -565,7 +579,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         };
 
         game_context.player_specs.update(|player_specs| {
-            if let Some(skill_specs) = player_specs.skills_specs.get_mut(index) {
+            if let Some(skill_specs) = player_specs.character_specs.skills_specs.get_mut(index) {
                 game_context.player_resources.write().gold -= cost;
                 for _ in 0..amount {
                     skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(1);
@@ -590,6 +604,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context
             .player_specs
             .read()
+            .character_specs
             .skills_specs
             .get(index)
             .map(|x| x.cooldown.get())
@@ -616,6 +631,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context
             .player_specs
             .read()
+            .character_specs
             .skills_specs
             .get(index)
             .cloned()
@@ -625,6 +641,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context
             .player_specs
             .read()
+            .character_specs
             .skills_specs
             .get(index)
             .map(|skill_specs| skill_specs.base.clone())
@@ -654,6 +671,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         game_context
             .player_state
             .read_untracked()
+            .character_state
             .skills_states
             .get(index)
             .map(|x| x.elapsed_cooldown.get())
