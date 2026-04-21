@@ -628,6 +628,40 @@ pub fn format_skill_effect(
         SkillEffectType::Resurrect => {
             view! { <EffectLi>{success_chance}"Resurrect"</EffectLi> }.into_any()
         }
+        SkillEffectType::RefreshCooldown {
+            skill_filter,
+            value,
+            modifier,
+        } => {
+            let value_str = if let RestoreModifier::Percent = modifier
+                && *value.max == 100.0
+                && *value.min == 100.0
+            {
+                view! {}.into_any()
+            } else {
+                match modifier {
+                    RestoreModifier::Percent => view! {
+                        {format_min_max(value)}
+                        "% of "
+                    }
+                    .into_any(),
+                    RestoreModifier::Flat => view! {
+                        {format_duration(value)}
+                        "s from "
+                    }
+                    .into_any(),
+                }
+            };
+
+            let skill_filter_str = skill_filter_str(&skill_filter, " ", true);
+            let skill_filter_str = if skill_filter_str.is_empty() {
+                "All Skills".to_string()
+            } else {
+                skill_filter_str
+            };
+            view! { <EffectLi>{success_chance}"Refresh " {value_str} {skill_filter_str} " Cooldown"</EffectLi> }
+            .into_any()
+        }
     };
 
     let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
@@ -826,7 +860,9 @@ pub fn skill_effect_text(
                 )
             })
             .join(" "),
-        SkillEffectType::Resurrect | SkillEffectType::Restore { .. } => {
+        SkillEffectType::Resurrect
+        | SkillEffectType::Restore { .. }
+        | SkillEffectType::RefreshCooldown { .. } => {
             stat_skill_effect_type_str(stat_skill_effect.as_ref())
         }
     }

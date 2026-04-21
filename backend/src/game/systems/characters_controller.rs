@@ -10,8 +10,8 @@ use shared::{
         modifier::Modifier,
         player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
-        stat_effect::{StatStatusType, StatType, compare_options},
-        values::NonNegative,
+        stat_effect::{StatSkillFilter, StatStatusType, StatType, compare_options},
+        values::{Cooldown, NonNegative},
     },
 };
 
@@ -228,6 +228,35 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
         .retain(|(_, status_state)| status_state.duration.is_none());
 
     true
+}
+
+pub fn refresh_skills_cooldown(
+    target: &mut Target,
+    skill_filter: &StatSkillFilter,
+    amount: f64,
+    modifier: &RestoreModifier,
+) -> bool {
+    let mut refreshed = false;
+    for (skill_specs, skill_state) in target
+        .1
+        .0
+        .skills_specs
+        .iter()
+        .zip(target.1.1.skills_states.iter_mut())
+    {
+        if skill_filter.is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
+        {
+            match modifier {
+                RestoreModifier::Flat => {
+                    skill_state.elapsed_cooldown += Cooldown(amount / skill_specs.cooldown.get())
+                }
+                RestoreModifier::Percent => skill_state.elapsed_cooldown += Cooldown(amount * 0.01),
+            }
+            refreshed = true;
+        }
+    }
+
+    refreshed
 }
 
 pub fn should_apply_status(

@@ -303,6 +303,7 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
                 format!("Restore{}", restore_type_str(*restore_type))
             }
             StatSkillEffectType::Resurrect => "Resurrect".into(),
+            StatSkillEffectType::RefreshCooldown => "Refresh Skills".into(),
         },
         None => "All Skill Effects".into(),
     }

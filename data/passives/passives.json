@@ -3223,7 +3223,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",
@@ -4470,18 +4470,6 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_type": null,
-                "skill_type": "Curse",
-                "skill_id": null,
-                "skill_description": null
-              }
-            },
-            "modifier": "Flat",
-            "value": 1e50
-          },
-          {
-            "stat": {
               "StatusPower": {
                 "status_type": null,
                 "skill_type": "Curse",
@@ -4491,10 +4479,43 @@
               }
             },
             "modifier": "More",
-            "value": -33.0
+            "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [
+          {
+            "name": null,
+            "icon": null,
+            "description": null,
+            "trigger_id": "cursed_mouth",
+            "OnWaveCompleted": null,
+            "target": "Me",
+            "modifiers": [],
+            "skill_range": "Melee",
+            "skill_type": "Other",
+            "effects": [
+              {
+                "success_chance": {
+                  "value": 100.0,
+                  "lucky_chance": 0.0
+                },
+                "RefreshCooldown": {
+                  "skill_type": "Curse",
+                  "skill_id": null,
+                  "skill_description": null,
+                  "value": 100.0,
+                  "modifier": "Percent"
+                },
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Single",
+            "owner": null,
+            "inherit_modifiers": false,
+            "is_debuff": false
+          }
+        ],
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
@@ -4920,7 +4941,7 @@
         "socket": false
       },
       "58a42157-4cc3-45ea-b71c-1395663a9b23": {
-        "name": "Damage",
+        "name": "Hit Damage",
         "icon": "passives/damage.svg",
         "x": 72.5,
         "y": 172.5,
@@ -4936,7 +4957,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",
@@ -4954,7 +4975,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",
@@ -12106,7 +12127,7 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "CritDamage": {
+                                  "CritChance": {
                                     "skill_type": null,
                                     "skill_id": null,
                                     "skill_description": null
@@ -12123,7 +12144,7 @@
                                   }
                                 },
                                 {
-                                  "CritChance": {
+                                  "CritDamage": {
                                     "skill_type": null,
                                     "skill_id": null,
                                     "skill_description": null
@@ -12238,7 +12259,7 @@
               }
             },
             "modifier": "More",
-            "value": -33.0
+            "value": -100.0
           }
         ],
         "triggers": [],
@@ -12841,6 +12862,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -12856,15 +12886,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "skill_description": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "min_max": null
                     }
                   }
                 ],
@@ -13109,14 +13130,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -13133,6 +13146,14 @@
                       "skill_id": null,
                       "skill_description": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
                     }
                   }
                 ],
@@ -14074,7 +14095,7 @@
         "socket": false
       },
       "dc33a293-4dbf-4ecf-a0b7-b2fca942ca38": {
-        "name": "Damage",
+        "name": "Hit Damage",
         "icon": "passives/damage.svg",
         "x": 55.0,
         "y": 165.0,
@@ -14090,7 +14111,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",
@@ -14108,7 +14129,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",
@@ -14567,7 +14588,7 @@
         "socket": false
       },
       "e30f5c37-e25e-4c73-a7ab-6f862398745f": {
-        "name": "Damage",
+        "name": "Hit Damage",
         "icon": "passives/damage.svg",
         "x": 65.0,
         "y": 165.0,
@@ -14583,7 +14604,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",
@@ -14601,7 +14622,7 @@
                 "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
-                "is_hit": null
+                "is_hit": true
               }
             },
             "modifier": "More",

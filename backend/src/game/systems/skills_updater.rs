@@ -591,6 +591,11 @@ pub fn compute_skill_specs_effect<'a>(
                 };
             }
             SkillEffectType::Resurrect => {}
+            SkillEffectType::RefreshCooldown {
+                skill_filter: _,
+                value: _,
+                modifier: _,
+            } => {}
         }
     }
 

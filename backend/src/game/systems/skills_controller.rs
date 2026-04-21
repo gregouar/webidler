@@ -508,6 +508,19 @@ fn apply_skill_effect_on_target(
             let resurrected = characters_controller::resuscitate_character(target);
             (resurrected, resurrected)
         }
+        SkillEffectType::RefreshCooldown {
+            skill_filter,
+            value,
+            modifier,
+        } => {
+            let refreshed = characters_controller::refresh_skills_cooldown(
+                target,
+                skill_filter,
+                value.roll_with_seed(seed),
+                modifier,
+            );
+            (refreshed, refreshed)
+        }
     }
 }
 
