@@ -13,15 +13,11 @@ use crate::{
 };
 
 pub use super::character::{CharacterSpecs, CharacterState};
-use super::{
-    item::{ItemSlot, ItemSpecs},
-    skill::{SkillSpecs, SkillState},
-};
+use super::item::{ItemSlot, ItemSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
-    pub skills_specs: Vec<SkillSpecs>,
     pub auto_skills: Vec<bool>, // Should move to a separate synced struct
 
     pub max_skills: u8,
@@ -50,7 +46,6 @@ fn default_max_level() -> u8 {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerState {
     pub character_state: CharacterState,
-    pub skills_states: Vec<SkillState>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

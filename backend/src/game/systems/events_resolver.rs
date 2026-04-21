@@ -229,7 +229,7 @@ fn handle_kill_event(
                             && all(kill_trigger.conditions.iter(), |condition| {
                                 check_condition(
                                     &game_data.area_threat,
-                                    &monster_specs.character_specs,
+                                    &monster_specs.character_specs.character_attrs,
                                     &monster_state.character_state,
                                     condition,
                                 ) > 0.0

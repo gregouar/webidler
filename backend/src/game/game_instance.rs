@@ -70,7 +70,13 @@ impl<'a> GameInstance<'a> {
                 .flatten()
                 .unwrap_or_default();
 
-        for skill_state in self.game_data.player_state.skills_states.iter_mut() {
+        for skill_state in self
+            .game_data
+            .player_state
+            .character_state
+            .skills_states
+            .iter_mut()
+        {
             skill_state.elapsed_cooldown = 1.0.into();
         }
 

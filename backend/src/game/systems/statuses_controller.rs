@@ -1,8 +1,9 @@
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
+    character::CharacterAttrs,
     character_status::{StatusMap, StatusSpecs, StatusState},
-    player::{CharacterSpecs, CharacterState},
+    player::CharacterState,
     stat_effect::EffectsMap,
     values::NonNegative,
 };
@@ -10,7 +11,7 @@ use shared::data::{
 use super::characters_controller;
 
 pub fn update_character_statuses(
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     character_state: &mut CharacterState,
     elapsed_time: Duration,
 ) {
@@ -21,7 +22,7 @@ pub fn update_character_statuses(
         .unique_statuses
         .retain(|_, (status_specs, status_state)| {
             update_status(
-                character_specs,
+                character_attrs,
                 &mut character_state.life,
                 &mut character_state.mana,
                 &mut character_state.dirty_specs,
@@ -36,7 +37,7 @@ pub fn update_character_statuses(
         .cumulative_statuses
         .retain_mut(|(status_specs, status_state)| {
             update_status(
-                character_specs,
+                character_attrs,
                 &mut character_state.life,
                 &mut character_state.mana,
                 &mut character_state.dirty_specs,
@@ -48,7 +49,7 @@ pub fn update_character_statuses(
 }
 
 fn update_status(
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     character_life: &mut NonNegative,
     character_mana: &mut NonNegative,
     character_buff_status_change: &mut bool,
@@ -58,7 +59,7 @@ fn update_status(
 ) -> bool {
     if let StatusSpecs::DamageOverTime { damage_type, .. } = status_specs {
         characters_controller::damage_character(
-            character_specs,
+            character_attrs,
             character_life,
             character_mana,
             &HashMap::from([(

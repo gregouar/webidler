@@ -5,13 +5,13 @@ use shared::{
     data::{
         area::AreaThreat,
         chance::{Chance, ChanceRange},
-        character::{CharacterId, CharacterSize},
+        character::{CharacterAttrs, CharacterId},
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
-        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
+        player::{PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
@@ -29,13 +29,8 @@ use crate::game::{
 
 use super::{characters_updater, skills_updater};
 
-pub fn base_player_character_specs(name: String, portrait: String, level: u8) -> CharacterSpecs {
-    CharacterSpecs {
-        name,
-        portrait,
-        size: CharacterSize::Small,
-        position_x: 0,
-        position_y: 0,
+pub fn base_player_character_attrs(level: u8) -> CharacterAttrs {
+    CharacterAttrs {
         max_life: AtLeastOne::new(100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64)
             .into(),
         life_regen: 10.0.into(),
@@ -64,24 +59,10 @@ pub fn update_player_state(
         &mut player_state.character_state,
         area_threat,
     );
-
-    if !player_state.character_state.is_stunned() {
-        skills_updater::update_skills_states(
-            elapsed_time,
-            &player_specs.skills_specs,
-            &mut player_state.skills_states,
-        );
-
-        skills_updater::update_repeated_skill_effects(
-            elapsed_time,
-            &mut player_state.character_state.repeated_skills,
-        )
-    }
 }
 
 pub fn reset_player(player_state: &mut PlayerState) {
     characters_updater::reset_character(&mut player_state.character_state);
-    skills_updater::reset_skills(&mut player_state.skills_states);
 }
 
 // I hate the fact player state influences player specs... But I couldn't figure out a way
@@ -116,7 +97,7 @@ pub fn update_player_specs(
             .chain(iter::once(
                 stats_updater::compute_conditional_modifiers(
                     area_threat,
-                    &player_specs.character_specs,
+                    &player_specs.character_specs.character_attrs,
                     &player_state.character_state,
                     &player_specs.character_specs.conditional_modifiers,
                 )
@@ -124,11 +105,7 @@ pub fn update_player_specs(
             )),
     );
 
-    player_specs.character_specs = base_player_character_specs(
-        player_specs.character_specs.name.clone(),
-        player_specs.character_specs.portrait.clone(),
-        player_specs.level,
-    );
+    player_specs.character_specs.character_attrs = base_player_character_attrs(player_specs.level);
 
     player_specs.gold_find = 100.0.into();
     player_specs.threat_gain = 100.0.into();
@@ -146,12 +123,14 @@ pub fn update_player_specs(
 
     player_specs
         .character_specs
+        .character_attrs
         .armor
         .entry(DamageType::Physical)
         .or_default()
         .apply_modifier(total_armor, Modifier::Flat);
     player_specs
         .character_specs
+        .character_attrs
         .block
         .entry(SkillType::Attack)
         .or_default()
@@ -185,6 +164,7 @@ pub fn update_player_specs(
             )
             .chain(
                 player_specs
+                    .character_specs
                     .skills_specs
                     .iter()
                     .flat_map(|skill_specs| skill_specs.triggers.iter()),
@@ -283,11 +263,11 @@ fn compute_player_specs(
         });
     }
 
-    for skill_specs in player_specs.skills_specs.iter_mut() {
+    for skill_specs in player_specs.character_specs.skills_specs.iter_mut() {
         skills_updater::update_skill_specs(
             skill_specs,
             effects,
-            &player_specs.character_specs,
+            &player_specs.character_specs.character_attrs,
             Some(player_inventory),
         );
     }

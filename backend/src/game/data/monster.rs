@@ -42,17 +42,20 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
     fn init(specs: BaseMonsterSpecs) -> Self {
         let mut monster_specs = Self {
             character_specs: specs.character_specs,
-            skill_specs: specs.skills.iter().cloned().map(SkillSpecs::init).collect(),
             rarity: specs.rarity,
-            // initiative: specs.initiative,
             power_factor: specs.power_factor,
             reward_factor: specs.power_factor,
         };
 
-        monster_specs.character_specs.status_resistances = specs
-            .status_resistances
-            .into_iter()
-            .fold(HashMap::new(), |mut acc, status_resistance| {
+        monster_specs.character_specs.skills_specs =
+            specs.skills.iter().cloned().map(SkillSpecs::init).collect();
+
+        monster_specs
+            .character_specs
+            .character_attrs
+            .status_resistances = specs.status_resistances.into_iter().fold(
+            HashMap::new(),
+            |mut acc, status_resistance| {
                 let mut apply = |skill_type| {
                     acc.entry((skill_type, status_resistance.status_type.clone()))
                         .or_default()
@@ -67,7 +70,8 @@ impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
                     }
                 }
                 acc
-            });
+            },
+        );
 
         monster_specs
     }

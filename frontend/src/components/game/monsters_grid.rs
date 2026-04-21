@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use rand::Rng;
 use shared::data::monster::MonsterRarity;
-use shared::data::player::CharacterSpecs;
+use shared::data::player::CharacterAttrs;
 use shared::data::skill::{DamageType, SkillType};
 use shared::data::stat_effect::{StatSkillFilter, StatStatusType};
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
@@ -524,7 +524,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
+fn MonsterTags(specs: CharacterAttrs) -> impl IntoView {
     let is_armored = specs.armor.iter().any(|(_, value)| **value > 0.0);
     let armored_tooltip = move || {
         view! {
@@ -835,7 +835,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .and_then(|m| m.skill_states.get(index))
+                .and_then(|m| m.skills_states.get(index))
                 .map(|s| s.elapsed_cooldown.get())
                 .unwrap_or_default())
                 * game_context
@@ -872,7 +872,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .and_then(|m| m.skill_states.get(index))
+                .and_then(|m| m.skills_states.get(index))
                 .map(|s| s.just_triggered)
                 .unwrap_or_default()
         } else {
@@ -888,7 +888,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             .monster_states
             .read_untracked()
             .get(monster_index)
-            .and_then(|m| m.skill_states.get(index))
+            .and_then(|m| m.skills_states.get(index))
             .map(|s| s.elapsed_cooldown.get())
             .unwrap_or_default(),
     );

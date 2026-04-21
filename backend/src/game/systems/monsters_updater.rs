@@ -32,8 +32,6 @@ pub fn update_monster_states(
         .enumerate()
         .filter(|(_, (s, _))| s.character_state.is_alive)
     {
-        // monster_state.initiative = (monster_state.initiative - elapsed_time.as_secs_f32()).max(0.0);
-
         characters_updater::update_character_state(
             events_queue,
             elapsed_time,
@@ -42,30 +40,12 @@ pub fn update_monster_states(
             &mut monster_state.character_state,
             area_threat,
         );
-
-        if
-        //  monster_state.initiative > 0.0 ||
-        monster_state.character_state.is_stunned() {
-            continue;
-        }
-
-        skills_updater::update_skills_states(
-            elapsed_time,
-            &monster_specs.skill_specs,
-            &mut monster_state.skill_states,
-        );
-
-        skills_updater::update_repeated_skill_effects(
-            elapsed_time,
-            &mut monster_state.character_state.repeated_skills,
-        )
     }
 }
 
 pub fn reset_monsters(monster_states: &mut [MonsterState]) {
     for monster_state in monster_states.iter_mut() {
         characters_updater::reset_character(&mut monster_state.character_state);
-        skills_updater::reset_skills(&mut monster_state.skill_states);
     }
 }
 
@@ -119,7 +99,7 @@ pub fn update_monster_specs(
     });
     effects.extend(stats_updater::compute_conditional_modifiers(
         area_threat,
-        &monster_specs.character_specs,
+        &monster_specs.character_specs.character_attrs,
         &monster_state.character_state,
         &monster_specs.character_specs.conditional_modifiers,
     ));
@@ -130,10 +110,7 @@ pub fn update_monster_specs(
     monster_specs.character_specs = character_specs;
     effects.extend(converted_effects);
 
-    // monster_specs.character_specs.effects = effects_map;
-    monster_specs.skill_specs = base_specs.skill_specs.clone();
-
-    for skill_specs in monster_specs.skill_specs.iter_mut() {
+    for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 
@@ -148,7 +125,8 @@ pub fn update_monster_specs(
             })
             .chain(
                 monster_specs
-                    .skill_specs
+                    .character_specs
+                    .skills_specs
                     .iter()
                     .flat_map(|skill_specs| skill_specs.triggers.iter()),
             )

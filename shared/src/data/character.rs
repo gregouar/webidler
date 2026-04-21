@@ -60,9 +60,27 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub position_y: u8,
 
+    #[serde(flatten)]
+    pub character_attrs: CharacterAttrs,
+
     // TODO: All the above: move elsewhere ^^^
     // TODO: Remove ModifiableValue and have a separate backend only struct to handle those
     //
+    #[serde(default)]
+    pub skills_specs: Vec<SkillSpecs>,
+
+    // TODO: Should have CharacterComputed
+    #[serde(default)]
+    pub triggers: Vec<TriggeredEffect>,
+    #[serde(default)]
+    pub effects: EffectsMap,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub conditional_modifiers: Vec<ConditionalModifier>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct CharacterAttrs {
     pub max_life: ModifiableValue<AtLeastOne>,
     #[serde(default)]
     pub life_regen: ModifiableValue<f64>,
@@ -97,15 +115,6 @@ pub struct CharacterSpecs {
 
     #[serde(default)]
     pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
-
-    // TODO: Should have CharacterComputed
-    #[serde(default)]
-    pub triggers: Vec<TriggeredEffect>,
-    #[serde(default)]
-    pub effects: EffectsMap,
-
-    #[serde(default, skip_serializing, skip_deserializing)]
-    pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -114,9 +123,7 @@ pub struct CharacterState {
     pub mana: NonNegative,
 
     pub statuses: StatusMap,
-    // This feels dirty
-    #[serde(default, skip_serializing, skip_deserializing)]
-    pub dirty_specs: bool,
+    pub skills_states: Vec<SkillState>,
 
     pub is_alive: bool,
     pub just_hurt: bool,
@@ -126,8 +133,9 @@ pub struct CharacterState {
 
     // This feels dirty
     #[serde(default, skip_serializing, skip_deserializing)]
+    pub dirty_specs: bool,
+    #[serde(default, skip_serializing, skip_deserializing)]
     pub monitored_conditions: HashMap<Condition, MonitoredCondition>,
-
     #[serde(default, skip_serializing, skip_deserializing)]
     pub repeated_skills: Vec<RepeatedSkillEffect>,
 }

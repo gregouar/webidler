@@ -3,11 +3,11 @@ use shared::{
     data::{
         area::{AreaSpecs, AreaState},
         chance::ChanceRange,
-        character::{CharacterSpecs, CharacterState},
+        character::CharacterState,
         character_status::StatusMap,
         monster::{MonsterSpecs, MonsterState},
         passive::{PassivesTreeAscension, PassivesTreeState},
-        player::{PlayerSpecs, PlayerState},
+        player::{CharacterSpecs, PlayerSpecs, PlayerState},
         skill::{BaseSkillSpecs, SkillSpecs, SkillState},
     },
 };
@@ -36,11 +36,11 @@ impl DataInit<&AreaSpecs> for AreaState {
 impl DataInit<&CharacterSpecs> for CharacterState {
     fn init(specs: &CharacterSpecs) -> Self {
         CharacterState {
-            life: specs.max_life.get().into(),
-            mana: specs.max_mana.get().into(),
+            life: specs.character_attrs.max_life.get().into(),
+            mana: specs.character_attrs.max_mana.get().into(),
 
             statuses: StatusMap::default(),
-            dirty_specs: true,
+            skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
 
             is_alive: true,
             just_hurt: false,
@@ -48,6 +48,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             just_blocked: false,
             just_evaded: false,
 
+            dirty_specs: true,
             monitored_conditions: Default::default(),
             repeated_skills: Default::default(),
         }
@@ -59,7 +60,6 @@ impl DataInit<CharacterSpecs> for PlayerSpecs {
         PlayerSpecs {
             max_area_level: 0,
             character_specs: specs.clone(),
-            skills_specs: vec![],
             auto_skills: vec![],
             max_skills: 4,
             buy_skill_cost: SKILL_BASE_COST,
@@ -78,35 +78,29 @@ impl DataInit<&PlayerSpecs> for PlayerState {
     fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
-            skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
         }
     }
 }
 
 impl DataInit<&MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
-        MonsterState {
+        let mut monster_state = MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            // skill_states: specs.skill_specs.iter().map(SkillState::init).collect(),
-            skill_states: specs
-                .skill_specs
-                .iter()
-                .map(|_| SkillState {
-                    elapsed_cooldown: ChanceRange {
-                        min: 0.0,
-                        max: 1.0,
-                        ..Default::default()
-                    }
-                    .roll()
-                    .into(),
-                    is_ready: false,
-                    just_triggered: false,
-                })
-                .collect(),
-            // initiative: specs.initiative.roll(), // TODO
             gold_reward: 0.0,
             gems_reward: 0.0,
+        };
+
+        for skill_state in monster_state.character_state.skills_states.iter_mut() {
+            skill_state.elapsed_cooldown = ChanceRange {
+                min: 0.0,
+                max: 1.0,
+                ..Default::default()
+            }
+            .roll()
+            .into();
         }
+
+        monster_state
     }
 }
 

@@ -3,10 +3,11 @@ use strum::IntoEnumIterator;
 
 use shared::data::{
     chance::ChanceRange,
+    character::CharacterAttrs,
     character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
     modifier::Modifier,
-    player::{CharacterSpecs, PlayerInventory},
+    player::PlayerInventory,
     skill::{
         DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect, SkillEffect,
         SkillEffectType, SkillSpecs, SkillState, SkillType,
@@ -21,10 +22,10 @@ use crate::game::systems::characters_updater;
 
 pub fn update_skills_states(
     elapsed_time: Duration,
-    skill_specs: &[SkillSpecs],
-    skill_states: &mut [SkillState],
+    skills_specs: &[SkillSpecs],
+    skills_states: &mut [SkillState],
 ) {
-    for (skill_specs, skill_state) in skill_specs.iter().zip(skill_states.iter_mut()) {
+    for (skill_specs, skill_state) in skills_specs.iter().zip(skills_states.iter_mut()) {
         if skill_specs.cooldown.get() > 0.0 {
             skill_state.elapsed_cooldown +=
                 (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
@@ -56,8 +57,8 @@ pub fn update_repeated_skill_effects(
     }
 }
 
-pub fn reset_skills(skill_states: &mut [SkillState]) {
-    for skill_state in skill_states.iter_mut() {
+pub fn reset_skills(skills_states: &mut [SkillState]) {
+    for skill_state in skills_states.iter_mut() {
         skill_state.just_triggered = false;
     }
 }
@@ -66,7 +67,7 @@ pub fn update_skill_specs(
     skill_specs: &mut SkillSpecs,
     // effects: impl Iterator<Item = &'a StatEffect> + Clone,
     effects: &[StatEffect],
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     inventory: Option<&PlayerInventory>,
 ) {
     skill_specs.targets = skill_specs.base.targets.clone();
@@ -101,7 +102,7 @@ pub fn update_skill_specs(
         ))
         .chain(std::iter::once(compute_skill_modifier_effects(
             skill_specs,
-            character_specs,
+            character_attrs,
             inventory,
         ))),
     ))
@@ -209,7 +210,7 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ef
 
 fn compute_skill_modifier_effects<'a>(
     skill_specs: &'a SkillSpecs,
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     inventory: Option<&'a PlayerInventory>,
 ) -> EffectsMap {
     let item_sources: Vec<_> = skill_specs
@@ -330,7 +331,7 @@ fn compute_skill_modifier_effects<'a>(
             ModifierEffectSource::CharacterStats(stat_converter) => Some((
                 me.clone(),
                 me.factor
-                    * characters_updater::compute_stat_converter(character_specs, stat_converter),
+                    * characters_updater::compute_stat_converter(character_attrs, stat_converter),
             )),
         })
         .collect();

@@ -5,7 +5,7 @@ use rand::{self, seq::IteratorRandom};
 use shared::{
     computations::skill_cost_increase,
     data::{
-        character::{CharacterId, SkillSpecs, SkillState},
+        character::{CharacterId, SkillSpecs},
         item::{SkillRange, SkillShape},
         player::PlayerResources,
         skill::{
@@ -30,14 +30,22 @@ use super::{characters_controller, characters_controller::Target};
 /// Return remaining mana available
 pub fn use_skill<'a>(
     events_queue: &mut EventsQueue,
-    skill_specs: &SkillSpecs,
-    skill_state: &mut SkillState,
+    skill_index: usize,
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> NonNegative {
-    if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
+    if skill_index >= me.1.0.skills_specs.len() || skill_index >= me.1.1.skills_states.len() {
         return me.1.1.mana;
+    }
+
+    let skill_specs = me.1.0.skills_specs.get(skill_index).unwrap();
+
+    {
+        let skill_state = me.1.1.skills_states.get(skill_index).unwrap();
+        if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
+            return me.1.1.mana;
+        }
     }
 
     let mut applied = false;
@@ -54,13 +62,15 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        characters_controller::spend_mana(me.1.0, me.1.1, *skill_specs.mana_cost);
+        characters_controller::spend_mana(&me.1.0.character_attrs, me.1.1, *skill_specs.mana_cost);
+
+        let skill_state = me.1.1.skills_states.get_mut(skill_index).unwrap();
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = Default::default();
     }
 
-    characters_controller::mana_available(me.1.0, me.1.1)
+    characters_controller::mana_available(&me.1.0.character_attrs, me.1.1)
 }
 
 fn apply_skill_on_targets<'a>(
@@ -354,7 +364,7 @@ fn apply_conditional_modifiers(
         &mut new_skill_effect,
         stats_updater::compute_conditional_modifiers(
             &Default::default(),
-            target.1.0,
+            &target.1.0.character_attrs,
             target.1.1,
             &skill_effect.conditional_modifiers,
         )

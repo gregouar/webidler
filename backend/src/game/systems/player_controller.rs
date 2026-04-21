@@ -36,8 +36,7 @@ impl PlayerController {
     pub fn init(specs: &PlayerSpecs) -> Self {
         PlayerController {
             // auto_skills: specs.auto_skills.clone(),
-            use_skills: Vec::with_capacity(specs.skills_specs.len()),
-            // preferred_loot: None,
+            use_skills: Vec::with_capacity(specs.character_specs.skills_specs.len()),
         }
     }
 
@@ -58,6 +57,7 @@ impl PlayerController {
         }
 
         let no_auto_use: Vec<_> = player_specs
+            .character_specs
             .skills_specs
             .iter()
             .map(|skill_specs| {
@@ -68,7 +68,7 @@ impl PlayerController {
                     .any(|condition| {
                         stats_updater::check_condition(
                             area_threat,
-                            &player_specs.character_specs,
+                            &player_specs.character_specs.character_attrs,
                             &player_state.character_state,
                             condition,
                         ) == 0.0
@@ -77,7 +77,7 @@ impl PlayerController {
             .collect();
 
         let mut mana_available = characters_controller::mana_available(
-            &player_specs.character_specs,
+            &player_specs.character_specs.character_attrs,
             &player_state.character_state,
         );
 
@@ -95,11 +95,13 @@ impl PlayerController {
 
         let min_mana_needed = if player_specs
             .character_specs
+            .character_attrs
             .take_from_mana_before_life
             .get()
             > 0.0
             || player_specs
                 .character_specs
+                .character_attrs
                 .take_from_life_before_mana
                 .get()
                 > 0.0
@@ -107,6 +109,7 @@ impl PlayerController {
             0.0
         } else {
             player_specs
+                .character_specs
                 .skills_specs
                 .iter()
                 .take(player_specs.max_skills as usize)
@@ -115,10 +118,10 @@ impl PlayerController {
                 .unwrap_or_default()
         };
 
-        for (i, ((skill_specs, skill_state), no_auto_use)) in player_specs
+        for (i, (skill_specs, no_auto_use)) in player_specs
+            .character_specs
             .skills_specs
             .iter()
-            .zip(player_state.skills_states.iter_mut())
             .zip(no_auto_use.into_iter())
             .take(player_specs.max_skills as usize)
             .enumerate()
@@ -133,14 +136,8 @@ impl PlayerController {
                 continue;
             }
 
-            mana_available = skills_controller::use_skill(
-                events_queue,
-                skill_specs,
-                skill_state,
-                &mut player,
-                &mut friends,
-                monsters,
-            );
+            mana_available =
+                skills_controller::use_skill(events_queue, i, &mut player, &mut friends, monsters);
         }
 
         self.reset();
@@ -319,6 +316,7 @@ fn unequip_weapon(
     item_slot: ItemSlot,
 ) {
     let to_remove: Vec<_> = player_specs
+        .character_specs
         .skills_specs
         .iter()
         .enumerate()
@@ -326,8 +324,8 @@ fn unequip_weapon(
         .collect();
 
     for i in to_remove.into_iter().rev() {
-        player_specs.skills_specs.remove(i);
-        player_state.skills_states.remove(i);
+        player_specs.character_specs.skills_specs.remove(i);
+        player_state.character_state.skills_states.remove(i);
         player_specs.auto_skills.remove(i);
     }
 }
@@ -361,13 +359,17 @@ pub fn equip_skill(
     let index = if item_slot.is_some() {
         0
     } else {
-        player_specs.skills_specs.len()
+        player_specs.character_specs.skills_specs.len()
     };
 
     player_state
+        .character_state
         .skills_states
         .insert(index, SkillState::init(&skill_specs));
-    player_specs.skills_specs.insert(index, skill_specs);
+    player_specs
+        .character_specs
+        .skills_specs
+        .insert(index, skill_specs);
     player_specs.auto_skills.insert(index, auto_use);
 }
 
@@ -379,7 +381,7 @@ pub fn buy_skill(
     skill_id: &str,
 ) -> bool {
     if player_resources.gold < player_specs.buy_skill_cost
-        || player_specs.skills_specs.len() >= player_specs.max_skills as usize
+        || player_specs.character_specs.skills_specs.len() >= player_specs.max_skills as usize
         || player_specs.bought_skills.contains(skill_id)
     {
         return false;
