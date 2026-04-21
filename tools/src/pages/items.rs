@@ -23,6 +23,7 @@ use shared::data::{
     skill::{DamageType, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+        compare_options,
     },
 };
 use strum::IntoEnumIterator;
@@ -326,10 +327,11 @@ fn compute_weapon_specs(
                 skill_filter,
                 damage_type,
                 min_max,
+                is_hit,
             } if skill_filter.is_match(&StatSkillFilter {
                 skill_type: Some(SkillType::Attack),
                 ..Default::default()
-            }) =>
+            }) && compare_options(is_hit, &Some(true)) =>
             {
                 match damage_type {
                     Some(damage_type) => {

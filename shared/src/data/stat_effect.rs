@@ -130,6 +130,8 @@ pub enum StatType {
         damage_type: Option<DamageType>,
         #[serde(default)]
         min_max: Option<MinMax>,
+        #[serde(default)]
+        is_hit: Option<bool>,
     },
     CritChance(#[serde(default)] StatSkillFilter),
     CritDamage(#[serde(default)] StatSkillFilter),
@@ -221,16 +223,19 @@ impl Matchable for StatType {
                     skill_filter,
                     damage_type,
                     min_max,
+                    is_hit,
                 },
                 Damage {
                     skill_filter: skill_filter_2,
                     damage_type: damage_type_2,
                     min_max: min_max_2,
+                    is_hit: is_hit_2,
                 },
             ) => {
                 skill_filter.is_match(skill_filter_2)
                     && compare_options(damage_type, damage_type_2)
                     && compare_options(min_max, min_max_2)
+                    && compare_options(is_hit, is_hit_2)
             }
             (
                 DamageResistance {

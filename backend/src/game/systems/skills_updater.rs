@@ -454,9 +454,11 @@ pub fn compute_skill_specs_effect<'a>(
                         skill_filter,
                         damage_type: stat_damage_type,
                         min_max,
+                        is_hit,
                     } = &effect.stat
                         && skill_filter.is_match_with_skill(skill_type, skill_id)
                         && compare_options(stat_damage_type, &Some(damage_type))
+                        && compare_options(is_hit, &Some(true))
                     {
                         if compare_options(min_max, &Some(MinMax::Min)) {
                             value.min.apply_effect(effect);
@@ -542,9 +544,11 @@ pub fn compute_skill_specs_effect<'a>(
                             skill_filter,
                             damage_type: stat_damage_type,
                             min_max,
+                            is_hit,
                         } = &effect.stat
                             && skill_filter.is_match_with_skill(skill_type, skill_id)
                             && compare_options(stat_damage_type, &Some(damage_type))
+                            && compare_options(is_hit, &Some(false))
                         {
                             if compare_options(min_max, &Some(MinMax::Min)) {
                                 status_effect.value.min.apply_effect(effect);
@@ -668,6 +672,7 @@ pub fn compute_skill_specs_effect<'a>(
                             skill_filter,
                             damage_type,
                             min_max: None,
+                            is_hit,
                         } = *specs.stat
                     {
                         stats_converted.push(StatEffect {
@@ -675,6 +680,7 @@ pub fn compute_skill_specs_effect<'a>(
                                 skill_filter: skill_filter.clone(),
                                 damage_type,
                                 min_max: Some(MinMax::Min),
+                                is_hit,
                             },
                             modifier,
                             value: amount.0,
@@ -685,6 +691,7 @@ pub fn compute_skill_specs_effect<'a>(
                                 skill_filter,
                                 damage_type,
                                 min_max: Some(MinMax::Max),
+                                is_hit,
                             },
                             modifier,
                             value: amount.1,

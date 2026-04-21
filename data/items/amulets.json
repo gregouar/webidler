@@ -4,7 +4,7 @@
     "icon": "items/amulets/wooden_beads.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -20,21 +20,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "medallion": {
     "name": "Brass Medallion",
     "icon": "items/amulets/medallion.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -50,21 +50,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "medallion_unique": {
     "name": "Burning Desire",
     "icon": "items/amulets/burning_desire.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -83,8 +83,11 @@
         "stat": {
           "Damage": {
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Fire",
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -104,6 +107,8 @@
               }
             },
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "min_max": null
           }
         },
@@ -123,7 +128,9 @@
                 "damage_type": "Fire"
               }
             },
-            "skill_type": null
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
           }
         },
         "modifier": "Increased",
@@ -138,6 +145,8 @@
         "stat": {
           "SuccessChance": {
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "effect_type": {
               "ApplyStatus": {
                 "status_type": {
@@ -178,7 +187,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -209,8 +218,11 @@
           "stat": {
             "Damage": {
               "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
               "damage_type": "Fire",
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
@@ -228,6 +240,8 @@
                 }
               },
               "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
               "min_max": null
             }
           },
@@ -242,7 +256,7 @@
     "icon": "items/amulets/silver_chain.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -258,21 +272,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "silver_chain_unique": {
     "name": "Arachnid Heart",
     "icon": "items/amulets/amulet_spider.webp",
     "description": "When her heart stopped, the storm did not. It only found a new host.",
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -289,7 +303,11 @@
       },
       {
         "stat": {
-          "CritChance": { }
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -301,7 +319,11 @@
       },
       {
         "stat": {
-          "CritDamage": { }
+          "CritDamage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -315,8 +337,11 @@
         "stat": {
           "Damage": {
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Storm",
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -340,7 +365,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -370,8 +395,11 @@
           "stat": {
             "Damage": {
               "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
               "damage_type": "Storm",
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
@@ -395,7 +423,7 @@
     "icon": "items/amulets/gold_pendant.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -411,21 +439,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "crest_pendant": {
     "name": "Crest Pendant",
     "icon": "items/amulets/crest_pendant.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -441,21 +469,172 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "jellyfish": {
+    "name": "Medusa's Drift",
+    "icon": "items/amulets/jellyfish.webp",
+    "description": "The sea kills without moving.",
+    "slot": "Amulet",
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": true
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Poison",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "skill_type": null,
+                  "not": false
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "Mana",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          15.0,
+          20.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Poison",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 30.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Increased",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "amulet": {
     "name": "Amulet",
     "icon": "items/amulets/amulet.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -471,21 +650,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "amulet_7": {
     "name": "Sacred Talisman",
     "icon": "items/amulets/sacred_talisman.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -501,21 +680,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "amulet_7_unique": {
     "name": "Cross of the Deep Well",
     "icon": "items/amulets/amulet_unique_cross.webp",
     "description": "The faithful did not pray for power. They prayed for endurance.",
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -540,7 +719,9 @@
       {
         "stat": {
           "ManaCost": {
-            "skill_type": null
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
           }
         },
         "modifier": "More",
@@ -550,7 +731,11 @@
       },
       {
         "stat": {
-          "SkillLevel": { }
+          "SkillLevel": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -578,8 +763,11 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": null,
-                "min_max": null
+                "min_max": null,
+                "is_hit": null
               }
             },
             "conditions": [
@@ -597,7 +785,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -633,8 +821,11 @@
               "stat": {
                 "Damage": {
                   "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
                   "damage_type": null,
-                  "min_max": null
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               "conditions": [
@@ -654,7 +845,7 @@
     "icon": "items/amulets/royal_parure.webp",
     "description": null,
     "slot": "Amulet",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Amulet"
@@ -670,13 +861,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

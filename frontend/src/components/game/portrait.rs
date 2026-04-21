@@ -594,6 +594,7 @@ fn StatusIcon(
                         skill_filter,
                         damage_type,
                         min_max,
+                        is_hit: _,
                     } => {
                         if let Some(damage_type) = damage_type {
                             match damage_type {

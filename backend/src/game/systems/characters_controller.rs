@@ -89,7 +89,7 @@ pub fn attack_character(
         trigger_id: trigger_id.map(String::from),
     }));
 
-    is_hurt
+    !is_blocked
 }
 
 pub fn damage_character(

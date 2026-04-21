@@ -419,6 +419,7 @@ impl From<OldStatType> for StatType {
                 },
                 damage_type,
                 min_max,
+                is_hit: None,
             },
             OldStatType::RestoreOnHit {
                 restore_type,

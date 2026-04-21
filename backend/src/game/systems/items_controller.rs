@@ -13,6 +13,7 @@ use shared::data::{
     },
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+        compare_options,
     },
     values::NonNegative,
 };
@@ -105,10 +106,11 @@ fn compute_weapon_specs(
                 skill_filter,
                 damage_type,
                 min_max,
+                is_hit,
             } if skill_filter.is_match(&StatSkillFilter {
                 skill_type: Some(SkillType::Attack),
                 ..Default::default()
-            }) =>
+            }) && compare_options(is_hit, &Some(true)) =>
             {
                 match damage_type {
                     Some(damage_type) => {
@@ -350,6 +352,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 skill_filter: Default::default(),
                 damage_type: None,
                 min_max: None,
+                is_hit: None,
             },
             modifier: Modifier::More,
             value: 30.0,

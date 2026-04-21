@@ -16,7 +16,7 @@ pub fn affix_price(amount: usize) -> Option<f64> {
 }
 
 pub fn remove_price(amount: usize) -> Option<f64> {
-    if amount > 0 { Some(10.0) } else { None }
+    if amount > 0 { Some(20.0) } else { None }
 }
 
 pub fn affix_operation_price(operation: ForgeAffixOperation, affixes_amount: usize) -> Option<f64> {

@@ -111,6 +111,7 @@ pub fn update_monster_specs(
             skill_filter: Default::default(),
             damage_type: None,
             min_max: None,
+            is_hit: None,
         },
         modifier: Modifier::Increased,
         value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,

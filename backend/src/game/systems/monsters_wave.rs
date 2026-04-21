@@ -225,6 +225,7 @@ fn generate_monster_specs(
             skill_filter: Default::default(),
             damage_type: None,
             min_max: None,
+            is_hit: None,
         },
         modifier: Modifier::Increased,
         value: (monster_level as f64 - 1.0) * MONSTERS_DEFAULT_DAMAGE_INCREASE,
