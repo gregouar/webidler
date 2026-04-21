@@ -4,8 +4,8 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use rand::Rng;
+use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
-use shared::data::player::CharacterSpecs;
 use shared::data::skill::{DamageType, SkillType};
 use shared::data::stat_effect::{StatSkillFilter, StatStatusType};
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
@@ -294,7 +294,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let damage_ticks = ArcRwSignal::new(Vec::new());
     let dot_tick = ArcRwSignal::new(None);
 
-    let mut old_life = specs.character_specs.max_life.get();
+    let mut old_life = specs.character_specs.character_attrs.max_life.get();
     let life = RwSignal::new(old_life);
 
     Effect::new({
@@ -391,12 +391,12 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(specs.character_specs.max_life.get())}
+            {format_number(specs.character_specs.character_attrs.max_life.get())}
         }
     };
 
     let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.max_life.get();
+        let max_life = specs.character_specs.character_attrs.max_life.get();
         if max_life > 0.0 {
             (life.get() / max_life * 100.0) as f32
         } else {
@@ -508,10 +508,15 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             </div>
 
             <div class="w-full flex flex-col justify-center gap-1">
-                <MonsterTags specs=specs.character_specs />
+                <MonsterTags
+                    attrs=specs.character_specs.character_attrs
+                    size=specs.character_specs.size
+                />
                 <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For
-                        each=move || { specs.skill_specs.clone().into_iter().enumerate() }
+                        each=move || {
+                            specs.character_specs.skills_specs.clone().into_iter().enumerate()
+                        }
                         key=|(i, _)| *i
                         let((i, p))
                     >
@@ -524,15 +529,15 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
-    let is_armored = specs.armor.iter().any(|(_, value)| **value > 0.0);
+fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
+    let is_armored = attrs.armor.iter().any(|(_, value)| **value > 0.0);
     let armored_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Armored"}</span>
                 {DamageType::iter()
                     .filter_map(|damage_type| {
-                        let value = *specs.armor.get(&damage_type).copied().unwrap_or_default();
+                        let value = *attrs.armor.get(&damage_type).copied().unwrap_or_default();
                         (value > 0.0)
                             .then(|| {
                                 view! {
@@ -551,7 +556,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_shielded = specs
+    let is_shielded = attrs
         .block
         .iter()
         .any(|(_, chance)| chance.value.get() > 0.0);
@@ -562,7 +567,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                 {[SkillType::Attack, SkillType::Spell]
                     .into_iter()
                     .filter_map(|skill_type| {
-                        let value = specs
+                        let value = attrs
                             .block
                             .get(&skill_type)
                             .copied()
@@ -585,12 +590,12 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             })
                     })
                     .collect::<Vec<_>>()}
-                {(specs.block_damage.get() > 0.0)
+                {(attrs.block_damage.get() > 0.0)
                     .then(|| {
                         view! {
                             <span>
                                 <span class="font-semibold">
-                                    {format!("{:.0}%", specs.block_damage.get())}
+                                    {format!("{:.0}%", attrs.block_damage.get())}
                                 </span>
                                 " Blocked Damage Taken"
                             </span>
@@ -600,7 +605,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_evasive = specs
+    let is_evasive = attrs
         .evade
         .iter()
         .any(|(_, chance)| chance.value.get() > 0.0);
@@ -610,7 +615,7 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                 <span class="font-semibold text-white">{"Evasive"}</span>
                 {DamageType::iter()
                     .filter_map(|damage_type| {
-                        let value = specs
+                        let value = attrs
                             .evade
                             .get(&damage_type)
                             .copied()
@@ -635,12 +640,12 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
                             })
                     })
                     .collect::<Vec<_>>()}
-                {(specs.evade_damage.get() > 0.0)
+                {(attrs.evade_damage.get() > 0.0)
                     .then(|| {
                         view! {
                             <span>
                                 <span class="font-semibold">
-                                    {format!("{:.0}%", specs.evade_damage.get())}
+                                    {format!("{:.0}%", attrs.evade_damage.get())}
                                 </span>
                                 " Evaded Damage Taken"
                             </span>
@@ -650,14 +655,14 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_resilient = specs
+    let is_resilient = attrs
         .status_resistances
         .iter()
         .any(|(_, value)| **value > 0.0);
     let resilient_tooltip = move || {
         let mut grouped: HashMap<Option<StatStatusType>, Vec<(SkillType, f64)>> = HashMap::new();
 
-        for ((skill_type, status_type), value) in specs.status_resistances.iter() {
+        for ((skill_type, status_type), value) in attrs.status_resistances.iter() {
             grouped
                 .entry(status_type.clone())
                 .or_default()
@@ -725,20 +730,20 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_regenerating = *specs.life_regen > 0.0;
+    let is_regenerating = *attrs.life_regen > 0.0;
     let regenerating_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
-                    <span class="font-semibold">{format!("{:.1}%", *specs.life_regen * 0.1)}</span>
+                    <span class="font-semibold">{format!("{:.1}%", *attrs.life_regen * 0.1)}</span>
                     " Life Regenerated per Second"
                 </span>
             </div>
         }
     };
 
-    let grid_size = match specs.size {
+    let grid_size = match size {
         CharacterSize::Small | CharacterSize::Tall => "grid-cols-3",
         CharacterSize::Large | CharacterSize::Huge | CharacterSize::Gargantuan => "grid-cols-6",
     };
@@ -835,14 +840,14 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .and_then(|m| m.skill_states.get(index))
+                .and_then(|m| m.character_state.skills_states.get(index))
                 .map(|s| s.elapsed_cooldown.get())
                 .unwrap_or_default())
                 * game_context
                     .monster_specs
                     .read()
                     .get(monster_index)
-                    .and_then(|m| m.skill_specs.get(index))
+                    .and_then(|m| m.character_specs.skills_specs.get(index))
                     .map(|s| s.cooldown.get())
                     .unwrap_or_default()
         }
@@ -872,7 +877,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .and_then(|m| m.skill_states.get(index))
+                .and_then(|m| m.character_state.skills_states.get(index))
                 .map(|s| s.just_triggered)
                 .unwrap_or_default()
         } else {
@@ -888,7 +893,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             .monster_states
             .read_untracked()
             .get(monster_index)
-            .and_then(|m| m.skill_states.get(index))
+            .and_then(|m| m.character_state.skills_states.get(index))
             .map(|s| s.elapsed_cooldown.get())
             .unwrap_or_default(),
     );

@@ -80,6 +80,7 @@ fn handle_client_message(
                 if let Some(skill_specs) = game_data
                     .player_specs
                     .mutate()
+                    .character_specs
                     .skills_specs
                     .get_mut(m.skill_index as usize)
                 {

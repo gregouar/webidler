@@ -216,6 +216,7 @@ fn generate_monster_specs(
     monster_specs.reward_factor *= reward_factor;
     monster_specs
         .character_specs
+        .character_attrs
         .max_life
         .apply_modifier((life_factor - 1.0) * 100.0, Modifier::More);
 
@@ -225,17 +226,18 @@ fn generate_monster_specs(
             skill_filter: Default::default(),
             damage_type: None,
             min_max: None,
+            is_hit: None,
         },
         modifier: Modifier::Increased,
         value: (monster_level as f64 - 1.0) * MONSTERS_DEFAULT_DAMAGE_INCREASE,
         bypass_ignore: true,
     }];
-    for skill_specs in monster_specs.skill_specs.iter_mut() {
+    for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
         if skill_specs.base.upgrade_effects.is_empty() {
             skills_updater::update_skill_specs(
                 skill_specs,
                 &upgrade_effects,
-                &monster_specs.character_specs,
+                &monster_specs.character_specs.character_attrs,
                 None,
             );
         } else {
@@ -244,7 +246,7 @@ fn generate_monster_specs(
             skills_updater::update_skill_specs(
                 skill_specs,
                 &effects,
-                &monster_specs.character_specs,
+                &monster_specs.character_specs.character_attrs,
                 None,
             );
         }
@@ -281,7 +283,7 @@ fn generate_monster_specs(
     monster_specs.character_specs = character_specs;
     effects.extend(converted_effects);
     // monster_specs.character_specs.effects = effects_map;
-    for skill_specs in monster_specs.skill_specs.iter_mut() {
+    for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 

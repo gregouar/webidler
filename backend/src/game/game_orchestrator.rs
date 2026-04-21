@@ -281,7 +281,12 @@ fn respawn_player(master_store: &MasterStore, game_data: &mut GameInstanceData) 
     );
 
     game_data.player_state = PlayerState::init(game_data.player_specs.read());
-    for skill_state in game_data.player_state.skills_states.iter_mut() {
+    for skill_state in game_data
+        .player_state
+        .character_state
+        .skills_states
+        .iter_mut()
+    {
         skill_state.elapsed_cooldown = 0.5.into();
     }
 

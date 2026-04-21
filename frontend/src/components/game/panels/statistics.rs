@@ -128,6 +128,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .max_life
                                             .get(),
                                     )
@@ -140,6 +141,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .player_specs
                                         .read()
                                         .character_specs
+                                        .character_attrs
                                         .life_regen * 0.1;
                                     if value == 0.0 { "-".into() } else { format!("{:.1}%", value) }
                                 }
@@ -152,6 +154,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .max_mana
                                             .get(),
                                     )
@@ -164,6 +167,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         .player_specs
                                         .read()
                                         .character_specs
+                                        .character_attrs
                                         .mana_regen * 0.1;
                                     if value == 0.0 { "-".into() } else { format!("{:.1}%", value) }
                                 }
@@ -200,6 +204,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .armor
                                             .get(&DamageType::Physical)
                                             .cloned()
@@ -216,6 +221,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .armor
                                             .get(&DamageType::Fire)
                                             .cloned()
@@ -232,6 +238,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .armor
                                             .get(&DamageType::Poison)
                                             .cloned()
@@ -248,6 +255,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .armor
                                             .get(&DamageType::Storm)
                                             .cloned()
@@ -263,6 +271,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .block
                                             .get(&SkillType::Attack)
                                             .copied()
@@ -275,6 +284,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .player_specs
                                     .read()
                                     .character_specs
+                                    .character_attrs
                                     .block
                                     .get(&SkillType::Spell)
                                     .copied()
@@ -294,6 +304,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .player_specs
                                     .read()
                                     .character_specs
+                                    .character_attrs
                                     .block_damage
                                     .get() as f64;
                                 (block_damage != 0.0)
@@ -311,6 +322,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .player_specs
                                     .read()
                                     .character_specs
+                                    .character_attrs
                                     .evade_damage
                                     .get() as f64;
                                 (evade_damage != 0.0)
@@ -328,6 +340,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .player_specs
                                     .read()
                                     .character_specs
+                                    .character_attrs
                                     .take_from_mana_before_life
                                     .get() as f64;
                                 (take_from_mana_before_life != 0.0)
@@ -345,6 +358,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     .player_specs
                                     .read()
                                     .character_specs
+                                    .character_attrs
                                     .take_from_life_before_mana
                                     .get() as f64;
                                 (take_from_life_before_mana != 0.0)
@@ -364,6 +378,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .player_specs
                                             .read()
                                             .character_specs
+                                            .character_attrs
                                             .evade
                                             .get(&damage_type)
                                             .copied()
@@ -563,6 +578,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         skill_filter: Default::default(),
                                         damage_type: None,
                                         min_max: None,
+                                        is_hit: None,
                                     }),
                                     conditions: vec![Condition::ThreatLevel],
                                     conditions_duration: 0,
@@ -577,6 +593,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     skill_filter: Default::default(),
                                     damage_type: None,
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                                 0.0,
@@ -589,6 +606,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     },
                                     damage_type: None,
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                             )}
@@ -600,6 +618,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     },
                                     damage_type: None,
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                             )}
@@ -608,6 +627,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Physical),
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                                 0.0,
@@ -617,6 +637,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Fire),
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                                 0.0,
@@ -626,6 +647,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Poison),
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                                 0.0,
@@ -635,6 +657,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     skill_filter: Default::default(),
                                     damage_type: Some(DamageType::Storm),
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 Modifier::More,
                                 0.0,

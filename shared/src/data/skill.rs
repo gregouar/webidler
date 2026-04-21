@@ -9,7 +9,7 @@ use crate::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     item::ItemCategory,
     modifier::ModifiableValue,
-    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatType},
+    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType},
     trigger::TriggerSpecs,
     values::{Cooldown, NonNegative},
 };
@@ -69,7 +69,6 @@ pub struct SkillSpecs {
 
     pub item_slot: Option<ItemSlot>,
 
-    #[serde(default)] //For retro compatibility
     pub level_modifier: u16,
 }
 
@@ -216,6 +215,12 @@ pub enum SkillEffectType {
         modifier: RestoreModifier,
     },
     Resurrect,
+    RefreshCooldown {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+        value: ChanceRange<ModifiableValue<f64>>,
+        modifier: RestoreModifier,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]

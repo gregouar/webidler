@@ -112,6 +112,14 @@ pub fn damage_over_time_type_value_str(damage_type: Option<DamageType>) -> &'sta
     }
 }
 
+pub fn is_hit_str(is_hit: &Option<bool>) -> &'static str {
+    match is_hit {
+        Some(true) => "Hit ",
+        Some(false) => "Non-hit",
+        None => "",
+    }
+}
+
 pub fn lucky_roll_str(roll_type: &LuckyRollType) -> String {
     match roll_type {
         LuckyRollType::Damage { damage_type } => {
@@ -295,6 +303,7 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
                 format!("Restore{}", restore_type_str(*restore_type))
             }
             StatSkillEffectType::Resurrect => "Resurrect".into(),
+            StatSkillEffectType::RefreshCooldown => "Refresh Skills".into(),
         },
         None => "All Skill Effects".into(),
     }
@@ -337,6 +346,7 @@ pub fn formatted_effects_list(
                     skill_filter,
                     damage_type,
                     min_max: Some(MinMax::Min),
+                    is_hit: None,
                 },
             ) => {
                 min_damage.insert(
@@ -350,6 +360,7 @@ pub fn formatted_effects_list(
                     skill_filter,
                     damage_type,
                     min_max: Some(MinMax::Max),
+                    is_hit: None,
                 },
             ) => {
                 max_damage.insert(
@@ -475,11 +486,13 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
             damage_type,
             min_max,
+            is_hit,
         } => format!(
-            "{}{}{}Damage",
+            "{}{}{}{}Damage",
             min_max_str(*min_max),
             damage_type_str(*damage_type),
             skill_filter_str(skill_filter, "", false),
+            is_hit_str(is_hit),
         ),
         StatType::Restore {
             restore_type,
@@ -691,11 +704,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter,
             damage_type,
             min_max,
+            is_hit,
         } => format!(
-            "{} {}{}Damage{}",
+            "{} {}{}{}Damage{}",
             format_adds_removes(value, false, ""),
             min_max_str(*min_max),
             damage_type_str(*damage_type),
+            is_hit_str(is_hit),
             skill_filter_str(skill_filter, "to ", true)
         ),
         StatType::Restore {

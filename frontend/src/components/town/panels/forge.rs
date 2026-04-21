@@ -482,7 +482,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     </div>
                 </MenuButton>
 
-                <MenuButton
+                <MenuButtonRed
                     on:click=move |_| try_remove_affix()
                     disabled=Signal::derive({
                         move || remove_price().map(|price| price > user_gems()).unwrap_or(true)
@@ -503,7 +503,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                 })
                         }}
                     </div>
-                </MenuButton>
+                </MenuButtonRed>
 
             </div>
         </div>

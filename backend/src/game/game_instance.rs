@@ -70,7 +70,13 @@ impl<'a> GameInstance<'a> {
                 .flatten()
                 .unwrap_or_default();
 
-        for skill_state in self.game_data.player_state.skills_states.iter_mut() {
+        for skill_state in self
+            .game_data
+            .player_state
+            .character_state
+            .skills_states
+            .iter_mut()
+        {
             skill_state.elapsed_cooldown = 1.0.into();
         }
 
@@ -276,7 +282,7 @@ impl<'a> GameInstance<'a> {
                         .chat_integration
                         .broadcast_message(
                             format!(
-                                "{}{} is the first to beat Area Level {:0} in \"{}\"!",
+                                "'{}'{} is the first to beat Area Level {:0} in '{}'!",
                                 self.game_data.player_specs.read().character_specs.name,
                                 realm_label,
                                 self.game_data.area_state.read().max_area_level,

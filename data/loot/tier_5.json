@@ -77,6 +77,10 @@
       "weight": 16000
     },
     {
+      "item_id": "jellyfish",
+      "weight": 4999
+    },
+    {
       "item_id": "edict",
       "weight": 400,
       "min_area_level": 190

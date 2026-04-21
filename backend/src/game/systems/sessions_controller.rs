@@ -7,9 +7,10 @@ use shared::{
     constants::MAX_PLAYER_STAMINA,
     data::{
         area::{AreaLevel, StartAreaConfig},
+        character::CharacterSize,
         item::ItemRarity,
         passive::PassivesTreeState,
-        player::{PlayerInventory, PlayerResources, PlayerSpecs},
+        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
     },
@@ -124,11 +125,15 @@ async fn new_game_instance(
 ) -> Result<GameInstanceData> {
     let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
 
-    let mut player_specs = PlayerSpecs::init(player_updater::base_player_character_specs(
-        character.character_name.clone(),
-        character.portrait.clone(),
-        1,
-    ));
+    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
+        character_attrs: player_updater::base_player_character_attrs(1),
+        name: character.character_name.clone(),
+        portrait: character.portrait.clone(),
+        size: CharacterSize::Small,
+        position_x: 0,
+        position_y: 0,
+        ..Default::default()
+    });
     player_specs.max_area_level = character.max_area_level as AreaLevel;
 
     let player_resources = PlayerResources::default();
@@ -249,7 +254,13 @@ async fn new_game_instance(
         &mut game_data.player_state,
     );
 
-    if game_data.player_specs.mutate().skills_specs.is_empty() {
+    if game_data
+        .player_specs
+        .mutate()
+        .character_specs
+        .skills_specs
+        .is_empty()
+    {
         game_data.player_specs.mutate().buy_skill_cost = 0.0;
     }
 

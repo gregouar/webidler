@@ -4,15 +4,15 @@
     "icon": "items/boots/cloth_shoes.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 10.0,
@@ -21,23 +21,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_boots": {
     "name": "Leather Boots",
     "icon": "items/boots/leather_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 20.0,
@@ -46,15 +46,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_boots_unique": {
     "name": "Pathwalker's Remains",
     "icon": "items/boots/pathwalker_remains.webp",
     "description": "Their journey never ended, maybe yours won't either.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -110,7 +110,7 @@
         "trigger_id": "pathwalker_remains",
         "OnWaveCompleted": null,
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -127,8 +127,8 @@
               ],
               "modifier": "Percent"
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -199,15 +199,15 @@
     "icon": "items/boots/reinforced_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 30.0,
@@ -216,23 +216,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "mail_boots": {
     "name": "Mail Boots",
     "icon": "items/boots/mail_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -241,23 +241,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "iron_shod_boots": {
     "name": "Iron-Shod Boots",
     "icon": "items/boots/iron_shod_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 50.0,
@@ -266,15 +266,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_compass": {
     "name": "Compass of Ruin",
     "icon": "items/boots/treasure_compass.webp",
     "description": "You stopped asking how it fits in your boots. You should have kept asking where it points though.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -295,18 +295,18 @@
         "name": null,
         "icon": null,
         "description": null,
-        "trigger_id": "treasure_compass",
+        "trigger_id": "treasure_compass_blessing",
         "OnKill": {
-          "conditions": [ ]
+          "conditions": []
         },
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "skill_range": "Melee",
-        "skill_type": "Other",
+        "skill_type": "Blessing",
         "effects": [
           {
             "success_chance": {
-              "value": 10.0,
+              "value": 5.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
@@ -315,7 +315,11 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": { "skill_type": "Attack" }
+                        "Speed": {
+                          "skill_type": "Attack",
+                          "skill_id": null,
+                          "skill_description": null
+                        }
                       },
                       "modifier": "Increased",
                       "debuff": false
@@ -330,7 +334,11 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": { "skill_type": "Spell" }
+                        "Speed": {
+                          "skill_type": "Spell",
+                          "skill_id": null,
+                          "skill_description": null
+                        }
                       },
                       "modifier": "Increased",
                       "debuff": false
@@ -342,14 +350,14 @@
                   "unavoidable": false
                 }
               ],
-              "duration": 5.0
+              "duration": 3.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           },
           {
             "success_chance": {
-              "value": 10.0,
+              "value": 5.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
@@ -360,8 +368,11 @@
                       "stat": {
                         "Damage": {
                           "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
                           "damage_type": null,
-                          "min_max": null
+                          "min_max": null,
+                          "is_hit": null
                         }
                       },
                       "modifier": "More",
@@ -374,14 +385,14 @@
                   "unavoidable": false
                 }
               ],
-              "duration": 5.0
+              "duration": 3.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           },
           {
             "success_chance": {
-              "value": 10.0,
+              "value": 5.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
@@ -413,11 +424,30 @@
                   "unavoidable": false
                 }
               ],
-              "duration": 5.0
+              "duration": 3.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
-          },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "inherit_modifiers": false,
+        "is_debuff": false
+      },
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "treasure_compass_curse",
+        "OnKill": {
+          "conditions": []
+        },
+        "target": "Me",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Curse",
+        "effects": [
           {
             "success_chance": {
               "value": 5.0,
@@ -446,8 +476,8 @@
               ],
               "duration": 5.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           },
           {
             "success_chance": {
@@ -485,8 +515,8 @@
               ],
               "duration": 3.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -528,15 +558,15 @@
     "icon": "items/boots/sabatons.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 60.0,
@@ -545,15 +575,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
     "icon": "items/boots/dragon_boots.webp",
     "description": "The Father Drake never fled, the storm simply carried him elsewhere.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -600,7 +630,9 @@
                 "damage_type": "Poison"
               }
             },
-            "skill_type": null
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
           }
         },
         "modifier": "Increased",
@@ -629,7 +661,7 @@
           "is_evaded": false
         },
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -646,8 +678,11 @@
                       "stat": {
                         "Damage": {
                           "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
                           "damage_type": "Storm",
-                          "min_max": null
+                          "min_max": null,
+                          "is_hit": null
                         }
                       },
                       "modifier": "Increased",
@@ -662,8 +697,8 @@
               ],
               "duration": 10.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -732,15 +767,15 @@
     "icon": "items/boots/plated_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 70.0,
@@ -749,15 +784,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "yokai_sandals": {
     "name": "Kaidan Geta",
     "icon": "items/boots/yokai_sandals.webp",
     "description": "Each tale ends the same: footsteps fading into nothing.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -807,10 +842,10 @@
         "description": null,
         "trigger_id": "spirit_walker",
         "OnKill": {
-          "conditions": [ ]
+          "conditions": []
         },
         "target": "SameTarget",
-        "modifiers": [ ],
+        "modifiers": [],
         "skill_range": "Melee",
         "skill_type": "Blessing",
         "effects": [
@@ -837,8 +872,8 @@
               ],
               "duration": 5.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -898,15 +933,15 @@
     "icon": "items/boots/runic_greaves.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 80.0,
@@ -915,7 +950,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }
