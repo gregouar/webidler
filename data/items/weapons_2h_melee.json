@@ -102,7 +102,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Physical",
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -117,7 +118,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Fire",
-            "min_max": "Min"
+            "min_max": "Min",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
@@ -132,7 +134,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Fire",
-            "min_max": "Max"
+            "min_max": "Max",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
@@ -147,7 +150,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "Increased",
@@ -225,7 +229,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Fire",
-              "min_max": "Min"
+              "min_max": "Min",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -241,7 +246,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Fire",
-              "min_max": "Max"
+              "min_max": "Max",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -257,7 +263,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "Increased",
@@ -369,7 +376,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "Increased",
@@ -387,7 +395,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Poison",
-            "min_max": "Min"
+            "min_max": "Min",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
@@ -402,7 +411,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Poison",
-            "min_max": "Max"
+            "min_max": "Max",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
@@ -451,7 +461,8 @@
                 "skill_id": null,
                 "skill_description": null,
                 "damage_type": null,
-                "min_max": null
+                "min_max": null,
+                "is_hit": null
               }
             },
             "skill_type": null,
@@ -469,7 +480,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 150.0,
+        "value": 140.0,
         "ignore_quality": true
       }
     ],
@@ -512,7 +523,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Min"
+              "min_max": "Min",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -528,7 +540,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Max"
+              "min_max": "Max",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -544,11 +557,44 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "Increased",
           "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "conditions": [
+                {
+                  "StatusStacks": {
+                    "status_type": null,
+                    "skill_type": "Curse"
+                  }
+                }
+              ]
+            }
+          },
+          "modifier": "More",
+          "value": 10.0
         }
       }
     ]
@@ -619,7 +665,7 @@
         },
         "modifier": "Flat",
         "scope": "Local",
-        "value": 200.0,
+        "value": 800.0,
         "ignore_quality": true
       },
       {
@@ -629,14 +675,15 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "Increased",
         "scope": "Local",
         "value": [
-          100.0,
-          140.0
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       },
@@ -647,7 +694,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Physical",
-            "min_max": "Min"
+            "min_max": "Min",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
@@ -665,7 +713,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": "Physical",
-            "min_max": "Max"
+            "min_max": "Max",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
@@ -701,11 +750,12 @@
                 "skill_id": null,
                 "skill_description": null,
                 "damage_type": "Storm",
-                "min_max": null
+                "min_max": null,
+                "is_hit": null
               }
             },
             "modifier": "Flat",
-            "factor": 0.3,
+            "factor": 0.1,
             "source": {
               "HitDamage": "Physical"
             }
@@ -739,19 +789,20 @@
                 }
               },
               {
-                "CritDamage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
                   "skill_description": null,
                   "damage_type": "Physical",
-                  "min_max": null
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
+                "CritDamage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
                 }
               }
             ],
@@ -801,7 +852,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Min"
+              "min_max": "Min",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -817,11 +869,29 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Max"
+              "min_max": "Max",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
           "value": 8.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 20.0
         }
       }
     ]
@@ -902,7 +972,8 @@
             "skill_id": null,
             "skill_description": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "Increased",
@@ -971,7 +1042,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Min"
+              "min_max": "Min",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -987,7 +1059,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Max"
+              "min_max": "Max",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -1003,7 +1076,8 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "Increased",
