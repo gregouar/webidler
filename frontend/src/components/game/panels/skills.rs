@@ -13,6 +13,7 @@ use crate::{
     components::{
         data_context::DataContext,
         game::{game_context::GameContext, websocket::WebsocketContext},
+        settings::{GraphicsQuality, SettingsContext},
         shared::{resources::GoldCounter, tooltips::SkillTooltip},
         ui::{
             buttons::FancyButton,
@@ -151,6 +152,7 @@ fn SkillCard(
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let settings = expect_context::<SettingsContext>();
 
     let is_selected = Signal::derive({
         let skill_id = skill_id.clone();
@@ -181,26 +183,72 @@ fn SkillCard(
     view! {
         <div
             class=move || {
-                let base = "relative isolate overflow-clip group border rounded-[9px]
+                let quality = settings.graphics_quality();
+                let base = "relative overflow-clip group border rounded-[9px]
                     px-3 py-3 xl:px-4 xl:py-4 flex flex-col items-center gap-3
-                    bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
-                    shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
-                    transition-all duration-150 cursor-pointer"
-                    .to_string();
+                    transition-[border-color,background-color,box-shadow,transform] duration-150 cursor-pointer";
+                let quality_class = match quality {
+                    GraphicsQuality::High => {
+                        "bg-[linear-gradient(180deg,rgba(226,193,122,0.045),rgba(0,0,0,0.02)_32%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.26)]"
+                    }
+                    GraphicsQuality::Medium => {
+                        "bg-[linear-gradient(180deg,rgba(200,164,96,0.04),rgba(0,0,0,0.02)_34%,rgba(0,0,0,0.12)_100%),linear-gradient(135deg,rgba(38,37,43,0.98),rgba(18,18,22,1))]
+                        shadow-md"
+                    }
+                    GraphicsQuality::Low => {
+                        "bg-[linear-gradient(180deg,rgba(177,143,85,0.035),rgba(0,0,0,0.03)_35%,rgba(0,0,0,0.12)_100%),linear-gradient(135deg,rgba(36,36,41,0.98),rgba(19,19,23,1))]"
+                    }
+                };
+
                 if is_selected.get() {
                     format!(
-                        "{} border-[#b28a4f] shadow-[0_8px_18px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(244,225,181,0.08),inset_0_0_0_1px_rgba(214,177,102,0.18)] -translate-y-[1px]",
+                        "{} {} {}",
                         base,
+                        quality_class,
+                        match quality {
+                            GraphicsQuality::High => {
+                                "border-[#b28a4f] shadow-[0_6px_14px_rgba(0,0,0,0.3)] -translate-y-[1px]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "border-[#9d7b45] shadow-[0_5px_12px_rgba(0,0,0,0.26)] -translate-y-[1px]"
+                            }
+                            GraphicsQuality::Low => "border-[#8a6d40]",
+                        },
                     )
                 } else if was_last_bought.get() {
                     format!(
-                        "{} border-fuchsia-700/70 hover:border-[#8c6a3b] hover:-translate-y-[1px] active:translate-y-[2px]",
+                        "{} {} {}",
                         base,
+                        quality_class,
+                        match quality {
+                            GraphicsQuality::High => {
+                                "border-fuchsia-700/70 hover:border-[#8c6a3b] hover:-translate-y-[1px] active:translate-y-[2px]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "border-fuchsia-700/70 hover:border-[#83653b] hover:-translate-y-[1px] active:translate-y-[2px]"
+                            }
+                            GraphicsQuality::Low => {
+                                "border-fuchsia-700/70 hover:border-[#7b6039] active:translate-y-[1px]"
+                            }
+                        },
                     )
                 } else {
                     format!(
-                        "{} border-[#3b3428] hover:border-[#7b6440] hover:-translate-y-[1px] active:translate-y-[2px]",
+                        "{} {} {}",
                         base,
+                        quality_class,
+                        match quality {
+                            GraphicsQuality::High => {
+                                "border-[#3b3428] hover:border-[#7b6440] hover:-translate-y-[1px] active:translate-y-[2px]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "border-[#4a3e2b] hover:border-[#715a38] hover:-translate-y-[1px] active:translate-y-[2px]"
+                            }
+                            GraphicsQuality::Low => {
+                                "border-[#554631] hover:border-[#675236] active:translate-y-[1px]"
+                            }
+                        },
                     )
                 }
             }
@@ -218,30 +266,51 @@ fn SkillCard(
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
         >
-            <div class="pointer-events-none absolute inset-[1px] rounded-[8px] border border-white/5"></div>
-            <div class=format!(
-                "pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent {} to-transparent",
-                skill_type_top_glow(skill_type),
-            )></div>
+            <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                <div class="pointer-events-none absolute inset-[1px] rounded-[8px] border border-white/5"></div>
+            </Show>
+            <Show when=move || settings.uses_heavy_effects()>
+                <div class=format!(
+                    "pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent {} to-transparent",
+                    skill_type_top_glow(skill_type),
+                )></div>
+            </Show>
 
             <div
-                class=format!(
-                    "relative flex h-20 w-20 xl:h-24 xl:w-24 items-center justify-center rounded-full
-                    overflow-clip
-                    border {}
-                    bg-stone-900
-                    shadow-[0_0_15px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(230,208,154,0.22),inset_0_-1px_0_rgba(0,0,0,0.45),inset_0_0_10px_rgba(0,0,0,0.75)]",
-                    skill_type_frame_border(skill_type),
-                )
-                style="background-image:
-                linear-gradient(180deg, rgba(214,177,102,0.10), rgba(0,0,0,0.18)),
-                linear-gradient(180deg, rgba(43,40,46,0.96), rgba(20,19,23,1));
-                background-size: auto, auto;
-                background-position: center, center;
-                background-blend-mode: screen, normal;"
+                class=move || {
+                    format!(
+                        "relative flex h-20 w-20 xl:h-24 xl:w-24 items-center justify-center rounded-full
+                        overflow-clip border {} {}",
+                        skill_type_frame_border(skill_type),
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                "bg-[linear-gradient(180deg,rgba(214,177,102,0.1),rgba(0,0,0,0.2)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))] shadow-[0_4px_12px_rgba(0,0,0,0.58)]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(41,38,44,0.96),rgba(21,20,24,1))] shadow-[0_3px_10px_rgba(0,0,0,0.48)]"
+                            }
+                            GraphicsQuality::Low => {
+                                "bg-[linear-gradient(180deg,rgba(39,37,42,0.98),rgba(20,19,23,1))]"
+                            }
+                        },
+                    )
+                }
             >
-                <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/18"></div>
-                <div class="pointer-events-none absolute inset-[3px] rounded-full border border-[#6d532e]/70 bg-[radial-gradient(circle_at_50%_40%,rgba(92,88,98,0.75),rgba(20,18,24,0.98)_72%)] shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]"></div>
+                <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                    <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/16"></div>
+                </Show>
+                <div
+                    class=move || {
+                        format!(
+                            "pointer-events-none absolute inset-[3px] rounded-full border {} bg-[radial-gradient(circle_at_50%_40%,rgba(92,88,98,0.72),rgba(20,18,24,0.98)_72%)]",
+                            match settings.graphics_quality() {
+                                GraphicsQuality::High => "border-[#6d532e]/70",
+                                GraphicsQuality::Medium => "border-[#6b5430]/55",
+                                GraphicsQuality::Low => "border-[#5a4628]/55",
+                            },
+                        )
+                    }
+                ></div>
                 <div class=format!(
                     "pointer-events-none absolute inset-[6px] rounded-full bg-radial {} to-transparent",
                     skill_type_inner_glow(skill_type),
@@ -250,8 +319,16 @@ fn SkillCard(
                     draggable="false"
                     src=img_asset(&skill_specs.base.icon)
                     alt=skill_specs.base.name.clone()
-                    class="relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current
-                      drop-shadow-[0px_4px_black] invert"
+                    class=move || {
+                        format!(
+                            "relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current invert {}",
+                            if settings.uses_surface_effects() {
+                                "drop-shadow-[0_2px_2px_rgba(0,0,0,0.72)]"
+                            } else {
+                                ""
+                            },
+                        )
+                    }
                 />
             </div>
 
