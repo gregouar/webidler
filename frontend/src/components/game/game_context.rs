@@ -13,7 +13,7 @@ use shared::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
-    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
     user::UserCharacterId,
 };
@@ -39,6 +39,7 @@ pub struct GameContext {
     pub passives_tree_state: Syncable<PassivesTreeState>,
     pub passives_tree_build: Syncable<PurchasedNodes>,
 
+    pub player_base_specs: Syncable<PlayerBaseSpecs>,
     pub player_specs: Syncable<PlayerSpecs>,
     pub player_inventory: RwSignal<PlayerInventory>,
     pub player_state: RwSignal<PlayerState>,
