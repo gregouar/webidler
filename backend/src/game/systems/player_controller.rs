@@ -395,7 +395,7 @@ pub fn equip_base_skill(
     let index = if item_slot.is_some() {
         0
     } else {
-        player_base_specs.character_specs.skills_specs.len()
+        player_base_specs.skills.len()
     };
 
     player_state

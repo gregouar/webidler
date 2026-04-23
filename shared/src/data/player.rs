@@ -15,6 +15,7 @@ use super::item::{ItemSlot, ItemSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerBaseSpecs {
+    // TODO: replace by granular needs
     pub character_specs: CharacterSpecs,
 
     pub buy_skill_cost: f64,
