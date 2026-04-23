@@ -91,6 +91,7 @@ impl GameContext {
             passives_tree_state: Default::default(),
             passives_tree_build: Default::default(),
 
+            player_base_specs: Default::default(),
             player_specs: Default::default(),
             player_inventory: RwSignal::new(Default::default()),
             player_state: RwSignal::new(Default::default()),

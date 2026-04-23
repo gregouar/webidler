@@ -168,14 +168,15 @@ pub fn PlayerCard() -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let max_level = move || {
-        game_context.player_specs.read().level >= game_context.player_specs.read().max_level
+        game_context.player_base_specs.read().level
+            >= game_context.player_base_specs.read().max_level
     };
 
     let max_xp = Memo::new(move |_| {
         if max_level() {
             0.0
         } else {
-            game_context.player_specs.read().experience_needed
+            game_context.player_base_specs.read().experience_needed
         }
     });
     let xp = Memo::new(move |_| game_context.player_resources.read().experience);
@@ -204,10 +205,10 @@ pub fn PlayerCard() -> impl IntoView {
     });
 
     let level_up = move |_| {
-        game_context.player_specs.update(|player_specs| {
-            game_context.player_resources.write().experience -= player_specs.experience_needed;
-            player_specs.level += 1;
-            player_specs.experience_needed = player_level_up_cost(player_specs);
+        game_context.player_base_specs.update(|player_base_specs| {
+            game_context.player_resources.write().experience -= player_base_specs.experience_needed;
+            player_base_specs.level += 1;
+            player_base_specs.experience_needed = player_level_up_cost(player_base_specs);
             just_leveled_up.set(true);
         });
         game_context.player_resources.write().passive_points += 1;
@@ -215,7 +216,7 @@ pub fn PlayerCard() -> impl IntoView {
         conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
     };
     let disable_level_up = Memo::new(move |_| {
-        game_context.player_specs.read().experience_needed
+        game_context.player_base_specs.read().experience_needed
             > game_context.player_resources.read().experience
             || max_level()
     });
@@ -337,7 +338,7 @@ pub fn PlayerCard() -> impl IntoView {
                             .character_specs
                             .skills_specs
                             .len()
-                            .min(game_context.player_specs.read().max_skills as usize)
+                            .min(game_context.player_base_specs.read().max_skills as usize)
                     }
                     key=|i| *i
                     let(i)
@@ -346,7 +347,7 @@ pub fn PlayerCard() -> impl IntoView {
                 </For>
                 <Show when=move || {
                     game_context.player_specs.read().character_specs.skills_specs.len()
-                        < game_context.player_specs.read().max_skills as usize
+                        < game_context.player_base_specs.read().max_skills as usize
                 }>
                     <BuySkillButton />
                 </Show>
@@ -371,7 +372,7 @@ pub fn PlayerName() -> impl IntoView {
     view! {
         <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
             <span class="font-bold">
-                {player_name} " — " {move || game_context.player_specs.read().level}
+                {player_name} " - " {move || game_context.player_base_specs.read().level}
             </span>
         </p>
     }
@@ -381,7 +382,7 @@ pub fn PlayerName() -> impl IntoView {
 fn BuySkillButton() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
-    let buy_skill_cost = Memo::new(move |_| game_context.player_specs.read().buy_skill_cost);
+    let buy_skill_cost = Memo::new(move |_| game_context.player_base_specs.read().buy_skill_cost);
 
     let disable_buy_skill =
         Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
@@ -532,36 +533,34 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let level_up_cost = Memo::new(move |_| {
         game_context
-            .player_specs
+            .player_base_specs
             .read()
-            .character_specs
-            .skills_specs
-            .get(index)
-            .map(|x| x.next_upgrade_cost)
+            .skills
+            .get_index(index)
+            .map(|(_, player_base_skill)| player_base_skill.next_upgrade_cost)
             .unwrap_or_default()
     });
 
     let level_up_batch = Memo::new(move |_| {
         let mut total_level = 0u8;
         let mut total_cost = 0.0;
-        if let Some(mut skill_specs) = game_context
-            .player_specs
+        if let Some(mut player_base_skill) = game_context
+            .player_base_specs
             .read()
-            .character_specs
-            .skills_specs
-            .get(index)
-            .cloned()
+            .skills
+            .get_index(index)
+            .map(|(_, player_base_skill)| player_base_skill.clone())
         {
             for _ in 0..10 {
-                if total_cost + skill_specs.next_upgrade_cost
+                if total_cost + player_base_skill.next_upgrade_cost
                     > game_context.player_resources.read().gold
                 {
                     break;
                 }
                 total_level += 1;
-                total_cost += skill_specs.next_upgrade_cost;
-                skill_specs.upgrade_level += 1;
-                skill_specs.next_upgrade_cost = skill_cost_increase(&skill_specs);
+                total_cost += player_base_skill.next_upgrade_cost;
+                player_base_skill.upgrade_level += 1;
+                player_base_skill.next_upgrade_cost = skill_cost_increase(&player_base_skill);
             }
         }
 
@@ -577,12 +576,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             (1, level_up_cost.get())
         };
 
-        game_context.player_specs.update(|player_specs| {
-            if let Some(skill_specs) = player_specs.character_specs.skills_specs.get_mut(index) {
+        game_context.player_base_specs.update(|player_base_specs| {
+            if let Some((_, player_base_skill)) = player_base_specs.skills.get_index_mut(index) {
                 game_context.player_resources.write().gold -= cost;
                 for _ in 0..amount {
-                    skill_specs.upgrade_level = skill_specs.upgrade_level.saturating_add(1);
-                    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+                    player_base_skill.upgrade_level =
+                        player_base_skill.upgrade_level.saturating_add(1);
+                    player_base_skill.next_upgrade_cost = skill_cost_increase(player_base_skill);
                 }
             }
         });
@@ -636,14 +636,27 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .cloned()
     });
 
-    let skill_specs_base = Memo::new(move |_| {
+    let skill_progress = Memo::new(move |_| {
         game_context
-            .player_specs
+            .player_base_specs
             .read()
-            .character_specs
-            .skills_specs
-            .get(index)
-            .map(|skill_specs| skill_specs.base.clone())
+            .skills
+            .get_index(index)
+            .map(|(_, player_base_skill)| {
+                (
+                    player_base_skill.base_skill_specs.skill_type,
+                    player_base_skill.base_skill_specs.icon.clone(),
+                )
+            })
+    });
+
+    let player_base_skill = Signal::derive(move || {
+        game_context
+            .player_base_specs
+            .read()
+            .skills
+            .get_index(index)
+            .map(|(_, player_base_skill)| player_base_skill.clone())
     });
 
     let tooltip = {
@@ -654,7 +667,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                     .as_ref()
                     .map(|skill_specs| {
                         let skill_specs = Arc::new(skill_specs.clone());
-                        view! { <SkillTooltip skill_specs=skill_specs /> }
+                        let player_base_skill = player_base_skill.get().map(Arc::new);
+                        view! {
+                            <SkillTooltip
+                                skill_specs=skill_specs
+                                player_base_skill=player_base_skill
+                            />
+                        }
                     })}
             }
             .into_any()
@@ -690,12 +709,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             disabled=move || !is_ready.get()
                         >
                             {move || {
-                                skill_specs_base
-                                    .get()
-                                    .map(|skill_specs_base| {
+                                skill_progress
+                                    .read()
+                                    .as_ref()
+                                    .map(|(skill_type, skill_icon)| {
                                         view! {
                                             <SkillProgressBar
-                                                skill_specs_base
+                                                skill_type=*skill_type
+                                                skill_icon=skill_icon.clone()
                                                 value=progress_value
                                                 reset=just_triggered
                                                 disabled=is_dead

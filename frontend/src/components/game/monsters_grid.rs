@@ -814,6 +814,14 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 #[component]
 fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let skill_type = Memo::new({
+        let skill_type = skill_specs.skill_type;
+        move |_| skill_type
+    });
+    let skill_icon = Memo::new({
+        let skill_icon = skill_specs.icon.clone();
+        move |_| skill_icon.clone()
+    });
 
     let is_dead = Memo::new(move |_| {
         game_context
@@ -900,7 +908,8 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
     view! {
         <SkillProgressBar
-            skill_specs_base=skill_specs.base
+            skill_type=skill_type.get()
+            skill_icon=skill_icon.get()
             value=progress_value
             reset=just_triggered
             disabled=is_dead

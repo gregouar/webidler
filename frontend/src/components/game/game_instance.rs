@@ -125,6 +125,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         passives_tree_specs,
         passives_tree_state,
         passives_tree_build,
+        player_base_specs,
         player_specs,
         player_state,
         last_skills_bought,
@@ -139,6 +140,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.passives_tree_build.set(passives_tree_build);
+    game_context.player_base_specs.set(player_base_specs);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.player_auto_skills.set(auto_skills);
@@ -150,6 +152,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         area_state,
         area_threat,
         passives_tree_state,
+        player_base_specs,
         player_specs,
         player_inventory,
         player_state,
@@ -165,6 +168,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.area_state.sync(area_state);
     game_context.area_threat.set(area_threat);
     game_context.passives_tree_state.sync(passives_tree_state);
+    game_context.player_base_specs.sync(player_base_specs);
     game_context.player_specs.sync(player_specs);
     if let Some(player_inventory) = player_inventory {
         game_context.player_inventory.set(player_inventory);
