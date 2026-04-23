@@ -6,7 +6,6 @@ use strum::IntoEnumIterator;
 
 use crate::data::{
     area::AreaLevel,
-    conditional_modifier::Condition,
     skill::BaseSkillSpecs,
     values::{AtLeastOne, NonNegative},
 };

@@ -159,7 +159,7 @@ fn PlayerCard() -> impl IntoView {
                             .with(|last_grind| {
                                 last_grind
                                     .as_ref()
-                                    .map(|last_grind| last_grind.skills_specs.len().min(4))
+                                    .map(|last_grind| last_grind.skills.len().min(4))
                                     .unwrap_or_default()
                             })
                     }
@@ -206,7 +206,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         town_context.last_grind.with(|last_grind| {
             last_grind
                 .as_ref()
-                .and_then(|last_grind| last_grind.skills_specs.get(index))
+                .and_then(|last_grind| last_grind.skills.get(index))
                 .cloned()
         })
     });
@@ -216,7 +216,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         let skill_specs = town_context.last_grind.with(|last_grind| {
             last_grind
                 .as_ref()
-                .and_then(|last_grind| last_grind.skills_specs.get(index))
+                .and_then(|last_grind| last_grind.skills.get(index))
                 .cloned()
         });
 

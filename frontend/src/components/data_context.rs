@@ -1,10 +1,7 @@
 use leptos::prelude::*;
 use std::collections::HashMap;
 
-use shared::data::{
-    area::AreaSpecs,
-    skill::{BaseSkillSpecs, SkillSpecs},
-};
+use shared::data::{area::AreaSpecs, skill::BaseSkillSpecs};
 
 use crate::components::backend_client::{BackendClient, BackendError};
 

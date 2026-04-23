@@ -9,7 +9,7 @@ use crate::data::{
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
-    skill::{BaseSkillSpecs, SkillSpecs},
+    skill::BaseSkillSpecs,
     stash::{Stash, StashItem},
     temple::{BenedictionSpecs, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},

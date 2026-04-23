@@ -5,9 +5,9 @@ use rand::{self, seq::IteratorRandom};
 use shared::{
     computations::skill_cost_increase,
     data::{
-        character::{CharacterId, SkillSpecs},
+        character::CharacterId,
         item::{SkillRange, SkillShape},
-        player::PlayerResources,
+        player::{PlayerBaseSkill, PlayerResources},
         skill::{
             RepeatedSkillEffect, SkillEffect, SkillEffectType, SkillRepeatTarget,
             SkillTargetsGroup, SkillType, TargetType,
@@ -52,8 +52,8 @@ pub fn use_skill<'a>(
     for targets_group in skill_specs.targets.iter() {
         applied |= apply_skill_on_targets(
             events_queue,
-            &skill_specs.base.skill_id,
-            skill_specs.base.skill_type,
+            &skill_specs.skill_id,
+            skill_specs.skill_type,
             targets_group,
             me,
             friends,
@@ -579,13 +579,16 @@ fn repeat_skill<'a>(
     repeated_skill_effect.amount_repeat < repeated_skill_effect.max_repeat
 }
 
-pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut PlayerResources) {
-    if player_resources.gold < skill_specs.next_upgrade_cost {
+pub fn level_up_skill(
+    player_base_skill: &mut PlayerBaseSkill,
+    player_resources: &mut PlayerResources,
+) {
+    if player_resources.gold < player_base_skill.next_upgrade_cost {
         return;
     }
 
-    player_resources.gold -= skill_specs.next_upgrade_cost;
+    player_resources.gold -= player_base_skill.next_upgrade_cost;
 
-    skill_specs.upgrade_level += 1;
-    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+    player_base_skill.upgrade_level += 1;
+    player_base_skill.next_upgrade_cost = skill_cost_increase(player_base_skill);
 }

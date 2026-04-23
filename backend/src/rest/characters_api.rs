@@ -11,9 +11,7 @@ use shared::{
     data::{
         area::AreaLevel,
         game_stats::GrindStats,
-        player::EquippedSlot,
         realms::Realm,
-        skill::SkillSpecs,
         stash::StashType,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
@@ -31,12 +29,9 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, CurrentUser},
     db,
-    game::{
-        data::{
-            DataInit, inventory_data::inventory_data_to_player_inventory,
-            passives::ascension_data_to_passives_tree_ascension,
-        },
-        systems::items_controller,
+    game::data::{
+        inventory_data::inventory_data_to_player_inventory,
+        passives::ascension_data_to_passives_tree_ascension,
     },
     rest::utils::MsgPack,
 };
@@ -184,58 +179,44 @@ async fn read_character_details(
         })
         .collect();
 
-    // let areas: Vec<UserGrindArea> = master_store
-    //     .area_blueprints_store
-    //     .iter()
-    //     .map(|(area_id, available_area)| UserGrindArea {
-    //         area_id: area_id.clone(),
-    //         max_level_reached: areas_completed
-    //             .iter()
-    //             .find(|area_completed| area_completed.area_id.eq(area_id))
-    //             .map(|area_completed| {
-    //                 area_completed.max_area_level as AreaLevel + available_area.specs.starting_level
-    //                     - 1
-    //             })
-    //             .unwrap_or_default(),
-    //     })
-    //     .collect();
-
     let inventory = inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
     let passives_build = passives_build?.unwrap_or_default();
 
     let last_grind = last_grind_data.map(|last_grind_data| {
-        let (items_data, skills_data) = last_grind_data;
+        let (_, skills) = last_grind_data;
 
-        let mut skills_specs: Vec<_> = items_data
-            .map(|items_data| {
-                items_data
-                    .values()
-                    .flat_map(|equipped_slot| match equipped_slot {
-                        EquippedSlot::MainSlot(item_specs) => {
-                            item_specs.weapon_specs.clone().map(|weapon_specs| {
-                                SkillSpecs::init(items_controller::make_weapon_skill(
-                                    item_specs.modifiers.level,
-                                    &weapon_specs,
-                                ))
-                            })
-                        }
-                        _ => None,
-                    })
-                    .collect()
-            })
-            .unwrap_or_default();
+        // let mut skills_specs: Vec<_> = items_data
+        //     .map(|items_data| {
+        //         items_data
+        //             .values()
+        //             .flat_map(|equipped_slot| match equipped_slot {
+        //                 EquippedSlot::MainSlot(item_specs) => {
+        //                     item_specs.weapon_specs.clone().map(|weapon_specs| {
+        //                         SkillSpecs::init(items_controller::make_weapon_skill(
+        //                             item_specs.modifiers.level,
+        //                             &weapon_specs,
+        //                         ))
+        //                     })
+        //                 }
+        //                 _ => None,
+        //             })
+        //             .collect()
+        //     })
+        //     .unwrap_or_default();
 
-        skills_specs.extend(
-            skills_data
-                .unwrap_or_default()
-                .into_iter()
-                .flat_map(|skill_id| master_store.skills_store.get(&skill_id))
-                .map(|base_skill_specs| SkillSpecs::init(base_skill_specs.clone())),
-        );
+        // skills_specs.extend(
+        //     skills_data
+        //         .unwrap_or_default()
+        //         .into_iter()
+        //         .flat_map(|skill_id| master_store.skills_store.get(&skill_id))
+        //         .map(|base_skill_specs| SkillSpecs::init(base_skill_specs.clone())),
+        // );
 
-        GrindStats { skills_specs }
+        GrindStats {
+            skills: skills.unwrap_or_default(),
+        }
     });
 
     Ok(MsgPack(GetCharacterDetailsResponse {

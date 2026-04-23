@@ -262,27 +262,21 @@ async fn new_game_instance(
 
     for _ in 0..extra_level {
         player_controller::level_up_no_cost(
-            &mut game_data.player_base_specs,
+            game_data.player_base_specs.mutate(),
             &mut game_data.player_state,
             game_data.player_resources.mutate(),
         );
     }
 
     player_controller::init_skills_from_inventory(
-        &mut game_data.player_base_specs,
+        game_data.player_base_specs.mutate(),
         game_data.player_inventory.mutate(),
         &mut game_data.player_state,
         &mut game_data.player_controller,
     );
 
-    if game_data
-        .player_specs
-        .mutate()
-        .character_specs
-        .skills_specs
-        .is_empty()
-    {
-        game_data.player_base_specs.buy_skill_cost = 0.0;
+    if game_data.player_base_specs.read().skills.is_empty() {
+        game_data.player_base_specs.mutate().buy_skill_cost = 0.0;
     }
 
     db::game_instances::save_game_instance_data(

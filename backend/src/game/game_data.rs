@@ -16,7 +16,9 @@ use shared::data::{
 
 use crate::game::{
     data::{DataInit, area::AreaBlueprint, master_store},
-    systems::{area_controller, passives_controller, player_controller::PlayerController},
+    systems::{
+        area_controller, passives_controller, player_controller::PlayerController, player_updater,
+    },
     utils::LazySyncer,
 };
 
@@ -72,7 +74,7 @@ pub struct SavedGameData {
     passives_tree_id: String,
     passives_tree_state: PassivesTreeState,
     player_resources: PlayerResources,
-    player_base_specs: PlayerSpecs,
+    player_base_specs: PlayerBaseSpecs,
     player_inventory: PlayerInventory,
     player_controller: PlayerController,
     queued_loot: Vec<QueuedLoot>,
@@ -152,6 +154,17 @@ impl GameInstanceData {
             &mut player_resources,
         );
 
+        let area_threat = AreaThreat::default();
+        let player_specs = player_updater::update_player_specs(
+            &player_base_specs,
+            // Two step init to have max life etc
+            &PlayerState::init(&PlayerSpecs::init(&player_base_specs)),
+            &player_inventory,
+            &passives_tree_specs,
+            &passives_tree_state,
+            &area_threat,
+        );
+
         Ok(Self {
             realm_id,
             area_id,
@@ -166,9 +179,9 @@ impl GameInstanceData {
             passives_tree_state: LazySyncer::new(passives_tree_state),
 
             player_resources: LazySyncer::new(player_resources),
-            player_state: PlayerState::init(&player_base_specs),
+            player_state: PlayerState::init(&player_specs),
             player_controller,
-            player_specs: LazySyncer::new(PlayerSpecs::init(&player_base_specs)),
+            player_specs: LazySyncer::new(player_specs),
             player_base_specs: LazySyncer::new(player_base_specs),
             player_inventory: LazySyncer::new(player_inventory),
             player_respawn_delay: Default::default(),
@@ -201,7 +214,7 @@ impl GameInstanceData {
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_resources: self.player_resources.unwrap(),
-            player_base_specs: self.player_base_specs,
+            player_base_specs: self.player_base_specs.unwrap(),
             player_inventory: self.player_inventory.unwrap(),
             player_stamina: self.player_stamina,
             player_controller: self.player_controller,

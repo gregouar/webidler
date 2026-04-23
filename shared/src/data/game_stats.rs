@@ -1,7 +1,8 @@
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-use crate::data::skill::SkillSpecs;
+use crate::data::player::PlayerBaseSkill;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GameStats {
@@ -15,5 +16,5 @@ pub struct GameStats {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GrindStats {
-    pub skills_specs: Vec<SkillSpecs>,
+    pub skills: IndexMap<String, PlayerBaseSkill>,
 }

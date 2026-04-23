@@ -85,7 +85,7 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             self.game_data,
             passives_tree_build,
-            last_skills_bought,
+            last_skills_bought.into_keys().collect(),
         )
         .await?;
 
@@ -229,7 +229,7 @@ impl<'a> GameInstance<'a> {
         db::characters::update_character_max_area_level(
             &mut tx,
             self.character_id,
-            self.game_data.player_base_specs.max_area_level as i32,
+            self.game_data.player_base_specs.read().max_area_level as i32,
         )
         .await?;
 

@@ -66,8 +66,8 @@ impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
     }
 }
 
-impl DataInit<&PlayerBaseSpecs> for PlayerState {
-    fn init(specs: &PlayerBaseSpecs) -> Self {
+impl DataInit<&PlayerSpecs> for PlayerState {
+    fn init(specs: &PlayerSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
         }

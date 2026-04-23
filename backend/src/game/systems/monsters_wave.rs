@@ -237,6 +237,7 @@ fn generate_monster_specs(
             skills_updater::update_skill_specs(
                 "".to_string(),
                 base_skill_specs,
+                0,
                 &upgrade_effects,
                 &monster_specs.character_specs.character_attrs,
                 None,
@@ -248,6 +249,7 @@ fn generate_monster_specs(
             skills_updater::update_skill_specs(
                 "".to_string(),
                 base_skill_specs,
+                0,
                 &effects,
                 &monster_specs.character_specs.character_attrs,
                 None,

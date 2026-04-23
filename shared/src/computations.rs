@@ -6,7 +6,7 @@ use crate::{
     data::{
         area::{AreaLevel, AreaState},
         item::ItemSpecs,
-        player::{PlayerBaseSkill, PlayerBaseSpecs, PlayerSpecs},
+        player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
 };

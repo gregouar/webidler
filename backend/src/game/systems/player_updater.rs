@@ -95,11 +95,6 @@ pub fn reset_player(player_state: &mut PlayerState) {
     characters_updater::reset_character(&mut player_state.character_state);
 }
 
-pub fn update_base_player_specs(player_base_specs: &mut PlayerBaseSpecs) {
-    player_base_specs.character_specs.character_attrs =
-        base_player_character_attrs(player_base_specs.level);
-}
-
 // I hate the fact player state influences player specs... But I couldn't figure out a way
 // to have it working with the dynamic statuses.
 pub fn update_player_specs(
@@ -311,6 +306,7 @@ fn compute_player_specs(
             skills_updater::update_skill_specs(
                 skill_id.to_string(),
                 &player_base_skill.base_skill_specs,
+                player_base_skill.upgrade_level,
                 effects,
                 &player_specs.character_specs.character_attrs,
                 Some(player_inventory),

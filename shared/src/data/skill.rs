@@ -71,6 +71,9 @@ pub struct SkillSpecs {
     pub triggers: Vec<TriggerSpecs>,
 
     pub level_modifier: u16,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
