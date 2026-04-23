@@ -981,7 +981,7 @@
   },
   "curse_weakness": {
     "name": "Curse of Weakness",
-    "description": "A debilitating curse that reduces enemies' damage output and slow them.",
+    "description": "A debilitating curse that reduces enemies' damage output.",
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Curse",
     "cooldown": 10,
@@ -1018,6 +1018,112 @@
                         }
                       },
                       "modifier": "More",
+                      "debuff": true
+                    }
+                  },
+                  "value": 17
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "curse_clumsy": {
+    "name": "Curse of Clumsiness",
+    "description": "A crippling curse that hinders enemies ability to evade or block your attacks.",
+    "icon": "skills/curse_clumsy.svg",
+    "skill_type": "Curse",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "StatModifier": {
+                "stat": {
+                  "Block": null
+                },
+                "debuff": true
+              }
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "StatModifier": {
+                "stat": {
+                  "Evade": null
+                },
+                "debuff": true
+              }
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "BlockDamageTaken",
+                      "modifier": "Flat",
+                      "debuff": false
+                    }
+                  },
+                  "value": 10
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "EvadeDamageTaken",
+                      "modifier": "Flat",
+                      "debuff": false
+                    }
+                  },
+                  "value": 10
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Block": null
+                      },
+                      "modifier": "Increased",
+                      "debuff": true
+                    }
+                  },
+                  "value": 17
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Evade": null
+                      },
+                      "modifier": "Increased",
                       "debuff": true
                     }
                   },

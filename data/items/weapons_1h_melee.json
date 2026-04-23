@@ -809,7 +809,7 @@
           "StatusPower": {
             "status_type": {
               "DamageOverTime": {
-                "damage_type": "Physical"
+                "damage_type": null
               }
             },
             "skill_type": null,
@@ -967,6 +967,26 @@
             }
           },
           "modifier": "Increased",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_type": {
+                "DamageOverTime": {
+                  "damage_type": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "min_max": null
+            }
+          },
+          "modifier": "More",
           "value": 20.0
         }
       }

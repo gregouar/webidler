@@ -1100,7 +1100,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 1.0,
+            "factor": 0.2,
             "source": {
               "HitDamage": "Fire"
             }

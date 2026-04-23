@@ -556,7 +556,16 @@ fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
         Some(status_specs) => match status_specs {
             StatusSpecs::Stun => true,
             StatusSpecs::DamageOverTime { .. } => true,
-            StatusSpecs::StatModifier { debuff, .. } => *debuff,
+            StatusSpecs::StatModifier { debuff, stat, .. } => {
+                if matches!(
+                    stat,
+                    StatType::BlockDamageTaken | StatType::EvadeDamageTaken
+                ) {
+                    !*debuff
+                } else {
+                    *debuff
+                }
+            }
             StatusSpecs::Trigger(trigger_specs) => {
                 trigger_specs.is_debuff
                     || matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
@@ -647,6 +656,8 @@ fn StatusIcon(
                         ) => "passives/smoking_finger.svg".into(),
                         _ => "passives/success.svg".into(),
                     },
+                    StatType::BlockDamageTaken => "passives/shield_impact.svg".to_string(),
+                    StatType::EvadeDamageTaken => "passives/falling.svg".to_string(),
                     StatType::GoldFind => "passives/gold.svg".to_string(),
                     StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
                     _ => "statuses/buff.svg".to_string(),
@@ -660,6 +671,8 @@ fn StatusIcon(
                     }
                     StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
                     StatType::Speed(_) => "statuses/slow.svg".to_string(),
+                    StatType::Block(_) => "passives/shield_impact.svg".to_string(),
+                    StatType::Evade(_) => "passives/falling.svg".to_string(),
                     StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
                     _ => "statuses/debuff.svg".to_string(),
                 },

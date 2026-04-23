@@ -410,7 +410,7 @@ pub fn apply_status(
                     .enumerate()
                     .rev()
                     .filter(|(_, (specs, _))| StatusId::from(specs) == status_id)
-                    .nth(100)
+                    .nth(constants::MAX_STATUS_STACKS)
                     .map(|(i, _)| i)
                 {
                     target_state.statuses.cumulative_statuses.remove(i);

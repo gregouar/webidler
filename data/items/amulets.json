@@ -626,6 +626,43 @@
           "modifier": "Increased",
           "value": 2.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    },
+                    "skill_type": null,
+                    "not": false
+                  }
+                }
+              ]
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
       }
     ]
   },
