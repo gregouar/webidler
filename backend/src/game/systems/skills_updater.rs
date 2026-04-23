@@ -9,8 +9,8 @@ use shared::data::{
     modifier::Modifier,
     player::PlayerInventory,
     skill::{
-        DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect, SkillEffect,
-        SkillEffectType, SkillSpecs, SkillState, SkillType,
+        BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
+        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
@@ -64,18 +64,14 @@ pub fn reset_skills(skills_states: &mut [SkillState]) {
 }
 
 pub fn update_skill_specs(
-    skill_specs: &mut SkillSpecs,
+    skill_id: String,
+    base_skill_specs: &BaseSkillSpecs,
     // effects: impl Iterator<Item = &'a StatEffect> + Clone,
     effects: &[StatEffect],
     character_attrs: &CharacterAttrs,
     inventory: Option<&PlayerInventory>,
-) {
-    skill_specs.targets = skill_specs.base.targets.clone();
-    skill_specs.triggers = skill_specs.base.triggers.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown.into();
-    skill_specs.mana_cost = skill_specs.base.mana_cost.into();
-
-    skill_specs.level_modifier = effects
+) -> SkillSpecs {
+    let level_modifier = effects
         .iter()
         .map(|e| {
             if let StatType::SkillLevel(skill_filter) = &e.stat
@@ -93,6 +89,24 @@ pub fn update_skill_specs(
         })
         .sum();
 
+    let mut skill_specs = SkillSpecs {
+        skill_id,
+        name: base_skill_specs.name.clone(),
+        icon: base_skill_specs.icon.clone(),
+        description: base_skill_specs.description.clone(),
+        skill_type: base_skill_specs.skill_type,
+        cooldown: base_skill_specs.cooldown.into(),
+        mana_cost: base_skill_specs.mana_cost.into(),
+        targets: base_skill_specs.targets.clone(),
+        triggers: base_skill_specs.triggers.clone(),
+        level_modifier,
+    };
+
+    skill_specs.targets = skill_specs.base.targets.clone();
+    skill_specs.triggers = skill_specs.base.triggers.clone();
+    skill_specs.cooldown = skill_specs.base.cooldown.into();
+    skill_specs.mana_cost = skill_specs.base.mana_cost.into();
+
     let local_effects: Vec<_> = (&EffectsMap::combine_all(
         std::iter::once(compute_skill_upgrade_effects(
             skill_specs,
@@ -109,6 +123,8 @@ pub fn update_skill_specs(
         .into();
 
     apply_effects_to_skill_specs(skill_specs, local_effects.iter().chain(effects));
+
+    skill_specs
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -190,10 +206,10 @@ pub fn apply_effects_to_skill_specs<'a>(
     }
 }
 
-pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> EffectsMap {
+pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u16) -> EffectsMap {
     let level = level as f64 - 1.0;
 
-    skill_specs.base.upgrade_effects.iter().fold(
+    base_skill_specs.upgrade_effects.iter().fold(
         EffectsMap(HashMap::new()),
         |mut effects_map, effect| {
             *effects_map

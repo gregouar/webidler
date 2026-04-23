@@ -6,8 +6,7 @@ use crate::{
     data::{
         area::{AreaLevel, AreaState},
         item::ItemSpecs,
-        player::PlayerSpecs,
-        skill::SkillSpecs,
+        player::{PlayerBaseSkill, PlayerBaseSpecs, PlayerSpecs},
         stash::{Stash, StashType},
     },
 };
@@ -24,12 +23,12 @@ pub fn diminishing(amount: f64, factor: f64) -> f64 {
     amount / (amount + factor)
 }
 
-pub fn skill_cost_increase(skill_specs: &SkillSpecs) -> f64 {
-    skill_specs.next_upgrade_cost
-        + (10.0 * exponential(skill_specs.upgrade_level, SKILL_COST_INCREASE_FACTOR)).round()
+pub fn skill_cost_increase(player_base_skill: &PlayerBaseSkill) -> f64 {
+    player_base_skill.next_upgrade_cost
+        + (10.0 * exponential(player_base_skill.upgrade_level, SKILL_COST_INCREASE_FACTOR)).round()
 }
 
-pub fn player_level_up_cost(player_specs: &PlayerSpecs) -> f64 {
+pub fn player_level_up_cost(player_specs: &PlayerBaseSpecs) -> f64 {
     (20.0 * exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR)).round()
 }
 

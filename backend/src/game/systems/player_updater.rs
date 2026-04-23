@@ -11,7 +11,7 @@ use shared::{
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
-        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
+        player::{CharacterSpecs, PlayerBaseSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
@@ -23,7 +23,7 @@ use shared::{
 use strum::IntoEnumIterator;
 
 use crate::game::{
-    data::event::EventsQueue,
+    data::{DataInit, event::EventsQueue},
     systems::{stats_updater, statuses_controller},
 };
 
@@ -45,8 +45,8 @@ pub fn init_player_base_specs(
     character_portrait: String,
     max_area_level: AreaLevel,
     effects: EffectsMap,
-) -> PlayerSpecs {
-    PlayerSpecs {
+) -> PlayerBaseSpecs {
+    PlayerBaseSpecs {
         max_area_level,
         character_specs: CharacterSpecs {
             character_attrs: base_player_character_attrs(1),
@@ -60,7 +60,7 @@ pub fn init_player_base_specs(
         },
         max_skills: 4,
         buy_skill_cost: SKILL_BASE_COST,
-        bought_skills: Default::default(),
+        skills: Default::default(),
         level: 1,
         experience_needed: 20.0,
         movement_cooldown: 3.0.into(),
@@ -95,20 +95,15 @@ pub fn reset_player(player_state: &mut PlayerState) {
     characters_updater::reset_character(&mut player_state.character_state);
 }
 
-pub fn update_base_player_specs(
-    player_base_specs: &mut PlayerSpecs,
-    player_state: &mut PlayerState,
-) {
+pub fn update_base_player_specs(player_base_specs: &mut PlayerBaseSpecs) {
     player_base_specs.character_specs.character_attrs =
         base_player_character_attrs(player_base_specs.level);
-
-    player_state.character_state.dirty_specs = true;
 }
 
 // I hate the fact player state influences player specs... But I couldn't figure out a way
 // to have it working with the dynamic statuses.
 pub fn update_player_specs(
-    player_base_specs: &PlayerSpecs,
+    player_base_specs: &PlayerBaseSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
@@ -116,7 +111,7 @@ pub fn update_player_specs(
     // benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) -> PlayerSpecs {
-    let mut player_specs = player_base_specs.clone();
+    let mut player_specs = PlayerSpecs::init(player_base_specs);
 
     let effects_map = EffectsMap::combine_all(
         player_inventory
@@ -177,7 +172,12 @@ pub fn update_player_specs(
 
     let mut effects: Vec<_> = (&effects_map).into();
 
-    compute_player_specs(&mut player_specs, player_inventory, &mut effects);
+    compute_player_specs(
+        player_base_specs,
+        &mut player_specs,
+        player_inventory,
+        &mut effects,
+    );
 
     player_specs.character_specs.triggers.extend(
         passives_tree_state
@@ -233,6 +233,7 @@ pub fn update_player_specs(
 }
 
 fn compute_player_specs(
+    player_base_specs: &PlayerBaseSpecs,
     player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
     effects: &mut Vec<StatEffect>,
@@ -303,14 +304,19 @@ fn compute_player_specs(
         });
     }
 
-    for skill_specs in player_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::update_skill_specs(
-            skill_specs,
-            effects,
-            &player_specs.character_specs.character_attrs,
-            Some(player_inventory),
-        );
-    }
+    player_specs.character_specs.skills_specs = player_base_specs
+        .skills
+        .iter()
+        .map(|(skill_id, player_base_skill)| {
+            skills_updater::update_skill_specs(
+                skill_id.to_string(),
+                &player_base_skill.base_skill_specs,
+                effects,
+                &player_specs.character_specs.character_attrs,
+                Some(player_inventory),
+            )
+        })
+        .collect();
 }
 
 #[derive(Clone, Default)]

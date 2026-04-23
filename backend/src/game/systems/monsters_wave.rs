@@ -185,7 +185,7 @@ fn generate_monster_specs(
     base_monster_specs: &BaseMonsterSpecs,
     monster_id: CharacterId,
 ) -> MonsterSpecs {
-    let mut monster_specs = MonsterSpecs::init(base_monster_specs.clone());
+    let mut monster_specs = MonsterSpecs::init(base_monster_specs);
     let mut monster_level = area_state.area_level + *area_specs.power_level;
     monster_specs
         .character_specs
@@ -232,24 +232,27 @@ fn generate_monster_specs(
         value: (monster_level as f64 - 1.0) * MONSTERS_DEFAULT_DAMAGE_INCREASE,
         bypass_ignore: true,
     }];
-    for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        if skill_specs.base.upgrade_effects.is_empty() {
+    for base_skill_specs in base_monster_specs.skills.iter() {
+        let mut skill_specs = if base_skill_specs.upgrade_effects.is_empty() {
             skills_updater::update_skill_specs(
-                skill_specs,
+                "".to_string(),
+                base_skill_specs,
                 &upgrade_effects,
                 &monster_specs.character_specs.character_attrs,
                 None,
-            );
+            )
         } else {
             let effects: Vec<_> =
-                (&skills_updater::compute_skill_upgrade_effects(skill_specs, monster_level)).into();
+                (&skills_updater::compute_skill_upgrade_effects(base_skill_specs, monster_level))
+                    .into();
             skills_updater::update_skill_specs(
-                skill_specs,
+                "".to_string(),
+                base_skill_specs,
                 &effects,
                 &monster_specs.character_specs.character_attrs,
                 None,
-            );
-        }
+            )
+        };
 
         // Link monster_id to triggers of skills
         for trigger in skill_specs.triggers.iter_mut() {

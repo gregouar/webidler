@@ -11,14 +11,17 @@ use shared::{
         character::CharacterId,
         item::{ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
-        player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-        skill::{BaseSkillSpecs, SkillSpecs, SkillState},
+        player::{
+            PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs,
+            PlayerState,
+        },
+        skill::BaseSkillSpecs,
     },
 };
 
 use crate::{
     game::{
-        data::{DataInit, event::EventsQueue, master_store::SkillsStore},
+        data::{event::EventsQueue, master_store::SkillsStore},
         systems::{characters_controller, inventory_controller, player_updater, stats_updater},
     },
     rest::AppError,
@@ -35,7 +38,7 @@ pub struct PlayerController {
 }
 
 impl PlayerController {
-    pub fn init(specs: &PlayerSpecs) -> Self {
+    pub fn init(specs: &PlayerBaseSpecs) -> Self {
         PlayerController {
             auto_skills: Vec::with_capacity(specs.max_skills as usize),
             use_skills: Vec::with_capacity(specs.max_skills as usize),
@@ -50,6 +53,7 @@ impl PlayerController {
         &mut self,
         events_queue: &mut EventsQueue,
         area_threat: &AreaThreat,
+        player_base_specs: &'a PlayerBaseSpecs,
         player_specs: &'a PlayerSpecs,
         player_state: &'a mut PlayerState,
         monsters: &mut [Target<'a>],
@@ -58,13 +62,12 @@ impl PlayerController {
             return;
         }
 
-        let no_auto_use: Vec<_> = player_specs
-            .character_specs
-            .skills_specs
-            .iter()
-            .map(|skill_specs| {
-                skill_specs
-                    .base
+        let no_auto_use: Vec<_> = player_base_specs
+            .skills
+            .values()
+            .map(|player_base_skill| {
+                player_base_skill
+                    .base_skill_specs
                     .auto_use_conditions
                     .iter()
                     .any(|condition| {
@@ -114,7 +117,7 @@ impl PlayerController {
                 .character_specs
                 .skills_specs
                 .iter()
-                .take(player_specs.max_skills as usize)
+                .take(player_base_specs.max_skills as usize)
                 .map(|s| s.mana_cost.get())
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
@@ -125,7 +128,7 @@ impl PlayerController {
             .skills_specs
             .iter()
             .zip(no_auto_use.into_iter())
-            .take(player_specs.max_skills as usize)
+            .take(player_base_specs.max_skills as usize)
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
@@ -173,7 +176,7 @@ pub fn reward_player(
 }
 
 pub fn level_up(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
@@ -190,7 +193,7 @@ pub fn level_up(
 }
 
 pub fn level_up_no_cost(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) {
@@ -201,12 +204,10 @@ pub fn level_up_no_cost(
     player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
     player_base_specs.character_specs.character_attrs =
         player_updater::base_player_character_attrs(player_base_specs.level);
-
-    player_state.character_state.dirty_specs = true;
 }
 
 pub fn equip_item_from_bag(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
@@ -241,7 +242,7 @@ pub fn equip_item_from_bag(
 }
 
 pub fn unequip_item_to_bag(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
@@ -307,7 +308,7 @@ pub fn sell_item(
 }
 
 pub fn init_skills_from_inventory(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
@@ -327,28 +328,30 @@ pub fn init_skills_from_inventory(
 }
 
 fn unequip_weapon(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
     item_slot: ItemSlot,
 ) {
     let to_remove: Vec<_> = player_base_specs
-        .character_specs
-        .skills_specs
-        .iter()
+        .skills
+        .values()
         .enumerate()
-        .filter_map(|(i, skill_specs)| (skill_specs.item_slot? == item_slot).then_some(i))
+        .filter_map(|(i, player_skill)| (player_skill.item_slot? == item_slot).then_some(i))
         .collect();
 
-    for i in to_remove.into_iter().rev() {
-        player_base_specs.character_specs.skills_specs.remove(i);
-        player_state.character_state.skills_states.remove(i);
-        player_controller.auto_skills.remove(i);
+    for skill_index in to_remove.into_iter().rev() {
+        unequip_base_skill(
+            player_base_specs,
+            player_state,
+            player_controller,
+            skill_index,
+        );
     }
 }
 
 fn equip_weapon(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
     item_slot: ItemSlot,
@@ -359,23 +362,36 @@ fn equip_weapon(
         player_base_specs,
         player_state,
         player_controller,
+        item_slot_to_skill_id(item_slot),
         items_controller::make_weapon_skill(item_level, weapon_specs),
         true,
         Some(item_slot),
     );
 }
 
+fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Accessory => "accessory_skill",
+        ItemSlot::Helmet => "helmet_skill",
+        ItemSlot::Amulet => "amulet_skill",
+        ItemSlot::Weapon => "weapon_skill",
+        ItemSlot::Body => "body_skill",
+        ItemSlot::Shield => "shield_skill",
+        ItemSlot::Gloves => "gloves_skill",
+        ItemSlot::Boots => "boots_skill",
+        ItemSlot::Ring => "ring_skill",
+    }
+}
+
 pub fn equip_base_skill(
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
+    skill_id: &str,
     base_skill_specs: BaseSkillSpecs,
     auto_use: bool,
     item_slot: Option<ItemSlot>,
 ) {
-    let mut skill_specs = SkillSpecs::init(base_skill_specs);
-    skill_specs.item_slot = item_slot;
-
     let index = if item_slot.is_some() {
         0
     } else {
@@ -385,19 +401,54 @@ pub fn equip_base_skill(
     player_state
         .character_state
         .skills_states
-        .insert(index, SkillState::init(&skill_specs));
-    player_base_specs
-        .character_specs
-        .skills_specs
-        .insert(index, skill_specs);
-    player_controller.auto_skills.insert(index, auto_use);
+        .insert(index, Default::default());
 
-    player_state.character_state.dirty_specs = true;
+    player_base_specs.skills.shift_insert(
+        index,
+        skill_id.to_string(),
+        PlayerBaseSkill {
+            item_slot,
+            upgrade_level: 1,
+            next_upgrade_cost: base_skill_specs.upgrade_cost,
+            base_skill_specs,
+        },
+    );
+
+    player_controller.auto_skills.insert(index, auto_use);
+}
+
+pub fn unequip_base_skill(
+    player_base_specs: &mut PlayerBaseSpecs,
+    player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
+    skill_index: usize,
+) {
+    if skill_index < player_base_specs.skills.len() {
+        player_base_specs.skills.shift_remove_index(skill_index);
+    }
+
+    if skill_index < player_base_specs.character_specs.skills_specs.len() {
+        player_base_specs
+            .character_specs
+            .skills_specs
+            .remove(skill_index);
+    }
+
+    if skill_index < player_state.character_state.skills_states.len() {
+        player_state
+            .character_state
+            .skills_states
+            .remove(skill_index);
+    }
+
+    if skill_index < player_controller.auto_skills.len() {
+        player_controller.auto_skills.remove(skill_index);
+    }
 }
 
 pub fn buy_skill(
     skills_store: &SkillsStore,
-    player_base_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
     player_resources: &mut PlayerResources,
@@ -406,7 +457,7 @@ pub fn buy_skill(
     if player_resources.gold < player_base_specs.buy_skill_cost
         || player_base_specs.character_specs.skills_specs.len()
             >= player_base_specs.max_skills as usize
-        || player_base_specs.bought_skills.contains(skill_id)
+        || player_base_specs.skills.contains_key(skill_id)
     {
         return false;
     }
@@ -416,10 +467,8 @@ pub fn buy_skill(
             player_base_specs,
             player_state,
             player_controller,
-            BaseSkillSpecs {
-                skill_id: skill_id.to_string(),
-                ..base_skill_specs.clone()
-            },
+            skill_id,
+            base_skill_specs.clone(),
             true,
             None,
         );
@@ -430,7 +479,6 @@ pub fn buy_skill(
             SKILL_BASE_COST * SKILL_COST_FACTOR
         })
         .round();
-        player_base_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {
         false

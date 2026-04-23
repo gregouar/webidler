@@ -78,6 +78,7 @@ fn handle_client_message(
             for _ in 0..m.amount {
                 if let Some(skill_specs) = game_data
                     .player_base_specs
+                    .mutate()
                     .character_specs
                     .skills_specs
                     .get_mut(m.skill_index as usize)
@@ -88,7 +89,6 @@ fn handle_client_message(
                     );
                 }
             }
-            game_data.player_state.character_state.dirty_specs = true;
         }
         ClientMessage::BuySkill(m) => {
             player_controller::buy_skill(

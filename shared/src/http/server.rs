@@ -9,7 +9,7 @@ use crate::data::{
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
-    skill::SkillSpecs,
+    skill::{BaseSkillSpecs, SkillSpecs},
     stash::{Stash, StashItem},
     temple::{BenedictionSpecs, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
@@ -142,7 +142,7 @@ pub struct GetAreasResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetSkillsResponse {
-    pub skills: HashMap<String, SkillSpecs>,
+    pub skills: HashMap<String, BaseSkillSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

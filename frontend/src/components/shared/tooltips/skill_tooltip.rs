@@ -234,12 +234,12 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     }
                 })}
 
-            {(!skill_specs.base.description.is_empty())
+            {(!skill_specs.description.is_empty())
                 .then(|| {
                     view! {
                         <Separator />
                         <p class="text-xs xl:text-sm italic text-stone-400 ">
-                            {skill_specs.base.description.clone()}
+                            {skill_specs.description.clone()}
                         </p>
                     }
                 })}

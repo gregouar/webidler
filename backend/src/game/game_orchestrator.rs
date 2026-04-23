@@ -51,7 +51,8 @@ pub async fn tick(
     }
 
     // If client input altered the player specs (equip item, ...), we need to recompute the currents specs
-    if game_data.player_specs.need_to_sync()
+    if game_data.player_base_specs.need_to_sync()
+        // || game_data.player_specs.need_to_sync()
         || game_data.player_inventory.need_to_sync()
         || game_data.passives_tree_state.need_to_sync()
         || game_data.player_state.character_state.dirty_specs

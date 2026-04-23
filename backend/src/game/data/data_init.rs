@@ -5,8 +5,7 @@ use shared::data::{
     character_status::StatusMap,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeAscension, PassivesTreeState},
-    player::{CharacterSpecs, PlayerSpecs, PlayerState},
-    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
+    player::{CharacterSpecs, PlayerBaseSpecs, PlayerSpecs, PlayerState},
 };
 
 use crate::game::utils::rng::Rollable;
@@ -37,7 +36,11 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             mana: specs.character_attrs.max_mana.get().into(),
 
             statuses: StatusMap::default(),
-            skills_states: specs.skills_specs.iter().map(SkillState::init).collect(),
+            skills_states: specs
+                .skills_specs
+                .iter()
+                .map(|_| Default::default())
+                .collect(),
 
             is_alive: true,
             just_hurt: false,
@@ -52,8 +55,19 @@ impl DataInit<&CharacterSpecs> for CharacterState {
     }
 }
 
-impl DataInit<&PlayerSpecs> for PlayerState {
-    fn init(specs: &PlayerSpecs) -> Self {
+impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
+    fn init(specs: &PlayerBaseSpecs) -> Self {
+        PlayerSpecs {
+            character_specs: specs.character_specs.clone(),
+            movement_cooldown: specs.movement_cooldown.clone(),
+            gold_find: specs.gold_find.clone(),
+            threat_gain: specs.threat_gain.clone(),
+        }
+    }
+}
+
+impl DataInit<&PlayerBaseSpecs> for PlayerState {
+    fn init(specs: &PlayerBaseSpecs) -> Self {
         PlayerState {
             character_state: CharacterState::init(&specs.character_specs),
         }
@@ -82,32 +96,31 @@ impl DataInit<&MonsterSpecs> for MonsterState {
     }
 }
 
-impl DataInit<BaseSkillSpecs> for SkillSpecs {
-    fn init(specs: BaseSkillSpecs) -> Self {
-        Self {
-            cooldown: specs.cooldown.into(),
-            mana_cost: specs.mana_cost.into(),
-            upgrade_level: 1,
-            next_upgrade_cost: specs.upgrade_cost,
-            targets: specs.targets.clone(),
-            triggers: specs.triggers.clone(),
-            item_slot: None,
-            base: specs,
-            level_modifier: 0,
-        }
-    }
-}
+// impl DataInit<BaseSkillSpecs> for SkillSpecs {
+//     fn init(specs: BaseSkillSpecs) -> Self {
+//         Self {
+//             cooldown: specs.cooldown.into(),
+//             mana_cost: specs.mana_cost.into(),
+//             upgrade_level: 1,
+//             next_upgrade_cost: specs.upgrade_cost,
+//             targets: specs.targets.clone(),
+//             triggers: specs.triggers.clone(),
+//             item_slot: None,
+//             level_modifier: 0,
+//         }
+//     }
+// }
 
-impl DataInit<&SkillSpecs> for SkillState {
-    fn init(specs: &SkillSpecs) -> Self {
-        let _ = specs;
-        Self {
-            elapsed_cooldown: Default::default(),
-            is_ready: false,
-            just_triggered: false,
-        }
-    }
-}
+// impl DataInit<&SkillSpecs> for SkillState {
+//     fn init(specs: &SkillSpecs) -> Self {
+//         let _ = specs;
+//         Self {
+//             elapsed_cooldown: Default::default(),
+//             is_ready: false,
+//             just_triggered: false,
+//         }
+//     }
+// }
 
 impl DataInit<PassivesTreeAscension> for PassivesTreeState {
     fn init(ascension: PassivesTreeAscension) -> Self {

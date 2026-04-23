@@ -47,27 +47,28 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub auto_use_conditions: Vec<Condition>,
 
-    #[serde(default)]
-    pub skill_id: String,
-
+    // #[serde(default)]
+    // pub skill_id: String,
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillSpecs {
-    pub base: BaseSkillSpecs,
+    // pub base: BaseSkillSpecs,
+    pub skill_id: String,
 
+    pub name: String,
+    pub icon: String,
+    pub description: String,
+    pub skill_type: SkillType,
+
+    // Should we split in two here?
     pub cooldown: ModifiableValue<NonNegative>,
     pub mana_cost: ModifiableValue<NonNegative>,
 
-    pub upgrade_level: u16,
-    pub next_upgrade_cost: f64,
-
     pub targets: Vec<SkillTargetsGroup>,
     pub triggers: Vec<TriggerSpecs>,
-
-    pub item_slot: Option<ItemSlot>,
 
     pub level_modifier: u16,
 }
