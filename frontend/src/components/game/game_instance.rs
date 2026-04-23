@@ -128,6 +128,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         player_specs,
         player_state,
         last_skills_bought,
+        auto_skills,
     } = init_message;
 
     game_context.started.set(true);
@@ -140,6 +141,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.passives_tree_build.set(passives_tree_build);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
+    game_context.player_auto_skills.set(auto_skills);
     game_context.last_skills_bought.set(last_skills_bought);
 }
 

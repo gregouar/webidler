@@ -249,7 +249,7 @@ pub fn PlayerCard() -> impl IntoView {
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Right>
                     <VerticalProgressBar
                         class="w-6 xl:w-8"
-                        bar_color="bg-gradient-to-l from-[#c44a3d] to-[#6b221d]"
+                        bar_color="bg-gradient-to-l from-[#6b221d] to-[#c44a3d]"
                         value=life_percent
                     />
                 </StaticTooltip>
@@ -282,7 +282,7 @@ pub fn PlayerCard() -> impl IntoView {
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
                     <VerticalProgressBar
                         class="w-6 xl:w-8"
-                        bar_color="bg-gradient-to-l from-[#3f79c2] to-[#224173]"
+                        bar_color="bg-gradient-to-l from-[#224173] to-[#3f79c2]"
                         value=mana_percent
                     >
                         <div
@@ -480,9 +480,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     // TODO: Make dynamic in case of reset?
     let initial_auto_use = *game_context
-        .player_specs
+        .player_auto_skills
         .read_untracked()
-        .auto_skills
         .get(index)
         .unwrap_or(&false);
 

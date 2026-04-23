@@ -1,17 +1,17 @@
 use std::{collections::HashMap, iter, time::Duration};
 
 use shared::{
-    constants::PLAYER_LIFE_PER_LEVEL,
+    constants::{DEFAULT_MAX_LEVEL, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST},
     data::{
-        area::AreaThreat,
+        area::{AreaLevel, AreaThreat},
         chance::{Chance, ChanceRange},
-        character::{CharacterAttrs, CharacterId},
+        character::{CharacterAttrs, CharacterId, CharacterSize},
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
-        player::{PlayerInventory, PlayerSpecs, PlayerState},
+        player::{CharacterSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
@@ -40,6 +40,36 @@ pub fn base_player_character_attrs(level: u8) -> CharacterAttrs {
     }
 }
 
+pub fn init_player_base_specs(
+    character_name: String,
+    character_portrait: String,
+    max_area_level: AreaLevel,
+    effects: EffectsMap,
+) -> PlayerSpecs {
+    PlayerSpecs {
+        max_area_level,
+        character_specs: CharacterSpecs {
+            character_attrs: base_player_character_attrs(1),
+            name: character_name,
+            portrait: character_portrait,
+            size: CharacterSize::Small,
+            position_x: 0,
+            position_y: 0,
+            effects,
+            ..Default::default()
+        },
+        max_skills: 4,
+        buy_skill_cost: SKILL_BASE_COST,
+        bought_skills: Default::default(),
+        level: 1,
+        experience_needed: 20.0,
+        movement_cooldown: 3.0.into(),
+        gold_find: 100.0.into(),
+        threat_gain: 100.0.into(),
+        max_level: DEFAULT_MAX_LEVEL,
+    }
+}
+
 pub fn update_player_state(
     events_queue: &mut EventsQueue,
     elapsed_time: Duration,
@@ -65,17 +95,29 @@ pub fn reset_player(player_state: &mut PlayerState) {
     characters_updater::reset_character(&mut player_state.character_state);
 }
 
+pub fn update_base_player_specs(
+    player_base_specs: &mut PlayerSpecs,
+    player_state: &mut PlayerState,
+) {
+    player_base_specs.character_specs.character_attrs =
+        base_player_character_attrs(player_base_specs.level);
+
+    player_state.character_state.dirty_specs = true;
+}
+
 // I hate the fact player state influences player specs... But I couldn't figure out a way
 // to have it working with the dynamic statuses.
 pub fn update_player_specs(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &PlayerSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
-    benedictions_effects: &EffectsMap,
+    // benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
-) {
+) -> PlayerSpecs {
+    let mut player_specs = player_base_specs.clone();
+
     let effects_map = EffectsMap::combine_all(
         player_inventory
             .equipped_items()
@@ -83,7 +125,6 @@ pub fn update_player_specs(
                 i.modifiers
                     .aggregate_effects(AffixEffectScope::Global, false)
             })
-            .chain(iter::once(benedictions_effects.clone()))
             .chain(iter::once(passive::generate_effects_map_from_passives(
                 passives_tree_specs,
                 &passives_tree_state.ascension,
@@ -102,14 +143,11 @@ pub fn update_player_specs(
                     &player_specs.character_specs.conditional_modifiers,
                 )
                 .into(),
+            ))
+            .chain(iter::once(
+                player_base_specs.character_specs.effects.clone(),
             )),
     );
-
-    player_specs.character_specs.character_attrs = base_player_character_attrs(player_specs.level);
-
-    player_specs.gold_find = 100.0.into();
-    player_specs.threat_gain = 100.0.into();
-    player_specs.movement_cooldown = 3.0.into();
 
     // TODO: Could we figure out a way to keep the block luck somehow?
     let (total_armor, total_block) = player_inventory
@@ -139,7 +177,7 @@ pub fn update_player_specs(
 
     let mut effects: Vec<_> = (&effects_map).into();
 
-    compute_player_specs(player_specs, player_inventory, &mut effects);
+    compute_player_specs(&mut player_specs, player_inventory, &mut effects);
 
     player_specs.character_specs.triggers.extend(
         passives_tree_state
@@ -190,6 +228,8 @@ pub fn update_player_specs(
     }
 
     player_specs.character_specs.effects = effects.into();
+
+    player_specs
 }
 
 fn compute_player_specs(

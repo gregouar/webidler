@@ -294,6 +294,7 @@ fn handle_area_completed_event(
     area_level: AreaLevel,
     is_boss_level: bool,
 ) {
+    let _ = area_level;
     let area_state = game_data.area_state.mutate();
 
     if !game_data.area_specs.disable_shards
@@ -303,13 +304,14 @@ fn handle_area_completed_event(
         game_data.player_resources.mutate().shards += 1.0;
     }
 
-    game_data.player_specs.mutate().max_area_level =
-        game_data.player_specs.read().max_area_level.max(
-            area_state
-                .area_level
-                .saturating_add(*game_data.area_specs.power_level)
-                .saturating_add(*game_data.area_specs.item_level_modifier),
-        );
+    let power_level = area_state
+        .area_level
+        .saturating_add(*game_data.area_specs.power_level)
+        .saturating_add(*game_data.area_specs.item_level_modifier);
+    if power_level > game_data.player_base_specs.max_area_level {
+        game_data.player_base_specs.max_area_level = power_level;
+        game_data.player_state.character_state.dirty_specs = true;
+    }
 
     let new_max = area_state.area_level > area_state.max_area_level;
 
@@ -325,9 +327,7 @@ fn handle_area_completed_event(
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
-        area_level
-            .saturating_add(*game_data.area_specs.item_level_modifier)
-            .saturating_add(*game_data.area_specs.power_level),
+        power_level,
         is_boss_level,
         new_max, // Only drop unique when new area completed
         false,

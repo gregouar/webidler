@@ -4,12 +4,9 @@ use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::{
-    constants::DEFAULT_MAX_LEVEL,
-    data::{
-        area::AreaLevel,
-        values::{AtLeastOne, NonNegative},
-    },
+use crate::data::{
+    area::AreaLevel,
+    values::{AtLeastOne, NonNegative},
 };
 
 pub use super::character::{CharacterSpecs, CharacterState};
@@ -18,29 +15,20 @@ use super::item::{ItemSlot, ItemSpecs};
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
-    pub auto_skills: Vec<bool>, // Should move to a separate synced struct
 
-    pub max_skills: u8,
     pub buy_skill_cost: f64,
     pub bought_skills: IndexSet<String>,
+    pub max_skills: u8,
 
     pub level: u8,
     pub experience_needed: f64,
+    pub max_level: u8,
 
-    // Should move to a DerivedPlayerSpecs
     pub movement_cooldown: AtLeastOne,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,
 
-    #[serde(default)] // for retro compatibility
     pub max_area_level: AreaLevel,
-
-    #[serde(default = "default_max_level")] // for retro compatibility
-    pub max_level: u8,
-}
-
-fn default_max_level() -> u8 {
-    DEFAULT_MAX_LEVEL
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -52,11 +40,11 @@ pub struct PlayerState {
 pub struct PlayerResources {
     pub experience: f64,
     pub passive_points: u16,
+
     pub gold: f64,
     pub gems: f64,
     pub shards: f64,
 
-    #[serde(default)]
     pub gold_total: f64,
 }
 

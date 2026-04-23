@@ -7,10 +7,9 @@ use shared::{
     constants::MAX_PLAYER_STAMINA,
     data::{
         area::{AreaLevel, StartAreaConfig},
-        character::CharacterSize,
         item::ItemRarity,
         passive::PassivesTreeState,
-        player::{CharacterSpecs, PlayerInventory, PlayerResources, PlayerSpecs},
+        player::{PlayerInventory, PlayerResources},
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
     },
@@ -25,7 +24,10 @@ use crate::{
         },
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
-        systems::{benedictions_controller, inventory_controller, player_updater},
+        systems::{
+            benedictions_controller, inventory_controller, player_controller::PlayerController,
+            player_updater,
+        },
     },
     rest::AppError,
 };
@@ -125,19 +127,6 @@ async fn new_game_instance(
 ) -> Result<GameInstanceData> {
     let area_config = area_config.ok_or(anyhow::anyhow!("missing area id"))?;
 
-    let mut player_specs = PlayerSpecs::init(CharacterSpecs {
-        character_attrs: player_updater::base_player_character_attrs(1),
-        name: character.character_name.clone(),
-        portrait: character.portrait.clone(),
-        size: CharacterSize::Small,
-        position_x: 0,
-        position_y: 0,
-        ..Default::default()
-    });
-    player_specs.max_area_level = character.max_area_level as AreaLevel;
-
-    let player_resources = PlayerResources::default();
-
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
@@ -196,6 +185,28 @@ async fn new_game_instance(
         }
     };
 
+    let mut player_resources = PlayerResources::default();
+    player_resources.gold += benedictions_controller::find_benediction_value(
+        &master_store.benedictions_store,
+        &player_benedictions,
+        BenedictionEffect::StartingGold,
+    );
+    let extra_level = benedictions_controller::find_benediction_value(
+        &master_store.benedictions_store,
+        &player_benedictions,
+        BenedictionEffect::StartingLevel,
+    ) as usize;
+
+    let player_base_specs = player_updater::init_player_base_specs(
+        character.character_name,
+        character.portrait,
+        character.max_area_level as AreaLevel,
+        benedictions_controller::generate_effects_map_from_benedictions(
+            &master_store.benedictions_store,
+            &player_benedictions,
+        ),
+    );
+
     let map_item = match area_config.map_item_index {
         Some(map_item_index) => {
             if (map_item_index as usize) < player_inventory.bag.len() {
@@ -211,7 +222,7 @@ async fn new_game_instance(
                     return Err(anyhow::anyhow!("missing map item"));
                 }
 
-                if map_item.required_level > player_specs.max_area_level {
+                if map_item.required_level > player_base_specs.max_area_level {
                     return Err(anyhow::anyhow!("power level too low"));
                 }
 
@@ -229,6 +240,7 @@ async fn new_game_instance(
         .and_then(|map_specs| map_specs.replace_area_id.clone())
         .unwrap_or(area_config.area_id);
 
+    let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
         character.realm_id,
@@ -237,21 +249,30 @@ async fn new_game_instance(
         area_level_completed as AreaLevel,
         "default",
         passives_tree_state,
-        player_benedictions,
         player_resources,
-        player_specs,
+        player_base_specs,
         player_inventory,
         Default::default(),
+        player_controller,
     )?;
 
     if game_data.area_specs.coming_soon {
         return Err(anyhow!("forbidden area"));
     }
 
+    for _ in 0..extra_level {
+        player_controller::level_up_no_cost(
+            &mut game_data.player_base_specs,
+            &mut game_data.player_state,
+            game_data.player_resources.mutate(),
+        );
+    }
+
     player_controller::init_skills_from_inventory(
-        game_data.player_specs.mutate(),
+        &mut game_data.player_base_specs,
         game_data.player_inventory.mutate(),
         &mut game_data.player_state,
+        &mut game_data.player_controller,
     );
 
     if game_data
@@ -261,26 +282,7 @@ async fn new_game_instance(
         .skills_specs
         .is_empty()
     {
-        game_data.player_specs.mutate().buy_skill_cost = 0.0;
-    }
-
-    game_data.player_resources.mutate().gold += benedictions_controller::find_benediction_value(
-        &master_store.benedictions_store,
-        &game_data.player_benedictions,
-        BenedictionEffect::StartingGold,
-    );
-
-    for _ in 0..benedictions_controller::find_benediction_value(
-        &master_store.benedictions_store,
-        &game_data.player_benedictions,
-        BenedictionEffect::StartingLevel,
-    ) as usize
-    {
-        player_controller::level_up_no_cost(
-            game_data.player_specs.mutate(),
-            &mut game_data.player_state,
-            game_data.player_resources.mutate(),
-        );
+        game_data.player_base_specs.buy_skill_cost = 0.0;
     }
 
     db::game_instances::save_game_instance_data(

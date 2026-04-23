@@ -55,33 +55,6 @@ pub fn update_monster_specs(
     monster_state: &MonsterState,
     area_threat: &AreaThreat,
 ) {
-    // let effects_map = EffectsMap::combine_all(
-    //     std::iter::once(statuses_controller::generate_effects_map_from_statuses(
-    //         &monster_state.character_state.statuses,
-    //     ))
-    //     .chain(std::iter::once(EffectsMap(HashMap::from([(
-    //         (
-    //             StatType::Damage {
-    //                 skill_type: None,
-    //                 damage_type: None,
-    //                 min_max: None,
-    //             },
-    //             Modifier::Multiplier,
-    //         ),
-    //         ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-    //     )])))) // .chain(std::iter::once(base_specs.character_specs.effects.clone())),
-    //     .chain(iter::once(
-    //         stats_updater::compute_conditional_modifiers(
-    //             area_threat,
-    //             &monster_specs.character_specs,
-    //             &monster_state.character_state,
-    //             &monster_specs.character_specs.conditional_modifiers,
-    //         )
-    //         .into(),
-    //     )),
-    // );
-    // let mut effects = (&effects_map).into();
-
     let mut effects: Vec<_> = (&statuses_controller::generate_effects_map_from_statuses(
         &monster_state.character_state.statuses,
     ))

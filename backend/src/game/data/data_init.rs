@@ -1,15 +1,12 @@
-use shared::{
-    constants::{DEFAULT_MAX_LEVEL, SKILL_BASE_COST},
-    data::{
-        area::{AreaSpecs, AreaState},
-        chance::ChanceRange,
-        character::CharacterState,
-        character_status::StatusMap,
-        monster::{MonsterSpecs, MonsterState},
-        passive::{PassivesTreeAscension, PassivesTreeState},
-        player::{CharacterSpecs, PlayerSpecs, PlayerState},
-        skill::{BaseSkillSpecs, SkillSpecs, SkillState},
-    },
+use shared::data::{
+    area::{AreaSpecs, AreaState},
+    chance::ChanceRange,
+    character::CharacterState,
+    character_status::StatusMap,
+    monster::{MonsterSpecs, MonsterState},
+    passive::{PassivesTreeAscension, PassivesTreeState},
+    player::{CharacterSpecs, PlayerSpecs, PlayerState},
+    skill::{BaseSkillSpecs, SkillSpecs, SkillState},
 };
 
 use crate::game::utils::rng::Rollable;
@@ -51,25 +48,6 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             dirty_specs: true,
             monitored_conditions: Default::default(),
             repeated_skills: Default::default(),
-        }
-    }
-}
-
-impl DataInit<CharacterSpecs> for PlayerSpecs {
-    fn init(specs: CharacterSpecs) -> Self {
-        PlayerSpecs {
-            max_area_level: 0,
-            character_specs: specs.clone(),
-            auto_skills: vec![],
-            max_skills: 4,
-            buy_skill_cost: SKILL_BASE_COST,
-            bought_skills: Default::default(),
-            level: 1,
-            experience_needed: 20.0,
-            movement_cooldown: 3.0.into(),
-            gold_find: 100.0.into(),
-            threat_gain: 100.0.into(),
-            max_level: DEFAULT_MAX_LEVEL,
         }
     }
 }

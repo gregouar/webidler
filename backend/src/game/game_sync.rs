@@ -31,6 +31,7 @@ pub async fn sync_init_game(
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
                 last_skills_bought,
+                auto_skills: game_data.player_controller.auto_skills.clone(),
             }
             .into(),
         )

@@ -368,7 +368,7 @@ pub fn ThreatMeter() -> impl IntoView {
                     class="z-2 w-4 xl:w-8"
                     value=progress_value
                     reset=threat_increase
-                    bar_color="bg-gradient-to-l from-[#d1a24b] to-[#9b7429]"
+                    bar_color="bg-gradient-to-l from-[#9b7429] to-[#d1a24b]"
                 />
             </div>
         </StaticTooltip>

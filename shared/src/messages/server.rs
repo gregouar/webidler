@@ -56,6 +56,7 @@ pub struct InitGameMessage {
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
     pub last_skills_bought: IndexSet<String>,
+    pub auto_skills: Vec<bool>,
 }
 
 /// Message to be sent every tick to sync current state of the game with clients

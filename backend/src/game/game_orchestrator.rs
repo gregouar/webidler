@@ -6,8 +6,6 @@ use shared::{
     data::{area::AreaThreat, character::CharacterId, player::PlayerState},
 };
 
-use crate::game::systems::benedictions_controller;
-
 use super::{
     data::{
         DataInit,
@@ -61,16 +59,12 @@ pub async fn tick(
         // This feels so dirty =(
         game_data.player_state.character_state.dirty_specs = false;
 
-        player_updater::update_player_specs(
-            game_data.player_specs.mutate(),
+        *game_data.player_specs.mutate() = player_updater::update_player_specs(
+            &game_data.player_base_specs,
             &game_data.player_state,
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),
-            &benedictions_controller::generate_effects_map_from_benedictions(
-                &master_store.benedictions_store,
-                &game_data.player_benedictions,
-            ),
             &game_data.area_threat,
         );
     }
@@ -118,7 +112,7 @@ async fn control_entities(
             Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
 
         if game_data.player_respawn_delay.is_zero() {
-            respawn_player(master_store, game_data);
+            respawn_player(game_data);
         }
         return Ok(());
     }
@@ -262,21 +256,17 @@ async fn update_entities(
     );
 }
 
-fn respawn_player(master_store: &MasterStore, game_data: &mut GameInstanceData) {
+fn respawn_player(game_data: &mut GameInstanceData) {
     game_data.monster_base_specs.mutate().clear();
     game_data.monster_specs.clear();
     game_data.monster_states.clear();
 
-    player_updater::update_player_specs(
-        game_data.player_specs.mutate(),
+    *game_data.player_specs.mutate() = player_updater::update_player_specs(
+        &game_data.player_base_specs,
         &game_data.player_state,
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,
         game_data.passives_tree_state.read(),
-        &benedictions_controller::generate_effects_map_from_benedictions(
-            &master_store.benedictions_store,
-            &game_data.player_benedictions,
-        ),
         &game_data.area_threat,
     );
 
