@@ -232,55 +232,61 @@ fn generate_monster_specs(
         value: (monster_level as f64 - 1.0) * MONSTERS_DEFAULT_DAMAGE_INCREASE,
         bypass_ignore: true,
     }];
-    for base_skill_specs in base_monster_specs.skills.iter() {
-        let mut skill_specs = if base_skill_specs.upgrade_effects.is_empty() {
-            skills_updater::update_skill_specs(
-                "".to_string(),
-                base_skill_specs,
-                0,
-                &upgrade_effects,
-                &monster_specs.character_specs.character_attrs,
-                None,
-            )
-        } else {
-            let effects: Vec<_> =
-                (&skills_updater::compute_skill_upgrade_effects(base_skill_specs, monster_level))
+
+    monster_specs.character_specs.skills_specs = base_monster_specs
+        .skills
+        .iter()
+        .map(|base_skill_specs| {
+            let mut skill_specs = if base_skill_specs.upgrade_effects.is_empty() {
+                skills_updater::update_skill_specs(
+                    "".to_string(),
+                    base_skill_specs,
+                    0,
+                    &upgrade_effects,
+                    &monster_specs.character_specs.character_attrs,
+                    None,
+                )
+            } else {
+                let effects: Vec<_> = (&skills_updater::compute_skill_upgrade_effects(
+                    base_skill_specs,
+                    monster_level,
+                ))
                     .into();
-            skills_updater::update_skill_specs(
-                "".to_string(),
-                base_skill_specs,
-                0,
-                &effects,
-                &monster_specs.character_specs.character_attrs,
-                None,
-            )
-        };
+                skills_updater::update_skill_specs(
+                    "".to_string(),
+                    base_skill_specs,
+                    0,
+                    &effects,
+                    &monster_specs.character_specs.character_attrs,
+                    None,
+                )
+            };
 
-        // Link monster_id to triggers of skills
-        for trigger in skill_specs.triggers.iter_mut() {
-            trigger.triggered_effect.owner = Some(monster_id);
-        }
+            // Link monster_id to triggers of skills
+            for trigger in skill_specs.triggers.iter_mut() {
+                trigger.triggered_effect.owner = Some(monster_id);
+            }
 
-        for effect in skill_specs
-            .targets
-            .iter_mut()
-            .flat_map(|target| target.effects.iter_mut())
-        {
-            if let SkillEffectType::ApplyStatus {
-                ref mut statuses, ..
-            } = effect.effect_type
+            for effect in skill_specs
+                .targets
+                .iter_mut()
+                .flat_map(|target| target.effects.iter_mut())
             {
-                for status in statuses {
-                    if let StatusSpecs::Trigger(ref mut trigger_specs) = status.status_type {
-                        trigger_specs.triggered_effect.owner = Some(monster_id);
+                if let SkillEffectType::ApplyStatus {
+                    ref mut statuses, ..
+                } = effect.effect_type
+                {
+                    for status in statuses {
+                        if let StatusSpecs::Trigger(ref mut trigger_specs) = status.status_type {
+                            trigger_specs.triggered_effect.owner = Some(monster_id);
+                        }
                     }
                 }
             }
-        }
-    }
 
-    // Apply area effects
-    // monster_specs.character_specs.effects = area_specs.effects.clone();
+            skill_specs
+        })
+        .collect();
 
     let mut effects: Vec<_> = (&area_specs.effects).into();
     let (character_specs, converted_effects) =
