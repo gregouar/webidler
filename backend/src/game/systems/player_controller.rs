@@ -455,8 +455,7 @@ pub fn buy_skill(
     skill_id: &str,
 ) -> bool {
     if player_resources.gold < player_base_specs.buy_skill_cost
-        || player_base_specs.character_specs.skills_specs.len()
-            >= player_base_specs.max_skills as usize
+        || player_base_specs.skills.len() >= player_base_specs.max_skills as usize
         || player_base_specs.skills.contains_key(skill_id)
     {
         return false;
