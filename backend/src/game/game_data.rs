@@ -155,10 +155,13 @@ impl GameInstanceData {
         );
 
         let area_threat = AreaThreat::default();
+        let player_specs = PlayerSpecs::init(&player_base_specs);
+        let player_state = PlayerState::init(&player_specs);
+        // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
             &player_base_specs,
-            // Two step init to have max life etc
-            &PlayerState::init(&PlayerSpecs::init(&player_base_specs)),
+            &player_specs,
+            &player_state,
             &player_inventory,
             &passives_tree_specs,
             &passives_tree_state,

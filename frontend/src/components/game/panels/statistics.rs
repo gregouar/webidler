@@ -113,12 +113,19 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             <Stat
                                 label="Name"
                                 value=move || {
-                                    game_context.player_specs.read().character_specs.name.clone()
+                                    game_context
+                                        .player_base_specs
+                                        .read()
+                                        .character_static
+                                        .name
+                                        .clone()
                                 }
                             />
                             <Stat
                                 label="Level"
-                                value=move || game_context.player_base_specs.read().level.to_string()
+                                value=move || {
+                                    game_context.player_base_specs.read().level.to_string()
+                                }
                             />
                             <Stat
                                 label="Maximum Life"

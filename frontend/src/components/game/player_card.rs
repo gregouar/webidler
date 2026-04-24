@@ -258,9 +258,9 @@ pub fn PlayerCard() -> impl IntoView {
                     <div class="flex-1 min-h-0">
                         <CharacterPortrait
                             image_uri=game_context
-                                .player_specs
+                                .player_base_specs
                                 .read_untracked()
-                                .character_specs
+                                .character_static
                                 .portrait
                                 .clone()
                             character_name="player".to_string()
@@ -362,9 +362,9 @@ pub fn PlayerName() -> impl IntoView {
 
     let player_name = Memo::new(move |_| {
         game_context
-            .player_specs
+            .player_base_specs
             .read()
-            .character_specs
+            .character_static
             .name
             .clone()
     });

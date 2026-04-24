@@ -103,10 +103,14 @@ pub fn MonstersGrid() -> impl IntoView {
                                     .get(index)
                                     .cloned()
                                     .expect("checked by Show");
-                                let (x_size, y_size) = specs.character_specs.size.get_xy_size();
+                                let (x_size, y_size) = specs
+                                    .character_specs
+                                    .character_static
+                                    .size
+                                    .get_xy_size();
                                 let (x_pos, y_pos) = (
-                                    specs.character_specs.position_x,
-                                    specs.character_specs.position_y,
+                                    specs.character_specs.character_static.position_x,
+                                    specs.character_specs.character_static.position_y,
                                 );
 
                                 view! {
@@ -239,8 +243,8 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let game_context: GameContext = expect_context();
     let settings: SettingsContext = expect_context();
 
-    let monster_name = specs.character_specs.name.clone();
-    let is_big = match specs.character_specs.size {
+    let monster_name = specs.character_specs.character_static.name.clone();
+    let is_big = match specs.character_specs.character_static.size {
         CharacterSize::Small | CharacterSize::Large | CharacterSize::Tall => false,
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
@@ -437,7 +441,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         MonsterRarity::Boss => "boss-title xl:text-base font-display",
     };
 
-    let x_size = specs.character_specs.size.get_xy_size().0;
+    let x_size = specs.character_specs.character_static.size.get_xy_size().0;
     let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
 
     view! {
@@ -492,8 +496,8 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 </StaticTooltip>
                 <div class="flex-1 min-h-0">
                     <CharacterPortrait
-                        image_uri=specs.character_specs.portrait.clone()
-                        character_name=specs.character_specs.name.clone()
+                        image_uri=specs.character_specs.character_static.portrait.clone()
+                        character_name=specs.character_specs.character_static.name.clone()
                         rarity=specs.rarity
                         just_hurt=just_hurt
                         just_hurt_crit=just_hurt_crit
@@ -510,7 +514,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             <div class="w-full flex flex-col justify-center gap-1">
                 <MonsterTags
                     attrs=specs.character_specs.character_attrs
-                    size=specs.character_specs.size
+                    size=specs.character_specs.character_static.size
                 />
                 <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
                     <For

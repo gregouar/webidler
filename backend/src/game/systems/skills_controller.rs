@@ -135,13 +135,19 @@ fn apply_repeated_skill_on_targets<'a>(
         match targets_group.target_type {
             TargetType::Enemy => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (
+                    me.1.0.character_static.position_x,
+                    me.1.0.character_static.position_y,
+                ),
                 enemies,
                 already_hit,
             ),
             TargetType::Friend => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (
+                    me.1.0.character_static.position_x,
+                    me.1.0.character_static.position_y,
+                ),
                 friends,
                 already_hit,
             ),
@@ -210,7 +216,7 @@ fn find_main_target<'a, 'b>(
     // Pick closest/furthest target
     let available_positions = target_specs
         .clone()
-        .map(|(_, specs)| specs.position_x.abs_diff(me_position.0));
+        .map(|(_, specs)| specs.character_static.position_x.abs_diff(me_position.0));
 
     let main_target_distance = match targets_group.range {
         SkillRange::Melee => available_positions.min(),
@@ -221,17 +227,25 @@ fn find_main_target<'a, 'b>(
     main_target_distance.and_then(|distance| {
         target_specs
             .clone()
-            .filter(|(_, specs)| specs.position_x.abs_diff(me_position.0) == distance)
+            .filter(|(_, specs)| {
+                specs.character_static.position_x.abs_diff(me_position.0) == distance
+            })
             .choose(&mut rand::rng())
             .map(|(id, specs)| {
-                let (x_size, y_size) = specs.size.get_xy_size();
+                let (x_size, y_size) = specs.character_static.size.get_xy_size();
                 let dx = rng::random_range(1..=x_size)
                     .and_then(|v| v.checked_sub(1))
                     .unwrap_or(0) as u8;
                 let dy = rng::random_range(1..=y_size)
                     .and_then(|v| v.checked_sub(1))
                     .unwrap_or(0) as u8;
-                (*id, (specs.position_x + dx, specs.position_y + dy))
+                (
+                    *id,
+                    (
+                        specs.character_static.position_x + dx,
+                        specs.character_static.position_y + dy,
+                    ),
+                )
             })
     })
 }
@@ -297,11 +311,14 @@ pub fn find_sub_targets<'a, 'b>(
     pre_targets
         .iter_mut()
         .filter(|(_, (specs, _))| {
-            let (x_size, y_size) = specs.size.get_xy_size();
+            let (x_size, y_size) = specs.character_static.size.get_xy_size();
             (0..x_size as i32)
                 .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
                 .any(|(x, y)| {
-                    is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
+                    is_target_in_range((
+                        specs.character_static.position_x as i32 + x,
+                        specs.character_static.position_y as i32 + y,
+                    ))
                 })
         })
         .collect()

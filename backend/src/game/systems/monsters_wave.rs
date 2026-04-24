@@ -123,13 +123,22 @@ fn generate_all_monsters_specs(
         };
 
         for _ in 0..spawn.quantity.roll() {
-            if let Some((x, y)) =
-                find_free_slot(&grid, base_monster_specs.character_specs.size.get_xy_size())
-            {
+            if let Some((x, y)) = find_free_slot(
+                &grid,
+                base_monster_specs
+                    .character_specs
+                    .character_static
+                    .size
+                    .get_xy_size(),
+            ) {
                 occupy_space(
                     &mut grid,
                     (x, y),
-                    base_monster_specs.character_specs.size.get_xy_size(),
+                    base_monster_specs
+                        .character_specs
+                        .character_static
+                        .size
+                        .get_xy_size(),
                 );
 
                 let mut specs = generate_monster_specs(
@@ -138,8 +147,8 @@ fn generate_all_monsters_specs(
                     base_monster_specs,
                     CharacterId::Monster(monsters.len()),
                 );
-                specs.character_specs.position_x = (x + 1) as u8;
-                specs.character_specs.position_y = (y + 1) as u8;
+                specs.character_specs.character_static.position_x = (x + 1) as u8;
+                specs.character_specs.character_static.position_y = (y + 1) as u8;
                 monsters.push(specs);
 
                 // Early exit if grid is full

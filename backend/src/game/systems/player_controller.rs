@@ -202,7 +202,7 @@ pub fn level_up_no_cost(
 
     player_resources.passive_points += 1;
     player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
-    player_base_specs.character_specs.character_attrs =
+    player_base_specs.character_attrs =
         player_updater::base_player_character_attrs(player_base_specs.level);
 }
 
@@ -425,13 +425,6 @@ pub fn unequip_base_skill(
 ) {
     if skill_index < player_base_specs.skills.len() {
         player_base_specs.skills.shift_remove_index(skill_index);
-    }
-
-    if skill_index < player_base_specs.character_specs.skills_specs.len() {
-        player_base_specs
-            .character_specs
-            .skills_specs
-            .remove(skill_index);
     }
 
     if skill_index < player_state.character_state.skills_states.len() {

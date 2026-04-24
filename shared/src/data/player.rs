@@ -6,7 +6,9 @@ use strum::IntoEnumIterator;
 
 use crate::data::{
     area::AreaLevel,
+    character::{CharacterAttrs, CharacterStatic},
     skill::BaseSkillSpecs,
+    stat_effect::EffectsMap,
     values::{AtLeastOne, NonNegative},
 };
 
@@ -15,8 +17,9 @@ use super::item::{ItemSlot, ItemSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerBaseSpecs {
-    // TODO: replace by granular needs
-    pub character_specs: CharacterSpecs,
+    pub character_static: CharacterStatic,
+    pub character_attrs: CharacterAttrs,
+    pub effects: EffectsMap,
 
     pub buy_skill_cost: f64,
     pub max_skills: u8,

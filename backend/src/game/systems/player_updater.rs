@@ -5,13 +5,13 @@ use shared::{
     data::{
         area::{AreaLevel, AreaThreat},
         chance::{Chance, ChanceRange},
-        character::{CharacterAttrs, CharacterId, CharacterSize},
+        character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
         character_status::StatusSpecs,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
-        player::{CharacterSpecs, PlayerBaseSpecs, PlayerInventory, PlayerSpecs, PlayerState},
+        player::{PlayerBaseSpecs, PlayerInventory, PlayerSpecs, PlayerState},
         skill::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
@@ -48,16 +48,15 @@ pub fn init_player_base_specs(
 ) -> PlayerBaseSpecs {
     PlayerBaseSpecs {
         max_area_level,
-        character_specs: CharacterSpecs {
-            character_attrs: base_player_character_attrs(1),
+        character_static: CharacterStatic {
             name: character_name,
             portrait: character_portrait,
             size: CharacterSize::Small,
             position_x: 0,
             position_y: 0,
-            effects,
-            ..Default::default()
         },
+        character_attrs: base_player_character_attrs(1),
+        effects,
         max_skills: 4,
         buy_skill_cost: SKILL_BASE_COST,
         skills: Default::default(),
@@ -99,15 +98,13 @@ pub fn reset_player(player_state: &mut PlayerState) {
 // to have it working with the dynamic statuses.
 pub fn update_player_specs(
     player_base_specs: &PlayerBaseSpecs,
+    player_specs: &PlayerSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
-    // benedictions_effects: &EffectsMap,
     area_threat: &AreaThreat,
 ) -> PlayerSpecs {
-    let mut player_specs = PlayerSpecs::init(player_base_specs);
-
     let effects_map = EffectsMap::combine_all(
         player_inventory
             .equipped_items()
@@ -134,45 +131,12 @@ pub fn update_player_specs(
                 )
                 .into(),
             ))
-            .chain(iter::once(
-                player_base_specs.character_specs.effects.clone(),
-            )),
+            .chain(iter::once(player_base_specs.effects.clone())),
     );
-
-    // TODO: Could we figure out a way to keep the block luck somehow?
-    let (total_armor, total_block) = player_inventory
-        .equipped_items()
-        .map(|(_, item)| item)
-        .filter_map(|item| item.armor_specs.as_ref())
-        .map(|spec| (spec.armor, spec.block))
-        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| {
-            (a_sum + *a, b_sum + b.get())
-        });
-
-    player_specs
-        .character_specs
-        .character_attrs
-        .armor
-        .entry(DamageType::Physical)
-        .or_default()
-        .apply_modifier(total_armor, Modifier::Flat);
-    player_specs
-        .character_specs
-        .character_attrs
-        .block
-        .entry(SkillType::Attack)
-        .or_default()
-        .value
-        .apply_modifier(total_block as f64, Modifier::Flat);
 
     let mut effects: Vec<_> = (&effects_map).into();
 
-    compute_player_specs(
-        player_base_specs,
-        &mut player_specs,
-        player_inventory,
-        &mut effects,
-    );
+    let mut player_specs = compute_player_specs(player_base_specs, player_inventory, &mut effects);
 
     player_specs.character_specs.triggers.extend(
         passives_tree_state
@@ -229,19 +193,39 @@ pub fn update_player_specs(
 
 fn compute_player_specs(
     player_base_specs: &PlayerBaseSpecs,
-    player_specs: &mut PlayerSpecs,
     player_inventory: &PlayerInventory,
     effects: &mut Vec<StatEffect>,
-    // effects_map: EffectsMap,
-) {
-    // let mut effects: Vec<_> = (&effects_map).into();
+) -> PlayerSpecs {
+    let mut player_specs = PlayerSpecs::init(player_base_specs);
+
+    let (total_armor, total_block) = player_inventory
+        .equipped_items()
+        .map(|(_, item)| item)
+        .filter_map(|item| item.armor_specs.as_ref())
+        .map(|spec| (spec.armor, spec.block))
+        .fold((0.0, 0.0), |(a_sum, b_sum), (a, b)| {
+            (a_sum + *a, b_sum + b.get())
+        });
+
+    player_specs
+        .character_specs
+        .character_attrs
+        .armor
+        .entry(DamageType::Physical)
+        .or_default()
+        .apply_modifier(total_armor, Modifier::Flat);
+    player_specs
+        .character_specs
+        .character_attrs
+        .block
+        .entry(SkillType::Attack)
+        .or_default()
+        .value
+        .apply_modifier(total_block as f64, Modifier::Flat);
 
     let (character_specs, converted_effects) =
         characters_updater::update_character_specs(&player_specs.character_specs, effects);
     player_specs.character_specs = character_specs;
-    // player_specs.character_specs.effects = EffectsMap::combine_all(
-    //     iter::once(effects_map).chain(iter::once(converted_effects.clone().into())),
-    // );
     effects.extend(converted_effects);
 
     let ModifiablePlayerSpecs {
@@ -313,6 +297,8 @@ fn compute_player_specs(
             )
         })
         .collect();
+
+    player_specs
 }
 
 #[derive(Clone, Default)]

@@ -58,7 +58,14 @@ impl DataInit<&CharacterSpecs> for CharacterState {
 impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
     fn init(specs: &PlayerBaseSpecs) -> Self {
         PlayerSpecs {
-            character_specs: specs.character_specs.clone(),
+            character_specs: CharacterSpecs {
+                character_static: specs.character_static.clone(),
+                character_attrs: specs.character_attrs.clone(),
+                skills_specs: Default::default(),
+                triggers: Default::default(),
+                effects: specs.effects.clone(),
+                conditional_modifiers: Default::default(),
+            },
             movement_cooldown: specs.movement_cooldown.clone(),
             gold_find: specs.gold_find.clone(),
             threat_gain: specs.threat_gain.clone(),

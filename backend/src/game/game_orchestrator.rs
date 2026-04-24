@@ -62,6 +62,7 @@ pub async fn tick(
 
         *game_data.player_specs.mutate() = player_updater::update_player_specs(
             game_data.player_base_specs.read(),
+            game_data.player_specs.read(),
             &game_data.player_state,
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
@@ -265,6 +266,7 @@ fn respawn_player(game_data: &mut GameInstanceData) {
 
     *game_data.player_specs.mutate() = player_updater::update_player_specs(
         game_data.player_base_specs.read(),
+        game_data.player_specs.read(),
         &game_data.player_state,
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,
