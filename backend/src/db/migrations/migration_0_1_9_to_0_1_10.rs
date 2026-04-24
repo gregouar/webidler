@@ -34,6 +34,7 @@ pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Re
     let mut tx = db_pool.begin().await?;
 
     stop_all_grinds(&mut *tx).await?;
+    clear_game_stats(&mut *tx).await?;
 
     migrate_character_data(&mut tx, master_store)
         .await
@@ -48,6 +49,13 @@ pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Re
 
 async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()> {
     sqlx::query!("DELETE FROM saved_game_instances WHERE data_version <= '0.1.9'")
+        .execute(executor)
+        .await?;
+    Ok(())
+}
+
+async fn clear_game_stats<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()> {
+    sqlx::query!("DELETE FROM game_stats WHERE data_version <= '0.1.9'")
         .execute(executor)
         .await?;
     Ok(())

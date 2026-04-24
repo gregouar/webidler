@@ -8,6 +8,7 @@ use shared::data::{
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
+    player::PlayerBaseSkill,
     skill::{
         DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreModifier,
         RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
@@ -108,7 +109,10 @@ pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
 }
 
 #[component]
-pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
+pub fn SkillTooltip(
+    skill_specs: Arc<SkillSpecs>,
+    #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
+) -> impl IntoView {
     let palette = TooltipFramePalette {
         border_class: "border-[#70508a]/92",
         inner_border_class: "border-fuchsia-200/10",
@@ -119,7 +123,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .targets
         .clone()
         .into_iter()
-        .map(|target| format_target(target, skill_specs.base.skill_type))
+        .map(|target| format_target(target, skill_specs.skill_type))
         .collect::<Vec<_>>();
 
     let trigger_lines = skill_specs
@@ -129,27 +133,37 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
         .map(|trigger| format_trigger(trigger, false))
         .collect::<Vec<_>>();
 
-    let modifier_lines: Vec<_> = skill_specs
-        .base
-        .modifier_effects
-        .clone()
-        .into_iter()
-        .filter(|skill_modifier| !skill_modifier.hidden)
-        .map(format_skill_modifier)
-        .collect();
+    let auto_use_conditions = player_base_skill
+        .as_ref()
+        .map(|player_base_skill| player_base_skill.base_skill_specs.auto_use_conditions.clone())
+        .unwrap_or_default();
+
+    let modifier_lines: Vec<_> = player_base_skill
+        .as_ref()
+        .map(|player_base_skill| {
+            player_base_skill
+                .base_skill_specs
+                .modifier_effects
+                .clone()
+                .into_iter()
+                .filter(|skill_modifier| !skill_modifier.hidden)
+                .map(format_skill_modifier)
+                .collect()
+        })
+        .unwrap_or_default();
 
     view! {
         <TooltipFrame palette class="max-w-xs">
             <strong class="text-sm xl:text-base font-bold text-violet-300 font-display text-shadow-md/80">
                 <ul class="list-none xl:space-y-1 mb-2">
-                    <li class=" whitespace-pre-line">{skill_specs.base.name.clone()}</li>
+                    <li class=" whitespace-pre-line">{skill_specs.name.clone()}</li>
                 </ul>
             </strong>
 
             <Separator />
 
             <p class="text-xs xl:text-sm text-stone-400 ">
-                {skill_type_str(Some(skill_specs.base.skill_type))} "| "
+                {skill_type_str(Some(skill_specs.skill_type))} "| "
                 {if skill_specs.cooldown.get() > 0.0 {
                     view! {
                         "Cooldown: "
@@ -172,7 +186,7 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     })}
             </p>
 
-            {(!skill_specs.base.auto_use_conditions.is_empty())
+            {(!auto_use_conditions.is_empty())
                 .then(|| {
                     view! {
                         <Separator />
@@ -181,11 +195,11 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                                 <span class="text-stone-400 ">
                                     "Auto-use only when "
                                     {conditions_tooltip::format_skill_modifier_conditions_pre(
-                                        &skill_specs.base.auto_use_conditions,
+                                        &auto_use_conditions,
                                         "",
                                     )}
                                     {conditions_tooltip::format_skill_modifier_conditions_post(
-                                        &skill_specs.base.auto_use_conditions,
+                                        &auto_use_conditions,
                                     )}
                                 </span>
                             </li>
@@ -198,17 +212,20 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
 
-            {(skill_specs.next_upgrade_cost > 0.0)
-                .then(|| {
+            {player_base_skill
+                .as_ref()
+                .filter(|player_base_skill| player_base_skill.next_upgrade_cost > 0.0)
+                .map(|player_base_skill| {
+                    let upgrade_effects = player_base_skill.base_skill_specs.upgrade_effects.clone();
+                    let upgrade_level = player_base_skill.upgrade_level;
+                    let next_upgrade_cost = player_base_skill.next_upgrade_cost;
                     view! {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
                                 <span class="text-stone-400 ">"Next upgrade:"</span>
                             </li>
-                            {effects_tooltip::formatted_effects_list(
-                                skill_specs.base.upgrade_effects.clone(),
-                            )}
+                            {effects_tooltip::formatted_effects_list(upgrade_effects)}
                         </ul>
 
                         <Separator />
@@ -217,29 +234,27 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                             {if skill_specs.level_modifier > 0 {
                                 view! {
                                     <span class="text-blue-300">
-                                        {skill_specs
-                                            .upgrade_level
-                                            .saturating_add(skill_specs.level_modifier)}
+                                        {upgrade_level.saturating_add(skill_specs.level_modifier)}
                                     </span>
                                 }
                             } else {
                                 view! {
-                                    <span class="text-stone-100">{skill_specs.upgrade_level}</span>
+                                    <span class="text-stone-100">{upgrade_level}</span>
                                 }
                             }} " | Upgrade Cost: "
                             <span class="text-stone-100">
-                                {format_number(skill_specs.next_upgrade_cost)}" Gold"
+                                {format_number(next_upgrade_cost)}" Gold"
                             </span>
                         </p>
                     }
                 })}
 
-            {(!skill_specs.base.description.is_empty())
+            {(!skill_specs.description.is_empty())
                 .then(|| {
                     view! {
                         <Separator />
                         <p class="text-xs xl:text-sm italic text-stone-400 ">
-                            {skill_specs.base.description.clone()}
+                            {skill_specs.description.clone()}
                         </p>
                     }
                 })}

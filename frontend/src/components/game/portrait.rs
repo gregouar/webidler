@@ -671,8 +671,8 @@ fn StatusIcon(
                     }
                     StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
                     StatType::Speed(_) => "statuses/slow.svg".to_string(),
-                    StatType::Block(_) => "passives/shield_impact.svg".to_string(),
-                    StatType::Evade(_) => "passives/falling.svg".to_string(),
+                    StatType::Block(_) => "statuses/shield_impact.svg".to_string(),
+                    StatType::Evade(_) => "statuses/falling.svg".to_string(),
                     StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
                     _ => "statuses/debuff.svg".to_string(),
                 },

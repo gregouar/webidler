@@ -113,12 +113,19 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             <Stat
                                 label="Name"
                                 value=move || {
-                                    game_context.player_specs.read().character_specs.name.clone()
+                                    game_context
+                                        .player_base_specs
+                                        .read()
+                                        .character_static
+                                        .name
+                                        .clone()
                                 }
                             />
                             <Stat
                                 label="Level"
-                                value=move || game_context.player_specs.read().level.to_string()
+                                value=move || {
+                                    game_context.player_base_specs.read().level.to_string()
+                                }
                             />
                             <Stat
                                 label="Maximum Life"
@@ -773,6 +780,16 @@ pub fn format_effect_value(value: f64) -> String {
 #[component]
 fn TriggersStats(#[prop(optional)] class: Option<&'static str>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let triggers = Memo::new(move |_| {
+        let mut triggers = game_context
+            .player_specs
+            .read()
+            .character_specs
+            .triggers
+            .clone();
+        triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
+        triggers
+    });
 
     // after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px
     // after:bg-gradient-to-r after:from-transparent after:via-zinc-600 after:to-transparent
@@ -784,36 +801,24 @@ fn TriggersStats(#[prop(optional)] class: Option<&'static str>) -> impl IntoView
             <CardInset pad=false class="w-full">
                 <CardInsetTitle>"Triggered Effects"</CardInsetTitle>
                 <div class="columns-2 xl:columns-3 gap-1">
-                    {move || {
-                        let mut triggers = game_context
-                            .player_specs
-                            .read()
-                            .character_specs
-                            .triggers
-                            .clone();
-                        triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
-
-                        view! {
-                            <For
-                                each=move || triggers.clone().into_iter()
-                                key=|triggered_effect| triggered_effect.trigger_id.clone()
-                                let(triggered_effect)
-                            >
-                                <div class="relative pb-2 list-none break-inside-avoid">
-                                    {trigger_tooltip::format_trigger(
-                                        TriggerSpecs {
-                                            name: None,
-                                            icon: None,
-                                            description: None,
-                                            triggered_effect: triggered_effect.clone(),
-                                            is_debuff: false,
-                                        },
-                                        true,
-                                    )} <Separator />
-                                </div>
-                            </For>
-                        }
-                    }}
+                    <For
+                        each=move || triggers.get().into_iter()
+                        key=|triggered_effect| triggered_effect.trigger_id.clone()
+                        let(triggered_effect)
+                    >
+                        <div class="relative pb-2 list-none break-inside-avoid">
+                            {trigger_tooltip::format_trigger(
+                                TriggerSpecs {
+                                    name: None,
+                                    icon: None,
+                                    description: None,
+                                    triggered_effect: triggered_effect.clone(),
+                                    is_debuff: false,
+                                },
+                                true,
+                            )} <Separator />
+                        </div>
+                    </For>
 
                 </div>
             </CardInset>

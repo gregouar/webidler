@@ -2,10 +2,15 @@ use std::collections::HashMap;
 
 use anyhow;
 
-use indexmap::IndexSet;
+use indexmap::IndexMap;
 use sqlx::{FromRow, types::JsonValue};
 
-use shared::data::{item::ItemSlot, player::EquippedSlot, realms::RealmId, user::UserCharacterId};
+use shared::data::{
+    item::ItemSlot,
+    player::{EquippedSlot, PlayerBaseSkill},
+    realms::RealmId,
+    user::UserCharacterId,
+};
 
 use crate::{
     constants::DATA_VERSION, db::utc_datetime::UtcDateTime, game::game_data::GameInstanceData,
@@ -49,7 +54,7 @@ pub async fn save_game_stats<'c>(
         serde_json::to_value(&game_instance_data.game_stats)?,
         serde_json::to_value(&game_instance_data.player_inventory.read().equipped)?,
         serde_json::to_value(game_instance_data.passives_tree_state.read())?,
-        serde_json::to_value(&game_instance_data.player_specs.read().bought_skills)?,
+        serde_json::to_value(&game_instance_data.player_base_specs.read().skills)?,
     )
     .await?)
 }
@@ -97,7 +102,7 @@ pub async fn load_last_game_stats<'c>(
 ) -> anyhow::Result<
     Option<(
         Option<HashMap<ItemSlot, EquippedSlot>>,
-        Option<IndexSet<String>>,
+        Option<IndexMap<String, PlayerBaseSkill>>,
     )>,
 > {
     let game_stats_data = read_last_game_stats(executor, character_id).await?;

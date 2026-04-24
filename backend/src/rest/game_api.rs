@@ -8,7 +8,7 @@ use axum::{
 };
 
 use shared::{
-    data::{area::AreaLevel, skill::SkillSpecs},
+    data::area::AreaLevel,
     http::{
         client::{
             AscendPassivesRequest, BuyBenedictionsRequest, SavePassivesRequest,
@@ -28,7 +28,7 @@ use crate::{
     db,
     game::{
         data::{
-            DataInit, inventory_data::inventory_data_to_player_inventory,
+            inventory_data::inventory_data_to_player_inventory,
             passives::ascension_data_to_passives_tree_ascension,
         },
         systems::{benedictions_controller, inventory_controller, passives_controller},
@@ -73,11 +73,7 @@ pub async fn get_skills(
     State(master_store): State<MasterStore>,
 ) -> Result<Json<GetSkillsResponse>, AppError> {
     Ok(Json(GetSkillsResponse {
-        skills: master_store
-            .skills_store
-            .iter()
-            .map(|(k, v)| (k.clone(), SkillSpecs::init(v.clone())))
-            .collect(),
+        skills: (*master_store.skills_store).clone(),
     }))
 }
 

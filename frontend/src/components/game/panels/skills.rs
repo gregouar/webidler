@@ -1,9 +1,12 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{
+    collections::{HashMap, HashSet},
+    sync::Arc,
+};
 
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::skill::{SkillSpecs, SkillType},
+    data::skill::{BaseSkillSpecs, SkillType},
     messages::client::BuySkillMessage,
 };
 use strum::IntoEnumIterator;
@@ -14,7 +17,7 @@ use crate::{
         data_context::DataContext,
         game::{game_context::GameContext, websocket::WebsocketContext},
         settings::{GraphicsQuality, SettingsContext},
-        shared::{resources::GoldCounter, tooltips::SkillTooltip},
+        shared::{resources::GoldCounter, skills::skill_specs_from_base, tooltips::SkillTooltip},
         ui::{
             buttons::FancyButton,
             card::{CardHeader, CardInset, MenuCard},
@@ -59,75 +62,84 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         let mut skills = data_context.skill_specs.get().into_iter().fold(
             HashMap::<_, Vec<_>>::new(),
             |mut acc, skill| {
-                acc.entry(skill.1.base.skill_type).or_default().push(skill);
+                acc.entry(skill.1.skill_type).or_default().push(skill);
                 acc
             },
         );
 
         for section in skills.values_mut() {
-            section.sort_by_key(|(_, skill_specs)| skill_specs.base.name.clone());
+            section.sort_by_key(|(_, skill_specs)| skill_specs.name.clone());
         }
 
         skills
+    });
+    let skill_sections = Memo::new(move |_| {
+        let bought_skills = game_context.player_base_specs.with(|player_base_specs| {
+            player_base_specs
+                .skills
+                .keys()
+                .cloned()
+                .collect::<HashSet<_>>()
+        });
+
+        available_skills.with(|available_skills| {
+            SkillType::iter()
+                .filter_map(|skill_type| {
+                    let unbought_skills = available_skills
+                        .get(&skill_type)
+                        .cloned()
+                        .unwrap_or_default()
+                        .into_iter()
+                        .filter(|(skill_id, _)| !bought_skills.contains(skill_id))
+                        .collect::<Vec<_>>();
+
+                    (!unbought_skills.is_empty()).then_some((skill_type, unbought_skills))
+                })
+                .collect::<Vec<_>>()
+        })
     });
 
     view! {
         <CardInset>
             {move || {
-                SkillType::iter()
-                    .map(move |skill_type| {
-                        let available_skills = available_skills
-                            .read()
-                            .get(&skill_type)
-                            .cloned()
-                            .unwrap_or_default();
-                        let unbought_skills = available_skills
-                            .into_iter()
-                            .filter(|(skill_id, _)| {
-                                !game_context
-                                    .player_specs
-                                    .read_untracked()
-                                    .bought_skills
-                                    .contains(skill_id)
-                            })
-                            .collect::<Vec<_>>();
-                        (!unbought_skills.is_empty())
-                            .then(|| {
-                                view! {
-                                    <div class="space-y-3 xl:space-y-4">
-                                        <div class="flex items-center gap-3 px-1">
-                                            <div class=format!(
-                                                "h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent {} to-transparent",
-                                                skill_type_glow(skill_type),
-                                            )></div>
-                                            <h3 class=format!(
-                                                "font-display text-sm xl:text-base tracking-[0.14em] uppercase {}",
-                                                skill_type_title_color(skill_type),
-                                            )>
-                                                {skill_type_title(skill_type)}
-                                            </h3>
-                                            <div class=format!(
-                                                "h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent {} to-transparent",
-                                                skill_type_glow(skill_type),
-                                            )></div>
-                                        </div>
+                skill_sections
+                    .get()
+                    .into_iter()
+                    .map(move |(skill_type, unbought_skills)| {
+                        view! {
+                            <div class="space-y-3 xl:space-y-4">
+                                <div class="flex items-center gap-3 px-1">
+                                    <div class=format!(
+                                        "h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent {} to-transparent",
+                                        skill_type_glow(skill_type),
+                                    )></div>
+                                    <h3 class=format!(
+                                        "font-display text-sm xl:text-base tracking-[0.14em] uppercase {}",
+                                        skill_type_title_color(skill_type),
+                                    )>
+                                        {skill_type_title(skill_type)}
+                                    </h3>
+                                    <div class=format!(
+                                        "h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent {} to-transparent",
+                                        skill_type_glow(skill_type),
+                                    )></div>
+                                </div>
 
-                                        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 xl:gap-3">
-                                            <For
-                                                each=move || unbought_skills.clone().into_iter()
-                                                key=|(skill_id, _)| skill_id.clone()
-                                                let:((skill_id, skill_specs))
-                                            >
-                                                <SkillCard
-                                                    skill_id=skill_id.clone()
-                                                    skill_specs=skill_specs.clone()
-                                                    selected=selected_skill
-                                                />
-                                            </For>
-                                        </div>
-                                    </div>
-                                }
-                            })
+                                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 xl:gap-3">
+                                    <For
+                                        each=move || unbought_skills.clone().into_iter()
+                                        key=|(skill_id, _)| skill_id.clone()
+                                        let:((skill_id, skill_specs))
+                                    >
+                                        <SkillCard
+                                            skill_id=skill_id.clone()
+                                            skill_specs=skill_specs.clone()
+                                            selected=selected_skill
+                                        />
+                                    </For>
+                                </div>
+                            </div>
+                        }
                     })
                     .collect::<Vec<_>>()
             }}
@@ -138,7 +150,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                 <span class="flex items-center gap-2">
                     "Confirm buying selected skill for"
                     <GoldCounter value=Signal::derive(move || {
-                        game_context.player_specs.read().buy_skill_cost
+                        game_context.player_base_specs.read().buy_skill_cost
                     }) />
                 </span>
             </FancyButton>
@@ -148,7 +160,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn SkillCard(
     skill_id: String,
-    skill_specs: SkillSpecs,
+    skill_specs: BaseSkillSpecs,
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
@@ -166,7 +178,7 @@ fn SkillCard(
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = {
-        let skill_specs = Arc::new(skill_specs.clone());
+        let skill_specs = Arc::new(skill_specs_from_base(skill_id.clone(), &skill_specs));
         move || {
             let skill_specs = skill_specs.clone();
             tooltip_context.set_content(
@@ -178,7 +190,7 @@ fn SkillCard(
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
-    let skill_type = skill_specs.base.skill_type;
+    let skill_type = skill_specs.skill_type;
 
     view! {
         <div
@@ -317,8 +329,8 @@ fn SkillCard(
                 )></div>
                 <img
                     draggable="false"
-                    src=img_asset(&skill_specs.base.icon)
-                    alt=skill_specs.base.name.clone()
+                    src=img_asset(&skill_specs.icon)
+                    alt=skill_specs.name.clone()
                     class=move || {
                         format!(
                             "relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current invert {}",
@@ -334,7 +346,7 @@ fn SkillCard(
 
             <div class="text-center">
                 <div class="text-sm xl:text-base font-bold text-white text-center font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
-                    {skill_specs.base.name.clone()}
+                    {skill_specs.name.clone()}
                 </div>
             </div>
         </div>

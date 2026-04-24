@@ -244,8 +244,7 @@ pub fn refresh_skills_cooldown(
         .iter()
         .zip(target.1.1.skills_states.iter_mut())
     {
-        if skill_filter.is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
-        {
+        if skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id) {
             match modifier {
                 RestoreModifier::Flat => {
                     skill_state.elapsed_cooldown += Cooldown(amount / skill_specs.cooldown.get())

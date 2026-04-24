@@ -308,9 +308,8 @@ fn handle_area_completed_event(
         .area_level
         .saturating_add(*game_data.area_specs.power_level)
         .saturating_add(*game_data.area_specs.item_level_modifier);
-    if power_level > game_data.player_base_specs.max_area_level {
-        game_data.player_base_specs.max_area_level = power_level;
-        game_data.player_state.character_state.dirty_specs = true;
+    if power_level > game_data.player_base_specs.read().max_area_level {
+        game_data.player_base_specs.mutate().max_area_level = power_level;
     }
 
     let new_max = area_state.area_level > area_state.max_area_level;

@@ -9,8 +9,8 @@ use shared::data::{
     modifier::Modifier,
     player::PlayerInventory,
     skill::{
-        DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect, SkillEffect,
-        SkillEffectType, SkillSpecs, SkillState, SkillType,
+        BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
+        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
@@ -64,23 +64,18 @@ pub fn reset_skills(skills_states: &mut [SkillState]) {
 }
 
 pub fn update_skill_specs(
-    skill_specs: &mut SkillSpecs,
-    // effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    skill_id: String,
+    base_skill_specs: &BaseSkillSpecs,
+    upgrade_level: u16,
     effects: &[StatEffect],
     character_attrs: &CharacterAttrs,
     inventory: Option<&PlayerInventory>,
-) {
-    skill_specs.targets = skill_specs.base.targets.clone();
-    skill_specs.triggers = skill_specs.base.triggers.clone();
-    skill_specs.cooldown = skill_specs.base.cooldown.into();
-    skill_specs.mana_cost = skill_specs.base.mana_cost.into();
-
-    skill_specs.level_modifier = effects
+) -> SkillSpecs {
+    let level_modifier = effects
         .iter()
         .map(|e| {
             if let StatType::SkillLevel(skill_filter) = &e.stat
-                && skill_filter
-                    .is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
+                && skill_filter.is_match_with_skill(base_skill_specs.skill_type, &skill_id)
                 && e.modifier == Modifier::Flat
             // if e.modifier == Modifier::Flat
             //     && e.stat
@@ -93,22 +88,36 @@ pub fn update_skill_specs(
         })
         .sum();
 
+    let mut skill_specs = SkillSpecs {
+        skill_id,
+        name: base_skill_specs.name.clone(),
+        icon: base_skill_specs.icon.clone(),
+        description: base_skill_specs.description.clone(),
+        skill_type: base_skill_specs.skill_type,
+        ignore_stat_effects: base_skill_specs.ignore_stat_effects.clone(),
+        cooldown: base_skill_specs.cooldown.into(),
+        mana_cost: base_skill_specs.mana_cost.into(),
+        targets: base_skill_specs.targets.clone(),
+        triggers: base_skill_specs.triggers.clone(),
+        level_modifier,
+    };
+
     let local_effects: Vec<_> = (&EffectsMap::combine_all(
         std::iter::once(compute_skill_upgrade_effects(
-            skill_specs,
-            skill_specs
-                .upgrade_level
-                .saturating_add(skill_specs.level_modifier),
+            base_skill_specs,
+            upgrade_level.saturating_add(skill_specs.level_modifier),
         ))
         .chain(std::iter::once(compute_skill_modifier_effects(
-            skill_specs,
+            base_skill_specs,
             character_attrs,
             inventory,
         ))),
     ))
         .into();
 
-    apply_effects_to_skill_specs(skill_specs, local_effects.iter().chain(effects));
+    apply_effects_to_skill_specs(&mut skill_specs, local_effects.iter().chain(effects));
+
+    skill_specs
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -118,7 +127,6 @@ pub fn apply_effects_to_skill_specs<'a>(
     let effects = effects.filter(|effect| {
         effect.bypass_ignore
             || skill_specs
-                .base
                 .ignore_stat_effects
                 .iter()
                 .all(|ignore| !effect.stat.is_match(ignore))
@@ -126,15 +134,13 @@ pub fn apply_effects_to_skill_specs<'a>(
 
     for effect in effects.clone() {
         if let StatType::Speed(skill_filter) = &effect.stat
-            && skill_filter
-                .is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
+            && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
         {
             skill_specs.cooldown.apply_negative_effect(effect);
         }
 
         if let StatType::ManaCost { skill_filter } = &effect.stat
-            && skill_filter
-                .is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
+            && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
         {
             skill_specs.mana_cost.apply_effect(effect);
         }
@@ -145,8 +151,7 @@ pub fn apply_effects_to_skill_specs<'a>(
             shape,
             repeat,
         } = &effect.stat
-            && skill_filter
-                .is_match_with_skill(skill_specs.base.skill_type, &skill_specs.base.skill_id)
+            && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
         {
             for target in skill_specs.targets.iter_mut() {
                 if let Some(range) = range {
@@ -182,18 +187,18 @@ pub fn apply_effects_to_skill_specs<'a>(
         )
     {
         compute_skill_specs_effect(
-            &skill_specs.base.skill_id,
-            skill_specs.base.skill_type,
+            &skill_specs.skill_id,
+            skill_specs.skill_type,
             skill_effect,
             effects.clone(),
         )
     }
 }
 
-pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> EffectsMap {
+pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u16) -> EffectsMap {
     let level = level as f64 - 1.0;
 
-    skill_specs.base.upgrade_effects.iter().fold(
+    base_skill_specs.upgrade_effects.iter().fold(
         EffectsMap(HashMap::new()),
         |mut effects_map, effect| {
             *effects_map
@@ -209,12 +214,11 @@ pub fn compute_skill_upgrade_effects(skill_specs: &SkillSpecs, level: u16) -> Ef
 }
 
 fn compute_skill_modifier_effects<'a>(
-    skill_specs: &'a SkillSpecs,
+    base_skill_specs: &'a BaseSkillSpecs,
     character_attrs: &CharacterAttrs,
     inventory: Option<&'a PlayerInventory>,
 ) -> EffectsMap {
-    let item_sources: Vec<_> = skill_specs
-        .base
+    let item_sources: Vec<_> = base_skill_specs
         .modifier_effects
         .iter()
         .filter_map(|modifier_effect| match &modifier_effect.source {
@@ -322,8 +326,7 @@ fn compute_skill_modifier_effects<'a>(
         })
         .collect();
 
-    let non_item_sources: Vec<_> = skill_specs
-        .base
+    let non_item_sources: Vec<_> = base_skill_specs
         .modifier_effects
         .iter()
         .filter_map(|me| match &me.source {

@@ -49,16 +49,8 @@ impl CharacterSize {
 // and an "computed stats".
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct CharacterSpecs {
-    pub name: String,
-    pub portrait: String,
-
-    #[serde(default)]
-    pub size: CharacterSize,
-
-    #[serde(default)]
-    pub position_x: u8,
-    #[serde(default)]
-    pub position_y: u8,
+    #[serde(flatten)]
+    pub character_static: CharacterStatic,
 
     // TODO: All the above: move elsewhere ^^^
     // TODO: Should have CharacterComputed
@@ -74,6 +66,20 @@ pub struct CharacterSpecs {
 
     #[serde(default, skip_serializing, skip_deserializing)]
     pub conditional_modifiers: Vec<ConditionalModifier>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct CharacterStatic {
+    pub name: String,
+    pub portrait: String,
+
+    #[serde(default)]
+    pub size: CharacterSize,
+
+    #[serde(default)]
+    pub position_x: u8,
+    #[serde(default)]
+    pub position_y: u8,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

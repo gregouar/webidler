@@ -51,7 +51,8 @@ pub async fn tick(
     }
 
     // If client input altered the player specs (equip item, ...), we need to recompute the currents specs
-    if game_data.player_specs.need_to_sync()
+    if game_data.player_base_specs.need_to_sync()
+        // || game_data.player_specs.need_to_sync()
         || game_data.player_inventory.need_to_sync()
         || game_data.passives_tree_state.need_to_sync()
         || game_data.player_state.character_state.dirty_specs
@@ -60,7 +61,8 @@ pub async fn tick(
         game_data.player_state.character_state.dirty_specs = false;
 
         *game_data.player_specs.mutate() = player_updater::update_player_specs(
-            &game_data.player_base_specs,
+            game_data.player_base_specs.read(),
+            game_data.player_specs.read(),
             &game_data.player_state,
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
@@ -137,6 +139,7 @@ async fn control_entities(
     game_data.player_controller.control_player(
         events_queue,
         &game_data.area_threat,
+        game_data.player_base_specs.read(),
         game_data.player_specs.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,
@@ -262,7 +265,8 @@ fn respawn_player(game_data: &mut GameInstanceData) {
     game_data.monster_states.clear();
 
     *game_data.player_specs.mutate() = player_updater::update_player_specs(
-        &game_data.player_base_specs,
+        game_data.player_base_specs.read(),
+        game_data.player_specs.read(),
         &game_data.player_state,
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,

@@ -19,7 +19,9 @@ use crate::{
         icons::area::{BossAreaIcon, CrucibleAreaIcon},
         settings::SettingsContext,
         shared::{
-            inventory::InventoryEquipFilter, skills::SkillProgressBar, tooltips::SkillTooltip,
+            inventory::InventoryEquipFilter,
+            skills::{SkillProgressBar, skill_specs_from_base},
+            tooltips::SkillTooltip,
         },
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
@@ -159,7 +161,7 @@ fn PlayerCard() -> impl IntoView {
                             .with(|last_grind| {
                                 last_grind
                                     .as_ref()
-                                    .map(|last_grind| last_grind.skills_specs.len().min(4))
+                                    .map(|last_grind| last_grind.skills.len().min(4))
                                     .unwrap_or_default()
                             })
                     }
@@ -202,30 +204,42 @@ pub fn PlayerName() -> impl IntoView {
 fn PlayerSkill(index: usize) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let skill_specs = Memo::new(move |_| {
+    let skill_entry = Signal::derive(move || {
         town_context.last_grind.with(|last_grind| {
             last_grind
                 .as_ref()
-                .and_then(|last_grind| last_grind.skills_specs.get(index))
-                .cloned()
+                .and_then(|last_grind| last_grind.skills.get_index(index))
+                .map(|(skill_id, player_base_skill)| (skill_id.clone(), player_base_skill.clone()))
         })
+    });
+
+    let skill_specs = Signal::derive(move || {
+        skill_entry.get().map(|(skill_id, player_base_skill)| {
+            skill_specs_from_base(skill_id, &player_base_skill.base_skill_specs)
+        })
+    });
+    let skill_progress = Memo::new(move |_| {
+        skill_specs
+            .read()
+            .as_ref()
+            .map(|skill_specs| (skill_specs.skill_type, skill_specs.icon.clone()))
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let show_tooltip = move || {
-        let skill_specs = town_context.last_grind.with(|last_grind| {
-            last_grind
-                .as_ref()
-                .and_then(|last_grind| last_grind.skills_specs.get(index))
-                .cloned()
-        });
-
-        if let Some(skill_specs) = skill_specs {
-            let skill_specs = Arc::new(skill_specs.clone());
+        if let Some((_, player_base_skill)) = skill_entry.get()
+            && let Some(skill_specs) = skill_specs.get()
+        {
+            let skill_specs = Arc::new(skill_specs);
+            let player_base_skill = Some(Arc::new(player_base_skill));
             tooltip_context.set_content(
                 move || {
                     let skill_specs = skill_specs.clone();
-                    view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+                    let player_base_skill = player_base_skill.clone();
+                    view! {
+                        <SkillTooltip skill_specs=skill_specs player_base_skill=player_base_skill />
+                    }
+                        .into_any()
                 },
                 DynamicTooltipPosition::TopRight,
             );
@@ -253,12 +267,14 @@ fn PlayerSkill(index: usize) -> impl IntoView {
                 // >
                 <div class="p-1 w-full h-full">
                     {move || {
-                        skill_specs
-                            .get()
-                            .map(|skill_specs| {
+                        skill_progress
+                            .read()
+                            .as_ref()
+                            .map(|(skill_type, skill_icon)| {
                                 view! {
                                     <SkillProgressBar
-                                        skill_specs_base=skill_specs.base
+                                        skill_type=*skill_type
+                                        skill_icon=skill_icon.clone()
                                         value=Signal::derive(|| 0.0)
                                         bar_width=4
                                     />

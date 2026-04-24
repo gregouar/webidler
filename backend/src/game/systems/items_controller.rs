@@ -339,7 +339,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
     ];
 
     BaseSkillSpecs {
-        skill_id: "weapon_attack".to_string(),
+        // skill_id: "weapon_attack".to_string(),
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),

@@ -85,7 +85,7 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             self.game_data,
             passives_tree_build,
-            last_skills_bought,
+            last_skills_bought.into_keys().collect(),
         )
         .await?;
 
@@ -229,7 +229,7 @@ impl<'a> GameInstance<'a> {
         db::characters::update_character_max_area_level(
             &mut tx,
             self.character_id,
-            self.game_data.player_base_specs.max_area_level as i32,
+            self.game_data.player_base_specs.read().max_area_level as i32,
         )
         .await?;
 
@@ -283,7 +283,11 @@ impl<'a> GameInstance<'a> {
                         .broadcast_message(
                             format!(
                                 "'{}'{} is the first to beat Area Level {:0} in '{}'!",
-                                self.game_data.player_specs.read().character_specs.name,
+                                self.game_data
+                                    .player_base_specs
+                                    .read()
+                                    .character_static
+                                    .name,
                                 realm_label,
                                 self.game_data.area_state.read().max_area_level,
                                 self.game_data.area_specs.name,

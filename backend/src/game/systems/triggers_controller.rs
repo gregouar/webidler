@@ -114,8 +114,11 @@ pub fn apply_trigger_effects(
                         .get(i)
                         .map(|m| {
                             (
-                                (m.character_specs.position_x, m.character_specs.position_y),
-                                m.character_specs.size.get_xy_size(),
+                                (
+                                    m.character_specs.character_static.position_x,
+                                    m.character_specs.character_static.position_y,
+                                ),
+                                m.character_specs.character_static.size.get_xy_size(),
                             )
                         })
                         .unwrap_or_default();

@@ -303,10 +303,10 @@ pub fn BattleSceneFooter() -> impl IntoView {
 pub fn GemsLoot() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
-    let gems_chance = move || game_context.area_state.with(computations::gem_chance);
+    let gems_chance = Memo::new(move |_| game_context.area_state.with(computations::gem_chance));
 
     let tooltip = move || {
-        let gems_chance = gems_chance();
+        let gems_chance = gems_chance.get();
         if gems_chance > 0.0 {
             format!(
                 "1/{:.0} Chance to find Champion Monster carrying Gems.",
@@ -323,7 +323,7 @@ pub fn GemsLoot() -> impl IntoView {
                 src=img_asset("ui/gems.webp")
                 alt="Gems Loot"
                 class="h-[2em] aspect-square"
-                class:grayscale=move || gems_chance() == 0.0
+                class:grayscale=move || gems_chance.get() == 0.0
             />
         </StaticTooltip>
     }
@@ -333,24 +333,26 @@ pub fn GemsLoot() -> impl IntoView {
 pub fn ThreatMeter() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
-    let threat_increase = Signal::derive(move || game_context.area_threat.read().just_increased);
+    let threat_increase = Memo::new(move |_| game_context.area_threat.read().just_increased);
+    let threat_gain = Memo::new(move |_| game_context.player_specs.with(|x| x.threat_gain.get()));
 
     let time_remaining = Signal::derive(move || {
-        if game_context.area_threat.read().cooldown.get() > 0.0 {
-            {
-                (1.0 - game_context.area_threat.read().elapsed_cooldown.get())
-                    * (game_context.area_threat.read().cooldown.get()
-                        / (game_context.player_specs.read().threat_gain.get() * 0.01))
+        game_context.area_threat.with(|area_threat| {
+            let cooldown = area_threat.cooldown.get();
+            let threat_gain = threat_gain.get();
+            if cooldown > 0.0 && threat_gain > 0.0 {
+                (1.0 - area_threat.elapsed_cooldown.get()) * (cooldown / (threat_gain * 0.01))
+            } else {
+                Default::default()
             }
-        } else {
-            Default::default()
-        }
+        })
     });
 
-    let no_threat = Signal::derive(move || time_remaining.get() == 0.0);
+    let no_threat = Memo::new(move |_| time_remaining.get() == 0.0);
 
     let reset = Signal::derive(move || threat_increase.get() || no_threat.get());
-    let progress_value = predictive_cooldown(time_remaining, reset, no_threat, 0.0);
+    let progress_value =
+        predictive_cooldown(time_remaining, reset, no_threat.into(), 0.0);
 
     view! {
         <StaticTooltip
