@@ -484,7 +484,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         .player_auto_skills
         .read_untracked()
         .get(index)
-        .unwrap_or(&false);
+        .unwrap_or(&true);
 
     let just_triggered = Memo::new(move |_| {
         !rush_mode.get()
