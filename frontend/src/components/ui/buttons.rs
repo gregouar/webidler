@@ -26,7 +26,6 @@ pub fn MenuButton(
                     before:pointer-events-none before:absolute before:inset-[1px]
                     before:rounded-[3px] xl:before:rounded-[5px]
                     before:border before:border-[#d5b16d]/18
-                    before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
                     hover:border-[#a27f46]
                     hover:text-[#f3ead2]
                     hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.28),inset_0_-1px_0_rgba(0,0,0,0.45)]
@@ -149,7 +148,6 @@ pub fn MenuButtonRed(
                     before:pointer-events-none before:absolute before:inset-[1px]
                     before:rounded-[3px] xl:before:rounded-[5px]
                     before:border before:border-[#d78b78]/16
-                    before:bg-[linear-gradient(180deg,rgba(239,170,142,0.08),transparent_36%)]
                     hover:border-[#b55d4c]
                     hover:text-[#ffd8d0]
                     hover:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_1px_0_rgba(255,220,198,0.24),inset_0_-1px_0_rgba(0,0,0,0.45)]
@@ -245,7 +243,6 @@ pub fn FancyButton(
                     before:pointer-events-none before:absolute before:inset-[1px]
                     before:rounded-[3px] xl:before:rounded-[5px]
                     before:border before:border-[#d5b16d]/18
-                    before:bg-[linear-gradient(180deg,rgba(222,188,112,0.08),transparent_36%)]
                     bg-[#1b191d]
                     hover:border-[#a27f46]
                     hover:text-[#f3ead2]
@@ -419,7 +416,7 @@ pub fn Toggle(
                     },
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
-                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/16 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]"
+                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/16"
                         }
                         GraphicsQuality::Medium => {
                             "border border-[#6c5329] before:pointer-events-none before:absolute before:inset-[1px] before:rounded-[3px] xl:before:rounded-[5px] before:border before:border-[#d5b16d]/10"
@@ -529,7 +526,7 @@ pub fn TabButton(
                     },
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
-                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/16 before:bg-[linear-gradient(180deg,rgba(222,188,112,0.07),transparent_38%)]"
+                            "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/16"
                         }
                         GraphicsQuality::Medium => {
                             "before:pointer-events-none before:absolute before:inset-[1px] before:rounded-t-[5px] before:border-t before:border-l before:border-r before:border-[#d5b16d]/10"
