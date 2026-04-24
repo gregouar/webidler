@@ -54,9 +54,19 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
-    let gold = Signal::derive(move || game_context.player_resources.read().gold);
-    let gems = Signal::derive(move || game_context.player_resources.read().gems);
-    let shards = Signal::derive(move || game_context.player_resources.read().shards);
+    let resources = Memo::new(move |_| {
+        game_context.player_resources.with(|player_resources| {
+            (
+                player_resources.gold,
+                player_resources.gems,
+                player_resources.shards,
+                player_resources.passive_points,
+            )
+        })
+    });
+    let gold = Signal::derive(move || resources.get().0);
+    let gems = Signal::derive(move || resources.get().1);
+    let shards = Signal::derive(move || resources.get().2);
 
     let open_inventory = move || {
         game_context
@@ -142,7 +152,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     <span class="inline xl:hidden">"Pas."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                     {move || {
-                        let points = game_context.player_resources.read().passive_points;
+                        let points = resources.get().3;
                         if points > 0 { format!(" ({points})") } else { "".to_string() }
                     }}
                 </MenuButton>
