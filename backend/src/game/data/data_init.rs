@@ -66,9 +66,9 @@ impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
                 effects: specs.effects.clone(),
                 conditional_modifiers: Default::default(),
             },
-            movement_cooldown: specs.movement_cooldown.clone(),
-            gold_find: specs.gold_find.clone(),
-            threat_gain: specs.threat_gain.clone(),
+            movement_cooldown: specs.movement_cooldown,
+            gold_find: specs.gold_find,
+            threat_gain: specs.threat_gain,
         }
     }
 }
