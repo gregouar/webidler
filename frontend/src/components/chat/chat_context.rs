@@ -110,6 +110,8 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
                 && opened.get()
             {
                 open();
+            } else if !is_auth {
+                opened.set(false);
             }
 
             if !is_auth && state == ConnectionReadyState::Open {
