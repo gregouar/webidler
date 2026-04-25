@@ -14,6 +14,7 @@ use super::{
 
 #[derive(Debug, FromRow)]
 pub struct LeaderboardEntry {
+    pub realm_id: RealmId,
     pub user_id: UserId,
     pub username: Option<String>,
     pub character_id: UserCharacterId,
@@ -36,6 +37,7 @@ pub async fn get_leaderboard(
         r#"
         WITH ranked AS (
             SELECT
+                lb.realm_id,
                 lb.character_id,
                 lb.area_id,
                 lb.area_level,
@@ -49,6 +51,7 @@ pub async fn get_leaderboard(
             WHERE lb.realm_id = $2
         )
         SELECT
+            r.realm_id,
             u.user_id           AS "user_id: UserId",
             u.username,
             c.character_id      AS "character_id: UserCharacterId",

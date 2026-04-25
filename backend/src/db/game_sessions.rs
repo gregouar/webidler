@@ -1,6 +1,9 @@
 use sqlx::FromRow;
 
-use shared::data::user::{UserCharacterId, UserId};
+use shared::data::{
+    realms::RealmId,
+    user::{UserCharacterId, UserId},
+};
 
 use crate::db::utc_datetime::UtcDateTime;
 
@@ -20,6 +23,7 @@ pub struct SessionEntry {
 
 #[derive(Debug, FromRow)]
 pub struct SessionGlimpse {
+    pub realm_id: RealmId,
     pub user_id: UserId,
     pub username: Option<String>,
     pub character_id: UserCharacterId,
@@ -88,6 +92,7 @@ pub async fn glimpse_active_sessions(
         SessionGlimpse,
         r#"
         SELECT
+            characters.realm_id as "realm_id!",
             users.user_id as "user_id: UserId",
             users.username,
             characters.character_id as "character_id: UserCharacterId",

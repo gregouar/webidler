@@ -9,6 +9,7 @@ use crate::data::{
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
+    realms::Realm,
     skill::BaseSkillSpecs,
     stash::{Stash, StashItem},
     temple::{BenedictionSpecs, PlayerBenedictions},
@@ -30,6 +31,7 @@ impl fmt::Display for ErrorResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LeaderboardEntry {
+    pub realm: Realm,
     pub user_id: UserId,
     pub username: String,
     pub character_id: UserCharacterId,
