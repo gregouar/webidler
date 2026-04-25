@@ -197,7 +197,7 @@ pub fn CardInsetTitle(children: Children) -> impl IntoView {
 
     view! {
         <div class="w-full flex flex-col mt-1 mb-2 gap-1">
-            <span class=move || {
+            <div class=move || {
                 format!(
                     "text-amber-200 text-sm xl:text-base font-display font-semibold tracking-[0.08em] {}",
                     if settings.uses_surface_effects() {
@@ -206,7 +206,7 @@ pub fn CardInsetTitle(children: Children) -> impl IntoView {
                         ""
                     },
                 )
-            }>{children()}</span>
+            }>{children()}</div>
             <TitleSeparator />
         </div>
     }

@@ -9,7 +9,7 @@ use std::{
 
 use shared::data::{
     monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs,
-    temple::BenedictionSpecs,
+    temple::BenedictionsCategory,
 };
 
 use super::{
@@ -31,7 +31,7 @@ use crate::game::{
 // TODO: Load from zip/dat file and compress at build time for prod release
 
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
-pub type BenedictionsStore = HashMap<String, BenedictionSpecs>;
+pub type BenedictionsStore = HashMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
@@ -55,7 +55,7 @@ pub struct MasterStore {
 impl LoadJsonFromFile for MonsterSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
 impl LoadJsonFromFile for PassivesTreeSpecs {}
-impl LoadJsonFromFile for BenedictionSpecs {}
+impl LoadJsonFromFile for BenedictionsCategory {}
 
 impl MasterStore {
     pub async fn load_from_folder(

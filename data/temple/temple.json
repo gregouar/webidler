@@ -1,160 +1,156 @@
 {
-  "starting_gold": {
+  "quickstart": {
+    "title": "Quickstart",
     "price": 1e5,
-    "value": 100,
-    "effect": "StartingGold",
     "price_increase_factor": 1e5,
-    "upgrade_value": 100,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 60
+    "max_upgrade_level": 69,
+    "benedictions": {
+      "starting_gold": {
+        "value": 100,
+        "effect": "StartingGold",
+        "upgrade_value": 100,
+        "upgrade_modifier": "Flat"
+      },
+      "starting_level": {
+        "value": 1,
+        "effect": "StartingLevel",
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      }
+    }
   },
-  "starting_level": {
-    "price": 1e10,
-    "value": 1,
-    "effect": "StartingLevel",
-    "price_increase_factor": 1e4,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 69
-  },
-  "life_max": {
+  "attributes": {
+    "title": "Attributes",
     "price": 1e6,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": "Life",
-        "modifier": "Flat"
-      }
-    },
     "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "mana_max": {
-    "price": 1e6,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": "Mana",
-        "modifier": "Flat"
+    "max_upgrade_level": 200,
+    "benedictions": {
+      "life_max": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": "Life",
+            "modifier": "Flat"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "mana_max": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": "Mana",
+            "modifier": "Flat"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
       }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
+    }
   },
-  "armor_physical": {
+  "defenses": {
+    "title": "Defenses",
     "price": 1e7,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Armor": "Physical" },
-        "modifier": "Flat"
-      }
-    },
     "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "armor_fire": {
-    "price": 1e7,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Armor": "Fire" },
-        "modifier": "Flat"
+    "max_upgrade_level": 200,
+    "benedictions": {
+      "armor_physical": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Armor": "Physical" },
+            "modifier": "Flat"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "armor_fire": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Armor": "Fire" },
+            "modifier": "Flat"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "armor_poison": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Armor": "Poison" },
+            "modifier": "Flat"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "armor_storm": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Armor": "Storm" },
+            "modifier": "Flat"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
       }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
+    }
   },
-  "armor_poison": {
-    "price": 1e7,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat"
-      }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "armor_storm": {
-    "price": 1e7,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat"
-      }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "damage_physical": {
+  "damages": {
+    "title": "Damages",
     "price": 1e8,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Damage": { "damage_type": "Physical" } },
-        "modifier": "More"
-      }
-    },
     "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "damage_fire": {
-    "price": 1e8,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Damage": { "damage_type": "Fire" } },
-        "modifier": "More"
+    "max_upgrade_level": 200,
+    "benedictions": {
+      "damage_physical": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Damage": { "damage_type": "Physical" } },
+            "modifier": "More"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "damage_fire": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Damage": { "damage_type": "Fire" } },
+            "modifier": "More"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "damage_poison": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Damage": { "damage_type": "Poison" } },
+            "modifier": "More"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
+      },
+      "damage_storm": {
+        "value": 5,
+        "effect": {
+          "StatEffect": {
+            "stat": { "Damage": { "damage_type": "Storm" } },
+            "modifier": "More"
+          }
+        },
+        "upgrade_value": 1,
+        "upgrade_modifier": "Flat"
       }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "damage_poison": {
-    "price": 1e8,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Damage": { "damage_type": "Poison" } },
-        "modifier": "More"
-      }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
-  },
-  "damage_storm": {
-    "price": 1e8,
-    "value": 5,
-    "effect": {
-      "StatEffect": {
-        "stat": { "Damage": { "damage_type": "Storm" } },
-        "modifier": "More"
-      }
-    },
-    "price_increase_factor": 6,
-    "upgrade_value": 1,
-    "upgrade_modifier": "Flat",
-    "max_upgrade_level": 200
+    }
   }
 }
