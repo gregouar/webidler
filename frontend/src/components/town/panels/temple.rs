@@ -89,10 +89,11 @@ fn ConfirmButton(
     cost: RwSignal<f64>,
     open: RwSignal<bool>,
 ) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let auth_context = expect_context::<AuthContext>();
+
     let do_buy = Arc::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
 
         let character_id = town_context.character.read_untracked().character_id;
@@ -142,7 +143,9 @@ fn ConfirmButton(
         }
     };
 
-    let disabled = Signal::derive(move || cost.get() == 0.0);
+    let disabled = Signal::derive(move || {
+        *town_context.player_benedictions.read() == *player_benedictions.read()
+    });
 
     view! {
         <MenuButton on:click=try_buy disabled=disabled>
@@ -540,7 +543,7 @@ pub fn EffectDescription(
                         BenedictionEffect::StartingGold => {
                             view! {
                                 {effects_tooltip::effect_li(
-                                    format!("+{:0} Starting Gold", value.round()),
+                                    format!("+{} Starting Gold", format_number(value)),
                                 )}
                             }
                                 .into_any()

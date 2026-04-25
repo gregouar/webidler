@@ -146,8 +146,8 @@ pub fn validate_benedictions(
 
         let total_level: u64 = player_category
             .purchased_benedictions
-            .iter()
-            .map(|(_, upgrade_level)| *upgrade_level)
+            .values()
+            .copied()
             .sum();
         if total_level > player_category.upgrade_level {
             return Err(anyhow::anyhow!("invalid benedictions"));
