@@ -14,7 +14,7 @@ use crate::components::{
     shared::{resources::GoldIcon, tooltips::effects_tooltip},
     town::TownContext,
     ui::{
-        buttons::{MenuButton, MenuButtonRed},
+        buttons::MenuButton,
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         confirm::ConfirmContext,
         list_row::MenuListRow,
@@ -47,7 +47,7 @@ pub fn TemplePanel(
 
     view! {
         <MenuPanel open=open>
-            <MenuCard class="h-full" gap=false>
+            <MenuCard class="h-full">
                 <CardHeader title="Temple" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {
@@ -63,7 +63,7 @@ pub fn TemplePanel(
 
                                 <div class="flex-1" />
 
-                                <div class="flex items-center gap-2">
+                                <div class="flex  h-full items-center gap-2">
                                     <MenuButton
                                         on:click=move |_| reset()
                                         disabled=Signal::derive(move || cost.get() == 0.0)
@@ -75,7 +75,7 @@ pub fn TemplePanel(
                             }
                         })}
                 </CardHeader>
-                <CardInset class="min-h-0 flex-1" gap=false pad=false>
+                <CardInset>
                     <BenedictionsList player_benedictions cost view_only />
                 </CardInset>
             </MenuCard>
@@ -159,39 +159,21 @@ fn BenedictionsList(
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let benediction_categories = Memo::new(move |_| {
-        town_context.benedictions_specs.with(|specs| {
-            let mut categories = specs
-                .iter()
-                .map(|(category_id, category_specs)| (category_id.clone(), category_specs.clone()))
-                .collect::<Vec<_>>();
-
-            categories.sort_by(|(a_id, a_specs), (b_id, b_specs)| {
-                a_specs.title.cmp(&b_specs.title).then(a_id.cmp(b_id))
-            });
-            categories
-        })
-    });
-
     view! {
-        <div class="w-full space-y-4 p-1 xl:p-3">
-            {move || {
-                benediction_categories
-                    .get()
-                    .into_iter()
-                    .map(|(category_id, category_specs)| {
-                        view! {
-                            <BenedictionCategorySection
-                                category_id
-                                category_specs
-                                player_benedictions
-                                cost
-                                view_only
-                            />
-                        }
-                    })
-                    .collect::<Vec<_>>()
-            }}
+        <div class="w-full space-y-12">
+            <For
+                each=move || town_context.benedictions_specs.get().into_iter()
+                key=|(category_id, _)| category_id.clone()
+                let:((category_id, category_specs))
+            >
+                <BenedictionCategorySection
+                    category_id
+                    category_specs
+                    player_benedictions
+                    cost
+                    view_only
+                />
+            </For>
         </div>
     }
 }
@@ -237,7 +219,7 @@ fn BenedictionCategorySection(
             })
         }
     });
-    let allocated_points = Memo::new({
+    let allocated_points: Memo<u64> = Memo::new({
         let category_id = category_id.clone();
         move |_| {
             player_benedictions.with(|player_benedictions| {
@@ -249,8 +231,6 @@ fn BenedictionCategorySection(
             })
         }
     });
-    let available_points =
-        Memo::new(move |_| bought_points.get().saturating_sub(allocated_points.get()));
     let max_level_reached = Signal::derive({
         let max_upgrade_level = category_specs.max_upgrade_level;
         move || {
@@ -296,94 +276,80 @@ fn BenedictionCategorySection(
             });
         }
     };
-
-    let benedictions = category_specs
-        .benedictions
-        .iter()
-        .map(|(benediction_id, benediction_specs)| {
-            (benediction_id.clone(), benediction_specs.clone())
-        })
-        .collect::<Vec<_>>();
-    // benedictions.sort_by(|(a_id, a_specs), (b_id, b_specs)| {
-    //     a_specs.effect.cmp(&b_specs.effect).then(a_id.cmp(b_id))
-    // });
+    let benedictions = category_specs.benedictions.clone();
 
     view! {
         <section class="w-full min-w-0">
-            <CardInsetTitle>
-                <div class="flex flex-wrap items-center justify-between gap-2">
+            <CardInsetTitle>{category_title}</CardInsetTitle>
 
-                    <div class="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 text-xs xl:text-sm tracking-normal font-sans">
-                        <span class="text-zinc-400">
-                            "Points "
-                            <span class="font-bold text-amber-100">
-                                {move || available_points.get()}
-                            </span> <span class="text-zinc-500">"/"</span>
-                            <span class="font-bold text-zinc-100">
-                                {move || bought_points.get()}
-                            </span>
-                        </span>
-                        <span class="text-zinc-600">"|"</span>
-                        <span class="text-zinc-400">
-                            "Max " <span class="font-semibold text-zinc-200">{max_level_text}</span>
-                        </span>
-
-                        {(!view_only)
-                            .then(|| {
-                                view! {
-                                    <MenuButtonRed on:click=reset_category disabled=reset_disabled>
-                                        "Reset"
-                                    </MenuButtonRed>
-                                }
-                            })}
+            <div class="mb-2 grid grid-cols-2 gap-2 px-1 text-xs xl:text-sm">
+                <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-start">
+                    {(!view_only)
+                        .then(|| {
+                            view! {
+                                <MenuButton on:click=reset_category disabled=reset_disabled>
+                                    "Reset"
+                                </MenuButton>
+                            }
+                        })}
+                    <div class="flex gap-1">
+                        <span class="font-bold text-zinc-100">{move || allocated_points.get()}</span>
+                        <span class="text-zinc-600">"/"</span>
+                        <span class="font-bold text-zinc-500">{move || bought_points.get()}</span>
+                        <span class="font-semibold text-zinc-500">" Spent"</span>
                     </div>
 
-                    <span>{category_title}</span>
-
-                    <div class="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 text-xs xl:text-sm tracking-normal font-sans">
-
-                        {(!view_only)
-                            .then(|| {
-                                view! {
-                                    <MenuButton on:click=buy_point disabled=buy_disabled>
-                                        <div class="flex items-center gap-1">
-                                            {move || {
-                                                if max_level_reached.get() {
-                                                    view! { "Max" }.into_any()
-                                                } else {
-                                                    view! {
-                                                        "Pray"
-                                                        <span class="text-amber-200 font-bold font-number">
-                                                            {format_number(price.get())}
-                                                        </span>
-                                                        <GoldIcon />
-                                                    }
-                                                        .into_any()
-                                                }
-                                            }}
-                                        </div>
-                                    </MenuButton>
-                                }
-                            })}
-                    </div>
                 </div>
-            </CardInsetTitle>
+
+                <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-end">
+
+                    <div class="flex gap-1">
+                        <span class="font-semibold text-zinc-500">"Prayed"</span>
+                        <span class="font-bold text-zinc-100">{move || bought_points.get()}</span>
+                        <span class="text-zinc-500">"/"</span>
+                        <span class="font-bold text-zinc-500">{max_level_text}</span>
+                    </div>
+
+                    {(!view_only)
+                        .then(|| {
+                            view! {
+                                <MenuButton on:click=buy_point disabled=buy_disabled>
+                                    <div class="flex items-center gap-1">
+                                        {move || {
+                                            if max_level_reached.get() {
+                                                view! { "Max" }.into_any()
+                                            } else {
+                                                view! {
+                                                    "Pray"
+                                                    <span class="text-amber-200 font-bold font-number w-[8ch] text-right">
+                                                        {format_number(price.get())}
+                                                    </span>
+                                                    <GoldIcon />
+                                                }
+                                                    .into_any()
+                                            }
+                                        }}
+                                    </div>
+                                </MenuButton>
+                            }
+                        })}
+                </div>
+            </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-2 items-start">
-                {benedictions
-                    .into_iter()
-                    .map(|(benediction_id, benediction_specs)| {
-                        view! {
-                            <BenedictionRow
-                                category_id=category_id.clone()
-                                benediction_id
-                                benediction_specs
-                                player_benedictions
-                                view_only
-                            />
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+                <For
+                    each=move || benedictions.clone().into_iter()
+                    key=|(benediction_id, _)| benediction_id.clone()
+                    let:((benediction_id, benediction_specs))
+                >
+                    <BenedictionRow
+                        category_id=category_id.clone()
+                        benediction_id
+                        benediction_specs
+                        player_benedictions
+                        view_only
+                    />
+                </For>
             </div>
         </section>
     }
@@ -480,8 +446,8 @@ fn BenedictionRow(
                 <div class="flex min-w-0 flex-col gap-2">
                     <div class="flex min-w-0 items-center justify-between gap-2">
                         <span class="
-                        text-shadow-lg/100 shadow-gray-950 text-amber-200 font-semibold
-                        text-sm xl:text-base font-display truncate
+                        text-shadow-lg/30 shadow-gray-950 text-amber-300 font-semibold
+                        text-sm xl:text-base
                         ">{benediction_title}</span>
 
                         {view_only
@@ -573,7 +539,9 @@ pub fn EffectDescription(
                     .map(|value| match benediction_specs.effect.clone() {
                         BenedictionEffect::StartingGold => {
                             view! {
-                                {effects_tooltip::effect_li(format!("+{:0} Starting Gold", value))}
+                                {effects_tooltip::effect_li(
+                                    format!("+{:0} Starting Gold", value.round()),
+                                )}
                             }
                                 .into_any()
                         }

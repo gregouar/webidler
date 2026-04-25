@@ -3,13 +3,13 @@
     "title": "Quickstart",
     "price": 1e5,
     "price_increase_factor": 1e5,
-    "max_upgrade_level": 69,
+    "max_upgrade_level": 60,
     "benedictions": {
       "starting_gold": {
         "value": 100,
         "effect": "StartingGold",
-        "upgrade_value": 100,
-        "upgrade_modifier": "Flat"
+        "upgrade_value": 50,
+        "upgrade_modifier": "More"
       },
       "starting_level": {
         "value": 1,

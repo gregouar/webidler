@@ -1,6 +1,7 @@
 use anyhow::{Result, anyhow};
 use backend_shared::signature::HmacKey;
 use futures::future::join_all;
+use indexmap::IndexMap;
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -31,7 +32,7 @@ use crate::game::{
 // TODO: Load from zip/dat file and compress at build time for prod release
 
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
-pub type BenedictionsStore = HashMap<String, BenedictionsCategory>;
+pub type BenedictionsStore = IndexMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;

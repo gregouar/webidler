@@ -16,7 +16,7 @@ pub struct BenedictionsCategory {
     pub price_increase_factor: f64,
     pub max_upgrade_level: Option<u64>,
 
-    pub benedictions: HashMap<String, BenedictionSpecs>,
+    pub benedictions: IndexMap<String, BenedictionSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]

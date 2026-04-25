@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use indexmap::IndexMap;
 use std::{collections::HashMap, fmt, time::Duration};
 
 use serde::{Deserialize, Serialize};
@@ -154,7 +155,7 @@ pub struct GetPassivesResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetBenedictionsResponse {
-    pub benedictions_specs: HashMap<String, BenedictionsCategory>,
+    pub benedictions_specs: IndexMap<String, BenedictionsCategory>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
