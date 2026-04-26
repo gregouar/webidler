@@ -76,7 +76,7 @@ pub fn MenuListRow(
             }
             on:click=move |ev| {
                 let _ = ev;
-                if let Some(on_click) = on_click {
+                if let Some(on_click) = on_click && !selected.get() {
                     on_click.run(());
                 }
             }

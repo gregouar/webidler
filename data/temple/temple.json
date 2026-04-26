@@ -8,7 +8,7 @@
       "starting_gold": {
         "value": 100,
         "effect": "StartingGold",
-        "upgrade_value": 50,
+        "upgrade_value": 30,
         "upgrade_modifier": "More"
       },
       "starting_level": {
