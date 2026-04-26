@@ -192,12 +192,15 @@ pub fn CardHeader(
 }
 
 #[component]
-pub fn CardInsetTitle(children: Children) -> impl IntoView {
+pub fn CardInsetTitle(
+    children: Children,
+    #[prop(default = true)] separator: bool,
+) -> impl IntoView {
     let settings: SettingsContext = expect_context();
 
     view! {
         <div class="w-full flex flex-col mt-1 mb-2 gap-1">
-            <span class=move || {
+            <div class=move || {
                 format!(
                     "text-amber-200 text-sm xl:text-base font-display font-semibold tracking-[0.08em] {}",
                     if settings.uses_surface_effects() {
@@ -206,8 +209,9 @@ pub fn CardInsetTitle(children: Children) -> impl IntoView {
                         ""
                     },
                 )
-            }>{children()}</span>
-            <TitleSeparator />
+            }>{children()}</div>
+            {separator.then(|| view! { <TitleSeparator /> })}
+
         </div>
     }
 }

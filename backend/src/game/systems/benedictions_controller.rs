@@ -18,43 +18,56 @@ pub fn generate_effects_map_from_benedictions(
     benedictions_store: &BenedictionsStore,
     player_benedictions: &PlayerBenedictions,
 ) -> EffectsMap {
-    player_benedictions
-        .purchased_benedictions
-        .iter()
-        .filter_map(|(benediction_id, benediction_state)| {
-            benedictions_store
-                .get(benediction_id)
-                .and_then(|benediction| {
-                    benediction.compute_stat_effect(benediction_state.upgrade_level)
-                })
-        })
-        .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
-            *effects_map
-                .0
-                .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
-                .or_default() += effect.value;
-            effects_map
-        })
+    EffectsMap(
+        player_benedictions
+            .categories
+            .iter()
+            .flat_map(|(category_id, player_category)| {
+                let store_category = benedictions_store.get(category_id);
+
+                player_category.purchased_benedictions.iter().filter_map(
+                    move |(benediction_id, upgrade_level)| {
+                        let specs = store_category?.benedictions.get(benediction_id)?;
+
+                        specs.compute_stat_effect(*upgrade_level)
+                    },
+                )
+            })
+            .fold(HashMap::new(), |mut effects, stat_effect| {
+                *effects
+                    .entry((
+                        stat_effect.stat.clone(),
+                        stat_effect.modifier,
+                        stat_effect.bypass_ignore,
+                    ))
+                    .or_default() += stat_effect.value;
+
+                effects
+            }),
+    )
 }
 
 pub fn find_benediction_value(
     benedictions_store: &BenedictionsStore,
     player_benedictions: &PlayerBenedictions,
-    benediction_effect: BenedictionEffect,
+    benediction_effect: &BenedictionEffect,
 ) -> f64 {
     player_benedictions
-        .purchased_benedictions
+        .categories
         .iter()
-        .filter_map(|(benediction_id, benediction_state)| {
-            benedictions_store
-                .get(benediction_id)
-                .and_then(|benediction| {
-                    if benediction_effect == benediction.effect {
-                        benediction.compute_value(benediction_state.upgrade_level)
+        .flat_map(|(category_id, player_category)| {
+            let store_category = benedictions_store.get(category_id);
+
+            player_category.purchased_benedictions.iter().filter_map(
+                move |(benediction_id, upgrade_level)| {
+                    let benediction = store_category?.benedictions.get(benediction_id)?;
+                    if *benediction_effect == benediction.effect {
+                        benediction.compute_value(*upgrade_level)
                     } else {
                         None
                     }
-                })
+                },
+            )
         })
         .fold(0.0, |total, value| total + value)
 }
@@ -71,7 +84,11 @@ pub async fn update_benedictions(
             .await?
             .unwrap_or_default();
 
-    validate_benedictions(&master_store.benedictions_store, player_benedictions)?;
+    validate_benedictions(
+        &master_store.benedictions_store,
+        &prev_benedictions,
+        player_benedictions,
+    )?;
 
     let cost = compute_benedictions_cost(&master_store.benedictions_store, player_benedictions)
         - compute_benedictions_cost(&master_store.benedictions_store, &prev_benedictions);
@@ -94,13 +111,13 @@ pub fn compute_benedictions_cost(
     player_benedictions: &PlayerBenedictions,
 ) -> f64 {
     player_benedictions
-        .purchased_benedictions
+        .categories
         .iter()
-        .map(|(benediction_id, benediction_state)| {
+        .map(|(category_id, player_category)| {
             benedictions_store
-                .get(benediction_id)
-                .map(|benediction_specs| {
-                    benediction_specs.compute_total_price(benediction_state.upgrade_level)
+                .get(category_id)
+                .map(|category_specs| {
+                    category_specs.compute_total_price(player_category.upgrade_level)
                 })
                 .unwrap_or_default()
         })
@@ -109,17 +126,45 @@ pub fn compute_benedictions_cost(
 
 pub fn validate_benedictions(
     benedictions_store: &BenedictionsStore,
+    prev_benedictions: &PlayerBenedictions,
     player_benedictions: &PlayerBenedictions,
 ) -> anyhow::Result<()> {
-    for (benediction_id, benediction_state) in player_benedictions.purchased_benedictions.iter() {
-        if benediction_state.upgrade_level
-            > benedictions_store
-                .get(benediction_id)
-                .map(|benediction_specs| benediction_specs.max_upgrade_level.unwrap_or(u64::MAX))
-                .unwrap_or_default()
-        {
+    for (category_id, player_category) in player_benedictions.categories.iter() {
+        let category_specs = benedictions_store
+            .get(category_id)
+            .ok_or_else(|| anyhow::anyhow!("invalid benedictions"))?;
+
+        if player_category.upgrade_level > category_specs.max_upgrade_level.unwrap_or(u64::MAX) {
+            return Err(anyhow::anyhow!("invalid benedictions"));
+        }
+
+        for benediction_id in player_category.purchased_benedictions.keys() {
+            if !category_specs.benedictions.contains_key(benediction_id) {
+                return Err(anyhow::anyhow!("invalid benedictions"));
+            }
+        }
+
+        let total_level: u64 = player_category
+            .purchased_benedictions
+            .values()
+            .copied()
+            .sum();
+        if total_level > player_category.upgrade_level {
             return Err(anyhow::anyhow!("invalid benedictions"));
         }
     }
+
+    for (category_id, prev_category) in prev_benedictions.categories.iter() {
+        let upgrade_level = player_benedictions
+            .categories
+            .get(category_id)
+            .map(|category| category.upgrade_level)
+            .unwrap_or_default();
+
+        if upgrade_level < prev_category.upgrade_level {
+            return Err(anyhow::anyhow!("invalid benedictions"));
+        }
+    }
+
     Ok(())
 }

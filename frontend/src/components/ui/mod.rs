@@ -18,4 +18,4 @@ pub mod tooltip;
 pub mod wiki;
 
 pub use link::ALink;
-pub use separator::Separator;
+pub use separator::{Separator, TitleSeparator};

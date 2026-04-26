@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use indexmap::IndexMap;
 use std::{collections::HashMap, path::Path};
 
 use serde::de::DeserializeOwned;
@@ -58,4 +59,5 @@ where
 }
 
 impl<T: LoadJsonFromFile> LoadJsonFromFile for HashMap<String, T> {}
+impl<T: LoadJsonFromFile> LoadJsonFromFile for IndexMap<String, T> {}
 impl<T: LoadJsonFromFile> LoadJsonFromFile for Vec<T> {}

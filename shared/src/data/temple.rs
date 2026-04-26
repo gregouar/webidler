@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
@@ -7,19 +8,24 @@ use crate::data::{
     stat_effect::{StatEffect, StatType},
 };
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+pub struct BenedictionsCategory {
+    pub title: String,
+
+    pub price: f64,
+    pub price_increase_factor: f64,
+    pub max_upgrade_level: Option<u64>,
+
+    pub benedictions: IndexMap<String, BenedictionSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct BenedictionSpecs {
     pub value: f64,
     pub effect: BenedictionEffect,
 
     pub upgrade_modifier: Modifier,
     pub upgrade_value: f64,
-
-    pub price: f64,
-    pub price_increase_factor: f64,
-
-    #[serde(default)]
-    pub max_upgrade_level: Option<u64>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
@@ -29,26 +35,34 @@ pub enum BenedictionEffect {
     StatEffect { stat: StatType, modifier: Modifier },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
-pub struct BenedictionState {
-    pub upgrade_level: u64,
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
+pub struct PlayerBenedictions {
+    pub categories: IndexMap<String, PlayerBenedictionsCategory>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
-pub struct PlayerBenedictions {
-    pub purchased_benedictions: HashMap<String, BenedictionState>,
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
+pub struct PlayerBenedictionsCategory {
+    pub upgrade_level: u64,
+    pub purchased_benedictions: HashMap<String, u64>,
+}
+
+impl BenedictionsCategory {
+    pub fn compute_price(&self, upgrade_level: u64) -> f64 {
+        self.price * self.price_increase_factor.powi(upgrade_level as i32)
+    }
+
+    pub fn compute_total_price(&self, upgrade_level: u64) -> f64 {
+        (0..upgrade_level)
+            .map(|level| self.compute_price(level))
+            .sum()
+    }
 }
 
 impl BenedictionSpecs {
     pub fn compute_value(&self, upgrade_level: u64) -> Option<f64> {
         let mut value = self.value;
 
-        if upgrade_level == 0
-            || self
-                .max_upgrade_level
-                .map(|max_upgrade_level| upgrade_level > max_upgrade_level)
-                .unwrap_or_default()
-        {
+        if upgrade_level == 0 {
             return None;
         }
 
@@ -75,15 +89,5 @@ impl BenedictionSpecs {
         } else {
             None
         }
-    }
-
-    pub fn compute_price(&self, upgrade_level: u64) -> f64 {
-        self.price * self.price_increase_factor.powi(upgrade_level as i32)
-    }
-
-    pub fn compute_total_price(&self, upgrade_level: u64) -> f64 {
-        (0..upgrade_level)
-            .map(|level| self.compute_price(level))
-            .sum()
     }
 }

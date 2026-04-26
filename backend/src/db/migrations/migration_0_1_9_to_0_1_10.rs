@@ -16,6 +16,7 @@ use shared::data::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
         StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusType, StatType,
     },
+    temple::PlayerBenedictions,
     user::UserCharacterId,
 };
 
@@ -27,7 +28,10 @@ use crate::{
         characters_data::{CharacterDataEntry, upsert_character_inventory_data},
         pool::{Database, DbExecutor, DbPool},
     },
-    game::{data::inventory_data::InventoryData, systems::passives_controller},
+    game::{
+        data::inventory_data::InventoryData,
+        systems::{benedictions_controller, passives_controller},
+    },
 };
 
 pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
@@ -105,6 +109,15 @@ async fn migrate_character_data(
             &character_data.character_id,
             character.resource_shards,
             &PassivesTreeAscension::default(),
+        )
+        .await?;
+
+        benedictions_controller::update_benedictions(
+            executor,
+            master_store,
+            &character_data.character_id,
+            character.resource_gold,
+            &PlayerBenedictions::default(),
         )
         .await?;
     }

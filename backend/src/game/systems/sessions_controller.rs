@@ -189,12 +189,12 @@ async fn new_game_instance(
     player_resources.gold += benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,
         &player_benedictions,
-        BenedictionEffect::StartingGold,
+        &BenedictionEffect::StartingGold,
     );
     let extra_level = benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,
         &player_benedictions,
-        BenedictionEffect::StartingLevel,
+        &BenedictionEffect::StartingLevel,
     ) as usize;
 
     let player_base_specs = player_updater::init_player_base_specs(
