@@ -192,7 +192,10 @@ pub fn CardHeader(
 }
 
 #[component]
-pub fn CardInsetTitle(children: Children) -> impl IntoView {
+pub fn CardInsetTitle(
+    children: Children,
+    #[prop(default = true)] separator: bool,
+) -> impl IntoView {
     let settings: SettingsContext = expect_context();
 
     view! {
@@ -207,7 +210,8 @@ pub fn CardInsetTitle(children: Children) -> impl IntoView {
                     },
                 )
             }>{children()}</div>
-            <TitleSeparator />
+            {separator.then(|| view! { <TitleSeparator /> })}
+
         </div>
     }
 }

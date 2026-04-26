@@ -70,7 +70,10 @@ pub fn GoldIcon() -> impl IntoView {
     }
 }
 #[component]
-pub fn GoldCounter(value: Signal<f64>, #[prop(default = false)] w_full: bool) -> impl IntoView {
+pub fn GoldCounter(
+    #[prop(into)] value: Signal<f64>,
+    #[prop(default = false)] w_full: bool,
+) -> impl IntoView {
     view! {
         <ResourceCounter
             class:text-amber-200

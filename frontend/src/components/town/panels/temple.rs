@@ -11,9 +11,13 @@ use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
     settings::SettingsContext,
-    shared::{resources::GoldIcon, tooltips::effects_tooltip},
+    shared::{
+        resources::{GoldCounter, GoldIcon},
+        tooltips::effects_tooltip,
+    },
     town::TownContext,
     ui::{
+        TitleSeparator,
         buttons::MenuButton,
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         confirm::ConfirmContext,
@@ -55,10 +59,7 @@ pub fn TemplePanel(
                                 <div class="flex-1" />
 
                                 <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
-                                    "Benedictions Cost: "
-                                    <span class="text-amber-200 font-bold font-number">
-                                        {move || format_number(cost.get())}
-                                    </span> <GoldIcon />
+                                    "Benedictions Cost: " <GoldCounter value=cost w_full=true />
                                 </div>
 
                                 <div class="flex-1" />
@@ -283,9 +284,9 @@ fn BenedictionCategorySection(
 
     view! {
         <section class="w-full min-w-0">
-            <CardInsetTitle>{category_title}</CardInsetTitle>
+            <TitleSeparator />
 
-            <div class="mb-2 grid grid-cols-2 gap-2 px-1 text-xs xl:text-sm">
+            <div class="mb-2 mt-1 grid grid-cols-3 gap-2 px-1 text-xs xl:text-sm">
                 <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-start">
                     {(!view_only)
                         .then(|| {
@@ -302,6 +303,10 @@ fn BenedictionCategorySection(
                         <span class="font-semibold text-zinc-500">" Spent"</span>
                     </div>
 
+                </div>
+
+                <div>
+                    <CardInsetTitle separator=false>{category_title}</CardInsetTitle>
                 </div>
 
                 <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-end">
