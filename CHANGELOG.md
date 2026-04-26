@@ -9,7 +9,7 @@ Features:
 - Forge - Empower Unique Items. Any Unique equipment can be Empowered up to its item level. Dropping a low-level Unique in a high Area Level allows for greater Empowerment than in lower-level areas.
 - Forge - Gambling. Obtain a 4-affix Rare Item of the highest available base for your current Power Level. You can choose the base type (or leave "Any" and hope for a Rune). Cost increases with Power Level.
 - Forge - Remove Affix. For 20 Gems, remove a random affix from a non-Unique Item.
-- Temple. Benedictions are now grouped by category. Prayers grant points within a specific category, which can then be spent on any Benediction within that group.
+- Temple. Benedictions are now grouped by category. Prayers grant points within a specific category, which can then be distributed among Benedictions within that group.
 - New UI, including a Graphics Quality setting. B-)
 
 Content:
@@ -28,10 +28,11 @@ Balance Changes:
 - Bosses have reduced Stun Resilience.
 - Retaliate now work with Evade as well.
 - Poison Cloud now repeats 4 times, but with a shorter Poison Duration.
+- Righteous Fire is now a Spell and do more damage.
 - Several Unique Items have been reworked.
 - Shields can now roll “More Attack Damage” affixes.
 - Cloaks can no longer roll “More Attack / Less Speed” or “More Spell / More Mana Cost” affixes.
-- Increased Critical Chance no longer rolls on Amulets and Rings, but can now roll on Gloves.
+- “Increased Critical Chance” no longer rolls on Amulets and Rings, but can now roll on Gloves.
 
 Fixes/QoL:
 
