@@ -4,7 +4,7 @@
     "icon": "items/weapons_1h/dagger.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -12,8 +12,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -34,15 +34,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "dagger_unique": {
     "name": "Onions Slicer",
     "icon": "items/weapons_1h/onions_slicer.webp",
     "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -84,7 +84,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -158,7 +158,7 @@
     "icon": "items/weapons_1h/shortsword.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -166,8 +166,8 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -188,15 +188,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "shortsword_unique": {
     "name": "Broken Trophy",
     "icon": "items/weapons_1h/broken_trophy.webp",
     "description": "A kind remembrance of a foe you'd rather drink to forget...",
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -255,7 +255,7 @@
         "bypass_ignore": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -376,7 +376,7 @@
     "icon": "items/weapons_1h/hand_axe.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -384,8 +384,8 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -406,15 +406,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "handaxe_unique": {
     "name": "Fang of the Widow",
     "icon": "items/weapons_1h/hand_axe_spider.webp",
     "description": "Its edge drips with the venom of a thousand silenced hearts.",
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -542,7 +542,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -631,7 +631,7 @@
     "icon": "items/weapons_1h/longsword.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -639,8 +639,8 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -661,15 +661,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "spiked_mace": {
     "name": "Spiked Mace",
     "icon": "items/weapons_1h/spiked_mace.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -677,8 +677,8 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -699,15 +699,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "sabre": {
     "name": "Sabre",
     "icon": "items/weapons_1h/sabre.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -715,8 +715,8 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -737,15 +737,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_cutlass": {
     "name": "Cutlass of Greed",
     "icon": "items/weapons_1h/treasure_cutlass.webp",
     "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -834,10 +834,10 @@
         "description": null,
         "trigger_id": "treasure_cutlass",
         "OnKill": {
-          "conditions": []
+          "conditions": [ ]
         },
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Curse",
         "effects": [
@@ -882,13 +882,12 @@
               ],
               "duration": 60.0
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false,
         "is_debuff": false
       }
     ],
@@ -997,7 +996,7 @@
     "icon": "items/weapons_1h/battleaxe.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -1005,8 +1004,8 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -1027,15 +1026,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "weapon_1h_8": {
     "name": "Rapier",
     "icon": "items/weapons_1h/rapier.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "MeleeWeapon",
@@ -1043,8 +1042,8 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
@@ -1065,7 +1064,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

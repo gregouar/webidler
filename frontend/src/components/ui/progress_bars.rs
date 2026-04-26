@@ -155,7 +155,11 @@ pub fn VerticalProgressBar(
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let set_value = move || {
-        if reset.get() { 0.0 } else { value.get() }
+        if reset.get() {
+            0.0
+        } else {
+            value.get().clamp(0.0, 1.0)
+        }
     };
     // Trick to reset animation by removing it when ended
     let reset_bar_animation = RwSignal::new("opacity: 0;");

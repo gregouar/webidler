@@ -96,8 +96,6 @@ pub struct TriggeredEffect {
 
     #[serde(default)]
     pub owner: Option<CharacterId>,
-    #[serde(default)]
-    pub inherit_modifiers: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

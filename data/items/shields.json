@@ -4,14 +4,14 @@
     "icon": "items/shields/buckler.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 25.0,
@@ -20,22 +20,22 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "small_round_shield": {
     "name": "Small Round Shield",
     "icon": "items/shields/small_round_shield.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 50.0,
@@ -44,15 +44,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "small_round_shield_unique": {
     "name": "Thunderclap Bulwark",
     "icon": "items/shields/thunderclap_bulwark.webp",
     "description": "When struck, it roars like the heavens, felling foes as if lightning kissed their skulls.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
@@ -112,7 +112,7 @@
           "damage_type": null
         },
         "target": "Source",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -136,13 +136,12 @@
                 3.0
               ]
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false,
         "is_debuff": false
       }
     ],
@@ -202,14 +201,14 @@
     "icon": "items/shields/iron_buckler.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 75.0,
@@ -218,22 +217,22 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "heater_shield": {
     "name": "Heater Shield",
     "icon": "items/shields/heater_shield.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 100.0,
@@ -242,15 +241,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "heater_shield_unique": {
     "name": "Bouffon's Last Jest",
     "icon": "items/shields/mocking_shield.webp",
     "description": "He laughed at danger until danger learned to fear the joke.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
@@ -325,7 +324,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 100.0,
@@ -412,14 +411,14 @@
     "icon": "items/shields/targe.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 125.0,
@@ -428,15 +427,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "throwing_shield": {
     "name": "The Borrowed Captain",
     "icon": "items/shields/throwing_shield.webp",
     "description": "No one questioned the captain after that.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
@@ -509,7 +508,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 125.0,
@@ -579,14 +578,14 @@
     "icon": "items/shields/kite_shield.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 150.0,
@@ -595,15 +594,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "kite_shield_unique": {
     "name": "Oath of the Cursed King",
     "icon": "items/shields/shield_cursed.webp",
     "description": "Each curse strengthens his reign, and drains what little life remains.",
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
@@ -749,12 +748,11 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false,
         "is_debuff": false
       }
     ],
@@ -826,14 +824,14 @@
     "icon": "items/shields/pavise.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 175.0,
@@ -842,22 +840,22 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "shield_8": {
     "name": "Runic Ward",
     "icon": "items/shields/runic_shield.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Shield"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 200.0,
@@ -866,7 +864,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

@@ -796,8 +796,7 @@
                       "name": "Curse of Putridity",
                       "icon": "skills/curse_putridity.svg",
                       "OnTakeHit": {
-                        "is_hurt": true,
-                        "is_triggered": false
+                        "is_hurt": true
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
@@ -805,9 +804,7 @@
                       "effects": [
                         {
                           "FlatDamage": {
-                            "damage": {
-                              "Poison": 0
-                            }
+                            "damage": { }
                           },
                           "ignore_stat_effects": [
                             {
@@ -1178,7 +1175,7 @@
                       "target": "Source",
                       "skill_range": "Any",
                       "skill_shape": "Single",
-                      "skill_type": "Other",
+                      "skill_type": "Curse",
                       "effects": [
                         {
                           "Restore": {
@@ -1189,8 +1186,7 @@
                           "ignore_stat_effects": [ ]
                         }
                       ],
-                      "modifiers": [ ],
-                      "inherit_modifiers": true
+                      "modifiers": [ ]
                     }
                   }
                 }
@@ -1806,8 +1802,7 @@
                             "HitCrit": null
                           }
                         }
-                      ],
-                      "inherit_modifiers": true
+                      ]
                     }
                   }
                 }
@@ -1998,7 +1993,6 @@
           "is_blocked": true
         },
         "target": "Source",
-        "inherit_modifiers": true,
         "effects": [
           {
             "FlatDamage": {
@@ -2044,7 +2038,6 @@
           "is_evaded": true
         },
         "target": "Source",
-        "inherit_modifiers": true,
         "effects": [
           {
             "FlatDamage": {

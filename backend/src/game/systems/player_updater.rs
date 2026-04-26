@@ -145,16 +145,6 @@ pub fn update_player_specs(
             .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
             .flat_map(|node| node.triggers.iter())
             .chain(
-                player_state
-                    .character_state
-                    .statuses
-                    .iter()
-                    .filter_map(|(status_specs, _)| match status_specs {
-                        StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
-                        _ => None,
-                    }),
-            )
-            .chain(
                 player_inventory
                     .equipped_items()
                     .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
@@ -169,13 +159,7 @@ pub fn update_player_specs(
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
-    // Apply modifiers on triggers that did not inherit modifiers from parent skill
-    for trigger_specs in player_specs
-        .character_specs
-        .triggers
-        .iter_mut()
-        .filter(|trigger_specs| !trigger_specs.inherit_modifiers)
-    {
+    for trigger_specs in player_specs.character_specs.triggers.iter_mut() {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
                 &trigger_specs.trigger_id,
@@ -185,6 +169,18 @@ pub fn update_player_specs(
             );
         }
     }
+
+    player_specs.character_specs.triggers.extend(
+        player_state
+            .character_state
+            .statuses
+            .iter()
+            .filter_map(|(status_specs, _)| match status_specs {
+                StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                _ => None,
+            })
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    );
 
     player_specs.character_specs.effects = effects.into();
 
@@ -279,7 +275,6 @@ fn compute_player_specs(
                 conditional_modifiers: Default::default(),
             }],
             owner: Some(CharacterId::Player),
-            inherit_modifiers: false,
         });
     }
 

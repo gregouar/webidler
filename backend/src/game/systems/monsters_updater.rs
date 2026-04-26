@@ -88,31 +88,15 @@ pub fn update_monster_specs(
     }
 
     monster_specs.character_specs.triggers.extend(
-        monster_state
-            .character_state
-            .statuses
+        monster_specs
+            .character_specs
+            .skills_specs
             .iter()
-            .filter_map(|(status_specs, _)| match status_specs {
-                StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
-                _ => None,
-            })
-            .chain(
-                monster_specs
-                    .character_specs
-                    .skills_specs
-                    .iter()
-                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
-            )
+            .flat_map(|skill_specs| skill_specs.triggers.iter())
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 
-    // Apply modifiers on triggers that did not inherit modifiers from skill
-    for trigger_specs in monster_specs
-        .character_specs
-        .triggers
-        .iter_mut()
-        .filter(|trigger_specs| !trigger_specs.inherit_modifiers)
-    {
+    for trigger_specs in monster_specs.character_specs.triggers.iter_mut() {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
                 &trigger_specs.trigger_id,
@@ -122,4 +106,16 @@ pub fn update_monster_specs(
             );
         }
     }
+
+    monster_specs.character_specs.triggers.extend(
+        monster_state
+            .character_state
+            .statuses
+            .iter()
+            .filter_map(|(status_specs, _)| match status_specs {
+                StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
+                _ => None,
+            })
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    );
 }

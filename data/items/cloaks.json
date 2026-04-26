@@ -218,7 +218,6 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false,
         "is_debuff": false
       }
     ],
@@ -419,7 +418,6 @@
         ],
         "skill_shape": "Single",
         "owner": null,
-        "inherit_modifiers": false,
         "is_debuff": false
       }
     ],

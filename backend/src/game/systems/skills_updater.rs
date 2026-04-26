@@ -182,7 +182,6 @@ pub fn apply_effects_to_skill_specs<'a>(
             skill_specs
                 .triggers
                 .iter_mut()
-                .filter(|trigger| trigger.triggered_effect.inherit_modifiers)
                 .flat_map(|trigger| trigger.triggered_effect.effects.iter_mut()),
         )
     {
@@ -364,9 +363,7 @@ pub fn compute_skill_specs_effect<'a>(
 ) {
     if let SkillEffectType::ApplyStatus { statuses, .. } = &mut skill_effect.effect_type {
         for status_effect in statuses.iter_mut() {
-            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type
-                && trigger_specs.triggered_effect.inherit_modifiers
-            {
+            if let StatusSpecs::Trigger(ref mut trigger_specs) = status_effect.status_type {
                 for triggered_effect in trigger_specs.triggered_effect.effects.iter_mut() {
                     compute_skill_specs_effect(
                         skill_id,
