@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use indexmap::IndexMap;
 use std::{collections::HashMap, fmt, time::Duration};
 
 use serde::{Deserialize, Serialize};
@@ -9,9 +10,10 @@ use crate::data::{
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
+    realms::Realm,
     skill::BaseSkillSpecs,
     stash::{Stash, StashItem},
-    temple::{BenedictionSpecs, PlayerBenedictions},
+    temple::{BenedictionsCategory, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
 };
 
@@ -30,6 +32,7 @@ impl fmt::Display for ErrorResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LeaderboardEntry {
+    pub realm: Realm,
     pub user_id: UserId,
     pub username: String,
     pub character_id: UserCharacterId,
@@ -152,7 +155,7 @@ pub struct GetPassivesResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetBenedictionsResponse {
-    pub benedictions_specs: HashMap<String, BenedictionSpecs>,
+    pub benedictions_specs: IndexMap<String, BenedictionsCategory>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
 use leptos::{html::*, prelude::*};
+use leptos_router::hooks::use_navigate;
 use shared::data::realms::Realm;
 
 use crate::components::{
     backend_client::BackendClient,
     ui::{
-        ALink,
         card::{CardHeader, CardInset, MenuCard},
         list_row::MenuListRow,
         menu_panel::MenuPanel,
@@ -102,7 +102,6 @@ fn LeaderboardContent() -> impl IntoView {
                                 .map(|area_specs| area_specs.required_level)
                                 .unwrap_or_default()
                         });
-
                     view! {
                         <div class="min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                             {leaderboard_per_area
@@ -125,22 +124,27 @@ fn LeaderboardContent() -> impl IntoView {
                                                     .into_iter()
                                                     .enumerate()
                                                     .map(|(i, entry)| {
+                                                        let view_character = {
+                                                            let navigate = use_navigate();
+                                                            let href = format!(
+                                                                "/view-character/{}",
+                                                                &entry.character_name,
+                                                            );
+                                                            move || {
+                                                                navigate(&href, Default::default());
+                                                            }
+                                                        };
                                                         view! {
-                                                            <MenuListRow class="mb-2">
+                                                            <MenuListRow class="mb-2" on_click=view_character>
                                                                 <div class="p-3">
                                                                     <div class="flex justify-between items-center mb-2">
                                                                         <div class="flex items-center space-x-3">
                                                                             <div class="text-2xl font-bold text-amber-300">
                                                                                 #{i + 1}
                                                                             </div>
-                                                                            <ALink
-                                                                                href=format!("/view-character/{}", &entry.character_name)
-                                                                                underline=false
-                                                                            >
-                                                                                <span class="text-white font-semibold text-lg font-display text-shadow-lg/100 shadow-gray-950">
-                                                                                    {entry.character_name.clone()}
-                                                                                </span>
-                                                                            </ALink>
+                                                                            <span class="text-white font-semibold text-lg font-display text-shadow-lg/100 shadow-gray-950">
+                                                                                {entry.character_name.clone()}
+                                                                            </span>
                                                                         </div>
                                                                         <div class="text-sm text-gray-400">{entry.username}</div>
                                                                     </div>

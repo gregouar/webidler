@@ -1,6 +1,7 @@
 use anyhow::{Result, anyhow};
 use backend_shared::signature::HmacKey;
 use futures::future::join_all;
+use indexmap::IndexMap;
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -9,7 +10,7 @@ use std::{
 
 use shared::data::{
     monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs,
-    temple::BenedictionSpecs,
+    temple::BenedictionsCategory,
 };
 
 use super::{
@@ -31,7 +32,7 @@ use crate::game::{
 // TODO: Load from zip/dat file and compress at build time for prod release
 
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
-pub type BenedictionsStore = HashMap<String, BenedictionSpecs>;
+pub type BenedictionsStore = IndexMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
@@ -55,7 +56,7 @@ pub struct MasterStore {
 impl LoadJsonFromFile for MonsterSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
 impl LoadJsonFromFile for PassivesTreeSpecs {}
-impl LoadJsonFromFile for BenedictionSpecs {}
+impl LoadJsonFromFile for BenedictionsCategory {}
 
 impl MasterStore {
     pub async fn load_from_folder(

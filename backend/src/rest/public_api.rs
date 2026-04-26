@@ -51,6 +51,7 @@ async fn get_players_count(
         .await?
         .into_iter()
         .map(|entry| LeaderboardEntry {
+            realm: (&entry.realm_id).into(),
             user_id: entry.user_id,
             username: entry.username.unwrap_or("Hidden User".into()),
             character_id: entry.character_id,
@@ -83,6 +84,7 @@ async fn get_leaderboard(
 impl From<db::leaderboard::LeaderboardEntry> for LeaderboardEntry {
     fn from(val: db::leaderboard::LeaderboardEntry) -> Self {
         LeaderboardEntry {
+            realm: (&val.realm_id).into(),
             user_id: val.user_id,
             username: val.username.unwrap_or_default(),
             character_id: val.character_id,
