@@ -676,7 +676,7 @@ impl From<OldStatConverterSpecs> for StatConverterSpecs {
     fn from(value: OldStatConverterSpecs) -> Self {
         Self {
             source: value.source,
-            stat: Box::new((*value.target_stat).into()),
+            stat: Box::new((*value.stat).into()),
             is_extra: value.is_extra,
             skill_type: value.skill_type,
         }
