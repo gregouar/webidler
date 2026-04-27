@@ -664,7 +664,7 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct OldStatConverterSpecs {
     pub source: StatConverterSource,
-    pub target_stat: Box<OldStatType>,
+    pub stat: Box<OldStatType>,
 
     #[serde(default)]
     pub is_extra: bool,
