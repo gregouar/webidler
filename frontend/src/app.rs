@@ -71,7 +71,7 @@ pub fn App() -> impl IntoView {
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
             .unwrap_or("ws://localhost:4242/chatws")
             .into()>
-            <Router>
+            <Router base=base_uri>
                 <Routes fallback=|| "Page not found.">
                     <Route path=path!("/") view=pages::MainMenuPage />
                     <Route path=path!("/terms") view=pages::terms::TermsPage />
