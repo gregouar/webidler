@@ -429,7 +429,7 @@ fn ChatBadge(badge: UserBadge) -> impl IntoView {
             "Please don't yell at him if everything is broken.",
         ),
         UserBadge::WitchHunter => (
-            "witch",
+            "badge_witch",
             "Witch Hunter",
             "This player killed Amelia, the Broodborne Witch.",
         ),
