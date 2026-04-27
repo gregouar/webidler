@@ -423,7 +423,11 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
 #[component]
 fn ChatBadge(badge: UserBadge) -> impl IntoView {
     let (src, badge_title, badge_description) = match badge {
-        UserBadge::Developer => ("badge_dev", "Developer", ""),
+        UserBadge::Developer => (
+            "badge_dev",
+            "Developer",
+            "Please don't yell at him if everything is broken.",
+        ),
         UserBadge::WitchHunter => (
             "witch",
             "Witch Hunter",
