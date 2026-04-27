@@ -87,15 +87,6 @@ pub fn update_monster_specs(
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 
-    monster_specs.character_specs.triggers.extend(
-        monster_specs
-            .character_specs
-            .skills_specs
-            .iter()
-            .flat_map(|skill_specs| skill_specs.triggers.iter())
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-    );
-
     for trigger_specs in monster_specs.character_specs.triggers.iter_mut() {
         for trigger_effect in trigger_specs.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
@@ -116,6 +107,13 @@ pub fn update_monster_specs(
                 StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
                 _ => None,
             })
+            .chain(
+                monster_specs
+                    .character_specs
+                    .skills_specs
+                    .iter()
+                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
+            )
             .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
 }

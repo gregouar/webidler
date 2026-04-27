@@ -4,15 +4,15 @@
     "icon": "items/gloves/cloth_wraps.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 10.0,
@@ -21,15 +21,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "cloth_wraps_unique": {
     "name": "Baker's Embrace",
     "icon": "items/gloves/oven_mitts.webp",
     "description": "Forged in hearthfire and kneaded by ancient hands, these mitts can withstand more than just the heat of an oven.",
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
@@ -65,8 +65,11 @@
         "stat": {
           "Damage": {
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Fire",
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -88,7 +91,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 10.0,
@@ -144,15 +147,15 @@
     "icon": "items/gloves/leather_gloves.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 20.0,
@@ -161,8 +164,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_gloves_unique": {
     "name": "Fangbreaker",
@@ -193,7 +196,11 @@
       },
       {
         "stat": {
-          "Speed": { "skill_type": "Attack" }
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Increased",
         "scope": "Global",
@@ -245,7 +252,7 @@
           "damage_type": null
         },
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -262,8 +269,11 @@
                       "stat": {
                         "Damage": {
                           "skill_type": "Attack",
+                          "skill_id": null,
+                          "skill_description": null,
                           "damage_type": null,
-                          "min_max": null
+                          "min_max": null,
+                          "is_hit": null
                         }
                       },
                       "modifier": "Increased",
@@ -278,8 +288,8 @@
               ],
               "duration": 5.0
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -337,8 +347,11 @@
           "stat": {
             "Damage": {
               "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Min"
+              "min_max": "Min",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -351,8 +364,11 @@
           "stat": {
             "Damage": {
               "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
               "damage_type": "Physical",
-              "min_max": "Max"
+              "min_max": "Max",
+              "is_hit": null
             }
           },
           "modifier": "Flat",
@@ -387,15 +403,15 @@
     "icon": "items/gloves/studded_gloves.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 30.0,
@@ -404,23 +420,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "chain_gloves": {
     "name": "Chain Gloves",
     "icon": "items/gloves/chain_gloves.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -429,15 +445,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "chain_gloves_unique": {
     "name": "Petalweave Gloves",
     "icon": "items/gloves/princess_gloves.webp",
     "description": "Each blossom stitched into the silk drinks in stray magic and returns it to its wielder in steady breaths.",
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
@@ -493,7 +509,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -554,15 +570,15 @@
     "icon": "items/gloves/leather_gauntlets.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 50.0,
@@ -571,23 +587,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "lamellar_gauntlets": {
     "name": "Lamellar Gauntlets",
     "icon": "items/gloves/leather_gauntlets.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 60.0,
@@ -596,15 +612,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "lamellar_gauntlets_unique": {
     "name": "Twinbound Grasp",
     "icon": "items/gloves/dragon_gloves.webp",
     "description": "Abal's fury, Zael's cunning, bound in mortal hands.",
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
@@ -642,11 +658,16 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": "Storm",
-                "min_max": null
+                "min_max": null,
+                "is_hit": null
               }
             },
             "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "conditions": [
               {
                 "HasStatus": {
@@ -689,12 +710,15 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
                 "damage_type": "Fire",
-                "min_max": null
+                "min_max": null,
+                "is_hit": null
               }
             },
             "modifier": "Flat",
-            "factor": 0.15,
+            "factor": 0.1,
             "source": {
               "HitDamage": "Storm"
             }
@@ -709,7 +733,7 @@
               "lucky_chance": 0.0
             },
             "FlatDamage": {
-              "damage": { },
+              "damage": {},
               "crit_chance": {
                 "value": 0.0,
                 "lucky_chance": 0.0
@@ -719,17 +743,24 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
+                "CritChance": {
                   "skill_type": null,
-                  "damage_type": "Storm",
-                  "min_max": null
+                  "skill_id": null,
+                  "skill_description": null
                 }
               },
               {
-                "CritChance": { }
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Storm",
+                  "min_max": null,
+                  "is_hit": null
+                }
               }
             ],
-            "conditional_modifiers": [ ]
+            "conditional_modifiers": []
           }
         ],
         "skill_shape": "Single",
@@ -789,15 +820,15 @@
     "icon": "items/gloves/plated_gauntlets.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 70.0,
@@ -806,23 +837,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "gloves_8": {
     "name": "Runic Gauntlets",
     "icon": "items/gloves/runic_gauntlets.webp",
     "description": null,
     "slot": "Gloves",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Gloves"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 80.0,
@@ -831,7 +862,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

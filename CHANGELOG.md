@@ -38,6 +38,7 @@ Fixes/QoL:
 
 - Items can now be picked directly from inventory when using the Market, Stash, or Forge.
 - Curse of Putridity secondary effect now scale with Physical Damage modifiers.
+- Retaliate can now trigger and apply Open Wound.
 
 ## Major Game Update: «Proclamation of Power»
 

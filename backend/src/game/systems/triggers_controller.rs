@@ -11,6 +11,7 @@ use crate::game::{
 
 use super::{skills_controller, skills_updater};
 
+#[derive(Debug)]
 pub struct TriggerContext<'a> {
     pub trigger: TriggeredEffect,
 

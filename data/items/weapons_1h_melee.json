@@ -241,7 +241,7 @@
         "stat": {
           "Damage": {
             "skill_type": null,
-            "skill_id": "open_wound_apply",
+            "skill_id": "open_wound",
             "skill_description": "Open Wound",
             "damage_type": null,
             "min_max": null,
@@ -358,7 +358,7 @@
           "stat": {
             "Damage": {
               "skill_type": null,
-              "skill_id": "open_wound_apply",
+              "skill_id": "open_wound",
               "skill_description": "Open Wound",
               "damage_type": null,
               "min_max": null,

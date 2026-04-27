@@ -95,10 +95,10 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
                 && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
-                && hit_trigger
-                    .is_triggered
-                    .unwrap_or(hit_event.trigger_id.is_some())
-                    == hit_event.trigger_id.is_some()
+                && compare_options(
+                    &hit_trigger.is_triggered,
+                    &Some(hit_event.trigger_id.is_some()),
+                )
                 && hit_trigger
                     .damage_type
                     .map(|damage_type| {

@@ -93,8 +93,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          50.0,
-          100.0
+          40.0,
+          80.0
         ],
         "ignore_quality": true
       },
@@ -115,8 +115,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          50.0,
-          100.0
+          40.0,
+          80.0
         ],
         "ignore_quality": true
       },
