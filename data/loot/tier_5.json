@@ -14,7 +14,7 @@
     },
     {
       "item_id": "brigandine_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "leather_gauntlets",
@@ -30,7 +30,7 @@
     },
     {
       "item_id": "bardiche_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "light_crossbow",
@@ -42,11 +42,15 @@
     },
     {
       "item_id": "decorated_wand_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "targe",
       "weight": 16000
+    },
+    {
+      "item_id": "throwing_shield",
+      "weight": 4999
     },
     {
       "item_id": "seer_lens",
@@ -62,15 +66,19 @@
     },
     {
       "item_id": "inlaid_ring_unique",
-      "weight": 500
+      "weight": 2499
     },
     {
       "item_id": "inlaid_ring_unique_2",
-      "weight": 500
+      "weight": 2499
     },
     {
       "item_id": "crest_pendant",
       "weight": 16000
+    },
+    {
+      "item_id": "jellyfish",
+      "weight": 4999
     },
     {
       "item_id": "edict",
@@ -89,7 +97,7 @@
     },
     {
       "item_id": "rune_poison_fire",
-      "weight": 50
+      "weight": 499
     }
   ]
 }

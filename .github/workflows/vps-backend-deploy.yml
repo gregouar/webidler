@@ -2,19 +2,18 @@ name: Backend
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - "main"
     paths:
-      [
-        "docker-compose.yml",
-        "backend/**",
-        "backend_shared/**",
-        "shared/**",
-        "nginx/**",
-        "data/**",
-        "profanities/**",
-        "migrations/**",
-        ".github/workflows/vps-backend-deploy.yml",
-      ]
+      - "docker-compose.yml"
+      - "backend/**"
+      - "backend_shared/**"
+      - "shared/**"
+      - "nginx/**"
+      - "data/**"
+      - "profanities/**"
+      - "migrations/**"
+      - ".github/workflows/vps-backend-deploy.yml"
 
 jobs:
   Pre-Build:
@@ -30,9 +29,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready"
-          --health-interval 10s
-          --health-timeout 5s
+          --health-cmd "pg_isready" --health-interval 10s --health-timeout 5s
           --health-retries 5
 
     env:

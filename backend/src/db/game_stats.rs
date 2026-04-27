@@ -2,10 +2,15 @@ use std::collections::HashMap;
 
 use anyhow;
 
-use indexmap::IndexSet;
+use indexmap::IndexMap;
 use sqlx::{FromRow, types::JsonValue};
 
-use shared::data::{item::ItemSlot, player::EquippedSlot, user::UserCharacterId};
+use shared::data::{
+    item::ItemSlot,
+    player::{EquippedSlot, PlayerBaseSkill},
+    realms::RealmId,
+    user::UserCharacterId,
+};
 
 use crate::{
     constants::DATA_VERSION, db::utc_datetime::UtcDateTime, game::game_data::GameInstanceData,
@@ -33,11 +38,13 @@ pub struct GameStatsEntry {
 pub async fn save_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
+    realm_id: &RealmId,
     game_instance_data: &GameInstanceData,
-) -> anyhow::Result<bool> {
+) -> anyhow::Result<()> {
     Ok(insert_game_stats(
         executor,
         character_id,
+        realm_id,
         &game_instance_data.area_id.clone(),
         game_instance_data.area_state.read().max_area_level as i32,
         game_instance_data
@@ -47,7 +54,7 @@ pub async fn save_game_stats<'c>(
         serde_json::to_value(&game_instance_data.game_stats)?,
         serde_json::to_value(&game_instance_data.player_inventory.read().equipped)?,
         serde_json::to_value(game_instance_data.passives_tree_state.read())?,
-        serde_json::to_value(&game_instance_data.player_specs.read().bought_skills)?,
+        serde_json::to_value(&game_instance_data.player_base_specs.read().skills)?,
     )
     .await?)
 }
@@ -56,6 +63,7 @@ pub async fn save_game_stats<'c>(
 async fn insert_game_stats<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
+    realm_id: &RealmId,
     area_id: &str,
     area_level: i32,
     elapsed_time: f64,
@@ -63,30 +71,13 @@ async fn insert_game_stats<'c>(
     items_data: JsonValue,
     passives_data: JsonValue,
     skills_data: JsonValue,
-) -> Result<bool, sqlx::Error> {
-    // For some reason, I need to count 0 instead of 1
-    // 1 = (
-    //     SELECT COUNT(*)
-    //     FROM game_stats gs
-    //     WHERE gs.area_id = $2
-    //         AND gs.data_version = $5
-    //         AND gs.area_level >= $3
-    //     )
-    let record = sqlx::query!(
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
         r#"
         INSERT INTO game_stats
             (character_id, area_id, area_level, elapsed_time, data_version,
-             stats_data, items_data, passives_data, skills_data)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        RETURNING
-        NOT EXISTS (
-        SELECT 1
-        FROM game_stats gs
-        WHERE gs.area_id = $2
-            AND gs.data_version = $5
-            AND gs.area_level >= $3
-        )
-        AS "is_highscore!: bool"
+             stats_data, items_data, passives_data, skills_data, realm_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         "#,
         character_id,
         area_id,
@@ -97,43 +88,13 @@ async fn insert_game_stats<'c>(
         items_data,
         passives_data,
         skills_data,
+        realm_id
     )
-    .fetch_one(executor)
+    .execute(executor)
     .await?;
 
-    Ok(record.is_highscore)
+    Ok(())
 }
-// async fn insert_game_stats<'c>(
-//     executor: impl DbExecutor<'c>,
-//     character_id: &UserCharacterId,
-//     area_id: &str,
-//     area_level: i32,
-//     elapsed_time: f64,
-//     stats_data: JsonValue,
-//     items_data: JsonValue,
-//     passives_data: JsonValue,
-//     skills_data: JsonValue,
-// ) -> Result<(), sqlx::Error> {
-//     sqlx::query!(
-//         "INSERT INTO game_stats
-//             (character_id, area_id, area_level, elapsed_time, data_version, stats_data, items_data, passives_data, skills_data)
-//             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-//         ",
-//         character_id,
-//         area_id,
-//         area_level,
-//         elapsed_time,
-//         DATA_VERSION,
-//         stats_data,
-//         items_data,
-//         passives_data,
-//         skills_data,
-//     )
-//     .execute(executor)
-//     .await?;
-
-//     Ok(())
-// }
 
 pub async fn load_last_game_stats<'c>(
     executor: impl DbExecutor<'c>,
@@ -141,7 +102,7 @@ pub async fn load_last_game_stats<'c>(
 ) -> anyhow::Result<
     Option<(
         Option<HashMap<ItemSlot, EquippedSlot>>,
-        Option<IndexSet<String>>,
+        Option<IndexMap<String, PlayerBaseSkill>>,
     )>,
 > {
     let game_stats_data = read_last_game_stats(executor, character_id).await?;

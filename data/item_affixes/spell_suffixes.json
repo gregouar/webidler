@@ -2,180 +2,180 @@
   {
     "name": "of the Vocalist",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [5, 7]
+        "value": [ 5, 7 ]
       }
     ]
   },
   {
     "name": "of the Caroler",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [8, 10]
+        "value": [ 8, 10 ]
       }
     ]
   },
   {
     "name": "of the Singer",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [11, 13]
+        "value": [ 11, 13 ]
       }
     ]
   },
   {
     "name": "of the Chantress",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [14, 16]
+        "value": [ 14, 16 ]
       }
     ]
   },
   {
     "name": "of the Maestro",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [17, 19]
+        "value": [ 17, 19 ]
       }
     ]
   },
   {
     "name": "of the Virtuoso",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [20, 22]
+        "value": [ 20, 22 ]
       }
     ]
   },
   {
     "name": "of the Conductor",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [23, 25]
+        "value": [ 23, 25 ]
       }
     ]
   },
   {
     "name": "of the Sinfonietta",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
     "weight": 700,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [26, 28]
+        "value": [ 26, 28 ]
       }
     ]
   },
   {
     "name": "of the Orchestra",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
     "weight": 600,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [29, 31]
+        "value": [ 29, 31 ]
       }
     ]
   },
   {
     "name": "of the Symphony",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
     "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [32, 34]
+        "value": [ 32, 34 ]
       }
     ]
   },
@@ -183,180 +183,180 @@
   {
     "name": "of Fluctuation",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [20, 25]
+        "value": [ 20, 25 ]
       }
     ]
   },
   {
     "name": "of Mutability",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [30, 35]
+        "value": [ 30, 35 ]
       }
     ]
   },
   {
     "name": "of Flux",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [40, 45]
+        "value": [ 40, 45 ]
       }
     ]
   },
   {
     "name": "of Instability",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [50, 55]
+        "value": [ 50, 55 ]
       }
     ]
   },
   {
     "name": "of Chaos",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 500,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [60, 65]
+        "value": [ 60, 65 ]
       }
     ]
   },
   {
     "name": "of Turbulence",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 450,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [70, 75]
+        "value": [ 70, 75 ]
       }
     ]
   },
   {
     "name": "of Aberration",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 400,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [80, 85]
+        "value": [ 80, 85 ]
       }
     ]
   },
   {
     "name": "of Uncertainty",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 350,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "weight": 200,
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [90, 95]
+        "value": [ 90, 95 ]
       }
     ]
   },
   {
     "name": "of Anomaly",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 300,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "weight": 100,
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [100, 105]
+        "value": [ 100, 105 ]
       }
     ]
   },
   {
     "name": "of Pandemonium",
     "family": "inc_spell_crit_chance",
-    "tags": ["Spell", "Critical"],
+    "tags": [ "Spell", "Critical" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 250,
-    "restrictions": ["SpellWeapon", "Focus"],
+    "weight": 50,
+    "restrictions": [ "SpellWeapon", "Focus" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
+        "stat": { "CritChance": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [110, 120]
+        "value": [ 110, 120 ]
       }
     ]
   }

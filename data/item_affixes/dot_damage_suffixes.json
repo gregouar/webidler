@@ -149,7 +149,7 @@
         "tags": [ "Attack", "Status" ],
         "affix_type": "Suffix",
         "tier": 9,
-        "weight": 150,
+        "weight": 100,
         "restrictions": [ "AttackWeapon" ],
         "item_level": 500,
         "effects": [
@@ -167,7 +167,7 @@
         "tags": [ "Attack", "Status" ],
         "affix_type": "Suffix",
         "tier": 10,
-        "weight": 100,
+        "weight": 50,
         "restrictions": [ "AttackWeapon" ],
         "item_level": 600,
         "effects": [

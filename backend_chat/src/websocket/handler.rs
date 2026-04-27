@@ -9,7 +9,7 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
-use backend_shared::http::users::{GetUserDetailsResponse, User};
+use backend_shared::http::users::{GetUserDetailsResponse, UserDetails};
 use shared_chat::messages::{
     client::{ClientChatMessage, ClientConnectMessage},
     server::{ErrorMessage, ErrorType},
@@ -118,16 +118,16 @@ async fn wait_for_connect(
 }
 
 async fn handle_connect(app_state: &AppState, msg: ClientConnectMessage) -> Result<ChatSession> {
-    let user = authorize_jwt(&app_state.app_settings, &msg.jwt).await?;
-    tracing::info!("connect: {}", user.user_id);
-    Ok(ChatSession::new(app_state.chat_state.clone(), user))
+    let user_details = authorize_jwt(&app_state.app_settings, &msg.jwt).await?;
+    tracing::info!("connect: {}", user_details.user.user_id);
+    Ok(ChatSession::new(app_state.chat_state.clone(), user_details))
 }
 
 // async fn handle_disconnect<'a>(session: ChatSession<'a>) -> Result<()> {
 //     Ok(())
 // }
 
-async fn authorize_jwt(app_settings: &AppSettings, token: &str) -> anyhow::Result<User> {
+async fn authorize_jwt(app_settings: &AppSettings, token: &str) -> anyhow::Result<UserDetails> {
     let res = reqwest::Client::new()
         .get(format!("{}/account/me", app_settings.backend_url))
         .header("Authorization", format!("Bearer {}", token))
@@ -140,9 +140,5 @@ async fn authorize_jwt(app_settings: &AppSettings, token: &str) -> anyhow::Resul
         anyhow::bail!("Server API error: {}", err);
     }
 
-    Ok(res
-        .json::<GetUserDetailsResponse>()
-        .await?
-        .user_details
-        .user)
+    Ok(res.json::<GetUserDetailsResponse>().await?.user_details)
 }

@@ -2,180 +2,180 @@
   {
     "name": "Harmful",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [25, 45]
+        "value": [ 25, 45 ]
       }
     ]
   },
   {
     "name": "Dangerous",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [55, 70]
+        "value": [ 55, 70 ]
       }
     ]
   },
   {
     "name": "Grievous",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [80, 95]
+        "value": [ 80, 95 ]
       }
     ]
   },
   {
     "name": "Lethal",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [105, 120]
+        "value": [ 105, 120 ]
       }
     ]
   },
   {
     "name": "Mortal",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [130, 145]
+        "value": [ 130, 145 ]
       }
     ]
   },
   {
     "name": "Deadly",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [155, 170]
+        "value": [ 155, 170 ]
       }
     ]
   },
   {
     "name": "Fatal",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Jewelry"],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [180, 195]
+        "value": [ 180, 195 ]
       }
     ]
   },
   {
     "name": "Grim",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Jewelry"],
+    "weight": 400,
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [205, 220]
+        "value": [ 205, 220 ]
       }
     ]
   },
   {
     "name": "Terrible",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Jewelry"],
+    "weight": 200,
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [230, 250]
+        "value": [ 230, 250 ]
       }
     ]
   },
   {
     "name": "Terminal",
     "family": "inc_crit_damage",
-    "tags": ["Attack", "Critical"],
+    "tags": [ "Attack", "Critical" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Jewelry"],
+    "weight": 100,
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "CritDamage": null },
+        "stat": { "CritDamage": { } },
         "modifier": "More",
-        "value": [260, 300]
+        "value": [ 260, 300 ]
       }
     ]
   }

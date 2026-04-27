@@ -28,9 +28,11 @@ pub async fn sync_init_game(
                 passives_tree_specs: game_data.passives_tree_specs.clone(),
                 passives_tree_state: game_data.passives_tree_state.read().clone(),
                 passives_tree_build,
+                player_base_specs: game_data.player_base_specs.read().clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
                 last_skills_bought,
+                auto_skills: game_data.player_controller.auto_skills.clone(),
             }
             .into(),
         )
@@ -48,6 +50,7 @@ pub async fn sync_update_game(
                 area_state: game_data.area_state.sync(),
                 area_threat: game_data.area_threat.clone(),
                 passives_tree_state: game_data.passives_tree_state.sync(),
+                player_base_specs: game_data.player_base_specs.sync(),
                 player_specs: game_data.player_specs.sync(),
                 player_inventory: game_data.player_inventory.sync(),
                 player_state: game_data.player_state.clone(),

@@ -11,6 +11,7 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
+        settings::{GraphicsQuality, SettingsContext},
         shared::tooltips::{conditions_tooltip, effects_tooltip, trigger_tooltip},
         ui::{
             number::format_number,
@@ -32,19 +33,20 @@ pub fn CharacterPortrait(
     #[prop(into)] statuses: Signal<StatusMap>,
     // enable_blink: bool,
 ) -> impl IntoView {
-    let is_dead_img_effect = move || {
+    let settings: SettingsContext = expect_context();
+    let heavy_effects = move || settings.uses_heavy_effects();
+    let is_dead_portrait_effect = move || {
         if is_dead.get() {
-            "transition-all duration-1000 saturate-0 brightness-50
-            [transform:rotateY(180deg)]"
+            "transition-[filter,opacity] duration-1000 saturate-0 brightness-50"
         } else {
-            "transition-all duration-1000"
+            "transition-[filter,opacity] duration-1000"
         }
     };
 
     let crit_hit = RwSignal::new(false);
 
     Effect::new(move |_| {
-        if just_hurt_crit.get() {
+        if just_hurt_crit.get() && settings.read_settings().shake_on_crit {
             crit_hit.set(true);
             set_timeout(move || crit_hit.set(false), Duration::from_millis(500));
         }
@@ -129,30 +131,82 @@ pub fn CharacterPortrait(
     //     ),
     // };
 
-    let (border_class, shimmer_effect) = match rarity {
+    let (accent_class, shimmer_effect, fixture_class) = match rarity {
         MonsterRarity::Normal => (
             "
-            shadow-[0_0_0_2px_#78716c,0_0_0_4px_#2e2926,0_0_0_6px_#78716c]
-            xl:shadow-[0_0_0_3px_#78716c,0_0_0_6px_#2e2926,0_0_0_8px_#78716c]
+            border-[#7f6744]
+            before:border-[#d0b173]/12
+            after:border-[#5a4427]/45
             ",
             "",
+            "
+            border-[#b89458]
+            bg-[linear-gradient(180deg,rgb(214,184,126),rgb(111,78,33))]
+            ",
         ),
 
         MonsterRarity::Champion => (
             "
-            shadow-[0_0_0_2px_#4338ca,0_0_0_4px_#1e1b4b,0_0_0_6px_#4338ca]
-            xl:shadow-[0_0_0_3px_#4338ca,0_0_0_6px_#1e1b4b,0_0_0_8px_#4338ca]
+            border-[#4f5fbe]
+            before:border-[#97a7ff]/14
+            after:border-[#2c356d]/55
             ",
             "champion-shimmer",
+            "
+            border-[#7a87d8]
+            bg-[linear-gradient(180deg,rgb(154,170,255),rgb(57,69,137))]
+            ",
         ),
 
         MonsterRarity::Boss => (
             "
-            shadow-[0_0_0_2px_#b91c1c,0_0_0_4px_#2b0a0a,0_0_0_8px_#b91c1c]
-            xl:shadow-[0_0_0_4px_#b91c1c,0_0_0_9px_#2b0a0a,0_0_0_12px_#b91c1c]
+            border-[#ab473c]
+            before:border-[#f2a18c]/20
+            after:border-[#6d2119]/60
             ",
             "boss-shimmer",
+            "
+            border-[#d77a68]
+            bg-[linear-gradient(180deg,rgb(247,167,145),rgb(116,38,30))]
+            ",
         ),
+    };
+
+    let portrait_frame_class = move || {
+        match settings.graphics_quality() {
+            /*shadow-[0_6px_12px_rgba(0,0,0,0.34),0_1px_0_rgba(23,15,8,0.82),inset_0_1px_0_rgba(243,221,173,0.12),inset_0_-1px_0_rgba(0,0,0,0.2)]*/
+            GraphicsQuality::High => format!(
+                "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            shadow-[0_2px_8px_rgba(0,0,0,0.28)]
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+                accent_class,
+            ),
+            GraphicsQuality::Medium => format!(
+                "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+                accent_class,
+            ),
+            GraphicsQuality::Low => format!(
+                "w-full h-full relative isolate
+            border-[1.5px] xl:border-2
+            before:pointer-events-none before:absolute before:inset-[1px]
+            before:border 
+            after:pointer-events-none after:absolute after:inset-[4px]
+            after:border-[1px]
+            {}",
+                accent_class,
+            ),
+        }
     };
 
     // let (hit_signal, set_hit_signal) = signal(false);
@@ -170,36 +224,154 @@ pub fn CharacterPortrait(
     //     }
     // });
 
-    view! {
-        <style>"color: #2e2926;"</style>
-        <div class=move || {
+    let activate_bleeding = RwSignal::new(false);
+    let is_bleeding = Memo::new(move |_| {
+        active_debuffs.read().contains(&StatusId::DamageOverTime {
+            damage_type: DamageType::Physical,
+        })
+    });
+    Effect::new(move || {
+        if is_bleeding.get() {
+            activate_bleeding.set(true)
+        }
+    });
+
+    let activate_burning = RwSignal::new(false);
+    let is_burning = Memo::new(move |_| {
+        active_debuffs.read().contains(&StatusId::DamageOverTime {
+            damage_type: DamageType::Fire,
+        })
+    });
+    Effect::new(move || {
+        if is_burning.get() {
+            activate_burning.set(true)
+        }
+    });
+
+    let activate_poisoned = RwSignal::new(false);
+    let is_poisoned = Memo::new(move |_| {
+        active_debuffs.read().contains(&StatusId::DamageOverTime {
+            damage_type: DamageType::Poison,
+        })
+    });
+    Effect::new(move || {
+        if is_poisoned.get() {
+            activate_poisoned.set(true)
+        }
+    });
+
+    let dot_overlay_class = move |blend_class: &'static str| {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 transition-opacity duration-500 opacity-0 pointer-events-none"
+                .to_string()
+        } else {
             format!(
-                "flex items-center justify-center h-full w-full relative p-1 xl:p-2 {}",
-                is_dead_img_effect(),
+                "absolute inset-0 transition-opacity duration-500 opacity-0 {} pointer-events-none",
+                blend_class,
             )
-        }>
-            <div class=format!("h-full w-full {}", border_class) style=crit_animation_style>
+        }
+    };
+
+    let bleed_overlay_class = move || {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 bg-[linear-gradient(to_bottom,rgba(150,0,0,0.52)_0%,rgba(150,0,0,0.24)_18%,rgba(150,0,0,0)_42%)]"
+        } else {
+            "absolute inset-0 status-bleed"
+        }
+    };
+
+    let burn_overlay_class = move || {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 bg-[linear-gradient(to_right,rgba(255,90,0,0.34)_0%,rgba(255,90,0,0.10)_18%,rgba(255,90,0,0.10)_82%,rgba(255,90,0,0.34)_100%)]"
+        } else {
+            "absolute inset-0 status-burn"
+        }
+    };
+
+    let poison_overlay_class = move || {
+        if matches!(settings.graphics_quality(), GraphicsQuality::Low) {
+            "absolute inset-0 bg-[linear-gradient(to_top,rgba(64,120,0,0.48)_0%,rgba(28,120,0,0.22)_22%,rgba(0,120,0,0)_46%)]"
+        } else {
+            "absolute inset-0 status-poison"
+        }
+    };
+
+    view! {
+        <div
+            class=move || {
+                format!(
+                    "flex items-center justify-center h-full w-full relative p-1 xl:p-2
+                overflow-clip {}",
+                    is_dead_portrait_effect(),
+                )
+            }
+            style="contain: layout paint style;"
+        >
+            <div class=portrait_frame_class style=crit_animation_style>
+                // <Show when=move || settings.uses_heavy_effects()>
+                // <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
+                // // <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
+                // </Show>
                 <div
-                    class="h-full w-full relative xl:shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]"
-                    style=format!(
-                        "background-image: url('{}');",
-                        img_asset("ui/paper_background.webp"),
-                    )
+                    class=move || {
+                        format!(
+                            "h-full z-0 overflow-clip border border-black/40 bg-[#1c1714] {}",
+                            if heavy_effects() {
+                                "shadow-[inset_0_1px_0_rgba(255,241,208,0.04),inset_0_0_8px_rgba(0,0,0,0.24)]"
+                            } else {
+                                ""
+                            },
+                        )
+                    }
+                    style=move || {
+                        if settings.uses_textures() {
+                            format!(
+                                "
+                                background-image: url('{}');
+                                background-size: cover;
+                                background-position: center;
+                                ",
+                                img_asset("ui/paper_background.webp"),
+                            )
+                        } else {
+                            "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"
+                                .to_string()
+                        }
+                    }
                 >
+                    <div class="pointer-events-none absolute inset-0 border-[2px] xl:border-[3px] border-[#2a1e19]/68"></div>
+                    // <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
                     <img
                         draggable="false"
                         src=img_asset(&image_uri)
                         alt=character_name
                         class=move || {
                             format!(
-                                "object-cover h-full w-full transition-all duration-[5s] {} ",
-                                if is_dead.get() { "opacity-50 " } else { "" },
+                                "object-cover h-full w-full
+                                [transition:transform_1s,opacity_5s]
+                                {}
+                                {}",
+                                if settings.uses_heavy_effects() {
+                                    "xl:drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]"
+                                } else {
+                                    ""
+                                },
+                                if is_dead.get() {
+                                    "opacity-50 [transform:rotateY(180deg)]"
+                                } else {
+                                    ""
+                                },
                             )
                         }
                     />
+
+                    // /////////
                     // class:hit-blink=hit_signal
 
-                    <div class="absolute inset-0 flex flex-wrap items-start justify-start pointer-events-none">
+                    <div
+                        class="absolute inset-0 flex flex-wrap content-start justify-start pointer-events-none"
+                        style="contain: paint;"
+                    >
                         <For
                             each=move || { active_debuffs.get().into_iter() }
                             key=|k| k.clone()
@@ -217,7 +389,10 @@ pub fn CharacterPortrait(
                         </For>
                     </div>
 
-                    <div class="absolute inset-0 flex flex-wrap items-end justify-start pointer-events-none">
+                    <div
+                        class="absolute inset-0 flex flex-wrap-reverse content-start justify-start pointer-events-none"
+                        style="contain: paint;"
+                    >
                         <For
                             each=move || { active_buffs.get().into_iter() }
                             key=|k| k.clone()
@@ -236,53 +411,88 @@ pub fn CharacterPortrait(
                     </div>
                 </div>
 
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-multiply  pointer-events-none"
-                    class:opacity-100=move || {
-                        active_debuffs
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Physical,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-bleed"></div>
-                </div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                         rotate-315 border {} {}",
+                        if settings.uses_heavy_effects() {
+                            "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
+                        } else {
+                            ""
+                        },
+                        fixture_class,
+                    )
+                }></div>
 
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-color-burn  pointer-events-none"
-                    class:opacity-100=move || {
-                        active_debuffs
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Fire,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-burn"></div>
-                </div>
+                <Show when=move || activate_bleeding.get()>
+                    <div
+                        class=move || dot_overlay_class("mix-blend-multiply")
+                        class:opacity-100=move || is_bleeding.get()
+                        style="contain: paint;"
+                    >
+                        <div class=bleed_overlay_class></div>
+                    </div>
+                </Show>
 
-                <div
-                    class="absolute inset-0 transition-opacity duration-500 opacity-0 mix-blend-hard-light  pointer-events-none"
-                    class:opacity-100=move || {
-                        active_debuffs
-                            .read()
-                            .contains(
-                                &StatusId::DamageOverTime {
-                                    damage_type: DamageType::Poison,
-                                },
-                            )
-                    }
-                >
-                    <div class="absolute inset-0 status-poison"></div>
-                </div>
+                <Show when=move || activate_burning.get()>
+                    <div
+                        class=move || dot_overlay_class("mix-blend-color-burn")
+                        class:opacity-100=move || is_burning.get()
+                        style="contain: paint;"
+                    >
+                        <div class=burn_overlay_class></div>
+                    </div>
+                </Show>
+
+                <Show when=move || activate_poisoned.get()>
+                    <div
+                        class=move || dot_overlay_class("mix-blend-hard-light")
+                        class:opacity-100=move || is_poisoned.get()
+                        style="contain: paint;"
+                    >
+                        <div class=poison_overlay_class></div>
+                    </div>
+                </Show>
 
                 {move || {
-                    (!is_dead.get() && !shimmer_effect.is_empty())
+                    (!is_dead.get() && !shimmer_effect.is_empty()
+                        && settings.uses_surface_effects())
                         .then(|| {
                             view! {
                                 <div class=format!("absolute inset-0  {}", shimmer_effect)></div>
@@ -311,9 +521,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/block.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_block_effect.set(false)
-                                style="animation: shield_flash 0.5s ease-out;
-                                image-rendering: pixelated; will-change: transform, opacity;
-                                "
+                                style="animation: shield_flash 0.5s ease-out;"
                             />
                         },
                     )
@@ -331,9 +539,7 @@ pub fn CharacterPortrait(
                                 src=img_asset("effects/evade.svg")
                                 class="absolute inset-0 w-object-contain pointer-events-none"
                                 on:animationend=move |_| show_evade_effect.set(false)
-                                style="animation: evade_flash 0.5s;
-                                image-rendering: pixelated; will-change: transform, opacity;
-                                "
+                                style="animation: evade_flash 0.5s;"
                             />
                         },
                     )
@@ -350,7 +556,16 @@ fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
         Some(status_specs) => match status_specs {
             StatusSpecs::Stun => true,
             StatusSpecs::DamageOverTime { .. } => true,
-            StatusSpecs::StatModifier { debuff, .. } => *debuff,
+            StatusSpecs::StatModifier { debuff, stat, .. } => {
+                if matches!(
+                    stat,
+                    StatType::BlockDamageTaken | StatType::EvadeDamageTaken
+                ) {
+                    !*debuff
+                } else {
+                    *debuff
+                }
+            }
             StatusSpecs::Trigger(trigger_specs) => {
                 trigger_specs.is_debuff
                     || matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
@@ -385,9 +600,10 @@ fn StatusIcon(
                 } => match stat {
                     StatType::LifeRegen => "passives/life_regen.svg".into(),
                     StatType::Damage {
-                        skill_type,
+                        skill_filter,
                         damage_type,
                         min_max,
+                        is_hit: _,
                     } => {
                         if let Some(damage_type) = damage_type {
                             match damage_type {
@@ -396,7 +612,7 @@ fn StatusIcon(
                                 DamageType::Poison => "passives/scorpion_tail.svg".into(),
                                 DamageType::Storm => "passives/storm_damage.svg".into(),
                             }
-                        } else if let Some(skill_type) = skill_type {
+                        } else if let Some(skill_type) = skill_filter.skill_type {
                             match skill_type {
                                 SkillType::Attack => "passives/attack.svg".into(),
                                 SkillType::Spell => "passives/spell.svg".into(),
@@ -426,9 +642,9 @@ fn StatusIcon(
                         ..
                     } => "statuses/stun_immune.svg".into(),
                     StatType::SuccessChance {
-                        skill_type,
+                        skill_filter,
                         effect_type,
-                    } => match (skill_type, effect_type) {
+                    } => match (skill_filter.skill_type, effect_type) {
                         (
                             _,
                             Some(StatSkillEffectType::ApplyStatus {
@@ -440,6 +656,8 @@ fn StatusIcon(
                         ) => "passives/smoking_finger.svg".into(),
                         _ => "passives/success.svg".into(),
                     },
+                    StatType::BlockDamageTaken => "statuses/shield_impact.svg".to_string(),
+                    StatType::EvadeDamageTaken => "statuses/falling.svg".to_string(),
                     StatType::GoldFind => "passives/gold.svg".to_string(),
                     StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
                     _ => "statuses/buff.svg".to_string(),
@@ -453,6 +671,8 @@ fn StatusIcon(
                     }
                     StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
                     StatType::Speed(_) => "statuses/slow.svg".to_string(),
+                    StatType::Block(_) => "statuses/shield_impact.svg".to_string(),
+                    StatType::Evade(_) => "statuses/falling.svg".to_string(),
                     StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
                     _ => "statuses/debuff.svg".to_string(),
                 },
@@ -486,7 +706,7 @@ fn StatusIcon(
                     draggable="false"
                     src=move || img_asset(&icon_uri())
                     alt=description
-                    class="w-full h-full xl:drop-shadow-md invert"
+                    class="w-full h-full xl:drop-shadow-sm/80 invert"
                 />
                 <Show when=move || { stack.read().0 > 1 }>
                     <div class="absolute bottom-0 right-0 text-xs font-bold text-white bg-black/50 rounded leading-tight px-1">
@@ -507,7 +727,7 @@ pub fn status_description(
         StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
         StatusId::DamageOverTime { damage_type } => {
             format!(
-                "{} for {} Damage per second",
+                "{} for {} Damage per Second",
                 conditions_tooltip::damaged_over_time_str(Some(*damage_type)),
                 format_number(value)
             )

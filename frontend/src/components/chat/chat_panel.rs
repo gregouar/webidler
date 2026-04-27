@@ -8,14 +8,21 @@ use leptos::{
 };
 use leptos_use::use_resize_observer;
 
-use shared::data::item::ItemSpecs;
+use shared::data::{badges::UserBadge, item::ItemSpecs};
 use shared_chat::types::{ChatChannel, ChatMessage};
 
-use crate::components::{
-    chat::chat_context::ChatContext,
-    events::{EventsContext, Key},
-    shared::tooltips::{ItemTooltip, item_tooltip},
-    ui::{checkbox::Checkbox, number::format_datetime, tooltip::DynamicTooltipTarget},
+use crate::{
+    assets::img_asset,
+    components::{
+        chat::chat_context::ChatContext,
+        events::{EventsContext, Key},
+        shared::tooltips::{ItemTooltip, item_tooltip},
+        ui::{
+            checkbox::Checkbox,
+            number::format_datetime,
+            tooltip::{DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition},
+        },
+    },
 };
 
 #[component]
@@ -379,7 +386,14 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
 
     view! {
-        <div class="text-sm" title=format!("Sent at {}", format_datetime(msg.sent_at))>
+        <div class="text-sm flex" title=format!("Sent at {}", format_datetime(msg.sent_at))>
+            {msg
+                .chat_badge
+                .as_ref()
+                .and_then(|chat_badge| serde_plain::from_str(chat_badge).ok())
+                .map(|badge| {
+                    view! { <ChatBadge badge /> }
+                })}
             <span
                 class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
                 on:click=move |_| {
@@ -401,8 +415,41 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                 .map(|item_specs: ItemSpecs| {
                     view! { <ChatItem item_specs=Arc::new(item_specs) /> }
                 })}
-            <span class="text-gray-200 select-text">{msg.content.into_inner()}</span>
+            <span class="text-gray-200 select-text">{msg.content}</span>
         </div>
+    }
+}
+
+#[component]
+fn ChatBadge(badge: UserBadge) -> impl IntoView {
+    let (src, badge_title, badge_description) = match badge {
+        UserBadge::Developer => (
+            "badge_dev",
+            "Developer",
+            "Please don't yell at him if everything is broken.",
+        ),
+        UserBadge::WitchHunter => (
+            "badge_witch",
+            "Witch Hunter",
+            "This player killed Amelia, the Broodborne Witch.",
+        ),
+    };
+
+    let src = img_asset(&format!("badges/{}.webp", src));
+
+    let tooltip = move || {
+        view! {
+            <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
+                <div class="font-semibold text-white">{badge_title}</div>
+                <div class="text-sm text-zinc-300">{badge_description}</div>
+            </div>
+        }
+    };
+
+    view! {
+        <StaticTooltip position=StaticTooltipPosition::Right tooltip>
+            <img src=src alt=badge_title class="h-[32px] mr-1 aspect-square" />
+        </StaticTooltip>
     }
 }
 

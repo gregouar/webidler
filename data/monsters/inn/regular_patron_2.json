@@ -1,0 +1,28 @@
+{
+    "name": "Regular Patron",
+    "portrait": "monsters/inn/regular_patron_2.webp",
+    "max_life": 8,
+    "power_factor": 1.5,
+    "armor": { "Poison": 50 },
+    "skills": [
+        {
+            "name": "Mug You",
+            "icon": "skills/attack.svg",
+            "cooldown": 2.0,
+            "skill_type": "Attack",
+            "targets": [
+                {
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": {
+                                    "Physical": [ 4, 6 ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

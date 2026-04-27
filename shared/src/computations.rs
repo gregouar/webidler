@@ -5,8 +5,8 @@ use crate::{
     },
     data::{
         area::{AreaLevel, AreaState},
-        player::PlayerSpecs,
-        skill::SkillSpecs,
+        item::ItemSpecs,
+        player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
 };
@@ -23,12 +23,12 @@ pub fn diminishing(amount: f64, factor: f64) -> f64 {
     amount / (amount + factor)
 }
 
-pub fn skill_cost_increase(skill_specs: &SkillSpecs) -> f64 {
-    skill_specs.next_upgrade_cost
-        + (10.0 * exponential(skill_specs.upgrade_level, SKILL_COST_INCREASE_FACTOR)).round()
+pub fn skill_cost_increase(player_base_skill: &PlayerBaseSkill) -> f64 {
+    player_base_skill.next_upgrade_cost
+        + (10.0 * exponential(player_base_skill.upgrade_level, SKILL_COST_INCREASE_FACTOR)).round()
 }
 
-pub fn player_level_up_cost(player_specs: &PlayerSpecs) -> f64 {
+pub fn player_level_up_cost(player_specs: &PlayerBaseSpecs) -> f64 {
     (20.0 * exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR)).round()
 }
 
@@ -67,4 +67,19 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
         stash_price.start_size + stash_price.upgrade_size.saturating_mul(next_stash_level),
         next_stash_price,
     )
+}
+
+pub fn gamble_price(item_level: AreaLevel) -> f64 {
+    (item_level as f64 / 20.0).floor() + 10.0
+}
+
+pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
+    item_specs
+        .base
+        .upgrade_levels
+        .get(item_specs.modifiers.upgrade_level as usize)
+        .and_then(|next_upgrade_level| {
+            (*next_upgrade_level <= item_specs.modifiers.level)
+                .then_some((*next_upgrade_level + item_specs.base.min_area_level) as f64)
+        })
 }

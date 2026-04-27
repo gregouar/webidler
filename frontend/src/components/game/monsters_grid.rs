@@ -4,10 +4,10 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use rand::Rng;
+use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
-use shared::data::player::CharacterSpecs;
 use shared::data::skill::{DamageType, SkillType};
-use shared::data::stat_effect::StatStatusType;
+use shared::data::stat_effect::{StatSkillFilter, StatStatusType};
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 use strum::IntoEnumIterator;
 
@@ -15,6 +15,8 @@ use crate::assets::img_asset;
 use crate::components::icons::monster_tags::{
     ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
 };
+use crate::components::settings::{GraphicsQuality, SettingsContext};
+use crate::components::shared::skills::SkillProgressBar;
 use crate::components::shared::tooltips::effects_tooltip;
 use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
 use crate::components::ui::progress_bars::predictive_cooldown;
@@ -22,7 +24,7 @@ use crate::components::{
     shared::tooltips::SkillTooltip,
     ui::{
         number::format_number,
-        progress_bars::{CircularProgressBar, HorizontalProgressBar},
+        progress_bars::HorizontalProgressBar,
         tooltip::{
             DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
         },
@@ -67,43 +69,63 @@ pub fn MonstersGrid() -> impl IntoView {
 
     view! {
         <div class=move || {
+            let animation_class = if all_monsters_dead.get() {
+                "animate-monster-fade-out pointer-events-none"
+            } else if flee.get() {
+                "animate-monster-flee pointer-events-none"
+            } else if !game_context.monster_states.read().is_empty() {
+                "animate-monster-fade-in"
+            } else {
+                ""
+            };
             format!(
                 "flex-1 min-h-0
-                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2 
-                items-center
-                {} will-change-transform-opacity
+                grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
+                items-center 
+                will-change-transform-opacity transform-gpu
+                {}
                 ",
-                if all_monsters_dead.get() {
-                    "animate-monster-fade-out pointer-events-none"
-                } else if flee.get() {
-                    "animate-monster-flee pointer-events-none"
-                } else if !game_context.monster_states.read().is_empty() {
-                    "animate-monster-fade-in"
-                } else {
-                    ""
-                },
+                animation_class,
             )
         }>
             <For
-                each=move || game_context.monster_specs.get().into_iter().enumerate()
-                key=move |(index, _)| (game_context.monster_wave.get(), *index)
-                children=move |(index, specs)| {
-                    let (x_size, y_size) = specs.character_specs.size.get_xy_size();
-                    let (x_pos, y_pos) = (
-                        specs.character_specs.position_x,
-                        specs.character_specs.position_y,
-                    );
-
+                each=move || 0..6
+                key=|index| *index
+                children=move |index| {
                     view! {
-                        <div class=format!(
-                            "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full ",
-                            x_size,
-                            y_size,
-                            x_pos,
-                            y_pos,
-                        )>
-                            <MonsterCard specs=specs index=index />
-                        </div>
+                        <Show when=move || {
+                            game_context.monster_specs.read().get(index).is_some()
+                        }>
+                            {move || {
+                                let specs = game_context
+                                    .monster_specs
+                                    .read()
+                                    .get(index)
+                                    .cloned()
+                                    .expect("checked by Show");
+                                let (x_size, y_size) = specs
+                                    .character_specs
+                                    .character_static
+                                    .size
+                                    .get_xy_size();
+                                let (x_pos, y_pos) = (
+                                    specs.character_specs.character_static.position_x,
+                                    specs.character_specs.character_static.position_y,
+                                );
+
+                                view! {
+                                    <div class=format!(
+                                        "col-span-{} row-span-{} col-start-{} row-start-{} items-center h-full ",
+                                        x_size,
+                                        y_size,
+                                        x_pos,
+                                        y_pos,
+                                    )>
+                                        <MonsterCard specs=specs index=index />
+                                    </div>
+                                }
+                            }}
+                        </Show>
                     }
                 }
             />
@@ -172,11 +194,57 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 }
 
 #[component]
-fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+fn MonsterFeedbackOverlay(
+    damage_ticks: ArcRwSignal<Vec<DamageTick>>,
+    gold_reward: RwSignal<f64>,
+    gems_reward: RwSignal<f64>,
+) -> impl IntoView {
+    view! {
+        <div class="absolute inset-0 z-30 pointer-events-none" style="contain: paint;">
+            <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
+                <DamageNumber tick />
+            </For>
 
-    let monster_name = specs.character_specs.name.clone();
-    let is_big = match specs.character_specs.size {
+            <Show when=move || { gold_reward.get() > 0.0 }>
+                <div class="
+                reward-float gold-text text-amber-400 text:lg xl:text-2xl text-shadow-md
+                absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number">
+                    <span>+{format_number(gold_reward.get())}</span>
+                    <img
+                        draggable="false"
+                        src=img_asset("ui/gold.webp")
+                        alt="Gold"
+                        class="h-[2em] aspect-square"
+                    />
+                </div>
+            </Show>
+
+            <Show when=move || { gems_reward.get() > 0.0 }>
+                <div class="
+                reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md
+                absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number">
+                    <span>+{format_number(gems_reward.get())}</span>
+                    <img
+                        draggable="false"
+                        src=img_asset("ui/gems.webp")
+                        alt="Gems"
+                        class="h-[1.2em] aspect-square"
+                    />
+                </div>
+            </Show>
+        </div>
+    }
+}
+
+#[component]
+fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
+    let game_context: GameContext = expect_context();
+    let settings: SettingsContext = expect_context();
+
+    let monster_name = specs.character_specs.character_static.name.clone();
+    let is_big = match specs.character_specs.character_static.size {
         CharacterSize::Small | CharacterSize::Large | CharacterSize::Tall => false,
         CharacterSize::Huge | CharacterSize::Gargantuan => true,
     };
@@ -230,7 +298,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     let damage_ticks = ArcRwSignal::new(Vec::new());
     let dot_tick = ArcRwSignal::new(None);
 
-    let mut old_life = specs.character_specs.max_life.get();
+    let mut old_life = specs.character_specs.character_attrs.max_life.get();
     let life = RwSignal::new(old_life);
 
     Effect::new({
@@ -327,12 +395,12 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(specs.character_specs.max_life.get())}
+            {format_number(specs.character_specs.character_attrs.max_life.get())}
         }
     };
 
     let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.max_life.get();
+        let max_life = specs.character_specs.character_attrs.max_life.get();
         if max_life > 0.0 {
             (life.get() / max_life * 100.0) as f32
         } else {
@@ -373,33 +441,63 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         MonsterRarity::Boss => "boss-title xl:text-base font-display",
     };
 
-    let x_size = specs.character_specs.size.get_xy_size().0;
+    let x_size = specs.character_specs.character_static.size.get_xy_size().0;
     let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
 
     view! {
         <div
-            class="grid grid-cols-4 h-full
-            rounded-md bg-zinc-800
-            ring-1 ring-zinc-900/80
-            shadow-[0_4px_6px_rgba(0,0,0,0.25),inset_1px_1px_1px_rgba(255,255,255,0.06),inset_-1px_-1px_1px_rgba(0,0,0,0.15)]
-            gap-1 xl:gap-2 p-1 xl:p-2"
-            style="contain: strict;"
+            class=move || {
+                format!(
+                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                        }
+                        GraphicsQuality::Medium => "border border-[#6c5734]/50",
+                        GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
+                    },
+                )
+            }
+            style=move || {
+                let background_style = match settings.graphics_quality() {
+                    GraphicsQuality::High => {
+                        format!(
+                            "
+                            background-image: url('{}');
+                            ",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    }
+                    GraphicsQuality::Medium => {
+                        format!(
+                            "
+                            background-image: url('{}');
+                            ",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    }
+                    GraphicsQuality::Low => "".to_string(),
+                };
+                format!("contain: layout paint style; {background_style}")
+            }
         >
-            <div class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0">
+            <div
+                class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0"
+                style="contain: layout paint;"
+            >
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
                     <HorizontalProgressBar
-                        class=if is_big { "h-5 xl:h-8" } else { "h-4 xl:h-5" }
-                        bar_color="bg-gradient-to-b from-red-500 to-red-700"
+                        class=if is_big { "h-6 xl:h-10" } else { "h-4 xl:h-7" }
+                        bar_color="bg-gradient-to-b from-[#bc4539] to-[#5d1e19]"
                         value=life_percent
                     >
                         <span class=title_style>{monster_name}</span>
                     </HorizontalProgressBar>
                 </StaticTooltip>
-
                 <div class="flex-1 min-h-0">
                     <CharacterPortrait
-                        image_uri=specs.character_specs.portrait.clone()
-                        character_name=specs.character_specs.name.clone()
+                        image_uri=specs.character_specs.character_static.portrait.clone()
+                        character_name=specs.character_specs.character_static.name.clone()
                         rarity=specs.rarity
                         just_hurt=just_hurt
                         just_hurt_crit=just_hurt_crit
@@ -410,54 +508,26 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     />
                 // enable_blink=true
                 </div>
-
-                <For each=move || damage_ticks.get() key=|tick| tick.id let(tick)>
-                    <DamageNumber tick />
-                </For>
-
-                <Show when=move || { gold_reward.get() > 0.0 }>
-                    <div class="
-                    reward-float gold-text text-amber-400 text:lg xl:text-2xl  text-shadow-md will-change-transform will-change-opacity
-                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-30 flex items-center gap-1
-                    font-number">
-                        <span>+{format_number(gold_reward.get())}</span>
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gold.webp")
-                            alt="Gold"
-                            class="h-[2em] aspect-square"
-                        />
-                    </div>
-                </Show>
-
-                <Show when=move || { gems_reward.get() > 0.0 }>
-                    <div class="
-                    reward-float gems-text text-fuchsia-400 text:lg text-2xl text-shadow-md will-change-transform will-change-opacity
-                    absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
-                    pointer-events-none z-30 flex items-center gap-1
-                    font-number">
-                        <span>+{format_number(gems_reward.get())}</span>
-                        <img
-                            draggable="false"
-                            src=img_asset("ui/gems.webp")
-                            alt="Gems"
-                            class="h-[1.2em] aspect-square"
-                        />
-                    </div>
-                </Show>
+                <MonsterFeedbackOverlay damage_ticks gold_reward gems_reward />
             </div>
 
             <div class="w-full flex flex-col justify-center gap-1">
-                <MonsterTags specs=specs.character_specs />
-                <div class=format!("flex-1 flex flex-col justify-evenly {skill_size} mx-auto")>
-                    <For
-                        each=move || { specs.skill_specs.clone().into_iter().enumerate() }
-                        key=|(i, _)| *i
-                        let((i, p))
-                    >
-                        <MonsterSkill skill_specs=p index=i monster_index=index />
-                    </For>
+                <MonsterTags
+                    attrs=specs.character_specs.character_attrs
+                    size=specs.character_specs.character_static.size
+                />
+                <div class=format!(
+                    "flex-1 flex flex-col justify-evenly {skill_size} mx-auto",
+                )>
+                    {specs
+                        .character_specs
+                        .skills_specs
+                        .into_iter()
+                        .enumerate()
+                        .map(|(i, p)| {
+                            view! { <MonsterSkill skill_specs=p index=i monster_index=index /> }
+                        })
+                        .collect::<Vec<_>>()}
                 </div>
             </div>
         </div>
@@ -465,74 +535,71 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
-    let is_armored = specs.armor.iter().any(|(_, value)| **value > 0.0);
+fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
+    let armor_values = DamageType::iter()
+        .filter_map(|damage_type| {
+            let value = *attrs.armor.get(&damage_type).copied().unwrap_or_default();
+            (value > 0.0).then_some((damage_type, value))
+        })
+        .collect::<Vec<_>>();
+    let is_armored = !armor_values.is_empty();
     let armored_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Armored"}</span>
-                {DamageType::iter()
-                    .filter_map(|damage_type| {
-                        let value = *specs.armor.get(&damage_type).copied().unwrap_or_default();
-                        (value > 0.0)
-                            .then(|| {
-                                view! {
-                                    <span>
-                                        <span class="font-semibold">{format!("{:.0}", value)}</span>
-                                        {format!(
-                                            " {}Armor",
-                                            effects_tooltip::damage_type_str(Some(damage_type)),
-                                        )}
-                                    </span>
-                                }
-                            })
+                {armor_values
+                    .iter()
+                    .map(|(damage_type, value)| {
+                        view! {
+                            <span>
+                                <span class="font-semibold">{format!("{:.0}", value)}</span>
+                                {format!(
+                                    " {}Armor",
+                                    effects_tooltip::damage_type_str(Some(*damage_type)),
+                                )}
+                            </span>
+                        }
                     })
                     .collect::<Vec<_>>()}
             </div>
         }
     };
 
-    let is_shielded = specs
-        .block
-        .iter()
-        .any(|(_, chance)| chance.value.get() > 0.0);
+    let shield_values = [SkillType::Attack, SkillType::Spell]
+        .into_iter()
+        .filter_map(|skill_type| {
+            let value = attrs
+                .block
+                .get(&skill_type)
+                .copied()
+                .unwrap_or_default()
+                .value
+                .get();
+            (value > 0.0).then_some((skill_type, value))
+        })
+        .collect::<Vec<_>>();
+    let block_damage = attrs.block_damage.get();
+    let is_shielded = !shield_values.is_empty();
     let shielded_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Shielded"}</span>
-                {[SkillType::Attack, SkillType::Spell]
-                    .into_iter()
-                    .filter_map(|skill_type| {
-                        let value = specs
-                            .block
-                            .get(&skill_type)
-                            .copied()
-                            .unwrap_or_default()
-                            .value
-                            .get();
-                        (value > 0.0)
-                            .then(|| {
-                                view! {
-                                    <span>
-                                        <span class="font-semibold">
-                                            {format!("{:.0}%", value)}
-                                        </span>
-                                        {format!(
-                                            " {} Block Chance",
-                                            skill_type_str(Some(skill_type)),
-                                        )}
-                                    </span>
-                                }
-                            })
+                {shield_values
+                    .iter()
+                    .map(|(skill_type, value)| {
+                        view! {
+                            <span>
+                                <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                {format!(" {} Block Chance", skill_type_str(Some(*skill_type)))}
+                            </span>
+                        }
                     })
                     .collect::<Vec<_>>()}
-                {(specs.block_damage.get() > 0.0)
+                {(block_damage > 0.0)
                     .then(|| {
                         view! {
                             <span>
-                                <span class="font-semibold">
-                                    {format!("{:.0}%", specs.block_damage.get())}
-                                </span>
+                                <span class="font-semibold">{format!("{:.0}%", block_damage)}</span>
                                 " Blocked Damage Taken"
                             </span>
                         }
@@ -541,48 +608,43 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_evasive = specs
-        .evade
-        .iter()
-        .any(|(_, chance)| chance.value.get() > 0.0);
+    let evade_values = DamageType::iter()
+        .filter_map(|damage_type| {
+            let value = attrs
+                .evade
+                .get(&damage_type)
+                .copied()
+                .unwrap_or_default()
+                .value
+                .get();
+            (value > 0.0 && damage_type != DamageType::Storm).then_some((damage_type, value))
+        })
+        .collect::<Vec<_>>();
+    let evade_damage = attrs.evade_damage.get();
+    let is_evasive = !evade_values.is_empty();
     let evasive_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Evasive"}</span>
-                {DamageType::iter()
-                    .filter_map(|damage_type| {
-                        let value = specs
-                            .evade
-                            .get(&damage_type)
-                            .copied()
-                            .unwrap_or_default()
-                            .value
-                            .get();
-                        (value > 0.0 && damage_type != DamageType::Storm)
-                            .then(|| {
-                                view! {
-                                    <span>
-                                        <span class="font-semibold">
-                                            {format!("{:.0}%", value)}
-                                        </span>
-                                        {format!(
-                                            " {} Evade Chance",
-                                            effects_tooltip::damage_over_time_type_str(
-                                                Some(damage_type),
-                                            ),
-                                        )}
-                                    </span>
-                                }
-                            })
+                {evade_values
+                    .iter()
+                    .map(|(damage_type, value)| {
+                        view! {
+                            <span>
+                                <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                {format!(
+                                    " {} Evade Chance",
+                                    effects_tooltip::damage_over_time_type_str(Some(*damage_type)),
+                                )}
+                            </span>
+                        }
                     })
                     .collect::<Vec<_>>()}
-                {(specs.evade_damage.get() > 0.0)
+                {(evade_damage > 0.0)
                     .then(|| {
                         view! {
                             <span>
-                                <span class="font-semibold">
-                                    {format!("{:.0}%", specs.evade_damage.get())}
-                                </span>
+                                <span class="font-semibold">{format!("{:.0}%", evade_damage)}</span>
                                 " Evaded Damage Taken"
                             </span>
                         }
@@ -591,70 +653,70 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_resilient = specs
-        .status_resistances
-        .iter()
-        .any(|(_, value)| **value > 0.0);
-    let resilient_tooltip = move || {
-        let mut grouped: HashMap<Option<StatStatusType>, Vec<(SkillType, f64)>> = HashMap::new();
-
-        for ((skill_type, status_type), value) in specs.status_resistances.iter() {
+    let mut grouped: HashMap<Option<StatStatusType>, Vec<(SkillType, f64)>> = HashMap::new();
+    for ((skill_type, status_type), value) in attrs.status_resistances.iter() {
+        if **value > 0.0 {
             grouped
                 .entry(status_type.clone())
                 .or_default()
                 .push((*skill_type, **value));
         }
+    }
 
+    let skill_type_count = SkillType::iter().count();
+    let mut resilient_values = Vec::new();
+    for (status_type, mut entries) in grouped {
+        entries.sort_by_key(|(skill_type, _)| *skill_type);
+        if entries.len() == skill_type_count
+            && entries
+                .iter()
+                .map(|(_, v)| *v)
+                .collect::<Vec<_>>()
+                .windows(2)
+                .all(|w| w[0] == w[1])
+        {
+            resilient_values.push((
+                entries[0].1,
+                format!(
+                    "{} Resilience",
+                    effects_tooltip::opt_status_type_str(status_type.as_ref()),
+                ),
+            ));
+        } else {
+            resilient_values.extend(entries.into_iter().map(|(skill_type, value)| {
+                (
+                    value,
+                    format!(
+                        "{} Resilience",
+                        effects_tooltip::skill_status_type_str(
+                            &StatSkillFilter {
+                                skill_type: Some(skill_type),
+                                ..Default::default()
+                            },
+                            status_type.as_ref(),
+                            true,
+                        ),
+                    ),
+                )
+            }));
+        }
+    }
+
+    let is_resilient = !resilient_values.is_empty();
+    let resilient_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Resilient"}</span>
 
-                {grouped
-                    .into_iter()
-                    .map(|(status_type, entries)| {
-                        if entries.len() == SkillType::iter().count()
-                            && entries
-                                .iter()
-                                .map(|(_, v)| *v)
-                                .collect::<Vec<_>>()
-                                .windows(2)
-                                .all(|w| w[0] == w[1])
-                        {
-                            let value = entries[0].1;
-
-                            view! {
-                                <span>
-                                    <span class="font-semibold">{format!("{:.0}%", value)}</span>
-                                    {format!(
-                                        " {} Resilience",
-                                        effects_tooltip::opt_status_type_str(status_type.as_ref()),
-                                    )}
-                                </span>
-                            }
-                                .into_any()
-                        } else {
-                            view! {
-                                {entries
-                                    .into_iter()
-                                    .map(|(skill_type, value)| {
-                                        view! {
-                                            <span>
-                                                <span class="font-semibold">
-                                                    {format!("{:.0}%", value)}
-                                                </span>
-                                                {format!(
-                                                    " {} Resilience",
-                                                    effects_tooltip::skill_status_type_str(
-                                                        Some(skill_type),
-                                                        status_type.as_ref(),
-                                                    ),
-                                                )}
-                                            </span>
-                                        }
-                                    })
-                                    .collect::<Vec<_>>()}
-                            }
-                                .into_any()
+                {resilient_values
+                    .iter()
+                    .map(|(value, label)| {
+                        let label = label.clone();
+                        view! {
+                            <span>
+                                <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                {format!(" {label}")}
+                            </span>
                         }
                     })
                     .collect::<Vec<_>>()}
@@ -662,20 +724,21 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
         }
     };
 
-    let is_regenerating = *specs.life_regen > 0.0;
+    let life_regen = *attrs.life_regen * 0.1;
+    let is_regenerating = life_regen > 0.0;
     let regenerating_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
-                    <span class="font-semibold">{format!("{:.1}%", *specs.life_regen * 0.1)}</span>
-                    " Life Regenerated per second"
+                    <span class="font-semibold">{format!("{:.1}%", life_regen)}</span>
+                    " Life Regenerated per Second"
                 </span>
             </div>
         }
     };
 
-    let grid_size = match specs.size {
+    let grid_size = match size {
         CharacterSize::Small | CharacterSize::Tall => "grid-cols-3",
         CharacterSize::Large | CharacterSize::Huge | CharacterSize::Gargantuan => "grid-cols-6",
     };
@@ -746,9 +809,9 @@ fn MonsterTags(specs: CharacterSpecs) -> impl IntoView {
 #[component]
 fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
-
-    let icon_asset = img_asset(&skill_specs.base.icon);
-    let skill_name = skill_specs.base.name.clone();
+    let skill_type = skill_specs.skill_type;
+    let skill_icon = skill_specs.icon.clone();
+    let skill_specs = Arc::new(skill_specs);
 
     let is_dead = Memo::new(move |_| {
         game_context
@@ -775,29 +838,32 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .and_then(|m| m.skill_states.get(index))
+                .and_then(|m| m.character_state.skills_states.get(index))
                 .map(|s| s.elapsed_cooldown.get())
                 .unwrap_or_default())
                 * game_context
                     .monster_specs
                     .read()
                     .get(monster_index)
-                    .and_then(|m| m.skill_specs.get(index))
+                    .and_then(|m| m.character_specs.skills_specs.get(index))
                     .map(|s| s.cooldown.get())
                     .unwrap_or_default()
         }
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let show_tooltip = move || {
-        let skill_specs = Arc::new(skill_specs.clone());
-        tooltip_context.set_content(
-            move || {
-                let skill_specs = skill_specs.clone();
-                view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
-            },
-            DynamicTooltipPosition::Auto,
-        );
+    let show_tooltip = {
+        let skill_specs = skill_specs.clone();
+        move || {
+            let skill_specs = skill_specs.clone();
+            tooltip_context.set_content(
+                move || {
+                    let skill_specs = skill_specs.clone();
+                    view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+                },
+                DynamicTooltipPosition::Auto,
+            );
+        }
     };
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
@@ -809,7 +875,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
                 .monster_states
                 .read()
                 .get(monster_index)
-                .and_then(|m| m.skill_states.get(index))
+                .and_then(|m| m.character_state.skills_states.get(index))
                 .map(|s| s.just_triggered)
                 .unwrap_or_default()
         } else {
@@ -825,18 +891,20 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             .monster_states
             .read_untracked()
             .get(monster_index)
-            .and_then(|m| m.skill_states.get(index))
+            .and_then(|m| m.character_state.skills_states.get(index))
             .map(|s| s.elapsed_cooldown.get())
             .unwrap_or_default(),
     );
 
     view! {
-        <CircularProgressBar
-            bar_color="oklch(55.5% 0.163 48.998)"
+        <SkillProgressBar
+            skill_type=skill_type
+            skill_icon=skill_icon
             value=progress_value
             reset=just_triggered
             disabled=is_dead
             bar_width=2
+            icon_class="w-full h-full flex-no-shrink fill-current invert"
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
@@ -848,14 +916,6 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
-        >
-            <img
-                draggable="false"
-                src=icon_asset
-                alt=skill_name
-                class="w-full h-full flex-no-shrink fill-current
-                xl:drop-shadow-[0px_2px_oklch(13% 0.028 261.692)] invert"
-            />
-        </CircularProgressBar>
+        />
     }
 }

@@ -13,6 +13,7 @@ use crate::components::{
         buttons::{MenuButton, MenuButtonRed},
         confirm::ConfirmContext,
         fullscreen::FullscreenButton,
+        header::BaseHeaderMenu,
         wiki::WikiButton,
     },
 };
@@ -53,9 +54,19 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
-    let gold = Signal::derive(move || game_context.player_resources.read().gold);
-    let gems = Signal::derive(move || game_context.player_resources.read().gems);
-    let shards = Signal::derive(move || game_context.player_resources.read().shards);
+    let resources = Memo::new(move |_| {
+        game_context.player_resources.with(|player_resources| {
+            (
+                player_resources.gold,
+                player_resources.gems,
+                player_resources.shards,
+                player_resources.passive_points,
+            )
+        })
+    });
+    let gold = Signal::derive(move || resources.get().0);
+    let gems = Signal::derive(move || resources.get().1);
+    let shards = Signal::derive(move || resources.get().2);
 
     let open_inventory = move || {
         game_context
@@ -100,9 +111,30 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     view! {
-        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
-        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
-            <div class="flex justify-around w-full items-center">
+        <BaseHeaderMenu>
+            <div class="flex justify-start space-x-1 xl:space-x-2">
+                <FullscreenButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        game_context.open_settings.set(!game_context.open_settings.get_untracked())
+                    }
+                >
+                    "⚙"
+                </MenuButton>
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        chat_context.opened.set(!chat_context.opened.get_untracked())
+                    }
+                >
+                    "🗪"
+                </MenuButton>
+                <WikiButton />
+            </div>
+            <div class="flex-1 flex justify-around w-full items-center">
                 <GoldCounter value=gold w_full=true />
                 <GemsCounter value=gems w_full=true />
                 <ShardsCounter
@@ -111,18 +143,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     disabled=Signal::derive(move || game_context.area_specs.read().disable_shards)
                 />
             </div>
-            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
-                <FullscreenButton />
-                <WikiButton />
-                <MenuButton
-                    class:hidden
-                    class:xl:inline
-                    on:click=move |_| {
-                        chat_context.opened.set(!chat_context.opened.get_untracked())
-                    }
-                >
-                    "Chat"
-                </MenuButton>
+            <div class="flex justify-end space-x-1 xl:space-x-2">
                 <MenuButton on:click=move |_| open_inventory()>
                     <span class="inline xl:hidden">"Inv."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
@@ -131,7 +152,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     <span class="inline xl:hidden">"Pas."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                     {move || {
-                        let points = game_context.player_resources.read().passive_points;
+                        let points = resources.get().3;
                         if points > 0 { format!(" ({points})") } else { "".to_string() }
                     }}
                 </MenuButton>
@@ -139,6 +160,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButtonRed on:click=try_abandon_quest>"Stop"</MenuButtonRed>
                 <MenuButton on:click=quit>"Back"</MenuButton>
             </div>
-        </div>
+        </BaseHeaderMenu>
     }
 }

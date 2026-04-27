@@ -20,13 +20,15 @@ use crate::components::{
         panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
-    ui::toast::*,
+    shared::settings::SettingsModal,
+    ui::{progress_bars::provide_cooldown_clock, toast::*},
 };
 
 #[component]
 pub fn GameInstance() -> impl IntoView {
     let game_context = GameContext::new();
     provide_context(game_context);
+    provide_cooldown_clock();
 
     let auth_context = expect_context::<AuthContext>();
 
@@ -75,6 +77,7 @@ pub fn GameInstance() -> impl IntoView {
                     <StatisticsPanel open=game_context.open_statistics />
                     <GameInventoryPanel open=game_context.open_inventory />
                     <EndQuestPanel />
+                    <SettingsModal open=game_context.open_settings />
                 </div>
             </Show>
             <ChatPanel />
@@ -122,9 +125,11 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         passives_tree_specs,
         passives_tree_state,
         passives_tree_build,
+        player_base_specs,
         player_specs,
         player_state,
         last_skills_bought,
+        auto_skills,
     } = init_message;
 
     game_context.started.set(true);
@@ -135,8 +140,10 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.passives_tree_build.set(passives_tree_build);
+    game_context.player_base_specs.set(player_base_specs);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
+    game_context.player_auto_skills.set(auto_skills);
     game_context.last_skills_bought.set(last_skills_bought);
 }
 
@@ -145,6 +152,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         area_state,
         area_threat,
         passives_tree_state,
+        player_base_specs,
         player_specs,
         player_inventory,
         player_state,
@@ -160,6 +168,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.area_state.sync(area_state);
     game_context.area_threat.set(area_threat);
     game_context.passives_tree_state.sync(passives_tree_state);
+    game_context.player_base_specs.sync(player_base_specs);
     game_context.player_specs.sync(player_specs);
     if let Some(player_inventory) = player_inventory {
         game_context.player_inventory.set(player_inventory);
@@ -168,7 +177,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.player_state.set(player_state);
     game_context.player_stamina.set(player_stamina);
     if let Some(monster_specs) = monster_specs {
-        *game_context.monster_wave.write() += 1; // TODO: Overflow
+        // *game_context.monster_wave.write() += 1; // TODO: Overflow
         game_context.monster_specs.set(monster_specs);
     }
     game_context.monster_states.set(monster_states);

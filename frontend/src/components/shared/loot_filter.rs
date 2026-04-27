@@ -25,10 +25,11 @@ use crate::components::{
     town::panels::market::{StatDropdown, item_rarity_str},
     ui::{
         buttons::{FancyButton, MenuButton, Toggle},
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
+        list_row::MenuListRow,
         menu_panel::MenuPanel,
     },
     utils::file_loader::{save_json, use_json_loader},
@@ -113,7 +114,7 @@ pub fn LootFilterPanel(
         }
     });
 
-    let (loaded_file, on_change) = use_json_loader::<LootFilter>();
+    let (loaded_file, filename, on_change) = use_json_loader::<LootFilter>();
     let file_input: NodeRef<Input> = NodeRef::new();
 
     Effect::new(move || {
@@ -129,7 +130,9 @@ pub fn LootFilterPanel(
         move |_| {
             save_json(
                 &local_loot_filter.get_untracked(),
-                &format!("loot_filter_{}.json", &character_name),
+                &filename
+                    .get()
+                    .unwrap_or(format!("loot_filter_{}.json", &character_name)),
             );
         }
     };
@@ -161,7 +164,7 @@ pub fn LootFilterPanel(
             {
                 let on_export = on_export.clone();
                 view! {
-                    <Card class="w-full h-full">
+                    <MenuCard class="w-full h-full">
                         <CardHeader title="Loot Filter" on_close=move || open.set(false)>
                             <div class="flex gap-2 mx-4">
                                 <MenuButton on:click=move |_| new_rule()>"New Rule"</MenuButton>
@@ -178,7 +181,7 @@ pub fn LootFilterPanel(
                             <RulesList loot_filter=local_loot_filter selected_rule />
                             <EditRule loot_filter=local_loot_filter selected_rule />
                         </div>
-                    </Card>
+                    </MenuCard>
                 }
             }
         </MenuPanel>
@@ -214,6 +217,13 @@ fn RuleRow(
     loot_filter: RwSignal<LootFilter>,
     selected_rule: RwSignal<Option<Uuid>>,
 ) -> impl IntoView {
+    let is_selected = Signal::derive(move || {
+        selected_rule
+            .read()
+            .map(|selected_rule| selected_rule == rule_id)
+            .unwrap_or_default()
+    });
+
     let rule_name = move || {
         loot_filter
             .read()
@@ -276,30 +286,18 @@ fn RuleRow(
             .unwrap_or(false)
     });
 
-    // TODO: Move up, down, delete
     view! {
-        <div
-            class=move || {
-                format!(
-                    "relative flex w-full items-center justify-between p-2 gap-2 cursor-pointer shadow-sm transition-colors duration-150 rounded-sm
-                bg-neutral-800 hover:bg-neutral-700 {}",
-                    if selected_rule
-                        .read()
-                        .map(|selected_rule| { selected_rule == rule_id })
-                        .unwrap_or_default()
-                    {
-                        "ring-2 ring-amber-400"
-                    } else {
-                        "ring-1 ring-zinc-950"
-                    },
-                )
-            }
-            on:click=move |_| { selected_rule.set(Some(rule_id)) }
-        >
-            <div class="flex flex-col flex-1 gap-1">
+        <MenuListRow selected=is_selected on_click=move || { selected_rule.set(Some(rule_id)) }>
+            <div class="flex flex-col flex-1 gap-1 p-2">
 
-                <div class="flex items-center justify-between">
-                    <div>
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1 shrink-0">
+                        <FancyButton on:click=move_up disabled=is_first>
+                            "↑"
+                        </FancyButton>
+                        <FancyButton on:click=move_down disabled=is_last>
+                            "↓"
+                        </FancyButton>
                         {move || {
                             match loot_filter
                                 .read()
@@ -309,24 +307,22 @@ fn RuleRow(
                                 .unwrap_or_default()
                             {
                                 FilterRuleType::Pickup => {
-                                    view! { <span class="text-emerald-400">"Pickup"</span> }
+                                    view! {
+                                        <span class="ml-2 w-12 text-emerald-400">"Pickup"</span>
+                                    }
                                 }
                                 FilterRuleType::Sell => {
-                                    view! { <span class="text-orange-400">"Sell"</span> }
+                                    view! { <span class="ml-2 w-12 text-orange-400">"Sell"</span> }
                                 }
                             }
                         }}
                     </div>
 
-                    <div class="text-sm xl:text-base font-semibold text-white">{rule_name}</div>
+                    <div class="min-w-0 flex-1 px-2 text-center text-sm xl:text-base font-semibold text-white truncate">
+                        {rule_name}
+                    </div>
 
-                    <div class="flex items-center gap-1">
-                        <FancyButton on:click=move_up disabled=is_first>
-                            "↑"
-                        </FancyButton>
-                        <FancyButton on:click=move_down disabled=is_last>
-                            "↓"
-                        </FancyButton>
+                    <div class="flex items-center gap-1 shrink-0">
                         <Toggle initial=is_enabled toggle_callback=enable_toggle>
                             {move || {
                                 if loot_filter
@@ -346,7 +342,7 @@ fn RuleRow(
                 </div>
 
             </div>
-        </div>
+        </MenuListRow>
     }
 }
 
@@ -578,7 +574,7 @@ pub fn EditRule(
                         id="item_damages"
                         label="Damage:"
                         input_type="number"
-                        placeholder="Damage per second"
+                        placeholder="Damage per Second"
                         bind=item_damages
                     />
                     <ValidatedInput

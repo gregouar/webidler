@@ -138,15 +138,29 @@ async fn handle_connect(
 ) -> Result<Session> {
     tracing::info!("connect: {}", msg.character_id);
 
-    let user_id = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
+    let user = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
         .ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
     let user_character = db::characters::read_character(&app_state.db_pool, &msg.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if user_character.user_id != user_id {
+    if user_character.user_id != user.user_id {
         return Err(AppError::NotFound.into());
+    }
+
+    if db::game_instances::is_user_instance_running(
+        &app_state.db_pool,
+        &user_character.user_id,
+        &user_character.realm_id,
+        &user_character.character_id,
+    )
+    .await?
+    {
+        return Err(AppError::UserError(
+            "Another character is already Grinding in this Realm".into(),
+        )
+        .into());
     }
 
     // conn.send(&ConnectMessage {}.into()).await?;

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['../frontend/src/**/*.rs'],
+  content: ['../src/**/*.rs', '../../frontend/src/**/*.rs'],
   safelist: [
     'duration-100',
     'duration-200',

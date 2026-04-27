@@ -354,7 +354,7 @@
     "tags": [ "Physical", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 410,
     "effects": [
@@ -378,7 +378,7 @@
     "tags": [ "Physical", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 500,
     "effects": [
@@ -402,7 +402,7 @@
     "tags": [ "Physical", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "AttackWeapon" ],
     "item_level": 600,
     "effects": [
@@ -763,7 +763,7 @@
     "tags": [ "Fire", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 410,
     "effects": [
@@ -787,7 +787,7 @@
     "tags": [ "Fire", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 410,
     "effects": [
@@ -811,7 +811,7 @@
     "tags": [ "Fire", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 500,
     "effects": [
@@ -835,7 +835,7 @@
     "tags": [ "Fire", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 500,
     "effects": [
@@ -859,7 +859,7 @@
     "tags": [ "Fire", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 600,
     "effects": [
@@ -883,7 +883,7 @@
     "tags": [ "Fire", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 600,
     "effects": [
@@ -1244,7 +1244,7 @@
     "tags": [ "Poison", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 410,
     "effects": [
@@ -1268,7 +1268,7 @@
     "tags": [ "Poison", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 410,
     "effects": [
@@ -1292,7 +1292,7 @@
     "tags": [ "Poison", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 500,
     "effects": [
@@ -1316,7 +1316,7 @@
     "tags": [ "Poison", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 500,
     "effects": [
@@ -1340,7 +1340,7 @@
     "tags": [ "Poison", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 600,
     "effects": [
@@ -1364,7 +1364,7 @@
     "tags": [ "Poison", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 600,
     "effects": [
@@ -1641,7 +1641,7 @@
     "tags": [ "Storm", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 410,
     "effects": [
@@ -1659,7 +1659,7 @@
     "tags": [ "Storm", "Attack" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 410,
     "effects": [
@@ -1677,7 +1677,7 @@
     "tags": [ "Storm", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 500,
     "effects": [
@@ -1695,7 +1695,7 @@
     "tags": [ "Storm", "Attack" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 500,
     "effects": [
@@ -1713,7 +1713,7 @@
     "tags": [ "Storm", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "MeleeWeapon1H" ],
     "item_level": 600,
     "effects": [
@@ -1731,7 +1731,7 @@
     "tags": [ "Storm", "Attack" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "MeleeWeapon2H", "RangedWeapon" ],
     "item_level": 600,
     "effects": [

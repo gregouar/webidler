@@ -7,7 +7,7 @@ use leptos::{
     prelude::*,
     web_sys,
 };
-use leptos_use::{UseMouseInElementReturn, use_mouse, use_mouse_in_element, use_window_size};
+use leptos_use::{use_mouse, use_window_size};
 
 #[derive(Clone, Debug, Copy)]
 pub struct DynamicTooltipContext {
@@ -21,8 +21,8 @@ impl DynamicTooltipContext {
         content: impl Fn() -> AnyView + Send + Sync + 'static,
         position: DynamicTooltipPosition,
     ) {
-        self.content.set(Some(Arc::new(content)));
         self.position.set(position);
+        self.content.set(Some(Arc::new(content)));
     }
 
     pub fn hide(&self) {
@@ -62,19 +62,18 @@ pub fn DynamicTooltip() -> impl IntoView {
     });
 
     let mouse = use_mouse();
-    let window = use_window_size();
+    let window_size = use_window_size();
 
     let style = move || {
         let mouse_x = mouse.x.get();
         let mouse_y = mouse.y.get();
         let (width, height) = tooltip_size.get();
+        let window_width = window_size.width.get();
+        let window_height = window_size.height.get();
 
         let position = match tooltip_context.position.get() {
             DynamicTooltipPosition::Auto => {
-                match (
-                    mouse_x < window.width.get() / 2.0,
-                    mouse_y < window.height.get() / 2.0,
-                ) {
+                match (mouse_x < window_width / 2.0, mouse_y < window_height / 2.0) {
                     (true, true) => DynamicTooltipPosition::BottomRight,
                     (false, true) => DynamicTooltipPosition::BottomLeft,
                     (true, false) => DynamicTooltipPosition::TopRight,
@@ -82,7 +81,7 @@ pub fn DynamicTooltip() -> impl IntoView {
                 }
             }
             DynamicTooltipPosition::AutoLeft => {
-                if mouse_y < window.height.get() / 2.0 {
+                if mouse_y < window_height / 2.0 {
                     DynamicTooltipPosition::BottomLeft
                 } else {
                     DynamicTooltipPosition::TopLeft
@@ -90,20 +89,6 @@ pub fn DynamicTooltip() -> impl IntoView {
             }
             x => x,
         };
-
-        let window_height = web_sys::window()
-            .unwrap()
-            .inner_height()
-            .unwrap()
-            .as_f64()
-            .unwrap();
-
-        let window_width = web_sys::window()
-            .unwrap()
-            .inner_width()
-            .unwrap()
-            .as_f64()
-            .unwrap();
 
         let (left, top) = match position {
             DynamicTooltipPosition::BottomLeft => (mouse_x - width, mouse_y),
@@ -173,14 +158,9 @@ pub fn DynamicTooltipTarget(
     let tooltip_context: DynamicTooltipContext = expect_context();
     let node_ref = NodeRef::<Span>::new();
 
-    let is_displayed = RwSignal::new(false);
-
-    let UseMouseInElementReturn { is_outside, .. } = use_mouse_in_element(node_ref);
-
     let show_tooltip = {
         let content = content.clone();
         move || {
-            is_displayed.set(true);
             tooltip_context.set_content(content.clone(), position);
         }
     };
@@ -188,23 +168,8 @@ pub fn DynamicTooltipTarget(
     let hide_tooltip = {
         move || {
             tooltip_context.hide();
-            is_displayed.set(false);
         }
     };
-
-    Effect::new({
-        move || {
-            if is_outside.get() {
-                if is_displayed.get_untracked() {
-                    hide_tooltip();
-                }
-            } else {
-                // if !is_displayed.get_untracked() {
-                //     show_tooltip();
-                // }
-            }
-        }
-    });
 
     // let mouse = use_mouse();
 
@@ -410,8 +375,8 @@ where
                         >
                             <div class="
                             px-2 py-1 xl:px-3 xl:py-1
-                            text-xs xl:text-sm text-white font-normal
-                            bg-zinc-900 border border-neutral-200
+                            text-xs xl:text-sm text-zinc-300 font-normal
+                            bg-zinc-900 border border-zinc-300
                             rounded shadow-lg/30 whitespace-nowrap
                             select-none text-center
                             ">

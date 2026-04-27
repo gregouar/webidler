@@ -30,11 +30,34 @@ pub fn control_monsters(
         };
 
         if !this_monster_state.character_state.is_alive
-            || this_monster_state.initiative > 0.0
+            // || this_monster_state.initiative > 0.0
             || this_monster_state.character_state.is_stunned()
         {
             continue;
         }
+
+        if !this_monster_state
+            .character_state
+            .skills_states
+            .iter()
+            .any(|skill_state| skill_state.is_ready)
+        {
+            continue;
+        }
+
+        let skills_ready: Vec<_> = this_monster_state
+            .character_state
+            .skills_states
+            .iter()
+            .enumerate()
+            .filter_map(|(skill_index, skill_state)| {
+                if skill_state.is_ready {
+                    Some(skill_index)
+                } else {
+                    None
+                }
+            })
+            .collect();
 
         let mut me = (
             CharacterId::Monster(monster_id),
@@ -71,16 +94,12 @@ pub fn control_monsters(
             ),
         )];
 
-        for (skill_specs, skill_state) in this_monster_specs
-            .skill_specs
-            .iter()
-            .zip(this_monster_state.skill_states.iter_mut())
-            .filter(|(_, s)| s.is_ready)
-        {
+        skills_controller::repeat_skills(events_queue, &mut me, &mut friends, &mut player);
+
+        for skill_index in skills_ready {
             skills_controller::use_skill(
                 events_queue,
-                skill_specs,
-                skill_state,
+                skill_index,
                 &mut me,
                 &mut friends,
                 &mut player,

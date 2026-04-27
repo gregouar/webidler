@@ -1,0 +1,29 @@
+{
+  "name": "Ember Butler",
+  "portrait": "monsters/castle/ember_butler.webp",
+  "max_life": 5,
+  "power_factor": 1,
+  "initiative": [ 0.0, 0.5 ],
+  "armor": { "Fire": 100 },
+  "skills": [
+    {
+      "name": "Careful, it's Hot!",
+      "icon": "skills/burning_ray.svg",
+      "cooldown": 2.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Fire": [ 2, 8 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

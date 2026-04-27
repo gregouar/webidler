@@ -49,6 +49,7 @@ pub struct StatusEvent {
     pub skill_type: SkillType,
 
     pub status_type: StatStatusType,
+    pub is_evaded: bool,
     pub value: NonNegative,
     pub duration: Option<NonNegative>,
 }

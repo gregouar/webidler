@@ -46,12 +46,12 @@ pub fn init_area_specs(
             std::iter::once(
                 map_item
                     .modifiers
-                    .aggregate_effects(AffixEffectScope::Local),
+                    .aggregate_effects(AffixEffectScope::Local, false),
             )
             .chain(std::iter::once(
                 map_item
                     .modifiers
-                    .aggregate_effects(AffixEffectScope::Global),
+                    .aggregate_effects(AffixEffectScope::Global, false),
             )),
         )
     } else {
@@ -73,6 +73,7 @@ fn compute_area_specs(area_specs: &mut AreaSpecs) {
             StatType::ItemRarity => area_specs.loot_rarity.apply_effect(&effect),
             StatType::ItemLevel => area_specs.item_level_modifier.apply_effect(&effect),
             StatType::GemsFind => area_specs.gems_find.apply_effect(&effect),
+            StatType::PowerLevel => area_specs.power_level.apply_effect(&effect),
             _ => {}
         }
     }

@@ -1,5 +1,4 @@
-use std::collections::HashMap;
-
+use indexmap::IndexMap;
 use leptos::prelude::*;
 
 use shared::data::{
@@ -7,7 +6,7 @@ use shared::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     stash::{Stash, StashType},
-    temple::{BenedictionSpecs, PlayerBenedictions},
+    temple::{BenedictionsCategory, PlayerBenedictions},
     user::{UserCharacter, UserGrindArea},
 };
 
@@ -26,7 +25,7 @@ pub struct TownContext {
     pub passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     pub passives_tree_build: RwSignal<PurchasedNodes>,
 
-    pub benedictions_specs: RwSignal<HashMap<String, BenedictionSpecs>>,
+    pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
 
     pub last_grind: RwSignal<Option<GrindStats>>,
@@ -42,6 +41,7 @@ pub struct TownContext {
     pub open_market: RwSignal<bool>,
     pub open_forge: RwSignal<bool>,
     pub open_temple: RwSignal<bool>,
+    pub open_settings: RwSignal<bool>,
 }
 
 impl Default for TownContext {
@@ -72,6 +72,7 @@ impl Default for TownContext {
             open_market: Default::default(),
             open_forge: Default::default(),
             open_temple: Default::default(),
+            open_settings: Default::default(),
         }
     }
 }

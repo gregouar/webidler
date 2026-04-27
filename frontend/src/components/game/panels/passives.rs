@@ -14,11 +14,12 @@ use crate::components::{
     events::{EventsContext, Key},
     game::{game_context::GameContext, websocket::WebsocketContext},
     shared::passives::{
-        Connection, MetaStatus, Node, NodeStatus, PurchaseStatus, node_meta_status,
+        Connection, MetaStatus, Node, NodeStatus, PassiveSkillStats, PurchaseStatus,
+        node_meta_status,
     },
     ui::{
         buttons::MenuButton,
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
@@ -51,7 +52,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open>
             <div class="w-full h-full">
-                <Card>
+                <MenuCard>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
                         <div class="flex px-2 xl:px-4">
                             <Input
@@ -85,10 +86,10 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
                         </div>
 
                     </CardHeader>
-                    <CardInset pad=false>
+                    <CardInset pad=false class="relative">
                         <PassiveSkillTree search_node />
                     </CardInset>
-                </Card>
+                </MenuCard>
             </div>
         </MenuPanel>
     }
@@ -227,6 +228,15 @@ fn PassiveSkillTree(search_node: RwSignal<Option<String>>) -> impl IntoView {
         Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
 
     view! {
+        <PassiveSkillStats
+            passives_tree_specs=game_context.passives_tree_specs
+            passives_tree_ascension=Signal::derive(move || {
+                game_context.passives_tree_state.read().ascension.clone()
+            })
+            purchased_nodes=Signal::derive(move || {
+                game_context.passives_tree_state.read().purchased_nodes.clone()
+            })
+        />
         <Pannable>
             <For
                 each=move || {

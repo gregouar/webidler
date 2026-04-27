@@ -1,323 +1,800 @@
 {
   "padded_tunic": {
     "name": "Padded Tunic",
-    "icon": "items/padded_tunic.webp",
+    "icon": "items/body_armors/padded_tunic.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 20
-    }
+      "armor": 20.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "padded_tunic_unique": {
     "name": "A Simple Shirt",
+    "icon": "items/body_armors/shirt.webp",
     "description": "Who needs more?",
-    "icon": "items/shirt.webp",
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
-    "armor_specs": {
-      "armor": 20
-    },
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 0,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
-        "stat": { "Armor": "Physical" },
+        "stat": {
+          "Armor": "Physical"
+        },
         "modifier": "More",
+        "scope": "Local",
         "value": -1e300,
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": {
+          "SkillLevel": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
         "modifier": "Flat",
-        "value": [ 1, 8 ],
+        "scope": "Global",
+        "value": [
+          1.0,
+          7.0
+        ],
         "ignore_quality": true
       }
-    ]
+    ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 20.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "leather_armor": {
     "name": "Leather Armor",
-    "icon": "items/leather_armor.webp",
+    "icon": "items/body_armors/leather_armor.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 40
+      "armor": 40.0,
+      "block": 0.0
     },
-    "min_area_level": 40
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "leather_armor_unique": {
     "name": "Wildheart Vest",
+    "icon": "items/body_armors/wildheart.webp",
     "description": "Life feeds on life, this is no cruelty, only the forest's way",
-    "icon": "items/wildheart.webp",
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
-    "armor_specs": {
-      "armor": 40
-    },
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 50,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": {
-          "Restore": { "restore_type": "Life" }
+          "Restore": {
+            "restore_type": "Life",
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Increased",
-        "value": [ 30, 50 ]
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Increased",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [ 8, 10 ]
+        "scope": "Global",
+        "value": [
+          8.0,
+          10.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": {
           "Armor": "Poison"
         },
         "modifier": "Flat",
-        "value": [ 40, 60 ]
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          20.0,
+          40.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 40.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
       },
       {
         "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 20, 40 ]
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Increased",
+          "value": 2.0
+        }
       }
-    ],
-    "min_area_level": 50
+    ]
   },
   "chain_shirt": {
     "name": "Chain Shirt",
-    "icon": "items/chain_shirt.webp",
+    "icon": "items/body_armors/chain_shirt.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 60
+      "armor": 60.0,
+      "block": 0.0
     },
-    "min_area_level": 90
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "scale_vest": {
     "name": "Scale Vest",
-    "icon": "items/scale_vest.webp",
+    "icon": "items/body_armors/scale_vest.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 80
+      "armor": 80.0,
+      "block": 0.0
     },
-    "min_area_level": 140
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "scale_vest_unique": {
     "name": "Mirrorshroud Dress",
+    "icon": "items/body_armors/princess_robe.webp",
     "description": "It whispers: you may strike, but you may not touch.",
-    "icon": "items/princess_robe.webp",
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
-    "armor_specs": {
-      "armor": 80
-    },
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 150,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
-        "stat": { "Armor": "Physical" },
+        "stat": {
+          "Armor": "Physical"
+        },
         "modifier": "More",
+        "scope": "Local",
         "value": -1e300,
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Block": "Attack" },
+        "stat": {
+          "Block": "Attack"
+        },
         "modifier": "Flat",
-        "value": 10,
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Block": "Spell" },
+        "stat": {
+          "Block": "Spell"
+        },
         "modifier": "Flat",
-        "value": 10,
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
         "ignore_quality": true
       },
       {
+        "stat": {
+          "Evade": null
+        },
+        "modifier": "Flat",
         "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": "ManaRegen",
         "modifier": "Flat",
-        "value": [ 6, 10 ],
+        "scope": "Global",
+        "value": [
+          6.0,
+          10.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "Flat",
-        "value": [ 6, 10 ],
+        "scope": "Global",
+        "value": [
+          6.0,
+          10.0
+        ],
         "ignore_quality": true
       }
     ],
-    "min_area_level": 150
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 80.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "LifeRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "brigandine": {
     "name": "Brigandine",
-    "icon": "items/brigandine.webp",
+    "icon": "items/body_armors/brigandine.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 100
+      "armor": 100.0,
+      "block": 0.0
     },
-    "min_area_level": 190
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "brigandine_unique": {
     "name": "Crustback Bulwark",
+    "icon": "items/body_armors/crab_armor.webp",
     "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
-    "icon": "items/crab_armor.webp",
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
-    "armor_specs": {
-      "armor": 100
-    },
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 200,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
         "stat": "LifeRegen",
         "modifier": "More",
+        "scope": "Global",
         "value": -1e300,
         "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": 500,
+        "scope": "Global",
+        "value": 500.0,
         "ignore_quality": true
       },
       {
-        "scope": "Local",
-        "stat": { "Armor": "Physical" },
+        "stat": {
+          "Armor": "Physical"
+        },
         "modifier": "Increased",
-        "value": [ 80, 120 ]
+        "scope": "Local",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Storm"
+        },
         "modifier": "Flat",
-        "value": [ 100, 140 ]
+        "scope": "Global",
+        "value": [
+          90.0,
+          150.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
-        "value": [ 60, 100 ]
+        "scope": "Global",
+        "value": [
+          60.0,
+          100.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
+        "stat": {
+          "Armor": "Poison"
+        },
         "modifier": "Flat",
-        "value": [ 60, 100 ]
+        "scope": "Global",
+        "value": [
+          60.0,
+          100.0
+        ],
+        "ignore_quality": true
       }
     ],
-    "min_area_level": 200
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 100.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 30.0
+        }
+      }
+    ]
   },
   "breastplate": {
     "name": "Breastplate",
-    "icon": "items/breastplate.webp",
+    "icon": "items/body_armors/breastplate.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 120
+      "armor": 120.0,
+      "block": 0.0
     },
-    "min_area_level": 250
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "breastplate_unique": {
-    "name": "Heart of the Wyrm",
+    "name": "Wyrmheart",
+    "icon": "items/body_armors/dragon_armor.webp",
     "description": "Abal's heart did not burn out, it learned to endure.",
-    "icon": "items/dragon_armor.webp",
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
-    "armor_specs": {
-      "armor": 120
-    },
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
-        "stat": { "Armor": "Physical" },
-        "modifier": "Increased",
-        "value": [ 150, 200 ],
-        "ignore_quality": true
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
-        "modifier": "Flat",
-        "value": [ 200, 300 ]
-      },
-      {
-        "scope": "Global",
-        "stat": "Life",
-        "modifier": "Increased",
-        "value": [ 10, 15 ],
-        "ignore_quality": true
-      },
-      {
-        "scope": "Global",
-        "stat": "GoldFind",
-        "modifier": "More",
-        "value": [ 200, 300 ]
-      },
-      {
-        "scope": "Global",
         "stat": {
-          "StatConverter": {
-            "source": {
-              "Damage": { "damage_type": "Physical" }
-            },
-            "stat": {
-              "Damage": { "damage_type": "Fire" }
-            },
-            "is_extra": true
-          }
+          "Armor": "Physical"
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Fire"
         },
         "modifier": "Flat",
-        "value": 50,
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "Life",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          8.0,
+          12.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
         "ignore_quality": true
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "breastplate_unique",
         "OnApplyStatus": {
-          "status_type": { "DamageOverTime": { "damage_type": "Fire" } }
+          "skill_type": null,
+          "status_type": {
+            "DamageOverTime": {
+              "damage_type": "Fire"
+            }
+          },
+          "is_triggered": null,
+          "is_evaded": false
         },
         "target": "Me",
+        "modifiers": [ ],
+        "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "Restore": {
               "restore_type": "Life",
-              "value": [ 5, 10 ],
+              "value": [
+                4.0,
+                6.0
+              ],
               "modifier": "Flat"
-            }
+            },
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
-        ]
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "is_debuff": false
       }
     ],
-    "min_area_level": 260
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 120.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Increased",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "body_7": {
     "name": "Cavalry Armor",
-    "icon": "items/cavalry_armor.webp",
+    "icon": "items/body_armors/cavalry_armor.webp",
+    "description": null,
     "slot": "Body",
-    "categories": [ "Armor", "Body" ],
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
     "armor_specs": {
-      "armor": 120
+      "armor": 120.0,
+      "block": 0.0
     },
-    "min_area_level": 320
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
+  },
+  "body_8": {
+    "name": "Plate Armor",
+    "icon": "items/body_armors/plate_armor.webp",
+    "description": null,
+    "slot": "Body",
+    "extra_slots": [ ],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 140.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

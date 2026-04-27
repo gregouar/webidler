@@ -6,9 +6,10 @@ use strum_macros::EnumIter;
 
 use crate::data::{
     chance::Chance,
-    item_affix::AffixType,
+    item_affix::{AffixEffect, AffixType},
     modifier::ModifiableValue,
     skill::DamageType,
+    stat_effect::{ArmorStatType, StatType},
     trigger::TriggerSpecs,
     values::{NonNegative, Percent},
 };
@@ -127,7 +128,7 @@ pub enum ItemCategory {
     Rune,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
 pub struct ItemBase {
     pub name: String,
     pub icon: String,
@@ -160,6 +161,11 @@ pub struct ItemBase {
 
     #[serde(default)]
     pub ignore_quality: bool,
+
+    #[serde(default)]
+    pub upgrade_levels: Vec<AreaLevel>,
+    #[serde(default)]
+    pub upgrade_effects: Vec<AffixEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -174,6 +180,9 @@ pub struct ItemModifiers {
 
     #[serde(default)]
     pub quality: f32,
+
+    #[serde(default)]
+    pub upgrade_level: u8,
 }
 
 // #[cfg(feature = "modifiable")]
@@ -270,23 +279,71 @@ pub struct MapSpecs {
     pub reward_slots: u8,
     #[serde(default)]
     pub loot_tables: Vec<String>,
+    #[serde(default)]
+    pub replace_area_id: Option<String>,
 }
 
 impl ItemModifiers {
-    pub fn aggregate_effects(&self, scope: AffixEffectScope) -> EffectsMap {
+    pub fn aggregate_effects(&self, scope: AffixEffectScope, split_elements: bool) -> EffectsMap {
         self.affixes
             .iter()
             .flat_map(|affix| affix.effects.iter())
             .filter(|e| e.scope == scope)
             .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
-                *effects_map
-                    .0
-                    .entry((
-                        effect.stat_effect.stat.clone(),
-                        effect.stat_effect.modifier,
-                        effect.stat_effect.bypass_ignore,
-                    ))
-                    .or_default() += effect.stat_effect.value;
+                if split_elements
+                    && matches!(
+                        &effect.stat_effect.stat,
+                        StatType::Armor(Some(ArmorStatType::Elemental))
+                    )
+                {
+                    for stat in [
+                        StatType::Armor(Some(ArmorStatType::Fire)),
+                        StatType::Armor(Some(ArmorStatType::Poison)),
+                        StatType::Armor(Some(ArmorStatType::Storm)),
+                    ] {
+                        *effects_map
+                            .0
+                            .entry((
+                                stat,
+                                effect.stat_effect.modifier,
+                                effect.stat_effect.bypass_ignore,
+                            ))
+                            .or_default() += effect.stat_effect.value;
+                    }
+                } else {
+                    *effects_map
+                        .0
+                        .entry((
+                            effect.stat_effect.stat.clone(),
+                            effect.stat_effect.modifier,
+                            effect.stat_effect.bypass_ignore,
+                        ))
+                        .or_default() += effect.stat_effect.value;
+                }
+
+                // let stats = if split_elements {
+                //     match &effect.stat_effect.stat {
+                //         StatType::Armor(Some(ArmorStatType::Elemental)) => vec![
+                //             StatType::Armor(Some(ArmorStatType::Fire)),
+                //             StatType::Armor(Some(ArmorStatType::Poison)),
+                //             StatType::Armor(Some(ArmorStatType::Storm)),
+                //         ],
+                //         _ => vec![effect.stat_effect.stat.clone()],
+                //     }
+                // } else {
+                //     vec![effect.stat_effect.stat.clone()]
+                // };
+
+                // for stat in stats {
+                //     *effects_map
+                //         .0
+                //         .entry((
+                //             stat,
+                //             effect.stat_effect.modifier,
+                //             effect.stat_effect.bypass_ignore,
+                //         ))
+                //         .or_default() += effect.stat_effect.value;
+                // }
                 effects_map
             })
     }
@@ -301,7 +358,7 @@ impl ItemModifiers {
     pub fn count_nonunique_affixes(&self) -> usize {
         self.affixes
             .iter()
-            .filter(|affix| affix.affix_type != AffixType::Unique)
+            .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
             .count()
     }
 

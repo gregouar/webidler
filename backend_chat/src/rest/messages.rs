@@ -39,7 +39,8 @@ async fn post_private_message(
             sent_at: Utc::now(),
             user_id: None,
             username: None,
-            content: payload.content,
+            chat_badge: None, // TODO: System badge?
+            content: payload.content.into_inner(),
             linked_item: payload.linked_item,
             // item_signature,
         }
@@ -69,7 +70,8 @@ async fn post_broadcast_message(
                 sent_at: Utc::now(),
                 user_id: None,
                 username: None,
-                content: payload.content,
+                chat_badge: None, // TODO: System badge?
+                content: payload.content.into_inner(),
                 linked_item: payload.linked_item,
                 // item_signature,
             },

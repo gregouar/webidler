@@ -1,12 +1,3 @@
-use leptos::prelude::*;
-use leptos_meta::*;
-use leptos_router::{
-    components::{Route, Router, Routes},
-    path,
-};
-use leptos_toaster::*;
-use url::Url;
-
 use crate::components::{
     accessibility::provide_accessibility_context,
     auth::provide_auth_context,
@@ -18,8 +9,15 @@ use crate::components::{
     settings::provide_settings_context,
     ui::{
         confirm::{ConfirmationModal, provide_confirm_context},
+        toast::{Toaster, ToasterPosition, provide_toasts},
         tooltip::DynamicTooltip,
     },
+};
+use leptos::prelude::*;
+use leptos_meta::*;
+use leptos_router::{
+    components::{Route, Router, Routes},
+    path,
 };
 
 // TODO: localization https://crates.io/crates/fluent-templates
@@ -28,12 +26,24 @@ use crate::components::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
+    // let base_uri = document()
+    //     .base_uri()
+    //     .ok()
+    //     .flatten()
+    //     .and_then(|base| Url::parse(&base).ok())
+    //     .map(|url| normalize_router_base(url.path()))
+    //     .unwrap_or_else(|| "/".to_string());
+
     let mut base_uri = document()
-        .base_uri()
+        .location()
+        .unwrap()
+        .pathname()
         .ok()
-        .flatten()
-        .and_then(|base| Url::parse(&base).ok())
-        .map(|url| url.path().to_string())
+        .and_then(|path| {
+            let mut parts = path.split('/').filter(|s| !s.is_empty());
+
+            parts.next().map(|first| format!("/{}/", first))
+        })
         .unwrap_or_else(|| "/".to_string());
 
     if base_uri.starts_with("/html") {
@@ -50,6 +60,7 @@ pub fn App() -> impl IntoView {
     provide_settings_context();
     provide_events_context();
     provide_data_context();
+    provide_toasts();
 
     let confirm_state = provide_confirm_context();
 
@@ -60,7 +71,7 @@ pub fn App() -> impl IntoView {
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
             .unwrap_or("ws://localhost:4242/chatws")
             .into()>
-            <Router base=base_uri>
+            <Router>
                 <Routes fallback=|| "Page not found.">
                     <Route path=path!("/") view=pages::MainMenuPage />
                     <Route path=path!("/terms") view=pages::terms::TermsPage />

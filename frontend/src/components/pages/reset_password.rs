@@ -126,7 +126,7 @@ pub fn ResetPasswordPage() -> impl IntoView {
                     <Captcha token=captcha_token />
                 </div>
 
-                <MenuButton class:w-full on:click=on_submit disabled=disable_submit>
+                <MenuButton class="w-full" on:click=on_submit disabled=disable_submit>
                     "Confirm"
                 </MenuButton>
             </div>

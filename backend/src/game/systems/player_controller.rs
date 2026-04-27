@@ -1,5 +1,6 @@
 use anyhow::Result;
 
+use serde::{Deserialize, Serialize};
 use shared::{
     computations,
     constants::{
@@ -10,34 +11,37 @@ use shared::{
         character::CharacterId,
         item::{ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
-        player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-        skill::{BaseSkillSpecs, SkillSpecs, SkillState},
+        player::{
+            PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs,
+            PlayerState,
+        },
+        skill::BaseSkillSpecs,
     },
 };
 
 use crate::{
     game::{
-        data::{DataInit, event::EventsQueue, master_store::SkillsStore},
-        systems::{characters_controller, inventory_controller, stats_updater},
+        data::{event::EventsQueue, master_store::SkillsStore},
+        systems::{characters_controller, inventory_controller, player_updater, stats_updater},
     },
     rest::AppError,
 };
 
 use super::{characters_controller::Target, items_controller, skills_controller};
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerController {
-    // pub auto_skills: Vec<bool>,
+    pub auto_skills: Vec<bool>,
+
+    #[serde(skip_serializing, skip_deserializing)]
     pub use_skills: Vec<usize>,
-    // pub preferred_loot: Option<ItemCategory>,
 }
 
 impl PlayerController {
-    pub fn init(specs: &PlayerSpecs) -> Self {
+    pub fn init(specs: &PlayerBaseSpecs) -> Self {
         PlayerController {
-            // auto_skills: specs.auto_skills.clone(),
-            use_skills: Vec::with_capacity(specs.skills_specs.len()),
-            // preferred_loot: None,
+            auto_skills: Vec::with_capacity(specs.max_skills as usize),
+            use_skills: Vec::with_capacity(specs.max_skills as usize),
         }
     }
 
@@ -49,6 +53,7 @@ impl PlayerController {
         &mut self,
         events_queue: &mut EventsQueue,
         area_threat: &AreaThreat,
+        player_base_specs: &'a PlayerBaseSpecs,
         player_specs: &'a PlayerSpecs,
         player_state: &'a mut PlayerState,
         monsters: &mut [Target<'a>],
@@ -57,18 +62,18 @@ impl PlayerController {
             return;
         }
 
-        let no_auto_use: Vec<_> = player_specs
-            .skills_specs
-            .iter()
-            .map(|skill_specs| {
-                skill_specs
-                    .base
+        let no_auto_use: Vec<_> = player_base_specs
+            .skills
+            .values()
+            .map(|player_base_skill| {
+                player_base_skill
+                    .base_skill_specs
                     .auto_use_conditions
                     .iter()
                     .any(|condition| {
                         stats_updater::check_condition(
                             area_threat,
-                            &player_specs.character_specs,
+                            &player_specs.character_specs.character_attrs,
                             &player_state.character_state,
                             condition,
                         ) == 0.0
@@ -77,7 +82,7 @@ impl PlayerController {
             .collect();
 
         let mut mana_available = characters_controller::mana_available(
-            &player_specs.character_specs,
+            &player_specs.character_specs.character_attrs,
             &player_state.character_state,
         );
 
@@ -95,11 +100,13 @@ impl PlayerController {
 
         let min_mana_needed = if player_specs
             .character_specs
+            .character_attrs
             .take_from_mana_before_life
             .get()
             > 0.0
             || player_specs
                 .character_specs
+                .character_attrs
                 .take_from_life_before_mana
                 .get()
                 > 0.0
@@ -107,24 +114,25 @@ impl PlayerController {
             0.0
         } else {
             player_specs
+                .character_specs
                 .skills_specs
                 .iter()
-                .take(player_specs.max_skills as usize)
+                .take(player_base_specs.max_skills as usize)
                 .map(|s| s.mana_cost.get())
                 .max_by(|a, b| a.total_cmp(b))
                 .unwrap_or_default()
         };
 
-        for (i, ((skill_specs, skill_state), no_auto_use)) in player_specs
+        for (i, (skill_specs, no_auto_use)) in player_specs
+            .character_specs
             .skills_specs
             .iter()
-            .zip(player_state.skills_states.iter_mut())
             .zip(no_auto_use.into_iter())
-            .take(player_specs.max_skills as usize)
+            .take(player_base_specs.max_skills as usize)
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
-            if (!player_specs.auto_skills.get(i).unwrap_or(&false)
+            if (!self.auto_skills.get(i).unwrap_or(&false)
                 || no_auto_use
                 || (skill_specs.mana_cost.get() > 0.0
                     && mana_available.get() < min_mana_needed + skill_specs.mana_cost.get()))
@@ -133,14 +141,8 @@ impl PlayerController {
                 continue;
             }
 
-            mana_available = skills_controller::use_skill(
-                events_queue,
-                skill_specs,
-                skill_state,
-                &mut player,
-                &mut friends,
-                monsters,
-            );
+            mana_available =
+                skills_controller::use_skill(events_queue, i, &mut player, &mut friends, monsters);
         }
 
         self.reset();
@@ -157,7 +159,7 @@ pub fn reward_player(
     let gold_reward = (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round();
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity {
         area_state.last_champion_spawn = area_state.area_level;
-        ((area_state.area_level + *area_specs.item_level_modifier + area_specs.power_level) as f64
+        ((area_state.area_level + *area_specs.item_level_modifier + *area_specs.power_level) as f64
             / 5.0
             * *area_specs.gems_find
             * 0.01)
@@ -174,42 +176,45 @@ pub fn reward_player(
 }
 
 pub fn level_up(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
-    if player_resources.experience < player_specs.experience_needed
-        || player_specs.level >= player_specs.max_level
+    if player_resources.experience < player_base_specs.experience_needed
+        || player_base_specs.level >= player_base_specs.max_level
     {
         return false;
     }
 
-    player_resources.experience -= player_specs.experience_needed;
-    level_up_no_cost(player_specs, player_state, player_resources);
+    player_resources.experience -= player_base_specs.experience_needed;
+    level_up_no_cost(player_base_specs, player_state, player_resources);
 
     true
 }
 
 pub fn level_up_no_cost(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) {
-    player_specs.level += 1;
-    player_resources.passive_points += 1;
-    player_specs.experience_needed = computations::player_level_up_cost(player_specs);
+    player_base_specs.level += 1;
+    player_base_specs.experience_needed = computations::player_level_up_cost(player_base_specs);
 
+    player_resources.passive_points += 1;
     player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
+    player_base_specs.character_attrs =
+        player_updater::base_player_character_attrs(player_base_specs.level);
 }
 
 pub fn equip_item_from_bag(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
     item_index: u8,
 ) -> Result<(), AppError> {
     let (new_item, old_item) = inventory_controller::equip_item_from_bag(
-        player_specs.max_area_level,
+        player_base_specs.max_area_level,
         player_inventory,
         item_index,
     )?;
@@ -217,15 +222,16 @@ pub fn equip_item_from_bag(
     if let Some(old_item) = old_item
         && let Some(slot) = old_item.base.slot
     {
-        unequip_weapon(player_specs, player_state, slot);
+        unequip_weapon(player_base_specs, player_state, player_controller, slot);
     }
 
     if let Some(ref weapon_specs) = new_item.weapon_specs
         && let Some(slot) = new_item.base.slot
     {
         equip_weapon(
-            player_specs,
+            player_base_specs,
             player_state,
+            player_controller,
             slot,
             new_item.modifiers.level,
             weapon_specs,
@@ -236,13 +242,19 @@ pub fn equip_item_from_bag(
 }
 
 pub fn unequip_item_to_bag(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
     item_slot: ItemSlot,
 ) -> Result<(), AppError> {
     inventory_controller::unequip_item_to_bag(player_inventory, item_slot)?;
-    unequip_weapon(player_specs, player_state, item_slot);
+    unequip_weapon(
+        player_base_specs,
+        player_state,
+        player_controller,
+        item_slot,
+    );
     Ok(())
 }
 
@@ -287,7 +299,7 @@ pub fn sell_item(
                 item_specs
                     .modifiers
                     .level
-                    .saturating_sub(area_specs.power_level + *area_specs.item_level_modifier),
+                    .saturating_sub(*area_specs.power_level + *area_specs.item_level_modifier),
                 MONSTER_REWARD_INCREASE_FACTOR,
             );
 
@@ -296,15 +308,17 @@ pub fn sell_item(
 }
 
 pub fn init_skills_from_inventory(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
 ) {
     for (item_slot, equipped_item) in player_inventory.equipped_items() {
         if let Some(weapon_specs) = equipped_item.weapon_specs.as_ref() {
             equip_weapon(
-                player_specs,
+                player_base_specs,
                 player_state,
+                player_controller,
                 item_slot,
                 equipped_item.modifiers.level,
                 weapon_specs,
@@ -314,96 +328,149 @@ pub fn init_skills_from_inventory(
 }
 
 fn unequip_weapon(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
     item_slot: ItemSlot,
 ) {
-    let to_remove: Vec<_> = player_specs
-        .skills_specs
-        .iter()
+    let to_remove: Vec<_> = player_base_specs
+        .skills
+        .values()
         .enumerate()
-        .filter_map(|(i, skill_specs)| (skill_specs.item_slot? == item_slot).then_some(i))
+        .filter_map(|(i, player_skill)| (player_skill.item_slot? == item_slot).then_some(i))
         .collect();
 
-    for i in to_remove.into_iter().rev() {
-        player_specs.skills_specs.remove(i);
-        player_state.skills_states.remove(i);
-        player_specs.auto_skills.remove(i);
+    for skill_index in to_remove.into_iter().rev() {
+        unequip_base_skill(
+            player_base_specs,
+            player_state,
+            player_controller,
+            skill_index,
+        );
     }
 }
 
 fn equip_weapon(
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
     item_slot: ItemSlot,
     item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) {
-    equip_skill(
-        player_specs,
+    equip_base_skill(
+        player_base_specs,
         player_state,
+        player_controller,
+        item_slot_to_skill_id(item_slot),
         items_controller::make_weapon_skill(item_level, weapon_specs),
         true,
         Some(item_slot),
     );
 }
 
-pub fn equip_skill(
-    player_specs: &mut PlayerSpecs,
+fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Accessory => "accessory_skill",
+        ItemSlot::Helmet => "helmet_skill",
+        ItemSlot::Amulet => "amulet_skill",
+        ItemSlot::Weapon => "weapon_skill",
+        ItemSlot::Body => "body_skill",
+        ItemSlot::Shield => "shield_skill",
+        ItemSlot::Gloves => "gloves_skill",
+        ItemSlot::Boots => "boots_skill",
+        ItemSlot::Ring => "ring_skill",
+    }
+}
+
+pub fn equip_base_skill(
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
+    skill_id: &str,
     base_skill_specs: BaseSkillSpecs,
     auto_use: bool,
     item_slot: Option<ItemSlot>,
 ) {
-    let mut skill_specs = SkillSpecs::init(base_skill_specs);
-    skill_specs.item_slot = item_slot;
-
     let index = if item_slot.is_some() {
         0
     } else {
-        player_specs.skills_specs.len()
+        player_base_specs.skills.len()
     };
 
     player_state
+        .character_state
         .skills_states
-        .insert(index, SkillState::init(&skill_specs));
-    player_specs.skills_specs.insert(index, skill_specs);
-    player_specs.auto_skills.insert(index, auto_use);
+        .insert(index, Default::default());
+
+    player_base_specs.skills.shift_insert(
+        index,
+        skill_id.to_string(),
+        PlayerBaseSkill {
+            item_slot,
+            upgrade_level: 1,
+            next_upgrade_cost: base_skill_specs.upgrade_cost,
+            base_skill_specs,
+        },
+    );
+
+    player_controller.auto_skills.insert(index, auto_use);
+}
+
+pub fn unequip_base_skill(
+    player_base_specs: &mut PlayerBaseSpecs,
+    player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
+    skill_index: usize,
+) {
+    if skill_index < player_base_specs.skills.len() {
+        player_base_specs.skills.shift_remove_index(skill_index);
+    }
+
+    if skill_index < player_state.character_state.skills_states.len() {
+        player_state
+            .character_state
+            .skills_states
+            .remove(skill_index);
+    }
+
+    if skill_index < player_controller.auto_skills.len() {
+        player_controller.auto_skills.remove(skill_index);
+    }
 }
 
 pub fn buy_skill(
     skills_store: &SkillsStore,
-    player_specs: &mut PlayerSpecs,
+    player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
     player_resources: &mut PlayerResources,
     skill_id: &str,
 ) -> bool {
-    if player_resources.gold < player_specs.buy_skill_cost
-        || player_specs.skills_specs.len() >= player_specs.max_skills as usize
-        || player_specs.bought_skills.contains(skill_id)
+    if player_resources.gold < player_base_specs.buy_skill_cost
+        || player_base_specs.skills.len() >= player_base_specs.max_skills as usize
+        || player_base_specs.skills.contains_key(skill_id)
     {
         return false;
     }
 
     if let Some(base_skill_specs) = skills_store.get(skill_id) {
-        equip_skill(
-            player_specs,
+        equip_base_skill(
+            player_base_specs,
             player_state,
-            BaseSkillSpecs {
-                skill_id: skill_id.to_string(),
-                ..base_skill_specs.clone()
-            },
+            player_controller,
+            skill_id,
+            base_skill_specs.clone(),
             true,
             None,
         );
-        player_resources.gold -= player_specs.buy_skill_cost;
-        player_specs.buy_skill_cost = (if player_specs.buy_skill_cost > 0.0 {
-            player_specs.buy_skill_cost * SKILL_COST_FACTOR
+        player_resources.gold -= player_base_specs.buy_skill_cost;
+        player_base_specs.buy_skill_cost = (if player_base_specs.buy_skill_cost > 0.0 {
+            player_base_specs.buy_skill_cost * SKILL_COST_FACTOR
         } else {
             SKILL_BASE_COST * SKILL_COST_FACTOR
         })
         .round();
-        player_specs.bought_skills.insert(skill_id.to_string());
         true
     } else {
         false

@@ -10,7 +10,7 @@
     "item_level": 100,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 10
@@ -40,7 +40,7 @@
     "item_level": 200,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 20
@@ -70,7 +70,7 @@
     "item_level": 300,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 30
@@ -100,7 +100,7 @@
     "item_level": 400,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 40
@@ -130,7 +130,7 @@
     "item_level": 500,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 50
@@ -160,7 +160,7 @@
     "item_level": 600,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 60
@@ -190,7 +190,7 @@
     "item_level": 700,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 70
@@ -220,7 +220,7 @@
     "item_level": 800,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 80
@@ -250,7 +250,7 @@
     "item_level": 900,
     "effects": [
       {
-        "scope": "Global",
+        "scope": "Local",
         "stat": "LifeRegen",
         "modifier": "Flat",
         "value": 100

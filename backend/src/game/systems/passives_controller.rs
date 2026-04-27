@@ -6,7 +6,6 @@ use shared::data::{
     item_affix::AffixEffectScope,
     passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
     player::PlayerResources,
-    stat_effect::EffectsMap,
     user::UserCharacterId,
 };
 use sqlx::Transaction;
@@ -69,27 +68,6 @@ pub fn purchase_node(
     }
 }
 
-pub fn generate_effects_map_from_passives<'a>(
-    passives_tree_specs: &'a PassivesTreeSpecs,
-    passives_tree_state: &'a PassivesTreeState,
-) -> impl Iterator<Item = EffectsMap> + use<'a> {
-    passives_tree_state
-        .purchased_nodes
-        .iter()
-        .filter_map(|node_id| {
-            passives_tree_specs.nodes.get(node_id).map(|node| {
-                node.aggregate_effects(
-                    passives_tree_state
-                        .ascension
-                        .ascended_nodes
-                        .get(node_id)
-                        .cloned()
-                        .unwrap_or_default(),
-                )
-            })
-        })
-}
-
 pub fn compute_passives_tree_specs(
     passives_tree_specs: &mut PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
@@ -103,7 +81,7 @@ pub fn compute_passives_tree_specs(
 
             node_specs.effects = (&(item_specs
                 .modifiers
-                .aggregate_effects(AffixEffectScope::Global)))
+                .aggregate_effects(AffixEffectScope::Global, false)))
                 .into(); // TODO: Better copy, don't aggregate?
             node_specs.triggers = item_specs.base.triggers.clone();
             node_specs.root_node |= item_specs
@@ -158,6 +136,7 @@ pub async fn update_ascension(
         0.0,
         (total_shards - cost) - resource_shards,
         0.0,
+        0.0,
     )
     .await?;
 
@@ -204,7 +183,7 @@ pub fn validate_ascension(
             ));
         }
 
-        cost += (*level) as f64;
+        cost += node_specs.total_ascend_cost(*level) as f64;
     }
 
     Ok(cost)

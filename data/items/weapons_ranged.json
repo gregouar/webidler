@@ -1,265 +1,525 @@
 {
   "shortbow": {
     "name": "Shortbow",
-    "icon": "items/shortbow.webp",
+    "icon": "items/weapons_ranged/shortbow.webp",
+    "description": null,
     "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [ 3, 7 ]
+        "Physical": [
+          3.0,
+          7.0
+        ]
       },
-      "crit_chance": 10,
-      "crit_damage": 100
-    }
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hunting_bow": {
     "name": "Hunting Bow",
-    "icon": "items/longbow.webp",
+    "icon": "items/weapons_ranged/longbow.webp",
+    "description": null,
     "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [ 7, 11 ]
+        "Physical": [
+          7.0,
+          11.0
+        ]
       },
-      "crit_chance": 10,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 40
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hunting_bow_unique": {
     "name": "Bloodspiller",
+    "icon": "items/weapons_ranged/bloodspiller.webp",
     "description": "It drinks deep of crimson under moonlight, never sated, never silent.",
-    "icon": "items/bloodspiller.webp",
     "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
-    "weapon_specs": {
-      "range": "Distance",
-      "shape": "Horizontal2",
-      "cooldown": 2.5,
-      "damage": {
-        "Physical": [ 7, 11 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 50,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
-          "CritDamage": null
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
         "modifier": "Increased",
-        "value": [ 40, 60 ]
-      },
-      {
         "scope": "Local",
-        "stat": {
-          "CritChance": null
-        },
-        "modifier": "Increased",
-        "value": [ 15, 30 ]
-      },
-      {
-        "scope": "Local",
-        "stat": {
-          "Damage": { }
-        },
-        "modifier": "Increased",
-        "value": [ 40, 60 ]
-      },
-      {
-        "scope": "Global",
-        "stat": {
-          "RestoreOnHit": { "restore_type": "Life", "skill_type": "Attack" }
-        },
-        "modifier": "Flat",
-        "value": [ 4, 8 ],
+        "value": [
+          40.0,
+          80.0
+        ],
         "ignore_quality": true
-      }
-    ],
-    "triggers": [
+      },
       {
-        "trigger_id": "bloodspiller",
-        "OnKill": {
-          "conditions": [ { "HasStatus": { "DamageOverTime": "Physical" } } ]
-        },
-        "skill_type": "Other",
-        "target": "Me",
-        "effects": [
-          {
-            "Restore": {
-              "restore_type": "Life",
-              "value": [ 20, 40 ],
-              "modifier": "Flat"
+        "stat": {
+          "SuccessChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                }
+              }
             }
           }
-        ]
-      }
-    ],
-    "min_area_level": 50
-  },
-  "decorated_bow": {
-    "name": "Decorated Bow",
-    "icon": "items/decorated_bow.webp",
-    "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
-    "weapon_specs": {
-      "range": "Distance",
-      "shape": "Horizontal2",
-      "cooldown": 2.5,
-      "damage": {
-        "Physical": [ 11, 15 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
-    "min_area_level": 90
-  },
-  "composite_bow": {
-    "name": "Composite Bow",
-    "icon": "items/composite_bow.webp",
-    "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
-    "weapon_specs": {
-      "range": "Distance",
-      "shape": "Horizontal2",
-      "cooldown": 2.5,
-      "damage": {
-        "Physical": [ 15, 19 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
-    "min_area_level": 140
-  },
-  "composite_bow_unique": {
-    "name": "Voltrach Bite",
-    "description": "Where lightning meets venom, life itself hesitates.",
-    "icon": "items/voltrach_bite.webp",
-    "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
-    "rarity": "Unique",
-    "weapon_specs": {
-      "range": "Distance",
-      "shape": "Horizontal2",
-      "cooldown": 2.5,
-      "damage": {
-        "Physical": [ 15, 19 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
-    "affixes": [
-      {
-        "scope": "Local",
-        "stat": {
-          "Damage": {
-            "damage_type": "Physical",
-            "min_max": "Min"
-          }
-        },
-        "modifier": "Flat",
-        "value": -15
-      },
-      {
-        "scope": "Local",
-        "stat": {
-          "Damage": {
-            "damage_type": "Physical",
-            "min_max": "Max"
-          }
-        },
-        "modifier": "Flat",
-        "value": -19
-      },
-      {
-        "scope": "Local",
-        "stat": {
-          "Damage": {
-            "damage_type": "Storm",
-            "min_max": "Max"
-          }
-        },
-        "modifier": "Flat",
-        "value": 34
-      },
-      {
-        "scope": "Local",
-        "stat": {
-          "Damage": {
-            "damage_type": "Storm"
-          }
         },
         "modifier": "Increased",
-        "value": [ 80, 140 ]
-      },
-      {
-        "scope": "Local",
-        "stat": {
-          "CritDamage": null
-        },
-        "modifier": "Increased",
-        "value": [ 100, 200 ],
-        "ignore_quality": true
-      },
-      {
         "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
         "stat": {
-          "RestoreOnHit": { "restore_type": "Mana", "skill_type": "Attack" }
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": "Attack"
+          }
         },
         "modifier": "Flat",
-        "value": [ 2, 4 ],
+        "scope": "Global",
+        "value": [
+          2.0,
+          4.0
+        ],
         "ignore_quality": true
-      }
-    ],
-    "triggers": [
+      },
       {
-        "trigger_id": "voltrach_bite",
-        "OnHit": { "is_hurt": true },
-        "skill_type": "Other",
-        "effects": [
-          {
-            "success_chance": 50,
-            "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "conditions": [
+              {
+                "HasStatus": {
                   "status_type": {
                     "DamageOverTime": {
-                      "damage_type": "Poison"
+                      "damage_type": "Physical"
                     }
                   },
-                  "value": 0
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "Damage": {
                   "skill_type": null,
-                  "damage_type": "Storm"
+                  "not": false
                 }
               }
             ]
           }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "bloodspiller",
+        "OnKill": {
+          "conditions": [
+            {
+              "HasStatus": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Physical"
+                  }
+                },
+                "skill_type": null,
+                "not": false
+              }
+            }
+          ]
+        },
+        "target": "Me",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Spell",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "Restore": {
+              "restore_type": "Life",
+              "value": [
+                10.0,
+                20.0
+              ],
+              "modifier": "Flat"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
         ],
+        "skill_shape": "Single",
+        "owner": null,
+        "is_debuff": false
+      }
+    ],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          7.0,
+          11.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      }
+    ]
+  },
+  "decorated_bow": {
+    "name": "Decorated Bow",
+    "icon": "items/weapons_ranged/decorated_bow.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          11.0,
+          15.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "composite_bow": {
+    "name": "Composite Bow",
+    "icon": "items/weapons_ranged/composite_bow.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          15.0,
+          19.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "composite_bow_unique": {
+    "name": "Voltrach Bite",
+    "icon": "items/weapons_ranged/voltrach_bite.webp",
+    "description": "Where lightning meets venom, life itself hesitates.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Storm",
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 34.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Physical",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Local",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          80.0,
+          140.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "CritDamage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Mana",
+            "skill_type": "Attack"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          2.0,
+          4.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "voltrach_bite",
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null
+        },
+        "target": "SameTarget",
         "modifiers": [
           {
             "stat": {
-              "Damage": { }
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
             },
             "modifier": "Flat",
             "factor": 0.5,
@@ -267,220 +527,592 @@
               "HitDamage": "Storm"
             }
           }
-        ]
+        ],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 30.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 4.0
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Storm",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "is_debuff": false
       }
     ],
-    "min_area_level": 150
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          15.0,
+          19.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Storm",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 8.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "CritDamage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "light_crossbow": {
     "name": "Light Crossbow",
-    "icon": "items/light_crossbow.webp",
+    "icon": "items/weapons_ranged/light_crossbow.webp",
+    "description": null,
     "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [ 19, 23 ]
+        "Physical": [
+          19.0,
+          23.0
+        ]
       },
-      "crit_chance": 10,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 190
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_gun": {
     "name": "Pistol of the Damned",
+    "icon": "items/weapons_ranged/treasure_gun.webp",
     "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
-    "icon": "items/treasure_gun.webp",
     "slot": "Weapon",
-    "extra_slots": [ ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
-    "weapon_specs": {
-      "range": "Distance",
-      "shape": "Horizontal2",
-      "cooldown": 2.5,
-      "damage": {
-        "Physical": [ 19, 23 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 200,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
           "Description": "Can be wielded One Handed"
         },
         "modifier": "Flat",
-        "value": 1
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Fire",
-            "min_max": "Min"
+            "min_max": "Min",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
-        "value": [ 10, 13 ],
+        "scope": "Local",
+        "value": [
+          10.0,
+          13.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Fire",
-            "min_max": "Max"
+            "min_max": "Max",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
-        "value": [ 14, 16 ],
+        "scope": "Local",
+        "value": [
+          14.0,
+          16.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
-          "Damage": { }
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
         "modifier": "Increased",
-        "value": [ 120, 160 ],
+        "scope": "Local",
+        "value": [
+          120.0,
+          160.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
-          "Speed": "Attack"
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Increased",
-        "value": [ 20, 30 ],
+        "scope": "Local",
+        "value": [
+          20.0,
+          30.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
-          "CritChance": null
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Increased",
-        "value": [ 40, 60 ],
+        "scope": "Local",
+        "value": [
+          40.0,
+          60.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 50, 100 ],
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
-    "min_area_level": 200
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          19.0,
+          23.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Fire",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Fire",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "compound_bow": {
     "name": "Compound Bow",
-    "icon": "items/compound_bow.webp",
+    "icon": "items/weapons_ranged/compound_bow.webp",
+    "description": null,
     "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [ 23, 27 ]
+        "Physical": [
+          23.0,
+          27.0
+        ]
       },
-      "crit_chance": 10,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 250
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
-    "icon": "items/dragon_crossbow.webp",
+    "icon": "items/weapons_ranged/dragon_crossbow.webp",
     "description": "Even unloaded, it smells of ash and oil.",
     "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
-    "weapon_specs": {
-      "range": "Distance",
-      "shape": "Horizontal2",
-      "cooldown": 2.5,
-      "damage": {
-        "Physical": [ 23, 27 ]
-      },
-      "crit_chance": 10,
-      "crit_damage": 100
-    },
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Fire",
-            "min_max": "Min"
+            "min_max": "Min",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
-        "value": [ 20, 25 ],
+        "scope": "Local",
+        "value": [
+          20.0,
+          25.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
           "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
             "damage_type": "Fire",
-            "min_max": "Max"
+            "min_max": "Max",
+            "is_hit": null
           }
         },
         "modifier": "Flat",
-        "value": [ 26, 30 ],
+        "scope": "Local",
+        "value": [
+          26.0,
+          30.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
-          "Damage": { }
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
         "modifier": "Increased",
-        "value": [ 150, 200 ],
+        "scope": "Local",
+        "value": [
+          150.0,
+          200.0
+        ],
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
-          "CritChance": null
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Flat",
-        "value": 5,
+        "scope": "Local",
+        "value": 5.0,
         "ignore_quality": true
       },
       {
-        "scope": "Local",
         "stat": {
-          "CritDamage": null
+          "CritDamage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
         },
         "modifier": "Flat",
-        "value": [ 100, 200 ],
+        "scope": "Local",
+        "value": [
+          100.0,
+          200.0
+        ],
         "ignore_quality": true
       }
     ],
     "triggers": [
       {
+        "name": null,
+        "icon": null,
+        "description": null,
         "trigger_id": "compound_bow_unique",
         "OnHit": {
           "skill_type": "Attack",
+          "range": null,
           "is_crit": true,
-          "is_triggered": false
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": false,
+          "damage_type": null
         },
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.2,
+            "source": {
+              "HitDamage": "Fire"
+            }
+          }
+        ],
+        "skill_range": "Melee",
         "skill_type": "Attack",
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "ApplyStatus": {
-              "duration": 2,
               "statuses": [
                 {
                   "status_type": {
@@ -489,52 +1121,206 @@
                     }
                   },
                   "value": 0.0,
-                  "cumulate": true
+                  "cumulate": true,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
                 }
-              ]
+              ],
+              "duration": 2.0
             },
             "ignore_stat_effects": [
               {
                 "Damage": {
                   "skill_type": "Attack",
-                  "damage_type": "Fire"
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Fire",
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
-            ]
+            ],
+            "conditional_modifiers": []
           }
         ],
-        "modifiers": [
-          {
-            "stat": {
-              "Damage": { }
-            },
-            "modifier": "Flat",
-            "factor": 1.0,
-            "source": {
-              "HitDamage": "Fire"
-            }
-          }
-        ]
+        "skill_shape": "Single",
+        "owner": null,
+        "is_debuff": false
       }
     ],
-    "min_area_level": 260
-  },
-  "weapon_ranged_7": {
-    "name": "Crossbow",
-    "icon": "items/crossbow.webp",
-    "slot": "Weapon",
-    "extra_slots": [ "Shield" ],
-    "categories": [ "AttackWeapon", "RangedWeapon" ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
       "cooldown": 2.5,
       "damage": {
-        "Physical": [ 27, 31 ]
+        "Physical": [
+          23.0,
+          27.0
+        ]
       },
-      "crit_chance": 10,
-      "crit_damage": 100
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
     },
-    "min_area_level": 320
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Fire",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 6.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Fire",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 6.0
+        }
+      }
+    ]
+  },
+  "weapon_ranged_7": {
+    "name": "Crossbow",
+    "icon": "items/weapons_ranged/crossbow.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          27.0,
+          31.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "weapon_ranged_8": {
+    "name": "Arbalest",
+    "icon": "items/weapons_ranged/arbalest.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          31.0,
+          35.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

@@ -1,0 +1,77 @@
+{
+  "name": "Urdnot",
+  "portrait": "monsters/inn/adventurer_barbarian.webp",
+  "rarity": "Boss",
+  "max_life": 200,
+  "power_factor": 8,
+  "armor": { "Physical": 500, "Fire": 500, "Storm": 500, "Poison": 500 },
+  "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 30
+    }
+  ],
+  "skills": [
+    {
+      "name": "Heavy Strike",
+      "icon": "skills/attack.svg",
+      "cooldown": 3.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 10, 20 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RAGE !!!",
+      "icon": "skills/haste.svg",
+      "skill_type": "Blessing",
+      "cooldown": 20.0,
+      "targets": [
+        {
+          "target_type": "Me",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [ 5, 10 ],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Damage": { } },
+                        "modifier": "Increased"
+                      }
+                    },
+                    "value": 100
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": { }
+                        },
+                        "modifier": "Flat",
+                        "debuff": false
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

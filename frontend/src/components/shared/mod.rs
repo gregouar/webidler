@@ -7,4 +7,5 @@ pub mod passives;
 pub mod player_count;
 pub mod resources;
 pub mod settings;
+pub mod skills;
 pub mod tooltips;

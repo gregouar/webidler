@@ -2,180 +2,180 @@
   {
     "name": "Lively",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [10, 15]
+        "value": [ 10, 15 ]
       }
     ]
   },
   {
     "name": "Healthy",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [20, 25]
+        "value": [ 20, 25 ]
       }
     ]
   },
   {
     "name": "Hearty",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [30, 35]
+        "value": [ 30, 35 ]
       }
     ]
   },
   {
     "name": "Enduring",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [40, 45]
+        "value": [ 40, 45 ]
       }
     ]
   },
   {
     "name": "Vigorous",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [50, 55]
+        "value": [ 50, 55 ]
       }
     ]
   },
   {
     "name": "Burly",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [60, 65]
+        "value": [ 60, 65 ]
       }
     ]
   },
   {
     "name": "Brawny",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [70, 75]
+        "value": [ 70, 75 ]
       }
     ]
   },
   {
     "name": "Solid",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Armor", "Shield"],
+    "weight": 400,
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [80, 85]
+        "value": [ 80, 85 ]
       }
     ]
   },
   {
     "name": "Imposing",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Armor", "Shield"],
+    "weight": 200,
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [90, 95]
+        "value": [ 90, 95 ]
       }
     ]
   },
   {
     "name": "Formidable",
     "family": "add_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Armor", "Shield"],
+    "weight": 100,
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Flat",
-        "value": [100, 120]
+        "value": [ 100, 120 ]
       }
     ]
   },
@@ -183,180 +183,180 @@
   {
     "name": "Hefty",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [2, 4]
+        "value": [ 2, 4 ]
       }
     ]
   },
   {
     "name": "Robust",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [5, 6]
+        "value": [ 5, 6 ]
       }
     ]
   },
   {
     "name": "Sturdy",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [7, 8]
+        "value": [ 7, 8 ]
       }
     ]
   },
   {
     "name": "Beefy",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [9, 10]
+        "value": [ 9, 10 ]
       }
     ]
   },
   {
     "name": "Endurant",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [11, 12]
+        "value": [ 11, 12 ]
       }
     ]
   },
   {
     "name": "Hulking",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [13, 14]
+        "value": [ 13, 14 ]
       }
     ]
   },
   {
     "name": "Resistant",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Armor", "Shield"],
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [15, 16]
+        "value": [ 15, 16 ]
       }
     ]
   },
   {
     "name": "Tenacious",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Armor", "Shield"],
+    "weight": 400,
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [17, 18]
+        "value": [ 17, 18 ]
       }
     ]
   },
   {
     "name": "Resilient",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Armor", "Shield"],
+    "weight": 200,
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [19, 20]
+        "value": [ 19, 20 ]
       }
     ]
   },
   {
     "name": "Stalwart",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Armor", "Shield"],
+    "weight": 100,
+    "restrictions": [ "Armor", "Shield" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [21, 22]
+        "value": [ 21, 22 ]
       }
     ]
   }

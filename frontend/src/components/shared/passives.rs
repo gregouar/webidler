@@ -4,19 +4,23 @@ use leptos::{html::*, prelude::*};
 use std::sync::Arc;
 
 use shared::data::passive::{
-    PassiveConnection, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
+    self, PassiveConnection, PassiveNodeSpecs, PassiveNodeType, PassivesTreeAscension,
+    PassivesTreeSpecs, PurchasedNodes,
 };
 
 use crate::{
     assets::img_asset,
     components::{
         accessibility::AccessibilityContext,
+        settings::{GraphicsQuality, SettingsContext},
         shared::tooltips::{
             effects_tooltip::{self, formatted_effects_list},
+            frame::{TooltipFrame, TooltipFramePalette},
             trigger_tooltip::{self, format_trigger},
         },
         ui::{
             Separator,
+            card::CardInsetTitle,
             tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
         },
     },
@@ -91,6 +95,7 @@ pub fn Node(
     on_right_click: impl Fn() + Send + Sync + 'static,
     #[prop(optional, into)] search_node: Option<Signal<Option<String>>>,
 ) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
     let fill = match node_specs.node_type {
         PassiveNodeType::Attack => "#8b1e1e",
         PassiveNodeType::Life => "#386641",
@@ -155,6 +160,9 @@ pub fn Node(
     };
 
     let shadow_class = move || {
+        if settings.graphics_quality() == GraphicsQuality::Low {
+            return "";
+        }
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Inactive, MetaStatus::Normal) => "",
@@ -289,8 +297,17 @@ pub fn Node(
                                         width=24 + node_size * 2
                                         height=24 + node_size * 2
                                         preserveAspectRatio="xMidYMid slice"
-                                        class="group-active:scale-90 group-active:brightness-100
-                                        xl:drop-shadow-[2px_2px_2px_black]"
+                                        class=move || {
+                                            format!(
+                                                "group-active:scale-90 group-active:brightness-100 {}",
+                                                if settings.graphics_quality() == GraphicsQuality::High {
+                                                    "xl:drop-shadow-[2px_2px_2px_black]"
+                                                } else {
+                                                    ""
+                                                },
+                                            )
+                                        }
+                                        // xl:drop-shadow-[2px_2px_2px_black]
                                         style=move || {
                                             format!(
                                                 "pointer-events: none;
@@ -447,14 +464,16 @@ pub fn NodeTooltip(
     node_level: Memo<u8>,
     show_upgrade: bool,
 ) -> impl IntoView {
+    let palette = TooltipFramePalette {
+        border_class: "border-teal-700/90",
+        inner_border_class: "border-teal-200/10",
+        shine_color: "rgba(153,244,234,0.35)",
+    };
+
     view! {
-        <div class="
-        max-w-xs p-4 rounded-xl border border-teal-700 ring-2 ring-teal-500 
-        shadow-md shadow-teal-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
-        text-center
-        ">
+        <TooltipFrame palette class="max-w-xs">
             <NodeTooltipContent node_specs node_level show_upgrade />
-        </div>
+        </TooltipFrame>
     }
 }
 
@@ -478,7 +497,7 @@ pub fn NodeTooltipContent(
         .triggers
         .clone()
         .into_iter()
-        .map(format_trigger)
+        .map(|trigger| format_trigger(trigger, false))
         .collect();
 
     let is_locked = move || node_specs_locked && node_level() == 0;
@@ -523,7 +542,7 @@ pub fn NodeTooltipContent(
     };
 
     let upgrade_text = {
-        let upgrade_effects = node_specs.upgrade_effects.clone();
+        let node_specs = node_specs.clone();
         move || {
             if !show_upgrade {
                 None
@@ -539,7 +558,7 @@ pub fn NodeTooltipContent(
                     }
                     .into_any(),
                 )
-            } else if !upgrade_effects.is_empty() {
+            } else if !node_specs.upgrade_effects.is_empty() {
                 let max_level = node_level() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
@@ -558,7 +577,12 @@ pub fn NodeTooltipContent(
                             } else {
                                 view! {
                                     " | Ascend Cost: "
-                                    <span class="text-cyan-300">"1 Power Shard"</span>
+                                    <span class="text-cyan-300">
+                                        <span class="font-semibold">
+                                            {node_specs.next_ascend_cost(node_level())}
+                                        </span>
+                                        " Power Shard(s)"
+                                    </span>
                                 }
                                     .into_any()
                             }}
@@ -572,7 +596,7 @@ pub fn NodeTooltipContent(
                                             <span class="text-gray-400 ">"Ascend to get:"</span>
                                         </li>
                                         {effects_tooltip::formatted_effects_list(
-                                            upgrade_effects.clone(),
+                                            node_specs.upgrade_effects.clone(),
                                         )}
                                     </ul>
                                 }
@@ -587,7 +611,7 @@ pub fn NodeTooltipContent(
     };
 
     view! {
-        <strong class="text-sm xl:text-base font-bold text-teal-300 font-display">
+        <strong class="text-sm xl:text-base font-bold text-teal-300 font-display text-shadow-md/80">
             <ul class="list-none xl:space-y-1 mb-2">
                 <li class=" whitespace-pre-line">{node_specs.name.clone()}</li>
             </ul>
@@ -617,4 +641,132 @@ pub fn node_text(node_specs: &PassiveNodeSpecs) -> String {
             .map(trigger_tooltip::trigger_text)
             .join(" ")
     )
+}
+
+#[component]
+pub fn PassiveSkillStats(
+    #[prop(into)] passives_tree_specs: Signal<PassivesTreeSpecs>,
+    #[prop(into)] passives_tree_ascension: Signal<PassivesTreeAscension>,
+    #[prop(into)] purchased_nodes: Signal<PurchasedNodes>,
+) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
+    let stats = Memo::new(move |_| {
+        passives_tree_specs.with(|passives_tree_specs| {
+            passives_tree_ascension.with(|passives_tree_ascension| {
+                purchased_nodes.with(|purchased_nodes| {
+                    passive::generate_effects_map_from_passives(
+                        passives_tree_specs,
+                        passives_tree_ascension,
+                        purchased_nodes,
+                    )
+                })
+            })
+        })
+    });
+
+    let (panel_open, set_panel_open) = signal(true);
+
+    view! {
+        <div class=move || {
+            format!(
+                "absolute left-0 top-0 h-full
+                transition-transform duration-300 ease-in-out {}",
+                if panel_open.get() { "translate-x-0" } else { "-translate-x-full" },
+            )
+        }>
+            <div class=move || {
+                format!(
+                    "h-full w-md overflow-y-auto p-2 xl:p-3 border-r {} {} {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "border-[#5a4a30]/70",
+                        GraphicsQuality::Medium => "border-[#5a4a30]/70",
+                        GraphicsQuality::Low => "border-[#54462f]/80",
+                    },
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "bg-[linear-gradient(180deg,rgba(226,193,122,0.04),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.14)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]"
+                        }
+                        GraphicsQuality::Medium => {
+                            "bg-[linear-gradient(180deg,rgba(204,172,105,0.035),rgba(0,0,0,0.02)_24%,rgba(0,0,0,0.12)_100%),linear-gradient(180deg,rgba(19,19,23,0.98),rgba(10,10,12,1))]"
+                        }
+                        GraphicsQuality::Low => {
+                            "bg-[linear-gradient(180deg,rgba(174,145,88,0.03),rgba(0,0,0,0.03)_26%,rgba(0,0,0,0.1)_100%),linear-gradient(180deg,rgba(20,20,24,0.98),rgba(11,11,13,1))]"
+                        }
+                    },
+                    if settings.graphics_quality() == GraphicsQuality::High {
+                        "shadow-[inset_0_1px_0_rgba(255,255,255,0.03),inset_-1px_0_0_rgba(0,0,0,0.35)]"
+                    } else {
+                        ""
+                    },
+                )
+            }>
+                <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                    <div class="pointer-events-none absolute inset-[1px] border-r border-white/5"></div>
+                </Show>
+
+                <CardInsetTitle>"Total Effects"</CardInsetTitle>
+
+                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                    {move || {
+                        let stats = stats.with(|stats| stats.into());
+                        effects_tooltip::formatted_effects_list(stats)
+                    }}
+                </ul>
+
+                {move || {
+                    purchased_nodes
+                        .with(|purchased_nodes| {
+                            passives_tree_specs
+                                .read()
+                                .nodes
+                                .iter()
+                                .filter(|(node_id, _)| purchased_nodes.contains(*node_id))
+                                .flat_map(|(_, node_specs)| node_specs.triggers.iter())
+                                .cloned()
+                                .map(|trigger_specs| {
+                                    view! {
+                                        <div class="pb-2 list-none">
+                                            <Separator />
+                                            {trigger_tooltip::format_trigger(trigger_specs, false)}
+                                        </div>
+                                    }
+                                })
+                                .collect::<Vec<_>>()
+                        })
+                }}
+            </div>
+
+            <button
+                class=move || {
+                    format!(
+                        "absolute top-1/2 right-0 -translate-y-1/2 translate-x-full
+                        rounded-r-[7px] flex items-center justify-center
+                        w-7 h-18 font-extrabold text-stone-200 text-shadow shadow-black/80
+                        border border-l-0 active:brightness-90 {} {}",
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => "border-[#5a4a30]/75",
+                            GraphicsQuality::Medium => "border-[#5a4a30]/75",
+                            GraphicsQuality::Low => "border-[#54462f]/80",
+                        },
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.14)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))] shadow-[0_4px_10px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(236,210,148,0.12),inset_0_-1px_0_rgba(0,0,0,0.35)] hover:text-[#f1e4c4] hover:border-[#7b6440]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "bg-[linear-gradient(180deg,rgba(199,166,101,0.06),rgba(0,0,0,0.12)),linear-gradient(180deg,rgba(39,38,44,0.98),rgba(18,18,22,1))] hover:text-[#f1e4c4] hover:border-[#7b6440]"
+                            }
+                            GraphicsQuality::Low => {
+                                "bg-[linear-gradient(180deg,rgba(174,145,88,0.05),rgba(0,0,0,0.1)),linear-gradient(180deg,rgba(37,36,42,0.99),rgba(18,18,22,1))] hover:text-[#e8d8b0] hover:border-[#6d5a3c]"
+                            }
+                        },
+                    )
+                }
+                on:click=move |_| {
+                    set_panel_open.update(|v| *v = !*v);
+                }
+            >
+                {move || if panel_open.get() { "<" } else { ">" }}
+            </button>
+        </div>
+    }
 }

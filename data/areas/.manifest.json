@@ -5,12 +5,15 @@
   "resources": {
     "areas": [
       "inn_basement.json",
+      "inn_basement_2.json",
       "forest.json",
       "witch_lair.json",
+      "witch_lair_2.json",
       "castle.json",
       "island.json",
       "peaks.json",
       "yokai.json",
+      "desert.json",
       "chaos.json"
     ]
   }

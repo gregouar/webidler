@@ -1,14 +1,14 @@
 use leptos::prelude::*;
 use std::collections::HashMap;
 
-use shared::data::{area::AreaSpecs, skill::SkillSpecs};
+use shared::data::{area::AreaSpecs, skill::BaseSkillSpecs};
 
 use crate::components::backend_client::{BackendClient, BackendError};
 
 #[derive(Clone, Copy)]
 pub struct DataContext {
     pub areas_specs: RwSignal<HashMap<String, AreaSpecs>>,
-    pub skill_specs: RwSignal<HashMap<String, SkillSpecs>>,
+    pub skill_specs: RwSignal<HashMap<String, BaseSkillSpecs>>,
     pub loaded: RwSignal<bool>,
 }
 
@@ -35,5 +35,13 @@ impl DataContext {
         self.loaded.set(true);
 
         Ok(())
+    }
+
+    pub fn skill_name(&self, skill_id: &str) -> String {
+        self.skill_specs
+            .read_untracked()
+            .get(skill_id)
+            .map(|skill| skill.name.clone())
+            .unwrap_or(skill_id.to_string())
     }
 }

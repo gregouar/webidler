@@ -20,7 +20,7 @@ pub struct AreaSpecs {
     pub header_background: String,
     pub footer_background: String,
 
-    pub power_level: AreaLevel,
+    pub power_level: ModifiableValue<AreaLevel>,
     #[serde(default)]
     pub required_level: AreaLevel,
     #[serde(default)]
@@ -32,6 +32,8 @@ pub struct AreaSpecs {
     pub disable_shards: bool,
     #[serde(default)]
     pub boss: bool,
+    #[serde(default)]
+    pub hidden: bool,
 
     #[serde(default = "default_reward_slots")]
     pub reward_slots: u8,

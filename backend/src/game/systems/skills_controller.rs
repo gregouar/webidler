@@ -5,9 +5,9 @@ use rand::{self, seq::IteratorRandom};
 use shared::{
     computations::skill_cost_increase,
     data::{
-        character::{CharacterId, SkillSpecs, SkillState},
+        character::CharacterId,
         item::{SkillRange, SkillShape},
-        player::PlayerResources,
+        player::{PlayerBaseSkill, PlayerResources},
         skill::{
             RepeatedSkillEffect, SkillEffect, SkillEffectType, SkillRepeatTarget,
             SkillTargetsGroup, SkillType, TargetType,
@@ -30,21 +30,30 @@ use super::{characters_controller, characters_controller::Target};
 /// Return remaining mana available
 pub fn use_skill<'a>(
     events_queue: &mut EventsQueue,
-    skill_specs: &SkillSpecs,
-    skill_state: &mut SkillState,
+    skill_index: usize,
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> NonNegative {
-    if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
+    if skill_index >= me.1.0.skills_specs.len() || skill_index >= me.1.1.skills_states.len() {
         return me.1.1.mana;
+    }
+
+    let skill_specs = me.1.0.skills_specs.get(skill_index).unwrap();
+
+    {
+        let skill_state = me.1.1.skills_states.get(skill_index).unwrap();
+        if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
+            return me.1.1.mana;
+        }
     }
 
     let mut applied = false;
     for targets_group in skill_specs.targets.iter() {
         applied |= apply_skill_on_targets(
             events_queue,
-            skill_specs.base.skill_type,
+            &skill_specs.skill_id,
+            skill_specs.skill_type,
             targets_group,
             me,
             friends,
@@ -53,17 +62,20 @@ pub fn use_skill<'a>(
     }
 
     if applied {
-        characters_controller::spend_mana(me.1.0, me.1.1, *skill_specs.mana_cost);
+        characters_controller::spend_mana(&me.1.0.character_attrs, me.1.1, *skill_specs.mana_cost);
+
+        let skill_state = me.1.1.skills_states.get_mut(skill_index).unwrap();
         skill_state.just_triggered = true;
         skill_state.is_ready = false;
         skill_state.elapsed_cooldown = Default::default();
     }
 
-    characters_controller::mana_available(me.1.0, me.1.1)
+    characters_controller::mana_available(&me.1.0.character_attrs, me.1.1)
 }
 
 fn apply_skill_on_targets<'a>(
     events_queue: &mut EventsQueue,
+    skill_id: &String,
     skill_type: SkillType,
     targets_group: &SkillTargetsGroup,
     me: &mut Target<'a>,
@@ -78,6 +90,7 @@ fn apply_skill_on_targets<'a>(
 
     let character_hit = apply_repeated_skill_on_targets(
         events_queue,
+        skill_id,
         skill_type,
         targets_group,
         me,
@@ -90,6 +103,7 @@ fn apply_skill_on_targets<'a>(
         Some(character_hit) => {
             if max_repeat > 1 {
                 me.1.1.repeated_skills.push(RepeatedSkillEffect {
+                    skill_id: skill_id.clone(),
                     skill_type,
                     targets_group: targets_group.clone(),
                     max_repeat,
@@ -104,8 +118,10 @@ fn apply_skill_on_targets<'a>(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn apply_repeated_skill_on_targets<'a>(
     events_queue: &mut EventsQueue,
+    skill_id: &String,
     skill_type: SkillType,
     targets_group: &SkillTargetsGroup,
     me: &mut Target<'a>,
@@ -119,13 +135,19 @@ fn apply_repeated_skill_on_targets<'a>(
         match targets_group.target_type {
             TargetType::Enemy => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (
+                    me.1.0.character_static.position_x,
+                    me.1.0.character_static.position_y,
+                ),
                 enemies,
                 already_hit,
             ),
             TargetType::Friend => find_targets(
                 targets_group,
-                (me.1.0.position_x, me.1.0.position_y),
+                (
+                    me.1.0.character_static.position_x,
+                    me.1.0.character_static.position_y,
+                ),
                 friends,
                 already_hit,
             ),
@@ -136,6 +158,7 @@ fn apply_repeated_skill_on_targets<'a>(
     let applied = apply_skill_effects(
         events_queue,
         attacker,
+        skill_id,
         skill_type,
         targets_group.range,
         &targets_group.effects,
@@ -193,7 +216,7 @@ fn find_main_target<'a, 'b>(
     // Pick closest/furthest target
     let available_positions = target_specs
         .clone()
-        .map(|(_, specs)| specs.position_x.abs_diff(me_position.0));
+        .map(|(_, specs)| specs.character_static.position_x.abs_diff(me_position.0));
 
     let main_target_distance = match targets_group.range {
         SkillRange::Melee => available_positions.min(),
@@ -204,17 +227,25 @@ fn find_main_target<'a, 'b>(
     main_target_distance.and_then(|distance| {
         target_specs
             .clone()
-            .filter(|(_, specs)| specs.position_x.abs_diff(me_position.0) == distance)
+            .filter(|(_, specs)| {
+                specs.character_static.position_x.abs_diff(me_position.0) == distance
+            })
             .choose(&mut rand::rng())
             .map(|(id, specs)| {
-                let (x_size, y_size) = specs.size.get_xy_size();
+                let (x_size, y_size) = specs.character_static.size.get_xy_size();
                 let dx = rng::random_range(1..=x_size)
                     .and_then(|v| v.checked_sub(1))
                     .unwrap_or(0) as u8;
                 let dy = rng::random_range(1..=y_size)
                     .and_then(|v| v.checked_sub(1))
                     .unwrap_or(0) as u8;
-                (*id, (specs.position_x + dx, specs.position_y + dy))
+                (
+                    *id,
+                    (
+                        specs.character_static.position_x + dx,
+                        specs.character_static.position_y + dy,
+                    ),
+                )
             })
     })
 }
@@ -280,19 +311,24 @@ pub fn find_sub_targets<'a, 'b>(
     pre_targets
         .iter_mut()
         .filter(|(_, (specs, _))| {
-            let (x_size, y_size) = specs.size.get_xy_size();
+            let (x_size, y_size) = specs.character_static.size.get_xy_size();
             (0..x_size as i32)
                 .flat_map(|x| (0..y_size as i32).map(move |y| (x, y)))
                 .any(|(x, y)| {
-                    is_target_in_range((specs.position_x as i32 + x, specs.position_y as i32 + y))
+                    is_target_in_range((
+                        specs.character_static.position_x as i32 + x,
+                        specs.character_static.position_y as i32 + y,
+                    ))
                 })
         })
         .collect()
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn apply_skill_effects(
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
+    skill_id: &String,
     skill_type: SkillType,
     range: SkillRange,
     skill_effects: &[SkillEffect],
@@ -307,7 +343,7 @@ pub fn apply_skill_effects(
             let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
                 skill_effect
             } else {
-                &apply_conditional_modifiers(target, skill_effect, skill_type)
+                &apply_conditional_modifiers(target, skill_effect, skill_id, skill_type)
             };
 
             let (applicable, effective) = apply_skill_effect_on_target(
@@ -334,16 +370,18 @@ pub fn apply_skill_effects(
 fn apply_conditional_modifiers(
     target: &mut Target,
     skill_effect: &SkillEffect,
+    skill_id: &String,
     skill_type: SkillType,
 ) -> SkillEffect {
     let mut new_skill_effect = skill_effect.clone();
 
     skills_updater::compute_skill_specs_effect(
+        skill_id,
         skill_type,
         &mut new_skill_effect,
         stats_updater::compute_conditional_modifiers(
             &Default::default(),
-            target.1.0,
+            &target.1.0.character_attrs,
             target.1.1,
             &skill_effect.conditional_modifiers,
         )
@@ -487,6 +525,19 @@ fn apply_skill_effect_on_target(
             let resurrected = characters_controller::resuscitate_character(target);
             (resurrected, resurrected)
         }
+        SkillEffectType::RefreshCooldown {
+            skill_filter,
+            value,
+            modifier,
+        } => {
+            let refreshed = characters_controller::refresh_skills_cooldown(
+                target,
+                skill_filter,
+                value.roll_with_seed(seed),
+                modifier,
+            );
+            (refreshed, refreshed)
+        }
     }
 }
 
@@ -525,6 +576,7 @@ fn repeat_skill<'a>(
 
     let character_hit = apply_repeated_skill_on_targets(
         events_queue,
+        &repeated_skill_effect.skill_id,
         repeated_skill_effect.skill_type,
         &repeated_skill_effect.targets_group,
         me,
@@ -533,26 +585,27 @@ fn repeat_skill<'a>(
         Some(&repeated_skill_effect.already_hit),
     );
 
-    match character_hit {
-        Some(charater_hit) => {
-            repeated_skill_effect.already_hit.insert(charater_hit);
-            repeated_skill_effect.elapsed_cooldown =
-                (repeated_skill_effect.elapsed_cooldown.get() - 1.0).into();
-            repeated_skill_effect.amount_repeat += 1;
-
-            repeated_skill_effect.amount_repeat < repeated_skill_effect.max_repeat
-        }
-        None => false,
+    if let Some(charater_hit) = character_hit {
+        repeated_skill_effect.already_hit.insert(charater_hit);
     }
+
+    repeated_skill_effect.elapsed_cooldown =
+        (repeated_skill_effect.elapsed_cooldown.get() - 1.0).into();
+    repeated_skill_effect.amount_repeat += 1;
+
+    repeated_skill_effect.amount_repeat < repeated_skill_effect.max_repeat
 }
 
-pub fn level_up_skill(skill_specs: &mut SkillSpecs, player_resources: &mut PlayerResources) {
-    if player_resources.gold < skill_specs.next_upgrade_cost {
+pub fn level_up_skill(
+    player_base_skill: &mut PlayerBaseSkill,
+    player_resources: &mut PlayerResources,
+) {
+    if player_resources.gold < player_base_skill.next_upgrade_cost {
         return;
     }
 
-    player_resources.gold -= skill_specs.next_upgrade_cost;
+    player_resources.gold -= player_base_skill.next_upgrade_cost;
 
-    skill_specs.upgrade_level += 1;
-    skill_specs.next_upgrade_cost = skill_cost_increase(skill_specs);
+    player_base_skill.upgrade_level += 1;
+    player_base_skill.next_upgrade_cost = skill_cost_increase(player_base_skill);
 }

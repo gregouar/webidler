@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use sqlx::{FromRow, Transaction};
 
-use shared::data::user::UserId;
+use shared::data::user::{User, UserId};
 
 use super::{
     pool::{Database, DbExecutor, DbPool},
@@ -14,9 +14,13 @@ pub struct UserEntry {
     pub username: Option<String>,
     pub email_crypt: Option<Vec<u8>>,
     pub terms_accepted_at: UtcDateTime,
+
     pub is_admin: bool,
     pub max_characters: i16,
+    pub chat_badge: Option<String>,
+
     pub last_login_at: Option<UtcDateTime>,
+
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
     pub deleted_at: Option<UtcDateTime>,
@@ -78,6 +82,7 @@ pub async fn read_user(
             terms_accepted_at, 
             is_admin, 
             max_characters as "max_characters!: i16", 
+            chat_badge,
             last_login_at as "last_login_at?: UtcDateTime",
             created_at, 
             updated_at, 
@@ -103,6 +108,7 @@ pub async fn read_user_by_email(
             email_crypt, 
             terms_accepted_at, 
             is_admin, 
+            chat_badge,
             max_characters as "max_characters!: i16", 
             last_login_at as "last_login_at?: UtcDateTime",
             created_at, 
@@ -137,11 +143,12 @@ pub async fn get_user_by_name<'c>(
 pub async fn auth_user(
     db_pool: &DbPool,
     username: &str,
-) -> Result<Option<(UserId, Option<String>)>, sqlx::Error> {
+) -> Result<Option<(User, Option<String>)>, sqlx::Error> {
     Ok(sqlx::query!(
         r#"
         SELECT 
             user_id as "user_id: UserId", 
+            username, 
             password_hash 
         FROM users WHERE LOWER(username) = LOWER($1) AND deleted_at IS NULL
         "#,
@@ -149,7 +156,15 @@ pub async fn auth_user(
     )
     .fetch_optional(db_pool)
     .await?
-    .map(|record| (record.user_id, record.password_hash)))
+    .map(|record| {
+        (
+            User {
+                user_id: record.user_id,
+                username: record.username.unwrap_or("someone".into()),
+            },
+            record.password_hash,
+        )
+    }))
 }
 
 pub async fn update_last_login(db_pool: &DbPool, user_id: &UserId) -> Result<(), sqlx::Error> {

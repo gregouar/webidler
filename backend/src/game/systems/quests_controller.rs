@@ -82,7 +82,7 @@ fn generate_end_quest_rewards(
 
     let item_level = area_level
         .saturating_add(*game_data.area_specs.item_level_modifier)
-        .saturating_add(game_data.area_specs.power_level);
+        .saturating_add(*game_data.area_specs.power_level);
 
     let item_rewards = (0..amount_map_rewards)
         .flat_map(|_| {
@@ -95,6 +95,8 @@ fn generate_end_quest_rewards(
                 item_level,
                 false,
                 true,
+                false,
+                false,
                 Some(ItemCategory::Map),
                 *game_data.area_specs.loot_rarity,
             )
@@ -109,6 +111,8 @@ fn generate_end_quest_rewards(
                 item_level,
                 false,
                 true,
+                false,
+                false,
                 None,
                 *game_data.area_specs.loot_rarity,
             )
@@ -123,6 +127,8 @@ fn generate_end_quest_rewards(
                 item_level,
                 true,
                 true,
+                false,
+                false,
                 None,
                 *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
             )

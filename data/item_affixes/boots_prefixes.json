@@ -2,180 +2,180 @@
   {
     "name": "Sprightly",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [10, 14]
+        "value": [ 10, 14 ]
       }
     ]
   },
   {
     "name": "Vivacious",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [15, 19]
+        "value": [ 15, 19 ]
       }
     ]
   },
   {
     "name": "Adroit",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [20, 24]
+        "value": [ 20, 24 ]
       }
     ]
   },
   {
     "name": "Lithe",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [25, 29]
+        "value": [ 25, 29 ]
       }
     ]
   },
   {
     "name": "Supple",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [30, 34]
+        "value": [ 30, 34 ]
       }
     ]
   },
   {
     "name": "Energetic",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [35, 39]
+        "value": [ 35, 39 ]
       }
     ]
   },
   {
     "name": "Athletic",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Boots"],
+    "restrictions": [ "Boots" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [40, 44]
+        "value": [ 40, 44 ]
       }
     ]
   },
   {
     "name": "Impetuous",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Boots"],
+    "weight": 400,
+    "restrictions": [ "Boots" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [45, 49]
+        "value": [ 45, 49 ]
       }
     ]
   },
   {
     "name": "Precipitous",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Boots"],
+    "weight": 200,
+    "restrictions": [ "Boots" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [50, 54]
+        "value": [ 50, 54 ]
       }
     ]
   },
   {
     "name": "Expeditious",
     "family": "inc_movement_speed",
-    "tags": ["Speed"],
+    "tags": [ "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Boots"],
+    "weight": 100,
+    "restrictions": [ "Boots" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "MovementSpeed",
         "modifier": "Increased",
-        "value": [55, 59]
+        "value": [ 55, 59 ]
       }
     ]
   }

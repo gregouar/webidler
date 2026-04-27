@@ -13,7 +13,7 @@ use shared::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
-    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
     user::UserCharacterId,
 };
@@ -39,13 +39,15 @@ pub struct GameContext {
     pub passives_tree_state: Syncable<PassivesTreeState>,
     pub passives_tree_build: Syncable<PurchasedNodes>,
 
+    pub player_base_specs: Syncable<PlayerBaseSpecs>,
     pub player_specs: Syncable<PlayerSpecs>,
     pub player_inventory: RwSignal<PlayerInventory>,
     pub player_state: RwSignal<PlayerState>,
     pub player_resources: Syncable<PlayerResources>,
     pub player_stamina: RwSignal<Duration>,
+    pub player_auto_skills: RwSignal<Vec<bool>>,
 
-    pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
+    // pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
@@ -62,6 +64,7 @@ pub struct GameContext {
     pub open_statistics: RwSignal<bool>,
     pub open_skills: RwSignal<bool>,
     pub open_end_quest: RwSignal<bool>,
+    pub open_settings: RwSignal<bool>,
 
     pub last_skills_bought: RwSignal<IndexSet<String>>,
     pub loot_filter: RwSignal<LootFilter>,
@@ -88,13 +91,15 @@ impl GameContext {
             passives_tree_state: Default::default(),
             passives_tree_build: Default::default(),
 
+            player_base_specs: Default::default(),
             player_specs: Default::default(),
             player_inventory: RwSignal::new(Default::default()),
             player_state: RwSignal::new(Default::default()),
             player_resources: Default::default(),
             player_stamina: Default::default(),
+            player_auto_skills: Default::default(),
 
-            monster_wave: RwSignal::new(0),
+            // monster_wave: RwSignal::new(0),
             monster_specs: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
 
@@ -109,6 +114,7 @@ impl GameContext {
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
             open_end_quest: RwSignal::new(false),
+            open_settings: RwSignal::new(false),
 
             last_skills_bought: RwSignal::new(Default::default()),
             loot_filter: Default::default(),

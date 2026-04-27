@@ -28,7 +28,7 @@ pub fn TermsContent() -> impl IntoView {
             <h1 class="text-2xl font-bold mb-4">"Terms and Conditions"</h1>
             <p>
                 <strong>"Last Updated:"</strong>
-                " 18 August 2025"
+                " 19 April 2026"
             </p>
 
             <h2 class="text-xl font-semibold mt-4 mb-2">"1. Introduction"</h2>
@@ -64,6 +64,12 @@ pub fn TermsContent() -> impl IntoView {
                 <li>"If you provide an email address, it is used only for password recovery."</li>
                 <li>
                     "You are responsible for maintaining the confidentiality of your account credentials."
+                </li>
+                <li>
+                    "Multi-accounting is forbidden: each player may create, own, and use only one account."
+                </li>
+                <li>
+                    "Creating or operating multiple accounts to gain gameplay, progression, or economic advantages is strictly prohibited."
                 </li>
             </ul>
 

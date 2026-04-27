@@ -7,18 +7,23 @@ use leptos_router::{
 use shared::http::server::GetCharacterDetailsResponse;
 
 use crate::components::{
+    auth::AuthContext,
     backend_client::BackendClient,
+    chat::{chat_context::ChatContext, chat_panel::ChatPanel},
     data_context::DataContext,
     shared::{
         player_count::PlayerCount,
-        resources::{GemsCounter, ShardsCounter},
+        resources::{GemsCounter, GoldCounter, ShardsCounter},
+        settings::SettingsModal,
     },
     town::{
         TownContext,
         panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
         town_scene::TownScene,
     },
-    ui::{buttons::MenuButton, fullscreen::FullscreenButton},
+    ui::{
+        buttons::MenuButton, fullscreen::FullscreenButton, header::BaseHeaderMenu, wiki::WikiButton,
+    },
 };
 
 #[derive(Clone, Params, PartialEq)]
@@ -123,9 +128,11 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene view_only=true />
+                            <ChatPanel />
                             <TemplePanel open=town_context.open_temple view_only=true />
                             <PassivesPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
+                            <SettingsModal open=town_context.open_settings />
                         </div>
                     }
                 })}
@@ -137,10 +144,13 @@ pub fn ViewCharacterPage() -> impl IntoView {
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+    let town_context: TownContext = expect_context();
+    let chat_context: ChatContext = expect_context();
+    let auth: AuthContext = expect_context();
 
     let gems = Signal::derive(move || town_context.character.read().resource_gems);
     let shards = Signal::derive(move || town_context.character.read().resource_shards);
+    let gold = Signal::derive(move || town_context.character.read().resource_gold);
 
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
@@ -161,12 +171,36 @@ pub fn HeaderMenu() -> impl IntoView {
         Signal::derive(move || town_context.character.read().max_area_level == 0);
 
     view! {
-        <div class="relative z-50 w-full flex justify-between items-center p-1 xl:p-2 bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
-            <div class="flex justify-around w-full items-center">
-                <GemsCounter value=gems />
-                <ShardsCounter value=shards />
+        <BaseHeaderMenu>
+            <div class="flex justify-start space-x-1 xl:space-x-2">
+                <FullscreenButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        town_context.open_settings.set(!town_context.open_settings.get_untracked())
+                    }
+                >
+                    "⚙"
+                </MenuButton>
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        chat_context.opened.set(!chat_context.opened.get_untracked())
+                    }
+                    disabled=Signal::derive(move || !auth.is_authenticated())
+                >
+                    "🗪"
+                </MenuButton>
+                <WikiButton />
             </div>
-            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+            <div class="flex-1 flex justify-around items-center">
+                <GoldCounter value=gold w_full=true />
+                <GemsCounter value=gems w_full=true />
+                <ShardsCounter value=shards w_full=true />
+            </div>
+            <div class="flex justify-end space-x-1 xl:space-x-2">
                 <FullscreenButton />
                 <MenuButton
                     on:click=move |_| {
@@ -200,6 +234,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
-        </div>
+        </BaseHeaderMenu>
     }
 }

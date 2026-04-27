@@ -12,7 +12,11 @@ use shared::data::{
 
 use crate::components::{
     data_context::DataContext,
-    shared::tooltips::{effects_tooltip::scope_str, trigger_tooltip::format_trigger},
+    shared::tooltips::{
+        effects_tooltip::scope_str,
+        frame::{TooltipFrame, TooltipFramePalette},
+        trigger_tooltip::format_trigger,
+    },
     ui::{Separator, number},
 };
 
@@ -33,32 +37,18 @@ pub fn ItemTooltip(
     #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
-    let (border_color, ring_color, shadow_color) = match item_specs.modifiers.rarity {
-        ItemRarity::Normal => ("border-gray-600", "ring-gray-700", "shadow-gray-800"),
-        ItemRarity::Magic => ("border-blue-500", "ring-blue-400", "shadow-blue-700"),
-        ItemRarity::Rare => ("border-yellow-400", "ring-yellow-300", "shadow-yellow-600"),
-        ItemRarity::Masterwork => (
-            "border-fuchsia-400",
-            "ring-fuchsia-300",
-            "shadow-fuchsia-600",
-        ),
-        ItemRarity::Unique => ("border-orange-700", "ring-orange-600", "shadow-orange-700"),
-    };
+    let palette = tooltip_rarity_palette(item_specs.modifiers.rarity);
 
     view! {
-        <div class=format!(
-            "max-w-xs p-2 xl:p-4 rounded-xl border {} ring-2 {} shadow-md {} bg-gradient-to-br from-gray-800 via-gray-900 to-black text-center",
-            border_color,
-            ring_color,
-            shadow_color,
-        )>
+        <TooltipFrame palette class="max-w-xs">
+            <span class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
             <ItemTooltipContent
                 item_specs=item_specs.clone()
                 show_affixes
                 comparable
                 max_item_level
             />
-        </div>
+        </TooltipFrame>
     }
 }
 
@@ -75,6 +65,8 @@ pub fn ItemTooltipContent(
         let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
         let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
         let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
+        let upgrade_affixes =
+            formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
             (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
@@ -106,6 +98,15 @@ pub fn ItemTooltipContent(
                             {suffixes}
                         }
                     })}
+                {(!upgrade_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-gray-400 text-xs xl:text-sm ">
+                            // "Base affixes:"
+                            // </li>
+                            {upgrade_affixes}
+                        }
+                    })}
             }
             .into_any(),
         )
@@ -113,13 +114,13 @@ pub fn ItemTooltipContent(
         let mut effects = effects_tooltip::formatted_effects_list(
             (&item_specs
                 .modifiers
-                .aggregate_effects(AffixEffectScope::Local))
+                .aggregate_effects(AffixEffectScope::Local, false))
                 .into(),
         );
         effects.extend(effects_tooltip::formatted_effects_list(
             (&item_specs
                 .modifiers
-                .aggregate_effects(AffixEffectScope::Global))
+                .aggregate_effects(AffixEffectScope::Global, false))
                 .into(),
         ));
         (!effects.is_empty(), view! { {effects} }.into_any())
@@ -131,7 +132,7 @@ pub fn ItemTooltipContent(
             .triggers
             .clone()
             .into_iter()
-            .map(format_trigger)
+            .map(|trigger| format_trigger(trigger, show_affixes))
             .collect::<Vec<_>>();
 
         (
@@ -152,6 +153,36 @@ pub fn ItemTooltipContent(
             },
         )
     };
+
+    let (has_upgrades, upgrades) = {
+        if show_affixes && !item_specs.base.upgrade_effects.is_empty() {
+            let upgrade_effects = item_specs
+                .base
+                .upgrade_effects
+                .iter()
+                .map(|effect| effect.stat_effect.clone())
+                .collect::<Vec<_>>();
+
+            (
+                item_specs
+                    .base
+                    .upgrade_levels
+                    .get(item_specs.modifiers.upgrade_level as usize)
+                    .map(|next_level| *next_level <= item_specs.modifiers.level)
+                    .unwrap_or_default(),
+                Some(effects_tooltip::formatted_effects_list(upgrade_effects)),
+            )
+        } else {
+            (false, None)
+        }
+    };
+
+    let max_upgrade_level = item_specs
+        .base
+        .upgrade_levels
+        .iter()
+        .filter(|upgrade_level| **upgrade_level <= item_specs.modifiers.level)
+        .count();
 
     let name_color = name_color_rarity(item_specs.modifiers.rarity);
 
@@ -175,7 +206,11 @@ pub fn ItemTooltipContent(
                     )
                 }
                 _ => None,
-            }} <strong class=format!("text-sm xl:text-base font-bold  font-display {}", name_color)>
+            }}
+            <strong class=format!(
+                "text-sm xl:text-base font-bold font-display tracking-[0.03em] text-shadow-md/80 {}",
+                name_color,
+            )>
                 <ul class="list-none xl:space-y-1 mb-2">
                     <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
@@ -188,6 +223,17 @@ pub fn ItemTooltipContent(
                 </ul>
             </strong> <Separator /> <ul class="list-none xl:space-y-1">
                 <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
+                {(max_upgrade_level > 0)
+                    .then(|| {
+                        view! {
+                            <li class="text-xs xl:text-sm text-gray-400">
+                                "Empower level: "
+                                <span class="font-bold text-[#ff8c4d]">
+                                    {item_specs.modifiers.upgrade_level}
+                                </span>"/"{max_upgrade_level}
+                            </li>
+                        }
+                    })}
                 <QualityTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
@@ -202,19 +248,27 @@ pub fn ItemTooltipContent(
                             {effects}{triggers}
                         </ul>
                     }
+                })}
+            {(has_upgrades)
+                .then(|| {
+                    view! {
+                        <Separator />
+                        <span class="text-xs xl:text-sm text-gray-400">"Empower effects:"</span>
+                        <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{upgrades}</ul>
+                    }
                 })} <Separator /> <ul class="list-none xl:space-y-1">
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
+                <li class="text-xs xl:text-sm text-gray-400">
                     "Required Power Level: "
                     <span class=move || {
                         if max_item_level.get() < required_level {
                             "font-bold text-red-500"
                         } else {
-                            "text-white"
+                            "text-stone-100"
                         }
                     }>{required_level}</span>
                 </li>
-                <li class="text-blue-400 text-xs xl:text-sm text-gray-400 ">
-                    "Item Level: " <span class="text-white">{item_specs.modifiers.level}</span>
+                <li class="text-xs xl:text-sm text-gray-400">
+                    "Item Level: " <span class="text-stone-100">{item_specs.modifiers.level}</span>
                 </li>
             </ul>
             {(!hide_description)
@@ -251,11 +305,41 @@ pub fn ItemTooltipContent(
 
 pub fn name_color_rarity(item_rarity: ItemRarity) -> &'static str {
     match item_rarity {
-        ItemRarity::Normal => "text-white",
+        ItemRarity::Normal => "text-stone-100",
         ItemRarity::Magic => "text-blue-400",
-        ItemRarity::Rare => "text-yellow-400",
+        ItemRarity::Rare => "text-[#f0bf48]",
         ItemRarity::Masterwork => "text-fuchsia-400",
-        ItemRarity::Unique => "text-orange-700",
+        ItemRarity::Unique => "text-[#ff8c4d]",
+    }
+}
+
+fn tooltip_rarity_palette(item_rarity: ItemRarity) -> TooltipFramePalette {
+    match item_rarity {
+        ItemRarity::Normal => TooltipFramePalette {
+            border_class: "border-[#6c5329]/85",
+            inner_border_class: "border-white/8",
+            shine_color: "rgba(230,230,236,0.2)",
+        },
+        ItemRarity::Magic => TooltipFramePalette {
+            border_class: "border-[#6c5329]/85",
+            inner_border_class: "border-blue-200/18",
+            shine_color: "rgba(144,205,255,0.44)",
+        },
+        ItemRarity::Rare => TooltipFramePalette {
+            border_class: "border-[#7a5d29]/90",
+            inner_border_class: "border-[#f3db9d]/18",
+            shine_color: "rgba(255,226,145,0.5)",
+        },
+        ItemRarity::Masterwork => TooltipFramePalette {
+            border_class: "border-[#74528a]/88",
+            inner_border_class: "border-fuchsia-200/18",
+            shine_color: "rgba(228,183,255,0.46)",
+        },
+        ItemRarity::Unique => TooltipFramePalette {
+            border_class: "border-[#8c5628]/92",
+            inner_border_class: "border-[#ffd1af]/18",
+            shine_color: "rgba(255,170,116,0.54)",
+        },
     }
 }
 
@@ -283,7 +367,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm ">
-                                "Armor: "
+                                "Physical Defense: "
                                 <span class=format!(
                                     "{} font-semibold",
                                     armor_color,
@@ -298,7 +382,7 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     Some(
                         view! {
                             <li class="text-gray-400 text-xs xl:text-sm ">
-                                "Block chance: "
+                                "Block Chance: "
                                 <span class=format!(
                                     "{} font-semibold",
                                     block_color,
@@ -402,14 +486,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 <li class="text-gray-400 text-xs xl:text-sm ">{range} {shape}</li>
                 {damage_lines}
                 <li class="text-gray-400 text-xs xl:text-sm ">
-                    "Critical hit chance: "
+                    "Critical Hit Chance: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_chance_color,
                     )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
                 </li>
                 <li class="text-gray-400 text-xs xl:text-sm ">
-                    "Critical hit damage: "
+                    "Critical Hit Damage: "
                     <span class=format!(
                         "{} font-semibold",
                         crit_damage_color,
@@ -464,7 +548,7 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                             <span class="text-white font-semibold">
                                 {data_context
                                     .areas_specs
-                                    .read()
+                                    .read_untracked()
                                     .get(area_id)
                                     .map(|area| area.name.clone())
                                     .unwrap_or(area_id.clone())}
@@ -518,7 +602,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Gloves => "Gloves",
                     ItemSlot::Helmet => "Helmet",
                     ItemSlot::Ring => "Ring",
-                    ItemSlot::Shield => "Shield",
+                    ItemSlot::Shield => "Off-hand",
                     ItemSlot::Accessory => "Accessory",
                     ItemSlot::Weapon => {
                         if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
@@ -571,7 +655,11 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique => view! { <li class="text-gray-400 text-xs ">"Implicit affix – "{scope_str(scope)}</li> }
+                AffixType::Unique | AffixType::Upgrade => view! {
+                    <li class="text-gray-400 text-xs -mb-1">
+                        {affix_type_str(affix.affix_type)}" – "{scope_str(scope)}
+                    </li>
+                }
                 .into_any(),
                 _ => {
                     let mut tags: Vec<_> = affix.tags.iter().collect();
@@ -582,7 +670,7 @@ pub fn formatted_affixes_list(
                         .collect();
 
                     view! {
-                        <li class="text-gray-400 text-xs ">
+                        <li class="text-gray-400 text-xs -mb-1">
                             {affix_type_str(affix.affix_type)}" "
                             <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
                             {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}
@@ -610,6 +698,7 @@ fn affix_type_str(affix_type: AffixType) -> &'static str {
         AffixType::Prefix => "Prefix",
         AffixType::Suffix => "Suffix",
         AffixType::Unique => "Base affix",
+        AffixType::Upgrade => "Empowering affix",
     }
 }
 

@@ -9,6 +9,7 @@ pub fn MenuPanel(
     #[prop(default = true)] w_full: bool,
     #[prop(default = true)] h_full: bool,
     #[prop(default = true)] center: bool,
+    #[prop(default = false)] always_mounted: bool,
 ) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
 
@@ -60,39 +61,40 @@ pub fn MenuPanel(
             }"
         </style>
 
-        // <Show when=move || is_visible.get()>
-        <div
-            class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center will-change-opacity"
-            style=move || {
-                if open.try_get().unwrap_or_default() {
-                    "animation: fadeIn 0.3s ease-out forwards;"
-                } else {
-                    "animation: fadeOut 0.3s ease-out forwards;"
-                }
-            }
-            on:click=move |_| {
-                open.try_set(false);
-            }
-            on:keydown=handle_key
-            tabindex="0"
-            class:hidden=move || !is_visible.get()
-        >
+        <Show when=move || is_visible.get() || always_mounted>
             <div
-                class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
-                class:w-full=w_full
-                class:h-full=h_full
-                class:my-auto=center
+                class="absolute inset-0 bg-black/70 z-40 flex flex-col p-1 xl:p-4 items-center  will-change-opacity"
                 style=move || {
                     if open.try_get().unwrap_or_default() {
-                        "animation: dropDown 0.3s ease-out forwards;"
+                        "animation: fadeIn 0.3s ease-out forwards;"
                     } else {
-                        "animation: pullUp 0.3s ease-out forwards;"
+                        "animation: fadeOut 0.3s ease-out forwards;"
                     }
                 }
-                on:click=|e| e.stop_propagation()
+                on:click=move |_| {
+                    open.try_set(false);
+                }
+                on:keydown=handle_key
+                tabindex="0"
+                class:hidden=move || !is_visible.get()
             >
-                {children.read_value()()}
+                <div
+                    class="z-41 w-fit mx-auto max-h-full flex flex-col will-change-transform"
+                    class:w-full=w_full
+                    class:h-full=h_full
+                    class:my-auto=center
+                    style=move || {
+                        if open.try_get().unwrap_or_default() {
+                            "animation: dropDown 0.3s ease-out forwards;"
+                        } else {
+                            "animation: pullUp 0.3s ease-out forwards;"
+                        }
+                    }
+                    on:click=|e| e.stop_propagation()
+                >
+                    {children.read_value()()}
+                </div>
             </div>
-        </div>
+        </Show>
     }
 }

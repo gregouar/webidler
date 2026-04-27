@@ -1,6 +1,9 @@
 use sqlx::{FromRow, Transaction};
 
-use shared::data::user::{UserCharacterId, UserId};
+use shared::data::{
+    realms::{Realm, RealmId},
+    user::{UserCharacterId, UserId},
+};
 
 use crate::db::pool::Database;
 
@@ -9,7 +12,10 @@ use super::{pool::DbExecutor, utc_datetime::UtcDateTime};
 #[derive(Debug, FromRow)]
 pub struct CharacterEntry {
     pub character_id: UserCharacterId,
+    pub realm_id: RealmId,
     pub user_id: UserId,
+
+    pub is_ssf: bool,
 
     pub character_name: String,
     pub portrait: String,
@@ -17,6 +23,7 @@ pub struct CharacterEntry {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
+    pub played_time_seconds: f64,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -49,18 +56,24 @@ pub async fn create_character<'c>(
     user_id: &UserId,
     name: &str,
     portrait: &str,
+    realm: Realm,
+    is_ssf: bool,
 ) -> Result<Option<UserCharacterId>, sqlx::Error> {
     let character_id = uuid::Uuid::new_v4();
 
+    let realm_id = realm.realm_id();
+
     let res = sqlx::query!(
         r#"
-        INSERT INTO characters (character_id, user_id, character_name, portrait)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO characters (character_id, user_id, character_name, portrait, realm_id, is_ssf)
+        VALUES ($1, $2, $3, $4, $5 , $6)
         "#,
         character_id,
         user_id,
         name,
-        portrait
+        portrait,
+        realm_id,
+        is_ssf
     )
     .execute(executor)
     .await;
@@ -99,12 +112,15 @@ pub async fn read_character<'c>(
         SELECT
             characters.character_id as "character_id: UserCharacterId",
             user_id as "user_id: UserId",
+            realm_id as "realm_id!",
+            is_ssf as "is_ssf!",
             character_name,
             portrait,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
             resource_gold,
+            played_time_seconds,
             created_at,
             updated_at,
             deleted_at as "deleted_at?: UtcDateTime",
@@ -176,12 +192,15 @@ pub async fn read_all_user_characters<'c>(
         SELECT
             characters.character_id as "character_id: UserCharacterId",
             user_id as "user_id: UserId",
+            realm_id as "realm_id!",
+            is_ssf as "is_ssf!",
             character_name,
             portrait,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
             resource_gold,
+            played_time_seconds,
             created_at,
             updated_at,
             deleted_at as "deleted_at: UtcDateTime",
@@ -244,23 +263,25 @@ pub async fn update_character<'c>(
     }
 }
 
-/// Add/remove resources to character
+/// Add/remove resources and played time to character.
 pub async fn update_character_resources<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     resource_gems: f64,
     resource_shards: f64,
     resource_gold: f64,
+    played_time_seconds: f64,
 ) -> Result<CharacterResources, sqlx::Error> {
     sqlx::query_as!(
         CharacterResources,
         r#"
         UPDATE characters
-        SET 
-            resource_gems =  resource_gems + $2,
+        SET
+            resource_gems = resource_gems + $2,
             resource_shards = resource_shards + $3,
             resource_gold = resource_gold + $4,
-            updated_at = CURRENT_TIMESTAMP 
+            played_time_seconds = played_time_seconds + $5,
+            updated_at = CURRENT_TIMESTAMP
         WHERE character_id = $1
         RETURNING resource_gems, resource_shards, resource_gold
         "#,
@@ -268,6 +289,7 @@ pub async fn update_character_resources<'c>(
         resource_gems,
         resource_shards,
         resource_gold,
+        played_time_seconds,
     )
     .fetch_one(executor)
     .await

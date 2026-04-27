@@ -1,6 +1,7 @@
 use anyhow::{Result, anyhow};
 use backend_shared::signature::HmacKey;
 use futures::future::join_all;
+use indexmap::IndexMap;
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
@@ -9,7 +10,7 @@ use std::{
 
 use shared::data::{
     monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs,
-    temple::BenedictionSpecs,
+    temple::BenedictionsCategory,
 };
 
 use super::{
@@ -20,12 +21,18 @@ use super::{
     monster::BaseMonsterSpecs,
 };
 
-use crate::game::{data::manifest::ManifestCategory, utils::json::LoadJsonFromFile};
+use crate::game::{
+    data::{
+        loot_table::{GambleTable, GambleTableBlueprint},
+        manifest::ManifestCategory,
+    },
+    utils::json::LoadJsonFromFile,
+};
 
 // TODO: Load from zip/dat file and compress at build time for prod release
 
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
-pub type BenedictionsStore = HashMap<String, BenedictionSpecs>;
+pub type BenedictionsStore = IndexMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
@@ -41,6 +48,7 @@ pub struct MasterStore {
     pub item_adjectives_table: Arc<ItemAdjectivesTable>,
     pub item_nouns_table: Arc<ItemNounsTable>,
     pub loot_tables_store: Arc<LootTablesStore>,
+    pub gamble_table: Arc<GambleTable>,
     pub monster_specs_store: Arc<MonstersSpecsStore>,
     pub area_blueprints_store: Arc<AreaBlueprintStore>,
 }
@@ -48,7 +56,7 @@ pub struct MasterStore {
 impl LoadJsonFromFile for MonsterSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
 impl LoadJsonFromFile for PassivesTreeSpecs {}
-impl LoadJsonFromFile for BenedictionSpecs {}
+impl LoadJsonFromFile for BenedictionsCategory {}
 
 impl MasterStore {
     pub async fn load_from_folder(
@@ -66,6 +74,7 @@ impl MasterStore {
             item_adjectives_table,
             item_nouns_table,
             loot_tables_store,
+            gamble_tables_store,
             monster_specs_store,
         ) = tokio::join!(
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Passives)),
@@ -76,6 +85,7 @@ impl MasterStore {
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAdjectives)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemNouns)),
             join_load_and_map(manifest.get_resources(ManifestCategory::Loot)),
+            join_load_and_map(manifest.get_resources(ManifestCategory::GambleTable)),
             join_load_and_map(manifest.get_resources(ManifestCategory::Monsters)),
         );
 
@@ -93,6 +103,27 @@ impl MasterStore {
                 })
                 .collect::<Result<_>>()?;
 
+        let gamble_tables_store: HashMap<String, GambleTableBlueprint> = gamble_tables_store?;
+        let gamble_table_blueprint = gamble_tables_store
+            .get("gamble_table.json")
+            .expect("missing 'gamble_table.json'");
+        let gamble_table = GambleTable {
+            loot_table: LootTable {
+                entries: gamble_table_blueprint
+                    .loot_tables
+                    .iter()
+                    .flat_map(|t| {
+                        loot_tables_store
+                            .get(t)
+                            .unwrap_or_else(|| panic!("missing loot table '{t}'"))
+                            .entries
+                            .clone()
+                    })
+                    .collect(),
+            },
+            item_rarity: gamble_table_blueprint.item_rarity,
+        };
+
         let master_store = MasterStore {
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),
@@ -105,6 +136,7 @@ impl MasterStore {
             item_adjectives_table: Arc::new(item_adjectives_table?),
             item_nouns_table: Arc::new(item_nouns_table?),
             loot_tables_store: Arc::new(loot_tables_store),
+            gamble_table: Arc::new(gamble_table),
             monster_specs_store: Arc::new(monster_specs_store?),
             area_blueprints_store: Arc::new(area_blueprints_store),
         };

@@ -67,8 +67,7 @@ fn handle_client_message(
         }
         ClientMessage::SetAutoSkill(m) => {
             if let Some(x) = game_data
-                .player_specs
-                .mutate()
+                .player_controller
                 .auto_skills
                 .get_mut(m.skill_index as usize)
             {
@@ -77,14 +76,14 @@ fn handle_client_message(
         }
         ClientMessage::LevelUpSkill(m) => {
             for _ in 0..m.amount {
-                if let Some(skill_specs) = game_data
-                    .player_specs
+                if let Some((_, player_base_skill)) = game_data
+                    .player_base_specs
                     .mutate()
-                    .skills_specs
-                    .get_mut(m.skill_index as usize)
+                    .skills
+                    .get_index_mut(m.skill_index as usize)
                 {
                     skills_controller::level_up_skill(
-                        skill_specs,
+                        player_base_skill,
                         game_data.player_resources.mutate(),
                     );
                 }
@@ -93,8 +92,9 @@ fn handle_client_message(
         ClientMessage::BuySkill(m) => {
             player_controller::buy_skill(
                 &master_store.skills_store,
-                game_data.player_specs.mutate(),
+                game_data.player_base_specs.mutate(),
                 &mut game_data.player_state,
+                &mut game_data.player_controller,
                 game_data.player_resources.mutate(),
                 &m.skill_id,
             );
@@ -102,7 +102,7 @@ fn handle_client_message(
         ClientMessage::LevelUpPlayer(m) => {
             for _ in 0..m.amount {
                 player_controller::level_up(
-                    game_data.player_specs.mutate(),
+                    game_data.player_base_specs.mutate(),
                     &mut game_data.player_state,
                     game_data.player_resources.mutate(),
                 );
@@ -110,9 +110,10 @@ fn handle_client_message(
         }
         ClientMessage::EquipItem(m) => {
             if let Err(err) = player_controller::equip_item_from_bag(
-                game_data.player_specs.mutate(),
+                game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
+                &mut game_data.player_controller,
                 m.item_index,
             ) {
                 return Some(ErrorMessage {
@@ -124,9 +125,10 @@ fn handle_client_message(
         }
         ClientMessage::UnequipItem(m) => {
             if let Err(err) = player_controller::unequip_item_to_bag(
-                game_data.player_specs.mutate(),
+                game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
+                &mut game_data.player_controller,
                 m.item_slot,
             ) {
                 return Some(ErrorMessage {

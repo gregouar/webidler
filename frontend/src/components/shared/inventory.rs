@@ -5,7 +5,7 @@ use leptos_use::on_click_outside;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemSlot, ItemSpecs},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -18,7 +18,7 @@ use crate::{
         shared::{item_card::ItemCard, tooltips::ItemTooltip},
         ui::{
             buttons::{CloseButton, MenuButton},
-            card::{Card, CardInset, CardTitle},
+            card::{CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
@@ -40,6 +40,12 @@ pub enum InventoryEquipFilter {
     Slot,
     Map(String),
     Rune,
+    Rarity {
+        // Maybe later rename to Any, and not_item_rarity
+        item_rarity: ItemRarity,
+        not: bool,
+    },
+    Bag,
 }
 
 #[derive(Clone, Default)]
@@ -92,7 +98,7 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
 
     view! {
         // <div class="w-[30%] h-full flex flex-col gap-1 xl:gap-2 p-1 xl:p-2 bg-zinc-800 rounded-md shadow-xl ring-1 ring-zinc-950">
-        <Card class="w-[30%] h-full">
+        <MenuCard class="w-[30%] h-full">
 
             // <p class="text-shadow-md shadow-gray-950 text-amber-200 text-l xl:text-xl">
             // <span class="font-bold">"Equipped"</span>
@@ -117,7 +123,7 @@ pub fn EquippedItemsCard(inventory: InventoryConfig) -> impl IntoView {
                         .collect::<Vec<_>>()}
                 </div>
             </CardInset>
-        </Card>
+        </MenuCard>
     }
 }
 
@@ -208,9 +214,28 @@ fn EquippedItemEquippedSlot(
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
+    let equipped_item_rarity = item_specs.modifiers.rarity;
+    let can_unequip = Signal::derive(move || {
+        inventory
+            .equip_filter
+            .with(|equip_filter| match equip_filter {
+                InventoryEquipFilter::Slot => true,
+                InventoryEquipFilter::Map(_)
+                | InventoryEquipFilter::Rune
+                | InventoryEquipFilter::Bag => false,
+                InventoryEquipFilter::Rarity { item_rarity, not } => {
+                    (equipped_item_rarity == *item_rarity) != *not
+                }
+            })
+    });
+
     let is_being_unequipped = RwSignal::new(false);
     view! {
-        <div node_ref=item_ref class="relative w-full h-full overflow-visible">
+        <div
+            node_ref=item_ref
+            class="relative w-full h-full overflow-visible"
+            class:brightness-50=move || !can_unequip.get()
+        >
             <ItemCard
                 item_specs=item_specs.clone()
                 on:click={
@@ -228,8 +253,14 @@ fn EquippedItemEquippedSlot(
             />
 
             <Show when=move || is_being_unequipped.get()>
-                <div class="absolute inset-0 z-30 w-full rounded-md
-                bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+                <div
+                    class="absolute inset-0 z-30 w-full"
+                    style="
+                    background:
+                    linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
+                    linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
+                    box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
+                ></div>
             </Show>
 
             <Show when=move || show_menu.get()>
@@ -238,6 +269,7 @@ fn EquippedItemEquippedSlot(
                     item_slot=item_slot
                     is_being_unequipped=is_being_unequipped
                     on_close=Callback::new(move |_| show_menu.set(false))
+                    can_unequip
                 />
                 {
                     let item_specs = item_specs.clone();
@@ -307,35 +339,46 @@ pub fn EquippedItemContextMenu(
     item_slot: ItemSlot,
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
+    can_unequip: Signal<bool>,
 ) -> impl IntoView {
     view! {
         <ContextMenu on_close=on_close>
             {inventory
                 .on_unequip
                 .map(|on_unequip| {
-                    view! {
-                        <button
-                            class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40 py-1 xl:py-2"
-                            on:click=move |_| {
-                                on_unequip(item_slot);
-                                on_close.run(());
-                                is_being_unequipped.set(true);
-                                set_timeout(
-                                    move || is_being_unequipped.set(false),
-                                    Duration::from_millis(1000),
-                                );
+                    can_unequip
+                        .get_untracked()
+                        .then(|| {
+
+                            view! {
+                                <ActionMenuRow
+                                    label=if let InventoryEquipFilter::Slot = inventory
+                                        .equip_filter
+                                        .get_untracked()
+                                    {
+                                        "Unequip"
+                                    } else {
+                                        "Use"
+                                    }
+                                    tone=ActionMenuTone::Success
+                                    on_click=move || {
+                                        on_unequip(item_slot);
+                                        on_close.run(());
+                                        is_being_unequipped.set(true);
+                                        set_timeout(
+                                            move || is_being_unequipped.set(false),
+                                            Duration::from_millis(1000),
+                                        );
+                                    }
+                                />
                             }
-                        >
-                            "Unequip"
-                        </button>
-                    }
+                        })
                 })}
-            <button
-                class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
-                on:click=move |_| on_close.run(())
-            >
-                "Cancel"
-            </button>
+            <ActionMenuRow
+                label="Cancel"
+                tone=ActionMenuTone::Neutral
+                on_click=move || on_close.run(())
+            />
         </ContextMenu>
     }
 }
@@ -344,7 +387,7 @@ pub fn EquippedItemContextMenu(
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
     view! {
         // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
-        <Card class="h-full w-[70%]">
+        <MenuCard class="h-full w-[70%]">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
                     <CardTitle>"Inventory"</CardTitle>
@@ -404,7 +447,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </CardInset>
 
-        </Card>
+        </MenuCard>
     }
 }
 
@@ -418,7 +461,6 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let maybe_item = Signal::derive({
         let inventory = inventory.clone();
         move || {
-            is_being_equipped.set(false);
             inventory
                 .player_inventory
                 .read()
@@ -427,6 +469,11 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 .cloned()
                 .map(Arc::new)
         }
+    });
+
+    Effect::new(move |_| {
+        let _ = maybe_item.get();
+        is_being_equipped.set(false);
     });
 
     let can_equip = Signal::derive(move || {
@@ -451,6 +498,10 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                             })
                             .unwrap_or_default(),
                         InventoryEquipFilter::Rune => item_specs.base.rune_specs.is_some(),
+                        InventoryEquipFilter::Rarity { item_rarity, not } => {
+                            (item_specs.modifiers.rarity == *item_rarity) != *not
+                        }
+                        InventoryEquipFilter::Bag => true,
                     })
             })
             .unwrap_or_default()
@@ -462,41 +513,6 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
     let show_menu = RwSignal::new(false);
 
     let item_ref = NodeRef::new();
-    let tooltip_ref = NodeRef::new();
-
-    let tooltip_size = Memo::new(move |_| {
-        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref.get();
-        tooltip_div
-            .map(|tooltip_div| {
-                let rect = tooltip_div.get_bounding_client_rect();
-                (rect.width(), rect.height())
-            })
-            .unwrap_or_default()
-    });
-
-    let tooltip_pos = move || {
-        let item_div: web_sys::HtmlDivElement = item_ref.get().unwrap();
-        let item_rect = item_div.get_bounding_client_rect();
-
-        let (tooltip_width, tooltip_height) = tooltip_size.get();
-
-        let window_height = web_sys::window()
-            .unwrap()
-            .inner_height()
-            .unwrap()
-            .as_f64()
-            .unwrap();
-
-        if tooltip_width > 0.0 {
-            (
-                (item_rect.left() - tooltip_width).max(0.0),
-                item_rect.top().min(window_height - tooltip_height),
-            )
-        } else {
-            (0.0, 0.0)
-        }
-    };
-
     view! {
         <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
             {move || {
@@ -558,7 +574,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 />
 
                                 <Show when=is_queued_for_sale>
-                                    <div class="absolute top-1 right-1 px-2 py-0.5 text-xs font-semibold bg-red-500 text-white rounded shadow">
+                                    <div class="absolute top-1 right-1 z-20 px-1.5 xl:px-2 py-0.5 text-[10px] xl:text-xs font-black tracking-[0.08em] text-[#ffe0d3] border border-[#8e4538] rounded-[3px] shadow-[0_3px_8px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,214,194,0.18)] bg-[linear-gradient(180deg,rgba(230,164,125,0.12),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(72,28,26,0.98),rgba(35,11,13,1))]">
                                         {match inventory.sell_type {
                                             SellType::Sell => "SELL",
                                             SellType::Discard => "DISC.",
@@ -567,8 +583,14 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                 </Show>
 
                                 <Show when=move || is_being_equipped.get()>
-                                    <div class="absolute inset-0 z-30 w-full rounded-md
-                                    bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black"></div>
+                                    <div
+                                        class="absolute inset-0 z-30 w-full"
+                                        style="
+                                        background:
+                                        linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
+                                        linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
+                                        box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
+                                    ></div>
                                 </Show>
 
                                 <Show when=move || { show_menu.get() }>
@@ -580,28 +602,70 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                         can_equip
                                     />
 
-                                    <Portal>
-                                        <div
-                                            node_ref=tooltip_ref
-                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
-                                            style=move || {
-                                                let (x, y) = tooltip_pos();
-                                                format!("left:{}px; top:{}px;", x, y)
-                                            }
-                                        >
-                                            <ItemTooltip
-                                                item_specs=maybe_item.get().unwrap().clone()
-                                                max_item_level=inventory.max_item_level
-                                            />
-                                        </div>
-                                    </Portal>
+                                    {
+                                        let inventory = inventory.clone();
+                                        view! {
+                                            <Portal>
+                                                {
+                                                    let tooltip_ref = NodeRef::new();
+                                                    let tooltip_size = Memo::new(move |_| {
+                                                        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref
+                                                            .get();
+                                                        tooltip_div
+                                                            .map(|tooltip_div| {
+                                                                let rect = tooltip_div.get_bounding_client_rect();
+                                                                (rect.width(), rect.height())
+                                                            })
+                                                            .unwrap_or_default()
+                                                    });
+                                                    let tooltip_pos = move || {
+                                                        let item_div: web_sys::HtmlDivElement = item_ref
+                                                            .get()
+                                                            .unwrap();
+                                                        let item_rect = item_div.get_bounding_client_rect();
+                                                        let (tooltip_width, tooltip_height) = tooltip_size.get();
+                                                        let window_height = web_sys::window()
+                                                            .unwrap()
+                                                            .inner_height()
+                                                            .unwrap()
+                                                            .as_f64()
+                                                            .unwrap();
+                                                        if tooltip_width > 0.0 {
+                                                            (
+                                                                (item_rect.left() - tooltip_width).max(0.0),
+                                                                item_rect.top().min(window_height - tooltip_height),
+                                                            )
+                                                        } else {
+                                                            (0.0, 0.0)
+                                                        }
+                                                    };
+
+                                                    view! {
+                                                        <div
+                                                            node_ref=tooltip_ref
+                                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
+                                                            style=move || {
+                                                                let (x, y) = tooltip_pos();
+                                                                format!("left:{}px; top:{}px;", x, y)
+                                                            }
+                                                        >
+                                                            <ItemTooltip
+                                                                item_specs=maybe_item.get().unwrap().clone()
+                                                                max_item_level=inventory.max_item_level
+                                                            />
+                                                        </div>
+                                                    }
+                                                }
+                                            </Portal>
+                                        }
+                                    }
 
                                 </Show>
                             </div>
                         }
                             .into_any()
                     }
-                    None => view! { <EmptySlot>{}</EmptySlot> }.into_any(),
+                    None => view! { <EmptySlot /> }.into_any(),
                 }
             }}
         </div>
@@ -639,9 +703,17 @@ pub fn BagItemContextMenu(
                             .get_untracked()
                             .then(|| {
                                 view! {
-                                    <button
-                                        class="btn w-full text-sm xl:text-lg font-semibold text-green-300 hover:text-green-100 hover:bg-green-800/40  py-1 xl:py-2"
-                                        on:click=move |_| {
+                                    <ActionMenuRow
+                                        label=if let InventoryEquipFilter::Slot = inventory
+                                            .equip_filter
+                                            .get_untracked()
+                                        {
+                                            "Equip"
+                                        } else {
+                                            "Use"
+                                        }
+                                        tone=ActionMenuTone::Success
+                                        on_click=move || {
                                             on_equip(item_index as u8);
                                             sell_queue.write().remove(&item_index);
                                             is_being_equipped.set(true);
@@ -651,9 +723,7 @@ pub fn BagItemContextMenu(
                                             );
                                             on_close.run(());
                                         }
-                                    >
-                                        "Equip"
-                                    </button>
+                                    />
                                 }
                             })
                     })
@@ -661,43 +731,43 @@ pub fn BagItemContextMenu(
             {(inventory.on_sell.is_some())
                 .then(|| {
                     view! {
-                        <button
-                            class="btn w-full text-sm xl:text-lg font-semibold text-amber-300 hover:text-amber-100 hover:bg-amber-800/40 py-1 xl:py-2"
-                            on:click=move |_| toggle_sell_mark()
-                        >
-                            {move || {
+                        <ActionMenuRow
+                            label_signal=Signal::derive(move || {
                                 if sell_queue.get().contains(&item_index) {
                                     match inventory.sell_type {
-                                        SellType::Sell => "Unsell",
-                                        SellType::Discard => "Keep",
+                                        SellType::Sell => "Unsell".to_string(),
+                                        SellType::Discard => "Keep".to_string(),
                                     }
                                 } else {
                                     match inventory.sell_type {
-                                        SellType::Sell => "Sell",
-                                        SellType::Discard => "Discard",
+                                        SellType::Sell => "Sell".to_string(),
+                                        SellType::Discard => "Discard".to_string(),
                                     }
                                 }
-                            }}
-                        </button>
+                            })
+                            tone=ActionMenuTone::Warning
+                            on_click=move || toggle_sell_mark()
+                        />
                     }
                 })}
-            <button
-                class="btn w-full text-sm xl:text-base text-gray-400 hover:text-white hover:bg-gray-400/40 py-2 xl:py-4"
-                on:click=move |_| on_close.run(())
-            >
-                "Cancel"
-            </button>
+            <ActionMenuRow
+                label="Cancel"
+                tone=ActionMenuTone::Neutral
+                on_click=move || on_close.run(())
+            />
         </ContextMenu>
     }
 }
 
 #[component]
-fn EmptySlot(children: Children) -> impl IntoView {
+fn EmptySlot(#[prop(optional)] children: Option<Children>) -> impl IntoView {
     view! {
-        <div class="
-        relative group flex items-center justify-center w-full h-full
-        rounded-md border-2 border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-900 opacity-70
-        ">{children()}</div>
+        <div class="relative isolate flex items-center justify-center w-full h-full overflow-clip rounded-[4px] xl:rounded-[6px] opacity-80 border border-[#56462f]/80 shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)] bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]">
+            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-white/5"></div>
+            <div class="relative z-10 flex h-full w-full items-center justify-center p-1">
+                {children.map(|children| children())}
+            </div>
+        </div>
     }
 }
 
@@ -713,17 +783,104 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
         <div
             node_ref=node_ref
             class="
-            absolute inset-0 z-30 flex flex-col justify-center items-center
+            absolute inset-0 z-30 flex flex-col justify-center 
             w-full
-            rounded-md  shadow-lg shadow-gray-900
-            bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-black
-            border border-gray-600 ring-2 ring-gray-700
+            p-1
             text-center
+            overflow-clip
             "
-            style="animation: fade-in 0.2s ease-out forwards"
+            style="
+            animation: fade-in 0.2s ease-out forwards;
+            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
+            linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
+            border: 1px solid rgba(108,83,41,0.72);
+            box-shadow:
+            0 10px 22px rgba(0,0,0,0.52),
+            inset 0 1px 0 rgba(240,215,159,0.16),
+            inset 0 -1px 0 rgba(0,0,0,0.45);
+            "
         >
-            {children()}
+            <div class="pointer-events-none absolute inset-[1px] border border-white/5"></div>
+            <div class="relative z-10 flex flex-col">{children()}</div>
         </div>
+    }
+}
+
+#[derive(Clone, Copy)]
+enum ActionMenuTone {
+    Success,
+    Warning,
+    Neutral,
+}
+
+#[derive(Clone, Copy)]
+struct ActionMenuRowTone {
+    text: &'static str,
+    hover_text: &'static str,
+    wash: &'static str,
+}
+
+fn action_menu_row_tone(tone: ActionMenuTone) -> ActionMenuRowTone {
+    match tone {
+        ActionMenuTone::Success => ActionMenuRowTone {
+            text: "text-amber-300",
+            hover_text: "hover:text-[#f2e5bc]",
+            wash: "rgba(247, 190, 77, 0.3)",
+        },
+        ActionMenuTone::Warning => ActionMenuRowTone {
+            text: "text-[#f86c47]",
+            hover_text: "hover:text-[#ffd4c8]",
+            wash: "rgba(192,92,61,0.30)",
+        },
+        ActionMenuTone::Neutral => ActionMenuRowTone {
+            text: "text-zinc-300",
+            hover_text: "hover:text-zinc-100",
+            wash: "rgba(255,255,255,0.10)",
+        },
+    }
+}
+
+#[component]
+fn ActionMenuRow(
+    #[prop(optional)] label: Option<&'static str>,
+    #[prop(optional, into)] label_signal: Option<Signal<String>>,
+    tone: ActionMenuTone,
+    #[prop(into)] on_click: Callback<()>,
+) -> impl IntoView {
+    let tone = action_menu_row_tone(tone);
+    view! {
+        <button
+            class=format!(
+                "btn relative w-full overflow-clip px-2 xl:px-2.5 py-1.5 xl:py-2
+                text-sm xl:text-base font-semibold tracking-[0.04em]
+                transition-colors duration-150 {} {}
+                bg-zinc-900/90
+                text-center active:brightness-90",
+                tone.text,
+                tone.hover_text,
+            )
+            on:click=move |_| on_click.run(())
+        >
+            <div
+                class="pointer-events-none absolute inset-0 hover:bg-white/[0.02]"
+                style=format!(
+                    "background:
+                    linear-gradient(90deg, transparent, {}, transparent);
+                 border-top: 1px solid rgba(255,255,255,0.04);",
+                    tone.wash,
+                )
+            />
+            <span class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent"></span>
+            <span class="drop-shadow-[0_2px_2px_rgba(0,0,0,0.95)]">
+                {move || {
+                    label_signal
+                        .as_ref()
+                        .map(|label_signal| label_signal.get())
+                        .or_else(|| label.map(str::to_string))
+                        .unwrap_or_default()
+                }}
+            </span>
+        </button>
     }
 }
 
@@ -774,14 +931,14 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
     match opt {
         Some(item_category) => match item_category {
             Armor => "Any Armor",
-            AttackWeapon => "Any Attack Weapon",
-            SpellWeapon => "Any Spell Weapon",
-            MeleeWeapon => "Any Melee Weapon",
             Jewelry => "Any Jewelry",
             Accessory => "Any Accessory",
+            AttackWeapon => "Attack Weapon",
+            SpellWeapon => "Spell Weapon",
+            MeleeWeapon => "Melee Weapon",
+            RangedWeapon => "Ranged Weapon",
             MeleeWeapon1H => "One-Handed Melee Weapon",
             MeleeWeapon2H => "Two-Handed Melee Weapon",
-            RangedWeapon => "Ranged Weapon",
             Shield => "Shield",
             Focus => "Magical Focus",
             Amulet => "Amulet",

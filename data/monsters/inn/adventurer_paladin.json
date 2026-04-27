@@ -1,0 +1,65 @@
+{
+  "name": "Tyranus",
+  "portrait": "monsters/inn/adventurer_paladin.webp",
+  "rarity": "Boss",
+  "max_life": 200,
+  "power_factor": 8,
+  "armor": {
+    "Physical": 100
+  },
+  "stun_lockout": 5,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 30
+    }
+  ],
+  "skills": [
+    {
+      "name": "Divine Smite",
+      "icon": "skills/attack.svg",
+      "cooldown": 3,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [
+                    5,
+                    10
+                  ],
+                  "Storm": [
+                    0,
+                    30
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lay on Hands",
+      "icon": "skills/heal.svg",
+      "skill_type": "Blessing",
+      "cooldown": 10,
+      "targets": [
+        {
+          "target_type": "Friend",
+          "effects": [
+            {
+              "Restore": {
+                "restore_type": "Life",
+                "modifier": "Percent",
+                "value": 50
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

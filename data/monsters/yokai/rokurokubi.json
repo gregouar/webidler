@@ -1,0 +1,29 @@
+{
+  "name": "Rokurokubi",
+  "portrait": "monsters/yokai/rokurokubi.webp",
+  "max_life": 20,
+  "power_factor": 4,
+  "size": "Tall",
+  "armor": { "Physical": 100 },
+  "skills": [
+    {
+      "name": "Stomp",
+      "icon": "skills/bite.svg",
+      "cooldown": 3.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 10, 15 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

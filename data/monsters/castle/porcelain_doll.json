@@ -1,0 +1,50 @@
+{
+  "name": "Porcelain Doll",
+  "portrait": "monsters/castle/porcelain_doll.webp",
+  "max_life": 7,
+  "power_factor": 1.5,
+  "initiative": [ 1.0, 3.0 ],
+  "skills": [
+    {
+      "name": "Clumsy Serving",
+      "icon": "skills/attack.svg",
+      "cooldown": 3.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 1, 3 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tea is Served",
+      "icon": "skills/heal.svg",
+      "cooldown": 5.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "target_type": "Friend",
+          "range": "Melee",
+          "shape": "Contact",
+          "effects": [
+            {
+              "Restore": {
+                "restore_type": "Life",
+                "value": 50,
+                "modifier": "Percent"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

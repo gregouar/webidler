@@ -95,10 +95,10 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
                 && hit_trigger.is_blocked.unwrap_or(hit_event.is_blocked) == hit_event.is_blocked
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
-                && hit_trigger
-                    .is_triggered
-                    .unwrap_or(hit_event.trigger_id.is_some())
-                    == hit_event.trigger_id.is_some()
+                && compare_options(
+                    &hit_trigger.is_triggered,
+                    &Some(hit_event.trigger_id.is_some()),
+                )
                 && hit_trigger
                     .damage_type
                     .map(|damage_type| {
@@ -148,14 +148,14 @@ fn handle_status_event<'a>(
         for triggered_effects in character_specs.triggers.iter() {
             match triggered_effects.trigger {
                 EventTrigger::OnApplyStatus(_) if status_event.source == character_id => {}
-                // EventTrigger::OnTakeHit(_) if hit_event.target == character_id => {}
+                EventTrigger::OnReceiveStatus(_) if status_event.target == character_id => {}
                 _ => continue,
             };
 
             let status_trigger = match &triggered_effects.trigger {
-                EventTrigger::OnApplyStatus(trigger)
-                // | EventTrigger::OnTakeHit(ht) 
-                => trigger,
+                EventTrigger::OnApplyStatus(trigger) | EventTrigger::OnReceiveStatus(trigger) => {
+                    trigger
+                }
                 _ => continue,
             };
 
@@ -181,6 +181,7 @@ fn handle_status_event<'a>(
                     &status_trigger.status_type.as_ref(),
                     &Some(&status_event.status_type),
                 )
+                && compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
                 && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
             {
                 trigger_contexts.push(TriggerContext {
@@ -228,7 +229,7 @@ fn handle_kill_event(
                             && all(kill_trigger.conditions.iter(), |condition| {
                                 check_condition(
                                     &game_data.area_threat,
-                                    &monster_specs.character_specs,
+                                    &monster_specs.character_specs.character_attrs,
                                     &monster_state.character_state,
                                     condition,
                                 ) > 0.0
@@ -293,6 +294,7 @@ fn handle_area_completed_event(
     area_level: AreaLevel,
     is_boss_level: bool,
 ) {
+    let _ = area_level;
     let area_state = game_data.area_state.mutate();
 
     if !game_data.area_specs.disable_shards
@@ -302,13 +304,13 @@ fn handle_area_completed_event(
         game_data.player_resources.mutate().shards += 1.0;
     }
 
-    game_data.player_specs.mutate().max_area_level =
-        game_data.player_specs.read().max_area_level.max(
-            area_state
-                .area_level
-                .saturating_add(game_data.area_specs.power_level)
-                .saturating_add(*game_data.area_specs.item_level_modifier),
-        );
+    let power_level = area_state
+        .area_level
+        .saturating_add(*game_data.area_specs.power_level)
+        .saturating_add(*game_data.area_specs.item_level_modifier);
+    if power_level > game_data.player_base_specs.read().max_area_level {
+        game_data.player_base_specs.mutate().max_area_level = power_level;
+    }
 
     let new_max = area_state.area_level > area_state.max_area_level;
 
@@ -324,11 +326,11 @@ fn handle_area_completed_event(
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
-        area_level
-            .saturating_add(*game_data.area_specs.item_level_modifier)
-            .saturating_add(game_data.area_specs.power_level),
+        power_level,
         is_boss_level,
         new_max, // Only drop unique when new area completed
+        false,
+        false,
         None,
         *game_data.area_specs.loot_rarity,
     ) {

@@ -4,8 +4,8 @@ use leptos::prelude::*;
 use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
-    skill::TargetType,
-    stat_effect::{StatEffect, StatType},
+    skill::{SkillType, TargetType},
+    stat_effect::{StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
@@ -18,7 +18,7 @@ use crate::components::shared::tooltips::{
     skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
 };
 
-pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
+pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoView {
     let effects = trigger
         .triggered_effect
         .effects
@@ -32,8 +32,17 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         })
         .collect::<Vec<_>>();
 
-    let target_infos = (trigger.triggered_effect.target != TriggerTarget::SameTarget)
-        .then(|| format!(", {}", trigger_target_str(trigger.triggered_effect.target)));
+    let details_infos = show_details.then(|| {
+        if matches!(trigger.triggered_effect.skill_type, SkillType::Other) {
+            format!(" ({})", trigger_target_str(trigger.triggered_effect.target))
+        } else {
+            format!(
+                " ({}, {})",
+                skill_type_str(Some(trigger.triggered_effect.skill_type)),
+                trigger_target_str(trigger.triggered_effect.target)
+            )
+        }
+    });
 
     let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
         .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
@@ -42,8 +51,8 @@ pub fn format_trigger(trigger: TriggerSpecs) -> impl IntoView {
         <EffectLi>
             <ul>
                 <EffectLi>
-                    {format_trigger_event(&trigger.triggered_effect.trigger)}{target_infos}
-                    {shape_infos}":"
+                    {format_trigger_event(&trigger.triggered_effect.trigger)}{shape_infos}
+                    {details_infos}":"
                 </EffectLi>
                 {trigger
                     .description
@@ -131,7 +140,14 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         } => {
             format!(
                 "{} Duration",
-                skill_status_type_str(*skill_type, status_type.as_ref())
+                skill_status_type_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_type.as_ref(),
+                    false
+                )
             )
         }
         TriggerEffectModifierSource::StatusStacks {
@@ -140,7 +156,14 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         } => {
             format!(
                 "{} Stacks",
-                skill_status_type_str(*skill_type, status_type.as_ref())
+                skill_status_type_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_type.as_ref(),
+                    false
+                )
             )
         }
     }
@@ -149,9 +172,10 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
 fn format_trigger_event(event_trigger: &EventTrigger) -> String {
     match event_trigger {
         EventTrigger::OnHit(hit_trigger) => format!("On {}Hit", format_hit_trigger(hit_trigger)),
-        EventTrigger::OnTakeHit(hit_trigger) => {
-            format!("On {}Hit Taken", format_hit_trigger(hit_trigger))
-        }
+        EventTrigger::OnTakeHit(hit_trigger) => match hit_trigger.is_blocked {
+            Some(true) => format!("On {}Block", format_blocked_hit_trigger(hit_trigger)),
+            _ => format!("On {}Hit Taken", format_hit_trigger(hit_trigger)),
+        },
         EventTrigger::OnKill(kill_trigger) => format_kill_trigger(kill_trigger),
         EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
         EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),
@@ -161,6 +185,13 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnApplyStatus(status_trigger) => {
             format!("On Applying {}", format_status_trigger(status_trigger))
         }
+        EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
+            Some(true) => match (&status_trigger.skill_type, &status_trigger.status_type) {
+                (None, None) => "On Evade".to_string(),
+                _ => format!("On Evaded {}", format_status_trigger(status_trigger)),
+            },
+            _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+        },
     }
 }
 
@@ -176,11 +207,26 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
     )
 }
 
+fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {
+    format!(
+        "{}{}{}{}",
+        critical_str(hit_trigger.is_crit),
+        range_str(hit_trigger.range),
+        skill_type_str(hit_trigger.skill_type),
+        damage_type_str(hit_trigger.damage_type),
+    )
+}
+
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     skill_status_type_str(
-            status_trigger.skill_type,
-            status_trigger.status_type.as_ref()
-        ).to_string()
+        &StatSkillFilter {
+            skill_type: status_trigger.skill_type,
+            ..Default::default()
+        },
+        status_trigger.status_type.as_ref(),
+        false,
+    )
+    .to_string()
 }
 
 fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {

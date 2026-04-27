@@ -1,0 +1,101 @@
+{
+  "name": "Vintorus, the Corkscrewed Warden",
+  "portrait": "monsters/inn/haunted_wine_rack.webp",
+  "rarity": "Boss",
+  "max_life": 200,
+  "size": "Huge",
+  "power_factor": 20,
+  "initiative": [ 1, 2 ],
+  "armor": { "Physical": 50, "Fire": 50, "Poison": 50, "Storm": 50 },
+  "stun_lockout": 5.0,
+  "status_resistances": [
+    {
+      "status_type": "Stun",
+      "value": 50
+    }
+  ],
+  "skills": [
+    {
+      "name": "Corkscrew Crush",
+      "icon": "skills/claw.svg",
+      "cooldown": 3.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 2, 4 ]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Physical" }
+                    },
+                    "value": [ 1, 2 ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Boiling Vintage Spray",
+      "icon": "skills/fireball.svg",
+      "skill_type": "Spell",
+      "cooldown": 5.0,
+      "targets": [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": 2,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "DamageOverTime": { "damage_type": "Fire" }
+                    },
+                    "value": [ 2, 4 ]
+                  }
+                ]
+              }
+            },
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [ 0, 8 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Summon Oathbound Bottles",
+      "icon": "skills/heal.svg",
+      "cooldown": 10.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "target_type": "Friend",
+          "target_dead": true,
+          "effects": [
+            {
+              "Resurrect": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

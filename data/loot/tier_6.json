@@ -1,6 +1,10 @@
 {
   "entries": [
     {
+      "item_id": "padded_tunic_unique",
+      "weight": 3
+    },
+    {
       "item_id": "sabre",
       "weight": 32000
     },
@@ -25,6 +29,10 @@
       "weight": 32000
     },
     {
+      "item_id": "kerden_dance",
+      "weight": 4999
+    },
+    {
       "item_id": "compound_bow",
       "weight": 32000
     },
@@ -33,12 +41,16 @@
       "weight": 32000
     },
     {
+      "item_id": "wand_prism",
+      "weight": 4999
+    },
+    {
       "item_id": "kite_shield",
       "weight": 32000
     },
     {
       "item_id": "kite_shield_unique",
-      "weight": 500
+      "weight": 4999
     },
     {
       "item_id": "ritual_orb",
@@ -67,7 +79,7 @@
     },
     {
       "item_id": "edict_treasure_map",
-      "weight": 500
+      "weight": 999
     },
     {
       "item_id": "rune",
@@ -81,7 +93,7 @@
     },
     {
       "item_id": "rune_mana_damage",
-      "weight": 50
+      "weight": 49
     }
   ]
 }

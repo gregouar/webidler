@@ -1,0 +1,84 @@
+{
+  "entries": [
+    {
+      "item_id": "weapon_1h_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "helmet_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "body_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "gloves_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "boots_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "weapon_2h_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "weapon_ranged_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "weapon_spell_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "shield_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "focus_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "cloak_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "ring_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "amulet_8",
+      "weight": 128000
+    },
+    {
+      "item_id": "edict",
+      "weight": 1600,
+      "min_area_level": 400
+    },
+    {
+      "item_id": "edict_2",
+      "weight": 1600,
+      "min_area_level": 400
+    },
+    {
+      "item_id": "rune",
+      "weight": 12800,
+      "min_area_level": 400
+    },
+    {
+      "item_id": "rune_root",
+      "weight": 1280,
+      "min_area_level": 400
+    },
+    {
+      "item_id": "rune_phys_fire",
+      "weight": 499
+    },
+    {
+      "item_id": "edict_witch",
+      "weight": 499
+    }
+  ]
+}

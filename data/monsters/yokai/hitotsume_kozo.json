@@ -1,0 +1,57 @@
+{
+  "name": "Hitotsume Kozo",
+  "portrait": "monsters/yokai/hitotsume_kozo.webp",
+  "max_life": 10,
+  "power_factor": 1.0,
+  "skills": [
+    {
+      "name": "Child's Play",
+      "icon": "skills/skull.svg",
+      "cooldown": 3.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 3, 6 ]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 3,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": "ManaRegen",
+                        "debuff": true
+                      }
+                    },
+                    "value": 100
+                  },
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Fire"
+                          }
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

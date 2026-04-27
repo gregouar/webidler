@@ -30,7 +30,7 @@ pub enum PassiveNodeType {
     Utility,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 pub struct PassivesTreeSpecs {
     pub nodes: HashMap<PassiveNodeId, PassiveNodeSpecs>,
     pub connections: Vec<PassiveConnection>,
@@ -83,7 +83,7 @@ pub struct PassiveNodeSpecs {
     pub socket: bool,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct PassiveConnection {
     pub from: PassiveNodeId,
     pub to: PassiveNodeId,
@@ -118,4 +118,40 @@ impl PassiveNodeSpecs {
                 effects_map
             })
     }
+
+    pub fn next_ascend_cost(&self, level: u8) -> u16 {
+        level as u16 + 1
+    }
+
+    pub fn total_ascend_cost(&self, level: u8) -> u16 {
+        (0..level).map(|l| self.next_ascend_cost(l)).sum()
+    }
+}
+
+pub fn generate_effects_map_from_passives<'a>(
+    passives_tree_specs: &'a PassivesTreeSpecs,
+    passives_tree_ascension: &'a PassivesTreeAscension,
+    purchased_nodes: &'a PurchasedNodes,
+) -> EffectsMap {
+    purchased_nodes
+        .iter()
+        .filter_map(|node_id| {
+            passives_tree_specs.nodes.get(node_id).map(|node| {
+                node.aggregate_effects(
+                    passives_tree_ascension
+                        .ascended_nodes
+                        .get(node_id)
+                        .cloned()
+                        .unwrap_or_default(),
+                )
+            })
+        })
+        .flat_map(|node_effects| node_effects.0.into_iter())
+        .fold(
+            EffectsMap(HashMap::new()),
+            |mut effects_map, (effect_type, effect_value)| {
+                *effects_map.0.entry(effect_type).or_default() += effect_value;
+                effects_map
+            },
+        )
 }

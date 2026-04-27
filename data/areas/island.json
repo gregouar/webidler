@@ -15,7 +15,8 @@
     "tier_4.json",
     "tier_5.json",
     "tier_6.json",
-    "tier_7.json"
+    "tier_7.json",
+    "tier_8.json"
   ],
   "bosses": [
     {
@@ -57,11 +58,11 @@
       "spawns": [
         {
           "monster": "pirate_deckhand.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "pirate_pistol.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "pirate_lookout.json",
@@ -84,15 +85,15 @@
       "spawns": [
         {
           "monster": "crab.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "shark.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "jellyfish.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "crab.json",
@@ -107,7 +108,7 @@
       "spawns": [
         {
           "monster": "pirate_monkey.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "pirate_skirmisher.json",
@@ -115,7 +116,7 @@
         },
         {
           "monster": "pirate_witch.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "pirate_skirmisher.json",
@@ -123,7 +124,7 @@
         },
         {
           "monster": "pirate_parrot.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "pirate_captain.json",
@@ -150,27 +151,27 @@
       "spawns": [
         {
           "monster": "drowned.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "harpy.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "mermaid.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "drowned.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "harpy.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "mermaid.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         }
       ]
     },
@@ -181,11 +182,11 @@
       "spawns": [
         {
           "monster": "cursed_pirate_digger.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "cursed_pirate_spider.json",
-          "quantity": [0, 1]
+          "quantity": [ 0, 1 ]
         },
         {
           "monster": "cursed_pirate_digger.json",
@@ -201,7 +202,7 @@
         },
         {
           "monster": "cursed_pirate_digger.json",
-          "quantity": [1, 2]
+          "quantity": [ 1, 2 ]
         },
         {
           "monster": "cursed_pirate_spider.json",

@@ -1,6 +1,9 @@
 use sqlx::FromRow;
 
-use shared::data::user::{UserCharacterId, UserId};
+use shared::data::{
+    realms::RealmId,
+    user::{UserCharacterId, UserId},
+};
 
 use crate::db::utc_datetime::UtcDateTime;
 
@@ -20,6 +23,7 @@ pub struct SessionEntry {
 
 #[derive(Debug, FromRow)]
 pub struct SessionGlimpse {
+    pub realm_id: RealmId,
     pub user_id: UserId,
     pub username: Option<String>,
     pub character_id: UserCharacterId,
@@ -29,24 +33,40 @@ pub struct SessionGlimpse {
     pub area_level: i32,
 }
 
-/// Return Ok(None) if session already exist
+/// Return Ok(None) if an active session already exists for this character
+/// or for another character of the same user in the same realm.
 pub async fn create_session(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<Option<SessionId>, sqlx::Error> {
     let res = sqlx::query_scalar!(
-        "
+        r#"
+        WITH target_character AS (
+            SELECT user_id, realm_id
+            FROM characters
+            WHERE character_id = $1
+        )
         INSERT INTO game_sessions (character_id)
-        VALUES ($1)
+        SELECT $1
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM game_sessions gs
+            INNER JOIN characters c ON c.character_id = gs.character_id
+            INNER JOIN target_character tc
+                ON tc.user_id = c.user_id
+               AND tc.realm_id = c.realm_id
+            WHERE gs.ended_at = '9999-01-01 23:59:59'
+        )
         RETURNING session_id
-        ",
+        "#,
         character_id
     )
-    .fetch_one(db_pool)
+    .fetch_optional(db_pool)
     .await;
 
     match res {
-        Ok(session_id) => Ok(Some(session_id)),
+        Ok(Some(session_id)) => Ok(Some(session_id)),
+        Ok(None) => Ok(None),
         Err(sqlx::Error::Database(db_err)) if db_err.is_unique_violation() => Ok(None),
         Err(e) => Err(e),
     }
@@ -72,6 +92,7 @@ pub async fn glimpse_active_sessions(
         SessionGlimpse,
         r#"
         SELECT
+            characters.realm_id as "realm_id!",
             users.user_id as "user_id: UserId",
             users.username,
             characters.character_id as "character_id: UserCharacterId",

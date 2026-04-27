@@ -28,7 +28,7 @@
                   12
                 ]
               },
-              "crit_chance": 10,
+              "crit_chance": 5,
               "crit_damage": 100
             }
           }
@@ -134,7 +134,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": null
+                        "Speed": { }
                       },
                       "modifier": "Increased",
                       "debuff": true
@@ -178,7 +178,9 @@
                   5,
                   15
                 ]
-              }
+              },
+              "crit_chance": 5,
+              "crit_damage": 100
             }
           }
         ]
@@ -244,7 +246,7 @@
     "name": "Righteous Fire",
     "description": "Remove your pants and burn everything, including yourself.",
     "icon": "skills/righteous_fire.svg",
-    "skill_type": "Other",
+    "skill_type": "Spell",
     "cooldown": 1,
     "mana_cost": 2,
     "upgrade_cost": 50,
@@ -273,7 +275,7 @@
     ],
     "ignore_stat_effects": [
       {
-        "Speed": null
+        "Speed": { }
       }
     ],
     "targets": [
@@ -382,10 +384,15 @@
       {
         "range": "Any",
         "shape": "All",
+        "repeat": {
+          "value": 4,
+          "target": "Any",
+          "repeat_cooldown": 1
+        },
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 6,
+              "duration": 2,
               "statuses": [
                 {
                   "status_type": {
@@ -484,10 +491,7 @@
           {
             "FlatDamage": {
               "damage": {
-                "Physical": [
-                  1,
-                  2
-                ]
+                "Physical": 1
               }
             }
           }
@@ -557,19 +561,16 @@
                       "effects": [
                         {
                           "ApplyStatus": {
-                            "duration": 5,
+                            "duration": 8,
                             "statuses": [
                               {
                                 "replace_on_value_only": true,
                                 "status_type": {
                                   "StatModifier": {
                                     "stat": {
-                                      "DamageResistance": {
-                                        "skill_type": null,
-                                        "damage_type": null
-                                      }
+                                      "Armor": null
                                     },
-                                    "modifier": "Flat",
+                                    "modifier": "More",
                                     "debuff": true
                                   }
                                 },
@@ -662,7 +663,7 @@
                               }
                             },
                             {
-                              "CritChance": null
+                              "CritChance": { }
                             }
                           ]
                         }
@@ -714,7 +715,7 @@
                               }
                             },
                             {
-                              "CritChance": null
+                              "CritChance": { }
                             }
                           ]
                         }
@@ -795,8 +796,7 @@
                       "name": "Curse of Putridity",
                       "icon": "skills/curse_putridity.svg",
                       "OnTakeHit": {
-                        "is_hurt": true,
-                        "is_triggered": false
+                        "is_hurt": true
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
@@ -804,16 +804,14 @@
                       "effects": [
                         {
                           "FlatDamage": {
-                            "damage": {
-                              "Poison": 0
-                            }
+                            "damage": { }
                           },
                           "ignore_stat_effects": [
                             {
-                              "CritChance": null
+                              "CritChance": { }
                             },
                             {
-                              "CritDamage": null
+                              "CritDamage": { }
                             },
                             {
                               "Damage": {
@@ -923,10 +921,10 @@
                           },
                           "ignore_stat_effects": [
                             {
-                              "CritChance": null
+                              "CritChance": { }
                             },
                             {
-                              "CritDamage": null
+                              "CritDamage": { }
                             },
                             {
                               "Damage": {
@@ -980,7 +978,7 @@
   },
   "curse_weakness": {
     "name": "Curse of Weakness",
-    "description": "A debilitating curse that reduces enemies' damage output and slow them.",
+    "description": "A debilitating curse that reduces enemies' damage output.",
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Curse",
     "cooldown": 10,
@@ -1029,6 +1027,176 @@
       }
     ]
   },
+  "curse_clumsy": {
+    "name": "Curse of Clumsiness",
+    "description": "A crippling curse that hinders enemies ability to evade or block your attacks.",
+    "icon": "skills/curse_clumsy.svg",
+    "skill_type": "Curse",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "StatModifier": {
+                "stat": {
+                  "Block": null
+                },
+                "debuff": true
+              }
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "StatModifier": {
+                "stat": {
+                  "Evade": null
+                },
+                "debuff": true
+              }
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "BlockDamageTaken",
+                      "modifier": "Flat",
+                      "debuff": false
+                    }
+                  },
+                  "value": 10
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "EvadeDamageTaken",
+                      "modifier": "Flat",
+                      "debuff": false
+                    }
+                  },
+                  "value": 10
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Block": null
+                      },
+                      "modifier": "Increased",
+                      "debuff": true
+                    }
+                  },
+                  "value": 17
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Evade": null
+                      },
+                      "modifier": "Increased",
+                      "debuff": true
+                    }
+                  },
+                  "value": 17
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "curse_vampirism": {
+    "name": "Curse of Vampirism",
+    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins.",
+    "icon": "skills/curse_vampirism.svg",
+    "skill_type": "Curse",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Restore": {
+            "restore_type": "Life"
+          }
+        },
+        "modifier": "Increased",
+        "value": 3
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "curse_vampirism",
+                      "name": "Curse of Vampirism",
+                      "icon": "skills/curse_vampirism.svg",
+                      "OnTakeHit": {
+                        "is_hurt": true,
+                        "is_triggered": false
+                      },
+                      "target": "Source",
+                      "skill_range": "Any",
+                      "skill_shape": "Single",
+                      "skill_type": "Curse",
+                      "effects": [
+                        {
+                          "Restore": {
+                            "restore_type": "Life",
+                            "value": 2,
+                            "modifier": "Flat"
+                          },
+                          "ignore_stat_effects": [ ]
+                        }
+                      ],
+                      "modifiers": [ ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
   "blessing_haste": {
     "name": "Blessing of Haste",
     "description": "A blessing that increases your speed, allowing quicker actions in battle.",
@@ -1061,7 +1229,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": "Attack"
+                        "Speed": { "skill_type": "Attack" }
                       },
                       "modifier": "Increased"
                     }
@@ -1073,7 +1241,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": "Spell"
+                        "Speed": { "skill_type": "Spell" }
                       },
                       "modifier": "Increased"
                     }
@@ -1133,7 +1301,7 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "CritDamage": null
+                        "CritDamage": { }
                       },
                       "modifier": "More"
                     }
@@ -1262,7 +1430,7 @@
     ],
     "ignore_stat_effects": [
       {
-        "Speed": null
+        "Speed": { }
       }
     ],
     "targets": [
@@ -1415,7 +1583,7 @@
     ],
     "ignore_stat_effects": [
       {
-        "Speed": null
+        "Speed": { }
       }
     ],
     "targets": [
@@ -1538,7 +1706,7 @@
     ],
     "ignore_stat_effects": [
       {
-        "Speed": null
+        "Speed": { }
       }
     ],
     "targets": [
@@ -1634,8 +1802,7 @@
                             "HitCrit": null
                           }
                         }
-                      ],
-                      "inherit_modifiers": true
+                      ]
                     }
                   }
                 }
@@ -1731,7 +1898,7 @@
     "name": "Meditate",
     "description": "Focus your mind to recover mana, replenishing your magical energy.",
     "icon": "skills/meditate.svg",
-    "skill_type": "Other",
+    "skill_type": "Blessing",
     "cooldown": 5,
     "mana_cost": 0,
     "upgrade_cost": 50,
@@ -1747,7 +1914,7 @@
       },
       {
         "stat": {
-          "Speed": null
+          "Speed": { }
         },
         "modifier": "Flat",
         "value": -0.3
@@ -1770,7 +1937,7 @@
   },
   "retaliate": {
     "name": "Retaliate",
-    "description": "A defensive technique that punishes enemies when you block their attacks.",
+    "description": "A defensive technique that punishes enemies when you block or evade their attacks.",
     "icon": "skills/retaliate.svg",
     "skill_type": "Attack",
     "cooldown": 0,
@@ -1826,7 +1993,51 @@
           "is_blocked": true
         },
         "target": "Source",
-        "inherit_modifiers": true,
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": [
+                  5,
+                  10
+                ]
+              },
+              "crit_chance": 5,
+              "crit_damage": 100
+            }
+          },
+          {
+            "ApplyStatus": {
+              "duration": 2,
+              "statuses": [
+                {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "value": 0,
+                  "cumulate": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "trigger_id": "retaliate_evade",
+        "skill_type": "Attack",
+        "OnReceiveStatus": {
+          "skill_type": null,
+          "status_type": {
+            "DamageOverTime": {
+              "damage_type": null
+            }
+          },
+          "is_triggered": null,
+          "is_evaded": true
+        },
+        "target": "Source",
         "effects": [
           {
             "FlatDamage": {
@@ -1913,7 +2124,7 @@
         "effects": [
           {
             "stat": {
-              "Speed": "Attack"
+              "Speed": { "skill_type": "Attack" }
             },
             "modifier": "More",
             "value": 1
@@ -1930,6 +2141,11 @@
     ],
     "targets": [
       {
+        "repeat": {
+          "value": 1,
+          "target": "Any",
+          "repeat_cooldown": 0.3
+        },
         "range": "Melee",
         "effects": [
           {
@@ -2049,7 +2265,7 @@
         "effects": [
           {
             "stat": {
-              "Speed": "Attack"
+              "Speed": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2068,7 +2284,7 @@
         "effects": [
           {
             "stat": {
-              "CritChance": "Attack"
+              "CritChance": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2087,7 +2303,7 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": "Attack"
+              "CritDamage": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2349,7 +2565,10 @@
         "range": "Melee",
         "shape": "Vertical2",
         "repeat": {
-          "value": [ 3, 5 ],
+          "value": [
+            3,
+            5
+          ],
           "target": "Any",
           "repeat_cooldown": 0.3
         },
@@ -2424,7 +2643,7 @@
         "effects": [
           {
             "stat": {
-              "Speed": "Attack"
+              "Speed": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2444,7 +2663,7 @@
         "effects": [
           {
             "stat": {
-              "CritChance": "Attack"
+              "CritChance": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2464,7 +2683,7 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": "Attack"
+              "CritDamage": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2735,7 +2954,10 @@
         "range": "Any",
         "shape": "Single",
         "repeat": {
-          "value": [ 6, 8 ],
+          "value": [
+            6,
+            8
+          ],
           "target": "Any",
           "repeat_cooldown": 0.3
         },
@@ -2770,7 +2992,7 @@
         "effects": [
           {
             "stat": {
-              "Speed": "Attack"
+              "Speed": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2790,7 +3012,7 @@
         "effects": [
           {
             "stat": {
-              "CritChance": "Attack"
+              "CritChance": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1
@@ -2810,7 +3032,7 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": "Attack"
+              "CritDamage": { "skill_type": "Attack" }
             },
             "modifier": "Flat",
             "value": 1

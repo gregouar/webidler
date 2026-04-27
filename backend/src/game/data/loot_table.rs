@@ -34,12 +34,26 @@ pub struct RarityWeights {
 impl Default for RarityWeights {
     fn default() -> Self {
         RarityWeights {
-            normal: 200.0,
-            magic: 160.0,
-            rare: 40.0,
+            normal: 400.0,
+            magic: 320.0,
+            rare: 80.0,
             unique: 1.0,
         }
     }
 }
 
 impl LoadJsonFromFile for LootTable {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GambleTableBlueprint {
+    pub loot_tables: Vec<String>,
+    pub item_rarity: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct GambleTable {
+    pub loot_table: LootTable,
+    pub item_rarity: f64,
+}
+
+impl LoadJsonFromFile for GambleTableBlueprint {}

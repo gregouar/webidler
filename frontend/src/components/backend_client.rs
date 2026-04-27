@@ -4,6 +4,7 @@ use std::time::Duration;
 
 use shared::{
     data::{
+        realms::Realm,
         stash::StashId,
         user::{UserCharacterId, UserId},
     },
@@ -11,25 +12,25 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
             BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
-            EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAddAffixRequest,
-            ForgotPasswordRequest, InventoryDeleteRequest, InventoryEquipRequest,
-            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
-            SavePassivesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
-            SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
+            EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
+            ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
+            InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
+            ResetPasswordRequest, SavePassivesRequest, SellMarketItemRequest, SignInRequest,
+            SignUpRequest, SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
             UpdateAccountRequest, UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
             BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
             DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
-            ExchangeGemsStashResponse, ForgeAddAffixResponse, ForgotPasswordResponse,
-            GetAreasResponse, GetBenedictionsResponse, GetCharacterDetailsResponse,
-            GetDiscordInviteResponse, GetPassivesResponse, GetSkillsResponse,
-            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
-            InventoryEquipResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
-            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
-            SavePassivesResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
-            SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
+            ForgotPasswordResponse, GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
+            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
+            GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
+            InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
+            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
+            ResetPasswordResponse, SavePassivesResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
             UpdateAccountResponse, UpgradeStashResponse,
         },
     },
@@ -84,8 +85,9 @@ impl BackendClient {
         self.get("players").await
     }
 
-    pub async fn get_leaderboard(&self) -> Result<LeaderboardResponse, BackendError> {
-        self.get("leaderboard").await
+    pub async fn get_leaderboard(&self, realm: Realm) -> Result<LeaderboardResponse, BackendError> {
+        self.get(&format!("leaderboard?realm={}", realm.realm_id()))
+            .await
     }
 
     pub async fn get_news(&self) -> Result<NewsResponse, BackendError> {
@@ -349,12 +351,28 @@ impl BackendClient {
 
     // Forge
 
-    pub async fn forge_add_affix(
+    pub async fn forge_affix(
         &self,
         token: &str,
-        request: &ForgeAddAffixRequest,
-    ) -> Result<ForgeAddAffixResponse, BackendError> {
-        self.post_auth("forge/add_affix", token, request).await
+        request: &ForgeAffixRequest,
+    ) -> Result<ForgeAffixResponse, BackendError> {
+        self.post_auth("forge/affix", token, request).await
+    }
+
+    pub async fn forge_upgrade(
+        &self,
+        token: &str,
+        request: &ForgeUpgradeRequest,
+    ) -> Result<ForgeUpgradeResponse, BackendError> {
+        self.post_auth("forge/upgrade", token, request).await
+    }
+
+    pub async fn gamble_item(
+        &self,
+        token: &str,
+        request: &GambleItemRequest,
+    ) -> Result<GambleItemResponse, BackendError> {
+        self.post_auth("forge/gamble", token, request).await
     }
 
     // Inventory

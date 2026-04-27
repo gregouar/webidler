@@ -2,16 +2,16 @@
   {
     "name": "Nimble",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 1
       }
@@ -20,16 +20,16 @@
   {
     "name": "Quick",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 2
       }
@@ -38,16 +38,16 @@
   {
     "name": "Swift",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 3
       }
@@ -56,16 +56,16 @@
   {
     "name": "Brisk",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 300,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 4
       }
@@ -74,16 +74,16 @@
   {
     "name": "Sudden",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 400,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 5
       }
@@ -92,16 +92,16 @@
   {
     "name": "Impulsive",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 6
       }
@@ -110,16 +110,16 @@
   {
     "name": "Precipitate",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 7
       }
@@ -128,16 +128,16 @@
   {
     "name": "Abrupt",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Rune"],
+    "weight": 400,
+    "restrictions": [ "Rune" ],
     "item_level": 700,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 8
       }
@@ -146,16 +146,16 @@
   {
     "name": "Immediate",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Rune"],
+    "weight": 200,
+    "restrictions": [ "Rune" ],
     "item_level": 800,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 9
       }
@@ -164,16 +164,16 @@
   {
     "name": "Unforeseen",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Rune"],
+    "weight": 100,
+    "restrictions": [ "Rune" ],
     "item_level": 900,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": 10
       }
@@ -183,16 +183,16 @@
   {
     "name": "Spiraling",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 1
       }
@@ -201,16 +201,16 @@
   {
     "name": "Veering",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 2
       }
@@ -219,16 +219,16 @@
   {
     "name": "Surging",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 3
       }
@@ -237,16 +237,16 @@
   {
     "name": "Soaring",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 300,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 4
       }
@@ -255,16 +255,16 @@
   {
     "name": "Warping",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 400,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 5
       }
@@ -273,16 +273,16 @@
   {
     "name": "Distorting",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 6
       }
@@ -291,16 +291,16 @@
   {
     "name": "Skewed",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 7
       }
@@ -309,16 +309,16 @@
   {
     "name": "Displaced",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Rune"],
+    "weight": 400,
+    "restrictions": [ "Rune" ],
     "item_level": 700,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 8
       }
@@ -327,16 +327,16 @@
   {
     "name": "Anomalous",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Rune"],
+    "weight": 200,
+    "restrictions": [ "Rune" ],
     "item_level": 800,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 9
       }
@@ -345,16 +345,16 @@
   {
     "name": "Paradoxical",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Rune"],
+    "weight": 100,
+    "restrictions": [ "Rune" ],
     "item_level": 900,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
         "value": 10
       }

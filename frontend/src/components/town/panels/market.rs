@@ -11,7 +11,10 @@ use shared::{
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
-        stat_effect::{StatEffect, StatSkillEffectType, StatStatusType, StatType},
+        stat_effect::{
+            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
+            StatType,
+        },
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -25,7 +28,7 @@ use crate::components::{
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
     shared::{
-        inventory::loot_filter_category_to_str,
+        inventory::{InventoryEquipFilter, loot_filter_category_to_str},
         resources::{GemsCounter, GemsIcon},
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
@@ -34,8 +37,9 @@ use crate::components::{
         items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
     },
     ui::{
+        Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
-        card::{Card, CardHeader, CardInset, CardTitle},
+        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
@@ -77,9 +81,9 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open=open>
-            <Card class="h-full" gap=false>
+            <MenuCard class="h-full" gap=false>
                 <CardHeader title="Market" on_close=move || open.set(false)>
-                    <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-hidden">
+                    <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-clip">
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == MarketTab::Filters
@@ -236,7 +240,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         }}
                     </CardInset>
                 </div>
-            </Card>
+            </MenuCard>
         </MenuPanel>
     }
 }
@@ -320,7 +324,7 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
             <span class="hidden xl:inline text-gray-400 text-xs xl:text-base font-medium">
                 "Revenue:"
             </span>
-            <GemsCounter value />
+            <GemsCounter value w_full=true />
             <MenuButton on:click=do_take disabled>
                 "Take"
             </MenuButton>
@@ -375,6 +379,7 @@ fn MarketBrowser(
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
                 let user_id = town_context.character.read_untracked().character_id;
+                let realm = town_context.character.read_untracked().realm;
                 let filters = filters.get_untracked();
 
                 spawn_local(async move {
@@ -383,6 +388,7 @@ fn MarketBrowser(
                             &auth_context.token(),
                             &BrowseMarketItemsRequest {
                                 user_id,
+                                realm,
                                 skip,
                                 limit: items_per_page,
                                 filters,
@@ -408,34 +414,72 @@ fn MarketBrowser(
 
 #[component]
 fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
-    let items_list = Signal::derive({
-        let town_context = expect_context::<TownContext>();
-        move || {
-            town_context
+    let town_context: TownContext = expect_context();
+
+    let select_from_inventory = move |_| {
+        town_context.selected_item_index.set(None);
+        town_context.equip_filter.set(InventoryEquipFilter::Bag);
+        town_context.open_inventory.set(true);
+    };
+
+    Effect::new(move || {
+        if let Some(item_index) = town_context.selected_item_index.get() {
+            let item_specs = town_context
                 .inventory
                 .read()
                 .bag
-                .iter()
-                .enumerate()
-                .map(|(index, item)| SelectedMarketItem {
-                    index,
+                .get(item_index as usize)
+                .cloned();
+
+            if let Some(item_specs) = item_specs {
+                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
+                    index: item_index as usize,
+                    item_specs: Arc::new(item_specs),
+                    price: 0.0,
                     owner_id: None,
                     owner_name: None,
-                    // owner_id: town_context.character.read_untracked().character_id,
-                    // owner_name: town_context.character.read_untracked().name.clone(),
                     recipient: None,
-                    item_specs: Arc::new(item.clone()),
-                    price: 0.0,
                     rejected: false,
                     created_at: Utc::now(),
                     deleted_at: None,
                     deleted_by: None,
-                })
-                .collect::<Vec<_>>()
+                }));
+            }
         }
     });
 
-    view! { <ItemsBrowser selected_item items_list /> }
+    let items_list = Signal::derive(move || {
+        town_context
+            .inventory
+            .read()
+            .bag
+            .iter()
+            .enumerate()
+            .map(|(index, item)| SelectedMarketItem {
+                index,
+                owner_id: None,
+                owner_name: None,
+                // owner_id: town_context.character.read_untracked().character_id,
+                // owner_name: town_context.character.read_untracked().name.clone(),
+                recipient: None,
+                item_specs: Arc::new(item.clone()),
+                price: 0.0,
+                rejected: false,
+                created_at: Utc::now(),
+                deleted_at: None,
+                deleted_by: None,
+            })
+            .collect::<Vec<_>>()
+    });
+
+    view! {
+        <div class="w-full px-2 pt-2">
+            <MenuButton class="w-full" on:click=select_from_inventory>
+                "Pick from Inventory"
+            </MenuButton>
+        </div>
+        <ItemsBrowser selected_item items_list />
+    }
 }
 
 #[component]
@@ -570,7 +614,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between">
-            <CardTitle>"Buy from Market"</CardTitle>
+            <CardInsetTitle>"Buy from Market"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 p-2 font-bold">
@@ -604,46 +648,51 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-center p-4 border-t border-zinc-700">
-                <div class="flex items-center gap-1 text-lg text-gray-400">
-                    {move || {
-                        price()
-                            .map(|price| {
-                                if price > 0.0 {
-                                    view! {
-                                        "Price: "
-                                        <span class="text-fuchsia-300 font-bold">
-                                            {format!("{:.0}", price)}
-                                        </span>
-                                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-center p-4">
+                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                        {move || {
+                            price()
+                                .map(|price| {
+                                    if price > 0.0 {
+                                        view! {
+                                            "Price: "
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {format!("{:.0}", price)}
+                                            </span>
+                                            <GemsIcon />
+                                        }
+                                            .into_any()
+                                    } else {
+                                        view! {
+                                            <span class="text-fuchsia-300 font-bold">"Free"</span>
+                                        }
+                                            .into_any()
                                     }
-                                        .into_any()
-                                } else {
-                                    view! { <span class="text-fuchsia-300 font-bold">"Free"</span> }
-                                        .into_any()
-                                }
+                                })
+                        }}
+                    </div>
+
+                    {move || {
+                        (private_offer())
+                            .then(|| {
+                                view! { <MenuButtonRed on:click=do_reject>"Reject"</MenuButtonRed> }
                             })
                     }}
+
+                    <MenuButton on:click=do_buy disabled=disabled>
+                        {move || {
+                            if own_item() {
+                                "Remove Item"
+                            } else if price().unwrap_or(1.0) > 0.0 {
+                                "Buy Item"
+                            } else {
+                                "Take Item"
+                            }
+                        }}
+                    </MenuButton>
                 </div>
-
-                {move || {
-                    (private_offer())
-                        .then(|| {
-                            view! { <MenuButtonRed on:click=do_reject>"Reject"</MenuButtonRed> }
-                        })
-                }}
-
-                <MenuButton on:click=do_buy disabled=disabled>
-                    {move || {
-                        if own_item() {
-                            "Remove Item"
-                        } else if price().unwrap_or(1.0) > 0.0 {
-                            "Buy Item"
-                        } else {
-                            "Take Item"
-                        }
-                    }}
-                </MenuButton>
             </div>
         </div>
     }
@@ -702,7 +751,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Sell from Bag"</CardTitle>
+            <CardInsetTitle>"Sell from Bag"</CardInsetTitle>
 
             <ValidatedInput
                 id="private_offer"
@@ -714,29 +763,32 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
             <ItemDetails selected_item show_affixes=true />
 
-            <div class="flex justify-between items-end border-t border-zinc-700 p-1 xl:p-4">
-                <div class="flex items-end gap-1 text-lg text-gray-400 ">
-                    <ValidatedInput
-                        id="price"
-                        label="Price:"
-                        input_type="number"
-                        placeholder="Enter Price"
-                        bind=price
-                    />
-                    <div class="flex items-center">
-                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-end p-1 xl:p-4">
+                    <div class="flex items-end gap-1 text-lg text-gray-400 ">
+                        <ValidatedInput
+                            id="price"
+                            label="Price:"
+                            input_type="number"
+                            placeholder="Enter Price"
+                            bind=price
+                        />
+                        <div class="flex items-center">
+                            <GemsIcon />
+                        </div>
                     </div>
-                </div>
 
-                <MenuButton on:click=do_sell disabled=disabled>
-                    {move || {
-                        if price.get().map(|price| price.into_inner()).unwrap_or(1.0) > 0.0 {
-                            "Sell Item"
-                        } else {
-                            "Give Item"
-                        }
-                    }}
-                </MenuButton>
+                    <MenuButton on:click=do_sell disabled=disabled>
+                        {move || {
+                            if price.get().map(|price| price.into_inner()).unwrap_or(1.0) > 0.0 {
+                                "Sell Item"
+                            } else {
+                                "Give Item"
+                            }
+                        }}
+                    </MenuButton>
+                </div>
             </div>
         </div>
     }
@@ -867,7 +919,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Remove from Market"</CardTitle>
+            <CardInsetTitle>"Remove from Market"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="p-2">
@@ -894,28 +946,33 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-end p-1 xl:p-4 border-t border-zinc-700">
-                <div class="flex items-end gap-1 text-lg text-gray-400 ">
-                    <ValidatedInput
-                        id="price"
-                        label="Price:"
-                        input_type="number"
-                        placeholder="Enter Price"
-                        bind=price
-                    />
-                    <div class="flex items-center">
-                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-end p-1 xl:p-4">
+                    <div class="flex items-end gap-1 text-lg text-gray-400 ">
+                        <ValidatedInput
+                            id="price"
+                            label="Price:"
+                            input_type="number"
+                            placeholder="Enter Price"
+                            bind=price
+                        />
+                        <div class="flex items-center">
+                            <GemsIcon />
+                        </div>
+                        <MenuButton on:click=do_edit disabled=disabled>
+                            <span class="inline xl:hidden">"Edit"</span>
+                            <span class="hidden xl:inline font-variant:small-caps">
+                                "Edit Price"
+                            </span>
+                        </MenuButton>
                     </div>
-                    <MenuButton on:click=do_edit disabled=disabled>
-                        <span class="inline xl:hidden">"Edit"</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Edit Price"</span>
+
+                    <MenuButton on:click=do_remove disabled=disabled>
+                        <span class="inline xl:hidden">"Remove"</span>
+                        <span class="hidden xl:inline font-variant:small-caps">"Remove Item"</span>
                     </MenuButton>
                 </div>
-
-                <MenuButton on:click=do_remove disabled=disabled>
-                    <span class="inline xl:hidden">"Remove"</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Remove Item"</span>
-                </MenuButton>
             </div>
         </div>
     }
@@ -967,7 +1024,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardTitle>"Item Sold"</CardTitle>
+            <CardInsetTitle>"Item Sold"</CardInsetTitle>
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
@@ -984,26 +1041,31 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 </div>
             </div>
 
-            <div class="flex justify-between items-end p-4 border-t border-zinc-700">
-                <div class="flex items-center gap-1 text-lg text-gray-400">
-                    {move || {
-                        price()
-                            .map(|price| {
-                                if price > 0.0 {
-                                    view! {
-                                        "Price: "
-                                        <span class="text-fuchsia-300 font-bold">
-                                            {format!("{:.0}", price)}
-                                        </span>
-                                        <GemsIcon />
+            <div class="w-full">
+                <Separator />
+                <div class="flex justify-between items-end p-4">
+                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                        {move || {
+                            price()
+                                .map(|price| {
+                                    if price > 0.0 {
+                                        view! {
+                                            "Price: "
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {format!("{:.0}", price)}
+                                            </span>
+                                            <GemsIcon />
+                                        }
+                                            .into_any()
+                                    } else {
+                                        view! {
+                                            <span class="text-fuchsia-300 font-bold">"Free"</span>
+                                        }
+                                            .into_any()
                                     }
-                                        .into_any()
-                                } else {
-                                    view! { <span class="text-fuchsia-300 font-bold">"Free"</span> }
-                                        .into_any()
-                                }
-                            })
-                    }}
+                                })
+                        }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -1040,7 +1102,10 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(item_name);
     rule_field!(min_req_level);
     rule_field!(max_req_level);
+    rule_field!(min_power_level);
+    rule_field!(min_upgrade_level);
     rule_field!(price);
+    rule_field!(item_cooldown);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
     rule_field!(item_damage_fire);
@@ -1122,7 +1187,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     };
                 }>"Reset"</MenuButton>
             </div>
-            <CardTitle>"Main Filters"</CardTitle>
+            <CardInsetTitle>"Main Filters"</CardInsetTitle>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
@@ -1152,16 +1217,31 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     </div>
 
                     <ValidatedInput
-                        id="price"
-                        label="Max Price:"
+                        id="power_level"
+                        label="Min Item Level:"
                         input_type="number"
-                        placeholder="Max Price"
-                        bind=price
+                        placeholder="Minimum Item Level"
+                        bind=min_power_level
+                    />
+                    <ValidatedInput
+                        id="upgrade_level"
+                        label="Min Empower Level:"
+                        input_type="number"
+                        placeholder="Minimum Empower Level"
+                        bind=min_upgrade_level
                     />
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <ValidatedInput
+                        id="price"
+                        label="Max Price:"
+                        input_type="number"
+                        placeholder="Maximum Price"
+                        bind=price
+                    />
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Category:"</span>
                         <SearchableDropdownMenu
                             options=item_category_options
@@ -1169,12 +1249,12 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         />
                     </div>
 
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Rarity:"</span>
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                     </div>
 
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Order by:"</span>
                         <DropdownMenu options=order_by_options chosen_option=order_by />
                     </div>
@@ -1187,7 +1267,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damages"
                         label="Min Damage:"
                         input_type="number"
-                        placeholder="Minimum Damage per second"
+                        placeholder="Minimum Damage per Second"
                         bind=item_damages
                     />
                     <ValidatedInput
@@ -1220,6 +1300,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     />
                 </div>
                 <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="item_damages"
+                        label="Max Cooldown:"
+                        input_type="number"
+                        placeholder="Maximum Cooldown"
+                        bind=item_cooldown
+                    />
                     <ValidatedInput
                         id="item_damages"
                         label="Min Critical Hit Chance:"
@@ -1280,7 +1367,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
     view! {
         <div class="w-full min-h-0 flex-1 flex flex-col gap-2 xl:gap-4 relative">
-            <CardTitle>"Stat Filters"</CardTitle>
+            <CardInsetTitle>"Stat Filters"</CardInsetTitle>
 
             <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
                 {stat_filters
@@ -1349,77 +1436,96 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Mana, Modifier::Increased),
         (StatType::Mana, Modifier::Flat),
         (StatType::ManaRegen, Modifier::Flat),
-        (StatType::Armor(Some(DamageType::Fire)), Modifier::Flat),
-        (StatType::Armor(Some(DamageType::Poison)), Modifier::Flat),
-        (StatType::Armor(Some(DamageType::Storm)), Modifier::Flat),
+        (StatType::Armor(Some(ArmorStatType::Fire)), Modifier::Flat),
+        (StatType::Armor(Some(ArmorStatType::Poison)), Modifier::Flat),
+        (StatType::Armor(Some(ArmorStatType::Storm)), Modifier::Flat),
         (StatType::Armor(None), Modifier::Increased),
         (StatType::Evade(None), Modifier::Flat),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: Default::default(),
                 damage_type: None,
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
         (
             StatType::Damage {
-                skill_type: Some(SkillType::Attack),
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                },
                 damage_type: None,
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
         (
             StatType::Damage {
-                skill_type: Some(SkillType::Spell),
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Spell),
+                    ..Default::default()
+                },
                 damage_type: None,
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Physical),
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Fire),
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Poison),
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
         (
             StatType::Damage {
-                skill_type: None,
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Storm),
                 min_max: None,
+                is_hit: None,
             },
             Modifier::More,
         ),
-        (StatType::CritDamage(None), Modifier::More),
-        (StatType::CritChance(None), Modifier::Increased),
+        (StatType::CritDamage(Default::default()), Modifier::More),
         (
-            StatType::CritChance(Some(SkillType::Spell)),
+            StatType::CritChance(Default::default()),
+            Modifier::Increased,
+        ),
+        (
+            StatType::CritChance(StatSkillFilter {
+                skill_type: Some(SkillType::Spell),
+                ..Default::default()
+            }),
             Modifier::Increased,
         ),
         (
             StatType::StatusPower {
                 status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
-                skill_type: None,
+                skill_filter: Default::default(),
                 min_max: None,
             },
             Modifier::More,
@@ -1427,7 +1533,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusPower {
                 status_type: None,
-                skill_type: Some(SkillType::Curse),
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Curse),
+                    ..Default::default()
+                },
                 min_max: None,
             },
             Modifier::Increased,
@@ -1435,13 +1544,13 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::StatusDuration {
                 status_type: None,
-                skill_type: None,
+                skill_filter: Default::default(),
             },
             Modifier::Increased,
         ),
         (
             StatType::SuccessChance {
-                skill_type: None,
+                skill_filter: Default::default(),
                 effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
             },
             Modifier::Increased,
@@ -1449,16 +1558,25 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Restore {
                 restore_type: Some(RestoreType::Life),
-                skill_type: None,
+                skill_filter: Default::default(),
             },
             Modifier::Increased,
         ),
-        (StatType::Speed(None), Modifier::Increased),
+        (StatType::Speed(Default::default()), Modifier::Increased),
         (
-            StatType::Speed(Some(SkillType::Attack)),
+            StatType::Speed(StatSkillFilter {
+                skill_type: Some(SkillType::Attack),
+                ..Default::default()
+            }),
             Modifier::Increased,
         ),
-        (StatType::Speed(Some(SkillType::Spell)), Modifier::Increased),
+        (
+            StatType::Speed(StatSkillFilter {
+                skill_type: Some(SkillType::Spell),
+                ..Default::default()
+            }),
+            Modifier::Increased,
+        ),
         (StatType::MovementSpeed, Modifier::Increased),
         (StatType::GoldFind, Modifier::More),
         (
@@ -1475,7 +1593,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             },
             Modifier::Flat,
         ),
-        (StatType::SkillLevel(None), Modifier::Flat),
+        (StatType::SkillLevel(Default::default()), Modifier::Flat),
         (StatType::ItemRarity, Modifier::Increased),
         (StatType::ItemLevel, Modifier::Flat),
         (StatType::GemsFind, Modifier::Increased),

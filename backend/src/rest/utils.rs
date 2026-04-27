@@ -9,7 +9,7 @@ pub fn verify_character_user(
     character: &CharacterEntry,
     current_user: &CurrentUser,
 ) -> Result<(), AppError> {
-    if character.user_id != current_user.user_details.user.user_id {
+    if character.user_id != current_user.user.user_id {
         return Err(AppError::Forbidden);
     }
     Ok(())
@@ -18,6 +18,15 @@ pub fn verify_character_user(
 pub fn verify_character_in_town(character: &CharacterEntry) -> Result<(), AppError> {
     if character.area_id.is_some() {
         return Err(AppError::UserError("character is grinding".to_string()));
+    }
+    Ok(())
+}
+
+pub fn verify_ssf(character: &CharacterEntry) -> Result<(), AppError> {
+    if character.is_ssf {
+        return Err(AppError::UserError(
+            "SSF character cannot do that".to_string(),
+        ));
     }
     Ok(())
 }

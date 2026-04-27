@@ -3,11 +3,10 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use shared::data::{
-    chance::ChanceRange,
     modifier::Modifier,
     monster::{MonsterRarity, MonsterSpecs},
     player::CharacterSpecs,
-    skill::{BaseSkillSpecs, SkillSpecs, SkillType},
+    skill::{BaseSkillSpecs, SkillType},
     stat_effect::StatStatusType,
 };
 use strum::IntoEnumIterator;
@@ -32,43 +31,49 @@ pub struct BaseMonsterSpecs {
     #[serde(default)]
     pub rarity: MonsterRarity,
 
-    pub initiative: ChanceRange<f32>,
+    // pub initiative: ChanceRange<f32>,
     pub power_factor: f64,
 
     #[serde(default)]
     pub status_resistances: Vec<StatusResistanceBlueprint>,
 }
 
-impl DataInit<BaseMonsterSpecs> for MonsterSpecs {
-    fn init(specs: BaseMonsterSpecs) -> Self {
+impl DataInit<&BaseMonsterSpecs> for MonsterSpecs {
+    fn init(specs: &BaseMonsterSpecs) -> Self {
         let mut monster_specs = Self {
-            character_specs: specs.character_specs,
-            skill_specs: specs.skills.iter().cloned().map(SkillSpecs::init).collect(),
+            character_specs: specs.character_specs.clone(),
             rarity: specs.rarity,
-            initiative: specs.initiative,
             power_factor: specs.power_factor,
             reward_factor: specs.power_factor,
         };
 
-        monster_specs.character_specs.status_resistances = specs
-            .status_resistances
-            .into_iter()
-            .fold(HashMap::new(), |mut acc, status_resistance| {
-                let mut apply = |skill_type| {
-                    acc.entry((skill_type, status_resistance.status_type.clone()))
-                        .or_default()
-                        .apply_modifier(status_resistance.value, Modifier::Flat);
-                };
+        // TODO
+        // monster_specs.character_specs.skills_specs =
+        //     specs.skills.iter().cloned().map(SkillSpecs::init).collect();
 
-                if let Some(skill_type) = status_resistance.skill_type {
-                    apply(skill_type);
-                } else {
-                    for skill_type in SkillType::iter() {
+        monster_specs
+            .character_specs
+            .character_attrs
+            .status_resistances =
+            specs
+                .status_resistances
+                .iter()
+                .fold(HashMap::new(), |mut acc, status_resistance| {
+                    let mut apply = |skill_type| {
+                        acc.entry((skill_type, status_resistance.status_type.clone()))
+                            .or_default()
+                            .apply_modifier(status_resistance.value, Modifier::Flat);
+                    };
+
+                    if let Some(skill_type) = status_resistance.skill_type {
                         apply(skill_type);
+                    } else {
+                        for skill_type in SkillType::iter() {
+                            apply(skill_type);
+                        }
                     }
-                }
-                acc
-            });
+                    acc
+                });
 
         monster_specs
     }

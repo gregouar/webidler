@@ -1,4 +1,4 @@
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::data::{
     modifier::ModifiableValue,
@@ -17,7 +17,7 @@ pub struct BoundedChance {
     pub lucky_chance: ModifiableValue<Luck>,
 }
 
-#[derive(Serialize, Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub struct ChanceRange<T> {
     pub min: T,
     pub max: T,
@@ -140,7 +140,7 @@ enum ChanceRangeDef<T> {
     Full(ChanceRangeDefFull<T>),
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 struct ChanceRangeDefFull<T> {
     min: T,
     max: T,
@@ -176,5 +176,30 @@ impl<'de, T: Deserialize<'de> + Copy> Deserialize<'de> for ChanceRange<T> {
             max: full_def.max,
             lucky_chance: full_def.lucky_chance,
         })
+    }
+}
+
+impl<T> Serialize for ChanceRange<T>
+where
+    T: Serialize + Copy + PartialEq,
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        if serializer.is_human_readable() && self.lucky_chance == Default::default() {
+            if self.min == self.max {
+                return self.min.serialize(serializer);
+            } else {
+                return [self.min, self.max].serialize(serializer);
+            }
+        }
+
+        ChanceRangeDefFull {
+            min: self.min,
+            max: self.max,
+            lucky_chance: self.lucky_chance,
+        }
+        .serialize(serializer)
     }
 }

@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "monsters": [
+      "beetle_lava.json",
+      "cloud.json",
+      "dragon_black.json",
+      "dragon_red.json",
+      "lizard_stone.json",
+      "pine_trickster.json",
+      "troll.json",
+      "wyrmling.json",
+      "wyvern_poison.json",
+      "wyvern_snow.json",
+      "yeti.json"
+    ]
+  }
+}

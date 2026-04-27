@@ -4,10 +4,11 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
-        item::ItemSlot,
+        item::{ItemCategory, ItemSlot},
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
+        realms::Realm,
         stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
@@ -62,6 +63,9 @@ pub struct UpdateAccountRequest {
 pub struct CreateCharacterRequest {
     pub name: Username,
     pub portrait: AssetName,
+
+    pub is_ssf: bool,
+    pub legacy: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -105,6 +109,7 @@ pub struct SavePassivesRequest {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseMarketItemsRequest {
     pub user_id: UserId,
+    pub realm: Realm,
 
     pub own_listings: bool,
     pub is_deleted: bool,
@@ -186,11 +191,29 @@ pub struct TakeStashItemRequest {
 
 // Forge
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum ForgeAffixOperation {
+    Add(Option<AffixType>),
+    Remove,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ForgeAddAffixRequest {
+pub struct ForgeAffixRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
-    pub affix_type: Option<AffixType>,
+    pub operation: ForgeAffixOperation,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeUpgradeRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GambleItemRequest {
+    pub character_id: UserCharacterId,
+    pub item_category: Option<ItemCategory>,
 }
 
 // Inventory

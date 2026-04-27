@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
-use crate::data::{chance::ChanceRange, modifier::Modifier};
+use crate::{
+    data::{chance::ChanceRange, modifier::Modifier},
+    serde_utils::{default_true, is_false},
+};
 
 use super::{
     area::AreaLevel,
@@ -14,6 +17,7 @@ pub enum AffixType {
     Prefix,
     Suffix,
     Unique,
+    Upgrade,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]
@@ -75,8 +79,11 @@ pub struct AffixEffectBlueprint {
     pub scope: AffixEffectScope,
     pub value: ChanceRange<f64>,
 
-    #[serde(default)]
+    #[serde(default = "default_true")]
     pub ignore_quality: bool,
+
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub bypass_ignore: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

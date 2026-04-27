@@ -8,7 +8,9 @@ use crate::components::{
         resources::{GemsCounter, GoldCounter, ShardsCounter},
     },
     town::TownContext,
-    ui::{buttons::MenuButton, fullscreen::FullscreenButton, wiki::WikiButton},
+    ui::{
+        buttons::MenuButton, fullscreen::FullscreenButton, header::BaseHeaderMenu, wiki::WikiButton,
+    },
 };
 
 #[component]
@@ -29,6 +31,7 @@ pub fn HeaderMenu() -> impl IntoView {
     };
 
     let disable_panels = Signal::derive(move || town_context.character.read().max_area_level == 0);
+    let disable_trade = Signal::derive(move || town_context.character.read().is_ssf);
 
     let open_inventory = move || {
         town_context
@@ -131,16 +134,18 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     view! {
-        <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
-        bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
-            <div class="flex justify-around w-full items-center">
-                <GoldCounter value=gold w_full=true />
-                <GemsCounter value=gems w_full=true />
-                <ShardsCounter value=shards w_full=true />
-            </div>
-            <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
+        <BaseHeaderMenu>
+            <div class="flex justify-start space-x-1 xl:space-x-2">
                 <FullscreenButton />
-                <WikiButton />
+                <MenuButton
+                    class:hidden
+                    class:xl:inline
+                    on:click=move |_| {
+                        town_context.open_settings.set(!town_context.open_settings.get_untracked())
+                    }
+                >
+                    "⚙"
+                </MenuButton>
                 <MenuButton
                     class:hidden
                     class:xl:inline
@@ -148,21 +153,37 @@ pub fn HeaderMenu() -> impl IntoView {
                         chat_context.opened.set(!chat_context.opened.get_untracked())
                     }
                 >
-                    "Chat"
+                    "🗪"
                 </MenuButton>
+                <WikiButton />
+            </div>
+            <div class="flex-1 flex justify-around items-center">
+                <GoldCounter value=gold w_full=true />
+                <GemsCounter value=gems w_full=true />
+                <ShardsCounter value=shards w_full=true />
+            </div>
+            <div class="flex justify-end space-x-1 xl:space-x-2">
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
                     "Inventory"
                 </MenuButton>
-                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
-                    "Stash"
-                </MenuButton>
-                <MenuButton on:click=move |_| open_market() disabled=disable_panels>
-                    "Market"
-                    {move || {
-                        (town_context.market_stash.read().resource_gems > 0.0).then_some(" [!]")
-                    }}
+                {move || {
+                    (!disable_trade.get())
+                        .then(|| {
+                            view! {
+                                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
+                                    "Stash"
+                                </MenuButton>
+                                <MenuButton on:click=move |_| open_market() disabled=disable_panels>
+                                    "Market"
+                                    {move || {
+                                        (town_context.market_stash.read().resource_gems > 0.0)
+                                            .then_some(" [!]")
+                                    }}
 
-                </MenuButton>
+                                </MenuButton>
+                            }
+                        })
+                }}
                 <MenuButton on:click=move |_| open_forge() disabled=disable_panels>
                     "Forge"
                 </MenuButton>
@@ -174,6 +195,6 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
-        </div>
+        </BaseHeaderMenu>
     }
 }

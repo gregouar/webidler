@@ -3,7 +3,10 @@ use anyhow;
 use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
-use shared::data::user::UserCharacterId;
+use shared::data::{
+    realms::RealmId,
+    user::{UserCharacterId, UserId},
+};
 
 use crate::{
     app_state::MasterStore,
@@ -23,7 +26,7 @@ pub struct SavedGameInstance {
 
     pub saved_at: UtcDateTime,
     pub data_version: String,
-    pub game_data: Vec<u8>, // Assuming game_data is stored as a binary blob
+    pub game_data: Vec<u8>,
 }
 
 pub async fn save_game_instance_data<'c>(
@@ -138,4 +141,41 @@ pub async fn peek_game_instances(
     }
 
     Ok(())
+}
+
+pub async fn is_user_instance_running(
+    db_pool: &DbPool,
+    user_id: &UserId,
+    realm_id: &RealmId,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<bool> {
+    let count = sqlx::query_scalar!(
+        r#"
+        SELECT COUNT(*) as "count!"
+        FROM characters c
+        WHERE c.user_id = $1
+          AND c.realm_id = $2
+          AND c.character_id != $3
+          AND (
+              EXISTS (
+                  SELECT 1
+                  FROM saved_game_instances sgi
+                  WHERE sgi.character_id = c.character_id
+              )
+              OR EXISTS (
+                  SELECT 1
+                  FROM game_sessions gs
+                  WHERE gs.character_id = c.character_id
+                    AND gs.ended_at = '9999-01-01 23:59:59'
+              )
+          )
+        "#,
+        user_id,
+        realm_id,
+        character_id
+    )
+    .fetch_one(db_pool)
+    .await?;
+
+    Ok(count > 0)
 }

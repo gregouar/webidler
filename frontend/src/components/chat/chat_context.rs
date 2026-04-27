@@ -56,13 +56,13 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
 
     // Websocket
     let on_error_callback = {
-        let toaster = expect_context::<Toasts>();
-        move |e: UseWebSocketError<_, _>| {
-            show_toast(
-                toaster,
-                format!("Chat connection error: {e:?}"),
-                ToastVariant::Error,
-            )
+        // let toaster = expect_context::<Toasts>();
+        move |_e: UseWebSocketError<_, _>| {
+            // show_toast(
+            //     toaster,
+            //     format!("Chat connection error: {e:?}"),
+            //     ToastVariant::Error,
+            // )
         }
     };
 

@@ -1,0 +1,32 @@
+{
+  "name": "Possessed Ashigaru",
+  "portrait": "monsters/yokai/possessed_ashigaru.webp",
+  "max_life": 10,
+  "power_factor": 1.5,
+  "armor": { "Physical": 50 },
+  "block": {
+    "Attack": 30,
+    "Spell": 20
+  },
+  "skills": [
+    {
+      "name": "Spear",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 4, 8 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

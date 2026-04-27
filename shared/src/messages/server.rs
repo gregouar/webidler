@@ -10,7 +10,7 @@ use crate::data::{
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
-    player::{PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
     user::UserCharacterId,
 };
@@ -53,9 +53,11 @@ pub struct InitGameMessage {
     pub passives_tree_specs: PassivesTreeSpecs,
     pub passives_tree_state: PassivesTreeState,
     pub passives_tree_build: PurchasedNodes,
+    pub player_base_specs: PlayerBaseSpecs,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
     pub last_skills_bought: IndexSet<String>,
+    pub auto_skills: Vec<bool>,
 }
 
 /// Message to be sent every tick to sync current state of the game with clients
@@ -64,6 +66,7 @@ pub struct SyncGameStateMessage {
     pub area_state: Option<AreaState>,
     pub area_threat: AreaThreat,
     pub passives_tree_state: Option<PassivesTreeState>,
+    pub player_base_specs: Option<PlayerBaseSpecs>,
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,

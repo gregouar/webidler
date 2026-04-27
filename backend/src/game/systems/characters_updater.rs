@@ -5,8 +5,9 @@ use shared::{
     constants::{MAX_BLOCK, MAX_EVADE},
     data::{
         area::AreaThreat,
-        character::{CharacterId, CharacterSpecs, CharacterState},
+        character::{CharacterAttrs, CharacterId, CharacterState},
         conditional_modifier::ConditionalModifier,
+        player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
     },
@@ -14,7 +15,7 @@ use shared::{
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent},
-    systems::{characters_controller::restore_character, stats_updater},
+    systems::{characters_controller::restore_character, skills_updater, stats_updater},
 };
 
 use super::statuses_controller;
@@ -33,7 +34,11 @@ pub fn update_character_state(
 
     let elapsed_time_f64 = elapsed_time.as_secs_f64();
 
-    statuses_controller::update_character_statuses(character_specs, character_state, elapsed_time);
+    statuses_controller::update_character_statuses(
+        &character_specs.character_attrs,
+        character_state,
+        elapsed_time,
+    );
 
     // character_state.life = character_specs.max_life.min(
     //     character_state.life
@@ -48,26 +53,26 @@ pub fn update_character_state(
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
-        elapsed_time_f64 * *character_specs.life_regen * 0.1,
+        elapsed_time_f64 * *character_specs.character_attrs.life_regen * 0.1,
         RestoreModifier::Percent,
     );
 
     restore_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
-        elapsed_time_f64 * *character_specs.mana_regen * 0.1,
+        elapsed_time_f64 * *character_specs.character_attrs.mana_regen * 0.1,
         RestoreModifier::Percent,
     );
 
     character_state.life = character_state
         .life
         .get()
-        .min(character_specs.max_life.get())
+        .min(character_specs.character_attrs.max_life.get())
         .into();
     character_state.mana = character_state
         .mana
         .get()
-        .min(character_specs.max_mana.get())
+        .min(character_specs.character_attrs.max_mana.get())
         .into();
 
     if character_state.life.get() < 0.5 {
@@ -86,7 +91,7 @@ pub fn update_character_state(
         for condition in conditional_modifier.conditions.iter() {
             let value = stats_updater::check_condition(
                 area_threat,
-                character_specs,
+                &character_specs.character_attrs,
                 character_state,
                 condition,
             );
@@ -111,6 +116,19 @@ pub fn update_character_state(
             }
         }
     }
+
+    if !character_state.is_stunned() {
+        skills_updater::update_skills_states(
+            elapsed_time,
+            &character_specs.skills_specs,
+            &mut character_state.skills_states,
+        );
+
+        skills_updater::update_repeated_skill_effects(
+            elapsed_time,
+            &mut character_state.repeated_skills,
+        )
+    }
 }
 
 pub fn reset_character(character_state: &mut CharacterState) {
@@ -118,6 +136,8 @@ pub fn reset_character(character_state: &mut CharacterState) {
     character_state.just_hurt_crit = false;
     character_state.just_blocked = false;
     character_state.just_evaded = false;
+
+    skills_updater::reset_skills(&mut character_state.skills_states);
 }
 
 /// Return converted stats for propagation
@@ -129,6 +149,7 @@ pub fn update_character_specs(
 
     for skill_type in SkillType::iter() {
         character_specs
+            .character_attrs
             .block
             .entry(skill_type)
             .or_default()
@@ -138,6 +159,7 @@ pub fn update_character_specs(
 
     for damage_type in DamageType::iter() {
         character_specs
+            .character_attrs
             .evade
             .entry(damage_type)
             .or_default()
@@ -154,22 +176,29 @@ fn compute_character_specs(
     effects: &[StatEffect],
 ) -> Vec<StatEffect> {
     let mut stats_converters = Vec::new();
+    let character_attrs = &mut character_specs.character_attrs;
 
     for effect in effects.iter() {
         match &effect.stat {
-            StatType::Life => character_specs.max_life.apply_effect(effect),
-            StatType::LifeRegen => character_specs.life_regen.apply_effect(effect),
-            StatType::Mana => character_specs.max_mana.apply_effect(effect),
-            StatType::ManaRegen => character_specs.mana_regen.apply_effect(effect),
-            StatType::Armor(damage_type) => match damage_type {
-                Some(damage_type) => character_specs
-                    .armor
-                    .entry(*damage_type)
-                    .or_default()
-                    .apply_effect(effect),
+            StatType::Life => character_attrs.max_life.apply_effect(effect),
+            StatType::LifeRegen => character_attrs.life_regen.apply_effect(effect),
+            StatType::Mana => character_attrs.max_mana.apply_effect(effect),
+            StatType::ManaRegen => character_attrs.mana_regen.apply_effect(effect),
+            StatType::Armor(armor_type) => match armor_type {
+                Some(armor_type) => {
+                    for damage_type in DamageType::iter() {
+                        if armor_type.is_match(damage_type) {
+                            character_attrs
+                                .armor
+                                .entry(damage_type)
+                                .or_default()
+                                .apply_effect(effect)
+                        }
+                    }
+                }
                 None => {
                     for damage_type in DamageType::iter() {
-                        character_specs
+                        character_attrs
                             .armor
                             .entry(damage_type)
                             .or_default()
@@ -177,14 +206,14 @@ fn compute_character_specs(
                     }
                 }
             },
-            StatType::TakeFromManaBeforeLife => character_specs
+            StatType::TakeFromManaBeforeLife => character_attrs
                 .take_from_mana_before_life
                 .apply_effect(effect),
-            StatType::TakeFromLifeBeforeMana => character_specs
+            StatType::TakeFromLifeBeforeMana => character_attrs
                 .take_from_life_before_mana
                 .apply_effect(effect),
             StatType::Block(skill_type) => match skill_type {
-                Some(skill_type) => character_specs
+                Some(skill_type) => character_attrs
                     .block
                     .entry(*skill_type)
                     .or_default()
@@ -192,7 +221,7 @@ fn compute_character_specs(
                     .apply_effect(effect),
                 None => {
                     for skill_type in SkillType::iter() {
-                        character_specs
+                        character_attrs
                             .block
                             .entry(skill_type)
                             .or_default()
@@ -201,9 +230,9 @@ fn compute_character_specs(
                     }
                 }
             },
-            StatType::BlockDamageTaken => character_specs.block_damage.apply_effect(effect),
+            StatType::BlockDamageTaken => character_attrs.block_damage.apply_effect(effect),
             StatType::Evade(damage_type) => match damage_type {
-                Some(damage_type) => character_specs
+                Some(damage_type) => character_attrs
                     .evade
                     .entry(*damage_type)
                     .or_default()
@@ -211,7 +240,7 @@ fn compute_character_specs(
                     .apply_effect(effect),
                 None => {
                     for damage_type in DamageType::iter() {
-                        character_specs
+                        character_attrs
                             .evade
                             .entry(damage_type)
                             .or_default()
@@ -220,7 +249,7 @@ fn compute_character_specs(
                     }
                 }
             },
-            StatType::EvadeDamageTaken => character_specs.evade_damage.apply_effect(effect),
+            StatType::EvadeDamageTaken => character_attrs.evade_damage.apply_effect(effect),
             StatType::DamageResistance {
                 skill_type,
                 damage_type,
@@ -237,7 +266,7 @@ fn compute_character_specs(
 
                 for &skill in &skill_types {
                     for &damage in &damage_types {
-                        character_specs
+                        character_attrs
                             .damage_resistance
                             .entry((skill, damage))
                             .or_default()
@@ -255,7 +284,7 @@ fn compute_character_specs(
                 };
 
                 for &skill in &skill_types {
-                    character_specs
+                    character_attrs
                         .status_resistances
                         .entry((skill, status_type.clone()))
                         .or_default()
@@ -263,18 +292,18 @@ fn compute_character_specs(
                 }
             }
             StatType::Lucky {
-                skill_type,
+                skill_filter,
                 roll_type: LuckyRollType::Block,
-            } => match skill_type {
-                Some(skill_type) => character_specs
+            } => match skill_filter.skill_type {
+                Some(skill_type) => character_attrs
                     .block
-                    .entry(*skill_type)
+                    .entry(skill_type)
                     .or_default()
                     .lucky_chance
                     .apply_effect(effect),
                 None => {
                     for skill_type in SkillType::iter() {
-                        character_specs
+                        character_attrs
                             .block
                             .entry(skill_type)
                             .or_default()
@@ -284,10 +313,10 @@ fn compute_character_specs(
                 }
             },
             StatType::Lucky {
-                skill_type: _,
+                skill_filter: _,
                 roll_type: LuckyRollType::Evade(damage_type),
             } => match damage_type {
-                Some(damage_type) => character_specs
+                Some(damage_type) => character_attrs
                     .evade
                     .entry(*damage_type)
                     .or_default()
@@ -295,7 +324,7 @@ fn compute_character_specs(
                     .apply_effect(effect),
                 None => {
                     for damage_type in DamageType::iter() {
-                        character_specs
+                        character_attrs
                             .evade
                             .entry(damage_type)
                             .or_default()
@@ -350,6 +379,7 @@ fn compute_character_specs(
             StatType::ItemRarity
             | StatType::ItemLevel
             | StatType::GemsFind
+            | StatType::PowerLevel
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }
@@ -368,26 +398,26 @@ fn compute_character_specs(
         for (specs, modifier, factor) in stats_converters {
             // let factor = factor * 0.01;
             let amount = match specs.source {
-                StatConverterSource::MaxLife => character_specs
+                StatConverterSource::MaxLife => character_attrs
                     .max_life
                     .convert_value(factor, specs.is_extra, false)
                     .get(),
-                StatConverterSource::MaxMana => character_specs
+                StatConverterSource::MaxMana => character_attrs
                     .max_mana
                     .convert_value(factor, specs.is_extra, false)
                     .get(),
                 StatConverterSource::ManaRegen => {
-                    character_specs
+                    character_attrs
                         .mana_regen
                         .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::LifeRegen => {
-                    character_specs
+                    character_attrs
                         .life_regen
                         .convert_value(factor, specs.is_extra, false)
                 }
                 StatConverterSource::Block(skill_type) => {
-                    if let Some(block) = character_specs.block.get_mut(&skill_type) {
+                    if let Some(block) = character_attrs.block.get_mut(&skill_type) {
                         block
                             .value
                             .convert_value(factor, specs.is_extra, false)
@@ -420,16 +450,16 @@ fn compute_character_specs(
 }
 
 pub fn compute_stat_converter(
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     source: &StatConverterSource,
 ) -> f64 {
     match source {
-        StatConverterSource::MaxLife => character_specs.max_life.get(),
-        StatConverterSource::MaxMana => character_specs.max_mana.get(),
-        StatConverterSource::ManaRegen => *character_specs.mana_regen,
-        StatConverterSource::LifeRegen => *character_specs.life_regen,
+        StatConverterSource::MaxLife => character_attrs.max_life.get(),
+        StatConverterSource::MaxMana => character_attrs.max_mana.get(),
+        StatConverterSource::ManaRegen => *character_attrs.mana_regen,
+        StatConverterSource::LifeRegen => *character_attrs.life_regen,
         StatConverterSource::Block(skill_type) => {
-            if let Some(block) = character_specs.block.get(skill_type) {
+            if let Some(block) = character_attrs.block.get(skill_type) {
                 block.value.get() as f64
             } else {
                 0.0

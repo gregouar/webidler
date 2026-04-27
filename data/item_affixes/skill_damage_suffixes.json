@@ -6,7 +6,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 1,
     "effects": [
       {
@@ -24,7 +24,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 50,
     "effects": [
       {
@@ -42,7 +42,7 @@
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 100,
     "effects": [
       {
@@ -60,7 +60,7 @@
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 150,
     "effects": [
       {
@@ -78,7 +78,7 @@
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 200,
     "effects": [
       {
@@ -96,7 +96,7 @@
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 900,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 260,
     "effects": [
       {
@@ -114,7 +114,7 @@
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 800,
-    "restrictions": [ "Jewelry" ],
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 330,
     "effects": [
       {
@@ -131,8 +131,8 @@
     "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": [ "Jewelry" ],
+    "weight": 400,
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 410,
     "effects": [
       {
@@ -149,8 +149,8 @@
     "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": [ "Jewelry" ],
+    "weight": 200,
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 500,
     "effects": [
       {
@@ -167,8 +167,8 @@
     "tags": [ "Attack" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": [ "Jewelry" ],
+    "weight": 100,
+    "restrictions": [ "Jewelry", "Shield" ],
     "item_level": 600,
     "effects": [
       {
@@ -187,7 +187,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
@@ -198,7 +198,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -5
       }
@@ -211,7 +211,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
@@ -222,7 +222,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -10
       }
@@ -235,7 +235,7 @@
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
@@ -246,7 +246,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -15
       }
@@ -259,7 +259,7 @@
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
@@ -270,7 +270,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -20
       }
@@ -283,7 +283,7 @@
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
@@ -294,7 +294,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -25
       }
@@ -307,7 +307,7 @@
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 225,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
@@ -318,7 +318,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -30
       }
@@ -331,7 +331,7 @@
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 200,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
@@ -342,7 +342,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -35
       }
@@ -354,8 +354,8 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 175,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "weight": 100,
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
@@ -366,7 +366,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -40
       }
@@ -378,8 +378,8 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 150,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "weight": 50,
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
@@ -390,7 +390,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -45
       }
@@ -402,8 +402,8 @@
     "tags": [ "Attack", "Speed" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 100,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "weight": 25,
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {
@@ -414,7 +414,7 @@
       },
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
         "value": -50
       }
@@ -553,7 +553,7 @@
     "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 700,
+    "weight": 400,
     "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 410,
     "effects": [
@@ -571,7 +571,7 @@
     "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 600,
+    "weight": 200,
     "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 500,
     "effects": [
@@ -589,7 +589,7 @@
     "tags": [ "Spell" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 500,
+    "weight": 100,
     "restrictions": [ "Jewelry", "SpellWeapon", "Focus" ],
     "item_level": 600,
     "effects": [
@@ -609,7 +609,7 @@
     "affix_type": "Suffix",
     "tier": 1,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 1,
     "effects": [
       {
@@ -633,7 +633,7 @@
     "affix_type": "Suffix",
     "tier": 2,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 50,
     "effects": [
       {
@@ -657,7 +657,7 @@
     "affix_type": "Suffix",
     "tier": 3,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 100,
     "effects": [
       {
@@ -681,7 +681,7 @@
     "affix_type": "Suffix",
     "tier": 4,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 150,
     "effects": [
       {
@@ -705,7 +705,7 @@
     "affix_type": "Suffix",
     "tier": 5,
     "weight": 250,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 200,
     "effects": [
       {
@@ -729,7 +729,7 @@
     "affix_type": "Suffix",
     "tier": 6,
     "weight": 225,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 260,
     "effects": [
       {
@@ -753,7 +753,7 @@
     "affix_type": "Suffix",
     "tier": 7,
     "weight": 200,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "restrictions": [ "Jewelry" ],
     "item_level": 330,
     "effects": [
       {
@@ -776,8 +776,8 @@
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 8,
-    "weight": 175,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "weight": 100,
+    "restrictions": [ "Jewelry" ],
     "item_level": 410,
     "effects": [
       {
@@ -800,8 +800,8 @@
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 9,
-    "weight": 150,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "weight": 50,
+    "restrictions": [ "Jewelry" ],
     "item_level": 500,
     "effects": [
       {
@@ -824,8 +824,8 @@
     "tags": [ "Spell", "Mana" ],
     "affix_type": "Suffix",
     "tier": 10,
-    "weight": 100,
-    "restrictions": [ "Jewelry", "Accessory" ],
+    "weight": 25,
+    "restrictions": [ "Jewelry" ],
     "item_level": 600,
     "effects": [
       {

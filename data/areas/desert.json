@@ -1,0 +1,37 @@
+{
+    "specs": {
+        "name": "Eternal Sands",
+        "description": "Endless dunes swallow all traces of life, yet nothing here truly dies. Forgotten pharaohs rise, gods watch from beyond the veil, and the desert feeds on those who wander too far.",
+        "power_level": 70,
+        "required_level": 350,
+        "item_level_modifier": 140,
+        "header_background": "areas/desert_header.webp",
+        "footer_background": "areas/desert_footer.webp",
+        "coming_soon": true
+    },
+    "loot_tables": [
+        "tier_1.json",
+        "tier_2.json",
+        "tier_3.json",
+        "tier_4.json",
+        "tier_5.json",
+        "tier_6.json",
+        "tier_7.json",
+        "tier_8.json"
+    ],
+    "bosses": [
+    ],
+    "waves": [
+        {
+            "min_level": 1,
+            "max_level": null,
+            "weight": 1000,
+            "spawns": [
+                {
+                    "monster": "possessed_ashigaru.json",
+                    "quantity": [ 1, 2 ]
+                }
+            ]
+        }
+    ]
+}

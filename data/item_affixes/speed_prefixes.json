@@ -2,180 +2,180 @@
   {
     "name": "Nimble",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [4, 6]
+        "value": [ 4, 6 ]
       }
     ]
   },
   {
     "name": "Quick",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [7, 9]
+        "value": [ 7, 9 ]
       }
     ]
   },
   {
     "name": "Swift",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [10, 12]
+        "value": [ 10, 12 ]
       }
     ]
   },
   {
     "name": "Brisk",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [13, 15]
+        "value": [ 13, 15 ]
       }
     ]
   },
   {
     "name": "Sudden",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [16, 18]
+        "value": [ 16, 18 ]
       }
     ]
   },
   {
     "name": "Impulsive",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [19, 21]
+        "value": [ 19, 21 ]
       }
     ]
   },
   {
     "name": "Precipitate",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [22, 24]
+        "value": [ 22, 24 ]
       }
     ]
   },
   {
     "name": "Abrupt",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Cloak"],
+    "weight": 400,
+    "restrictions": [ "Cloak" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [25, 27]
+        "value": [ 25, 27 ]
       }
     ]
   },
   {
     "name": "Immediate",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Cloak"],
+    "weight": 200,
+    "restrictions": [ "Cloak" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [28, 30]
+        "value": [ 28, 30 ]
       }
     ]
   },
   {
     "name": "Unforeseen",
     "family": "inc_attack_speed",
-    "tags": ["Attack", "Speed"],
+    "tags": [ "Attack", "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Cloak"],
+    "weight": 100,
+    "restrictions": [ "Cloak" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Attack" },
+        "stat": { "Speed": { "skill_type": "Attack" } },
         "modifier": "Increased",
-        "value": [31, 33]
+        "value": [ 31, 33 ]
       }
     ]
   },
@@ -183,180 +183,180 @@
   {
     "name": "Spiraling",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [4, 6]
+        "value": [ 4, 6 ]
       }
     ]
   },
   {
     "name": "Veering",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 50,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [7, 9]
+        "value": [ 7, 9 ]
       }
     ]
   },
   {
     "name": "Surging",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [10, 12]
+        "value": [ 10, 12 ]
       }
     ]
   },
   {
     "name": "Soaring",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 150,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [13, 15]
+        "value": [ 13, 15 ]
       }
     ]
   },
   {
     "name": "Warping",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [16, 18]
+        "value": [ 16, 18 ]
       }
     ]
   },
   {
     "name": "Distorting",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 260,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [19, 21]
+        "value": [ 19, 21 ]
       }
     ]
   },
   {
     "name": "Skewed",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Cloak"],
+    "restrictions": [ "Cloak" ],
     "item_level": 330,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [22, 24]
+        "value": [ 22, 24 ]
       }
     ]
   },
   {
     "name": "Displaced",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Cloak"],
+    "weight": 400,
+    "restrictions": [ "Cloak" ],
     "item_level": 410,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [25, 27]
+        "value": [ 25, 27 ]
       }
     ]
   },
   {
     "name": "Anomalous",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Cloak"],
+    "weight": 200,
+    "restrictions": [ "Cloak" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [28, 30]
+        "value": [ 28, 30 ]
       }
     ]
   },
   {
     "name": "Paradoxical",
     "family": "inc_spell_speed",
-    "tags": ["Spell", "Speed"],
+    "tags": [ "Spell", "Speed" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 500,
-    "restrictions": ["Cloak"],
+    "weight": 100,
+    "restrictions": [ "Cloak" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "Speed": "Spell" },
+        "stat": { "Speed": { "skill_type": "Spell" } },
         "modifier": "Increased",
-        "value": [31, 33]
+        "value": [ 31, 33 ]
       }
     ]
   }

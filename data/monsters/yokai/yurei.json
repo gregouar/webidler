@@ -1,0 +1,54 @@
+{
+  "name": "Yurei",
+  "portrait": "monsters/yokai/yurei.webp",
+  "max_life": 7,
+  "power_factor": 2.0,
+  "evade": {
+    "Physical": 20,
+    "Fire": 20,
+    "Storm": 20,
+    "Poison": 20
+  },
+  "skills": [
+    {
+      "name": "Haunting",
+      "icon": "skills/curse_frailty.svg",
+      "skill_type": "Spell",
+      "cooldown": 3.0,
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [ 0, 8 ]
+                }
+              }
+            },
+            {
+              "ApplyStatus": {
+                "duration": 5,
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": {
+                          "DamageResistance": {
+                            "damage_type": "Storm"
+                          }
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                      }
+                    },
+                    "value": 50
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 1
       }
@@ -29,7 +29,7 @@
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 2
       }
@@ -41,13 +41,13 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 3,
-    "weight": 450,
+    "weight": 300,
     "restrictions": [ "Amulet" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 3
       }
@@ -59,13 +59,13 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 4,
-    "weight": 400,
+    "weight": 150,
     "restrictions": [ "Amulet" ],
     "item_level": 300,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 4
       }
@@ -77,13 +77,13 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 5,
-    "weight": 200,
+    "weight": 100,
     "restrictions": [ "Amulet" ],
     "item_level": 400,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 5
       }
@@ -95,13 +95,13 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 6,
-    "weight": 100,
+    "weight": 50,
     "restrictions": [ "Amulet" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 6
       }
@@ -113,13 +113,13 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 7,
-    "weight": 50,
+    "weight": 20,
     "restrictions": [ "Amulet" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
-        "stat": { "SkillLevel": null },
+        "stat": { "SkillLevel": { } },
         "modifier": "Flat",
         "value": 7
       }

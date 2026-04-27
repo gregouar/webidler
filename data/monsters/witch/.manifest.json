@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "enabled": true
+  },
+  "resources": {
+    "monsters": [
+      "ghost_child.json",
+      "spider_fire.json",
+      "spider_mother.json",
+      "spider_phys.json",
+      "spider_poison.json",
+      "spiderlings.json",
+      "witch_child.json",
+      "witch_spider.json",
+      "witch.json",
+      "witch_2.json"
+    ]
+  }
+}

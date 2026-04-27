@@ -9,7 +9,7 @@ use crate::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     item::ItemCategory,
     modifier::ModifiableValue,
-    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatType},
+    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType},
     trigger::TriggerSpecs,
     values::{Cooldown, NonNegative},
 };
@@ -47,30 +47,33 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub auto_use_conditions: Vec<Condition>,
 
-    #[serde(default)]
-    pub skill_id: String,
-
+    // #[serde(default)]
+    // pub skill_id: String,
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillSpecs {
-    pub base: BaseSkillSpecs,
+    // pub base: BaseSkillSpecs,
+    pub skill_id: String,
 
+    pub name: String,
+    pub icon: String,
+    pub description: String,
+    pub skill_type: SkillType,
+
+    // Should we split in two here?
     pub cooldown: ModifiableValue<NonNegative>,
     pub mana_cost: ModifiableValue<NonNegative>,
-
-    pub upgrade_level: u16,
-    pub next_upgrade_cost: f64,
 
     pub targets: Vec<SkillTargetsGroup>,
     pub triggers: Vec<TriggerSpecs>,
 
-    pub item_slot: Option<ItemSlot>,
-
-    #[serde(default)] //For retro compatibility
     pub level_modifier: u16,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -216,6 +219,12 @@ pub enum SkillEffectType {
         modifier: RestoreModifier,
     },
     Resurrect,
+    RefreshCooldown {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+        value: ChanceRange<ModifiableValue<f64>>,
+        modifier: RestoreModifier,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
@@ -284,6 +293,7 @@ impl Matchable for RestoreType {
 #[derive(Debug, Clone)]
 pub struct RepeatedSkillEffect {
     // Could we avoid to clone each time?
+    pub skill_id: String,
     pub skill_type: SkillType,
     pub targets_group: SkillTargetsGroup,
 

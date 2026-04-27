@@ -7,7 +7,7 @@ use shared::data::item::{ItemRarity, ItemSpecs};
 
 use crate::assets::img_asset;
 use crate::components::events::{EventsContext, Key};
-use crate::components::settings::SettingsContext;
+use crate::components::settings::{GraphicsQuality, SettingsContext};
 use crate::components::shared::tooltips::item_tooltip::ComparableType;
 use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition};
 
@@ -20,38 +20,45 @@ pub fn ItemCard(
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
     #[prop(default=Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
-    let (border_color, ring_color, shadow_color, gradient) = match item_specs.modifiers.rarity {
-        ItemRarity::Normal => (
-            "border-gray-600/70",
-            "ring-gray-600/20",
-            "shadow-gray-800/20",
-            "from-gray-900/80 to-gray-950",
-        ),
-        ItemRarity::Magic => (
-            "border-blue-500/70",
-            "ring-blue-400/20",
-            "shadow-blue-700/20",
-            "from-blue-900/80 to-gray-950",
-        ),
-        ItemRarity::Rare => (
-            "border-yellow-400/70",
-            "ring-yellow-300/20",
-            "shadow-yellow-600/20",
-            "from-yellow-900/80 to-gray-950",
-        ),
-        ItemRarity::Masterwork => (
-            "border-fuchsia-400/70",
-            "ring-fuchsia-300/20",
-            "shadow-fuchsia-600/20",
-            "from-fuchsia-900/80 to-gray-950",
-        ),
-        ItemRarity::Unique => (
-            "border-orange-700/70",
-            "ring-orange-600/30",
-            "shadow-orange-700/30",
-            "from-orange-900/80 to-gray-950",
-        ),
-    };
+    let settings: SettingsContext = expect_context();
+    let (accent, inner_border, rarity_wash, rarity_core, frame_shine) =
+        match item_specs.modifiers.rarity {
+            ItemRarity::Normal => (
+                "rgba(126, 112, 82, 0.28)",
+                "rgba(214, 219, 229, 0.16)",
+                "rgba(210, 215, 224, 0.06)",
+                "rgba(255, 255, 255, 0.015)",
+                "rgba(230, 230, 236, 0.22)",
+            ),
+            ItemRarity::Magic => (
+                "rgba(126, 112, 82, 0.3)",
+                "rgba(182, 219, 255, 0.24)",
+                "rgba(75, 126, 235, 0.24)",
+                "rgba(48, 86, 196, 0.2)",
+                "rgba(144, 205, 255, 0.46)",
+            ),
+            ItemRarity::Rare => (
+                "rgba(126, 112, 82, 0.32)",
+                "rgba(255, 232, 160, 0.24)",
+                "rgba(173, 124, 26, 0.28)",
+                "rgba(108, 76, 8, 0.22)",
+                "rgba(255, 226, 145, 0.52)",
+            ),
+            ItemRarity::Masterwork => (
+                "rgba(126, 112, 82, 0.32)",
+                "rgba(236, 204, 255, 0.24)",
+                "rgba(143, 78, 220, 0.28)",
+                "rgba(90, 44, 150, 0.22)",
+                "rgba(228, 183, 255, 0.48)",
+            ),
+            ItemRarity::Unique => (
+                "rgba(126, 112, 82, 0.34)",
+                "rgba(255, 226, 186, 0.24)",
+                "rgba(188, 72, 28, 0.38)",
+                "rgba(114, 18, 8, 0.34)",
+                "rgba(255, 170, 116, 0.56)",
+            ),
+        };
 
     let icon_asset = img_asset(&item_specs.base.icon);
 
@@ -117,7 +124,6 @@ pub fn ItemCard(
     let is_inside = RwSignal::new(false);
 
     let events_context: EventsContext = expect_context();
-    let settings_context: SettingsContext = expect_context();
 
     Effect::new({
         let show_tooltip = show_tooltip.clone();
@@ -127,9 +133,9 @@ pub fn ItemCard(
                 tooltip_in_use = true;
                 show_tooltip(
                     events_context.key_pressed(Key::Alt)
-                        || settings_context.read_settings().always_display_affix_tiers,
+                        || settings.read_settings().always_display_affix_tiers,
                     events_context.key_pressed(Key::Ctrl)
-                        || settings_context.read_settings().always_compare_items,
+                        || settings.read_settings().always_compare_items,
                 );
             } else if tooltip_in_use {
                 tooltip_in_use = false;
@@ -141,15 +147,38 @@ pub fn ItemCard(
     view! {
         <div
             // node_ref=node_ref
-            class=format!(
-                "relative group flex items-center justify-center w-full aspect-[2/3]
-                rounded-md p-1 bg-gradient-to-br {} border-1 xl:border-2 {} ring-1 xl:ring-2 {} shadow-md {}
-                cursor-pointer
-                ",
-                gradient,
-                border_color,
-                ring_color,
-                shadow_color,
+            class=move || {
+                format!(
+                    "relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-clip
+                    rounded-[4px] xl:rounded-[6px] border {} {} {}",
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => "border-[#6c5329]/85",
+                        GraphicsQuality::Medium => "border-[#665131]/85",
+                        GraphicsQuality::Low => "border-[#5c4a2e]/85",
+                    },
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_44%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.12)_48%),linear-gradient(135deg,rgba(46,44,50,0.96),rgba(18,18,22,1))]"
+                        }
+                        GraphicsQuality::Medium => {
+                            "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_46%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.1)_50%),linear-gradient(135deg,rgba(42,40,46,0.96),rgba(18,18,22,1))]"
+                        }
+                        GraphicsQuality::Low => {
+                            "bg-[linear-gradient(180deg,var(--item-rarity-wash),transparent_48%),linear-gradient(180deg,var(--item-rarity-core),rgba(0,0,0,0.08)_52%),linear-gradient(135deg,rgba(39,38,43,0.98),rgba(19,19,23,1))]"
+                        }
+                    },
+                    if settings.uses_heavy_effects() {
+                        "shadow-[0_3px_7px_rgba(0,0,0,0.3),0_1px_0_rgba(26,17,10,0.88),inset_0_1px_0_rgba(240,215,159,0.14),inset_0_-1px_0_rgba(0,0,0,0.38)]"
+                    } else {
+                        ""
+                    },
+                )
+            }
+            style=format!(
+                "--item-rarity-wash: {};
+                --item-rarity-core: {};",
+                rarity_wash,
+                rarity_core,
             )
 
             on:touchstart={
@@ -162,15 +191,73 @@ pub fn ItemCard(
             on:mouseenter=move |_| is_inside.set(true)
             on:mouseleave=move |_| is_inside.set(false)
         >
+            <div
+                class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px]"
+                style=move || {
+                    match settings.graphics_quality() {
+                        GraphicsQuality::High => {
+                            format!(
+                                "border: 1px solid {};
+                            box-shadow: inset 0 0 0 1px {}, inset 0 8px 12px rgba(255,255,255,0.02), inset 0 -12px 16px rgba(0,0,0,0.22);",
+                                accent,
+                                inner_border,
+                            )
+                        }
+                        GraphicsQuality::Medium => {
+                            format!(
+                                "border: 1px solid {};
+                            box-shadow: inset 0 0 0 1px {};",
+                                accent,
+                                inner_border,
+                            )
+                        }
+                        GraphicsQuality::Low => {
+                            format!(
+                                "border: 1px solid {};
+                            box-shadow: inset 0 0 0 1px {};",
+                                accent,
+                                inner_border,
+                            )
+                        }
+                    }
+                }
+            ></div>
+            <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
+                <span
+                    class="pointer-events-none absolute left-[5px] right-[5px] top-[1px] h-px"
+                    style=format!(
+                        "background: linear-gradient(90deg, transparent, {}, transparent);",
+                        frame_shine,
+                    )
+                ></span>
+            </Show>
+            // // <div class="pointer-events-none absolute inset-0">
+            // // <span
+            // // class="absolute inset-x-[5px] top-[1px] h-[1px]"
+            // // style=format!(
+            // // "background: linear-gradient(90deg, transparent, {}, transparent);",
+            // // frame_shine,
+            // // )
+            // // ></span>
+            // // <span class="absolute inset-x-3 top-[2px] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></span>
+            // // </div>
 
             <img
                 draggable="false"
                 src=icon_asset
-                class="object-contain max-w-full max-h-full transition-all duration-50 ease-in-out
-                group-hover:scale-105 group-hover:brightness-110
-                group-active:scale-90 group-active:brightness-90
-                xl:drop-shadow-[0px_6px_6px_black]
-                "
+                class=move || {
+                    format!(
+                        "relative z-10 object-contain max-w-full max-h-full p-1 transition-transform duration-75 ease-out
+                group-hover:scale-[1.045] group-hover:brightness-110
+                group-active:scale-[0.96] group-active:brightness-95
+                {}",
+                        if settings.uses_surface_effects() {
+                            "xl:drop-shadow-[0px_6px_6px_black]"
+                        } else {
+                            ""
+                        },
+                    )
+                }
             />
         </div>
     }

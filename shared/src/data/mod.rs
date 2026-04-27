@@ -1,4 +1,5 @@
 pub mod area;
+pub mod badges;
 pub mod chance;
 pub mod character;
 pub mod character_status;
@@ -14,6 +15,7 @@ pub mod monster;
 pub mod passive;
 pub mod player;
 pub mod quest;
+pub mod realms;
 pub mod skill;
 pub mod stash;
 pub mod stat_effect;

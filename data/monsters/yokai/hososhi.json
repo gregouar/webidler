@@ -1,0 +1,64 @@
+{
+  "name": "Mad Hososhi",
+  "portrait": "monsters/yokai/hososhi.webp",
+  "max_life": 8,
+  "power_factor": 1.5,
+  "armor": { "Fire": 50 },
+  "status_resistances": [
+    {
+      "skill_type": "Curse",
+      "value": 50
+    }
+  ],
+  "skills": [
+    {
+      "name": "Spear",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 4, 8 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ward Evil",
+      "icon": "skills/blessing_protection.svg",
+      "cooldown": 8.0,
+      "skill_type": "Blessing",
+      "targets": [
+        {
+          "target_type": "Friend",
+          "shape": "All",
+          "effects": [
+            {
+              "ApplyStatus": {
+                "duration": [ 5, 10 ],
+                "statuses": [
+                  {
+                    "status_type": {
+                      "StatModifier": {
+                        "stat": { "Armor": null },
+                        "modifier": "Flat"
+                      }
+                    },
+                    "value": 100
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

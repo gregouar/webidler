@@ -4,8 +4,10 @@ pub mod checkbox;
 pub mod confirm;
 pub mod dropdown;
 pub mod fullscreen;
+pub mod header;
 pub mod input;
 mod link;
+pub mod list_row;
 pub mod menu_panel;
 pub mod number;
 pub mod pannable;
@@ -16,4 +18,4 @@ pub mod tooltip;
 pub mod wiki;
 
 pub use link::ALink;
-pub use separator::Separator;
+pub use separator::{Separator, TitleSeparator};

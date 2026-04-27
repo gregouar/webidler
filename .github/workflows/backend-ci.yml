@@ -2,20 +2,19 @@ name: Backend CI
 
 on:
   pull_request:
-    branches: ["main"]
+    branches:
+      - "main"
     paths:
-      [
-        "docker-compose.yml",
-        "backend/**",
-        "backend_chat/**",
-        "backend_shared/**",
-        "shared/**",
-        "shared_chat/**",
-        "nginx/**",
-        "data/**",
-        "migrations/**",
-        ".github/workflows/*.yml",
-      ]
+      - "docker-compose.yml"
+      - "backend/**"
+      - "backend_chat/**"
+      - "backend_shared/**"
+      - "shared/**"
+      - "shared_chat/**"
+      - "nginx/**"
+      - "data/**"
+      - "migrations/**"
+      - ".github/workflows/*.yml"
 
 jobs:
   Tests:
@@ -31,9 +30,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready"
-          --health-interval 10s
-          --health-timeout 5s
+          --health-cmd "pg_isready" --health-interval 10s --health-timeout 5s
           --health-retries 5
 
     env:

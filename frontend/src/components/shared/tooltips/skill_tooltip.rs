@@ -8,23 +8,28 @@ use shared::data::{
     character_status::StatusSpecs,
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
+    player::PlayerBaseSkill,
     skill::{
         DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource, RestoreModifier,
         RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{Matchable, StatEffect, StatSkillEffectType, StatStatusType, StatType},
+    stat_effect::{
+        Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType, StatType,
+    },
     trigger::TriggerEffectModifier,
 };
 use strum::IntoEnumIterator;
 
 use crate::components::{
+    data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
             self, damage_over_time_type_value_str, formatted_effects_list, min_max_str,
             stat_skill_effect_type_str, status_type_str,
         },
+        frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip,
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
@@ -45,9 +50,54 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
         Some(SkillType::Spell) => "Spell ",
         Some(SkillType::Curse) => "Curse ",
         Some(SkillType::Blessing) => "Blessing ",
-        Some(SkillType::Other) => "Other ",
+        Some(SkillType::Other) => "",
         None => "",
     }
+}
+
+pub fn skills_type_str(skill_type: Option<SkillType>) -> &'static str {
+    match skill_type {
+        Some(SkillType::Attack) => "Attacks ",
+        Some(SkillType::Spell) => "Spells ",
+        Some(SkillType::Curse) => "Curses ",
+        Some(SkillType::Blessing) => "Blessings ",
+        Some(SkillType::Other) => "Others ",
+        None => "",
+    }
+}
+
+pub fn skill_filter_str(skill_filter: &StatSkillFilter, prefix: &str, plural: bool) -> String {
+    let skill_name = skill_filter
+        .skill_id
+        .as_ref()
+        .map(|skill_id| {
+            let data_context: DataContext = expect_context();
+            format!(
+                "{} ",
+                skill_filter
+                    .skill_description
+                    .clone()
+                    .unwrap_or(data_context.skill_name(skill_id))
+            )
+        })
+        .unwrap_or_default();
+
+    let prefix = if skill_name.is_empty() && skill_filter.skill_type.is_none() {
+        ""
+    } else {
+        prefix
+    };
+
+    format!(
+        "{}{}{}",
+        prefix,
+        skill_name,
+        if plural {
+            skills_type_str(skill_filter.skill_type)
+        } else {
+            skill_type_str(skill_filter.skill_type)
+        }
+    )
 }
 
 pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
@@ -59,52 +109,65 @@ pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
 }
 
 #[component]
-pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
+pub fn SkillTooltip(
+    skill_specs: Arc<SkillSpecs>,
+    #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
+) -> impl IntoView {
+    let palette = TooltipFramePalette {
+        border_class: "border-[#70508a]/92",
+        inner_border_class: "border-fuchsia-200/10",
+        shine_color: "rgba(228,183,255,0.42)",
+    };
+
     let targets_lines = skill_specs
         .targets
         .clone()
         .into_iter()
-        .map(|target| format_target(target, skill_specs.base.skill_type))
+        .map(|target| format_target(target, skill_specs.skill_type))
         .collect::<Vec<_>>();
 
     let trigger_lines = skill_specs
         .triggers
         .clone()
         .into_iter()
-        .map(format_trigger)
+        .map(|trigger| format_trigger(trigger, false))
         .collect::<Vec<_>>();
 
-    let modifier_lines: Vec<_> = skill_specs
-        .base
-        .modifier_effects
-        .clone()
-        .into_iter()
-        .filter(|skill_modifier| !skill_modifier.hidden)
-        .map(format_skill_modifier)
-        .collect();
+    let auto_use_conditions = player_base_skill
+        .as_ref()
+        .map(|player_base_skill| player_base_skill.base_skill_specs.auto_use_conditions.clone())
+        .unwrap_or_default();
+
+    let modifier_lines: Vec<_> = player_base_skill
+        .as_ref()
+        .map(|player_base_skill| {
+            player_base_skill
+                .base_skill_specs
+                .modifier_effects
+                .clone()
+                .into_iter()
+                .filter(|skill_modifier| !skill_modifier.hidden)
+                .map(format_skill_modifier)
+                .collect()
+        })
+        .unwrap_or_default();
 
     view! {
-        <div class="
-        max-w-xs p-4 rounded-xl border border-violet-700 ring-2 ring-violet-500 
-        shadow-md shadow-violet-700 bg-gradient-to-br from-gray-800 via-gray-900 to-black space-y-2
-        text-center
-        ">
-            <strong class="text-sm xl:text-base font-bold text-violet-300 font-display">
+        <TooltipFrame palette class="max-w-xs">
+            <strong class="text-sm xl:text-base font-bold text-violet-300 font-display text-shadow-md/80">
                 <ul class="list-none xl:space-y-1 mb-2">
-                    <li class=" whitespace-pre-line">
-                        {skill_specs.base.name.clone()}
-                    </li>
+                    <li class=" whitespace-pre-line">{skill_specs.name.clone()}</li>
                 </ul>
             </strong>
 
             <Separator />
 
-            <p class="text-xs xl:text-sm text-gray-400 ">
-                {skill_type_str(Some(skill_specs.base.skill_type))} "| "
+            <p class="text-xs xl:text-sm text-stone-400 ">
+                {skill_type_str(Some(skill_specs.skill_type))} "| "
                 {if skill_specs.cooldown.get() > 0.0 {
                     view! {
                         "Cooldown: "
-                        <span class="text-white">
+                        <span class="text-stone-100">
                             {format!("{:.1}s", skill_specs.cooldown.get())}
                         </span>
                     }
@@ -116,25 +179,27 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                     .then(|| {
                         view! {
                             " | Mana Cost: "
-                            <span class="text-white">{skill_specs.mana_cost.get().round()}</span>
+                            <span class="text-stone-100">
+                                {skill_specs.mana_cost.get().round()}
+                            </span>
                         }
                     })}
             </p>
 
-            {(!skill_specs.base.auto_use_conditions.is_empty())
+            {(!auto_use_conditions.is_empty())
                 .then(|| {
                     view! {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-gray-400 ">
+                                <span class="text-stone-400 ">
                                     "Auto-use only when "
                                     {conditions_tooltip::format_skill_modifier_conditions_pre(
-                                        &skill_specs.base.auto_use_conditions,
+                                        &auto_use_conditions,
                                         "",
                                     )}
                                     {conditions_tooltip::format_skill_modifier_conditions_post(
-                                        &skill_specs.base.auto_use_conditions,
+                                        &auto_use_conditions,
                                     )}
                                 </span>
                             </li>
@@ -147,52 +212,53 @@ pub fn SkillTooltip(skill_specs: Arc<SkillSpecs>) -> impl IntoView {
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
 
-            {(skill_specs.next_upgrade_cost > 0.0)
-                .then(|| {
+            {player_base_skill
+                .as_ref()
+                .filter(|player_base_skill| player_base_skill.next_upgrade_cost > 0.0)
+                .map(|player_base_skill| {
+                    let upgrade_effects = player_base_skill.base_skill_specs.upgrade_effects.clone();
+                    let upgrade_level = player_base_skill.upgrade_level;
+                    let next_upgrade_cost = player_base_skill.next_upgrade_cost;
                     view! {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
-                                <span class="text-gray-400 ">"Next upgrade:"</span>
+                                <span class="text-stone-400 ">"Next upgrade:"</span>
                             </li>
-                            {effects_tooltip::formatted_effects_list(
-                                skill_specs.base.upgrade_effects.clone(),
-                            )}
+                            {effects_tooltip::formatted_effects_list(upgrade_effects)}
                         </ul>
 
                         <Separator />
-                        <p class="text-xs xl:text-sm text-gray-400 ">
+                        <p class="text-xs xl:text-sm text-stone-400 ">
                             "Level: "
                             {if skill_specs.level_modifier > 0 {
                                 view! {
-                                    <span class="text-blue-400">
-                                        {skill_specs
-                                            .upgrade_level
-                                            .saturating_add(skill_specs.level_modifier)}
+                                    <span class="text-blue-300">
+                                        {upgrade_level.saturating_add(skill_specs.level_modifier)}
                                     </span>
                                 }
                             } else {
                                 view! {
-                                    <span class="text-white">{skill_specs.upgrade_level}</span>
+                                    <span class="text-stone-100">{upgrade_level}</span>
                                 }
                             }} " | Upgrade Cost: "
-                            <span class="text-white">
-                                {format_number(skill_specs.next_upgrade_cost)}" Gold"
+                            <span class="text-stone-100">
+                                {format_number(next_upgrade_cost)}" Gold"
                             </span>
                         </p>
                     }
                 })}
 
-            {(!skill_specs.base.description.is_empty())
+            {(!skill_specs.description.is_empty())
                 .then(|| {
                     view! {
                         <Separator />
-                        <p class="text-xs xl:text-sm italic text-gray-400 ">
-                            {skill_specs.base.description.clone()}
+                        <p class="text-xs xl:text-sm italic text-stone-400 ">
+                            {skill_specs.description.clone()}
                         </p>
                     }
                 })}
-        </div>
+        </TooltipFrame>
     }
 }
 
@@ -313,8 +379,9 @@ pub fn format_skill_effect(
                         find_trigger_modifier(
                             StatType::Damage {
                                 damage_type: Some(damage_type),
-                                skill_type: None,
+                                skill_filter: Default::default(),
                                 min_max: None,
+                                is_hit: None,
                             },
                             modifiers,
                         ),
@@ -343,11 +410,11 @@ pub fn format_skill_effect(
                 Some(
                     view! {
                         <EffectLi>
-                            "Critical hit chance: "
+                            "Critical Hit Chance: "
                             <span class="font-semibold">{format_chance(&crit_chance, true)}</span>
                         </EffectLi>
                         <EffectLi>
-                            "Critical hit damage: "
+                            "Critical Hit Damage: "
                             <span class="font-semibold">
                                 {format!("+{}%", number::format_number(*crit_damage))}
                             </span>
@@ -376,7 +443,7 @@ pub fn format_skill_effect(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
                                     status_type: Some(StatStatusType::Stun),
-                                    skill_type: None,
+                                    skill_filter: Default::default(),
                                 },
                                 modifiers,
                             ),
@@ -397,8 +464,9 @@ pub fn format_skill_effect(
                             find_trigger_modifier(
                                 StatType::Damage {
                                     damage_type: Some(damage_type),
-                                    skill_type: None,
+                                    skill_filter: Default::default(),
                                     min_max: None,
+                                    is_hit: None,
                                 },
                                 modifiers,
                             ),
@@ -410,7 +478,7 @@ pub fn format_skill_effect(
                                     status_type: Some(StatStatusType::DamageOverTime {
                                         damage_type: Some(damage_type),
                                     }),
-                                    skill_type: None,
+                                    skill_filter: Default::default(),
                                 },
                                 modifiers,
                             ),
@@ -433,9 +501,9 @@ pub fn format_skill_effect(
                                             "font-semibold {damage_color}",
                                         )>{format_min_max(status_effect.value)}</span>
                                         {trigger_modifier_damage_str}"  "
-                                        // {damage_type_str(Some(damage_type))} "Damage per second "
+                                        // {damage_type_str(Some(damage_type))} "Damage per Second "
                                         {damage_over_time_type_value_str(Some(damage_type))}
-                                        " per second " {format_duration(duration)}
+                                        " per Second " {format_duration(duration)}
                                         {trigger_modifier_duration_str}
                                     </EffectLi>
                                 }
@@ -477,7 +545,8 @@ pub fn format_skill_effect(
                         if let Some(name) = &trigger_specs.name {
                             trigger_name = Some(name.clone());
                         }
-                        trigger_effects.push(view! { <ul>{format_trigger(*trigger_specs)}</ul> });
+                        trigger_effects
+                            .push(view! { <ul>{format_trigger(*trigger_specs, false)}</ul> });
                         ().into_any()
                     }
                 })
@@ -489,7 +558,7 @@ pub fn format_skill_effect(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
                                     status_type: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
-                                    skill_type: None,
+                                    skill_filter:  Default::default(),
                                 },
                                 modifiers,
                             ),
@@ -550,7 +619,7 @@ pub fn format_skill_effect(
             let trigger_modifier = find_trigger_modifier(
                 StatType::Restore {
                     restore_type: Some(restore_type),
-                    skill_type: None,
+                    skill_filter: Default::default(),
                 },
                 modifiers,
             );
@@ -573,6 +642,36 @@ pub fn format_skill_effect(
         }
         SkillEffectType::Resurrect => {
             view! { <EffectLi>{success_chance}"Resurrect"</EffectLi> }.into_any()
+        }
+        SkillEffectType::RefreshCooldown {
+            skill_filter,
+            value,
+            modifier,
+        } => {
+            let value_str = (matches!(modifier, RestoreModifier::Percent)
+                && *value.max == 100.0
+                && *value.min == 100.0)
+                .then(|| match modifier {
+                    RestoreModifier::Percent => view! {
+                        {format_min_max(value)}
+                        "% of "
+                    }
+                    .into_any(),
+                    RestoreModifier::Flat => view! {
+                        {format_duration(value)}
+                        "s from "
+                    }
+                    .into_any(),
+                });
+
+            let skill_filter_str = skill_filter_str(&skill_filter, " ", true);
+            let skill_filter_str = if skill_filter_str.is_empty() {
+                "All Skills".to_string()
+            } else {
+                skill_filter_str
+            };
+            view! { <EffectLi>{success_chance}"Refresh " {value_str} {skill_filter_str} " Cooldown"</EffectLi> }
+            .into_any()
         }
     };
 
@@ -655,11 +754,7 @@ where
 
 #[component]
 pub fn EffectLi(children: Children) -> impl IntoView {
-    view! {
-        <li class="text-xs xl:text-sm text-violet-200  whitespace-pre-line">
-            {children()}
-        </li>
-    }
+    view! { <li class="text-xs xl:text-sm text-violet-200 whitespace-pre-line">{children()}</li> }
 }
 
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
@@ -776,7 +871,9 @@ pub fn skill_effect_text(
                 )
             })
             .join(" "),
-        SkillEffectType::Resurrect | SkillEffectType::Restore { .. } => {
+        SkillEffectType::Resurrect
+        | SkillEffectType::Restore { .. }
+        | SkillEffectType::RefreshCooldown { .. } => {
             stat_skill_effect_type_str(stat_skill_effect.as_ref())
         }
     }

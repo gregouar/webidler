@@ -1,320 +1,1019 @@
 {
   "wool_cloak": {
     "name": "Wool Cloak",
-    "icon": "items/wool_cloak.webp",
+    "icon": "items/cloaks/wool_cloak.webp",
+    "description": null,
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 15
-      },
-      {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 15
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 15
+        "value": 15.0,
+        "ignore_quality": false
       }
-    ]
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hooded_wrap": {
     "name": "Hooded Wrap",
-    "icon": "items/hooded_wrap.webp",
+    "icon": "items/cloaks/hooded_wrap.webp",
+    "description": null,
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 30
-      },
-      {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 30
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 30
+        "value": 30.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 40
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hooded_wrap_unique": {
     "name": "Stormfeast Shroud",
+    "icon": "items/cloaks/stormfeast_shroud.webp",
     "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
-    "icon": "items/stormfeast_shroud.webp",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 50,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 30
+        "scope": "Global",
+        "value": 30.0,
+        "ignore_quality": false
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 30
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 30
-      },
-      {
-        "scope": "Global",
         "stat": {
           "StatConverter": {
             "source": {
-              "Damage": { "damage_type": "Storm" }
+              "Damage": {
+                "damage_type": "Storm",
+                "min_max": null
+              }
             },
             "stat": {
-              "Damage": { "damage_type": "Fire" }
-            }
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "is_extra": false,
+            "skill_type": null
           }
         },
         "modifier": "Flat",
-        "ignore_quality": true,
-        "value": 100
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Damage": { "damage_type": "Fire" } },
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Fire",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
         "modifier": "More",
-        "value": [50, 100]
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
+        "stat": {
+          "Armor": "Fire"
+        },
         "modifier": "Flat",
-        "value": [-90, -60]
+        "scope": "Global",
+        "value": [
+          30.0,
+          60.0
+        ],
+        "ignore_quality": true
       },
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
-        "modifier": "Flat",
-        "value": [30, 60]
-      },
-      {
-        "scope": "Global",
-        "stat": { "Speed": null },
+        "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
         "modifier": "Increased",
-        "value": [8, 12],
+        "scope": "Global",
+        "value": [
+          8.0,
+          12.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          8.0,
+          12.0
+        ],
         "ignore_quality": true
       }
     ],
-    "min_area_level": 50
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "drink_storm",
+        "OnTakeHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": "Storm"
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
+                          "damage_type": "Fire",
+                          "min_max": null,
+                          "is_hit": null
+                        }
+                      },
+                      "modifier": "More",
+                      "debuff": false
+                    }
+                  },
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 5.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "is_debuff": false
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Fire",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      }
+    ]
   },
   "heavy_cloak": {
     "name": "Heavy Cloak",
-    "icon": "items/heavy_cloak.webp",
+    "icon": "items/cloaks/heavy_cloak.webp",
+    "description": null,
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 50
-      },
-      {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 50
+        "value": 50.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 90
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
-  "fur_cloak": {
-    "name": "Fur-lined Cloak",
-    "icon": "items/fur_cloak.webp",
+  "cloak_backstab": {
+    "name": "Gareth's Misdirection",
+    "icon": "items/cloaks/cloak_backstab.webp",
+    "description": "He insisted it wasn't betrayal, just better positioning.",
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
-    "affixes": [
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
-        "modifier": "Flat",
-        "value": 75
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 75
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 75
-      }
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
     ],
-    "min_area_level": 140
-  },
-  "fur_cloak_unique": {
-    "name": "Shadowmoth Embrace",
-    "description": "Spread your wings, let the world fear what follows.",
-    "icon": "items/princess_cloak.webp",
-    "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "min_area_level": 100,
     "rarity": "Unique",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
-        "modifier": "Flat",
-        "value": 75
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 75
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 75
-      },
-      {
-        "scope": "Global",
-        "stat": "ThreatGain",
-        "modifier": "Increased",
-        "value": 50,
-        "ignore_quality": true
-      },
-      {
-        "scope": "Global",
         "stat": {
-          "StatusDuration": {
-            "status_type": { "DamageOverTime": { "damage_type": "Poison" } }
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null
           }
         },
         "modifier": "Increased",
-        "value": [30, 50],
+        "scope": "Global",
+        "value": [
+          8.0,
+          12.0
+        ],
         "ignore_quality": true
       },
       {
+        "stat": "MovementSpeed",
+        "modifier": "Increased",
         "scope": "Global",
-        "stat": { "Damage": { "damage_type": "Poison" } },
-        "modifier": "More",
-        "value": [80, 120]
+        "value": 10.0,
+        "ignore_quality": true
       },
       {
+        "stat": "GoldFind",
+        "modifier": "More",
         "scope": "Global",
-        "stat": { "CritChance": "Spell" },
-        "modifier": "Increased",
-        "value": [40, 60],
+        "value": [
+          100.0,
+          150.0
+        ],
         "ignore_quality": true
       }
     ],
-    "min_area_level": 150
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "backstab_cloak",
+        "OnReceiveStatus": {
+          "skill_type": null,
+          "status_type": {
+            "DamageOverTime": {
+              "damage_type": null
+            }
+          },
+          "is_triggered": null,
+          "is_evaded": true
+        },
+        "target": "SameTarget",
+        "modifiers": [],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "statuses": [
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "CritChance": {
+                          "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null
+                        }
+                      },
+                      "modifier": "More",
+                      "debuff": false
+                    }
+                  },
+                  "value": 100.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                },
+                {
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Damage": {
+                          "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
+                          "damage_type": null,
+                          "min_max": null,
+                          "is_hit": null
+                        }
+                      },
+                      "modifier": "More",
+                      "debuff": false
+                    }
+                  },
+                  "value": 200.0,
+                  "cumulate": false,
+                  "replace_on_value_only": false,
+                  "unavoidable": false
+                }
+              ],
+              "duration": 10.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Single",
+        "owner": null,
+        "is_debuff": false
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Speed": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "skill_description": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 25.0
+        }
+      }
+    ]
+  },
+  "fur_cloak": {
+    "name": "Fur-lined Cloak",
+    "icon": "items/cloaks/fur_cloak.webp",
+    "description": null,
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 75.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "fur_cloak_unique": {
+    "name": "Shadowmoth Embrace",
+    "icon": "items/cloaks/princess_cloak.webp",
+    "description": "Spread your wings, let the world fear what follows.",
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 75.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": "ThreatGain",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusDuration": {
+            "status_type": {
+              "DamageOverTime": {
+                "damage_type": "Poison"
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Poison",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Evade": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          5.0,
+          10.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Poison",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Evade": null
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "reinforced_cloak": {
     "name": "Reinforced Cloak",
-    "icon": "items/reinforced_cloak.webp",
+    "icon": "items/cloaks/reinforced_cloak.webp",
+    "description": null,
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 100
-      },
-      {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 100
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 100
+        "value": 100.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 190
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "great_cloak": {
     "name": "Great Cloak",
-    "icon": "items/great_cloak.webp",
+    "icon": "items/cloaks/great_cloak.webp",
+    "description": null,
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 125
-      },
-      {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 125
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 125
+        "value": 125.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 250
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "treasure_chest": {
+    "name": "Gilded Chest",
+    "icon": "items/cloaks/treasure_chest.webp",
+    "description": "You finally found it. Now what will it take from you?",
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory"
+    ],
+    "min_area_level": 260,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          400.0,
+          800.0
+        ],
+        "ignore_quality": false
+      },
+      {
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": -30.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "DamageResistance": {
+            "skill_type": null,
+            "damage_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": -100.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 100.0
+        }
+      }
+    ]
   },
   "cloak_7": {
     "name": "Elven Cape",
-    "icon": "items/elven_cape.webp",
+    "icon": "items/cloaks/elven_cape.webp",
+    "description": null,
     "slot": "Accessory",
-    "categories": ["Accessory", "Cloak"],
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
     "affixes": [
       {
-        "scope": "Global",
-        "stat": { "Armor": "Fire" },
+        "stat": {
+          "Armor": "Elemental"
+        },
         "modifier": "Flat",
-        "value": 150
-      },
-      {
         "scope": "Global",
-        "stat": { "Armor": "Poison" },
-        "modifier": "Flat",
-        "value": 150
-      },
-      {
-        "scope": "Global",
-        "stat": { "Armor": "Storm" },
-        "modifier": "Flat",
-        "value": 150
+        "value": 150.0,
+        "ignore_quality": false
       }
     ],
-    "min_area_level": 320
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "cloak_exorcist": {
+    "name": "Veil of a Thousand Seals",
+    "icon": "items/cloaks/cloak_exorcist.webp",
+    "description": "Each seal binds a whisper. Together, they silence the chorus.",
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 330,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 150.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "StatusResistance": {
+            "skill_type": "Curse",
+            "status_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": null,
+            "skill_type": "Curse",
+            "skill_id": null,
+            "skill_description": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e300,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_type": null,
+                  "skill_type": "Blessing",
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": null,
+                    "skill_type": "Blessing",
+                    "not": false
+                  }
+                }
+              ],
+              "conditions_duration": 0
+            }
+          },
+          "modifier": "More",
+          "value": 40.0
+        }
+      }
+    ]
+  },
+  "cloak_8": {
+    "name": "Regal Mantle",
+    "icon": "items/cloaks/regal_mantle.webp",
+    "description": null,
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 175.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

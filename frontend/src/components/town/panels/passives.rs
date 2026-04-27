@@ -23,16 +23,17 @@ use crate::components::{
     events::{EventsContext, Key},
     shared::{
         inventory::InventoryEquipFilter,
-        passives::{Connection, MetaStatus, Node, NodeStatus, PurchaseStatus},
+        passives::{Connection, MetaStatus, Node, NodeStatus, PassiveSkillStats, PurchaseStatus},
         resources::ShardsCounter,
     },
     town::TownContext,
     ui::{
         buttons::{MenuButton, TabButton},
-        card::{Card, CardHeader, CardInset},
+        card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
+        number::NumberInset,
         pannable::Pannable,
         toast::*,
     },
@@ -157,11 +158,11 @@ pub fn PassivesPanel(
     });
 
     view! {
-        <MenuPanel open=open>
+        <MenuPanel open=open always_mounted=true>
             <div class="w-full h-full">
-                <Card>
+                <MenuCard>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>
-                        <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-hidden">
+                        <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 -mb-2 overflow-clip">
                             <TabButton
                                 is_active=Signal::derive(move || {
                                     active_tab.get() == PassivesTab::Ascend
@@ -213,7 +214,7 @@ pub fn PassivesPanel(
                         }}
 
                     </CardHeader>
-                    <CardInset pad=false>
+                    <CardInset pad=false class="relative">
                         <PassiveSkillTree
                             active_tab
                             passives_tree_ascension
@@ -225,7 +226,7 @@ pub fn PassivesPanel(
                             view_only
                         />
                     </CardInset>
-                </Card>
+                </MenuCard>
             </div>
         </MenuPanel>
     }
@@ -468,7 +469,7 @@ pub fn BuildPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400">
+                    <div class="text-sm xl:text-base text-gray-400 flex items-center">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {
@@ -481,9 +482,9 @@ pub fn BuildPanelHeader(
                             false => {
                                 view! {
                                     "Required Player Level:"
-                                    <span class="text-white font-semibold ml-2">
+                                    <NumberInset class="text-white ml-2 w-[2ch]  text-right">
                                         {move || passives_tree_build.read().len() + 1}
-                                    </span>
+                                    </NumberInset>
                                     "/"
                                     {DEFAULT_MAX_LEVEL}
                                 }
@@ -681,7 +682,25 @@ fn PassiveSkillTree(
         }
     });
 
+    let derived_passives_tree_specs = Memo::new(move |_| {
+        let mut passives_tree_specs = town_context.passives_tree_specs.get();
+        for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
+            let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
+            node_specs.effects = (&(item_specs
+                .modifiers
+                .aggregate_effects(AffixEffectScope::Global, false)))
+                .into();
+            node_specs.triggers = item_specs.base.triggers.clone();
+        }
+        passives_tree_specs
+    });
+
     view! {
+        <PassiveSkillStats
+            passives_tree_specs=derived_passives_tree_specs
+            passives_tree_ascension=passives_tree_ascension
+            purchased_nodes=passives_tree_build
+        />
         <Pannable>
             <For
                 each=move || {
@@ -764,7 +783,7 @@ fn AscendNode(
                 node_specs.icon = item_specs.base.icon.clone();
                 node_specs.effects = (&(item_specs
                     .modifiers
-                    .aggregate_effects(AffixEffectScope::Global)))
+                    .aggregate_effects(AffixEffectScope::Global, false)))
                     .into(); // TODO: Better copy, don't aggregate?
                 node_specs.triggers = item_specs.base.triggers.clone();
                 node_specs.root_node |= item_specs
@@ -901,8 +920,9 @@ fn AscendNode(
         }
     });
 
-    let purchase = move || {
-        match active_tab.get() {
+    let purchase = {
+        let node_specs = node_specs.clone();
+        move || match active_tab.get() {
             PassivesTab::Ascend => {
                 if node_specs.socket && (!node_specs.locked || node_level.get() > 0) {
                     selected_socket_node.set(Some(node_id));
@@ -915,9 +935,11 @@ fn AscendNode(
                             .ascended_nodes
                             .entry(node_id)
                             .or_default();
+                        ascension_cost.update(|ascension_cost| {
+                            *ascension_cost += node_specs.next_ascend_cost(*entry) as f64
+                        });
                         *entry = entry.saturating_add(1);
                     });
-                    ascension_cost.update(|ascension_cost| *ascension_cost += 1.0); // TODO: Ascend cost?
                 }
             }
             PassivesTab::Build => {
@@ -970,7 +992,9 @@ fn AscendNode(
                         .or_default();
                     if *entry > 0 {
                         *entry = entry.saturating_sub(1);
-                        ascension_cost.update(|ascension_cost| *ascension_cost -= 1.0);
+                        ascension_cost.update(|ascension_cost| {
+                            *ascension_cost -= node_specs.next_ascend_cost(*entry) as f64
+                        });
                     }
                 });
             }
@@ -984,8 +1008,8 @@ fn AscendNode(
                     node_specs=derived_node_specs.get()
                     node_status
                     node_level
-                    on_click=purchase
-                    on_right_click=refund
+                    on_click=purchase.clone()
+                    on_right_click=refund.clone()
                     show_upgrade=true
                     search_node
                 />
@@ -1005,20 +1029,18 @@ fn AscendConnection(
     let town_context: TownContext = expect_context();
 
     let amount_connections = Memo::new(move |_| match active_tab.get() {
-        PassivesTab::Ascend => {
+        PassivesTab::Ascend => passives_tree_ascension.with(|passives_tree_ascension| {
             passives_tree_ascension
-                .read()
                 .ascended_nodes
                 .get(&connection.from)
                 .map(|x| (*x > 0) as usize)
                 .unwrap_or_default()
                 + passives_tree_ascension
-                    .read()
                     .ascended_nodes
                     .get(&connection.to)
                     .map(|x| (*x > 0) as usize)
                     .unwrap_or_default()
-        }
+        }),
         PassivesTab::Build => {
             passives_tree_build.read().contains(&connection.from) as usize
                 + passives_tree_build.read().contains(&connection.to) as usize
@@ -1026,20 +1048,20 @@ fn AscendConnection(
     });
 
     let node_levels = Memo::new(move |_| match active_tab.get() {
-        PassivesTab::Ascend => (
-            passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&connection.from)
-                .cloned()
-                .unwrap_or_default(),
-            passives_tree_ascension
-                .read()
-                .ascended_nodes
-                .get(&connection.to)
-                .cloned()
-                .unwrap_or_default(),
-        ),
+        PassivesTab::Ascend => passives_tree_ascension.with(|passives_tree_ascension| {
+            (
+                passives_tree_ascension
+                    .ascended_nodes
+                    .get(&connection.from)
+                    .cloned()
+                    .unwrap_or_default(),
+                passives_tree_ascension
+                    .ascended_nodes
+                    .get(&connection.to)
+                    .cloned()
+                    .unwrap_or_default(),
+            )
+        }),
         PassivesTab::Build => (
             town_context
                 .passives_tree_ascension

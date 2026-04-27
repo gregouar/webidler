@@ -3,7 +3,7 @@
     "name": "The Chaos Dimension",
     "description": "A realm without history, without future, only iteration.",
     "power_level": 0,
-    "required_level": 300,
+    "required_level": 350,
     "item_level_modifier": 0,
     "header_background": "areas/chaos_header.webp",
     "footer_background": "areas/chaos_footer.webp",
@@ -16,12 +16,13 @@
     "tier_4.json",
     "tier_5.json",
     "tier_6.json",
-    "tier_7.json"
+    "tier_7.json",
+    "tier_8.json"
   ],
   "bosses": [
     {
       "level": 10,
-      "interval": 60,
+      "interval": 70,
       "spawns": [
         {
           "monster": "haunted_wine_bottle.json",
@@ -35,7 +36,7 @@
     },
     {
       "level": 20,
-      "interval": 60,
+      "interval": 70,
       "spawns": [
         {
           "monster": "hound_fire.json",
@@ -53,7 +54,7 @@
     },
     {
       "level": 30,
-      "interval": 60,
+      "interval": 70,
       "spawns": [
         {
           "monster": "witch.json",
@@ -63,7 +64,7 @@
     },
     {
       "level": 40,
-      "interval": 60,
+      "interval": 70,
       "spawns": [
         {
           "monster": "princess_fire.json",
@@ -81,7 +82,7 @@
     },
     {
       "level": 50,
-      "interval": 60,
+      "interval": 70,
       "spawns": [
         {
           "monster": "treasure_idol.json",
@@ -111,7 +112,7 @@
     },
     {
       "level": 60,
-      "interval": 60,
+      "interval": 70,
       "spawns": [
         {
           "monster": "dragon_black.json",
@@ -119,6 +120,16 @@
         },
         {
           "monster": "dragon_red.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "level": 70,
+      "interval": 70,
+      "spawns": [
+        {
+          "monster": "gashadokuro.json",
           "quantity": 1
         }
       ]
@@ -824,6 +835,135 @@
         {
           "monster": "cloud.json",
           "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "possessed_ashigaru.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "hososhi.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "karakasa_kozo.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "possessed_ashigaru.json",
+          "quantity": 1
+        },
+        {
+          "monster": "hososhi.json",
+          "quantity": 1
+        },
+        {
+          "monster": "karakasa_kozo.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "kappa.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "ushi_oni.json",
+          "quantity": 1
+        },
+        {
+          "monster": "nure_onna.json",
+          "quantity": 1
+        },
+        {
+          "monster": "ushi_oni.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "kappa.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "yurei.json",
+          "quantity": 1
+        },
+        {
+          "monster": "raiju.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "ohaguro_bettari.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "yurei.json",
+          "quantity": 1
+        },
+        {
+          "monster": "raiju.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "ohaguro_bettari.json",
+          "quantity": [ 1, 2 ]
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "chochin_obake.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "hitotsume_kozo.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "rokurokubi.json",
+          "quantity": 1
+        },
+        {
+          "monster": "hitotsume_kozo.json",
+          "quantity": 1
+        },
+        {
+          "monster": "chochin_obake.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "oni_warrior.json",
+          "quantity": 1
+        },
+        {
+          "monster": "oni_pyro.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "kasha.json",
+          "quantity": 1
+        },
+        {
+          "monster": "oni_pyro.json",
+          "quantity": 1
         }
       ]
     }

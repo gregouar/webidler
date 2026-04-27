@@ -3,7 +3,7 @@ use anyhow::Result;
 use shared::{
     computations,
     constants::{self, RUSH_MODE_SPEED_MULTIPLIER},
-    data::user::UserCharacterId,
+    data::{realms::Realm, user::UserCharacterId},
     messages::server::{ErrorMessage, ErrorType, ServerMessage},
 };
 
@@ -70,7 +70,13 @@ impl<'a> GameInstance<'a> {
                 .flatten()
                 .unwrap_or_default();
 
-        for skill_state in self.game_data.player_state.skills_states.iter_mut() {
+        for skill_state in self
+            .game_data
+            .player_state
+            .character_state
+            .skills_states
+            .iter_mut()
+        {
             skill_state.elapsed_cooldown = 1.0.into();
         }
 
@@ -79,7 +85,7 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             self.game_data,
             passives_tree_build,
-            last_skills_bought,
+            last_skills_bought.into_keys().collect(),
         )
         .await?;
 
@@ -213,16 +219,17 @@ impl<'a> GameInstance<'a> {
             self.game_data.player_resources.read().gold_total
                 * computations::exponential(
                     *self.game_data.area_specs.item_level_modifier
-                        + self.game_data.area_specs.power_level,
+                        + *self.game_data.area_specs.power_level,
                     constants::MONSTER_REWARD_INCREASE_FACTOR,
                 ),
+            self.game_data.game_stats.elapsed_time.as_secs_f64(),
         )
         .await?;
 
         db::characters::update_character_max_area_level(
             &mut tx,
             self.character_id,
-            self.game_data.player_specs.read().max_area_level as i32,
+            self.game_data.player_base_specs.read().max_area_level as i32,
         )
         .await?;
 
@@ -240,15 +247,48 @@ impl<'a> GameInstance<'a> {
         db::game_instances::delete_game_instance_data(&mut *tx, self.character_id).await?;
 
         if self.game_data.area_state.read().max_area_level > 0 {
-            match db::game_stats::save_game_stats(&mut *tx, self.character_id, self.game_data).await
+            if let Err(err) = db::game_stats::save_game_stats(
+                &mut *tx,
+                self.character_id,
+                &self.game_data.realm_id.clone(),
+                self.game_data,
+            )
+            .await
+            {
+                tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
+            }
+
+            match db::leaderboard::update_leaderboard(
+                &mut tx,
+                self.character_id,
+                &self.game_data.realm_id.clone(),
+                &self.game_data.area_id,
+                self.game_data.area_state.read().max_area_level as i32,
+                self.game_data
+                    .game_stats
+                    .elapsed_time_at_max_level
+                    .as_secs_f64(),
+            )
+            .await
             {
                 Ok(true) => {
+                    let realm: Realm = (&self.game_data.realm_id).into();
+                    let realm_label = match realm {
+                        Realm::Standard => "",
+                        Realm::StandardSSF => " [SSF]",
+                        Realm::Legacy => " [Legacy]",
+                    };
                     if let Err(err) = self
                         .chat_integration
                         .broadcast_message(
                             format!(
-                                "{} is the first to beat Area Level {:0} in \"{}\"!",
-                                self.game_data.player_specs.read().character_specs.name,
+                                "'{}'{} is the first to beat Area Level {:0} in '{}'!",
+                                self.game_data
+                                    .player_base_specs
+                                    .read()
+                                    .character_static
+                                    .name,
+                                realm_label,
                                 self.game_data.area_state.read().max_area_level,
                                 self.game_data.area_specs.name,
                             ),
@@ -260,7 +300,11 @@ impl<'a> GameInstance<'a> {
                     }
                 }
                 Err(err) => {
-                    tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
+                    tracing::error!(
+                        "failed to update leaderboard '{}': {}",
+                        self.character_id,
+                        err
+                    );
                 }
                 _ => {}
             }

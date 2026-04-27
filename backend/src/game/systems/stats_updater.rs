@@ -1,7 +1,8 @@
 use shared::data::{
     area::AreaThreat,
+    character::CharacterAttrs,
     conditional_modifier::{Condition, ConditionalModifier},
-    player::{CharacterSpecs, CharacterState},
+    player::CharacterState,
     stat_effect::{StatEffect, compare_options},
 };
 
@@ -34,7 +35,7 @@ use shared::data::{
 
 pub fn compute_conditional_modifiers(
     area_threat: &AreaThreat,
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
     conditional_modifiers: &[ConditionalModifier],
 ) -> Vec<StatEffect> {
@@ -53,7 +54,7 @@ pub fn compute_conditional_modifiers(
                         monitored_condition.value
                     } else if conditional_modifier.conditions_duration == 0 {
                         // Last minute check, useful for skill modifiers that are not tracked
-                        check_condition(area_threat, character_specs, character_state, condition)
+                        check_condition(area_threat, character_attrs, character_state, condition)
                     } else {
                         0.0
                     }
@@ -81,7 +82,7 @@ pub fn compute_conditional_modifiers(
 
 pub fn check_condition(
     area_threat: &AreaThreat,
-    character_specs: &CharacterSpecs,
+    character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
     condition: &Condition,
 ) -> f64 {
@@ -112,16 +113,16 @@ pub fn check_condition(
             })
             .count() as f64,
         Condition::MaximumLife => {
-            (character_state.life.get() >= character_specs.max_life.get() * 0.9999) as usize as f64
+            (character_state.life.get() >= character_attrs.max_life.get() * 0.9999) as usize as f64
         }
         Condition::MaximumMana => {
-            (character_state.mana.get() >= character_specs.max_mana.get() * 0.9999) as usize as f64
+            (character_state.mana.get() >= character_attrs.max_mana.get() * 0.9999) as usize as f64
         }
         Condition::LowLife => {
-            (character_state.life.get() <= character_specs.max_life.get() * 0.5) as usize as f64
+            (character_state.life.get() <= character_attrs.max_life.get() * 0.5) as usize as f64
         }
         Condition::LowMana => {
-            (character_state.mana.get() <= character_specs.max_mana.get() * 0.5) as usize as f64
+            (character_state.mana.get() <= character_attrs.max_mana.get() * 0.5) as usize as f64
         }
         Condition::ThreatLevel => area_threat.threat_level as f64,
     }

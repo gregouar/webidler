@@ -2,180 +2,180 @@
   {
     "name": "Hefty",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 1,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 1,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [1, 2]
+        "value": [ 1, 2 ]
       }
     ]
   },
   {
     "name": "Robust",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 2,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 100,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [3, 4]
+        "value": [ 3, 4 ]
       }
     ]
   },
   {
     "name": "Sturdy",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 3,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 200,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [5, 6]
+        "value": [ 5, 6 ]
       }
     ]
   },
   {
     "name": "Beefy",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 4,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 300,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [7, 8]
+        "value": [ 7, 8 ]
       }
     ]
   },
   {
     "name": "Endurant",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 5,
     "weight": 1000,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 400,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [9, 10]
+        "value": [ 9, 10 ]
       }
     ]
   },
   {
     "name": "Hulking",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 6,
     "weight": 900,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 500,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [11, 12]
+        "value": [ 11, 12 ]
       }
     ]
   },
   {
     "name": "Resistant",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 7,
     "weight": 800,
-    "restrictions": ["Rune"],
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [13, 14]
+        "value": [ 13, 14 ]
       }
     ]
   },
   {
     "name": "Tenacious",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 8,
-    "weight": 700,
-    "restrictions": ["Rune"],
+    "weight": 400,
+    "restrictions": [ "Rune" ],
     "item_level": 700,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [15, 16]
+        "value": [ 15, 16 ]
       }
     ]
   },
   {
     "name": "Resilient",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 9,
-    "weight": 600,
-    "restrictions": ["Rune"],
+    "weight": 200,
+    "restrictions": [ "Rune" ],
     "item_level": 800,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [17, 18]
+        "value": [ 17, 18 ]
       }
     ]
   },
   {
     "name": "Stalwart",
     "family": "inc_life",
-    "tags": ["Life"],
+    "tags": [ "Life" ],
     "affix_type": "Prefix",
     "tier": 10,
-    "weight": 900,
-    "restrictions": ["Rune"],
+    "weight": 100,
+    "restrictions": [ "Rune" ],
     "item_level": 600,
     "effects": [
       {
         "scope": "Global",
         "stat": "Life",
         "modifier": "Increased",
-        "value": [19, 20]
+        "value": [ 19, 20 ]
       }
     ]
   }

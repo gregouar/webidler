@@ -24,7 +24,7 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
 use shared::{
-    data::user::{User, UserDetails, UserId},
+    data::user::{User, UserId},
     types::Email,
 };
 
@@ -58,6 +58,7 @@ pub struct Claims {
     pub exp: usize,  // Expiry time of the token
     pub iat: usize,  // Issued at time of the token
     pub sub: UserId, // Subject associated with the token
+    pub username: String,
 }
 pub async fn sign_in(
     app_settings: &AppSettings,
@@ -65,7 +66,7 @@ pub async fn sign_in(
     username: &str,
     password: &str,
 ) -> Result<String, AppError> {
-    let (user_id, password_hash_opt) = db::users::auth_user(db_pool, username)
+    let (user, password_hash_opt) = db::users::auth_user(db_pool, username)
         .await?
         .ok_or_else(|| AppError::Unauthorized("incorrect username or password".to_string()))?;
 
@@ -75,10 +76,10 @@ pub async fn sign_in(
     // TODO: Track activity logs, etc.
 
     if verify_password(password, &password_hash) {
-        db::users::update_last_login(db_pool, &user_id)
+        db::users::update_last_login(db_pool, &user.user_id)
             .await
             .unwrap_or_else(|e| tracing::error!("couldn't update user last login: {e}"));
-        Ok(encode_jwt(app_settings, user_id)?)
+        Ok(encode_jwt(app_settings, user)?)
     } else {
         Err(AppError::Unauthorized(
             "incorrect username or password".to_string(),
@@ -88,7 +89,8 @@ pub async fn sign_in(
 
 #[derive(Clone)]
 pub struct CurrentUser {
-    pub user_details: UserDetails,
+    // pub user_details: UserDetails,
+    pub user: User,
 }
 
 pub async fn authorization_middleware(
@@ -97,45 +99,39 @@ pub async fn authorization_middleware(
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AppError> {
-    let user_id = authorize_jwt(&state.app_settings, bearer.token())
+    let user = authorize_jwt(&state.app_settings, bearer.token())
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    let user = db::users::read_user(&state.db_pool, &user_id)
-        .await?
-        .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
-
-    let email = user
-        .email_crypt
-        .as_ref()
-        .and_then(|email_crypt| decrypt_email(&state.app_settings, email_crypt).ok());
-
-    req.extensions_mut().insert(CurrentUser {
-        user_details: UserDetails {
-            email,
-            user: user.into(),
-        },
-    });
+    req.extensions_mut().insert(CurrentUser { user });
     Ok(next.run(req).await)
 }
 
-pub fn authorize_jwt(app_settings: &AppSettings, token: &str) -> Option<UserId> {
+pub fn authorize_jwt(app_settings: &AppSettings, token: &str) -> Option<User> {
     decode(
         token,
         &app_settings.jwt_decoding_key,
         &Validation::default(),
     )
     .ok()
-    .map(|token_data: TokenData<Claims>| token_data.claims.sub)
+    .map(|token_data: TokenData<Claims>| User {
+        user_id: token_data.claims.sub,
+        username: token_data.claims.username,
+    })
 }
 
-fn encode_jwt(app_settings: &AppSettings, sub: UserId) -> anyhow::Result<String> {
+fn encode_jwt(app_settings: &AppSettings, user: User) -> anyhow::Result<String> {
     let now = Utc::now();
     let exp: usize = (now + Duration::hours(24)).timestamp() as usize;
     let iat: usize = now.timestamp() as usize;
 
     Ok(encode(
         &Header::default(),
-        &Claims { iat, exp, sub },
+        &Claims {
+            iat,
+            exp,
+            sub: user.user_id,
+            username: user.username,
+        },
         &app_settings.jwt_encoding_key,
     )?)
 }
@@ -161,7 +157,6 @@ impl From<db::users::UserEntry> for User {
         User {
             user_id: val.user_id,
             username: val.username.unwrap_or_default(),
-            max_characters: val.max_characters as u8,
         }
     }
 }

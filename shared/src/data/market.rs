@@ -43,9 +43,13 @@ pub struct MarketFilters {
     pub max_req_level: Option<AreaLevel>,
     pub price: Option<ItemPrice>,
 
+    pub min_power_level: Option<AreaLevel>,
+    pub min_upgrade_level: Option<u8>,
+
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
 
+    pub item_cooldown: Option<f64>,
     pub item_damages: Option<f64>,
     pub item_damage_physical: Option<f64>,
     pub item_damage_fire: Option<f64>,

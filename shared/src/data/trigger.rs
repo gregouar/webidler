@@ -19,7 +19,7 @@ pub enum EventTrigger {
     OnThreatIncreased,
     OnDeath(TargetType),
     OnApplyStatus(StatusTrigger),
-    // TODO: Receive status
+    OnReceiveStatus(StatusTrigger),
 }
 
 // TODO: replace by simple tag system?
@@ -52,6 +52,8 @@ pub struct StatusTrigger {
     pub status_type: Option<StatStatusType>,
     #[serde(default)]
     pub is_triggered: Option<bool>,
+    #[serde(default)]
+    pub is_evaded: Option<bool>,
 }
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct KillTrigger {
@@ -94,8 +96,6 @@ pub struct TriggeredEffect {
 
     #[serde(default)]
     pub owner: Option<CharacterId>,
-    #[serde(default)]
-    pub inherit_modifiers: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
