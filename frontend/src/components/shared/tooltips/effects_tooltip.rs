@@ -73,7 +73,7 @@ pub fn armor_type_str(armor_type: &Option<ArmorStatType>) -> &'static str {
             ArmorStatType::Storm => "Storm Defense",
             ArmorStatType::Elemental => "Elemental Defenses",
         },
-        None => "All Defenses",
+        None => "Defenses",
     }
 }
 
