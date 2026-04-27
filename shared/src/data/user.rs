@@ -20,6 +20,7 @@ pub struct User {
 pub struct UserDetails {
     pub user: User,
     pub email: Option<Email>,
+    pub chat_badge: Option<String>,
     pub max_characters: u8,
 }
 

@@ -20,6 +20,7 @@ pub struct ChatMessage {
 
     pub user_id: Option<UserId>,
     pub username: Option<String>,
+    pub chat_badge: Option<String>,
 
     pub content: String,
     pub linked_item: Option<LinkedItemBytes>,

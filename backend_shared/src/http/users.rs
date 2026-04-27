@@ -16,13 +16,14 @@ pub struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetUserDetailsResponse {
-    pub user_details: UserDetails,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UserDetails {
     pub user: User,
     pub email: Option<EmailNoValidate>,
     pub max_characters: u8,
+    pub chat_badge: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetUserDetailsResponse {
+    pub user_details: UserDetails,
 }

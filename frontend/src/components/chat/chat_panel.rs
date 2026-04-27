@@ -11,11 +11,14 @@ use leptos_use::use_resize_observer;
 use shared::data::item::ItemSpecs;
 use shared_chat::types::{ChatChannel, ChatMessage};
 
-use crate::components::{
-    chat::chat_context::ChatContext,
-    events::{EventsContext, Key},
-    shared::tooltips::{ItemTooltip, item_tooltip},
-    ui::{checkbox::Checkbox, number::format_datetime, tooltip::DynamicTooltipTarget},
+use crate::{
+    assets::img_asset,
+    components::{
+        chat::chat_context::ChatContext,
+        events::{EventsContext, Key},
+        shared::tooltips::{ItemTooltip, item_tooltip},
+        ui::{checkbox::Checkbox, number::format_datetime, tooltip::DynamicTooltipTarget},
+    },
 };
 
 #[component]
@@ -379,7 +382,19 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
 
     view! {
-        <div class="text-sm" title=format!("Sent at {}", format_datetime(msg.sent_at))>
+        <div class="text-sm flex" title=format!("Sent at {}", format_datetime(msg.sent_at))>
+            {msg
+                .chat_badge
+                .as_ref()
+                .map(|chat_badge| {
+                    view! {
+                        <img
+                            src=img_asset(&format!("badges/{}", chat_badge))
+                            alt="Badge"
+                            class="h-[32px] mr-1 aspect-square"
+                        />
+                    }
+                })}
             <span
                 class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
                 on:click=move |_| {

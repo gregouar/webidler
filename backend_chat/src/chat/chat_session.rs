@@ -1,5 +1,5 @@
 use anyhow::Result;
-use backend_shared::http::users::User;
+use backend_shared::http::users::UserDetails;
 use chrono::Utc;
 use std::ops::ControlFlow;
 use tokio::sync::mpsc;
@@ -21,16 +21,16 @@ use crate::{
 pub struct ChatSession {
     session_id: Uuid,
     chat_state: ChatState,
-    user: User,
+    user_details: UserDetails,
     // TODO: ConnectedAt, other?
 }
 
 impl ChatSession {
-    pub fn new(chat_state: ChatState, user: User) -> Self {
+    pub fn new(chat_state: ChatState, user_details: UserDetails) -> Self {
         Self {
             session_id: Uuid::new_v4(),
             chat_state,
-            user,
+            user_details,
         }
     }
 
@@ -40,7 +40,7 @@ impl ChatSession {
         mut ws_receiver: WebSocketReceiver,
     ) -> Result<()> {
         let history = ServerConnectMessage {
-            user_id: self.user.user_id,
+            user_id: self.user_details.user.user_id,
             history: self
                 .chat_state
                 .history
@@ -65,13 +65,16 @@ impl ChatSession {
             .insert(self.session_id, direct_tx.clone());
         self.chat_state
             .users_map
-            .entry(self.user.user_id)
+            .entry(self.user_details.user.user_id)
             .or_default()
             .insert(self.session_id);
         self.chat_state
             .usernames_map
-            .entry(self.user.username.to_ascii_lowercase())
-            .or_insert((self.user.user_id, self.user.username.clone()));
+            .entry(self.user_details.user.username.to_ascii_lowercase())
+            .or_insert((
+                self.user_details.user.user_id,
+                self.user_details.user.username.clone(),
+            ));
         let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
         ///////////////////////////////
 
@@ -135,17 +138,17 @@ impl ChatSession {
         let mut user_entry = self
             .chat_state
             .users_map
-            .entry(self.user.user_id)
+            .entry(self.user_details.user.user_id)
             .or_default();
         user_entry.remove(&self.session_id);
         if user_entry.is_empty() {
             self.chat_state
                 .usernames_map
-                .remove(&self.user.username.to_ascii_lowercase());
+                .remove(&self.user_details.user.username.to_ascii_lowercase());
         }
         self.chat_state.reply_map.remove(&self.session_id);
 
-        tracing::debug!("chat session '{}' ended ", self.user.user_id);
+        tracing::debug!("chat session '{}' ended ", self.user_details.user.user_id);
         Ok(())
     }
 
@@ -182,8 +185,9 @@ impl ChatSession {
                 self.session_id,
                 ChatMessage {
                     channel: msg.channel,
-                    user_id: Some(self.user.user_id),
-                    username: Some(self.user.username.clone()),
+                    user_id: Some(self.user_details.user.user_id),
+                    username: Some(self.user_details.user.username.clone()),
+                    chat_badge: self.user_details.chat_badge.clone(),
                     content: msg.content.into_inner(),
                     linked_item: msg.linked_item,
                     // item_signature,

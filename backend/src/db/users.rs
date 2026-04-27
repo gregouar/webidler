@@ -14,9 +14,13 @@ pub struct UserEntry {
     pub username: Option<String>,
     pub email_crypt: Option<Vec<u8>>,
     pub terms_accepted_at: UtcDateTime,
+
     pub is_admin: bool,
     pub max_characters: i16,
+    pub chat_badge: Option<String>,
+
     pub last_login_at: Option<UtcDateTime>,
+
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
     pub deleted_at: Option<UtcDateTime>,
@@ -78,6 +82,7 @@ pub async fn read_user(
             terms_accepted_at, 
             is_admin, 
             max_characters as "max_characters!: i16", 
+            chat_badge,
             last_login_at as "last_login_at?: UtcDateTime",
             created_at, 
             updated_at, 
@@ -103,6 +108,7 @@ pub async fn read_user_by_email(
             email_crypt, 
             terms_accepted_at, 
             is_admin, 
+            chat_badge,
             max_characters as "max_characters!: i16", 
             last_login_at as "last_login_at?: UtcDateTime",
             created_at, 

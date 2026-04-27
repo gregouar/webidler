@@ -148,6 +148,7 @@ async fn get_me(
     Ok(Json(GetUserDetailsResponse {
         user_details: UserDetails {
             max_characters: user.max_characters as u8,
+            chat_badge: user.chat_badge.clone(),
             user: user.into(),
             email,
         },

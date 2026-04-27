@@ -124,6 +124,7 @@ impl MessagesProcessor {
                         sent_at: Utc::now(),
                         user_id: None,
                         username: None,
+                        chat_badge: None,
                         content: format!(
                             "Your message has been redacted because it contains the profanity '{}': \"{}\"",
                             profanity, content
