@@ -8,7 +8,7 @@ use leptos::{
 };
 use leptos_use::use_resize_observer;
 
-use shared::data::item::ItemSpecs;
+use shared::data::{badges::UserBadge, item::ItemSpecs};
 use shared_chat::types::{ChatChannel, ChatMessage};
 
 use crate::{
@@ -17,7 +17,11 @@ use crate::{
         chat::chat_context::ChatContext,
         events::{EventsContext, Key},
         shared::tooltips::{ItemTooltip, item_tooltip},
-        ui::{checkbox::Checkbox, number::format_datetime, tooltip::DynamicTooltipTarget},
+        ui::{
+            checkbox::Checkbox,
+            number::format_datetime,
+            tooltip::{DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition},
+        },
     },
 };
 
@@ -386,14 +390,9 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
             {msg
                 .chat_badge
                 .as_ref()
-                .map(|chat_badge| {
-                    view! {
-                        <img
-                            src=img_asset(&format!("badges/{}", chat_badge))
-                            alt="Badge"
-                            class="h-[32px] mr-1 aspect-square"
-                        />
-                    }
+                .and_then(|chat_badge| serde_plain::from_str(chat_badge).ok())
+                .map(|badge| {
+                    view! { <ChatBadge badge /> }
                 })}
             <span
                 class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
@@ -418,6 +417,35 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                 })}
             <span class="text-gray-200 select-text">{msg.content}</span>
         </div>
+    }
+}
+
+#[component]
+fn ChatBadge(badge: UserBadge) -> impl IntoView {
+    let (src, badge_title, badge_description) = match badge {
+        UserBadge::Developer => ("badge_dev", "Developer", ""),
+        UserBadge::WitchHunter => (
+            "witch",
+            "Witch Hunter",
+            "This player killed Amelia, the Broodborne Witch.",
+        ),
+    };
+
+    let src = img_asset(&format!("badges/{}.webp", src));
+
+    let tooltip = move || {
+        view! {
+            <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
+                <div class="font-semibold text-white">{badge_title}</div>
+                <div class="text-sm text-zinc-300">{badge_description}</div>
+            </div>
+        }
+    };
+
+    view! {
+        <StaticTooltip position=StaticTooltipPosition::Right tooltip>
+            <img src=src alt=badge_title class="h-[32px] mr-1 aspect-square" />
+        </StaticTooltip>
     }
 }
 

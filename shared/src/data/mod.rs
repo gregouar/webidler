@@ -1,4 +1,5 @@
 pub mod area;
+pub mod badges;
 pub mod chance;
 pub mod character;
 pub mod character_status;
