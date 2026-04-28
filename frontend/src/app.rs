@@ -4,6 +4,7 @@ use leptos_router::{
     components::{Route, Router, Routes},
     path,
 };
+use url::Url;
 
 use crate::components::{
     accessibility::provide_accessibility_context,
@@ -26,31 +27,15 @@ use crate::components::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
-    // let mut base_uri = document()
-    //     .base_uri()
-    //     .ok()
-    //     .flatten()
-    //     .and_then(|base| Url::parse(&base).ok())
-    //     .map(|url| url.path().to_string())
-    //     .unwrap_or_default();
-
-    let mut base_uri = document()
-        .location()
-        .unwrap()
-        .pathname()
+    let base_uri = document()
+        .base_uri()
         .ok()
-        .and_then(|path| {
-            let mut parts = path.split('/').filter(|s| !s.is_empty());
-
-            parts.next().map(|first| format!("/{}/", first))
-        })
+        .flatten()
+        .and_then(|base| Url::parse(&base).ok())
+        .map(|url| url.path().to_string())
         .unwrap_or_default();
 
-    if base_uri.starts_with("/html") {
-        base_uri.push_str("index.html");
-    }
-
-    let base_uri = base_uri.strip_prefix("/").unwrap_or(&base_uri).to_string();
+    let base_uri = router_base_from_base_uri(base_uri);
 
     console_log(&base_uri);
 
@@ -95,12 +80,21 @@ pub fn App() -> impl IntoView {
     }
 }
 
-// fn compute_base() -> String {
-//     let location = window().location();
+fn router_base_from_base_uri(mut base_uri: String) -> String {
+    if base_uri.starts_with("/html/") && !base_uri.ends_with("index.html") {
+        if !base_uri.ends_with('/') {
+            base_uri.push('/');
+        }
+        base_uri.push_str("index.html");
+    }
 
-//     // if !path.ends_with('/') {
-//     //     path.push('/');
-//     // }
+    if base_uri == "/" {
+        return String::new();
+    }
 
-//     location.pathname().unwrap_or_else(|_| "/".into())
-// }
+    if !base_uri.starts_with('/') {
+        base_uri.insert(0, '/');
+    }
+
+    base_uri.trim_end_matches('/').to_string()
+}
