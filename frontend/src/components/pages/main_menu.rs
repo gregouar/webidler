@@ -31,7 +31,7 @@ use crate::{
 pub fn MainMenuPage() -> impl IntoView {
     let auth_context = expect_context::<AuthContext>();
     if !auth_context.token().is_empty() {
-        view! { <Redirect path="user-dashboard" /> }.into_any()
+        view! { <Redirect path="/user-dashboard" /> }.into_any()
     } else {
         view! { <MainMenu /> }.into_any()
     }
@@ -82,7 +82,7 @@ fn MainMenu() -> impl IntoView {
                     {
                         Ok(response) => {
                             auth_context.sign_in(response.jwt);
-                            navigate("user-dashboard", Default::default());
+                            navigate("/user-dashboard", Default::default());
                         }
                         Err(e) => {
                             show_toast(
@@ -122,7 +122,7 @@ fn MainMenu() -> impl IntoView {
     let navigate_to_signup = {
         let navigate = use_navigate();
         move |_| {
-            navigate("signup", Default::default());
+            navigate("/signup", Default::default());
         }
     };
     let password_ref = NodeRef::<leptos::html::Input>::new();
@@ -621,7 +621,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                         Ok(response) => {
                             auth_context.sign_in(response.jwt);
 
-                            navigate("user-dashboard", Default::default());
+                            navigate("/user-dashboard", Default::default());
                         }
                         Err(e) => {
                             show_toast(
