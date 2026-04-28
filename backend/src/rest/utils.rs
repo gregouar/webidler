@@ -3,19 +3,26 @@ use axum::{
     response::{IntoResponse, Response},
 };
 
-use crate::{auth::CurrentUser, db::characters::CharacterEntry, rest::AppError};
+use shared::data::user::User;
 
-pub fn verify_character_user(
-    character: &CharacterEntry,
-    current_user: &CurrentUser,
-) -> Result<(), AppError> {
-    if character.user_id != current_user.user.user_id {
+use crate::{db::characters::CharacterEntry, rest::AppError};
+
+pub fn verify_character_user(character: &CharacterEntry, user: &User) -> Result<(), AppError> {
+    if character.user_id != user.user_id {
         return Err(AppError::Forbidden);
     }
     Ok(())
 }
 
+pub fn verify_character_not_deleted(character: &CharacterEntry) -> Result<(), AppError> {
+    if character.deleted_at.is_some() {
+        return Err(AppError::NotFound);
+    }
+    Ok(())
+}
+
 pub fn verify_character_in_town(character: &CharacterEntry) -> Result<(), AppError> {
+    verify_character_not_deleted(character)?;
     if character.area_id.is_some() {
         return Err(AppError::UserError("character is grinding".to_string()));
     }

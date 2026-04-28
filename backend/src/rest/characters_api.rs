@@ -27,13 +27,15 @@ use shared::{
 
 use crate::{
     app_state::{AppState, MasterStore},
-    auth::{self, CurrentUser},
+    auth::{self, User},
     db,
     game::data::{
         inventory_data::inventory_data_to_player_inventory,
         passives::ascension_data_to_passives_tree_ascension,
     },
-    rest::utils::MsgPack,
+    rest::utils::{
+        MsgPack, verify_character_in_town, verify_character_not_deleted, verify_character_user,
+    },
 };
 
 use super::AppError;
@@ -63,11 +65,11 @@ async fn post_create_character(
     State(db_pool): State<db::DbPool>,
     State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Path(user_id): Path<UserId>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(current_user): Extension<User>,
     Json(payload): Json<CreateCharacterRequest>,
 ) -> Result<Json<CreateCharacterResponse>, AppError> {
     // TODO: better access management
-    if current_user.user.user_id != user_id {
+    if current_user.user_id != user_id {
         return Err(AppError::Forbidden);
     }
 
@@ -186,34 +188,6 @@ async fn read_character_details(
 
     let last_grind = last_grind_data.map(|last_grind_data| {
         let (_, skills) = last_grind_data;
-
-        // let mut skills_specs: Vec<_> = items_data
-        //     .map(|items_data| {
-        //         items_data
-        //             .values()
-        //             .flat_map(|equipped_slot| match equipped_slot {
-        //                 EquippedSlot::MainSlot(item_specs) => {
-        //                     item_specs.weapon_specs.clone().map(|weapon_specs| {
-        //                         SkillSpecs::init(items_controller::make_weapon_skill(
-        //                             item_specs.modifiers.level,
-        //                             &weapon_specs,
-        //                         ))
-        //                     })
-        //                 }
-        //                 _ => None,
-        //             })
-        //             .collect()
-        //     })
-        //     .unwrap_or_default();
-
-        // skills_specs.extend(
-        //     skills_data
-        //         .unwrap_or_default()
-        //         .into_iter()
-        //         .flat_map(|skill_id| master_store.skills_store.get(&skill_id))
-        //         .map(|base_skill_specs| SkillSpecs::init(base_skill_specs.clone())),
-        // );
-
         GrindStats {
             skills: skills.unwrap_or_default(),
         }
@@ -236,16 +210,15 @@ async fn post_update_character(
     State(db_pool): State<db::DbPool>,
     State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Path(character_id): Path<UserCharacterId>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<UpdateCharacterRequest>,
 ) -> Result<Json<UpdateCharacterResponse>, AppError> {
     let character = db::characters::read_character(&db_pool, &character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if current_user.user.user_id != character.user_id {
-        return Err(AppError::Forbidden);
-    }
+    verify_character_not_deleted(&character)?;
+    verify_character_user(&character, &user)?;
 
     if profanities_checker.find_profanity(&payload.name).is_some() {
         return Err(AppError::UserError(
@@ -269,16 +242,14 @@ async fn post_update_character(
 async fn delete_character(
     State(db_pool): State<db::DbPool>,
     Path(character_id): Path<UserCharacterId>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
 ) -> Result<Json<DeleteCharacterResponse>, AppError> {
-    let character = db::characters::read_character(&db_pool, &character_id).await?;
+    let character = db::characters::read_character(&db_pool, &character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
 
-    if !character
-        .map(|character| character.user_id == current_user.user.user_id)
-        .unwrap_or_default()
-    {
-        return Err(AppError::NotFound);
-    }
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
 
     db::characters::delete_character(&db_pool, &character_id).await?;
     Ok(Json(DeleteCharacterResponse {}))

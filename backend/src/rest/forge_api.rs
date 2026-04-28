@@ -13,7 +13,7 @@ use shared::{
 
 use crate::{
     app_state::{AppState, MasterStore},
-    auth::{self, CurrentUser},
+    auth::{self, User},
     db::{self},
     game::{
         data::inventory_data::inventory_data_to_player_inventory,
@@ -38,7 +38,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 pub async fn post_affix(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<ForgeAffixRequest>,
 ) -> Result<Json<ForgeAffixResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -47,7 +47,7 @@ pub async fn post_affix(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =
@@ -112,7 +112,7 @@ pub async fn post_affix(
 pub async fn post_upgrade(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<ForgeUpgradeRequest>,
 ) -> Result<Json<ForgeUpgradeResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -121,7 +121,7 @@ pub async fn post_upgrade(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =
@@ -170,7 +170,7 @@ pub async fn post_upgrade(
 pub async fn post_gamble(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<GambleItemRequest>,
 ) -> Result<Json<GambleItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -179,7 +179,7 @@ pub async fn post_gamble(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     if !constants::GAMBLE_ITEM_CATEGORIES.contains(&payload.item_category) {

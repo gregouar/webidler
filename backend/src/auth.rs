@@ -23,10 +23,9 @@ use rand::RngCore;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
-use shared::{
-    data::user::{User, UserId},
-    types::Email,
-};
+use shared::types::Email;
+
+pub use shared::data::user::{User, UserId};
 
 use crate::{
     app_state::{AppSettings, AppState},
@@ -87,12 +86,6 @@ pub async fn sign_in(
     }
 }
 
-#[derive(Clone)]
-pub struct CurrentUser {
-    // pub user_details: UserDetails,
-    pub user: User,
-}
-
 pub async fn authorization_middleware(
     State(state): State<AppState>,
     TypedHeader(Authorization(bearer)): TypedHeader<Authorization<Bearer>>,
@@ -102,7 +95,7 @@ pub async fn authorization_middleware(
     let user = authorize_jwt(&state.app_settings, bearer.token())
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
-    req.extensions_mut().insert(CurrentUser { user });
+    req.extensions_mut().insert(user);
     Ok(next.run(req).await)
 }
 

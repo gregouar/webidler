@@ -24,7 +24,7 @@ use shared::{
 
 use crate::{
     app_state::{AppState, MasterStore},
-    auth::{self, CurrentUser},
+    auth::{self, User},
     db,
     game::{
         data::{
@@ -100,7 +100,7 @@ pub async fn get_benedictions(
 pub async fn post_ascend_passives(
     State(master_store): State<MasterStore>,
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<AscendPassivesRequest>,
 ) -> Result<Json<AscendPassivesResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -109,7 +109,7 @@ pub async fn post_ascend_passives(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (_, ascension_data, _) =
@@ -153,7 +153,7 @@ pub async fn post_ascend_passives(
 pub async fn post_socket_passive(
     State(master_store): State<MasterStore>,
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<SocketPassiveRequest>,
 ) -> Result<Json<SocketPassiveResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -162,7 +162,7 @@ pub async fn post_socket_passive(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, ascension_data, _) =
@@ -206,7 +206,7 @@ pub async fn post_socket_passive(
 
 pub async fn post_save_passives_build(
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<SavePassivesRequest>,
 ) -> Result<Json<SavePassivesResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -215,7 +215,7 @@ pub async fn post_save_passives_build(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
 
     db::characters_builds::save_character_passives_build(
         &mut *tx,
@@ -232,7 +232,7 @@ pub async fn post_save_passives_build(
 pub async fn post_buy_benedictions(
     State(master_store): State<MasterStore>,
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<BuyBenedictionsRequest>,
 ) -> Result<Json<BuyBenedictionsResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -241,7 +241,7 @@ pub async fn post_buy_benedictions(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     benedictions_controller::update_benedictions(

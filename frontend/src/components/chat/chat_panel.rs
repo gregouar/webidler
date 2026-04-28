@@ -447,9 +447,11 @@ fn ChatBadge(badge: UserBadge) -> impl IntoView {
     };
 
     view! {
-        <StaticTooltip position=StaticTooltipPosition::Right tooltip>
-            <img src=src alt=badge_title class="h-[32px] mr-1 aspect-square" />
-        </StaticTooltip>
+        <div class="shrink-0">
+            <StaticTooltip position=StaticTooltipPosition::Right tooltip>
+                <img src=src alt=badge_title class="h-[32px] mr-1 aspect-square" />
+            </StaticTooltip>
+        </div>
     }
 }
 

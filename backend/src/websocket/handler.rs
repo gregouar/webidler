@@ -31,7 +31,10 @@ use crate::{
         sessions::{Session, SessionsStore},
         systems::sessions_controller,
     },
-    rest::AppError,
+    rest::{
+        AppError,
+        utils::{verify_character_not_deleted, verify_character_user},
+    },
     websocket::WebSocketConnection,
 };
 
@@ -145,9 +148,8 @@ async fn handle_connect(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    if user_character.user_id != user.user_id {
-        return Err(AppError::NotFound.into());
-    }
+    verify_character_user(&user_character, &user)?;
+    verify_character_not_deleted(&user_character)?;
 
     if db::game_instances::is_user_instance_running(
         &app_state.db_pool,
