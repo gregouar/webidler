@@ -4,7 +4,6 @@ use leptos_router::{
     components::{Route, Router, Routes},
     path,
 };
-use url::Url;
 
 use crate::components::{
     accessibility::provide_accessibility_context,
@@ -27,25 +26,25 @@ use crate::components::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
-    let mut base_uri = document()
-        .base_uri()
-        .ok()
-        .flatten()
-        .and_then(|base| Url::parse(&base).ok())
-        .map(|url| url.path().to_string())
-        .unwrap_or_default();
-
     // let mut base_uri = document()
-    //     .location()
-    //     .unwrap()
-    //     .pathname()
+    //     .base_uri()
     //     .ok()
-    //     .and_then(|path| {
-    //         let mut parts = path.split('/').filter(|s| !s.is_empty());
+    //     .flatten()
+    //     .and_then(|base| Url::parse(&base).ok())
+    //     .map(|url| url.path().to_string())
+    //     .unwrap_or_default();
 
-    //         parts.next().map(|first| format!("/{}/", first))
-    //     })
-    //     .unwrap_or_else(|| "".to_string());
+    let mut base_uri = document()
+        .location()
+        .unwrap()
+        .pathname()
+        .ok()
+        .and_then(|path| {
+            let mut parts = path.split('/').filter(|s| !s.is_empty());
+
+            parts.next().map(|first| format!("/{}/", first))
+        })
+        .unwrap_or_default();
 
     if base_uri.starts_with("/html") {
         base_uri.push_str("index.html");
