@@ -50,7 +50,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <MenuPanel open=open>
+        <MenuPanel open=open always_mounted=true>
             <div class="w-full h-full">
                 <MenuCard>
                     <CardHeader title="Passive Skills" on_close=move || open.set(false)>

@@ -932,7 +932,7 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
         Some(item_category) => match item_category {
             Armor => "Any Armor",
             Jewelry => "Any Jewelry",
-            Accessory => "Any Accessory",
+            Accessory => "Cloak",
             AttackWeapon => "Attack Weapon",
             SpellWeapon => "Spell Weapon",
             MeleeWeapon => "Melee Weapon",

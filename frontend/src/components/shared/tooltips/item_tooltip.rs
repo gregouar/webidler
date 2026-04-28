@@ -603,7 +603,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Helmet => "Helmet",
                     ItemSlot::Ring => "Ring",
                     ItemSlot::Shield => "Off-hand",
-                    ItemSlot::Accessory => "Accessory",
+                    ItemSlot::Accessory => "Cloak",
                     ItemSlot::Weapon => {
                         if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
                             "Two-Handed Weapon"
@@ -735,7 +735,7 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Shield => "Shield",
         ItemCategory::Focus => "Magic Focus",
         ItemCategory::Jewelry => "Jewelry",
-        ItemCategory::Accessory => "Accessory",
+        ItemCategory::Accessory => "Cloak",
         ItemCategory::Amulet => "Amulet",
         ItemCategory::Body => "Body Armor",
         ItemCategory::Boots => "Boots",
