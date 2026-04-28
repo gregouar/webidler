@@ -17,6 +17,7 @@ use crate::components::{
         frame::{TooltipFrame, TooltipFramePalette},
         trigger_tooltip::format_trigger,
     },
+    town::panels::market::item_rarity_str,
     ui::{Separator, number},
 };
 
@@ -513,8 +514,9 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 #[component]
 pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     item_specs.base.rune_specs.as_ref().map(|specs| {
+        let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
-            <li class="text-gray-400 text-xs xl:text-sm ">"Rune"</li>
+            <li class="text-gray-400 text-xs xl:text-sm ">{item_rarity}" Rune"</li>
             {(specs.root_node)
                 .then(|| {
                     view! {
@@ -535,8 +537,9 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let data_context: DataContext = expect_context();
 
     item_specs.base.map_specs.as_ref().map(|specs| {
+        let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
-            <li class="text-gray-400 text-xs xl:text-sm ">"Edict"</li>
+            <li class="text-gray-400 text-xs xl:text-sm ">{item_rarity}" Edict"</li>
 
             {specs
                 .area_id
@@ -612,10 +615,11 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                         }
                     }
                 };
+                let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
 
                 view! {
                     <li class="text-gray-400 text-xs xl:text-sm ">
-                        {item_slot}
+                        {item_rarity} " " {item_slot}
                         {(show_level)
                             .then(|| format!(" - Level {}", item_specs.base.min_area_level))}
                     </li>
