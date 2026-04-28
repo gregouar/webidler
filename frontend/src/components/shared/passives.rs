@@ -544,21 +544,34 @@ pub fn NodeTooltipContent(
     let upgrade_text = {
         let node_specs = node_specs.clone();
         move || {
-            if !show_upgrade {
-                None
-            } else if is_locked() {
+            if is_locked() {
                 Some(
                     view! {
                         <Separator />
                         <ul>
                             <li>
-                                <span class="text-sm text-gray-400 ">"Ascend to Unlock"</span>
+                                <span class="text-sm text-gray-400 ">
+                                    "Ascend in Town to Unlock"
+                                </span>
                             </li>
                         </ul>
                     }
                     .into_any(),
                 )
-            } else if !node_specs.upgrade_effects.is_empty() {
+            } else if !show_upgrade && node_level() > 0 && !node_specs.upgrade_effects.is_empty() {
+                Some(
+                    view! {
+                        <Separator />
+                        <p class="text-xs xl:text-sm text-gray-400 ">
+                            "Ascended Level: " <span class="text-white">{node_level}</span>
+                            {max_upgrade_level
+                                .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
+                                .unwrap_or_default()}
+                        </p>
+                    }
+                    .into_any(),
+                )
+            } else if show_upgrade && !node_specs.upgrade_effects.is_empty() {
                 let max_level = node_level() >= max_upgrade_level.unwrap_or(u8::MAX);
                 Some(
                     view! {
