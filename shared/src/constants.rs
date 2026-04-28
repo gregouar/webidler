@@ -66,7 +66,7 @@ pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 14] = [
     Some(ItemCategory::Body),
     Some(ItemCategory::Gloves),
     Some(ItemCategory::Boots),
-    Some(ItemCategory::Cloak),
+    Some(ItemCategory::Accessory),
     Some(ItemCategory::Amulet),
     Some(ItemCategory::Ring),
 ];

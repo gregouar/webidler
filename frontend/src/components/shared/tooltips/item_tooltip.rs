@@ -17,6 +17,7 @@ use crate::components::{
         frame::{TooltipFrame, TooltipFramePalette},
         trigger_tooltip::format_trigger,
     },
+    town::panels::market::item_rarity_str,
     ui::{Separator, number},
 };
 
@@ -513,8 +514,9 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 #[component]
 pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     item_specs.base.rune_specs.as_ref().map(|specs| {
+        let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
-            <li class="text-gray-400 text-xs xl:text-sm ">"Rune"</li>
+            <li class="text-gray-400 text-xs xl:text-sm ">{item_rarity}" Rune"</li>
             {(specs.root_node)
                 .then(|| {
                     view! {
@@ -535,8 +537,9 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let data_context: DataContext = expect_context();
 
     item_specs.base.map_specs.as_ref().map(|specs| {
+        let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
-            <li class="text-gray-400 text-xs xl:text-sm ">"Edict"</li>
+            <li class="text-gray-400 text-xs xl:text-sm ">{item_rarity}" Edict"</li>
 
             {specs
                 .area_id
@@ -603,7 +606,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Helmet => "Helmet",
                     ItemSlot::Ring => "Ring",
                     ItemSlot::Shield => "Off-hand",
-                    ItemSlot::Accessory => "Accessory",
+                    ItemSlot::Accessory => "Cloak",
                     ItemSlot::Weapon => {
                         if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
                             "Two-Handed Weapon"
@@ -612,10 +615,11 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                         }
                     }
                 };
+                let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
 
                 view! {
                     <li class="text-gray-400 text-xs xl:text-sm ">
-                        {item_slot}
+                        {item_rarity} " " {item_slot}
                         {(show_level)
                             .then(|| format!(" - Level {}", item_specs.base.min_area_level))}
                     </li>
@@ -735,7 +739,7 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Shield => "Shield",
         ItemCategory::Focus => "Magic Focus",
         ItemCategory::Jewelry => "Jewelry",
-        ItemCategory::Accessory => "Accessory",
+        ItemCategory::Accessory => "Cloak",
         ItemCategory::Amulet => "Amulet",
         ItemCategory::Body => "Body Armor",
         ItemCategory::Boots => "Boots",

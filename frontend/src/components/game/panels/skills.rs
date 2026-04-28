@@ -47,6 +47,13 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
     let selected_skill = RwSignal::new(None::<String>);
     let disable_confirm = Signal::derive(move || selected_skill.get().is_none());
+    let selected_skill_name = Signal::derive(move || {
+        selected_skill.get().and_then(|skill_id| {
+            data_context
+                .skill_specs
+                .with(|skill_specs| skill_specs.get(&skill_id).map(|skill| skill.name.clone()))
+        })
+    });
 
     let buy_skill = {
         let conn = expect_context::<WebsocketContext>();
@@ -147,8 +154,15 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
         <div class="flex items-center justify-center">
             <FancyButton disabled=disable_confirm on:click=buy_skill class="py-2 px-4">
-                <span class="flex items-center gap-2">
-                    "Confirm buying selected skill for"
+                <span class="flex items-center gap-2 text-zinc-300">
+                    "Confirm buying "
+                    {move || {
+                        selected_skill_name
+                            .get()
+                            .map(|skill_name| {
+                                view! { <span class="font-display text-white">{skill_name}</span> }
+                            })
+                    }} " for"
                     <GoldCounter value=Signal::derive(move || {
                         game_context.player_base_specs.read().buy_skill_cost
                     }) />
@@ -212,19 +226,27 @@ fn SkillCard(
                         "bg-[linear-gradient(180deg,rgba(177,143,85,0.035),rgba(0,0,0,0.03)_35%,rgba(0,0,0,0.12)_100%),linear-gradient(135deg,rgba(36,36,41,0.98),rgba(19,19,23,1))]"
                     }
                 };
-
+                let selected_quality_class = match quality {
+                    GraphicsQuality::High => {
+                        "bg-[linear-gradient(180deg,rgba(214,177,102,0.24),rgba(103,74,34,0.18)_42%,rgba(30,24,17,0.52)_100%),linear-gradient(135deg,rgba(62,50,34,0.98),rgba(26,22,18,1))]
+                        shadow-[0_6px_14px_rgba(0,0,0,0.3),inset_0_0_22px_rgba(214,177,102,0.14)]"
+                    }
+                    GraphicsQuality::Medium => {
+                        "bg-[linear-gradient(180deg,rgba(200,164,96,0.2),rgba(96,69,34,0.15)_44%,rgba(29,24,18,0.46)_100%),linear-gradient(135deg,rgba(57,47,34,0.98),rgba(25,22,18,1))]
+                        shadow-[0_5px_12px_rgba(0,0,0,0.26),inset_0_0_18px_rgba(200,164,96,0.11)]"
+                    }
+                    GraphicsQuality::Low => {
+                        "bg-[linear-gradient(180deg,rgba(177,143,85,0.18),rgba(92,67,36,0.14)_44%,rgba(28,24,19,0.44)_100%),linear-gradient(135deg,rgba(52,44,34,0.98),rgba(25,22,19,1))]"
+                    }
+                };
                 if is_selected.get() {
                     format!(
                         "{} {} {}",
                         base,
-                        quality_class,
+                        selected_quality_class,
                         match quality {
-                            GraphicsQuality::High => {
-                                "border-[#b28a4f] shadow-[0_6px_14px_rgba(0,0,0,0.3)] -translate-y-[1px]"
-                            }
-                            GraphicsQuality::Medium => {
-                                "border-[#9d7b45] shadow-[0_5px_12px_rgba(0,0,0,0.26)] -translate-y-[1px]"
-                            }
+                            GraphicsQuality::High => "border-[#b28a4f] -translate-y-[1px]",
+                            GraphicsQuality::Medium => "border-[#9d7b45] -translate-y-[1px]",
                             GraphicsQuality::Low => "border-[#8a6d40]",
                         },
                     )
@@ -288,45 +310,69 @@ fn SkillCard(
                 )></div>
             </Show>
 
-            <div
-                class=move || {
-                    format!(
-                        "relative flex h-20 w-20 xl:h-24 xl:w-24 items-center justify-center rounded-full
-                        overflow-clip border {} {}",
-                        skill_type_frame_border(skill_type),
-                        match settings.graphics_quality() {
-                            GraphicsQuality::High => {
-                                "bg-[linear-gradient(180deg,rgba(214,177,102,0.1),rgba(0,0,0,0.2)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))] shadow-[0_4px_12px_rgba(0,0,0,0.58)]"
-                            }
-                            GraphicsQuality::Medium => {
-                                "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(41,38,44,0.96),rgba(21,20,24,1))] shadow-[0_3px_10px_rgba(0,0,0,0.48)]"
-                            }
-                            GraphicsQuality::Low => {
-                                "bg-[linear-gradient(180deg,rgba(39,37,42,0.98),rgba(20,19,23,1))]"
-                            }
-                        },
-                    )
-                }
-            >
+            <div class=move || {
+                let quality = settings.graphics_quality();
+                let frame_background = match quality {
+                    GraphicsQuality::High => {
+                        "bg-[linear-gradient(180deg,rgba(214,177,102,0.1),rgba(0,0,0,0.2)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]"
+                    }
+                    GraphicsQuality::Medium => {
+                        "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(41,38,44,0.96),rgba(21,20,24,1))]"
+                    }
+                    GraphicsQuality::Low => {
+                        "bg-[linear-gradient(180deg,rgba(39,37,42,0.98),rgba(20,19,23,1))]"
+                    }
+                };
+                let frame_shadow = if is_selected.get() {
+                    match quality {
+                        GraphicsQuality::High => skill_type_selected_frame_glow(skill_type),
+                        GraphicsQuality::Medium => skill_type_selected_frame_glow(skill_type),
+                        GraphicsQuality::Low => skill_type_selected_frame_glow_low(skill_type),
+                    }
+                } else {
+                    match quality {
+                        GraphicsQuality::High => "shadow-[0_4px_12px_rgba(0,0,0,0.58)]",
+                        GraphicsQuality::Medium => "shadow-[0_3px_10px_rgba(0,0,0,0.48)]",
+                        GraphicsQuality::Low => "",
+                    }
+                };
+                format!(
+                    "relative flex h-20 w-20 xl:h-24 xl:w-24 items-center justify-center rounded-full
+                        overflow-clip border {} {} {}",
+                    skill_type_frame_border(skill_type),
+                    frame_background,
+                    frame_shadow,
+                )
+            }>
                 <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                     <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/16"></div>
                 </Show>
-                <div
-                    class=move || {
-                        format!(
-                            "pointer-events-none absolute inset-[3px] rounded-full border {} bg-[radial-gradient(circle_at_50%_40%,rgba(92,88,98,0.72),rgba(20,18,24,0.98)_72%)]",
-                            match settings.graphics_quality() {
-                                GraphicsQuality::High => "border-[#6d532e]/70",
-                                GraphicsQuality::Medium => "border-[#6b5430]/55",
-                                GraphicsQuality::Low => "border-[#5a4628]/55",
-                            },
-                        )
-                    }
-                ></div>
-                <div class=format!(
-                    "pointer-events-none absolute inset-[6px] rounded-full bg-radial {} to-transparent",
-                    skill_type_inner_glow(skill_type),
-                )></div>
+                <div class=move || {
+                    let selected = is_selected.get();
+                    format!(
+                        "pointer-events-none absolute inset-[3px] rounded-full border {} {}",
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => "border-[#6d532e]/70",
+                            GraphicsQuality::Medium => "border-[#6b5430]/55",
+                            GraphicsQuality::Low => "border-[#5a4628]/55",
+                        },
+                        if selected {
+                            "bg-[radial-gradient(circle_at_50%_38%,rgba(142,132,118,0.9),rgba(56,47,41,0.88)_48%,rgba(20,18,24,0.98)_78%)]"
+                        } else {
+                            "bg-[radial-gradient(circle_at_50%_40%,rgba(92,88,98,0.72),rgba(20,18,24,0.98)_72%)]"
+                        },
+                    )
+                }></div>
+                <div class=move || {
+                    format!(
+                        "pointer-events-none absolute inset-[6px] rounded-full bg-radial {} to-transparent",
+                        if is_selected.get() {
+                            skill_type_selected_inner_glow(skill_type)
+                        } else {
+                            skill_type_inner_glow(skill_type)
+                        },
+                    )
+                }></div>
                 <img
                     draggable="false"
                     src=img_asset(&skill_specs.icon)
@@ -393,6 +439,28 @@ fn skill_type_frame_border(skill_type: SkillType) -> &'static str {
     }
 }
 
+fn skill_type_selected_frame_glow(skill_type: SkillType) -> &'static str {
+    match skill_type {
+        SkillType::Attack => "shadow-[0_0_18px_rgba(248,113,113,0.5),0_4px_14px_rgba(0,0,0,0.58)]",
+        SkillType::Spell => "shadow-[0_0_18px_rgba(56,189,248,0.5),0_4px_14px_rgba(0,0,0,0.58)]",
+        SkillType::Curse => "shadow-[0_0_18px_rgba(192,132,252,0.5),0_4px_14px_rgba(0,0,0,0.58)]",
+        SkillType::Blessing => {
+            "shadow-[0_0_18px_rgba(252,211,77,0.52),0_4px_14px_rgba(0,0,0,0.58)]"
+        }
+        SkillType::Other => "shadow-[0_0_18px_rgba(203,213,225,0.42),0_4px_14px_rgba(0,0,0,0.58)]",
+    }
+}
+
+fn skill_type_selected_frame_glow_low(skill_type: SkillType) -> &'static str {
+    match skill_type {
+        SkillType::Attack => "shadow-[0_0_12px_rgba(248,113,113,0.38)]",
+        SkillType::Spell => "shadow-[0_0_12px_rgba(56,189,248,0.38)]",
+        SkillType::Curse => "shadow-[0_0_12px_rgba(192,132,252,0.38)]",
+        SkillType::Blessing => "shadow-[0_0_12px_rgba(252,211,77,0.4)]",
+        SkillType::Other => "shadow-[0_0_12px_rgba(203,213,225,0.32)]",
+    }
+}
+
 fn skill_type_inner_glow(skill_type: SkillType) -> &'static str {
     match skill_type {
         SkillType::Attack => "from-red-400/18",
@@ -400,6 +468,16 @@ fn skill_type_inner_glow(skill_type: SkillType) -> &'static str {
         SkillType::Curse => "from-purple-400/18",
         SkillType::Blessing => "from-amber-300/18",
         SkillType::Other => "from-slate-300/14",
+    }
+}
+
+fn skill_type_selected_inner_glow(skill_type: SkillType) -> &'static str {
+    match skill_type {
+        SkillType::Attack => "from-red-300/42",
+        SkillType::Spell => "from-sky-300/42",
+        SkillType::Curse => "from-purple-300/42",
+        SkillType::Blessing => "from-amber-200/44",
+        SkillType::Other => "from-slate-200/34",
     }
 }
 

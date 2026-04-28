@@ -18,7 +18,7 @@ use shared::{
 
 use crate::{
     app_state::{AppState, MasterStore},
-    auth::{self, CurrentUser},
+    auth::{self, User},
     db::{self, market::MarketEntry},
     game::{
         data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
@@ -46,12 +46,12 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 pub async fn post_browse_market(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<BrowseMarketItemsRequest>,
 ) -> Result<Json<BrowseMarketItemsResponse>, AppError> {
     let (items, has_more) = db::market::read_market_items(
         &db_pool,
-        &current_user.user.user_id,
+        &user.user_id,
         payload.realm,
         payload.filters,
         payload.skip as i64,
@@ -76,7 +76,7 @@ pub async fn post_buy_market_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
     State(chat_integration): State<ChatIntegration>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<BuyMarketItemRequest>,
 ) -> Result<Json<BuyMarketItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -86,14 +86,14 @@ pub async fn post_buy_market_item(
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let market_buy_entry = db::market::buy_item(
         &mut tx,
         &character.realm_id,
         payload.item_index as i64,
-        Some(current_user.user.user_id),
+        Some(user.user_id),
     )
     .await?
     .ok_or(AppError::NotFound)?;
@@ -109,7 +109,7 @@ pub async fn post_buy_market_item(
     // Allow seller to remove own listing
     let price = if character.user_id != item_bought.user_id {
         if let Some(recipient_id) = market_buy_entry.recipient_id
-            && recipient_id != current_user.user.user_id
+            && recipient_id != user.user_id
         {
             return Err(AppError::Forbidden);
         }
@@ -147,10 +147,7 @@ pub async fn post_buy_market_item(
         && let Err(err) = chat_integration
             .send_private_message(
                 item_bought.user_id,
-                format!(
-                    "Sold to {} for {:.0} Gems.",
-                    current_user.user.username, price
-                ),
+                format!("Sold to {} for {:.0} Gems.", user.username, price),
                 Some(&item_bought.item_specs),
             )
             .await
@@ -173,16 +170,10 @@ pub async fn post_buy_market_item(
 
 pub async fn post_reject_market_item(
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<RejectMarketItemRequest>,
 ) -> Result<Json<RejectMarketItemResponse>, AppError> {
-    if !db::market::reject_item(
-        &db_pool,
-        payload.item_index as i64,
-        &current_user.user.user_id,
-    )
-    .await?
-    {
+    if !db::market::reject_item(&db_pool, payload.item_index as i64, &user.user_id).await? {
         return Err(AppError::NotFound);
     }
 
@@ -192,7 +183,7 @@ pub async fn post_reject_market_item(
 pub async fn post_sell_market_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<SellMarketItemRequest>,
 ) -> Result<Json<SellMarketItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -202,7 +193,7 @@ pub async fn post_sell_market_item(
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let mut stash = db::stashes::get_character_stash_by_type(
@@ -239,7 +230,7 @@ pub async fn post_sell_market_item(
         None
     };
 
-    if recipient_id.unwrap_or_default() == current_user.user.user_id {
+    if recipient_id.unwrap_or_default() == user.user_id {
         return Err(AppError::UserError("cannot offer to yourself".into()));
     }
 
@@ -275,7 +266,7 @@ pub async fn post_sell_market_item(
 pub async fn post_edit_market_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<EditMarketItemRequest>,
 ) -> Result<Json<EditMarketItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -285,14 +276,14 @@ pub async fn post_edit_market_item(
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let market_item = db::market::buy_item(
         &mut tx,
         &character.realm_id,
         payload.item_index as i64,
-        Some(current_user.user.user_id),
+        Some(user.user_id),
     )
     .await?
     .ok_or(AppError::NotFound)?;

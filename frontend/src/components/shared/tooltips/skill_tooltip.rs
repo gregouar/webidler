@@ -135,7 +135,12 @@ pub fn SkillTooltip(
 
     let auto_use_conditions = player_base_skill
         .as_ref()
-        .map(|player_base_skill| player_base_skill.base_skill_specs.auto_use_conditions.clone())
+        .map(|player_base_skill| {
+            player_base_skill
+                .base_skill_specs
+                .auto_use_conditions
+                .clone()
+        })
         .unwrap_or_default();
 
     let modifier_lines: Vec<_> = player_base_skill
@@ -216,7 +221,10 @@ pub fn SkillTooltip(
                 .as_ref()
                 .filter(|player_base_skill| player_base_skill.next_upgrade_cost > 0.0)
                 .map(|player_base_skill| {
-                    let upgrade_effects = player_base_skill.base_skill_specs.upgrade_effects.clone();
+                    let upgrade_effects = player_base_skill
+                        .base_skill_specs
+                        .upgrade_effects
+                        .clone();
                     let upgrade_level = player_base_skill.upgrade_level;
                     let next_upgrade_cost = player_base_skill.next_upgrade_cost;
                     view! {
@@ -238,9 +246,7 @@ pub fn SkillTooltip(
                                     </span>
                                 }
                             } else {
-                                view! {
-                                    <span class="text-stone-100">{upgrade_level}</span>
-                                }
+                                view! { <span class="text-stone-100">{upgrade_level}</span> }
                             }} " | Upgrade Cost: "
                             <span class="text-stone-100">
                                 {format_number(next_upgrade_cost)}" Gold"
@@ -797,7 +803,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                         ItemSlot::Helmet => "Helmet",
                         ItemSlot::Ring => "Ring",
                         ItemSlot::Shield => "Shield",
-                        ItemSlot::Accessory => "Accessory",
+                        ItemSlot::Accessory => "Cloak",
                         ItemSlot::Weapon => "Weapon",
                     },
                     None => "Item",

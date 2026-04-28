@@ -12,7 +12,7 @@ use shared::{
 
 use crate::{
     app_state::{AppState, MasterStore},
-    auth::{self, CurrentUser},
+    auth::{self, User},
     db,
     game::{
         data::inventory_data::inventory_data_to_player_inventory, systems::inventory_controller,
@@ -36,7 +36,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 pub async fn post_equip_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<InventoryEquipRequest>,
 ) -> Result<Json<InventoryEquipResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -45,7 +45,7 @@ pub async fn post_equip_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =
@@ -73,7 +73,7 @@ pub async fn post_equip_item(
 pub async fn post_unequip_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<InventoryUnequipRequest>,
 ) -> Result<Json<InventoryUnequipResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -82,7 +82,7 @@ pub async fn post_unequip_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =
@@ -106,7 +106,7 @@ pub async fn post_unequip_item(
 pub async fn post_delete_items(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<InventoryDeleteRequest>,
 ) -> Result<Json<InventoryDeleteResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -115,7 +115,7 @@ pub async fn post_delete_items(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =

@@ -240,12 +240,9 @@ pub fn ItemDetails(
     });
 
     view! {
-        <ItemDetailsPanel
-            item_specs=selected_specs
-            show_affixes
-            max_item_level
-            empty_label="No Item Selected"
-        />
+        <ItemDetailsPanel item_specs=selected_specs show_affixes max_item_level>
+            "No Item Selected"
+        </ItemDetailsPanel>
     }
 }
 
@@ -254,14 +251,15 @@ pub fn ItemDetailsPanel(
     #[prop(into)] item_specs: Signal<Option<Arc<ItemSpecs>>>,
     #[prop(default = false)] show_affixes: bool,
     max_item_level: Signal<AreaLevel>,
-    empty_label: &'static str,
-    #[prop(optional)] empty_label_class: Option<&'static str>,
     #[prop(optional, into)] selected: Option<Signal<bool>>,
     #[prop(optional, into)] on_click: Option<Callback<()>>,
+    children: ChildrenFn,
 ) -> impl IntoView {
     let is_selected =
         Signal::derive(move || selected.map(|selected| selected.get()).unwrap_or(false));
     let is_clickable = on_click.is_some();
+
+    let children = StoredValue::new(children);
 
     view! {
         <div class="w-full h-full flex items-center justify-center">
@@ -335,9 +333,8 @@ pub fn ItemDetailsPanel(
                                 .unwrap_or_else(|| {
                                     view! {
                                         <div class=format!(
-                                            "flex h-full items-center justify-center text-sm xl:text-base text-gray-400 {}",
-                                            empty_label_class.unwrap_or("text-center"),
-                                        )>{empty_label}</div>
+                                            "flex h-full items-center justify-center text-sm xl:text-base text-gray-400",
+                                        )>{children.read_value()()}</div>
                                     }
                                         .into_any()
                                 })

@@ -1,3 +1,11 @@
+use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos_meta::*;
+use leptos_router::{
+    components::{Route, Router, Routes},
+    path,
+};
+use url::Url;
+
 use crate::components::{
     accessibility::provide_accessibility_context,
     auth::provide_auth_context,
@@ -13,42 +21,39 @@ use crate::components::{
         tooltip::DynamicTooltip,
     },
 };
-use leptos::prelude::*;
-use leptos_meta::*;
-use leptos_router::{
-    components::{Route, Router, Routes},
-    path,
-};
-
 // TODO: localization https://crates.io/crates/fluent-templates
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
-    // let base_uri = document()
-    //     .base_uri()
-    //     .ok()
-    //     .flatten()
-    //     .and_then(|base| Url::parse(&base).ok())
-    //     .map(|url| normalize_router_base(url.path()))
-    //     .unwrap_or_else(|| "/".to_string());
-
     let mut base_uri = document()
-        .location()
-        .unwrap()
-        .pathname()
+        .base_uri()
         .ok()
-        .and_then(|path| {
-            let mut parts = path.split('/').filter(|s| !s.is_empty());
+        .flatten()
+        .and_then(|base| Url::parse(&base).ok())
+        .map(|url| url.path().to_string())
+        .unwrap_or_default();
 
-            parts.next().map(|first| format!("/{}/", first))
-        })
-        .unwrap_or_else(|| "/".to_string());
+    // let mut base_uri = document()
+    //     .location()
+    //     .unwrap()
+    //     .pathname()
+    //     .ok()
+    //     .and_then(|path| {
+    //         let mut parts = path.split('/').filter(|s| !s.is_empty());
+
+    //         parts.next().map(|first| format!("/{}/", first))
+    //     })
+    //     .unwrap_or_else(|| "".to_string());
 
     if base_uri.starts_with("/html") {
         base_uri.push_str("index.html");
     }
+
+    let base_uri = base_uri.strip_prefix("/").unwrap_or(&base_uri).to_string();
+
+    console_log(&base_uri);
 
     provide_context(BackendClient::new(
         option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),

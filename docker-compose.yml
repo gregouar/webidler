@@ -38,7 +38,7 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       DATABASE_URL: postgres://webidler_user:${POSTGRES_PASSWORD}@database/webidler
       CORS_ORIGINS: https://gregouar.github.io,https://html-classic.itch.zone
-      FRONTEND_URL: https://gregouar.github.io/webidler
+      FRONTEND_URL: https://gregouar.github.io/webidler/
       CHAT_URL: http://backend_chat:4242
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
       RUST_LOG: INFO

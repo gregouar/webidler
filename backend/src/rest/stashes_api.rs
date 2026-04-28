@@ -24,7 +24,7 @@ use shared::{
 
 use crate::{
     app_state::{AppState, MasterStore},
-    auth::{self, CurrentUser},
+    auth::{self, User},
     db::{self, stashes::StashEntry},
     game::{
         data::inventory_data::inventory_data_to_player_inventory,
@@ -48,23 +48,17 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         ))
 }
 
-fn verify_stash_access_write(
-    current_user: &CurrentUser,
-    stash: &StashEntry,
-) -> Result<(), AppError> {
-    if stash.user_id != current_user.user.user_id {
+fn verify_stash_access_write(user: &User, stash: &StashEntry) -> Result<(), AppError> {
+    if stash.user_id != user.user_id {
         return Err(AppError::Forbidden);
     }
     Ok(())
 }
 
-fn verify_stash_access_read(
-    current_user: &CurrentUser,
-    stash: &StashEntry,
-) -> Result<(), AppError> {
+fn verify_stash_access_read(user: &User, stash: &StashEntry) -> Result<(), AppError> {
     if !match stash.stash_type.0 {
         StashType::Market => true,
-        StashType::User => stash.user_id == current_user.user.user_id,
+        StashType::User => stash.user_id == user.user_id,
     } {
         return Err(AppError::Forbidden);
     }
@@ -73,7 +67,7 @@ fn verify_stash_access_read(
 
 pub async fn post_upgrade_stash(
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Json(payload): Json<UpgradeStashRequest>,
 ) -> Result<Json<UpgradeStashResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
@@ -83,7 +77,7 @@ pub async fn post_upgrade_stash(
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let stash = match db::stashes::get_character_stash_by_type(
@@ -107,7 +101,7 @@ pub async fn post_upgrade_stash(
         }
     };
 
-    verify_stash_access_write(&current_user, &stash)?;
+    verify_stash_access_write(&user, &stash)?;
 
     let mut stash = stash.into();
     let (max_items, cost) = computations::stash_upgrade(&stash);
@@ -139,7 +133,7 @@ pub async fn post_upgrade_stash(
 
 pub async fn post_exchange_gems(
     State(db_pool): State<db::DbPool>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Path(stash_id): Path<StashId>,
     Json(payload): Json<ExchangeGemsStashRequest>,
 ) -> Result<Json<ExchangeGemsStashResponse>, AppError> {
@@ -150,14 +144,14 @@ pub async fn post_exchange_gems(
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let mut stash = db::stashes::get_stash(&db_pool, &stash_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_write(&current_user, &stash)?;
+    verify_stash_access_write(&user, &stash)?;
 
     let gems_amount = payload.amount.into_inner();
     let gems_difference = match payload.stash_action {
@@ -189,7 +183,7 @@ pub async fn post_exchange_gems(
 pub async fn post_browse_stash(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Path(stash_id): Path<StashId>,
     Json(payload): Json<BrowseStashItemsRequest>,
 ) -> Result<Json<BrowseStashItemsResponse>, AppError> {
@@ -197,7 +191,7 @@ pub async fn post_browse_stash(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_read(&current_user, &stash)?;
+    verify_stash_access_read(&user, &stash)?;
 
     let (items, has_more) = db::stash_items::read_stash_items(
         &db_pool,
@@ -222,7 +216,7 @@ pub async fn post_browse_stash(
 pub async fn post_take_stash_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Path(stash_id): Path<StashId>,
     Json(payload): Json<TakeStashItemRequest>,
 ) -> Result<Json<TakeStashItemResponse>, AppError> {
@@ -232,14 +226,14 @@ pub async fn post_take_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_write(&current_user, &stash)?;
+    verify_stash_access_write(&user, &stash)?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =
@@ -276,7 +270,7 @@ pub async fn post_take_stash_item(
 pub async fn post_store_stash_item(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
-    Extension(current_user): Extension<CurrentUser>,
+    Extension(user): Extension<User>,
     Path(stash_id): Path<StashId>,
     Json(payload): Json<StoreStashItemRequest>,
 ) -> Result<Json<StoreStashItemResponse>, AppError> {
@@ -286,14 +280,14 @@ pub async fn post_store_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_write(&current_user, &stash)?;
+    verify_stash_access_write(&user, &stash)?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
     verify_ssf(&character)?;
-    verify_character_user(&character, &current_user)?;
+    verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
     let (inventory_data, _, _) =

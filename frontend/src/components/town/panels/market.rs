@@ -1140,7 +1140,11 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         }
     });
     let item_category_options = std::iter::once(None)
-        .chain(ItemCategory::iter().map(Some))
+        .chain(
+            ItemCategory::iter()
+                .filter(|item_category| *item_category != ItemCategory::Cloak)
+                .map(Some),
+        )
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
