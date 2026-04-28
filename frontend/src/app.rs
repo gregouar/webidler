@@ -33,7 +33,7 @@ pub fn App() -> impl IntoView {
         .flatten()
         .and_then(|base| Url::parse(&base).ok())
         .map(|url| url.path().to_string())
-        .unwrap_or_else(|| "".to_string());
+        .unwrap_or_default();
 
     // let mut base_uri = document()
     //     .location()
