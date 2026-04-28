@@ -172,7 +172,7 @@ pub fn LootFilterPanel(
 
                             <div class="flex-1" />
                             <p class="text-xs xl:text-sm font-medium text-zinc-400">
-                                "Loot filter will auto pick up and/or sell items when they reach to end of the loot queue, at the bottom right of the screen."
+                                "Loot filter automatically picks up and/or sells items when they reach the end of the loot queue at the bottom right of the screen."
                             </p>
                             <div class="flex-1" />
 
