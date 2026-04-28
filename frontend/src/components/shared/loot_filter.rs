@@ -171,6 +171,10 @@ pub fn LootFilterPanel(
                             </div>
 
                             <div class="flex-1" />
+                            <p class="text-xs xl:text-sm font-medium text-zinc-400">
+                                "Loot filter will auto pick up and/or sell items when they reach to end of the loot queue, at the bottom right of the screen."
+                            </p>
+                            <div class="flex-1" />
 
                             <div class="flex gap-2 mx-4">
                                 <MenuButton on:click=on_import>"Import"</MenuButton>
@@ -196,6 +200,9 @@ pub fn RulesList(
     view! {
         <CardInset>
             <div class="gap-2 flex flex-col">
+                <p class="text-xs xl:text-sm font-medium text-zinc-400">
+                    "Rules are evaluated in order, from top to bottom."
+                </p>
                 <For
                     each=move || {
                         let keys = loot_filter.read().rules.keys().copied().collect::<Vec<_>>();
