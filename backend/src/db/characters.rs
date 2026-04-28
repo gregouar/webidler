@@ -5,9 +5,12 @@ use shared::data::{
     user::{UserCharacterId, UserId},
 };
 
-use crate::db::pool::Database;
+use crate::db::{self, pool::Database};
 
-use super::{pool::DbExecutor, utc_datetime::UtcDateTime};
+use super::{
+    pool::{DbExecutor, DbPool},
+    utc_datetime::UtcDateTime,
+};
 
 #[derive(Debug, FromRow)]
 pub struct CharacterEntry {
@@ -348,10 +351,12 @@ pub async fn update_character_area_progress<'c>(
     Ok(())
 }
 
-pub async fn delete_character<'c>(
-    executor: impl DbExecutor<'c>,
+pub async fn delete_character(
+    db_pool: &DbPool,
     character_id: &UserCharacterId,
 ) -> Result<(), sqlx::Error> {
+    db::game_instances::delete_game_instance_data(db_pool, character_id).await?;
+    db::game_sessions::end_session(db_pool, character_id).await?;
     sqlx::query!(
         r#"
         UPDATE characters
@@ -362,7 +367,7 @@ pub async fn delete_character<'c>(
         "#,
         character_id,
     )
-    .execute(executor)
+    .execute(db_pool)
     .await?;
 
     Ok(())

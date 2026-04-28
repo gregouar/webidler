@@ -5,9 +5,7 @@ use shared::data::{
     user::{UserCharacterId, UserId},
 };
 
-use crate::db::utc_datetime::UtcDateTime;
-
-use super::pool::DbPool;
+use super::{pool::DbPool, utc_datetime::UtcDateTime};
 
 pub type SessionId = i64;
 
@@ -55,6 +53,7 @@ pub async fn create_session(
             INNER JOIN target_character tc
                 ON tc.user_id = c.user_id
                AND tc.realm_id = c.realm_id
+               AND c.deleted_at IS NULL
             WHERE gs.ended_at = '9999-01-01 23:59:59'
         )
         RETURNING session_id
