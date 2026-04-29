@@ -33,8 +33,7 @@ pub fn init_item_specs_from_store(
             create_item_specs(
                 base.clone(),
                 item_modifiers,
-                true,
-                // &items_store.signature_key,
+                0.0, // &items_store.signature_key,
             )
         })
 }
@@ -42,7 +41,7 @@ pub fn init_item_specs_from_store(
 pub fn create_item_specs(
     base: ItemBase,
     mut modifiers: ItemModifiers,
-    old_game: bool,
+    gold_price: f64,
     // signature_key: &HmacKey,
 ) -> ItemSpecs {
     compute_upgrade_effects(&base, &mut modifiers);
@@ -71,7 +70,8 @@ pub fn create_item_specs(
         }),
         base,
         modifiers,
-        old_game,
+        old_game: true,
+        gold_price,
         // signature: Default::default(),
     }
 
@@ -277,7 +277,7 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     let mut item_modifiers = item.modifiers.clone();
     item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
 
-    Ok(create_item_specs(item.base.clone(), item_modifiers, true))
+    Ok(create_item_specs(item.base.clone(), item_modifiers, 0.0))
 }
 
 pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {

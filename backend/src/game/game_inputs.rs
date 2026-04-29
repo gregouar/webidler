@@ -143,8 +143,6 @@ fn handle_client_message(
             item_indexes.sort_by_key(|&i| i);
             for &item_index in item_indexes.iter().rev() {
                 player_controller::sell_item_from_bag(
-                    &game_data.area_specs,
-                    game_data.player_specs.read(),
                     game_data.player_inventory.mutate(),
                     game_data.player_resources.mutate(),
                     item_index,
@@ -159,12 +157,7 @@ fn handle_client_message(
                 if let Some(item_specs) =
                     loot_controller::take_loot(game_data.queued_loot.mutate(), m.loot_identifier)
                 {
-                    player_controller::sell_item(
-                        &game_data.area_specs,
-                        game_data.player_specs.read(),
-                        game_data.player_resources.mutate(),
-                        &item_specs,
-                    );
+                    player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
                 }
             } else if let Err(e) = loot_controller::pickup_loot(
                 game_data.player_inventory.mutate(),

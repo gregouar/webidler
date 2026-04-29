@@ -73,10 +73,12 @@ pub fn LootQueue() -> impl IntoView {
         );
     };
 
+    let hover_lock = RwSignal::new(false);
+
     let position_style = move |loot_identifier| {
         let index = game_context
             .queued_loot
-            .read()
+            .read_untracked()
             .iter()
             .filter(|l| l.state != LootState::HasDisappeared || l.identifier == loot_identifier)
             .rev()
@@ -137,6 +139,13 @@ pub fn LootQueue() -> impl IntoView {
             >
                 {
                     let item_rarity = loot.item_specs.modifiers.rarity;
+                    let saved_position_style = RwSignal::new(position_style(loot.identifier));
+                    Effect::new(move || {
+                        if !hover_lock.get() {
+                            let _ = game_context.queued_loot.read();
+                            saved_position_style.set(position_style(loot.identifier));
+                        }
+                    });
                     view! {
                         <div style="animation: loot-drop 1.3s ease forwards;">
                             <div
@@ -145,12 +154,13 @@ pub fn LootQueue() -> impl IntoView {
                                 transition-all duration-500 ease
                                 pointer-events-none
                                 will-change-transform
+                                hover:z-1
                                 "
                                 style=move || {
                                     format!(
                                         "{} {}",
                                         animation_style(loot.identifier),
-                                        position_style(loot.identifier),
+                                        saved_position_style.get(),
                                     )
                                 }
                             >
@@ -175,6 +185,8 @@ pub fn LootQueue() -> impl IntoView {
                                         let pickup_loot = pickup_loot.clone();
                                         move |_| pickup_loot(loot.identifier)
                                     }
+                                    on:mouseenter=move |_| hover_lock.set(true)
+                                    on:mouseleave=move |_| hover_lock.set(false)
 
                                     on:contextmenu={
                                         let sell_loot = sell_loot.clone();
@@ -183,6 +195,7 @@ pub fn LootQueue() -> impl IntoView {
                                                 && item_rarity != ItemRarity::Unique
                                             {
                                                 sell_loot(loot.identifier);
+                                                hover_lock.set(false);
                                             }
                                         }
                                     }

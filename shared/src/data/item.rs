@@ -194,35 +194,16 @@ pub struct ItemSpecs {
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
 
-    // To indicate it comes from old game and not dropped during current one
+    // Deprecated, to be removed later
     pub old_game: bool,
 
     #[serde(default)]
     pub required_level: AreaLevel,
     // #[serde(default)]
     // pub signature: ItemSignature,
+    #[serde(default)]
+    pub gold_price: f64,
 }
-
-// #[cfg(not(feature = "modifiable"))]
-// #[derive(Serialize, Debug, Clone, PartialEq)]
-// pub struct ItemSpecs {
-//     pub base: ItemBase,
-//     pub modifiers: ItemModifiers,
-
-//     pub weapon_specs: Option<WeaponSpecs>,
-//     pub armor_specs: Option<ArmorSpecs>,
-
-//     // To indicate it comes from old game and not dropped during current one
-//     pub old_game: bool,
-
-//     #[serde(default)]
-//     pub required_level: AreaLevel,
-
-//     #[serde(default)]
-//     pub signature: ItemSignature,
-//     #[serde(skip)]
-//     pub raw_bytes: Vec<u8>,
-// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct WeaponSpecs {

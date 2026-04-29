@@ -93,12 +93,14 @@ fn generate_end_quest_rewards(
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
                 item_level,
+                0,
                 false,
                 true,
                 false,
                 false,
                 Some(ItemCategory::Map),
                 *game_data.area_specs.loot_rarity,
+                0.0,
             )
         })
         .chain((0..amount_normal_rewards).flat_map(|_| {
@@ -109,12 +111,14 @@ fn generate_end_quest_rewards(
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
                 item_level,
+                0,
                 false,
                 true,
                 false,
                 false,
                 None,
                 *game_data.area_specs.loot_rarity,
+                0.0,
             )
         }))
         .chain((0..amount_rare_rewards).flat_map(|_| {
@@ -125,12 +129,14 @@ fn generate_end_quest_rewards(
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
                 item_level,
+                0,
                 true,
                 true,
                 false,
                 false,
                 None,
                 *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
+                0.0,
             )
         }))
         .collect();
