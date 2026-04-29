@@ -76,7 +76,7 @@ pub fn LootQueue() -> impl IntoView {
         );
     };
 
-    let hover_lock = RwSignal::new(false);
+    let hover_lock = RwSignal::new(None);
 
     let loot_state = move |loot_identifier| {
         game_context
@@ -148,22 +148,38 @@ pub fn LootQueue() -> impl IntoView {
                     let item_rarity = loot.item_specs.modifiers.rarity;
                     let gold_price = loot.item_specs.gold_price;
                     let can_sell = !matches!(loot.item_specs.modifiers.rarity, ItemRarity::Unique);
+                    let is_new = RwSignal::new(true);
+                    let stack_style = move || {
+                        let z_index = if hover_lock.get() == Some(loot.identifier) {
+                            30
+                        } else if is_new.get() {
+                            10
+                        } else {
+                            20
+                        };
+                        format!(
+                            "animation: loot-drop 1.3s ease forwards; position: relative; z-index: {z_index};"
+                        )
+                    };
                     let saved_position_style = RwSignal::new(position_style(loot.identifier));
                     Effect::new(move || {
-                        if !hover_lock.get() {
+                        if hover_lock.read().is_none() {
                             let _ = game_context.queued_loot.read();
                             saved_position_style.set(position_style(loot.identifier));
+                            is_new.set(false);
                         }
                     });
+
                     view! {
-                        <div style="animation: loot-drop 1.3s ease forwards;">
+                        <div
+                            style=stack_style
+                        >
                             <div
                                 class="
                                 absolute bottom-0 w-[12%] aspect-[2/3]
                                 transition-all duration-500 ease
                                 pointer-events-none
                                 will-change-transform
-                                hover:z-10
                                 "
                                 style=move || {
                                     format!(
@@ -180,7 +196,6 @@ pub fn LootQueue() -> impl IntoView {
                                             relative
                                             transition-all duration-200 ease-in-out 
                                             translate-y-1/2 hover:translate-y-1/4
-                                            pointer-events-auto
                                             {}
                                             ",
                                             if settings.uses_surface_effects() {
@@ -190,12 +205,18 @@ pub fn LootQueue() -> impl IntoView {
                                             },
                                         )
                                     }
+                                    class:pointer-events-auto=move || !is_new.get()
+                                    class:pointer-events-none=move || is_new.get()
                                     on:click={
                                         let pickup_loot = pickup_loot.clone();
                                         move |_| pickup_loot(loot.identifier)
                                     }
-                                    on:mouseenter=move |_| hover_lock.set(true)
-                                    on:mouseleave=move |_| hover_lock.set(false)
+                                    on:mouseenter=move |_| hover_lock.set(Some(loot.identifier))
+                                    on:mouseleave=move |_| {
+                                        if hover_lock.get_untracked() == Some(loot.identifier) {
+                                            hover_lock.set(None);
+                                        }
+                                    }
 
                                     on:contextmenu={
                                         let sell_loot = sell_loot.clone();
@@ -204,7 +225,7 @@ pub fn LootQueue() -> impl IntoView {
                                                 && item_rarity != ItemRarity::Unique
                                             {
                                                 sell_loot(loot.identifier);
-                                                hover_lock.set(false);
+                                                hover_lock.set(None);
                                             }
                                         }
                                     }
