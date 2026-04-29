@@ -184,7 +184,7 @@ pub fn DynamicTooltipTarget(
         }
     };
 
-    let hide_tooltip = { move || tooltip_context.hide(tooltip_id.get()) };
+    let hide_tooltip = { move || tooltip_context.hide(tooltip_id.get_untracked()) };
 
     // let mouse = use_mouse();
 

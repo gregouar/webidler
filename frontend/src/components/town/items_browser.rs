@@ -385,7 +385,7 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
 
     let hide_tooltip = {
         move || {
-            tooltip_context.hide(tooltip_id.get());
+            tooltip_context.hide(tooltip_id.get_untracked());
         }
     };
     on_cleanup(move || {

@@ -15,4 +15,11 @@ pub enum LootState {
     Normal,
     WillDisappear,
     HasDisappeared,
+    Sold,
+}
+
+impl LootState {
+    pub fn has_disappeared(&self) -> bool {
+        matches!(self, LootState::Sold | LootState::HasDisappeared)
+    }
 }

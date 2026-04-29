@@ -14,15 +14,18 @@ use shared::{
     messages::client::PickUpLootMessage,
 };
 
-use crate::components::{
-    accessibility::AccessibilityContext,
-    game::{GameContext, websocket::WebsocketContext},
-    settings::SettingsContext,
-    shared::{
-        item_card::ItemCard,
-        loot_filter::{FilterRule, FilterRuleType, LootFilter},
+use crate::{
+    assets::img_asset,
+    components::{
+        accessibility::AccessibilityContext,
+        game::{GameContext, websocket::WebsocketContext},
+        settings::SettingsContext,
+        shared::{
+            item_card::ItemCard,
+            loot_filter::{FilterRule, FilterRuleType, LootFilter},
+        },
+        ui::{number::format_number, tooltip::DynamicTooltipPosition},
     },
-    ui::tooltip::DynamicTooltipPosition,
 };
 
 #[component]
@@ -60,7 +63,7 @@ pub fn LootQueue() -> impl IntoView {
                 .iter_mut()
                 .find(|loot| loot.identifier == loot_identifier)
             {
-                loot.state = LootState::HasDisappeared
+                loot.state = LootState::Sold
             }
         });
 
@@ -75,12 +78,22 @@ pub fn LootQueue() -> impl IntoView {
 
     let hover_lock = RwSignal::new(false);
 
+    let loot_state = move |loot_identifier| {
+        game_context
+            .queued_loot
+            .read()
+            .iter()
+            .find(|l| l.identifier == loot_identifier)
+            .map(|l| l.state)
+            .unwrap_or_default()
+    };
+
     let position_style = move |loot_identifier| {
         let index = game_context
             .queued_loot
             .read_untracked()
             .iter()
-            .filter(|l| l.state != LootState::HasDisappeared || l.identifier == loot_identifier)
+            .filter(|l| !l.state.has_disappeared() || l.identifier == loot_identifier)
             .rev()
             .position(|l| l.identifier == loot_identifier)
             .unwrap_or_default();
@@ -88,17 +101,11 @@ pub fn LootQueue() -> impl IntoView {
     };
 
     let animation_style = move |loot_identifier| {
-        let state = game_context
-            .queued_loot
-            .read()
-            .iter()
-            .find(|l| l.identifier == loot_identifier)
-            .map(|l| l.state)
-            .unwrap_or_default();
+        let state = loot_state(loot_identifier);
         match state {
             LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite;",
             LootState::WillDisappear => "animation: loot-vibrate 0.3s linear infinite;",
-            LootState::HasDisappeared => {
+            LootState::HasDisappeared | LootState::Sold => {
                 "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
             }
         }
@@ -139,6 +146,8 @@ pub fn LootQueue() -> impl IntoView {
             >
                 {
                     let item_rarity = loot.item_specs.modifiers.rarity;
+                    let gold_price = loot.item_specs.gold_price;
+                    let can_sell = !matches!(loot.item_specs.modifiers.rarity, ItemRarity::Unique);
                     let saved_position_style = RwSignal::new(position_style(loot.identifier));
                     Effect::new(move || {
                         if !hover_lock.get() {
@@ -154,6 +163,7 @@ pub fn LootQueue() -> impl IntoView {
                                 transition-all duration-500 ease
                                 pointer-events-none
                                 will-change-transform
+                                hover:z-10
                                 "
                                 style=move || {
                                     format!(
@@ -171,7 +181,6 @@ pub fn LootQueue() -> impl IntoView {
                                             transition-all duration-200 ease-in-out 
                                             translate-y-1/2 hover:translate-y-1/4
                                             pointer-events-auto
-                                            hover:z-2
                                             {}
                                             ",
                                             if settings.uses_surface_effects() {
@@ -222,9 +231,33 @@ pub fn LootQueue() -> impl IntoView {
                                         tooltip_position=DynamicTooltipPosition::TopLeft
                                         class:shadow-lg
                                         max_item_level=Signal::derive(|| AreaLevel::MAX)
+                                        can_sell
                                     />
                                 </div>
                             </div>
+
+                            <div
+                                class="absolute bottom-0 w-[12%] aspect-[2/3] z-30 pointer-events-none"
+                                style=saved_position_style
+                            >
+                                <Show when=move || {
+                                    matches!(loot_state(loot.identifier), LootState::Sold)
+                                }>
+                                    <div class="
+                                    reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
+                                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
+                                    flex items-center gap-1 font-number">
+                                        <span>+{format_number(gold_price)}</span>
+                                        <img
+                                            draggable="false"
+                                            src=img_asset("ui/gold.webp")
+                                            alt="Gold"
+                                            class="h-[2em] aspect-square"
+                                        />
+                                    </div>
+                                </Show>
+                            </div>
+
                         </div>
                     }
                 }

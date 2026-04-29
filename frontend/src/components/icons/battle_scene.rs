@@ -126,7 +126,7 @@ pub fn EdictIcon(map_item: ItemSpecs) -> impl IntoView {
     };
 
     let hide_tooltip = move || {
-        tooltip_context.hide(tooltip_id.get());
+        tooltip_context.hide(tooltip_id.get_untracked());
     };
     on_cleanup(move || {
         hide_tooltip();

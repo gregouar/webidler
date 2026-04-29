@@ -19,6 +19,7 @@ pub fn ItemCard(
     #[prop(default=None)] comparable_item_specs: Option<Arc<ItemSpecs>>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
     #[prop(default=Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
+    #[prop(default = false)] can_sell: bool,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let (accent, inner_border, rarity_wash, rarity_core, frame_shine) =
@@ -103,6 +104,7 @@ pub fn ItemCard(
                                 ComparableType::NotComparable
                             }
                             max_item_level
+                            can_sell
                         />
 
                     </div>
@@ -115,7 +117,7 @@ pub fn ItemCard(
 
     let hide_tooltip = {
         move || {
-            tooltip_context.hide(tooltip_id.get());
+            tooltip_context.hide(tooltip_id.get_untracked());
         }
     };
 

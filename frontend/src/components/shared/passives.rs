@@ -150,7 +150,7 @@ pub fn Node(
     let hide_tooltip = {
         move || {
             if let Some(tooltip_context) = tooltip_context {
-                tooltip_context.hide(tooltip_id.get());
+                tooltip_context.hide(tooltip_id.get_untracked());
             }
         }
     };
