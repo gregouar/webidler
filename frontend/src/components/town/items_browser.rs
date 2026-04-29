@@ -349,6 +349,7 @@ pub fn ItemDetailsPanel(
 #[component]
 pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> impl IntoView {
     let tooltip_context: DynamicTooltipContext = expect_context();
+    let tooltip_id = RwSignal::new(0);
     let town_context: TownContext = expect_context();
 
     let show_tooltip = move || {
@@ -361,15 +362,15 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
 
         if let Some(EquippedSlot::MainSlot(item_specs)) = item_specs {
             let item_specs = Arc::new(*item_specs);
-            tooltip_context.set_content(
+            tooltip_id.set(tooltip_context.set_content(
                 move || {
                     view! { <ItemTooltip item_specs=item_specs.clone() max_item_level /> }
                         .into_any()
                 },
                 DynamicTooltipPosition::Auto,
-            );
+            ));
         } else {
-            tooltip_context.set_content(
+            tooltip_id.set(tooltip_context.set_content(
                 move || {
                     view! {
                         <div class="shadow-md bg-gradient-to-br from-gray-800 via-gray-900 to-black  p-2 xl:p-4 rounded-xl border">
@@ -378,18 +379,24 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
                     }.into_any()
                 },
                 DynamicTooltipPosition::Auto,
-            );
+            ));
         }
     };
 
-    let hide_tooltip = { move || tooltip_context.hide() };
-    on_cleanup(move || tooltip_context.hide());
+    let hide_tooltip = {
+        move || {
+            tooltip_context.hide(tooltip_id.get());
+        }
+    };
+    on_cleanup(move || {
+        hide_tooltip();
+    });
 
     view! {
         <div
             class="absolute flex top-2 right-2 px-2 py-1 rounded-[4px] items-center border border-zinc-700/80 bg-black/45 hover:bg-black/60"
 
-            on:touchstart=move |_| { show_tooltip() }
+            on:touchstart=move |_| show_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }

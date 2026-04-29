@@ -191,19 +191,24 @@ fn SkillCard(
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
+    let tooltip_id = RwSignal::new(0);
     let show_tooltip = {
         let skill_specs = Arc::new(skill_specs_from_base(skill_id.clone(), &skill_specs));
         move || {
             let skill_specs = skill_specs.clone();
-            tooltip_context.set_content(
+            tooltip_id.set(tooltip_context.set_content(
                 move || view! { <SkillTooltip skill_specs=skill_specs.clone() /> }.into_any(),
                 DynamicTooltipPosition::Auto,
-            );
+            ));
         }
     };
 
-    let hide_tooltip = move || tooltip_context.hide();
-    on_cleanup(move || tooltip_context.hide());
+    let hide_tooltip = move || {
+        tooltip_context.hide(tooltip_id.get());
+    };
+    on_cleanup(move || {
+        hide_tooltip();
+    });
     let skill_type = skill_specs.skill_type;
 
     view! {
@@ -292,7 +297,7 @@ fn SkillCard(
             }
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
-                move |_| { show_tooltip() }
+                move |_| show_tooltip()
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();

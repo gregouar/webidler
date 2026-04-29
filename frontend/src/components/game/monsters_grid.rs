@@ -852,22 +852,27 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
+    let tooltip_id = RwSignal::new(0);
     let show_tooltip = {
         let skill_specs = skill_specs.clone();
         move || {
             let skill_specs = skill_specs.clone();
-            tooltip_context.set_content(
+            tooltip_id.set(tooltip_context.set_content(
                 move || {
                     let skill_specs = skill_specs.clone();
                     view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
                 },
                 DynamicTooltipPosition::Auto,
-            );
+            ));
         }
     };
 
-    let hide_tooltip = move || tooltip_context.hide();
-    on_cleanup(move || tooltip_context.hide());
+    let hide_tooltip = move || {
+        tooltip_context.hide(tooltip_id.get());
+    };
+    on_cleanup(move || {
+        hide_tooltip();
+    });
 
     let just_triggered = Memo::new(move |_| {
         if !is_dead.get() {
@@ -908,7 +913,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
-                move |_| { show_tooltip() }
+                move |_| show_tooltip()
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();

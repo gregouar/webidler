@@ -154,7 +154,6 @@ pub fn LootQueue() -> impl IntoView {
                                 transition-all duration-500 ease
                                 pointer-events-none
                                 will-change-transform
-                                hover:z-1
                                 "
                                 style=move || {
                                     format!(
@@ -172,6 +171,7 @@ pub fn LootQueue() -> impl IntoView {
                                             transition-all duration-200 ease-in-out 
                                             translate-y-1/2 hover:translate-y-1/4
                                             pointer-events-auto
+                                            hover:z-2
                                             {}
                                             ",
                                             if settings.uses_surface_effects() {

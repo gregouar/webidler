@@ -111,21 +111,26 @@ pub fn ThreatIcon() -> impl IntoView {
 #[component]
 pub fn EdictIcon(map_item: ItemSpecs) -> impl IntoView {
     let tooltip_context: DynamicTooltipContext = expect_context();
+    let tooltip_id = RwSignal::new(0);
     let item_specs = Arc::new(map_item);
 
     let show_tooltip = move || {
         let item_specs = item_specs.clone();
-        tooltip_context.set_content(
+        tooltip_id.set(tooltip_context.set_content(
             move || {
                 view! { <ItemTooltip item_specs=item_specs.clone() max_item_level=Signal::derive(|| 9999) /> }
                     .into_any()
             },
             DynamicTooltipPosition::BottomLeft,
-        );
+        ));
     };
 
-    let hide_tooltip = move || tooltip_context.hide();
-    on_cleanup(move || tooltip_context.hide());
+    let hide_tooltip = move || {
+        tooltip_context.hide(tooltip_id.get());
+    };
+    on_cleanup(move || {
+        hide_tooltip();
+    });
 
     view! {
         <div

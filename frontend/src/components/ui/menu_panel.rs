@@ -36,7 +36,7 @@ pub fn MenuPanel(
             set_is_visible.set(true);
         } else {
             if let Some(tooltip_context) = tooltip_context {
-                tooltip_context.hide();
+                tooltip_context.clear();
             }
             set_timeout(
                 move || set_is_visible.set(open.try_get_untracked().unwrap_or_default()),

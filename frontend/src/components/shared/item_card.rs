@@ -63,12 +63,13 @@ pub fn ItemCard(
     let icon_asset = img_asset(&item_specs.base.icon);
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
+    let tooltip_id = RwSignal::new(0);
 
     let show_tooltip = move |show_affixes, compare: bool| {
         let item_specs = item_specs.clone();
         let comparable_item_specs = comparable_item_specs.clone();
 
-        tooltip_context.set_content(
+        tooltip_id.set(tooltip_context.set_content(
             move || {
                 let item_specs = item_specs.clone();
                 let is_comparable = comparable_item_specs.is_some();
@@ -109,17 +110,23 @@ pub fn ItemCard(
                 .into_any()
             },
             tooltip_position,
-        );
+        ));
     };
 
-    let hide_tooltip = { move || tooltip_context.hide() };
-    on_cleanup(move || tooltip_context.hide());
+    let hide_tooltip = {
+        move || {
+            tooltip_context.hide(tooltip_id.get());
+        }
+    };
 
     // let node_ref = NodeRef::new();
     // let UseMouseInElementReturn { is_outside, .. } = use_mouse_in_element(node_ref);
     // let is_inside = Memo::new(move |_| !is_outside.get());
 
     let is_inside = RwSignal::new(false);
+    on_cleanup(move || {
+        hide_tooltip();
+    });
 
     let events_context: EventsContext = expect_context();
 
