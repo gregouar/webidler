@@ -300,6 +300,7 @@ pub fn create_item_specs(
         base,
         modifiers,
         old_game,
+        gold_price: 0.0,
     }
 }
 

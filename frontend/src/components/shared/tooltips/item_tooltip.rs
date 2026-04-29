@@ -34,6 +34,7 @@ pub enum ComparableType {
 pub fn ItemTooltip(
     item_specs: Arc<ItemSpecs>,
     #[prop(default = false)] show_affixes: bool,
+    #[prop(default = false)] can_sell: bool,
     #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
     #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
@@ -48,6 +49,7 @@ pub fn ItemTooltip(
                 show_affixes
                 comparable
                 max_item_level
+                can_sell
             />
         </TooltipFrame>
     }
@@ -58,6 +60,7 @@ pub fn ItemTooltipContent(
     item_specs: Arc<ItemSpecs>,
     #[prop(default = false)] show_affixes: bool,
     #[prop(default = false)] hide_description: bool,
+    #[prop(default = false)] can_sell: bool,
     #[prop(default = ComparableType::NotComparable)] comparable: ComparableType,
     max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
@@ -287,19 +290,29 @@ pub fn ItemTooltipContent(
                             }
                         })
                 })}
-            {match comparable {
-                ComparableType::Comparable => {
-                    Some(
+            {((can_sell
+                && !matches!(comparable, ComparableType::Compared | ComparableType::Equipped))
+                || matches!(comparable, ComparableType::Comparable))
+                .then(|| view! { <Separator /> })}
+            <ul class="list-none">
+                {matches!(comparable, ComparableType::Comparable)
+                    .then(|| {
                         view! {
-                            <Separator />
-                            <p class="text-xs xl:text-sm italic text-gray-400  whitespace-pre-line">
+                            <li class="text-xs xl:text-sm text-gray-400 italic">
                                 "Hold CTRL to compare."
-                            </p>
-                        },
-                    )
-                }
-                _ => None,
-            }}
+                            </li>
+                        }
+                    })}
+                {can_sell
+                    .then(|| {
+                        view! {
+                            <li class="text-xs xl:text-sm text-gray-400 italic">
+                                "Right click to sell."
+                            </li>
+                        }
+                    })}
+            </ul>
+
         </div>
     }
 }

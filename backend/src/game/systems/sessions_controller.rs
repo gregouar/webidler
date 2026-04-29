@@ -168,11 +168,12 @@ async fn new_game_instance(
                         base_weapon,
                         ItemRarity::Normal,
                         0,
+                        0,
                         &master_store.item_affixes_table,
                         &master_store.item_adjectives_table,
                         &master_store.item_nouns_table,
                         false,
-                        // &master_store.items_store.signature_key,
+                        0.0, // &master_store.items_store.signature_key,
                     ),
                 );
             }

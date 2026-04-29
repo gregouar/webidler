@@ -413,7 +413,9 @@ pub fn CharacterPortrait(
 
                 <div class=move || {
                     format!(
-                        "pointer-events-none absolute -top-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                        "pointer-events-none absolute
+                         -top-[3px] xl:-top-[5px] -left-[3px] xl:-left-[5px] 
+                         z-2 h-[8px] xl:h-[12px] w-[8px] xl:w-[12px]
                          rotate-315 border {} {}",
                         if settings.uses_heavy_effects() {
                             "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
@@ -425,7 +427,9 @@ pub fn CharacterPortrait(
                 }></div>
                 <div class=move || {
                     format!(
-                        "pointer-events-none absolute -top-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                        "pointer-events-none absolute
+                         -top-[3px] xl:-top-[5px] -right-[3px] xl:-right-[5px] 
+                         z-2 h-[8px] xl:h-[12px] w-[8px] xl:w-[12px]
                          rotate-315 border {} {}",
                         if settings.uses_heavy_effects() {
                             "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
@@ -437,7 +441,9 @@ pub fn CharacterPortrait(
                 }></div>
                 <div class=move || {
                     format!(
-                        "pointer-events-none absolute -bottom-[5px] -left-[5px] z-2 h-[12px] w-[12px]
+                        "pointer-events-none absolute
+                         -bottom-[3px] xl:-bottom-[5px] -left-[3px] xl:-left-[5px] 
+                         z-2 h-[8px] xl:h-[12px] w-[8px] xl:w-[12px]
                          rotate-315 border {} {}",
                         if settings.uses_heavy_effects() {
                             "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"
@@ -449,7 +455,9 @@ pub fn CharacterPortrait(
                 }></div>
                 <div class=move || {
                     format!(
-                        "pointer-events-none absolute -bottom-[5px] -right-[5px] z-2 h-[12px] w-[12px]
+                        "pointer-events-none absolute
+                         -bottom-[3px] xl:-bottom-[5px] -right-[3px] xl:-right-[5px] 
+                         z-2 h-[8px] xl:h-[12px] w-[8px] xl:w-[12px]
                          rotate-315 border {} {}",
                         if settings.uses_heavy_effects() {
                             "shadow-[0_2px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,241,209,1.0)]"

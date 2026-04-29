@@ -137,15 +137,9 @@ pub fn HeaderMenu() -> impl IntoView {
         <BaseHeaderMenu>
             <div class="flex justify-start space-x-1 xl:space-x-2">
                 <FullscreenButton />
-                <MenuButton
-                    class:hidden
-                    class:xl:inline
-                    on:click=move |_| {
-                        town_context.open_settings.set(!town_context.open_settings.get_untracked())
-                    }
-                >
-                    "⚙"
-                </MenuButton>
+                <MenuButton on:click=move |_| {
+                    town_context.open_settings.set(!town_context.open_settings.get_untracked())
+                }>"⚙"</MenuButton>
                 <MenuButton
                     class:hidden
                     class:xl:inline

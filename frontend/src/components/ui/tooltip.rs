@@ -13,19 +13,35 @@ use leptos_use::{use_mouse, use_window_size};
 pub struct DynamicTooltipContext {
     content: RwSignal<Option<ChildrenFn>>,
     position: RwSignal<DynamicTooltipPosition>,
+    current_id: RwSignal<DynamicTooltipId>,
+    next_id: RwSignal<usize>,
 }
+
+pub type DynamicTooltipId = usize;
 
 impl DynamicTooltipContext {
     pub fn set_content(
         &self,
         content: impl Fn() -> AnyView + Send + Sync + 'static,
         position: DynamicTooltipPosition,
-    ) {
+    ) -> DynamicTooltipId {
+        let id = self.next_id.get_untracked();
+        self.next_id
+            .update(|next_id| *next_id = next_id.wrapping_add(1));
+        self.current_id.set(id);
         self.position.set(position);
         self.content.set(Some(Arc::new(content)));
+        id
     }
 
-    pub fn hide(&self) {
+    pub fn hide(&self, id: DynamicTooltipId) {
+        if self.current_id.get_untracked() == id {
+            self.clear();
+        }
+    }
+
+    pub fn clear(&self) {
+        self.current_id.set(0usize);
         self.content.set(None);
     }
 }
@@ -45,6 +61,8 @@ pub fn DynamicTooltip() -> impl IntoView {
     let tooltip_context = DynamicTooltipContext {
         content: RwSignal::new(None),
         position: RwSignal::new(DynamicTooltipPosition::BottomRight),
+        current_id: RwSignal::new(0),
+        next_id: RwSignal::new(1),
     };
     provide_context(tooltip_context);
 
@@ -108,7 +126,7 @@ pub fn DynamicTooltip() -> impl IntoView {
     let handle = window_event_listener(ev::touchend, {
         move |ev| {
             if ev.touches().length() == 0 {
-                tooltip_context.content.set(None)
+                tooltip_context.clear();
             }
         }
     });
@@ -118,7 +136,7 @@ pub fn DynamicTooltip() -> impl IntoView {
     let handle = window_event_listener(ev::touchcancel, {
         move |ev| {
             if ev.touches().length() == 0 {
-                tooltip_context.content.set(None)
+                tooltip_context.clear();
             }
         }
     });
@@ -157,19 +175,16 @@ pub fn DynamicTooltipTarget(
 ) -> impl IntoView {
     let tooltip_context: DynamicTooltipContext = expect_context();
     let node_ref = NodeRef::<Span>::new();
+    let tooltip_id = RwSignal::new(0);
 
     let show_tooltip = {
         let content = content.clone();
         move || {
-            tooltip_context.set_content(content.clone(), position);
+            tooltip_id.set(tooltip_context.set_content(content.clone(), position));
         }
     };
 
-    let hide_tooltip = {
-        move || {
-            tooltip_context.hide();
-        }
-    };
+    let hide_tooltip = { move || tooltip_context.hide(tooltip_id.get_untracked()) };
 
     // let mouse = use_mouse();
 
@@ -195,6 +210,7 @@ pub fn DynamicTooltipTarget(
     // });
 
     let _ = leptos_use::on_click_outside(node_ref, move |_| hide_tooltip());
+    on_cleanup(hide_tooltip);
 
     let children = StoredValue::new(children);
     view! {
@@ -202,7 +218,7 @@ pub fn DynamicTooltipTarget(
             node_ref=node_ref
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
-                move |_| { show_tooltip() }
+                move |_| show_tooltip()
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();

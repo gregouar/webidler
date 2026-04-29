@@ -3,13 +3,11 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use shared::{
     computations,
-    constants::{
-        MONSTER_REWARD_INCREASE_FACTOR, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR,
-    },
+    constants::{PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR},
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
-        item::{ItemRarity, ItemSlot, ItemSpecs, WeaponSpecs},
+        item::{ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
         player::{
             PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs,
@@ -259,52 +257,19 @@ pub fn unequip_item_to_bag(
 }
 
 pub fn sell_item_from_bag(
-    area_specs: &AreaSpecs,
-    player_specs: &PlayerSpecs,
     player_inventory: &mut PlayerInventory,
     player_resources: &mut PlayerResources,
     item_index: u8,
 ) {
     let item_index = item_index as usize;
     if item_index < player_inventory.bag.len() {
-        sell_item(
-            area_specs,
-            player_specs,
-            player_resources,
-            &player_inventory.bag.remove(item_index),
-        );
+        sell_item(player_resources, &player_inventory.bag.remove(item_index));
     }
 }
 
-pub fn sell_item(
-    area_specs: &AreaSpecs,
-    player_specs: &PlayerSpecs,
-    player_resources: &mut PlayerResources,
-    item_specs: &ItemSpecs,
-) {
-    if item_specs.old_game {
-        return;
-    }
-
-    let gold_reward =
-        10.0 * match item_specs.modifiers.rarity {
-            ItemRarity::Normal => 1.0,
-            ItemRarity::Magic => 2.0,
-            ItemRarity::Rare => 4.0,
-            ItemRarity::Unique => 8.0,
-            ItemRarity::Masterwork => 8.0,
-        } * player_specs.gold_find.get()
-            * 0.01
-            * computations::exponential(
-                item_specs
-                    .modifiers
-                    .level
-                    .saturating_sub(*area_specs.power_level + *area_specs.item_level_modifier),
-                MONSTER_REWARD_INCREASE_FACTOR,
-            );
-
-    player_resources.gold += gold_reward;
-    player_resources.gold_total += gold_reward;
+pub fn sell_item(player_resources: &mut PlayerResources, item_specs: &ItemSpecs) {
+    player_resources.gold += item_specs.gold_price;
+    player_resources.gold_total += item_specs.gold_price;
 }
 
 pub fn init_skills_from_inventory(

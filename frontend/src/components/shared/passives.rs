@@ -112,6 +112,7 @@ pub fn Node(
         PassiveNodeType::Utility => "#973ea9ff",
     };
     let tooltip_context: Option<DynamicTooltipContext> = use_context();
+    let tooltip_id = RwSignal::new(0);
     let accessibility: Option<AccessibilityContext> = use_context();
 
     let node_text = node_text(&node_specs).to_lowercase();
@@ -135,13 +136,13 @@ pub fn Node(
         move || {
             let node_specs = node_specs.clone();
             if let Some(tooltip_context) = tooltip_context {
-                tooltip_context.set_content(
+                tooltip_id.set(tooltip_context.set_content(
                     move || {
                         let node_specs = node_specs.clone();
                         view! { <NodeTooltip node_specs node_level show_upgrade /> }.into_any()
                     },
                     DynamicTooltipPosition::Auto,
-                );
+                ));
             }
         }
     };
@@ -149,10 +150,11 @@ pub fn Node(
     let hide_tooltip = {
         move || {
             if let Some(tooltip_context) = tooltip_context {
-                tooltip_context.hide()
+                tooltip_context.hide(tooltip_id.get_untracked());
             }
         }
     };
+    on_cleanup(hide_tooltip);
 
     let stroke = move || {
         let status = node_status();
@@ -232,7 +234,7 @@ pub fn Node(
 
             on:touchstart={
                 let show_tooltip = show_tooltip.clone();
-                move |_| { show_tooltip() }
+                move |_| show_tooltip()
             }
             on:contextmenu=move |ev| {
                 ev.prevent_default();
@@ -689,7 +691,7 @@ pub fn PassiveSkillStats(
         }>
             <div class=move || {
                 format!(
-                    "h-full w-md overflow-y-auto p-2 xl:p-3 border-r {} {} {}",
+                    "h-full w-xs xl:w-md overflow-y-auto p-2 xl:p-3 border-r {} {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => "border-[#5a4a30]/70",
                         GraphicsQuality::Medium => "border-[#5a4a30]/70",

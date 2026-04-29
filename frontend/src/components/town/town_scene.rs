@@ -228,31 +228,34 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     });
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
+    let tooltip_id = RwSignal::new(0);
     let show_tooltip = move || {
         if let Some((_, player_base_skill)) = skill_entry.get()
             && let Some(skill_specs) = skill_specs.get()
         {
             let skill_specs = Arc::new(skill_specs);
             let player_base_skill = Some(Arc::new(player_base_skill));
-            tooltip_context.set_content(
+            tooltip_id.set(tooltip_context.set_content(
                 move || {
                     let skill_specs = skill_specs.clone();
                     let player_base_skill = player_base_skill.clone();
                     view! { <SkillTooltip skill_specs=skill_specs player_base_skill=player_base_skill /> }
-                        .into_any()
+                    .into_any()
                 },
                 DynamicTooltipPosition::TopRight,
-            );
+            ));
         }
     };
 
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let hide_tooltip = move || tooltip_context.hide();
+    let hide_tooltip = move || {
+        tooltip_context.hide(tooltip_id.get_untracked());
+    };
+    on_cleanup(hide_tooltip);
 
     view! {
         <div class="flex flex-col">
             <div
-                on:touchstart=move |_| { show_tooltip() }
+                on:touchstart=move |_| show_tooltip()
                 on:contextmenu=move |ev| {
                     ev.prevent_default();
                 }

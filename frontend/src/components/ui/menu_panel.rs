@@ -2,6 +2,8 @@ use std::time::Duration;
 
 use leptos::{ev::KeyboardEvent, html::*, prelude::*};
 
+use crate::components::ui::tooltip::DynamicTooltipContext;
+
 #[component]
 pub fn MenuPanel(
     open: RwSignal<bool>,
@@ -12,6 +14,7 @@ pub fn MenuPanel(
     #[prop(default = false)] always_mounted: bool,
 ) -> impl IntoView {
     let panel_ref = NodeRef::<Div>::new();
+    let tooltip_context = use_context::<DynamicTooltipContext>();
 
     Effect::new(move |_| {
         if open.try_get().unwrap_or_default()
@@ -32,6 +35,9 @@ pub fn MenuPanel(
         if open.try_get().unwrap_or_default() {
             set_is_visible.set(true);
         } else {
+            if let Some(tooltip_context) = tooltip_context {
+                tooltip_context.clear();
+            }
             set_timeout(
                 move || set_is_visible.set(open.try_get_untracked().unwrap_or_default()),
                 Duration::from_millis(300),

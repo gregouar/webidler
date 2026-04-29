@@ -19,6 +19,7 @@ pub fn ItemCard(
     #[prop(default=None)] comparable_item_specs: Option<Arc<ItemSpecs>>,
     #[prop(default=DynamicTooltipPosition::Auto)] tooltip_position: DynamicTooltipPosition,
     #[prop(default=Signal::derive(|| AreaLevel::MAX))] max_item_level: Signal<AreaLevel>,
+    #[prop(default = false)] can_sell: bool,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let (accent, inner_border, rarity_wash, rarity_core, frame_shine) =
@@ -63,12 +64,13 @@ pub fn ItemCard(
     let icon_asset = img_asset(&item_specs.base.icon);
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
+    let tooltip_id = RwSignal::new(0);
 
     let show_tooltip = move |show_affixes, compare: bool| {
         let item_specs = item_specs.clone();
         let comparable_item_specs = comparable_item_specs.clone();
 
-        tooltip_context.set_content(
+        tooltip_id.set(tooltip_context.set_content(
             move || {
                 let item_specs = item_specs.clone();
                 let is_comparable = comparable_item_specs.is_some();
@@ -102,6 +104,7 @@ pub fn ItemCard(
                                 ComparableType::NotComparable
                             }
                             max_item_level
+                            can_sell
                         />
 
                     </div>
@@ -109,12 +112,13 @@ pub fn ItemCard(
                 .into_any()
             },
             tooltip_position,
-        );
+        ));
     };
 
     let hide_tooltip = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move || tooltip_context.hide()
+        move || {
+            tooltip_context.hide(tooltip_id.get_untracked());
+        }
     };
 
     // let node_ref = NodeRef::new();
@@ -122,6 +126,7 @@ pub fn ItemCard(
     // let is_inside = Memo::new(move |_| !is_outside.get());
 
     let is_inside = RwSignal::new(false);
+    on_cleanup(hide_tooltip);
 
     let events_context: EventsContext = expect_context();
 

@@ -327,22 +327,19 @@ fn handle_area_completed_event(
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
         power_level,
+        *game_data.area_specs.power_level + *game_data.area_specs.item_level_modifier,
         is_boss_level,
         new_max, // Only drop unique when new area completed
         false,
         false,
         None,
         *game_data.area_specs.loot_rarity,
+        game_data.player_specs.read().gold_find.get(),
     ) {
         Some(item_specs) => {
             for item_specs in loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs)
             {
-                player_controller::sell_item(
-                    &game_data.area_specs,
-                    game_data.player_specs.read(),
-                    game_data.player_resources.mutate(),
-                    &item_specs,
-                );
+                player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
             }
         }
         None => tracing::warn!("Failed to generate loot"),

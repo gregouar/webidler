@@ -1,7 +1,8 @@
 use std::collections::{BTreeSet, HashSet};
 
 use shared::{
-    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
+    computations,
+    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL, MONSTER_REWARD_INCREASE_FACTOR},
     data::{
         area::AreaLevel,
         chance::ChanceRange,
@@ -30,12 +31,14 @@ pub fn generate_loot(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
     level: AreaLevel,
+    power_level_modifier: AreaLevel,
     is_boss_level: bool,
     allow_unique: bool,
     max_base: bool,
     max_affixes: bool,
     filter_category: Option<ItemCategory>,
     loot_rarity: f64,
+    gold_find: f64,
 ) -> Option<ItemSpecs> {
     let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
     if !allow_unique {
@@ -61,10 +64,12 @@ pub fn generate_loot(
             base,
             rarity,
             level,
+            power_level_modifier,
             affixes_table,
             adjectives_table,
             nouns_table,
             max_affixes,
+            gold_find,
             // &items_store.signature_key,
         )
     })
@@ -89,10 +94,12 @@ pub fn roll_item(
     base: ItemBase,
     rarity: ItemRarity,
     level: AreaLevel,
+    power_level_modifier: AreaLevel,
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
     max_affixes: bool,
+    gold_find: f64,
     // signature_key: &HmacSignature,
 ) -> ItemSpecs {
     let quality = if base.ignore_quality {
@@ -149,7 +156,9 @@ pub fn roll_item(
         );
     }
 
-    items_controller::create_item_specs(base, modifiers, false)
+    let gold_price = item_gold_price(&modifiers, power_level_modifier, gold_find);
+
+    items_controller::create_item_specs(base, modifiers, gold_price)
 }
 
 fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
@@ -620,4 +629,23 @@ impl RandomWeighted for &LootTableEntry {
     fn random_weight(&self) -> u64 {
         self.weight
     }
+}
+
+fn item_gold_price(
+    item_modifiers: &ItemModifiers,
+    power_level_modifier: AreaLevel,
+    gold_find: f64,
+) -> f64 {
+    10.0 * match item_modifiers.rarity {
+        ItemRarity::Normal => 1.0,
+        ItemRarity::Magic => 2.0,
+        ItemRarity::Rare => 4.0,
+        ItemRarity::Unique => 8.0,
+        ItemRarity::Masterwork => 8.0,
+    } * gold_find
+        * 0.01
+        * computations::exponential(
+            item_modifiers.level.saturating_sub(power_level_modifier),
+            MONSTER_REWARD_INCREASE_FACTOR,
+        )
 }

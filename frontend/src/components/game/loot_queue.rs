@@ -14,15 +14,18 @@ use shared::{
     messages::client::PickUpLootMessage,
 };
 
-use crate::components::{
-    accessibility::AccessibilityContext,
-    game::{GameContext, websocket::WebsocketContext},
-    settings::SettingsContext,
-    shared::{
-        item_card::ItemCard,
-        loot_filter::{FilterRule, FilterRuleType, LootFilter},
+use crate::{
+    assets::img_asset,
+    components::{
+        accessibility::AccessibilityContext,
+        game::{GameContext, websocket::WebsocketContext},
+        settings::SettingsContext,
+        shared::{
+            item_card::ItemCard,
+            loot_filter::{FilterRule, FilterRuleType, LootFilter},
+        },
+        ui::{number::format_number, tooltip::DynamicTooltipPosition},
     },
-    ui::tooltip::DynamicTooltipPosition,
 };
 
 #[component]
@@ -60,7 +63,7 @@ pub fn LootQueue() -> impl IntoView {
                 .iter_mut()
                 .find(|loot| loot.identifier == loot_identifier)
             {
-                loot.state = LootState::HasDisappeared
+                loot.state = LootState::Sold
             }
         });
 
@@ -73,12 +76,24 @@ pub fn LootQueue() -> impl IntoView {
         );
     };
 
-    let position_style = move |loot_identifier| {
-        let index = game_context
+    let hover_lock = RwSignal::new(None);
+
+    let loot_state = move |loot_identifier| {
+        game_context
             .queued_loot
             .read()
             .iter()
-            .filter(|l| l.state != LootState::HasDisappeared || l.identifier == loot_identifier)
+            .find(|l| l.identifier == loot_identifier)
+            .map(|l| l.state)
+            .unwrap_or_default()
+    };
+
+    let position_style = move |loot_identifier| {
+        let index = game_context
+            .queued_loot
+            .read_untracked()
+            .iter()
+            .filter(|l| !l.state.has_disappeared() || l.identifier == loot_identifier)
             .rev()
             .position(|l| l.identifier == loot_identifier)
             .unwrap_or_default();
@@ -86,17 +101,11 @@ pub fn LootQueue() -> impl IntoView {
     };
 
     let animation_style = move |loot_identifier| {
-        let state = game_context
-            .queued_loot
-            .read()
-            .iter()
-            .find(|l| l.identifier == loot_identifier)
-            .map(|l| l.state)
-            .unwrap_or_default();
+        let state = loot_state(loot_identifier);
         match state {
             LootState::Normal => "animation: loot-float 2.5s ease-in-out infinite;",
             LootState::WillDisappear => "animation: loot-vibrate 0.3s linear infinite;",
-            LootState::HasDisappeared => {
+            LootState::HasDisappeared | LootState::Sold => {
                 "animation: loot-pickup 0.3s ease forwards; pointer-events: none;"
             }
         }
@@ -137,8 +146,34 @@ pub fn LootQueue() -> impl IntoView {
             >
                 {
                     let item_rarity = loot.item_specs.modifiers.rarity;
+                    let gold_price = loot.item_specs.gold_price;
+                    let can_sell = !matches!(loot.item_specs.modifiers.rarity, ItemRarity::Unique);
+                    let is_new = RwSignal::new(true);
+                    let stack_style = move || {
+                        let z_index = if hover_lock.get() == Some(loot.identifier) {
+                            30
+                        } else if is_new.get() {
+                            10
+                        } else {
+                            20
+                        };
+                        format!(
+                            "animation: loot-drop 1.3s ease forwards; position: relative; z-index: {z_index};"
+                        )
+                    };
+                    let saved_position_style = RwSignal::new(position_style(loot.identifier));
+                    Effect::new(move || {
+                        if hover_lock.read().is_none() {
+                            let _ = game_context.queued_loot.read();
+                            saved_position_style.set(position_style(loot.identifier));
+                            is_new.set(false);
+                        }
+                    });
+
                     view! {
-                        <div style="animation: loot-drop 1.3s ease forwards;">
+                        <div
+                            style=stack_style
+                        >
                             <div
                                 class="
                                 absolute bottom-0 w-[12%] aspect-[2/3]
@@ -150,7 +185,7 @@ pub fn LootQueue() -> impl IntoView {
                                     format!(
                                         "{} {}",
                                         animation_style(loot.identifier),
-                                        position_style(loot.identifier),
+                                        saved_position_style.get(),
                                     )
                                 }
                             >
@@ -161,7 +196,6 @@ pub fn LootQueue() -> impl IntoView {
                                             relative
                                             transition-all duration-200 ease-in-out 
                                             translate-y-1/2 hover:translate-y-1/4
-                                            pointer-events-auto
                                             {}
                                             ",
                                             if settings.uses_surface_effects() {
@@ -171,9 +205,17 @@ pub fn LootQueue() -> impl IntoView {
                                             },
                                         )
                                     }
+                                    class:pointer-events-auto=move || !is_new.get()
+                                    class:pointer-events-none=move || is_new.get()
                                     on:click={
                                         let pickup_loot = pickup_loot.clone();
                                         move |_| pickup_loot(loot.identifier)
+                                    }
+                                    on:mouseenter=move |_| hover_lock.set(Some(loot.identifier))
+                                    on:mouseleave=move |_| {
+                                        if hover_lock.get_untracked() == Some(loot.identifier) {
+                                            hover_lock.set(None);
+                                        }
                                     }
 
                                     on:contextmenu={
@@ -183,6 +225,7 @@ pub fn LootQueue() -> impl IntoView {
                                                 && item_rarity != ItemRarity::Unique
                                             {
                                                 sell_loot(loot.identifier);
+                                                hover_lock.set(None);
                                             }
                                         }
                                     }
@@ -209,9 +252,33 @@ pub fn LootQueue() -> impl IntoView {
                                         tooltip_position=DynamicTooltipPosition::TopLeft
                                         class:shadow-lg
                                         max_item_level=Signal::derive(|| AreaLevel::MAX)
+                                        can_sell
                                     />
                                 </div>
                             </div>
+
+                            <div
+                                class="absolute bottom-0 w-[12%] aspect-[2/3] z-30 pointer-events-none"
+                                style=saved_position_style
+                            >
+                                <Show when=move || {
+                                    matches!(loot_state(loot.identifier), LootState::Sold)
+                                }>
+                                    <div class="
+                                    reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
+                                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
+                                    flex items-center gap-1 font-number">
+                                        <span>+{format_number(gold_price)}</span>
+                                        <img
+                                            draggable="false"
+                                            src=img_asset("ui/gold.webp")
+                                            alt="Gold"
+                                            class="h-[2em] aspect-square"
+                                        />
+                                    </div>
+                                </Show>
+                            </div>
+
                         </div>
                     }
                 }

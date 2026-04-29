@@ -16,9 +16,9 @@ pub fn drop_loot(queued_loot: &mut Vec<QueuedLoot>, item_specs: ItemSpecs) -> Ve
 pub fn take_loot(queued_loot: &mut [QueuedLoot], loot_identifier: u32) -> Option<ItemSpecs> {
     if let Some(loot) = queued_loot
         .iter_mut()
-        .find(|x| x.identifier == loot_identifier && x.state != LootState::HasDisappeared)
+        .find(|x| x.identifier == loot_identifier && !x.state.has_disappeared())
     {
-        loot.state = LootState::HasDisappeared;
+        loot.state = LootState::Sold;
         return Some(loot.item_specs.clone());
     }
     None
@@ -34,7 +34,7 @@ pub fn pickup_loot(
 
     if let Some(loot) = queued_loot
         .iter_mut()
-        .find(|x| x.identifier == loot_identifier && x.state != LootState::HasDisappeared)
+        .find(|x| x.identifier == loot_identifier && !x.state.has_disappeared())
     {
         loot.state = LootState::HasDisappeared;
         if let Err(e) =
@@ -68,7 +68,7 @@ fn drop_loot_impl(
 
     // This feels very hacky =/
     if purge_disappeared {
-        queued_loot.retain(|loot| loot.state != LootState::HasDisappeared);
+        queued_loot.retain(|loot| !loot.state.has_disappeared());
     }
 
     queued_loot.push(QueuedLoot {
@@ -87,7 +87,7 @@ fn update_loot_states(queued_loot: &mut [QueuedLoot]) -> Vec<ItemSpecs> {
 
     let mut queued_loot: Vec<_> = queued_loot
         .iter_mut()
-        .filter(|x| x.state != LootState::HasDisappeared)
+        .filter(|x| !x.state.has_disappeared())
         .collect();
 
     for loot in queued_loot.iter_mut() {
@@ -108,13 +108,13 @@ fn update_loot_states(queued_loot: &mut [QueuedLoot]) -> Vec<ItemSpecs> {
             std::mem::swap(&mut left[i].item_specs, &mut right[0].item_specs);
         }
 
-        queued_loot[i].state = LootState::HasDisappeared;
+        queued_loot[i].state = LootState::Sold;
         discarded_loot.push(queued_loot[i].item_specs.clone());
     }
 
     let mut queued_loot: Vec<_> = queued_loot
         .iter_mut()
-        .filter(|x| x.state != LootState::HasDisappeared)
+        .filter(|x| !x.state.has_disappeared())
         .collect();
 
     for i in 0..queued_loot.len().saturating_sub(MAX_QUEUE_SIZE - 1) {

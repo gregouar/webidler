@@ -571,6 +571,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     }
                                     tooltip_position=DynamicTooltipPosition::AutoLeft
                                     max_item_level=inventory.max_item_level
+                                    can_sell=inventory.on_sell.is_some()
                                 />
 
                                 <Show when=is_queued_for_sale>
