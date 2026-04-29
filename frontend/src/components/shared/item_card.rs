@@ -112,10 +112,8 @@ pub fn ItemCard(
         );
     };
 
-    let hide_tooltip = {
-        let tooltip_context = expect_context::<DynamicTooltipContext>();
-        move || tooltip_context.hide()
-    };
+    let hide_tooltip = { move || tooltip_context.hide() };
+    on_cleanup(move || tooltip_context.hide());
 
     // let node_ref = NodeRef::new();
     // let UseMouseInElementReturn { is_outside, .. } = use_mouse_in_element(node_ref);

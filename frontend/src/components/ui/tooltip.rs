@@ -108,7 +108,7 @@ pub fn DynamicTooltip() -> impl IntoView {
     let handle = window_event_listener(ev::touchend, {
         move |ev| {
             if ev.touches().length() == 0 {
-                tooltip_context.content.set(None)
+                tooltip_context.hide();
             }
         }
     });
@@ -118,7 +118,7 @@ pub fn DynamicTooltip() -> impl IntoView {
     let handle = window_event_listener(ev::touchcancel, {
         move |ev| {
             if ev.touches().length() == 0 {
-                tooltip_context.content.set(None)
+                tooltip_context.hide();
             }
         }
     });
@@ -195,6 +195,7 @@ pub fn DynamicTooltipTarget(
     // });
 
     let _ = leptos_use::on_click_outside(node_ref, move |_| hide_tooltip());
+    on_cleanup(move || tooltip_context.hide());
 
     let children = StoredValue::new(children);
     view! {

@@ -246,8 +246,8 @@ fn PlayerSkill(index: usize) -> impl IntoView {
         }
     };
 
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
+    on_cleanup(move || tooltip_context.hide());
 
     view! {
         <div class="flex flex-col">

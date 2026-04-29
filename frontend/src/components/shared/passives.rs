@@ -153,6 +153,11 @@ pub fn Node(
             }
         }
     };
+    on_cleanup(move || {
+        if let Some(tooltip_context) = tooltip_context {
+            tooltip_context.hide();
+        }
+    });
 
     let stroke = move || {
         let status = node_status();
@@ -689,7 +694,7 @@ pub fn PassiveSkillStats(
         }>
             <div class=move || {
                 format!(
-                    "h-full w-md overflow-y-auto p-2 xl:p-3 border-r {} {} {}",
+                    "h-full w-xs xl:w-md overflow-y-auto p-2 xl:p-3 border-r {} {} {}",
                     match settings.graphics_quality() {
                         GraphicsQuality::High => "border-[#5a4a30]/70",
                         GraphicsQuality::Medium => "border-[#5a4a30]/70",

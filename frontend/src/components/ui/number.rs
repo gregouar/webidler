@@ -188,7 +188,10 @@ mod tests {
             format_duration_in_days(Duration::from_secs(5 * 3600 + 7 * 60)),
             "05:07"
         );
-        assert_eq!(format_duration_in_days(Duration::from_secs(24 * 3600)), "24:00");
+        assert_eq!(
+            format_duration_in_days(Duration::from_secs(24 * 3600)),
+            "24:00"
+        );
         assert_eq!(
             format_duration_in_days(Duration::from_secs(2 * 24 * 3600 + 3 * 3600 + 4 * 60)),
             "2 Days 03:04"

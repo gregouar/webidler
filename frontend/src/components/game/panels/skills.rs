@@ -202,8 +202,8 @@ fn SkillCard(
         }
     };
 
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
     let hide_tooltip = move || tooltip_context.hide();
+    on_cleanup(move || tooltip_context.hide());
     let skill_type = skill_specs.skill_type;
 
     view! {

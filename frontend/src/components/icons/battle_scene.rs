@@ -116,15 +116,16 @@ pub fn EdictIcon(map_item: ItemSpecs) -> impl IntoView {
     let show_tooltip = move || {
         let item_specs = item_specs.clone();
         tooltip_context.set_content(
-                move || {
-                    view! { <ItemTooltip item_specs=item_specs.clone() max_item_level=Signal::derive(|| 9999) /> }
-                        .into_any()
-                },
-                DynamicTooltipPosition::BottomLeft,
-            );
+            move || {
+                view! { <ItemTooltip item_specs=item_specs.clone() max_item_level=Signal::derive(|| 9999) /> }
+                    .into_any()
+            },
+            DynamicTooltipPosition::BottomLeft,
+        );
     };
 
     let hide_tooltip = move || tooltip_context.hide();
+    on_cleanup(move || tooltip_context.hide());
 
     view! {
         <div
