@@ -126,9 +126,7 @@ pub fn ItemCard(
     // let is_inside = Memo::new(move |_| !is_outside.get());
 
     let is_inside = RwSignal::new(false);
-    on_cleanup(move || {
-        hide_tooltip();
-    });
+    on_cleanup(hide_tooltip);
 
     let events_context: EventsContext = expect_context();
 

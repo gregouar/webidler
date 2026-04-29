@@ -250,9 +250,7 @@ fn PlayerSkill(index: usize) -> impl IntoView {
     let hide_tooltip = move || {
         tooltip_context.hide(tooltip_id.get_untracked());
     };
-    on_cleanup(move || {
-        hide_tooltip();
-    });
+    on_cleanup(hide_tooltip);
 
     view! {
         <div class="flex flex-col">

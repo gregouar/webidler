@@ -870,9 +870,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
     let hide_tooltip = move || {
         tooltip_context.hide(tooltip_id.get_untracked());
     };
-    on_cleanup(move || {
-        hide_tooltip();
-    });
+    on_cleanup(hide_tooltip);
 
     let just_triggered = Memo::new(move |_| {
         if !is_dead.get() {

@@ -206,9 +206,7 @@ fn SkillCard(
     let hide_tooltip = move || {
         tooltip_context.hide(tooltip_id.get_untracked());
     };
-    on_cleanup(move || {
-        hide_tooltip();
-    });
+    on_cleanup(hide_tooltip);
     let skill_type = skill_specs.skill_type;
 
     view! {
