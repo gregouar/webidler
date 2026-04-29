@@ -8,7 +8,7 @@
       "starting_gold": {
         "value": 100,
         "effect": "StartingGold",
-        "upgrade_value": 30,
+        "upgrade_value": 50,
         "upgrade_modifier": "More"
       },
       "starting_level": {
@@ -63,7 +63,7 @@
             "modifier": "Flat"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 5,
         "upgrade_modifier": "Flat"
       },
       "armor_fire": {
@@ -74,7 +74,7 @@
             "modifier": "Flat"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 5,
         "upgrade_modifier": "Flat"
       },
       "armor_poison": {
@@ -85,7 +85,7 @@
             "modifier": "Flat"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 5,
         "upgrade_modifier": "Flat"
       },
       "armor_storm": {
@@ -96,7 +96,7 @@
             "modifier": "Flat"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 5,
         "upgrade_modifier": "Flat"
       }
     }
@@ -115,7 +115,7 @@
             "modifier": "More"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 2.5,
         "upgrade_modifier": "Flat"
       },
       "damage_fire": {
@@ -126,7 +126,7 @@
             "modifier": "More"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 2.5,
         "upgrade_modifier": "Flat"
       },
       "damage_poison": {
@@ -137,7 +137,7 @@
             "modifier": "More"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 2.5,
         "upgrade_modifier": "Flat"
       },
       "damage_storm": {
@@ -148,7 +148,7 @@
             "modifier": "More"
           }
         },
-        "upgrade_value": 1,
+        "upgrade_value": 2.5,
         "upgrade_modifier": "Flat"
       }
     }
