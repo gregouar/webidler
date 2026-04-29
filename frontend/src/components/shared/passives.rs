@@ -154,7 +154,7 @@ pub fn Node(
             }
         }
     };
-    on_cleanup(move || hide_tooltip());
+    on_cleanup(hide_tooltip);
 
     let stroke = move || {
         let status = node_status();
