@@ -794,7 +794,7 @@ pub fn GambleDetails(
                 <div class="w-full flex items-center gap-1 text-lg text-gray-400 p-2">
                     "Price: "
                     <span class="text-fuchsia-300 font-bold">
-                        {format!("{:.0}", gamble_price())}
+                        {move || format!("{:.0}", gamble_price())}
                     </span> <GemsIcon />
                 </div>
                 <div class="flex gap-1 xl:gap-2 w-full text-white mb-2">
