@@ -120,7 +120,7 @@ impl PassiveNodeSpecs {
     }
 
     pub fn next_ascend_cost(&self, level: u8) -> u16 {
-        level as u16 + 1
+        (level as u16) / 2 + 1
     }
 
     pub fn total_ascend_cost(&self, level: u8) -> u16 {
