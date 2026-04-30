@@ -493,7 +493,11 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 .unwrap_or_default()
         });
 
-        (1.0 - elapsed_cooldown) * cooldown
+        if is_dead.get() {
+            0.0
+        } else {
+            (1.0 - elapsed_cooldown) * cooldown
+        }
     });
 
     // TODO: Make dynamic in case of reset?
@@ -513,6 +517,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 .get(index)
                 .map(|x| x.just_triggered)
                 .unwrap_or_default()
+            && !is_dead.get()
     });
 
     let is_ready = Memo::new(move |_| {
@@ -694,8 +699,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         }
     };
 
-    let reset_progress =
-        Signal::derive(move || just_triggered.get() || is_dead.get() || rush_mode.get());
+    let reset_progress = Signal::derive(move || just_triggered.get() || rush_mode.get());
     let progress_value = predictive_cooldown(
         skill_cooldown,
         reset_progress,

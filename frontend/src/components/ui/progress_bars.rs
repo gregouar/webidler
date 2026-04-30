@@ -599,7 +599,7 @@ pub fn predictive_cooldown(
 
     Effect::new(move || {
         let remaining_time = remaining_time.get();
-        if remaining_time > 0.0 {
+        if progress_value.get_untracked() < 1.0 {
             let remaining: f64 = (1.0f64 - progress_value.get_untracked()).clamp(0.0, 1.0);
             rate.set(remaining / remaining_time);
         }

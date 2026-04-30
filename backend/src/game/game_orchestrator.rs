@@ -281,10 +281,10 @@ fn respawn_player(game_data: &mut GameInstanceData) {
         .skills_states
         .iter_mut()
     {
-        skill_state.elapsed_cooldown = 0.5.into();
+        skill_state.elapsed_cooldown = 1.0.into();
     }
 
-    if game_data.area_state.read().auto_progress {
+    if game_data.area_state.read().auto_progress || game_data.area_state.read().is_boss {
         area_controller::decrease_area_level(game_data.area_state.mutate(), 1);
     } else {
         game_data.area_state.mutate().waves_done = 1;
