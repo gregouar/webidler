@@ -440,8 +440,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                         value=move || {
                                                             format!(
                                                                 "{}{}%",
-                                                                if value >= 0.0 { "-" } else { "+" },
-                                                                format_number(-value),
+                                                                if value >= 0.0 { "+" } else { "-" },
+                                                                format_number(value.abs()),
                                                             )
                                                         }
                                                     />
