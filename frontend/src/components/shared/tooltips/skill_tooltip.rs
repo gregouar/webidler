@@ -400,7 +400,7 @@ pub fn format_skill_effect(
                             .push(
                                 view! {
                                     <EffectLi>
-                                        {success_chance}"Deal "
+                                        {success_chance}"Hit for "
                                         <span class=format!(
                                             "font-semibold {damage_color}",
                                         )>{format_min_max(value)}</span> {trigger_modifier_str} " "
@@ -498,7 +498,7 @@ pub fn format_skill_effect(
                             || {
                                 let deal_str = match status_effect.cumulate {
                                     true => "Stack",
-                                    false => "Deal",
+                                    false => "Inflict",
                                 };
                                 view! {
                                     <EffectLi>
@@ -833,7 +833,7 @@ pub fn skill_effect_text(
     match effect.effect_type {
         SkillEffectType::FlatDamage { damage, .. } => {
             format!(
-                "Deal {}Damage",
+                "Hit {}Damage",
                 damage
                     .keys()
                     .map(|damage_type| damage_type_str(Some(*damage_type)))

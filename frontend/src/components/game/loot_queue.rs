@@ -88,16 +88,33 @@ pub fn LootQueue() -> impl IntoView {
             .unwrap_or_default()
     };
 
-    let position_style = move |loot_identifier| {
-        let index = game_context
+    let position_index = move |loot_identifier| {
+        game_context
+            .queued_loot
+            .read()
+            .iter()
+            .filter(|l| !l.state.has_disappeared() || l.identifier == loot_identifier)
+            .rev()
+            .position(|l| l.identifier == loot_identifier)
+            .unwrap_or_default()
+    };
+
+    let position_index_untracked = move |loot_identifier| {
+        game_context
             .queued_loot
             .read_untracked()
             .iter()
             .filter(|l| !l.state.has_disappeared() || l.identifier == loot_identifier)
             .rev()
             .position(|l| l.identifier == loot_identifier)
-            .unwrap_or_default();
-        format!("left: {}%;", 4 + index * 20)
+            .unwrap_or_default()
+    };
+
+    let position_style = move |loot_identifier| {
+        format!(
+            "left: {}%;",
+            4 + position_index_untracked(loot_identifier).clamp(0, 4) * 20
+        )
     };
 
     let animation_style = move |loot_identifier| {
@@ -150,15 +167,9 @@ pub fn LootQueue() -> impl IntoView {
                     let can_sell = !matches!(loot.item_specs.modifiers.rarity, ItemRarity::Unique);
                     let is_new = RwSignal::new(true);
                     let stack_style = move || {
-                        let z_index = if hover_lock.get() == Some(loot.identifier) {
-                            30
-                        } else if is_new.get() {
-                            10
-                        } else {
-                            20
-                        };
                         format!(
-                            "animation: loot-drop 1.3s ease forwards; position: relative; z-index: {z_index};"
+                            "animation: loot-drop 1.3s ease forwards; position: relative; z-index: {};",
+                            position_index(loot.identifier),
                         )
                     };
                     let saved_position_style = RwSignal::new(position_style(loot.identifier));
@@ -171,9 +182,7 @@ pub fn LootQueue() -> impl IntoView {
                     });
 
                     view! {
-                        <div
-                            style=stack_style
-                        >
+                        <div style=stack_style>
                             <div
                                 class="
                                 absolute bottom-0 w-[12%] aspect-[2/3]

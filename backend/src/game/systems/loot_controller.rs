@@ -106,9 +106,11 @@ fn update_loot_states(queued_loot: &mut [QueuedLoot]) -> Vec<ItemSpecs> {
         {
             let (left, right) = queued_loot.split_at_mut(last_index);
             std::mem::swap(&mut left[i].item_specs, &mut right[0].item_specs);
+            queued_loot[i].state = LootState::HasDisappeared;
+        } else {
+            queued_loot[i].state = LootState::Sold;
         }
 
-        queued_loot[i].state = LootState::Sold;
         discarded_loot.push(queued_loot[i].item_specs.clone());
     }
 

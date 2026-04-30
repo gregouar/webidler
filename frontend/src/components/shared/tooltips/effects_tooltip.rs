@@ -386,7 +386,7 @@ pub fn formatted_effects_list(
                 format_number(*min_flat),
                 format_number(*max_flat),
                 damage_type_str(*damage_type),
-                skill_filter_str(skill_filter, "to ", true)
+                skill_filter_str(skill_filter, " to ", true)
             ));
         } else {
             let (skill_filter, damage_type, positive) = k;
@@ -395,7 +395,7 @@ pub fn formatted_effects_list(
                 positive_str(*positive),
                 format_number(*min_flat),
                 damage_type_str(*damage_type),
-                skill_filter_str(skill_filter, "to ", true)
+                skill_filter_str(skill_filter, " to ", true)
             ));
         }
     }
@@ -408,7 +408,7 @@ pub fn formatted_effects_list(
                 positive_str(*positive),
                 format_number(*max_flat),
                 damage_type_str(*damage_type),
-                skill_filter_str(skill_filter, "to ", true)
+                skill_filter_str(skill_filter, " to ", true)
             ));
         }
     }
@@ -501,7 +501,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!(
                 "Restore{} Effects{}",
                 restore_type_str(*restore_type),
-                skill_filter_str(skill_filter, "with ", true)
+                skill_filter_str(skill_filter, " with ", true)
             )
         }
         StatType::CritChance(skill_filter) => {
@@ -587,7 +587,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => format!(
             "Luck {}{}",
             &lucky_roll_str(roll_type),
-            skill_filter_str(skill_filter, "to ", true)
+            skill_filter_str(skill_filter, " to ", true)
         ),
         StatType::SuccessChance {
             skill_filter,
@@ -607,7 +607,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => format!(
             "{}{} against {}Enemies{}",
             format_multiplier_stat_name(stat),
-            skill_filter_str(skill_filter, "with ", true),
+            skill_filter_str(skill_filter, " with ", true),
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
@@ -659,7 +659,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::ManaCost { skill_filter } => format!(
             "{} Mana Cost{}",
             format_adds_removes(value, false, ""),
-            skill_filter_str(skill_filter, "to ", true)
+            skill_filter_str(skill_filter, " to ", true)
         ),
         StatType::Armor(armor_type) => format!(
             "{} {}",
@@ -711,7 +711,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             min_max_str(*min_max),
             damage_type_str(*damage_type),
             is_hit_str(is_hit),
-            skill_filter_str(skill_filter, "to ", true)
+            skill_filter_str(skill_filter, " to ", true)
         ),
         StatType::Restore {
             restore_type,
@@ -721,7 +721,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 "Restore {} more{}{}",
                 format_flat_number(value, false),
                 restore_type_str(*restore_type),
-                skill_filter_str(skill_filter, "with ", true)
+                skill_filter_str(skill_filter, " with ", true)
             )
         }
         StatType::CritChance(skill_filter) => {
@@ -729,20 +729,20 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if unwrap_value >= 100.0 {
                 format!(
                     "Guaranteed Critical Hit Chance{}",
-                    skill_filter_str(skill_filter, "with", true)
+                    skill_filter_str(skill_filter, " with ", true)
                 )
             } else {
                 format!(
                     "{} Critical Hit Chance{}",
                     format_adds_removes(value, false, "%"),
-                    skill_filter_str(skill_filter, "to ", true)
+                    skill_filter_str(skill_filter, " to ", true)
                 )
             }
         }
         StatType::CritDamage(skill_filter) => format!(
             "{} Critical Hit Damage{}",
             format_adds_removes(value, false, "%"),
-            skill_filter_str(skill_filter, "to ", true)
+            skill_filter_str(skill_filter, " to ", true)
         ),
         StatType::StatusPower {
             status_type,
@@ -806,13 +806,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 format!(
                     "Removes {}s Cooldown{}",
                     format_flat_number(value, true),
-                    skill_filter_str(skill_filter, "to ", true)
+                    skill_filter_str(skill_filter, " to ", true)
                 )
             } else {
                 format!(
                     "Adds {}s Cooldown{}",
                     format_flat_number(value.map(|v| -v), true),
-                    skill_filter_str(skill_filter, "to ", true)
+                    skill_filter_str(skill_filter, " to ", true)
                 )
             }
         }
@@ -996,7 +996,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => format!(
             "{}{} against {}Enemies{}",
             format_flat_stat(stat, value),
-            skill_filter_str(skill_filter, "with ", true),
+            skill_filter_str(skill_filter, " with ", true),
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
             conditions_tooltip::format_skill_modifier_conditions_post(conditions)
         ),
