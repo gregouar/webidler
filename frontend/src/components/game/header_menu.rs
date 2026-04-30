@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::messages::client::ClientMessage;
+use shared::messages::client::{ClientMessage, TerminateQuestMessage};
 
 use crate::components::{
     chat::chat_context::ChatContext,
@@ -35,9 +35,18 @@ pub fn HeaderMenu() -> impl IntoView {
 
     let try_abandon_quest = {
         let confirm_context: ConfirmContext = expect_context();
+        let conn: WebsocketContext = expect_context();
         move |_| {
             if game_context.quest_rewards.read_untracked().is_some() {
                 game_context.open_end_quest.set(true);
+            } else if game_context.area_specs.read_untracked().training {
+                do_abandon_quest();
+                conn.send(
+                    &TerminateQuestMessage {
+                        reward_picks: Default::default(),
+                    }
+                    .into(),
+                );
             } else {
                 (confirm_context.confirm)(
                 "Abandoning the Grind will reset the progression, keeping only Items, Gems and Power Shards collected. Are you sure?".into(),
@@ -129,12 +138,26 @@ pub fn HeaderMenu() -> impl IntoView {
                 <WikiButton />
             </div>
             <div class="flex-1 flex justify-around w-full items-center">
-                <GoldCounter value=gold w_full=true />
-                <GemsCounter value=gems w_full=true />
+                <GoldCounter
+                    value=gold
+                    w_full=true
+                    disabled=Signal::derive(move || {
+                        !game_context.area_specs.read().can_reward_gold()
+                    })
+                />
+                <GemsCounter
+                    value=gems
+                    w_full=true
+                    disabled=Signal::derive(move || {
+                        !game_context.area_specs.read().can_reward_gems()
+                    })
+                />
                 <ShardsCounter
                     value=shards
                     w_full=true
-                    disabled=Signal::derive(move || game_context.area_specs.read().disable_shards)
+                    disabled=Signal::derive(move || {
+                        !game_context.area_specs.read().can_reward_shards()
+                    })
                 />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">

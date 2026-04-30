@@ -2,7 +2,7 @@ use std::iter;
 
 use itertools::all;
 use shared::{
-    constants::WAVES_PER_AREA_LEVEL,
+    constants::{MAX_AREA_LEVEL, WAVES_PER_AREA_LEVEL},
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
@@ -297,7 +297,7 @@ fn handle_area_completed_event(
     let _ = area_level;
     let area_state = game_data.area_state.mutate();
 
-    if !game_data.area_specs.disable_shards
+    if game_data.area_specs.can_reward_shards()
         && (area_state.area_level > area_state.max_area_level_ever)
         && (area_state.area_level).is_multiple_of(10)
     {
@@ -320,34 +320,40 @@ fn handle_area_completed_event(
         area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
     }
 
-    match loot_generator::generate_loot(
-        &game_data.area_blueprint.loot_table,
-        &master_store.items_store,
-        &master_store.item_affixes_table,
-        &master_store.item_adjectives_table,
-        &master_store.item_nouns_table,
-        power_level,
-        *game_data.area_specs.power_level + *game_data.area_specs.item_level_modifier,
-        is_boss_level,
-        new_max, // Only drop unique when new area completed
-        false,
-        false,
-        None,
-        *game_data.area_specs.loot_rarity,
-        game_data.player_specs.read().gold_find.get(),
-    ) {
-        Some(item_specs) => {
-            for item_specs in loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs)
-            {
-                player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
+    if !game_data.area_blueprint.loot_table.entries.is_empty() {
+        match loot_generator::generate_loot(
+            &game_data.area_blueprint.loot_table,
+            &master_store.items_store,
+            &master_store.item_affixes_table,
+            &master_store.item_adjectives_table,
+            &master_store.item_nouns_table,
+            power_level,
+            *game_data.area_specs.power_level + *game_data.area_specs.item_level_modifier,
+            is_boss_level,
+            new_max, // Only drop unique when new area completed
+            false,
+            false,
+            None,
+            *game_data.area_specs.loot_rarity,
+            game_data.player_specs.read().gold_find.get(),
+        ) {
+            Some(item_specs) => {
+                for item_specs in
+                    loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs)
+                {
+                    player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
+                }
             }
+            None => tracing::warn!("Failed to generate loot"),
         }
-        None => tracing::warn!("Failed to generate loot"),
     }
 
     area_state.waves_done = 1;
     if area_state.auto_progress {
-        area_state.area_level += 1;
+        area_state.area_level = area_state
+            .area_level
+            .saturating_add(1)
+            .clamp(1, MAX_AREA_LEVEL);
     }
 
     game_data.game_stats.areas_completed += 1;

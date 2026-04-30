@@ -1,9 +1,12 @@
 use std::ops::ControlFlow;
 use tokio::task::yield_now;
 
-use shared::messages::{
-    client::ClientMessage,
-    server::{ErrorMessage, ErrorType},
+use shared::{
+    constants::MAX_AREA_LEVEL,
+    messages::{
+        client::ClientMessage,
+        server::{ErrorMessage, ErrorType},
+    },
 };
 
 use crate::{
@@ -174,8 +177,15 @@ fn handle_client_message(
         ClientMessage::SetAutoProgress(m) => game_data.area_state.mutate().auto_progress = m.value,
         ClientMessage::GoBack(m) => {
             let area_state = game_data.area_state.mutate();
-            area_state.going_back += m.amount;
-            area_state.auto_progress = false;
+            if m.amount >= 0 {
+                area_state.auto_progress = false;
+            } else if !game_data.area_specs.training {
+                return None;
+            }
+            area_state.going_back = area_state
+                .going_back
+                .saturating_add(m.amount)
+                .clamp(-(MAX_AREA_LEVEL as i32), MAX_AREA_LEVEL as i32);
         }
         ClientMessage::SetRushMode(m) => game_data.area_state.mutate().rush_mode = m.value,
         ClientMessage::PurchasePassive(m) => {

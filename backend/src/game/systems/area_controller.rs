@@ -1,14 +1,19 @@
-use shared::data::{
-    area::{AreaLevel, AreaSpecs, AreaState},
-    item::ItemSpecs,
-    item_affix::AffixEffectScope,
-    stat_effect::{EffectsMap, StatType},
+use shared::{
+    constants::MAX_AREA_LEVEL,
+    data::{
+        area::{AreaLevel, AreaSpecs, AreaState},
+        item::ItemSpecs,
+        item_affix::AffixEffectScope,
+        stat_effect::{EffectsMap, StatType},
+    },
 };
 
 use crate::game::data::{area::AreaBlueprint, master_store::LootTablesStore};
 
-pub fn decrease_area_level(area_state: &mut AreaState, amount: AreaLevel) {
-    area_state.area_level = area_state.area_level.saturating_sub(amount).max(1);
+pub fn decrease_area_level(area_state: &mut AreaState, amount: i32) {
+    area_state.area_level = (area_state.area_level as i32)
+        .saturating_sub(amount)
+        .clamp(1, MAX_AREA_LEVEL as i32) as AreaLevel;
     area_state.waves_done = 1;
 }
 

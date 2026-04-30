@@ -146,7 +146,7 @@ async fn control_entities(
     );
 
     let wave_completed = monsters_still_alive.is_empty();
-    if wave_completed || game_data.area_state.read().going_back > 0 {
+    if wave_completed || game_data.area_state.read().going_back != 0 {
         game_data.area_threat.cooldown = Default::default();
         if wave_completed
             && !game_data.wave_completed
@@ -160,7 +160,7 @@ async fn control_entities(
         }
 
         if game_data.monster_wave_delay.is_zero() {
-            if game_data.area_state.read().going_back > 0 {
+            if game_data.area_state.read().going_back != 0 {
                 let area_state = game_data.area_state.mutate();
                 let amount = area_state.going_back;
                 area_controller::decrease_area_level(area_state, amount);
@@ -238,7 +238,7 @@ async fn update_entities(
     game_data.monster_wave_delay = game_data.monster_wave_delay.saturating_sub(elapsed_time);
 
     if !game_data.player_state.character_state.is_alive
-        || game_data.area_state.read().going_back > 0
+        || game_data.area_state.read().going_back != 0
     {
         return;
     }

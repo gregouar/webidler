@@ -135,6 +135,11 @@ impl GameInstanceData {
             return Err(anyhow::anyhow!("area is hidden"));
         }
 
+        if area_specs.training {
+            player_resources.experience = 1e70;
+            player_resources.gold = 1e160;
+        }
+
         let mut area_state = AreaState::init(&area_specs);
         area_state.max_area_level_ever = max_area_level_completed;
 
@@ -168,6 +173,11 @@ impl GameInstanceData {
             &area_threat,
         );
 
+        let mut player_state = PlayerState::init(&player_specs);
+        for skill_state in player_state.character_state.skills_states.iter_mut() {
+            skill_state.elapsed_cooldown = 1.0.into();
+        }
+
         Ok(Self {
             realm_id,
             area_id,
@@ -182,7 +192,7 @@ impl GameInstanceData {
             passives_tree_state: LazySyncer::new(passives_tree_state),
 
             player_resources: LazySyncer::new(player_resources),
-            player_state: PlayerState::init(&player_specs),
+            player_state,
             player_controller,
             player_specs: LazySyncer::new(player_specs),
             player_base_specs: LazySyncer::new(player_base_specs),

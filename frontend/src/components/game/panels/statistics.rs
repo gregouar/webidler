@@ -437,7 +437,13 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                             "{}Damage Taken",
                                                             effects_tooltip::damage_type_str(Some(damage_type)),
                                                         )
-                                                        value=move || format_effect_value(value)
+                                                        value=move || {
+                                                            format!(
+                                                                "{}{}%",
+                                                                if value >= 0.0 { "+" } else { "-" },
+                                                                format_number(value.abs()),
+                                                            )
+                                                        }
                                                     />
                                                 }
                                             })

@@ -247,7 +247,7 @@ fn compute_total_shards(
         .map(|area| {
             if area_blueprints_store
                 .get(&area.area_id)
-                .map(|area_blueprint| !area_blueprint.specs.disable_shards)
+                .map(|area_blueprint| !area_blueprint.specs.crucible)
                 .unwrap_or_default()
             {
                 (area.max_area_level / 10) as f64

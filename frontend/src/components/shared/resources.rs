@@ -12,13 +12,13 @@ use crate::{
 pub fn ResourceIcon(
     icon: &'static str,
     name: &'static str,
-    description: &'static str,
+    description: impl Fn() -> String + Send + Sync + Clone + 'static,
 ) -> impl IntoView {
     let tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
                 <div class="font-semibold text-white">{name}</div>
-                <div class="text-sm text-zinc-300">{description}</div>
+                <div class="text-sm text-zinc-300">{description()}</div>
             </div>
         }
     };
@@ -41,20 +41,38 @@ pub fn ResourceCounter(
     description: &'static str,
     value: Signal<f64>,
     w_full: bool,
+    text_color: &'static str,
+    disabled: Signal<bool>,
 ) -> impl IntoView {
     view! {
-        <div class="flex-1 text-shadow-md shadow-gray-950
-        text-sm xl:text-xl 
-        flex justify-center items-center space-x-1">
+        <div
+            class="flex-1 text-shadow-md shadow-gray-950
+            text-sm xl:text-xl 
+            flex justify-center items-center space-x-1"
+            class:saturate-10=disabled
+        >
             <NumberInset>
-                <div class=format!(
-                    "font-number font-semibold text-right {}",
-                    if w_full { "w-[8ch]" } else { "" },
-                )>
+                <div class=move || {
+                    format!(
+                        "font-number font-semibold text-right {} {}",
+                        if w_full { "w-[8ch]" } else { "" },
+                        if disabled.get() { "text-gray-300" } else { text_color },
+                    )
+                }>
                     <Number value=value />
                 </div>
             </NumberInset>
-            <ResourceIcon icon name description />
+            <ResourceIcon
+                icon
+                name
+                description=move || {
+                    if disabled.get() {
+                        format!("{} are disabled in this area.", name)
+                    } else {
+                        description.to_string()
+                    }
+                }
+            />
         </div>
     }
 }
@@ -65,7 +83,10 @@ pub fn GoldIcon() -> impl IntoView {
         <ResourceIcon
             icon="ui/gold.webp"
             name="Gold"
-            description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Blessings in Town."
+            description=move || {
+                "Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Blessings in Town."
+                    .into()
+            }
         />
     }
 }
@@ -73,15 +94,17 @@ pub fn GoldIcon() -> impl IntoView {
 pub fn GoldCounter(
     #[prop(into)] value: Signal<f64>,
     #[prop(default = false)] w_full: bool,
+    #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
 ) -> impl IntoView {
     view! {
         <ResourceCounter
-            class:text-amber-200
+            text_color="text-amber-200"
             icon="ui/gold.webp"
             name="Gold"
             description="Used during Grind to buy level up for Skills. Total Gold collected during a Grind is also converted to Temple Donations to buy Blessings in Town."
             value
             w_full
+            disabled
         />
     }
 }
@@ -92,20 +115,28 @@ pub fn GemsIcon() -> impl IntoView {
         <ResourceIcon
             icon="ui/gems.webp"
             name="Gems"
-            description="To exchange Items in the Market or craft Items at the Forge, in Town between Grinds. Obtained by killing Champion Monsters."
+            description=move || {
+                "To exchange Items in the Market or craft Items at the Forge, in Town between Grinds. Obtained by killing Champion Monsters."
+                    .into()
+            }
         />
     }
 }
 #[component]
-pub fn GemsCounter(value: Signal<f64>, #[prop(default = false)] w_full: bool) -> impl IntoView {
+pub fn GemsCounter(
+    value: Signal<f64>,
+    #[prop(default = false)] w_full: bool,
+    #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
+) -> impl IntoView {
     view! {
         <ResourceCounter
-            class:text-fuchsia-300
+            text_color="text-fuchsia-300"
             icon="ui/gems.webp"
             name="Gems"
             description="To exchange Items in the Market or craft Items at the Forge, in Town between Grinds. Obtained by killing Champion Monsters."
             value
             w_full
+            disabled
         />
     }
 }
@@ -116,7 +147,10 @@ pub fn ShardsIcon() -> impl IntoView {
         <ResourceIcon
             icon="ui/power_shard.webp"
             name="Power Shards"
-            description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
+            description=move || {
+                "To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
+                    .into()
+            }
         />
     }
 }
@@ -127,33 +161,14 @@ pub fn ShardsCounter(
     #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
 ) -> impl IntoView {
     view! {
-        {move || {
-            if disabled.get() {
-                view! {
-                    <ResourceCounter
-                        class:saturate-10
-                        class:text-gray-300
-                        icon="ui/power_shard.webp"
-                        name="Power Shards"
-                        description="Power Shards are not obtainable in Crucible Area."
-                        value
-                        w_full
-                    />
-                }
-                    .into_any()
-            } else {
-                view! {
-                    <ResourceCounter
-                        class:text-cyan-300
-                        icon="ui/power_shard.webp"
-                        name="Power Shards"
-                        description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
-                        value
-                        w_full
-                    />
-                }
-                    .into_any()
-            }
-        }}
+        <ResourceCounter
+            text_color="text-cyan-300"
+            icon="ui/power_shard.webp"
+            name="Power Shards"
+            description="To permanently increase power of Passive Skills by Ascending them, in Town between Grinds. Obtained for every 10 new Area Level completed."
+            value
+            w_full
+            disabled
+        />
     }
 }

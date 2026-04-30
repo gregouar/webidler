@@ -1,10 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    area::{AreaLevel, StartAreaConfig},
-    item::ItemSlot,
-    passive::PassiveNodeId,
-    user::UserCharacterId,
+    area::StartAreaConfig, item::ItemSlot, passive::PassiveNodeId, user::UserCharacterId,
 };
 
 use super::macros::impl_into_message;
@@ -120,7 +117,7 @@ pub struct PickUpLootMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GoBackLevelMessage {
-    pub amount: AreaLevel,
+    pub amount: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

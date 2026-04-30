@@ -1,4 +1,4 @@
-use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{
     components::{Route, Router, Routes},
@@ -36,8 +36,6 @@ pub fn App() -> impl IntoView {
         .unwrap_or_default();
 
     let base_uri = router_base_from_base_uri(base_uri);
-
-    console_log(&base_uri);
 
     provide_context(BackendClient::new(
         option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),

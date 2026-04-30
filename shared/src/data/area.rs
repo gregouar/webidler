@@ -29,11 +29,13 @@ pub struct AreaSpecs {
     #[serde(default)]
     pub coming_soon: bool,
     #[serde(default)]
-    pub disable_shards: bool,
+    pub crucible: bool,
     #[serde(default)]
     pub boss: bool,
     #[serde(default)]
     pub hidden: bool,
+    #[serde(default)]
+    pub training: bool,
 
     #[serde(default = "default_reward_slots")]
     pub reward_slots: u8,
@@ -48,6 +50,20 @@ pub struct AreaSpecs {
     pub effects: EffectsMap,
     #[serde(default)]
     pub triggers: Vec<TriggeredEffect>,
+}
+
+impl AreaSpecs {
+    pub fn can_reward_shards(&self) -> bool {
+        !self.crucible && !self.training
+    }
+
+    pub fn can_reward_gold(&self) -> bool {
+        !self.training
+    }
+
+    pub fn can_reward_gems(&self) -> bool {
+        !self.training
+    }
 }
 
 fn default_reward_slots() -> u8 {
@@ -73,7 +89,7 @@ pub struct AreaState {
     pub last_champion_spawn: AreaLevel,
 
     pub auto_progress: bool,
-    pub going_back: u16,
+    pub going_back: i32,
     pub rush_mode: bool,
     // pub end_quest: bool,
 }

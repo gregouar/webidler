@@ -4,6 +4,7 @@
   },
   "resources": {
     "areas": [
+      "training.json",
       "inn_basement.json",
       "inn_basement_2.json",
       "forest.json",

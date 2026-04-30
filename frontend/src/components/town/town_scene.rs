@@ -16,7 +16,7 @@ use crate::{
     components::{
         data_context::DataContext,
         game::portrait::CharacterPortrait,
-        icons::area::{BossAreaIcon, CrucibleAreaIcon},
+        icons::area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
@@ -98,6 +98,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                                 .read()
                                                 .get(&area.area_id)
                                                 .map(|area_specs| (
+                                                    !area_specs.training,
                                                     area_specs.coming_soon,
                                                     area_specs.required_level,
                                                 ))
@@ -560,8 +561,11 @@ pub fn StartGrindPanel(
                                 <CardInset class="xl:space-y-4">
                                     <div class="w-full flex text-lg xl:text-2xl font-bold text-shadow-lg/100 shadow-gray-950 text-amber-300 justify-center items-center gap-4">
                                         {area_specs
-                                            .disable_shards
+                                            .crucible
                                             .then(|| view! { <CrucibleAreaIcon /> })}
+                                        {area_specs
+                                            .training
+                                            .then(|| view! { <TrainingAreaIcon /> })}
                                         {area_specs.boss.then(|| view! { <BossAreaIcon /> })}
                                         <span class="font-display">{area_specs.name}</span>
                                     </div>

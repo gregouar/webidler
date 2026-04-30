@@ -4,6 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::{
     computations::{player_level_up_cost, skill_cost_increase},
+    constants::MAX_SKILL_LEVEL,
     messages::client::{
         LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
     },
@@ -33,7 +34,9 @@ use super::{GameContext, portrait::CharacterPortrait};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
-    let game_context = expect_context::<GameContext>();
+    let game_context: GameContext = expect_context();
+    let events_context: EventsContext = expect_context();
+
     let quantize_ratio = |value: f64| (value.clamp(0.0, 1.0) * 200.0).round() / 200.0;
     let quantize_percent = |value: f64| (value.clamp(0.0, 100.0) * 2.0).round() / 2.0;
 
@@ -191,15 +194,31 @@ pub fn PlayerCard() -> impl IntoView {
     });
 
     let level_up = move |_| {
-        game_context.player_base_specs.update(|player_base_specs| {
-            game_context.player_resources.write().experience -= player_base_specs.experience_needed;
-            player_base_specs.level += 1;
-            player_base_specs.experience_needed = player_level_up_cost(player_base_specs);
-            just_leveled_up.set(true);
-        });
-        game_context.player_resources.write().passive_points += 1;
+        let amount = if events_context.key_pressed(Key::Ctrl) {
+            10
+        } else {
+            1
+        };
 
-        conn.send(&LevelUpPlayerMessage { amount: 1 }.into());
+        game_context.player_base_specs.update(|player_base_specs| {
+            game_context.player_resources.update(|player_resources| {
+                for _ in 0..amount {
+                    if player_resources.experience < player_base_specs.experience_needed
+                        || player_base_specs.level >= player_base_specs.max_level
+                    {
+                        break;
+                    }
+                    player_resources.passive_points += 1;
+                    player_resources.experience -= player_base_specs.experience_needed;
+                    player_base_specs.level += 1;
+                    player_base_specs.experience_needed = player_level_up_cost(player_base_specs);
+                }
+            })
+        });
+
+        just_leveled_up.set(true);
+
+        conn.send(&LevelUpPlayerMessage { amount }.into());
     };
     let disable_level_up = Memo::new(move |_| {
         max_xp.get() > game_context.player_resources.read().experience || max_level.get()
@@ -557,7 +576,9 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         if let Some(player_base_skill) = player_base_skill.get() {
             let mut player_base_skill = (*player_base_skill).clone();
             for _ in 0..10 {
-                if total_cost + player_base_skill.next_upgrade_cost > gold {
+                if total_cost + player_base_skill.next_upgrade_cost > gold
+                    || player_base_skill.upgrade_level >= MAX_SKILL_LEVEL
+                {
                     break;
                 }
                 total_level += 1;
@@ -599,8 +620,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         );
     };
 
-    let disable_level_up =
-        Memo::new(move |_| level_up_cost.get() > game_context.player_resources.read().gold);
+    let disable_level_up = Memo::new(move |_| {
+        level_up_cost.get() > game_context.player_resources.read().gold
+            || player_base_skill
+                .read()
+                .as_ref()
+                .map(|player_base_skill| player_base_skill.upgrade_level >= MAX_SKILL_LEVEL)
+                .unwrap_or(true)
+    });
 
     let disabled_auto = Memo::new(move |_| {
         skill_specs.with(|skill_specs| {
@@ -613,17 +640,27 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     });
 
     let cost_tooltip = move || {
-        view! {
-            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
-                <span class="font-semibold text-white">{"Upgrade Cost"}</span>
-                <span class="text-zinc-300">
-                    <Number class:font-semibold value=level_up_cost />
-                    " Gold"
-                </span>
-                <span class="text-xs italic text-gray-400">
-                    {format!("Hold CTRL: +{}", level_up_batch.get().0)}
-                </span>
-            </div>
+        if player_base_skill
+            .read()
+            .as_ref()
+            .map(|player_base_skill| player_base_skill.upgrade_level >= MAX_SKILL_LEVEL)
+            .unwrap_or(true)
+        {
+            view! { <span class="text-zinc-300">"Max Level"</span> }.into_any()
+        } else {
+            view! {
+                <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
+                    <span class="font-semibold text-white">{"Upgrade Cost"}</span>
+                    <span class="text-zinc-300">
+                        <Number class:font-semibold value=level_up_cost />
+                        " Gold"
+                    </span>
+                    <span class="text-xs italic text-gray-400">
+                        {format!("Hold CTRL: +{}", level_up_batch.get().0)}
+                    </span>
+                </div>
+            }
+            .into_any()
         }
     };
 
