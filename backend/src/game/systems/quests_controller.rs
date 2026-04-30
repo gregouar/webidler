@@ -65,7 +65,7 @@ fn generate_end_quest_rewards(
     let area_level = game_data.area_state.read().max_area_level;
 
     // Up to 2 rewards are edict, only 1 if only 2 rewards available.
-    let rewards_amount = if area_level >= ITEM_REWARDS_MIN_LEVEL {
+    let rewards_amount = if area_level >= ITEM_REWARDS_MIN_LEVEL && !game_data.area_specs.training {
         game_data.area_specs.reward_slots
     } else {
         0

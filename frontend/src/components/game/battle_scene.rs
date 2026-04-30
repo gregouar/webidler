@@ -2,19 +2,20 @@ use leptos::{html::*, prelude::*};
 
 use shared::{
     computations,
-    constants::WAVES_PER_AREA_LEVEL,
+    constants::{MAX_AREA_LEVEL, WAVES_PER_AREA_LEVEL},
     messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage},
 };
 
 use crate::{
     assets::img_asset,
     components::{
+        events::{EventsContext, Key},
         game::{
             GameContext, loot_queue::LootQueue, monsters_grid::MonstersGrid,
             player_card::PlayerCard, websocket::WebsocketContext,
         },
         icons::{
-            area::{BossAreaIcon, CrucibleAreaIcon},
+            area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
             battle_scene::{EdictIcon, RushIcon, ThreatIcon},
         },
         ui::{
@@ -67,13 +68,34 @@ pub fn BattleScene() -> impl IntoView {
 #[component]
 pub fn BattleSceneHeader() -> impl IntoView {
     let game_context: GameContext = expect_context();
+    let events_context: EventsContext = expect_context();
 
     let go_back = {
         let conn: WebsocketContext = expect_context();
         move |_| {
-            conn.send(&GoBackLevelMessage { amount: 1 }.into());
+            let amount = if events_context.key_pressed(Key::Ctrl) {
+                10
+            } else {
+                1
+            };
+            conn.send(&GoBackLevelMessage { amount }.into());
             game_context.area_state.update(|area_state| {
-                area_state.going_back = area_state.going_back.saturating_add(1);
+                area_state.going_back = area_state.going_back.saturating_add(amount);
+            });
+        }
+    };
+
+    let go_forth = {
+        let conn: WebsocketContext = expect_context();
+        move |_| {
+            let amount = if events_context.key_pressed(Key::Ctrl) {
+                -10
+            } else {
+                -1
+            };
+            conn.send(&GoBackLevelMessage { amount }.into());
+            game_context.area_state.update(|area_state| {
+                area_state.going_back = area_state.going_back.saturating_add(amount);
             });
         }
     };
@@ -143,6 +165,37 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 </StaticTooltip>
             </div>
 
+            {
+                let go_forth = go_forth.clone();
+                move || {
+                    let go_forth = go_forth.clone();
+                    game_context
+                        .area_specs
+                        .read()
+                        .training
+                        .then(move || {
+                            view! {
+                                <div class="w-12 flex justify-start">
+                                    <StaticTooltip
+                                        position=StaticTooltipPosition::Right
+                                        tooltip=|| "Go Forth one Area Level"
+                                    >
+                                        <button
+                                            class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
+                                            hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
+                                            active:scale-90 active:brightness-125 transition"
+                                            title="Go Forth One Level"
+                                            on:click=go_forth
+                                        >
+                                            "→"
+                                        </button>
+                                    </StaticTooltip>
+                                </div>
+                            }
+                        })
+                }
+            }
+
             <div class="flex-1 text-center relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
                 <div class="relative z-10 inline-flex items-center justify-center space-x-2 xl:space-x-4
@@ -151,13 +204,20 @@ pub fn BattleSceneHeader() -> impl IntoView {
                         game_context
                             .area_specs
                             .read()
-                            .disable_shards
+                            .crucible
                             .then(|| view! { <CrucibleAreaIcon /> })
+                    }}
+                    {move || {
+                        game_context
+                            .area_specs
+                            .read()
+                            .training
+                            .then(|| view! { <TrainingAreaIcon /> })
                     }}
                     {move || {
                         game_context.area_specs.read().boss.then(|| view! { <BossAreaIcon /> })
                     }}
-                    <div class="flex items-center text-lg xl:text-2xl font-bold leading-none  text-shadow-lg/100 shadow-gray-950">
+                    <div class="flex gap-1 items-center text-lg xl:text-2xl font-bold leading-none  text-shadow-lg/100 shadow-gray-950">
                         <span class="[font-variant:small-caps] font-display">
                             {move || game_context.area_specs.read().name.clone()}
                         </span>
@@ -166,10 +226,9 @@ pub fn BattleSceneHeader() -> impl IntoView {
                             game_context
                                 .area_state
                                 .with(|area_state| {
-                                    area_state
-                                        .area_level
+                                    (area_state.area_level as i32)
                                         .saturating_sub(area_state.going_back)
-                                        .max(1)
+                                        .clamp(1, MAX_AREA_LEVEL as i32)
                                 })
                         }}
                     </div>

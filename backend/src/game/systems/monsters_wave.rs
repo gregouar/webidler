@@ -66,7 +66,7 @@ fn generate_monsters_wave_specs(
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, bool)> {
     // Can only fight boss once per level
-    if area_state.max_area_level < area_state.area_level {
+    if area_state.max_area_level < area_state.area_level || area_specs.training {
         let available_bosses: Vec<_> = bosses
             .iter()
             .filter(|b| {

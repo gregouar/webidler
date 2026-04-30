@@ -482,7 +482,7 @@ fn CharacterSlot(
 
                     <div class="text-sm text-gray-400 truncate">
                         {if character.max_area_level > 0 {
-                            format!("Item Power Level: {}", character.max_area_level)
+                            format!("Power Level: {}", character.max_area_level)
                         } else {
                             "Newbie".to_string()
                         }}

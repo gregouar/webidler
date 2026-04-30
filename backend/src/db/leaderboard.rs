@@ -73,6 +73,53 @@ pub async fn get_leaderboard(
     .await
 }
 
+pub async fn get_area_leaderboard(
+    db_pool: &DbPool,
+    top_n: i64,
+    realm_id: &RealmId,
+    area_id: &str,
+) -> Result<Vec<LeaderboardEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        LeaderboardEntry,
+        r#"
+        WITH ranked AS (
+            SELECT
+                lb.realm_id,
+                lb.character_id,
+                lb.area_id,
+                lb.area_level,
+                lb.elapsed_time,
+                lb.updated_at,
+                ROW_NUMBER() OVER (
+                    ORDER BY lb.area_level DESC, lb.elapsed_time ASC, lb.updated_at ASC
+                ) AS area_rank
+            FROM leaderboard lb
+            WHERE lb.realm_id = $2 AND lb.area_id = $3
+        )
+        SELECT
+            r.realm_id,
+            u.user_id           AS "user_id: UserId",
+            u.username,
+            c.character_id      AS "character_id: UserCharacterId",
+            c.character_name,
+            r.area_id,
+            r.area_level        AS "area_level: i32",
+            r.updated_at        AS "created_at",
+            r.elapsed_time
+        FROM ranked r
+        JOIN characters c ON r.character_id = c.character_id
+        JOIN users u      ON c.user_id = u.user_id
+        WHERE r.area_rank <= $1
+        ORDER BY r.area_rank;
+        "#,
+        top_n,
+        realm_id,
+        area_id
+    )
+    .fetch_all(db_pool)
+    .await
+}
+
 /// Return whether the result is a new global high score in the realm
 pub async fn update_leaderboard<'c>(
     executor: &mut sqlx::Transaction<'c, Database>,

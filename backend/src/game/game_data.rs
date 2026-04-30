@@ -135,6 +135,11 @@ impl GameInstanceData {
             return Err(anyhow::anyhow!("area is hidden"));
         }
 
+        if area_specs.training {
+            player_resources.experience = 1e70;
+            player_resources.gold = 1e160;
+        }
+
         let mut area_state = AreaState::init(&area_specs);
         area_state.max_area_level_ever = max_area_level_completed;
 

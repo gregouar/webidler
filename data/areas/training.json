@@ -1,0 +1,136 @@
+{
+  "specs": {
+    "name": "Training Grounds",
+    "description": "The training field invites you to test your finest builds, refine your tactics, and experiment without consequence.",
+    "power_level": 0,
+    "required_level": 50,
+    "training": true,
+    "header_background": "areas/training_header.webp",
+    "footer_background": "areas/training_footer.webp"
+  },
+  "loot_tables": [
+  ],
+  "bosses": [
+    {
+      "level": 50,
+      "interval": 50,
+      "spawns": [
+        {
+          "monster": "haunted_wine_bottle.json",
+          "quantity": 2
+        },
+        {
+          "monster": "haunted_wine_rack.json",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "waves": [
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "rat.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "bat.json",
+          "quantity": [ 3, 4 ]
+        },
+        {
+          "monster": "rat.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "bat.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "centipede.json",
+          "quantity": 1
+        },
+        {
+          "monster": "bat.json",
+          "quantity": [ 0, 1 ]
+        },
+        {
+          "monster": "centipede.json",
+          "quantity": 1
+        },
+        {
+          "monster": "bat.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "cat_skeleton.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "soot_imp.json",
+          "quantity": [ 2, 3 ]
+        },
+        {
+          "monster": "soot_imp_2.json",
+          "quantity": [ 2, 3 ]
+        },
+        {
+          "monster": "cat_skeleton.json",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "barrel_mimic.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "booze_elemental.json",
+          "quantity": [ 2, 3 ]
+        },
+        {
+          "monster": "patron_ghost.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "booze_elemental.json",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        {
+          "monster": "haunted_pot.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "bat_fire.json",
+          "quantity": [ 2, 3 ]
+        },
+        {
+          "monster": "haunted_lantern.json",
+          "quantity": [ 1, 2 ]
+        },
+        {
+          "monster": "bat_fire.json",
+          "quantity": 2
+        }
+      ]
+    }
+  ]
+}

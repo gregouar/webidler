@@ -4,6 +4,7 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::{
     computations::skill_cost_increase,
+    constants::MAX_SKILL_LEVEL,
     data::{
         character::CharacterId,
         item::{SkillRange, SkillShape},
@@ -600,7 +601,9 @@ pub fn level_up_skill(
     player_base_skill: &mut PlayerBaseSkill,
     player_resources: &mut PlayerResources,
 ) {
-    if player_resources.gold < player_base_skill.next_upgrade_cost {
+    if player_resources.gold < player_base_skill.next_upgrade_cost
+        || player_base_skill.upgrade_level >= MAX_SKILL_LEVEL
+    {
         return;
     }
 

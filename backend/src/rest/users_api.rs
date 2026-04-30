@@ -12,7 +12,11 @@ use chrono::{Duration, Utc};
 
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
-    data::user::{UserDetails, UserId},
+    data::{
+        badges::UserBadge,
+        realms::Realm,
+        user::{UserDetails, UserId},
+    },
     http::{
         client::{
             ForgotPasswordRequest, ResetPasswordRequest, SignInRequest, SignUpRequest,
@@ -136,9 +140,13 @@ async fn get_me(
     State(db_pool): State<db::DbPool>,
     Extension(user): Extension<User>,
 ) -> Result<Json<GetUserDetailsResponse>, AppError> {
-    let user = db::users::read_user(&db_pool, &user.user_id)
+    let mut user = db::users::read_user(&db_pool, &user.user_id)
         .await?
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
+
+    if let Some(crucible_badge) = crucible_badge(&db_pool, user.user_id).await {
+        user.chat_badge = serde_plain::to_string(&crucible_badge).ok();
+    }
 
     let email = user
         .email_crypt
@@ -153,6 +161,65 @@ async fn get_me(
             email,
         },
     }))
+}
+
+// TODO: Move somewhere else, have proper cosmetic system
+async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBadge> {
+    let top_three_standard = db::leaderboard::get_area_leaderboard(
+        &db_pool,
+        3,
+        &Realm::Standard.realm_id(),
+        "chaos.json",
+    )
+    .await
+    .unwrap_or_default();
+
+    let top_three_ssf = db::leaderboard::get_area_leaderboard(
+        &db_pool,
+        3,
+        &Realm::Standard.realm_id(),
+        "chaos.json",
+    )
+    .await
+    .unwrap_or_default();
+
+    if top_three_standard
+        .get(0)
+        .map(|entry| entry.user_id == user_id)
+        .unwrap_or_default()
+        || top_three_ssf
+            .get(0)
+            .map(|entry| entry.user_id == user_id)
+            .unwrap_or_default()
+    {
+        return Some(UserBadge::CrucibleChaosGold);
+    }
+
+    if top_three_standard
+        .get(1)
+        .map(|entry| entry.user_id == user_id)
+        .unwrap_or_default()
+        || top_three_ssf
+            .get(1)
+            .map(|entry| entry.user_id == user_id)
+            .unwrap_or_default()
+    {
+        return Some(UserBadge::CrucibleChaosSilver);
+    }
+
+    if top_three_standard
+        .get(2)
+        .map(|entry| entry.user_id == user_id)
+        .unwrap_or_default()
+        || top_three_ssf
+            .get(2)
+            .map(|entry| entry.user_id == user_id)
+            .unwrap_or_default()
+    {
+        return Some(UserBadge::CrucibleChaosBronze);
+    }
+
+    None
 }
 
 async fn post_forgot_password(

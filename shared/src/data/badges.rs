@@ -6,4 +6,7 @@ use serde::{Deserialize, Serialize};
 pub enum UserBadge {
     Developer,
     WitchHunter,
+    CrucibleChaosGold,
+    CrucibleChaosSilver,
+    CrucibleChaosBronze,
 }

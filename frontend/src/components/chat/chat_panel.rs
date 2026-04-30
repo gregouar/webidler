@@ -433,6 +433,21 @@ fn ChatBadge(badge: UserBadge) -> impl IntoView {
             "Witch Hunter",
             "This player killed Amelia, the Broodborne Witch.",
         ),
+        UserBadge::CrucibleChaosGold => (
+            "badge_chaos_gold",
+            "Champion of the Chaos Dimension",
+            "This player holds first place in 'The Chaos Dimension' crucible within a Realm.",
+        ),
+        UserBadge::CrucibleChaosSilver => (
+            "badge_chaos_silver",
+            "Vanguard of the Chaos Dimension",
+            "This player holds second place in 'The Chaos Dimension' crucible within a Realm.",
+        ),
+        UserBadge::CrucibleChaosBronze => (
+            "badge_chaos_bronze",
+            "Adept of the Chaos Dimension",
+            "This player holds third place in 'The Chaos Dimension' crucible within a Realm.",
+        ),
     };
 
     let src = img_asset(&format!("badges/{}.webp", src));
