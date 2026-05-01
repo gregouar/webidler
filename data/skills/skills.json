@@ -1294,7 +1294,7 @@
                       "modifier": "Flat"
                     }
                   },
-                  "value": 100
+                  "value": 200
                 },
                 {
                   "replace_on_value_only": true,

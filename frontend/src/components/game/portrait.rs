@@ -81,7 +81,9 @@ pub fn CharacterPortrait(
             statuses.read().iter().fold(
                 HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
                 |mut acc, (status_specs, status_state)| {
-                    let entry = acc.entry(status_specs.into()).or_default();
+                    let entry = acc
+                        .entry(status_specs.into_status_id(SkillType::Other))
+                        .or_default();
                     entry.0 += 1;
                     entry.1 += status_state.value.get();
                     entry.2 = Some(status_specs.clone());
@@ -741,6 +743,7 @@ pub fn status_description(
             )
         }
         StatusId::StatModifier {
+            skill_type: _,
             stat,
             modifier,
             debuff,
