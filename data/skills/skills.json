@@ -505,7 +505,7 @@
     "icon": "skills/curse_frailty.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -596,7 +596,7 @@
     "icon": "skills/curse_conductivity.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -750,7 +750,7 @@
     "icon": "skills/curse_putridity.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -859,7 +859,7 @@
     "icon": "skills/curse_flammability.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -982,7 +982,7 @@
     "icon": "skills/curse_weakness.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -1033,7 +1033,7 @@
     "icon": "skills/curse_clumsy.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -1139,7 +1139,7 @@
     "icon": "skills/curse_vampirism.svg",
     "skill_type": "Curse",
     "cooldown": 10,
-    "mana_cost": 30,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -1819,7 +1819,7 @@
     "icon": "skills/heal.svg",
     "skill_type": "Spell",
     "cooldown": 20,
-    "mana_cost": 25,
+    "mana_cost": 15,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
