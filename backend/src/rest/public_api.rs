@@ -47,7 +47,7 @@ async fn get_players_count(
     State(db_pool): State<db::DbPool>,
 ) -> Result<Json<PlayersCountResponse>, AppError> {
     let value = db::game_sessions::count_active_sessions(&db_pool).await?;
-    let glimpse = db::game_sessions::glimpse_active_sessions(&db_pool, 10)
+    let glimpse = db::game_sessions::glimpse_active_sessions(&db_pool, 30)
         .await?
         .into_iter()
         .map(|entry| LeaderboardEntry {
