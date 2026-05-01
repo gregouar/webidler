@@ -428,10 +428,14 @@ fn GrindingAreaCard(
                             </div>
 
                             <div class="text-xs xl:text-sm text-zinc-400">
-                                {if area.max_level_reached > 0 {
-                                    format!("Level Reached: {}", area.max_level_reached)
-                                } else {
-                                    "New Grind!".to_string()
+                                {move || {
+                                    if area_specs.read().training {
+                                        "Training".to_string()
+                                    } else if area.max_level_reached > 0 {
+                                        format!("Level Reached: {}", area.max_level_reached)
+                                    } else {
+                                        "New Grind!".to_string()
+                                    }
                                 }}
                             </div>
                         </div>
