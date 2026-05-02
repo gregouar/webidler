@@ -220,7 +220,11 @@ pub fn LootQueue() -> impl IntoView {
                                         let pickup_loot = pickup_loot.clone();
                                         move |_| pickup_loot(loot.identifier)
                                     }
-                                    on:mouseenter=move |_| hover_lock.set(Some(loot.identifier))
+                                    on:mouseenter=move |_| {
+                                        if !accessibility.is_on_mobile() {
+                                            hover_lock.set(Some(loot.identifier));
+                                        }
+                                    }
                                     on:mouseleave=move |_| {
                                         if hover_lock.get_untracked() == Some(loot.identifier) {
                                             hover_lock.set(None);
