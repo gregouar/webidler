@@ -8,7 +8,7 @@
     "power_factor": 20,
     "initiative": 3,
     "armor": { "Physical": 200, "Storm": 50, "Poison": 50, "Fire": 50 },
-    "stun_lockout": 5.0,
+    "stun_lockout": 3.0,
     "status_resistances": [
         {
             "status_type": "Stun",

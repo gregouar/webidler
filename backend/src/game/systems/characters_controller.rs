@@ -289,7 +289,7 @@ pub fn should_apply_status(
     if let Some((_, cur_status_state)) = target_state
         .statuses
         .unique_statuses
-        .get(&(status_specs.into(), skill_type))
+        .get(&status_specs.into_status_id(skill_type))
     {
         return compute_effect_weight(value, duration, replace_on_value_only)
             > compute_effect_weight(
@@ -400,7 +400,7 @@ pub fn apply_status(
             ));
 
             if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
-                let status_id: StatusId = status_specs.into();
+                let status_id: StatusId = status_specs.into_status_id(skill_type);
 
                 if let Some(i) = target_state
                     .statuses
@@ -408,7 +408,7 @@ pub fn apply_status(
                     .iter()
                     .enumerate()
                     .rev()
-                    .filter(|(_, (specs, _))| StatusId::from(specs) == status_id)
+                    .filter(|(_, (specs, _))| specs.into_status_id(skill_type) == status_id)
                     .nth(constants::MAX_STATUS_STACKS)
                     .map(|(i, _)| i)
                 {
@@ -419,7 +419,7 @@ pub fn apply_status(
             target_state
                 .statuses
                 .unique_statuses
-                .entry((status_specs.into(), skill_type))
+                .entry(status_specs.into_status_id(skill_type))
                 .and_modify(|(cur_status_specs, cur_status_state)| {
                     if compute_effect_weight(value, duration, false)
                         > compute_effect_weight(

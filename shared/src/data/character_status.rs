@@ -12,7 +12,7 @@ use super::{skill::DamageType, stat_effect::StatType};
 pub struct StatusMap {
     // TODO: Do we want to replace this by a map to indexes ?
     // pub unique_statuses: HashMap<StatusId, usize>, // Points to statuses vec
-    pub unique_statuses: HashMap<(StatusId, SkillType), (StatusSpecs, StatusState)>,
+    pub unique_statuses: HashMap<StatusId, (StatusSpecs, StatusState)>,
     pub cumulative_statuses: Vec<(StatusSpecs, StatusState)>,
 }
 
@@ -31,6 +31,7 @@ pub enum StatusId {
         damage_type: DamageType,
     },
     StatModifier {
+        skill_type: SkillType,
         stat: StatType,
         modifier: Modifier,
         debuff: bool,
@@ -54,9 +55,9 @@ pub enum StatusSpecs {
     Trigger(Box<TriggerSpecs>),
 }
 
-impl From<&StatusSpecs> for StatusId {
-    fn from(val: &StatusSpecs) -> Self {
-        match val {
+impl StatusSpecs {
+    pub fn into_status_id(&self, skill_type: SkillType) -> StatusId {
+        match self {
             StatusSpecs::Stun => StatusId::Stun,
             StatusSpecs::DamageOverTime { damage_type, .. } => StatusId::DamageOverTime {
                 damage_type: *damage_type,
@@ -66,6 +67,7 @@ impl From<&StatusSpecs> for StatusId {
                 modifier,
                 debuff,
             } => StatusId::StatModifier {
+                skill_type,
                 stat: stat.clone(),
                 modifier: *modifier,
                 debuff: *debuff,
@@ -76,6 +78,29 @@ impl From<&StatusSpecs> for StatusId {
         }
     }
 }
+
+// impl From<&StatusSpecs> for StatusId {
+//     fn from(val: &StatusSpecs) -> Self {
+//         match val {
+//             StatusSpecs::Stun => StatusId::Stun,
+//             StatusSpecs::DamageOverTime { damage_type, .. } => StatusId::DamageOverTime {
+//                 damage_type: *damage_type,
+//             },
+//             StatusSpecs::StatModifier {
+//                 stat,
+//                 modifier,
+//                 debuff,
+//             } => StatusId::StatModifier {
+//                 stat: stat.clone(),
+//                 modifier: *modifier,
+//                 debuff: *debuff,
+//             },
+//             StatusSpecs::Trigger(trigger_specs) => {
+//                 StatusId::Trigger(trigger_specs.triggered_effect.trigger_id.clone())
+//             }
+//         }
+//     }
+// }
 
 // IDEA: Separate more status specs from status id, do hash map of status id + cumulable
 // Use skill_id as status_id for special buffs and default status_id for others (status_id would be enum BaseStatusTYpe + String ?)

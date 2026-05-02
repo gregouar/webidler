@@ -156,6 +156,6 @@ impl CharacterState {
         self.statuses
             .unique_statuses
             .iter()
-            .any(|((status_id, _), _)| *status_id == StatusId::Stun)
+            .any(|(status_id, _)| *status_id == StatusId::Stun)
     }
 }

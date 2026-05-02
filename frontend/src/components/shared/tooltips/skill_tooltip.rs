@@ -6,6 +6,7 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     chance::{Chance, ChanceRange},
     character_status::StatusSpecs,
+    conditional_modifier::ConditionalModifier,
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     player::PlayerBaseSkill,
@@ -683,8 +684,16 @@ pub fn format_skill_effect(
 
     let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
 
+    let conditional_modifiers = effect
+        .conditional_modifiers
+        .clone()
+        .into_iter()
+        .map(format_conditional_modifier)
+        .collect::<Vec<_>>();
+
     view! {
         {base_effects}
+        {conditional_modifiers}
         {formatted_modifiers}
     }
 }
@@ -822,6 +831,46 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
         <EffectLi>{source_description}</EffectLi>
         {effects}
     }
+}
+
+fn format_conditional_modifier(conditional_modifier: ConditionalModifier) -> impl IntoView {
+    conditional_modifier
+        .effects
+        .into_iter()
+        .map(move |effect| {
+            let conditions = conditional_modifier.conditions.clone();
+            view! {
+                <EffectLi>
+                    {effects_tooltip::format_stat(
+                        &StatEffect {
+                            stat: StatType::SkillConditionalModifier {
+                                stat: Box::new(effect.stat),
+                                skill_filter: Default::default(),
+                                conditions,
+                            },
+                            modifier: effect.modifier,
+                            value: effect.value,
+                            bypass_ignore: effect.bypass_ignore,
+                        },
+                    )}
+                </EffectLi>
+            }
+
+            // if
+            // effects_tooltip::effect_li(format!(
+            //     "{} against {}Enemies{}",
+            //     effects_tooltip::format_flat_stat(&effect.stat, Some(effect.value)),
+            //     // skill_filter_str(skill_filter, " with ", true),
+            //     conditions_tooltip::format_skill_modifier_conditions_pre(
+            //         &conditional_modifier.conditions,
+            //         ""
+            //     ),
+            //     conditions_tooltip::format_skill_modifier_conditions_post(
+            //         &conditional_modifier.conditions
+            //     )
+            // ))
+        })
+        .collect::<Vec<_>>()
 }
 
 pub fn skill_effect_text(

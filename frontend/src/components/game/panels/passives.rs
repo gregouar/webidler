@@ -23,6 +23,7 @@ use crate::components::{
         confirm::ConfirmContext,
         input::Input,
         menu_panel::MenuPanel,
+        number::NumberInset,
         pannable::Pannable,
         toast::*,
         tooltip::{StaticTooltip, StaticTooltipPosition},
@@ -67,10 +68,13 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="flex-1" />
 
                         <span class="text-sm xl:text-base text-gray-400">
-                            "Remaining Points: "
-                            <span class="font-semibold text-white">
-                                {move || { game_context.player_resources.read().passive_points }}
-                            </span>
+                            "Remaining Points: " <NumberInset>
+                                <span class="font-semibold text-white">
+                                    {move || {
+                                        game_context.player_resources.read().passive_points
+                                    }}
+                                </span>
+                            </NumberInset>
                         </span>
 
                         <div class="flex-1" />

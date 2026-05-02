@@ -666,17 +666,21 @@ pub fn PassiveSkillStats(
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let stats = Memo::new(move |_| {
-        passives_tree_specs.with(|passives_tree_specs| {
-            passives_tree_ascension.with(|passives_tree_ascension| {
-                purchased_nodes.with(|purchased_nodes| {
-                    passive::generate_effects_map_from_passives(
-                        passives_tree_specs,
-                        passives_tree_ascension,
-                        purchased_nodes,
-                    )
-                })
-            })
-        })
+        let Some(passives_tree_specs) = passives_tree_specs.try_get() else {
+            return Default::default();
+        };
+        let Some(passives_tree_ascension) = passives_tree_ascension.try_get() else {
+            return Default::default();
+        };
+        let Some(purchased_nodes) = purchased_nodes.try_get() else {
+            return Default::default();
+        };
+
+        passive::generate_effects_map_from_passives(
+            &passives_tree_specs,
+            &passives_tree_ascension,
+            &purchased_nodes,
+        )
     });
 
     let (panel_open, set_panel_open) = signal(true);
@@ -729,25 +733,28 @@ pub fn PassiveSkillStats(
                 </ul>
 
                 {move || {
-                    purchased_nodes
-                        .with(|purchased_nodes| {
-                            passives_tree_specs
-                                .read()
-                                .nodes
-                                .iter()
-                                .filter(|(node_id, _)| purchased_nodes.contains(*node_id))
-                                .flat_map(|(_, node_specs)| node_specs.triggers.iter())
-                                .cloned()
-                                .map(|trigger_specs| {
-                                    view! {
-                                        <div class="pb-2 list-none">
-                                            <Separator />
-                                            {trigger_tooltip::format_trigger(trigger_specs, false)}
-                                        </div>
-                                    }
-                                })
-                                .collect::<Vec<_>>()
+                    let Some(purchased_nodes) = purchased_nodes.try_get() else {
+                        return Vec::new();
+                    };
+                    let Some(passives_tree_specs) = passives_tree_specs.try_get() else {
+                        return Vec::new();
+                    };
+
+                    passives_tree_specs
+                        .nodes
+                        .iter()
+                        .filter(|(node_id, _)| purchased_nodes.contains(*node_id))
+                        .flat_map(|(_, node_specs)| node_specs.triggers.iter())
+                        .cloned()
+                        .map(|trigger_specs| {
+                            view! {
+                                <div class="pb-2 list-none">
+                                    <Separator />
+                                    {trigger_tooltip::format_trigger(trigger_specs, false)}
+                                </div>
+                            }
                         })
+                        .collect::<Vec<_>>()
                 }}
             </div>
 
