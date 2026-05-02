@@ -164,6 +164,33 @@
         },
         "modifier": "More",
         "value": 30
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Fire"
+                    }
+                  },
+                  "skill_type": null
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "Increased",
+        "value": 5
       }
     ],
     "targets": [
@@ -192,7 +219,7 @@
     "description": "Release a horizontal beam of fire that burns enemies over time. Useful for hitting groups in a line.",
     "icon": "skills/burning_ray.svg",
     "skill_type": "Spell",
-    "cooldown": 4,
+    "cooldown": 3,
     "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -213,8 +240,8 @@
             "FlatDamage": {
               "damage": {
                 "Fire": [
-                  2,
-                  6
+                  1,
+                  3
                 ]
               }
             }
@@ -1229,7 +1256,9 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": { "skill_type": "Attack" }
+                        "Speed": {
+                          "skill_type": "Attack"
+                        }
                       },
                       "modifier": "Increased"
                     }
@@ -1241,7 +1270,9 @@
                   "status_type": {
                     "StatModifier": {
                       "stat": {
-                        "Speed": { "skill_type": "Spell" }
+                        "Speed": {
+                          "skill_type": "Spell"
+                        }
                       },
                       "modifier": "Increased"
                     }
@@ -2123,7 +2154,9 @@
         "effects": [
           {
             "stat": {
-              "Speed": { "skill_type": "Attack" }
+              "Speed": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "More",
             "value": 1
@@ -2264,7 +2297,9 @@
         "effects": [
           {
             "stat": {
-              "Speed": { "skill_type": "Attack" }
+              "Speed": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -2283,7 +2318,9 @@
         "effects": [
           {
             "stat": {
-              "CritChance": { "skill_type": "Attack" }
+              "CritChance": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -2302,7 +2339,9 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": { "skill_type": "Attack" }
+              "CritDamage": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -2642,7 +2681,9 @@
         "effects": [
           {
             "stat": {
-              "Speed": { "skill_type": "Attack" }
+              "Speed": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -2662,7 +2703,9 @@
         "effects": [
           {
             "stat": {
-              "CritChance": { "skill_type": "Attack" }
+              "CritChance": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -2682,7 +2725,9 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": { "skill_type": "Attack" }
+              "CritDamage": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -2991,7 +3036,9 @@
         "effects": [
           {
             "stat": {
-              "Speed": { "skill_type": "Attack" }
+              "Speed": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -3011,7 +3058,9 @@
         "effects": [
           {
             "stat": {
-              "CritChance": { "skill_type": "Attack" }
+              "CritChance": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1
@@ -3031,7 +3080,9 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": { "skill_type": "Attack" }
+              "CritDamage": {
+                "skill_type": "Attack"
+              }
             },
             "modifier": "Flat",
             "value": 1

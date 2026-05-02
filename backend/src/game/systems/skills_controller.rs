@@ -10,7 +10,7 @@ use shared::{
         item::{SkillRange, SkillShape},
         player::{PlayerBaseSkill, PlayerResources},
         skill::{
-            RepeatedSkillEffect, SkillEffect, SkillEffectType, SkillRepeatTarget,
+            RepeatedSkillEffect, RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget,
             SkillTargetsGroup, SkillType, TargetType,
         },
         values::NonNegative,
@@ -338,8 +338,15 @@ pub fn apply_skill_effects(
 ) -> bool {
     let seed = rng::roll_seed();
 
-    targets.iter_mut().any_all(|target| {
-        let mut target_applicable = false;
+    if !targets.iter().any(|target| {
+        skill_effects.iter().any(|skill_effect| {
+            is_skill_effect_applicable_on_target(skill_type, skill_effect, target)
+        })
+    }) {
+        return false;
+    }
+
+    for target in targets.iter_mut() {
         for skill_effect in skill_effects.iter() {
             let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
                 skill_effect
@@ -347,7 +354,7 @@ pub fn apply_skill_effects(
                 &apply_conditional_modifiers(target, skill_effect, skill_id, skill_type)
             };
 
-            let (applicable, effective) = apply_skill_effect_on_target(
+            if !apply_skill_effect_on_target(
                 events_queue,
                 attacker,
                 skill_type,
@@ -356,16 +363,13 @@ pub fn apply_skill_effects(
                 target,
                 trigger_id,
                 &mut seed.clone(),
-            );
-
-            target_applicable |= applicable;
-            if !effective {
-                // In case of like hit blocked
+            ) {
                 break;
             }
         }
-        target_applicable
-    })
+    }
+
+    true
 }
 
 fn apply_conditional_modifiers(
@@ -392,8 +396,55 @@ fn apply_conditional_modifiers(
     new_skill_effect
 }
 
-/// Return first whether the skill effect was applicable
-/// and secondly if it did applied (like not blocked)
+fn is_skill_effect_applicable_on_target(
+    skill_type: SkillType,
+    skill_effect: &SkillEffect,
+    target: &Target,
+) -> bool {
+    match &skill_effect.effect_type {
+        SkillEffectType::FlatDamage { .. } => target.1.1.is_alive,
+        SkillEffectType::ApplyStatus { duration, statuses } => {
+            let values: Vec<_> = statuses
+                .iter()
+                .map(|status_effect| status_effect.value.max)
+                .collect();
+
+            let duration = Some(duration.max);
+
+            statuses
+                .iter()
+                .zip(values.iter())
+                .any(|(status_effect, value)| {
+                    characters_controller::should_apply_status(
+                        target,
+                        &status_effect.status_type,
+                        skill_type,
+                        **value,
+                        duration.map(|duration| *duration),
+                        status_effect.cumulate,
+                        status_effect.replace_on_value_only,
+                    )
+                })
+        }
+        SkillEffectType::Restore { restore_type, .. } => {
+            target.1.1.is_alive
+                && match restore_type {
+                    RestoreType::Life => {
+                        target.1.1.life.get() < target.1.0.character_attrs.max_life.get()
+                    }
+                    RestoreType::Mana => {
+                        target.1.1.mana.get() < target.1.0.character_attrs.max_mana.get()
+                    }
+                }
+        }
+        SkillEffectType::Resurrect => !target.1.1.is_alive,
+        SkillEffectType::RefreshCooldown { .. } => {
+            target.1.1.is_alive // TODO: Actually verify skills
+        }
+    }
+}
+
+/// Return if it did apply (like not blocked)
 #[allow(clippy::too_many_arguments)]
 fn apply_skill_effect_on_target(
     events_queue: &mut EventsQueue,
@@ -404,8 +455,10 @@ fn apply_skill_effect_on_target(
     target: &mut Target,
     trigger_id: Option<&str>,
     seed: &mut RngSeed,
-) -> (bool, bool) {
-    let is_successful = skill_effect.success_chance.roll_with_seed(seed);
+) -> bool {
+    if !skill_effect.success_chance.roll_with_seed(seed) {
+        return false;
+    }
 
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage {
@@ -414,10 +467,6 @@ fn apply_skill_effect_on_target(
             crit_damage,
             unblockable,
         } => {
-            if !is_successful {
-                return (true, false);
-            }
-
             let is_crit = crit_chance.roll_with_seed(seed);
 
             let damage: HashMap<_, _> = damage
@@ -435,19 +484,16 @@ fn apply_skill_effect_on_target(
                 })
                 .collect();
 
-            (
-                true,
-                characters_controller::attack_character(
-                    events_queue,
-                    target,
-                    attacker,
-                    damage.clone(),
-                    skill_type,
-                    range,
-                    is_crit,
-                    *unblockable,
-                    trigger_id,
-                ),
+            characters_controller::attack_character(
+                events_queue,
+                target,
+                attacker,
+                damage.clone(),
+                skill_type,
+                range,
+                is_crit,
+                *unblockable,
+                trigger_id,
             )
         }
         SkillEffectType::ApplyStatus { duration, statuses } => {
@@ -458,87 +504,45 @@ fn apply_skill_effect_on_target(
 
             let duration = Some(duration.roll_with_seed(seed));
 
-            if !statuses
+            statuses
                 .iter()
                 .zip(values.iter())
-                .any(|(status_effect, value)| {
-                    characters_controller::should_apply_status(
+                .any_all(|(status_effect, value)| {
+                    characters_controller::apply_status(
+                        events_queue,
                         target,
+                        attacker,
                         &status_effect.status_type,
                         skill_type,
                         *value,
                         duration,
                         status_effect.cumulate,
-                        status_effect.replace_on_value_only,
+                        status_effect.unavoidable,
+                        trigger_id,
                     )
                 })
-            {
-                return (false, false);
-            }
-
-            if !is_successful {
-                return (true, false);
-            }
-
-            (
-                true,
-                statuses
-                    .iter()
-                    .zip(values.iter())
-                    .any_all(|(status_effect, value)| {
-                        characters_controller::apply_status(
-                            events_queue,
-                            target,
-                            attacker,
-                            &status_effect.status_type,
-                            skill_type,
-                            *value,
-                            duration,
-                            status_effect.cumulate,
-                            status_effect.unavoidable,
-                            trigger_id,
-                        )
-                    }),
-            )
         }
         SkillEffectType::Restore {
             restore_type,
             value,
             modifier,
-        } => {
-            if !is_successful {
-                return (true, false);
-            }
-
-            let restored = characters_controller::restore_character(
-                target,
-                *restore_type,
-                value.roll_with_seed(seed),
-                *modifier,
-            );
-            (restored, restored)
-        }
-        SkillEffectType::Resurrect => {
-            if !is_successful {
-                return (true, false);
-            }
-
-            let resurrected = characters_controller::resuscitate_character(target);
-            (resurrected, resurrected)
-        }
+        } => characters_controller::restore_character(
+            target,
+            *restore_type,
+            value.roll_with_seed(seed),
+            *modifier,
+        ),
+        SkillEffectType::Resurrect => characters_controller::resuscitate_character(target),
         SkillEffectType::RefreshCooldown {
             skill_filter,
             value,
             modifier,
-        } => {
-            let refreshed = characters_controller::refresh_skills_cooldown(
-                target,
-                skill_filter,
-                value.roll_with_seed(seed),
-                modifier,
-            );
-            (refreshed, refreshed)
-        }
+        } => characters_controller::refresh_skills_cooldown(
+            target,
+            skill_filter,
+            value.roll_with_seed(seed),
+            modifier,
+        ),
     }
 }
 
