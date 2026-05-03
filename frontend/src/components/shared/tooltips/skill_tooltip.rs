@@ -27,8 +27,8 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
-            self, damage_over_time_type_value_str, formatted_effects_list, min_max_str,
-            stat_skill_effect_type_str, status_type_str,
+            self, damage_over_time_type_value_str, format_multiplier_stat_name,
+            formatted_effects_list, min_max_str, stat_skill_effect_type_str, status_type_str,
         },
         frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip,
@@ -158,6 +158,13 @@ pub fn SkillTooltip(
         })
         .unwrap_or_default();
 
+    let ignore_stat_effects: Vec<_> = skill_specs
+        .ignore_stat_effects
+        .clone()
+        .into_iter()
+        .map(format_ignored_stat)
+        .collect();
+
     view! {
         <TooltipFrame palette class="max-w-xs">
             <strong class="text-sm xl:text-base font-bold text-violet-300 font-display text-shadow-md/80">
@@ -217,6 +224,8 @@ pub fn SkillTooltip(
                 {targets_lines}{trigger_lines}
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
+
+            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{ignore_stat_effects}</ul>
 
             {player_base_skill
                 .as_ref()
@@ -699,6 +708,13 @@ pub fn format_skill_effect(
         .map(format_conditional_modifier)
         .collect::<Vec<_>>();
 
+    // let ignore_stat_effects: Vec<_> = effect
+    //     .ignore_stat_effects
+    //     .clone()
+    //     .into_iter()
+    //     .map(format_ignored_stat)
+    //     .collect();
+
     view! {
         {base_effects}
         {conditional_modifiers}
@@ -776,8 +792,16 @@ where
 }
 
 #[component]
-pub fn EffectLi(children: Children) -> impl IntoView {
-    view! { <li class="text-xs xl:text-sm text-violet-200 whitespace-pre-line">{children()}</li> }
+pub fn EffectLi(
+    #[prop(optional)] class: Option<&'static str>,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <li class=format!(
+            "text-xs xl:text-sm text-violet-200 whitespace-pre-line {}",
+            class.unwrap_or(""),
+        )>{children()}</li>
+    }
 }
 
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
@@ -939,5 +963,13 @@ pub fn skill_effect_text(
         | SkillEffectType::RefreshCooldown { .. } => {
             stat_skill_effect_type_str(stat_skill_effect.as_ref())
         }
+    }
+}
+
+fn format_ignored_stat(stat_type: StatType) -> impl IntoView {
+    view! {
+        <EffectLi class="italic">
+            "Unaffected by "{format_multiplier_stat_name(&stat_type)}" Modifiers"
+        </EffectLi>
     }
 }
