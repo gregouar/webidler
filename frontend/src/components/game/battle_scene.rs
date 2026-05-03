@@ -244,7 +244,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     tooltip=move || {
                         if disable_rush.get() {
                             view! {
-                                <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
+                                <div class="flex flex-col xl:space-y-1 w-[15vw] whitespace-normal">
                                     <div class="font-semibold text-white">"Rush Mode"</div>
                                     <span class="text-zinc-300">
                                         "Unavailable, no Stamina left"
@@ -257,7 +257,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                 .into_any()
                         } else {
                             view! {
-                                <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
+                                <div class="flex flex-col xl:space-y-1 w-[15vw] whitespace-normal">
                                     <div class="font-semibold text-white">"Rush Mode"</div>
                                     <span class="text-zinc-300">
                                         {format_duration(game_context.player_stamina.get(), false)}
