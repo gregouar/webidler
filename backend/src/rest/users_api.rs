@@ -177,16 +177,18 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
     let top_three_ssf = db::leaderboard::get_area_leaderboard(
         db_pool,
         3,
-        &Realm::Standard.realm_id(),
+        &Realm::StandardSSF.realm_id(),
         "chaos.json",
     )
     .await
     .unwrap_or_default();
 
-    if top_three_standard.first()
+    if top_three_standard
+        .first()
         .map(|entry| entry.user_id == user_id)
         .unwrap_or_default()
-        || top_three_ssf.first()
+        || top_three_ssf
+            .first()
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
