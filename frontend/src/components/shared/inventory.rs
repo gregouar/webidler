@@ -583,7 +583,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     </div>
                                 </Show>
 
-                                <Show when=move || is_being_equipped.get()>
+                                <Show when=move || is_being_equipped.try_get().unwrap_or_default()>
                                     <div
                                         class="absolute inset-0 z-30 w-full"
                                         style="

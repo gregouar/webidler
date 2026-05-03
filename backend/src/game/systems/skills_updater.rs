@@ -13,8 +13,8 @@ use shared::data::{
         SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
     stat_effect::{
-        EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatEffect, StatType,
-        compare_options,
+        EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
+        StatEffect, StatType, compare_options,
     },
 };
 
@@ -376,228 +376,12 @@ pub fn compute_skill_specs_effect<'a>(
         }
     }
 
-    let mut stats_converters = Vec::new();
-
-    for effect in effects.clone() {
-        if !effect.bypass_ignore
-            && skill_effect
-                .ignore_stat_effects
-                .iter()
-                .any(|ignore| effect.stat.is_match(ignore))
-        {
-            continue;
-        }
-
-        if let StatType::Lucky {
-            skill_filter,
-            roll_type: LuckyRollType::SuccessChance { effect_type },
-        } = &effect.stat
-            && skill_filter.is_match_with_skill(skill_type, skill_id)
-            && compare_options(effect_type, &(&skill_effect.effect_type).into())
-        {
-            skill_effect
-                .success_chance
-                .lucky_chance
-                .apply_effect(effect);
-            continue;
-        }
-
-        if let StatType::SuccessChance {
-            skill_filter,
-            effect_type,
-        } = &effect.stat
-            && skill_filter.is_match_with_skill(skill_type, skill_id)
-            && compare_options(effect_type, &(&skill_effect.effect_type).into())
-        {
-            skill_effect.success_chance.value.apply_effect(effect);
-            continue;
-        }
-
-        if let StatType::StatConverter(specs) = &effect.stat {
-            stats_converters.push((specs.clone(), effect.modifier, effect.value));
-            continue;
-        }
-
-        if let StatType::SkillConditionalModifier {
-            skill_filter,
-            conditions,
-            stat,
-        } = &effect.stat
-            && skill_filter.is_match_with_skill(skill_type, skill_id)
-        {
-            skill_effect
-                .conditional_modifiers
-                .push(ConditionalModifier {
-                    conditions: conditions.clone(),
-                    conditions_duration: 0,
-                    effects: [StatEffect {
-                        stat: *(stat.clone()),
-                        modifier: effect.modifier,
-                        value: effect.value,
-                        bypass_ignore: effect.bypass_ignore,
-                    }]
-                    .into(),
-                });
-            continue;
-        }
-
-        match &mut skill_effect.effect_type {
-            SkillEffectType::FlatDamage {
-                damage,
-                crit_chance,
-                crit_damage,
-                ..
-            } => {
-                for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
-                    let value = damage.entry(damage_type).or_default();
-
-                    if let StatType::Damage {
-                        skill_filter,
-                        damage_type: stat_damage_type,
-                        min_max,
-                        is_hit,
-                    } = &effect.stat
-                        && skill_filter.is_match_with_skill(skill_type, skill_id)
-                        && compare_options(stat_damage_type, &Some(damage_type))
-                        && compare_options(is_hit, &Some(true))
-                    {
-                        if compare_options(min_max, &Some(MinMax::Min)) {
-                            value.min.apply_effect(effect);
-                        }
-
-                        if compare_options(min_max, &Some(MinMax::Max)) {
-                            value.max.apply_effect(effect);
-                        }
-                    }
-
-                    if let StatType::Lucky {
-                        skill_filter,
-                        roll_type:
-                            LuckyRollType::Damage {
-                                damage_type: stat_damage_type,
-                            },
-                    } = &effect.stat
-                        && skill_filter.is_match_with_skill(skill_type, skill_id)
-                        && compare_options(stat_damage_type, &Some(damage_type))
-                    {
-                        value.lucky_chance.apply_effect(effect);
-                    }
-                }
-
-                if let StatType::CritChance(skill_filter) = &effect.stat
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                {
-                    crit_chance.value.apply_effect(effect);
-                }
-
-                if let StatType::Lucky {
-                    skill_filter,
-                    roll_type: LuckyRollType::CritChance,
-                } = &effect.stat
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                {
-                    crit_chance.lucky_chance.apply_effect(effect);
-                }
-
-                if let StatType::CritDamage(skill_filter) = &effect.stat
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                {
-                    crit_damage.apply_effect(effect);
-                }
-
-                // crit_chance.clamp();
-            }
-            SkillEffectType::ApplyStatus { statuses, duration } => {
-                if let StatType::StatusDuration {
-                    status_type,
-                    skill_filter,
-                } = &effect.stat
-                    && statuses.iter().any(|status_effect| {
-                        compare_options(status_type, &Some((&status_effect.status_type).into()))
-                    })
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                {
-                    duration.min.apply_effect(effect);
-                    duration.max.apply_effect(effect);
-                }
-
-                for status_effect in statuses.iter_mut() {
-                    if let StatType::StatusPower {
-                        status_type,
-                        skill_filter,
-                        min_max,
-                    } = &effect.stat
-                        && compare_options(status_type, &Some((&status_effect.status_type).into()))
-                        && skill_filter.is_match_with_skill(skill_type, skill_id)
-                    {
-                        if compare_options(min_max, &Some(MinMax::Min)) {
-                            status_effect.value.min.apply_effect(effect);
-                        }
-                        if compare_options(min_max, &Some(MinMax::Max)) {
-                            status_effect.value.max.apply_effect(effect);
-                        }
-                    }
-
-                    if let StatusSpecs::DamageOverTime { damage_type, .. } =
-                        status_effect.status_type
-                    {
-                        if let StatType::Damage {
-                            skill_filter,
-                            damage_type: stat_damage_type,
-                            min_max,
-                            is_hit,
-                        } = &effect.stat
-                            && skill_filter.is_match_with_skill(skill_type, skill_id)
-                            && compare_options(stat_damage_type, &Some(damage_type))
-                            && compare_options(is_hit, &Some(false))
-                        {
-                            if compare_options(min_max, &Some(MinMax::Min)) {
-                                status_effect.value.min.apply_effect(effect);
-                            }
-                            if compare_options(min_max, &Some(MinMax::Max)) {
-                                status_effect.value.max.apply_effect(effect);
-                            }
-                        }
-
-                        if let StatType::Lucky {
-                            skill_filter,
-                            roll_type:
-                                LuckyRollType::Damage {
-                                    damage_type: stat_damage_type,
-                                },
-                        } = &effect.stat
-                            && skill_filter.is_match_with_skill(skill_type, skill_id)
-                            && compare_options(stat_damage_type, &Some(damage_type))
-                        {
-                            status_effect.value.lucky_chance.apply_effect(effect);
-                        }
-                    }
-                }
-            }
-            SkillEffectType::Restore {
-                restore_type,
-                value,
-                ..
-            } => {
-                if let StatType::Restore {
-                    restore_type: stat_restore_type,
-                    skill_filter,
-                } = &effect.stat
-                    && compare_options(stat_restore_type, &Some(*restore_type))
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                {
-                    value.min.apply_effect(effect);
-                    value.max.apply_effect(effect);
-                };
-            }
-            SkillEffectType::Resurrect => {}
-            SkillEffectType::RefreshCooldown {
-                skill_filter: _,
-                value: _,
-                modifier: _,
-            } => {}
-        }
-    }
+    let mut stats_converters: Vec<_> = effects
+        .clone()
+        .filter_map(|effect| {
+            apply_stat_effect_on_skill_effect(skill_id, skill_type, skill_effect, effect)
+        })
+        .collect();
 
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
@@ -611,10 +395,6 @@ pub fn compute_skill_specs_effect<'a>(
         let mut stats_converted = Vec::with_capacity(stats_converters.len());
 
         for (specs, modifier, factor) in stats_converters {
-            if specs.skill_type.is_some_and(|s| s != skill_type) {
-                continue;
-            }
-
             if let Some(stat) = match (specs.source, &mut skill_effect.effect_type) {
                 (
                     StatConverterSource::CritDamage,
@@ -770,3 +550,255 @@ pub fn compute_skill_specs_effect<'a>(
         compute_skill_specs_effect(skill_id, skill_type, skill_effect, stats_converted.iter());
     }
 }
+
+pub fn apply_stat_effect_on_skill_effect(
+    skill_id: &String,
+    skill_type: SkillType,
+    skill_effect: &mut SkillEffect,
+    effect: &StatEffect,
+) -> Option<(StatConverterSpecs, Modifier, f64)> {
+    if !effect.bypass_ignore
+        && skill_effect
+            .ignore_stat_effects
+            .iter()
+            .any(|ignore| effect.stat.is_match(ignore))
+    {
+        return None;
+    }
+
+    if let StatType::Lucky {
+        skill_filter,
+        roll_type: LuckyRollType::SuccessChance { effect_type },
+    } = &effect.stat
+        && skill_filter.is_match_with_skill(skill_type, skill_id)
+        && compare_options(effect_type, &(&skill_effect.effect_type).into())
+    {
+        skill_effect
+            .success_chance
+            .lucky_chance
+            .apply_effect(effect);
+        return None;
+    }
+
+    if let StatType::SuccessChance {
+        skill_filter,
+        effect_type,
+    } = &effect.stat
+        && skill_filter.is_match_with_skill(skill_type, skill_id)
+        && compare_options(effect_type, &(&skill_effect.effect_type).into())
+    {
+        skill_effect.success_chance.value.apply_effect(effect);
+        return None;
+    }
+
+    if let StatType::StatConverter(specs) = &effect.stat
+        && compare_options(&specs.skill_type, &Some(skill_type))
+    {
+        return Some((specs.clone(), effect.modifier, effect.value));
+    }
+
+    if let StatType::SkillConditionalModifier {
+        skill_filter,
+        conditions,
+        stat,
+    } = &effect.stat
+        && skill_filter.is_match_with_skill(skill_type, skill_id)
+    // && could_apply(&stat, skill_effect)
+    {
+        let stat_effect = StatEffect {
+            stat: *(stat.clone()),
+            modifier: effect.modifier,
+            value: effect.value,
+            bypass_ignore: effect.bypass_ignore,
+        };
+
+        let mut skill_effect_cloned = skill_effect.clone();
+        let _ = apply_stat_effect_on_skill_effect(
+            skill_id,
+            skill_type,
+            &mut skill_effect_cloned,
+            &stat_effect,
+        );
+        if skill_effect_cloned == *skill_effect {
+            return None;
+        }
+
+        skill_effect
+            .conditional_modifiers
+            .push(ConditionalModifier {
+                conditions: conditions.clone(),
+                conditions_duration: 0,
+                effects: [stat_effect].into(),
+            });
+        return None;
+    }
+
+    match &mut skill_effect.effect_type {
+        SkillEffectType::FlatDamage {
+            damage,
+            crit_chance,
+            crit_damage,
+            ..
+        } => {
+            for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
+                let value = damage.entry(damage_type).or_default();
+
+                if let StatType::Damage {
+                    skill_filter,
+                    damage_type: stat_damage_type,
+                    min_max,
+                    is_hit,
+                } = &effect.stat
+                    && skill_filter.is_match_with_skill(skill_type, skill_id)
+                    && compare_options(stat_damage_type, &Some(damage_type))
+                    && compare_options(is_hit, &Some(true))
+                {
+                    if compare_options(min_max, &Some(MinMax::Min)) {
+                        value.min.apply_effect(effect);
+                    }
+
+                    if compare_options(min_max, &Some(MinMax::Max)) {
+                        value.max.apply_effect(effect);
+                    }
+                }
+
+                if let StatType::Lucky {
+                    skill_filter,
+                    roll_type:
+                        LuckyRollType::Damage {
+                            damage_type: stat_damage_type,
+                        },
+                } = &effect.stat
+                    && skill_filter.is_match_with_skill(skill_type, skill_id)
+                    && compare_options(stat_damage_type, &Some(damage_type))
+                {
+                    value.lucky_chance.apply_effect(effect);
+                }
+            }
+
+            if let StatType::CritChance(skill_filter) = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                crit_chance.value.apply_effect(effect);
+            }
+
+            if let StatType::Lucky {
+                skill_filter,
+                roll_type: LuckyRollType::CritChance,
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                crit_chance.lucky_chance.apply_effect(effect);
+            }
+
+            if let StatType::CritDamage(skill_filter) = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                crit_damage.apply_effect(effect);
+            }
+
+            // crit_chance.clamp();
+        }
+        SkillEffectType::ApplyStatus { statuses, duration } => {
+            if let StatType::StatusDuration {
+                status_type,
+                skill_filter,
+            } = &effect.stat
+                && statuses.iter().any(|status_effect| {
+                    compare_options(status_type, &Some((&status_effect.status_type).into()))
+                })
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                duration.min.apply_effect(effect);
+                duration.max.apply_effect(effect);
+            }
+
+            for status_effect in statuses.iter_mut() {
+                if let StatType::StatusPower {
+                    status_type,
+                    skill_filter,
+                    min_max,
+                } = &effect.stat
+                    && compare_options(status_type, &Some((&status_effect.status_type).into()))
+                    && skill_filter.is_match_with_skill(skill_type, skill_id)
+                {
+                    if compare_options(min_max, &Some(MinMax::Min)) {
+                        status_effect.value.min.apply_effect(effect);
+                    }
+                    if compare_options(min_max, &Some(MinMax::Max)) {
+                        status_effect.value.max.apply_effect(effect);
+                    }
+                }
+
+                if let StatusSpecs::DamageOverTime { damage_type, .. } = status_effect.status_type {
+                    if let StatType::Damage {
+                        skill_filter,
+                        damage_type: stat_damage_type,
+                        min_max,
+                        is_hit,
+                    } = &effect.stat
+                        && skill_filter.is_match_with_skill(skill_type, skill_id)
+                        && compare_options(stat_damage_type, &Some(damage_type))
+                        && compare_options(is_hit, &Some(false))
+                    {
+                        if compare_options(min_max, &Some(MinMax::Min)) {
+                            status_effect.value.min.apply_effect(effect);
+                        }
+                        if compare_options(min_max, &Some(MinMax::Max)) {
+                            status_effect.value.max.apply_effect(effect);
+                        }
+                    }
+
+                    if let StatType::Lucky {
+                        skill_filter,
+                        roll_type:
+                            LuckyRollType::Damage {
+                                damage_type: stat_damage_type,
+                            },
+                    } = &effect.stat
+                        && skill_filter.is_match_with_skill(skill_type, skill_id)
+                        && compare_options(stat_damage_type, &Some(damage_type))
+                    {
+                        status_effect.value.lucky_chance.apply_effect(effect);
+                    }
+                }
+            }
+        }
+        SkillEffectType::Restore {
+            restore_type,
+            value,
+            ..
+        } => {
+            if let StatType::Restore {
+                restore_type: stat_restore_type,
+                skill_filter,
+            } = &effect.stat
+                && compare_options(stat_restore_type, &Some(*restore_type))
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                value.min.apply_effect(effect);
+                value.max.apply_effect(effect);
+            };
+        }
+        SkillEffectType::Resurrect => {}
+        SkillEffectType::RefreshCooldown {
+            skill_filter: _,
+            value: _,
+            modifier: _,
+        } => {}
+    }
+
+    None
+}
+
+// fn could_apply(stat: &StatType, effect_type: &SkillEffectType) -> bool {
+//     match effect_type {
+//         SkillEffectType::FlatDamage { damage, .. } => {
+//             matches!(stat, StatType::CritChance(skill_filter) |)
+//         }
+//         SkillEffectType::ApplyStatus { statuses, duration } => todo!(),
+//         SkillEffectType::Restore { restore_type, .. } => todo!(),
+//         SkillEffectType::Resurrect => todo!(),
+//         SkillEffectType::RefreshCooldown { skill_filter, .. } => todo!(),
+//     }
+// }

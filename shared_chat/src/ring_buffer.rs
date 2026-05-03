@@ -15,6 +15,10 @@ impl<T> RingBuffer<T> {
     }
 
     pub fn push(&mut self, value: T) {
+        if self.capacity == 0 {
+            return;
+        }
+
         if self.buf.len() == self.capacity {
             self.buf.pop_front();
         }
@@ -44,5 +48,32 @@ impl<T> RingBuffer<T> {
 
     pub fn is_empty(&self) -> bool {
         self.len() == 0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::RingBuffer;
+
+    #[test]
+    fn keeps_only_the_most_recent_values() {
+        let mut buffer = RingBuffer::new(3);
+
+        buffer.extend(1..=5);
+
+        assert_eq!(buffer.iter().copied().collect::<Vec<_>>(), vec![3, 4, 5]);
+        assert_eq!(
+            buffer.iter_rev().copied().collect::<Vec<_>>(),
+            vec![5, 4, 3]
+        );
+    }
+
+    #[test]
+    fn zero_capacity_buffer_never_stores_values() {
+        let mut buffer = RingBuffer::new(0);
+
+        buffer.push(1);
+
+        assert!(buffer.is_empty());
     }
 }

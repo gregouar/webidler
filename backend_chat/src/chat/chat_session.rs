@@ -39,6 +39,8 @@ impl ChatSession {
         mut ws_sender: WebSocketSender,
         mut ws_receiver: WebSocketReceiver,
     ) -> Result<()> {
+        let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
+
         let history = ServerConnectMessage {
             user_id: self.user_details.user.user_id,
             history: self
@@ -46,8 +48,7 @@ impl ChatSession {
                 .history
                 .lock()
                 .unwrap()
-                .iter_rev()
-                .take(50)
+                .iter()
                 .map(|m| (**m).clone())
                 .collect(),
         }
@@ -75,24 +76,30 @@ impl ChatSession {
                 self.user_details.user.user_id,
                 self.user_details.user.username.clone(),
             ));
-        let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
         ///////////////////////////////
 
         let write_task = tokio::spawn(async move {
             loop {
                 tokio::select! {
-                    Ok(msg) = broadcast_rx.recv() => {
-                       if let Err(err)=  ws_sender.send_raw(msg).await {
-                         tracing::warn!("failed to send message: {}",err);
-                         break;
-                       }
-
+                    result = broadcast_rx.recv() => {
+                        match result {
+                            Ok(msg) => {
+                                if let Err(err) = ws_sender.send_raw(msg).await {
+                                    tracing::warn!("failed to send message: {}", err);
+                                    break;
+                                }
+                            }
+                            Err(tokio::sync::broadcast::error::RecvError::Lagged(skipped)) => {
+                                tracing::warn!("chat connection skipped {skipped} broadcast messages");
+                            }
+                            Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
+                        }
                     }
                     Some(msg) = direct_rx.recv() => {
-                       if let Err(err)=  ws_sender.send(&msg).await {
-                         tracing::warn!("failed to send message: {}",err);
-                         break;
-                       }
+                        if let Err(err) = ws_sender.send(&msg).await {
+                            tracing::warn!("failed to send message: {}", err);
+                            break;
+                        }
                     }
                     else => break, // This disconnect...
                 }
