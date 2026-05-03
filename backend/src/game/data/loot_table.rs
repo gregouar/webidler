@@ -34,9 +34,9 @@ pub struct RarityWeights {
 impl Default for RarityWeights {
     fn default() -> Self {
         RarityWeights {
-            normal: 400.0,
-            magic: 320.0,
-            rare: 80.0,
+            normal: 300.0,
+            magic: 240.0,
+            rare: 60.0,
             unique: 1.0,
         }
     }

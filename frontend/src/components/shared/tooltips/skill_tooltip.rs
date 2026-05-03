@@ -684,9 +684,17 @@ pub fn format_skill_effect(
 
     let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
 
-    let conditional_modifiers = effect
-        .conditional_modifiers
-        .clone()
+    let mut conditional_modifiers = effect.conditional_modifiers.clone();
+    conditional_modifiers.sort_by_key(|conditional_modifier| {
+        (
+            conditional_modifier.conditions.first().cloned(),
+            conditional_modifier
+                .effects
+                .first()
+                .map(|effect| effect.stat.clone()),
+        )
+    });
+    let conditional_modifiers = conditional_modifiers
         .into_iter()
         .map(format_conditional_modifier)
         .collect::<Vec<_>>();
