@@ -454,7 +454,7 @@ fn ChatBadge(badge: UserBadge) -> impl IntoView {
 
     let tooltip = move || {
         view! {
-            <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
+            <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
                 <div class="font-semibold text-white">{badge_title}</div>
                 <div class="text-sm text-zinc-300">{badge_description}</div>
             </div>

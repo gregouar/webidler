@@ -243,12 +243,32 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     position=StaticTooltipPosition::Left
                     tooltip=move || {
                         if disable_rush.get() {
-                            "No Stamina, Go Offline to Recuperate".to_string()
+                            view! {
+                                <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
+                                    <div class="font-semibold text-white">"Rush Mode"</div>
+                                    <span class="text-zinc-300">
+                                        "Unavailable, no Stamina left"
+                                    </span>
+                                    <span class="text-xs italic text-gray-400">
+                                        "Go Offline while in a Grind to recuperate."
+                                    </span>
+                                </div>
+                            }
+                                .into_any()
                         } else {
-                            format!(
-                                "Rush! ({} Stamina)",
-                                format_duration(game_context.player_stamina.get(), false),
-                            )
+                            view! {
+                                <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
+                                    <div class="font-semibold text-white">"Rush Mode"</div>
+                                    <span class="text-zinc-300">
+                                        {format_duration(game_context.player_stamina.get(), false)}
+                                        " Stamina left"
+                                    </span>
+                                    <span class="text-xs italic text-gray-400">
+                                        "Stamina will be lost when Stopping the Grind."
+                                    </span>
+                                </div>
+                            }
+                                .into_any()
                         }
                     }
                 >
