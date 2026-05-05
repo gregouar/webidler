@@ -15,7 +15,7 @@ pub fn TooltipFrame(
 ) -> impl IntoView {
     view! {
         <div class=format!(
-            "relative isolate text-center  backdrop-blur-sm {}",
+            "relative isolate self-start text-center backdrop-blur-sm {}",
             class.unwrap_or("max-w-xs"),
         )>
             <div

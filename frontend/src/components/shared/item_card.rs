@@ -75,7 +75,7 @@ pub fn ItemCard(
                 let item_specs = item_specs.clone();
                 let is_comparable = comparable_item_specs.is_some();
                 view! {
-                    <div class="flex gap-1 xl:gap-2">
+                    <div class="flex items-start gap-1 xl:gap-2">
                         {comparable_item_specs
                             .as_ref()
                             .and_then(|comparable_item_specs| {
