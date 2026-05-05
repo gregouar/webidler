@@ -67,13 +67,13 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
 
                         <div class="flex-1" />
 
-                        <span class="text-sm xl:text-base text-gray-400">
+                        <span class="flex text-sm xl:text-base text-gray-400 gap-1">
                             "Remaining Points: " <NumberInset>
-                                <span class="font-semibold text-white">
+                                <div class="w-[2ch] font-semibold text-white text-right">
                                     {move || {
                                         game_context.player_resources.read().passive_points
                                     }}
-                                </span>
+                                </div>
                             </NumberInset>
                         </span>
 

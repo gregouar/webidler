@@ -23,17 +23,16 @@ const LEADERBOARD_REALM_TABS: [(Realm, &str); 3] = [
 #[component]
 pub fn LeaderboardPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
-        <MenuPanel open>
+        <MenuPanel open h_full=true>
             <MenuCard>
-                <CardHeader title="Leaderboard" on_close=move || open.set(false) />
-                <LeaderboardContent />
+                <LeaderboardContent open />
             </MenuCard>
         </MenuPanel>
     }
 }
 
 #[component]
-fn LeaderboardContent() -> impl IntoView {
+fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
     let selected_realm = RwSignal::new(Realm::Standard);
 
     let leaderboard_and_areas = LocalResource::new({
@@ -57,26 +56,29 @@ fn LeaderboardContent() -> impl IntoView {
     });
 
     view! {
-        <div class="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-            {LEADERBOARD_REALM_TABS
-                .into_iter()
-                .map(|(realm, label)| {
-                    let is_selected = Signal::derive(move || selected_realm.get() == realm);
-                    view! {
-                        <MenuListRow
-                            selected=is_selected
-                            on_click=move || selected_realm.set(realm)
-                        >
-                            <div class="px-3 py-2 text-center">
-                                <span class="text-xs sm:text-sm font-semibold uppercase tracking-[0.12em] text-amber-200/95">
-                                    {label}
-                                </span>
-                            </div>
-                        </MenuListRow>
-                    }
-                })
-                .collect::<Vec<_>>()}
-        </div>
+        <CardHeader title="Leaderboard" on_close=move || open.set(false)>
+            <div class="px-4 w-full grid grid-cols-1 gap-2 sm:grid-cols-3">
+                {LEADERBOARD_REALM_TABS
+                    .into_iter()
+                    .map(|(realm, label)| {
+                        let is_selected = Signal::derive(move || selected_realm.get() == realm);
+                        view! {
+                            <MenuListRow
+                                selected=is_selected
+                                on_click=move || selected_realm.set(realm)
+                            >
+                                <div class="px-3 py-2 text-center">
+                                    <span class="text-xs sm:text-sm font-semibold uppercase tracking-[0.12em] text-amber-200/95">
+                                        {label}
+                                    </span>
+                                </div>
+                            </MenuListRow>
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </div>
+        </CardHeader>
+
         <Suspense fallback=move || {
             view! { "Loading..." }
         }>
@@ -103,7 +105,7 @@ fn LeaderboardContent() -> impl IntoView {
                                 .unwrap_or_default()
                         });
                     view! {
-                        <div class="min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                        <div class="mt-2 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                             {leaderboard_per_area
                                 .into_iter()
                                 .rev()

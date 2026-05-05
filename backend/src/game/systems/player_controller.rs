@@ -168,6 +168,7 @@ pub fn reward_player(
             * *area_specs.gems_find
             * 0.01)
             .floor()
+            + 1.0
     } else {
         0.0
     };

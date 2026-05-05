@@ -35,9 +35,12 @@ pub fn format_skill_modifier_conditions_pre(
         .join("")
 }
 
-pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String {
+pub fn format_skill_modifier_conditions_post(
+    conditions: &[Condition],
+    prefix: &'static str,
+) -> String {
     // TODO: sort?
-    conditions
+    let conditions_str = conditions
         .iter()
         .map(|condition| match condition {
             Condition::HasStatus { .. } => "".into(),
@@ -61,8 +64,13 @@ pub fn format_skill_modifier_conditions_post(conditions: &[Condition]) -> String
             Condition::LowMana => " on Low Mana".into(),
             Condition::ThreatLevel => " per Threat Level".into(),
         })
-        .collect::<Vec<_>>()
-        .join("")
+        .collect::<Vec<_>>();
+
+    if conditions_str.is_empty() {
+        "".into()
+    } else {
+        format!("{}{}", prefix, conditions_str.join(""))
+    }
 }
 
 pub fn format_under_status_type_condition(
@@ -152,7 +160,7 @@ pub fn damaged_over_time_str(value: Option<DamageType>) -> &'static str {
 pub fn format_conditions_duration(conditions_duration: u32) -> String {
     if conditions_duration > 0 {
         format!(
-            " during the last {:1} seconds",
+            " for the last {:1} seconds",
             conditions_duration as f64 * 0.1
         )
     } else {

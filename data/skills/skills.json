@@ -1417,7 +1417,7 @@
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
     "icon": "skills/poison_coating.svg",
     "skill_type": "Attack",
-    "cooldown": 5,
+    "cooldown": 4,
     "mana_cost": 5,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -1591,7 +1591,7 @@
     "description": "Infuse your weapon with the power of Fire and Storm.",
     "icon": "skills/pyroclastic_infusion.svg",
     "skill_type": "Attack",
-    "cooldown": 5,
+    "cooldown": 4,
     "mana_cost": 5,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -1714,7 +1714,7 @@
     "description": "Sharpen your weapon, making it likely to bleed your foes.",
     "icon": "skills/sharpen_weapon.svg",
     "skill_type": "Attack",
-    "cooldown": 5,
+    "cooldown": 4,
     "mana_cost": 5,
     "upgrade_cost": 50,
     "upgrade_effects": [
@@ -1746,7 +1746,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
+              "duration": 5.0,
               "statuses": [
                 {
                   "replace_on_value_only": true,

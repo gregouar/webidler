@@ -288,7 +288,7 @@ pub fn AscendPanelHeader(
                                     .into_any()
                             }
                             false => view! { "Ascension Cost:" }.into_any(),
-                        }} <ShardsCounter value=ascension_cost.into() />
+                        }} <ShardsCounter w_full=true value=ascension_cost.into() />
                     </div>
 
                     <div class="flex-1" />
@@ -469,7 +469,7 @@ pub fn BuildPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400 flex items-center">
+                    <div class="text-sm xl:text-base text-gray-400 flex items-center gap-1">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {
@@ -482,8 +482,10 @@ pub fn BuildPanelHeader(
                             false => {
                                 view! {
                                     "Required Player Level:"
-                                    <NumberInset class="text-white ml-2 w-[2ch]  text-right">
-                                        {move || passives_tree_build.read().len() + 1}
+                                    <NumberInset>
+                                        <div class="w-[2ch] font-semibold text-white text-right">
+                                            {move || passives_tree_build.read().len() + 1}
+                                        </div>
                                     </NumberInset>
                                     "/"
                                     {DEFAULT_MAX_LEVEL}

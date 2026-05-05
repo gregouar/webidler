@@ -8,15 +8,17 @@ use uuid::Uuid;
 use shared_chat::{
     messages::{
         client::{ClientChatMessage, ClientPostMessage},
-        server::{ErrorMessage, ErrorType, ServerConnectMessage},
+        server::{ErrorMessage, ErrorType, ServerChatMessage, ServerConnectMessage},
     },
-    types::ChatMessage,
+    types::{ChatMessage, UserId},
 };
 
 use crate::{
     chat::chat_state::ChatState,
     websocket::{WebSocketReceiver, WebSocketSender},
 };
+
+const MAX_OUTBOUND_HISTORY_MESSAGE_SIZE: usize = 7 * 1024;
 
 pub struct ChatSession {
     session_id: Uuid,
@@ -40,22 +42,20 @@ impl ChatSession {
         mut ws_receiver: WebSocketReceiver,
     ) -> Result<()> {
         let mut broadcast_rx = self.chat_state.outbound_tx.subscribe();
-
-        let history = ServerConnectMessage {
-            user_id: self.user_details.user.user_id,
-            history: self
-                .chat_state
-                .history
-                .lock()
-                .unwrap()
-                .iter()
-                .map(|m| (**m).clone())
-                .collect(),
-        }
-        .into();
+        let history: Vec<_> = self
+            .chat_state
+            .history
+            .lock()
+            .unwrap()
+            .iter_rev()
+            .take(30)
+            .map(|m| (**m).clone())
+            .collect();
+        let history_message =
+            build_history_connect_message(self.user_details.user.user_id, history);
 
         ws_sender
-            .send(&history)
+            .send(&history_message)
             .await
             .unwrap_or_else(|_| tracing::warn!("failed to send connection message"));
 
@@ -205,4 +205,28 @@ impl ChatSession {
 
         Ok(())
     }
+}
+
+fn build_history_connect_message(user_id: UserId, history: Vec<ChatMessage>) -> ServerChatMessage {
+    let mut message = ServerConnectMessage {
+        user_id,
+        history: Vec::new(),
+    };
+
+    for history_message in history.into_iter() {
+        message.history.push(history_message);
+
+        if rmp_serde::to_vec(&message)
+            .map(|bytes| bytes.len())
+            .unwrap_or(usize::MAX)
+            <= MAX_OUTBOUND_HISTORY_MESSAGE_SIZE
+        {
+            continue;
+        }
+
+        message.history.pop();
+        break;
+    }
+
+    message.into()
 }
