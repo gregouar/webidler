@@ -196,7 +196,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
     match message {
         ServerChatMessage::Connect(m) => {
             chat_context.user_id.set(Some(m.user_id));
-            for message in m.history {
+            for message in m.history.into_iter().rev() {
                 push_message(chat_context, message)
             }
         }
