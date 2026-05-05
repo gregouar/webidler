@@ -152,7 +152,7 @@ pub fn damaged_over_time_str(value: Option<DamageType>) -> &'static str {
 pub fn format_conditions_duration(conditions_duration: u32) -> String {
     if conditions_duration > 0 {
         format!(
-            " during the last {:1} seconds",
+            " for the last {:1} seconds",
             conditions_duration as f64 * 0.1
         )
     } else {
