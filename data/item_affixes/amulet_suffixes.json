@@ -77,7 +77,7 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 5,
-    "weight": 100,
+    "weight": 50,
     "restrictions": [ "Amulet" ],
     "item_level": 400,
     "effects": [
@@ -95,7 +95,7 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 6,
-    "weight": 50,
+    "weight": 25,
     "restrictions": [ "Amulet" ],
     "item_level": 500,
     "effects": [
@@ -113,7 +113,7 @@
     "tags": [ "Skill" ],
     "affix_type": "Suffix",
     "tier": 7,
-    "weight": 20,
+    "weight": 10,
     "restrictions": [ "Amulet" ],
     "item_level": 600,
     "effects": [
