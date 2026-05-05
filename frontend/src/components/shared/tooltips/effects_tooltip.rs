@@ -609,7 +609,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format_multiplier_stat_name(stat),
             skill_filter_str(skill_filter, " with ", true),
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
-            conditions_tooltip::format_skill_modifier_conditions_post(conditions)
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
         ),
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::StatConditionalModifier {
@@ -620,7 +620,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             "{} {}{}{}",
             format_multiplier_stat_name(stat),
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, "when "),
-            conditions_tooltip::format_skill_modifier_conditions_post(conditions),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "if "),
             conditions_tooltip::format_conditions_duration(*conditions_duration),
         ),
         StatType::StatConverter(stat_converter_specs) => {
@@ -998,7 +998,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_flat_stat(stat, value),
             skill_filter_str(skill_filter, " with ", true),
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
-            conditions_tooltip::format_skill_modifier_conditions_post(conditions)
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
         ),
         StatType::StatConditionalModifier {
             stat,
@@ -1007,8 +1007,8 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => format!(
             "{} {}{}{}",
             format_flat_stat(stat, value),
-            conditions_tooltip::format_skill_modifier_conditions_pre(conditions, "when"),
-            conditions_tooltip::format_skill_modifier_conditions_post(conditions),
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions, "when "),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "if "),
             conditions_tooltip::format_conditions_duration(*conditions_duration),
         ),
         StatType::Description(description) | StatType::Description2(description) => {

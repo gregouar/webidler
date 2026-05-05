@@ -213,6 +213,7 @@ pub fn SkillTooltip(
                                     )}
                                     {conditions_tooltip::format_skill_modifier_conditions_post(
                                         &auto_use_conditions,
+                                        "",
                                     )}
                                 </span>
                             </li>
