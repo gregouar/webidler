@@ -40,14 +40,27 @@ pub fn format_skill_modifier_conditions_post(
     prefix: &'static str,
 ) -> String {
     // TODO: sort?
-    let conditions_str = conditions
+    let on_conditions_str = conditions
         .iter()
-        .map(|condition| match condition {
-            Condition::HasStatus { .. } => "".into(),
+        .filter_map(|condition| match condition {
+            Condition::HasStatus { .. } => None,
+            Condition::StatusStacks { .. } => None,
+            Condition::MaximumLife => Some(" on Maximum Life"),
+            Condition::MaximumMana => Some(" on Maximum Mana"),
+            Condition::LowLife => Some(" on Low Life"),
+            Condition::LowMana => Some(" on Low Mana"),
+            Condition::ThreatLevel => None,
+        })
+        .collect::<Vec<_>>();
+
+    let per_conditions_str = conditions
+        .iter()
+        .filter_map(|condition| match condition {
+            Condition::HasStatus { .. } => None,
             Condition::StatusStacks {
                 status_type,
                 skill_type,
-            } => format!(
+            } => Some(format!(
                 " per {}",
                 effects_tooltip::skill_status_type_str(
                     &StatSkillFilter {
@@ -57,19 +70,26 @@ pub fn format_skill_modifier_conditions_post(
                     status_type.as_ref(),
                     false
                 ),
-            ),
-            Condition::MaximumLife => " on Maximum Life".into(),
-            Condition::MaximumMana => " on Maximum Mana".into(),
-            Condition::LowLife => " on Low Life".into(),
-            Condition::LowMana => " on Low Mana".into(),
-            Condition::ThreatLevel => " per Threat Level".into(),
+            )),
+            Condition::MaximumLife
+            | Condition::MaximumMana
+            | Condition::LowLife
+            | Condition::LowMana => None,
+            Condition::ThreatLevel => Some(" per Threat Level".into()),
         })
         .collect::<Vec<_>>();
 
-    if conditions_str.is_empty() {
+    if on_conditions_str.is_empty() && per_conditions_str.is_empty() {
         "".into()
+    } else if on_conditions_str.is_empty() {
+        per_conditions_str.join(" and ")
     } else {
-        format!("{}{}", prefix, conditions_str.join(""))
+        format!(
+            "{}{}{}",
+            per_conditions_str.join(" and "),
+            prefix,
+            on_conditions_str.join(" and ")
+        )
     }
 }
 
