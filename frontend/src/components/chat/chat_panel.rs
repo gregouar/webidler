@@ -384,9 +384,10 @@ pub fn ChatPanel() -> impl IntoView {
 #[component]
 fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
+    let sent_title = format!("Sent at {}", format_datetime(msg.sent_at));
 
     view! {
-        <div class="text-sm flex" title=format!("Sent at {}", format_datetime(msg.sent_at))>
+        <div class="group/message flex items-start gap-1.5 text-sm leading-[1.35]">
             {msg
                 .chat_badge
                 .as_ref()
@@ -394,28 +395,36 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                 .map(|badge| {
                     view! { <ChatBadge badge /> }
                 })}
-            <span
-                class=move || { format!("cursor-pointer {}", channel_color(msg.channel)) }
-                on:click=move |_| {
-                    if let ChatChannel::Whisper(_) = msg.channel
-                        && msg.user_id == chat_context.user_id.get()
-                    {
-                        chat_context.write_channel.set(msg.channel)
-                    } else if let Some(user_id) = msg.user_id {
-                        chat_context.write_channel.set(ChatChannel::Whisper(user_id))
+            <p class="min-w-0 flex-1 text-gray-200 select-text">
+                <span
+                    class=move || {
+                        format!(
+                            "cursor-pointer font-medium transition-colors hover:brightness-125 {}",
+                            channel_color(msg.channel),
+                        )
                     }
-                }
-            >
-                {author_str(&msg)}
-            </span>
-            <span class="text-gray-500">": "</span>
-            {msg
-                .linked_item
-                .and_then(|item_data| MsgpackSerdeCodec::decode(&item_data.into_inner()).ok())
-                .map(|item_specs: ItemSpecs| {
-                    view! { <ChatItem item_specs=Arc::new(item_specs) /> }
-                })}
-            <span class="text-gray-200 select-text">{msg.content}</span>
+                    title=sent_title.clone()
+                    on:click=move |_| {
+                        if let ChatChannel::Whisper(_) = msg.channel
+                            && msg.user_id == chat_context.user_id.get()
+                        {
+                            chat_context.write_channel.set(msg.channel)
+                        } else if let Some(user_id) = msg.user_id {
+                            chat_context.write_channel.set(ChatChannel::Whisper(user_id))
+                        }
+                    }
+                >
+                    {author_str(&msg)}
+                </span>
+                <span class="text-gray-500 select-none">": "</span>
+                {msg
+                    .linked_item
+                    .and_then(|item_data| MsgpackSerdeCodec::decode(&item_data.into_inner()).ok())
+                    .map(|item_specs: ItemSpecs| {
+                        view! { <ChatItem item_specs=Arc::new(item_specs) /> }
+                    })}
+                <span title=sent_title>{msg.content}</span>
+            </p>
         </div>
     }
 }
@@ -492,9 +501,9 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     view! {
         <DynamicTooltipTarget content=tooltip>
             <span class=format!(
-                "font-bold {}",
+                "mr-1 inline-flex select-none align-baseline items-center rounded border border-current/25 bg-zinc-950/45 px-1.5 py-[1px] font-semibold leading-[1.25] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors hover:bg-zinc-800/80 {}",
                 item_tooltip::name_color_rarity(item_specs.modifiers.rarity),
-            )>"<" {item_specs.modifiers.name.clone()} "> "</span>
+            )>{item_specs.modifiers.name.clone()}</span>
         </DynamicTooltipTarget>
     }
 }

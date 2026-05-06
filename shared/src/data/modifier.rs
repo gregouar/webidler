@@ -151,6 +151,10 @@ where
     pub fn as_new_base(&self) -> Self {
         self.evaluated.into()
     }
+
+    pub fn base_mut(&mut self) -> &mut T {
+        &mut self.base
+    }
 }
 
 #[cfg(feature = "modifiable")]

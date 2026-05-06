@@ -154,6 +154,7 @@ pub fn update_character_specs(
             .entry(skill_type)
             .or_default()
             .value
+            .base_mut()
             .set_bounds(Some(0.0), Some(MAX_BLOCK));
     }
 
@@ -164,6 +165,7 @@ pub fn update_character_specs(
             .entry(damage_type)
             .or_default()
             .value
+            .base_mut()
             .set_bounds(Some(0.0), Some(MAX_EVADE));
     }
 
