@@ -240,7 +240,7 @@ pub fn PassivesPanel(
                             </TabButton>
                         </div>
 
-                        <div class="flex px-2 xl:px-4">
+                        <div class="flex pl-2 pr-1 xl:pl-4 xl:pr-2">
                             <Input
                                 node_ref=search_node_ref
                                 id="search_node"
@@ -350,7 +350,11 @@ fn PassiveTreeJsonButtons(
     };
 
     view! {
-        <div class=if view_only { "hidden" } else { "flex items-center gap-2 px-2 xl:px-4" }>
+        <div class=if view_only {
+            "hidden"
+        } else {
+            "flex items-center gap-2 pl-1 pr-2 xl:pl-2 xl:pr-4"
+        }>
             <MenuButton on:click=on_load_tree>"Load"</MenuButton>
             <MenuButton on:click=on_save_tree>"Save"</MenuButton>
         </div>

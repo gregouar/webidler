@@ -47,6 +47,7 @@ impl PlayerController {
         self.use_skills.clear();
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn control_player<'a>(
         &mut self,
         events_queue: &mut EventsQueue,
