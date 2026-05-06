@@ -71,4 +71,8 @@ impl EventsQueue {
     pub fn consume_events(&mut self) -> Vec<GameEvent> {
         std::mem::take(&mut self.events)
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.events.is_empty()
+    }
 }
