@@ -98,6 +98,8 @@ pub async fn post_affix(
         return Err(AppError::UserError("forge operation failed".into()));
     }
 
+    *item = items_controller::create_item_specs(item.base.clone(), item.modifiers.clone(), 0.0);
+
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
 
