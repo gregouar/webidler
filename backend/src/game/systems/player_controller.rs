@@ -13,7 +13,7 @@ use shared::{
             PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs,
             PlayerState,
         },
-        skill::BaseSkillSpecs,
+        skill::{BaseSkillSpecs, SkillType},
     },
 };
 
@@ -55,6 +55,7 @@ impl PlayerController {
         player_specs: &'a PlayerSpecs,
         player_state: &'a mut PlayerState,
         monsters: &mut [Target<'a>],
+        prevent_attack: bool,
     ) {
         if !player_state.character_state.is_alive || player_state.character_state.is_stunned() {
             return;
@@ -76,6 +77,11 @@ impl PlayerController {
                             condition,
                         ) == 0.0
                     })
+                    || (prevent_attack
+                        && matches!(
+                            player_base_skill.base_skill_specs.skill_type,
+                            SkillType::Attack | SkillType::Spell
+                        ))
             })
             .collect();
 

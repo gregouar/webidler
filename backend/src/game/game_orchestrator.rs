@@ -147,7 +147,9 @@ async fn control_entities(
         game_data.player_specs.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,
+        game_data.new_wave,
     );
+    game_data.new_wave = false;
 
     let wave_completed = monsters_still_alive.is_empty();
     if wave_completed || game_data.area_state.read().going_back != 0 {
@@ -181,6 +183,7 @@ async fn control_entities(
             game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
             game_data.monster_specs = monster_specs;
             game_data.monster_states = monster_states;
+            game_data.new_wave = true;
 
             game_data.area_threat = AreaThreat {
                 threat_level: 0,

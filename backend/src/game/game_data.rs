@@ -55,6 +55,7 @@ pub struct GameInstanceData {
     pub monster_wave_delay: Duration,
 
     pub wave_completed: bool,
+    pub new_wave: bool,
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
@@ -206,6 +207,7 @@ impl GameInstanceData {
             monster_wave_delay: Default::default(),
 
             wave_completed: false,
+            new_wave: false,
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
