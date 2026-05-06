@@ -37,6 +37,7 @@ use crate::components::{
         pannable::Pannable,
         toast::*,
     },
+    utils::file_loader::{save_json, use_json_loader},
 };
 
 type TreeConnections = HashMap<PassiveNodeId, HashSet<PassiveNodeId>>;
@@ -144,6 +145,50 @@ pub fn PassivesPanel(
     });
     let invalid_tree = Signal::derive(move || !invalid_nodes.read().is_empty());
 
+    let (loaded_ascension, ascension_filename, on_ascension_change) =
+        use_json_loader::<PassivesTreeAscension>();
+    let ascension_file_input = NodeRef::<leptos::html::Input>::new();
+    let (loaded_build, build_filename, on_build_change) = use_json_loader::<PurchasedNodes>();
+    let build_file_input = NodeRef::<leptos::html::Input>::new();
+
+    Effect::new(move || {
+        loaded_ascension.with(|loaded_ascension| {
+            if let Some(loaded_ascension) = loaded_ascension {
+                let mut loaded_ascension = loaded_ascension.clone();
+                let passives_tree_specs = town_context.passives_tree_specs.read_untracked();
+
+                loaded_ascension
+                    .ascended_nodes
+                    .retain(|node_id, _| passives_tree_specs.nodes.contains_key(node_id));
+                loaded_ascension
+                    .socketed_nodes
+                    .retain(|node_id, _| passives_tree_specs.nodes.contains_key(node_id));
+
+                ascension_cost.set(compute_ascension_cost_delta(
+                    &passives_tree_specs,
+                    &town_context.passives_tree_ascension.get_untracked(),
+                    &loaded_ascension,
+                ));
+                passives_tree_ascension.set(loaded_ascension);
+            }
+        });
+    });
+
+    Effect::new(move || {
+        loaded_build.with(|loaded_build| {
+            if let Some(loaded_build) = loaded_build {
+                let passives_tree_specs = town_context.passives_tree_specs.read_untracked();
+                passives_tree_build.set(
+                    loaded_build
+                        .iter()
+                        .filter(|node_id| passives_tree_specs.nodes.contains_key(node_id))
+                        .copied()
+                        .collect(),
+                );
+            }
+        });
+    });
+
     Effect::new({
         let events_context: EventsContext = expect_context();
         move || {
@@ -158,6 +203,20 @@ pub fn PassivesPanel(
     });
 
     view! {
+        <input
+            node_ref=ascension_file_input
+            type="file"
+            accept="application/json"
+            on:change=on_ascension_change
+            class="hidden"
+        />
+        <input
+            node_ref=build_file_input
+            type="file"
+            accept="application/json"
+            on:change=on_build_change
+            class="hidden"
+        />
         <MenuPanel open=open always_mounted=true>
             <div class="w-full h-full">
                 <MenuCard>
@@ -181,7 +240,7 @@ pub fn PassivesPanel(
                             </TabButton>
                         </div>
 
-                        <div class="flex px-2 xl:px-4">
+                        <div class="flex pl-2 pr-1 xl:pl-4 xl:pr-2">
                             <Input
                                 node_ref=search_node_ref
                                 id="search_node"
@@ -190,6 +249,17 @@ pub fn PassivesPanel(
                                 bind=search_node
                             />
                         </div>
+
+                        <PassiveTreeJsonButtons
+                            view_only
+                            active_tab
+                            passives_tree_ascension
+                            passives_tree_build
+                            ascension_file_input
+                            build_file_input
+                            ascension_filename
+                            build_filename
+                        />
 
                         <div class="flex-1"></div>
 
@@ -229,6 +299,65 @@ pub fn PassivesPanel(
                 </MenuCard>
             </div>
         </MenuPanel>
+    }
+}
+
+#[component]
+fn PassiveTreeJsonButtons(
+    view_only: bool,
+    active_tab: RwSignal<PassivesTab>,
+    passives_tree_ascension: RwSignal<PassivesTreeAscension>,
+    passives_tree_build: RwSignal<PurchasedNodes>,
+    ascension_file_input: NodeRef<leptos::html::Input>,
+    build_file_input: NodeRef<leptos::html::Input>,
+    ascension_filename: RwSignal<Option<String>>,
+    build_filename: RwSignal<Option<String>>,
+) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+
+    let on_save_tree = move |_| match active_tab.get_untracked() {
+        PassivesTab::Ascend => {
+            let character_name = town_context.character.read_untracked().name.clone();
+            save_json(
+                &passives_tree_ascension.get_untracked(),
+                &ascension_filename
+                    .get_untracked()
+                    .unwrap_or(format!("passives_ascension_{character_name}.json")),
+            );
+        }
+        PassivesTab::Build => {
+            let character_name = town_context.character.read_untracked().name.clone();
+            save_json(
+                &passives_tree_build.get_untracked(),
+                &build_filename
+                    .get_untracked()
+                    .unwrap_or(format!("passives_plan_{character_name}.json")),
+            );
+        }
+    };
+
+    let on_load_tree = move |_| match active_tab.get_untracked() {
+        PassivesTab::Ascend => {
+            if let Some(input) = ascension_file_input.get() {
+                input.click();
+            }
+        }
+        PassivesTab::Build => {
+            if let Some(input) = build_file_input.get() {
+                input.click();
+            }
+        }
+    };
+
+    view! {
+        <div class=if view_only {
+            "hidden"
+        } else {
+            "flex items-center gap-2 pl-1 pr-2 xl:pl-2 xl:pr-4"
+        }>
+            <MenuButton on:click=on_load_tree>"Load"</MenuButton>
+            <MenuButton on:click=on_save_tree>"Save"</MenuButton>
+        </div>
     }
 }
 
@@ -287,7 +416,7 @@ pub fn AscendPanelHeader(
                                 }
                                     .into_any()
                             }
-                            false => view! { "Ascension Cost:" }.into_any(),
+                            false => view! { "Cost:" }.into_any(),
                         }} <ShardsCounter w_full=true value=ascension_cost.into() />
                     </div>
 
@@ -379,8 +508,7 @@ fn ConfirmAscendButton(
 
     view! {
         <MenuButton on:click=try_ascend disabled=disabled>
-            <span class="inline xl:hidden">"Confirm"</span>
-            <span class="hidden xl:inline">"Confirm Ascension"</span>
+            "Confirm"
         </MenuButton>
     }
 }
@@ -430,18 +558,14 @@ fn RefundAscendButton(
         let confirm_context = expect_context::<ConfirmContext>();
         move |_| {
             (confirm_context.confirm)(
-                "Do you confirm fully Refund Ascension and reclaim all Power Shards?".to_string(),
+                "Do you confirm to fully Refund Ascension and reclaim all Power Shards?"
+                    .to_string(),
                 do_reset.clone(),
             );
         }
     };
 
-    view! {
-        <MenuButton on:click=try_reset>
-            <span class="inline xl:hidden">"Refund"</span>
-            <span class="hidden xl:inline">"Refund Ascension"</span>
-        </MenuButton>
-    }
+    view! { <MenuButton on:click=try_reset>"Refund"</MenuButton> }
 }
 
 // Build Header
@@ -481,7 +605,7 @@ pub fn BuildPanelHeader(
                             }
                             false => {
                                 view! {
-                                    "Required Player Level:"
+                                    "Required Level:"
                                     <NumberInset>
                                         <div class="w-[2ch] font-semibold text-white text-right">
                                             {move || passives_tree_build.read().len() + 1}
@@ -575,8 +699,7 @@ fn ConfirmBuildButton(
 
     view! {
         <MenuButton on:click=try_save disabled=disabled>
-            <span class="inline xl:hidden">"Export"</span>
-            <span class="hidden xl:inline">"Export Build"</span>
+            "Confirm"
         </MenuButton>
     }
 }
@@ -1098,6 +1221,41 @@ fn compute_connections(passives_tree_specs: &PassivesTreeSpecs) -> TreeConnectio
                 .insert(connection.from);
             acc
         })
+}
+
+fn compute_ascension_cost_delta(
+    passives_tree_specs: &PassivesTreeSpecs,
+    base_ascension: &PassivesTreeAscension,
+    target_ascension: &PassivesTreeAscension,
+) -> f64 {
+    let node_ids = base_ascension
+        .ascended_nodes
+        .keys()
+        .chain(target_ascension.ascended_nodes.keys())
+        .copied()
+        .collect::<HashSet<_>>();
+
+    node_ids
+        .iter()
+        .filter_map(|node_id| {
+            passives_tree_specs.nodes.get(node_id).map(|node_specs| {
+                let base_level = base_ascension
+                    .ascended_nodes
+                    .get(node_id)
+                    .copied()
+                    .unwrap_or_default();
+                let target_level = target_ascension
+                    .ascended_nodes
+                    .get(node_id)
+                    .copied()
+                    .unwrap_or_default();
+
+                node_specs.total_ascend_cost(target_level) as f64
+                    - node_specs.total_ascend_cost(base_level) as f64
+            })
+        })
+        .sum::<f64>()
+        .round()
 }
 
 fn validate_ascension(

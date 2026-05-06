@@ -97,6 +97,10 @@ pub async fn tick(
 
     control_entities(events_queue, game_data, master_store).await?;
     events_resolver::resolve_events(events_queue, game_data, master_store).await;
+    // Some effects need to chain before next tick (eg. retaliate bleed)
+    if !events_queue.is_empty() {
+        events_resolver::resolve_events(events_queue, game_data, master_store).await;
+    }
     update_entities(events_queue, game_data, elapsed_time).await;
 
     game_data.game_stats.elapsed_time += elapsed_time;
@@ -143,7 +147,9 @@ async fn control_entities(
         game_data.player_specs.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,
+        game_data.new_wave,
     );
+    game_data.new_wave = false;
 
     let wave_completed = monsters_still_alive.is_empty();
     if wave_completed || game_data.area_state.read().going_back != 0 {
@@ -177,6 +183,7 @@ async fn control_entities(
             game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
             game_data.monster_specs = monster_specs;
             game_data.monster_states = monster_states;
+            game_data.new_wave = true;
 
             game_data.area_threat = AreaThreat {
                 threat_level: 0,
