@@ -447,7 +447,7 @@ pub fn apply_status(
         }
     }
 
-    if !applied {
+    if !applied && !is_evaded {
         return false;
     }
 
@@ -491,7 +491,7 @@ pub fn apply_status(
         );
     }
 
-    true
+    applied
 }
 
 fn compute_effect_weight(
