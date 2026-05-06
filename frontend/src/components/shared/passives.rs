@@ -85,6 +85,10 @@ fn node_size(node_specs: &PassiveNodeSpecs) -> i32 {
     node_specs.size as i32 * 7
 }
 
+fn node_hitbox_size(node_specs: &PassiveNodeSpecs) -> i32 {
+    node_size(node_specs) + 34
+}
+
 #[component]
 pub fn Node(
     node_specs: PassiveNodeSpecs,
@@ -129,6 +133,14 @@ pub fn Node(
     });
 
     let node_status = move || node_status.try_get().unwrap_or_default();
+
+    let node_group_class = move || {
+        if node_status().purchase_status == PurchaseStatus::Purchaseable {
+            "group cursor-pointer"
+        } else {
+            ""
+        }
+    };
 
     let node_specs = Arc::new(node_specs);
     let show_tooltip = {
@@ -188,7 +200,7 @@ pub fn Node(
         let status = node_status();
         match (status.purchase_status, status.meta_status) {
             (PurchaseStatus::Purchaseable, _) => {
-                "saturate-50 cursor-pointer group active:brightness-50 pointer-events: none"
+                "saturate-50 group-active:brightness-50 pointer-events: none"
             }
             (PurchaseStatus::Inactive, MetaStatus::Locked) => {
                 "saturate-50 brightness-30 pointer-events: none"
@@ -213,10 +225,12 @@ pub fn Node(
     };
 
     let node_size = node_size(&node_specs);
+    let node_hitbox_size = node_hitbox_size(&node_specs);
 
     view! {
         <g
             transform=format!("translate({}, {})", node_specs.x * 10.0, -node_specs.y * 10.0)
+            class=node_group_class
 
             on:click=move |ev| {
                 ev.stop_propagation();
@@ -226,8 +240,9 @@ pub fn Node(
                 }
             }
 
-            on:mousedown=|ev| {
-                if ev.button() == 0 {
+            on:mousedown=move |ev| {
+                if ev.button() == 0 && node_status().purchase_status == PurchaseStatus::Purchaseable
+                {
                     ev.stop_propagation()
                 }
             }
@@ -246,6 +261,18 @@ pub fn Node(
             on:mouseenter=move |_| show_tooltip()
             on:mouseleave=move |_| hide_tooltip()
         >
+            <circle
+                r=node_hitbox_size
+                fill="transparent"
+                class=move || {
+                    if node_status().purchase_status == PurchaseStatus::Purchaseable {
+                        "active:brightness-50"
+                    } else {
+                        ""
+                    }
+                }
+                style="pointer-events: all"
+            />
             <g class=class_style>
                 {node_specs
                     .root_node
