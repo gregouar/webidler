@@ -169,8 +169,7 @@
         "stat": {
           "SkillConditionalModifier": {
             "stat": {
-              "Damage": {
-              }
+              "Damage": { }
             },
             "skill_type": null,
             "skill_id": null,
@@ -601,7 +600,7 @@
                                     "debuff": true
                                   }
                                 },
-                                "value": 1e200
+                                "value": 1e+200
                               }
                             ]
                           }
@@ -1152,6 +1151,26 @@
                     }
                   },
                   "value": 17
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "SuccessChance": {
+                          "skill_type": null,
+                          "skill_id": null,
+                          "skill_description": null,
+                          "effect_type": null
+                        }
+                      },
+                      "modifier": "Increased",
+                      "debuff": true
+                    }
+                  },
+                  "value": 11,
+                  "cumulate": false,
+                  "unavoidable": false
                 }
               ]
             }
@@ -1162,7 +1181,7 @@
   },
   "curse_vampirism": {
     "name": "Curse of Vampirism",
-    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins.",
+    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins, healing you and making you stronger.",
     "icon": "skills/curse_vampirism.svg",
     "skill_type": "Curse",
     "cooldown": 10,
@@ -1197,13 +1216,38 @@
                       "icon": "skills/curse_vampirism.svg",
                       "OnTakeHit": {
                         "is_hurt": true,
-                        "is_triggered": false
+                        "skill_type": "Attack"
                       },
                       "target": "Source",
                       "skill_range": "Any",
                       "skill_shape": "Single",
                       "skill_type": "Curse",
                       "effects": [
+                        {
+                          "ApplyStatus": {
+                            "statuses": [
+                              {
+                                "status_type": {
+                                  "StatModifier": {
+                                    "stat": {
+                                      "Damage": {
+                                      }
+                                    },
+                                    "modifier": "More",
+                                    "debuff": false
+                                  }
+                                },
+                                "value": 10,
+                                "cumulate": true,
+                                "replace_on_value_only": false,
+                                "unavoidable": false
+                              }
+                            ],
+                            "duration": 5
+                          },
+                          "ignore_stat_effects": [ ],
+                          "conditional_modifiers": [ ]
+                        },
                         {
                           "Restore": {
                             "restore_type": "Life",
@@ -1746,7 +1790,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5.0,
+              "duration": 5,
               "statuses": [
                 {
                   "replace_on_value_only": true,
