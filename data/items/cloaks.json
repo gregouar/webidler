@@ -882,17 +882,16 @@
       },
       {
         "stat": {
-          "StatusPower": {
+          "StatusDuration": {
             "status_type": null,
             "skill_type": "Curse",
             "skill_id": null,
-            "skill_description": null,
-            "min_max": null
+            "skill_description": null
           }
         },
-        "modifier": "More",
+        "modifier": "Flat",
         "scope": "Global",
-        "value": -1e300,
+        "value": -99999999.0,
         "ignore_quality": true
       },
       {

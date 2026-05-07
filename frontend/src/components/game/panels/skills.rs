@@ -6,7 +6,10 @@ use std::{
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::skill::{BaseSkillSpecs, SkillType},
+    data::{
+        player::PlayerBaseSkill,
+        skill::{BaseSkillSpecs, SkillType},
+    },
     messages::client::BuySkillMessage,
 };
 use strum::IntoEnumIterator;
@@ -140,7 +143,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                                     >
                                         <SkillCard
                                             skill_id=skill_id.clone()
-                                            skill_specs=skill_specs.clone()
+                                            base_skill_specs=skill_specs.clone()
                                             selected=selected_skill
                                         />
                                     </For>
@@ -174,11 +177,15 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn SkillCard(
     skill_id: String,
-    skill_specs: BaseSkillSpecs,
+    base_skill_specs: BaseSkillSpecs,
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let settings = expect_context::<SettingsContext>();
+
+    let skill_type = base_skill_specs.skill_type;
+    let skill_name = base_skill_specs.name.clone();
+    let skill_icon = img_asset(&base_skill_specs.icon);
 
     let is_selected = Signal::derive({
         let skill_id = skill_id.clone();
@@ -193,11 +200,26 @@ fn SkillCard(
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let tooltip_id = RwSignal::new(0);
     let show_tooltip = {
-        let skill_specs = Arc::new(skill_specs_from_base(skill_id.clone(), &skill_specs));
+        let skill_specs = Arc::new(skill_specs_from_base(skill_id.clone(), &base_skill_specs));
+        let player_base_skill = Some(Arc::new(PlayerBaseSkill {
+            next_upgrade_cost: base_skill_specs.upgrade_cost,
+            base_skill_specs,
+            item_slot: None,
+            upgrade_level: 0,
+        }));
         move || {
             let skill_specs = skill_specs.clone();
+            let player_base_skill = player_base_skill.clone();
             tooltip_id.set(tooltip_context.set_content(
-                move || view! { <SkillTooltip skill_specs=skill_specs.clone() /> }.into_any(),
+                move || {
+                    view! {
+                        <SkillTooltip
+                            skill_specs=skill_specs.clone()
+                            player_base_skill=player_base_skill.clone()
+                        />
+                    }
+                    .into_any()
+                },
                 DynamicTooltipPosition::Auto,
             ));
         }
@@ -207,7 +229,6 @@ fn SkillCard(
         tooltip_context.hide(tooltip_id.get_untracked());
     };
     on_cleanup(hide_tooltip);
-    let skill_type = skill_specs.skill_type;
 
     view! {
         <div
@@ -378,8 +399,8 @@ fn SkillCard(
                 }></div>
                 <img
                     draggable="false"
-                    src=img_asset(&skill_specs.icon)
-                    alt=skill_specs.name.clone()
+                    src=skill_icon
+                    alt=skill_name.clone()
                     class=move || {
                         format!(
                             "relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current invert {}",
@@ -395,7 +416,7 @@ fn SkillCard(
 
             <div class="text-center">
                 <div class="text-sm xl:text-base font-bold text-white text-center font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
-                    {skill_specs.name.clone()}
+                    {skill_name}
                 </div>
             </div>
         </div>

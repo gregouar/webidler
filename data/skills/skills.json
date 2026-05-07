@@ -275,7 +275,7 @@
     "icon": "skills/righteous_fire.svg",
     "skill_type": "Spell",
     "cooldown": 1,
-    "mana_cost": 2,
+    "mana_cost": 4,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
@@ -320,7 +320,7 @@
                       "damage_type": "Fire"
                     }
                   },
-                  "value": 2
+                  "value": 1
                 }
               ]
             },
@@ -588,20 +588,20 @@
                       "effects": [
                         {
                           "ApplyStatus": {
-                            "duration": 8,
+                            "duration": 5,
                             "statuses": [
                               {
                                 "replace_on_value_only": true,
                                 "status_type": {
                                   "StatModifier": {
                                     "stat": {
-                                      "Armor": null
+                                      "Armor": "Physical"
                                     },
                                     "modifier": "More",
                                     "debuff": true
                                   }
                                 },
-                                "value": 100
+                                "value": 1e200
                               }
                             ]
                           }
@@ -931,7 +931,7 @@
                       "trigger_id": "curse_flammability",
                       "name": "Curse of Flammability",
                       "icon": "skills/curse_flammability.svg",
-                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 30% of the Hit's Fire Damage for each Stack of Burn present on the target.",
+                      "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 10% of the Hit's Fire Damage for each Stack of Burn present on the target.",
                       "OnTakeHit": {
                         "is_hurt": true,
                         "damage_type": "Fire",
@@ -983,7 +983,7 @@
                             }
                           },
                           "modifier": "Flat",
-                          "factor": 0.3,
+                          "factor": 0.1,
                           "source": {
                             "StatusStacks": {
                               "DamageOverTime": {
@@ -2978,7 +2978,7 @@
   },
   "rain_arrows": {
     "name": "Rain of Arrows",
-    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies for 30% of your base weapon damage each hit.",
+    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies for 40% of your base weapon damage each hit.",
     "icon": "skills/rain_arrows.svg",
     "skill_type": "Attack",
     "cooldown": 0,
@@ -3123,7 +3123,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3151,7 +3151,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3179,7 +3179,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3207,7 +3207,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3235,7 +3235,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3263,7 +3263,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3295,7 +3295,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       },
       {
         "hidden": true,
@@ -3327,7 +3327,7 @@
             }
           }
         },
-        "factor": 0.3
+        "factor": 0.4
       }
     ]
   }
