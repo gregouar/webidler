@@ -25,7 +25,7 @@ use shared::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, User},
-    db::{self, stashes::StashEntry},
+    db::{self, characters::CharacterEntry, stashes::StashEntry},
     game::{
         data::inventory_data::inventory_data_to_player_inventory,
         systems::{inventory_controller, stashes_controller},
@@ -48,8 +48,11 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         ))
 }
 
-fn verify_stash_access_write(user: &User, stash: &StashEntry) -> Result<(), AppError> {
-    if stash.user_id != user.user_id {
+fn verify_stash_access_write(
+    character: &CharacterEntry,
+    stash: &StashEntry,
+) -> Result<(), AppError> {
+    if stash.user_id != character.user_id || stash.realm_id != character.realm_id {
         return Err(AppError::Forbidden);
     }
     Ok(())
@@ -92,7 +95,7 @@ pub async fn post_upgrade_stash(
             db::stashes::create_stash(
                 &mut *tx,
                 character.user_id,
-                character.realm_id,
+                character.realm_id.clone(),
                 payload.stash_type,
                 0,
                 "New stash",
@@ -101,7 +104,7 @@ pub async fn post_upgrade_stash(
         }
     };
 
-    verify_stash_access_write(&user, &stash)?;
+    verify_stash_access_write(&character, &stash)?;
 
     let mut stash = stash.into();
     let (max_items, cost) = computations::stash_upgrade(&stash);
@@ -151,7 +154,7 @@ pub async fn post_exchange_gems(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_write(&user, &stash)?;
+    verify_stash_access_write(&character, &stash)?;
 
     let gems_amount = payload.amount.into_inner();
     let gems_difference = match payload.stash_action {
@@ -226,8 +229,6 @@ pub async fn post_take_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_write(&user, &stash)?;
-
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
@@ -235,6 +236,8 @@ pub async fn post_take_stash_item(
     verify_ssf(&character)?;
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
+
+    verify_stash_access_write(&character, &stash)?;
 
     let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
@@ -280,8 +283,6 @@ pub async fn post_store_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_write(&user, &stash)?;
-
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
         .await?
         .ok_or(AppError::NotFound)?;
@@ -289,6 +290,8 @@ pub async fn post_store_stash_item(
     verify_ssf(&character)?;
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
+
+    verify_stash_access_write(&character, &stash)?;
 
     let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
