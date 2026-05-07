@@ -604,22 +604,6 @@
       },
       {
         "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
           "Evade": null
         },
         "modifier": "Flat",
@@ -627,6 +611,45 @@
         "value": [
           5.0,
           10.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
+                  "skill_type": null,
+                  "not": false
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
         ],
         "ignore_quality": true
       }
@@ -667,6 +690,43 @@
               "damage_type": "Poison",
               "min_max": null,
               "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Poison"
+                      }
+                    },
+                    "skill_type": null,
+                    "not": false
+                  }
+                }
+              ]
             }
           },
           "modifier": "More",

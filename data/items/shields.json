@@ -458,6 +458,18 @@
       },
       {
         "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "Damage": {
             "skill_type": "Attack",
             "skill_id": null,
@@ -536,7 +548,7 @@
             "Armor": "Physical"
           },
           "modifier": "Flat",
-          "value": 25.0
+          "value": 35.0
         }
       },
       {
@@ -737,20 +749,20 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_type": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
                 }
               }
             ],
