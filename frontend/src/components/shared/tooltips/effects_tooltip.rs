@@ -774,6 +774,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     "{} never expire",
                     skill_status_type_str(skill_filter, status_type.as_ref(), true)
                 )
+            } else if value.unwrap_or_default() <= -99999.0 {
+                format!(
+                    "{} have no effects",
+                    skill_status_type_str(skill_filter, status_type.as_ref(), true)
+                )
             } else {
                 format!(
                     "{} seconds duration to {}",

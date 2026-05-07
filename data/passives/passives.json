@@ -1780,17 +1780,6 @@
         "effects": [
           {
             "stat": {
-              "CritDamage": {
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
-              }
-            },
-            "modifier": "Increased",
-            "value": -33.0
-          },
-          {
-            "stat": {
               "SkillConditionalModifier": {
                 "stat": {
                   "CritChance": {
@@ -2591,7 +2580,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2606,7 +2595,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3017,7 +3006,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -3032,15 +3021,15 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "39b2026c-9b8d-4133-8fd9-1342e2dcd513": {
-        "name": "Initial Poison Damage",
-        "icon": "passives/wasp.svg",
+        "name": "Poison Amplification",
+        "icon": "passives/snake_spiral.svg",
         "x": 10.0,
         "y": -120.0,
         "size": 0,
@@ -3072,7 +3061,7 @@
                         }
                       },
                       "skill_type": null,
-                      "not": true
+                      "not": false
                     }
                   }
                 ]
@@ -3110,7 +3099,7 @@
                         }
                       },
                       "skill_type": null,
-                      "not": true
+                      "not": false
                     }
                   }
                 ]
@@ -5756,8 +5745,8 @@
         "socket": false
       },
       "641ea2e9-be62-40ad-b81a-e2502dbee41d": {
-        "name": "Initial Poison Damage",
-        "icon": "passives/wasp.svg",
+        "name": "Poison Amplification",
+        "icon": "passives/snake_spiral.svg",
         "x": 0.0,
         "y": -127.5,
         "size": 1,
@@ -5789,7 +5778,7 @@
                         }
                       },
                       "skill_type": null,
-                      "not": true
+                      "not": false
                     }
                   }
                 ]
@@ -5827,7 +5816,7 @@
                         }
                       },
                       "skill_type": null,
-                      "not": true
+                      "not": false
                     }
                   }
                 ]
@@ -6138,7 +6127,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -6153,7 +6142,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9758,7 +9747,7 @@
               }
             ],
             "skill_range": "Any",
-            "skill_type": "Other",
+            "skill_type": "Curse",
             "effects": [
               {
                 "success_chance": {
@@ -12855,16 +12844,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -12879,6 +12858,16 @@
                       "skill_type": null,
                       "skill_id": null,
                       "skill_description": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -12988,6 +12977,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null,
@@ -13003,15 +13001,6 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "min_max": null
                     }
                   }
                 ],
@@ -13129,15 +13118,6 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -13145,6 +13125,15 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -13797,8 +13786,8 @@
         "socket": false
       },
       "d95d327a-d5ae-4754-be2d-a8afdeb998bc": {
-        "name": "Initial Poison Damage",
-        "icon": "passives/wasp.svg",
+        "name": "Poison Amplification",
+        "icon": "passives/snake_spiral.svg",
         "x": -10.0,
         "y": -120.0,
         "size": 0,
@@ -13830,7 +13819,7 @@
                         }
                       },
                       "skill_type": null,
-                      "not": true
+                      "not": false
                     }
                   }
                 ]
@@ -13868,7 +13857,7 @@
                         }
                       },
                       "skill_type": null,
-                      "not": true
+                      "not": false
                     }
                   }
                 ]
@@ -14842,7 +14831,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -14857,7 +14846,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -15410,7 +15399,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -15425,7 +15414,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,

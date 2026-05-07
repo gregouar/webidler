@@ -571,14 +571,20 @@ pub fn format_skill_effect(
 
             let formatted_stats_effects = {
                 (!stat_effects.is_empty() || !trigger_effects.is_empty()).then(|| {
-                        let trigger_modifier_duration_str = format_trigger_modifier(
-                            find_trigger_modifier(
+                        let trigger_modifier_duration = find_trigger_modifier(
                                 StatType::StatusDuration {
                                     status_type: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
                                     skill_filter:  Default::default(),
                                 },
                                 modifiers,
-                            ),
+                            );
+                        
+                        if trigger_modifier_duration.is_none() && duration.max.get() < 0.1 {
+                            return view! { <EffectLi>"No Effects"</EffectLi> }.into_any();
+                        }
+                        
+                        let trigger_modifier_duration_str = format_trigger_modifier(
+                         trigger_modifier_duration   ,
                             "",
                         );
                         let apply_str = match stackable_stat_effects {
@@ -618,7 +624,7 @@ pub fn format_skill_effect(
                                         .into_any()
                                 })} {trigger_effects}
                         </EffectLi>
-                    }
+                    }.into_any()
                 })
             };
 
