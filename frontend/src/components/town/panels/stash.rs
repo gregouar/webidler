@@ -430,7 +430,7 @@ fn StashBrowser(
                 let skip = extend_list.get_untracked();
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
-                let character_id = town_context.character.read_untracked().character_id;
+                let realm = town_context.character.read_untracked().realm;
                 let stash_id = stash.read_untracked().stash_id;
                 let filters = filters.get_untracked();
 
@@ -439,7 +439,7 @@ fn StashBrowser(
                         .browse_stash_items(
                             &auth_context.token(),
                             &BrowseStashItemsRequest {
-                                character_id,
+                                realm,
                                 skip,
                                 limit: items_per_page,
                                 filters,

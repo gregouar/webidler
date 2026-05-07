@@ -169,7 +169,7 @@ pub struct ExchangeGemsStashRequest {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseStashItemsRequest {
-    pub character_id: UserCharacterId,
+    pub realm: Realm,
 
     pub filters: MarketFilters,
 

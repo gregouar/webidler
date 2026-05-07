@@ -66,6 +66,7 @@ pub async fn create_stash<'c>(
 pub async fn get_stash<'c>(
     executor: impl DbExecutor<'c>,
     stash_id: &StashId,
+    realm_id: &RealmId,
 ) -> Result<Option<StashEntry>, sqlx::Error> {
     sqlx::query_as!(
         StashEntry,
@@ -86,9 +87,13 @@ pub async fn get_stash<'c>(
                 AND stash_items.stash_id = stashes.stash_id
             ) as "items_amount!: i64"
         FROM stashes
-        WHERE stash_id = $1 AND deleted_at IS NULL
+        WHERE 
+            stash_id = $1 
+            AND realm_id = $2
+            AND deleted_at IS NULL 
         "#,
-        stash_id
+        stash_id,
+        realm_id
     )
     .fetch_optional(executor)
     .await
