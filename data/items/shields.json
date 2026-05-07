@@ -185,6 +185,16 @@
         }
       },
       {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Block": null
+          },
+          "modifier": "Increased",
+          "value": 10.0
+        }
+      },
+      {
         "scope": "Global",
         "stat_effect": {
           "stat": {
@@ -749,20 +759,20 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_type": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null,
                   "min_max": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
                 }
               }
             ],

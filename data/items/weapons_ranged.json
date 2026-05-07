@@ -312,7 +312,44 @@
             }
           },
           "modifier": "Increased",
-          "value": 20.0
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_type": {
+                      "DamageOverTime": {
+                        "damage_type": "Physical"
+                      }
+                    },
+                    "skill_type": null,
+                    "not": false
+                  }
+                }
+              ]
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
         }
       }
     ]
