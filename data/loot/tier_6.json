@@ -2,7 +2,8 @@
   "entries": [
     {
       "item_id": "padded_tunic_unique",
-      "weight": 3
+      "weight": 3,
+      "min_area_level": 260
     },
     {
       "item_id": "sabre",
