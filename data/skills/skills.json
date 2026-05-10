@@ -822,7 +822,8 @@
                       "name": "Curse of Putridity",
                       "icon": "skills/curse_putridity.svg",
                       "OnTakeHit": {
-                        "is_hurt": true
+                        "is_hurt": true,
+                        "is_triggered": false
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
