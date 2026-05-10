@@ -285,7 +285,7 @@
             "conditions_duration": 0
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
         "value": 140.0,
         "ignore_quality": true
@@ -412,7 +412,7 @@
               "conditions_duration": 0
             }
           },
-          "modifier": "Increased",
+          "modifier": "More",
           "value": 10.0
         }
       }
@@ -732,7 +732,7 @@
                           "is_hit": null
                         }
                       },
-                      "modifier": "Increased",
+                      "modifier": "More",
                       "debuff": false
                     }
                   },
@@ -759,20 +759,20 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_type": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
                 }
               }
             ],
