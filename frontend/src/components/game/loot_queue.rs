@@ -2,12 +2,13 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
+use leptos_use::watch_throttled;
 use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
         item_affix::AffixEffectScope,
-        loot::LootState,
+        loot::{LootState, QueuedLoot},
         player::EquippedSlot,
         skill::DamageType,
     },
@@ -128,31 +129,45 @@ pub fn LootQueue() -> impl IntoView {
         }
     };
 
-    Effect::new({
-        let loot_filter = game_context.loot_filter;
-        let pickup_loot = pickup_loot.clone();
-        let sell_loot = sell_loot.clone();
-        let last_try = RwSignal::new(Default::default());
-        move || {
-            let queued_loot = game_context
+    let loot_filter = game_context.loot_filter;
+    let queued_loot = Signal::derive(move || {
+        if loot_filter.read().immediate_mode {
+            game_context
+                .queued_loot
+                .read()
+                .iter()
+                .find(|l| !l.state.has_disappeared())
+                .cloned()
+        } else {
+            game_context
                 .queued_loot
                 .read()
                 .iter()
                 .find(|l| l.state == LootState::WillDisappear)
-                .cloned();
-
-            if let Some(queued_loot) = queued_loot
-                && last_try.try_get_untracked().unwrap_or_default() != queued_loot.identifier
-            {
-                match filter_loot(loot_filter, &queued_loot.item_specs) {
-                    Some(FilterRuleType::Pickup) => pickup_loot(queued_loot.identifier),
-                    Some(FilterRuleType::Sell) => sell_loot(queued_loot.identifier),
-                    None => {}
-                }
-                last_try.set(queued_loot.identifier);
-            }
+                .cloned()
         }
     });
+    let last_try = RwSignal::new(Default::default());
+    let _ = watch_throttled(
+        move || queued_loot.get(),
+        {
+            let pickup_loot = pickup_loot.clone();
+            let sell_loot = sell_loot.clone();
+            move |queued_loot: &Option<QueuedLoot>, _, _| {
+                if let Some(queued_loot) = queued_loot
+                    && last_try.try_get_untracked().unwrap_or_default() != queued_loot.identifier
+                {
+                    match filter_loot(loot_filter, &queued_loot.item_specs) {
+                        Some(FilterRuleType::Pickup) => pickup_loot(queued_loot.identifier),
+                        Some(FilterRuleType::Sell) => sell_loot(queued_loot.identifier),
+                        None => {}
+                    }
+                    last_try.set(queued_loot.identifier);
+                }
+            }
+        },
+        5000.0,
+    );
 
     view! {
         <div class="relative w-full z-0 pr-4">

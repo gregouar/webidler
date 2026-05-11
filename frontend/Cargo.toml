@@ -20,6 +20,7 @@ leptos-use = { version = "0.18.3", features = [
     "on_click_outside",
     "use_infinite_scroll",
     "storage",
+    "watch_throttled",
 ] }
 web-sys = { version = "0.3.95", features = ["Performance", "Selection", "ValidityState"] }
 
