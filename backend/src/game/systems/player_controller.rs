@@ -332,7 +332,9 @@ pub fn init_skills_from_inventory(
     player_controller: &mut PlayerController,
 ) {
     for (item_slot, equipped_item) in player_inventory.equipped_items() {
-        if let Some(weapon_specs) = equipped_item.weapon_specs.as_ref() {
+        if let Some(weapon_specs) = equipped_item.weapon_specs.as_ref()
+            && !player_inventory.sheathed.contains(&item_slot)
+        {
             equip_weapon(
                 player_base_specs,
                 player_state,

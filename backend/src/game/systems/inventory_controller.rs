@@ -90,10 +90,8 @@ pub fn equip_item(
     }
 
     let old_item = unequip_item(player_inventory, slot);
-    player_inventory.sheathed.remove(&slot);
 
     for item_slot in item_specs.base.extra_slots.iter() {
-        player_inventory.sheathed.remove(item_slot);
         player_inventory
             .equipped
             .insert(*item_slot, EquippedSlot::ExtraSlot(slot));
