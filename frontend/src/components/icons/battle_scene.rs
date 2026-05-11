@@ -17,7 +17,7 @@ pub fn ThreatIcon() -> impl IntoView {
             position=StaticTooltipPosition::Left
             tooltip=|| {
                 format!(
-                    "Each Threat Level increases Enemies Power by {:.0}%.",
+                    "At each increase of the Threat Level, Enemies deal {:.0}% More Damage.",
                     THREAT_EFFECT * 100.0,
                 )
             }

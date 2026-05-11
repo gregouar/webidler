@@ -704,30 +704,32 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let progress_value = predictive_cooldown(
         skill_cooldown,
         reset_progress,
-        Signal::derive(move || is_dead.get() || rush_mode.get()),
-        game_context
-            .player_state
-            .read_untracked()
-            .character_state
-            .skills_states
-            .get(index)
-            .map(|x| x.elapsed_cooldown.get())
-            .unwrap_or_default(),
+        Signal::derive(move || is_dead.get() || rush_mode.get() || disabled_auto.get()),
+        if disabled_auto.get_untracked() {
+            0.0
+        } else {
+            game_context
+                .player_state
+                .read_untracked()
+                .character_state
+                .skills_states
+                .get(index)
+                .map(|x| x.elapsed_cooldown.get())
+                .unwrap_or_default()
+        },
     );
 
-    let disabled = Memo::new(move |_| is_dead.get() || disabled_auto.get());
-
     view! {
-        <div class="flex flex-col">
+        <div class="flex flex-col xl:gap-1">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
                 {
                     let use_skill = use_skill.clone();
                     view! {
                         <button
-                            class="btn p-1 w-full h-full isolate
+                            class="btn w-full h-full isolate
                             active:brightness-50 active:sepia"
                             on:click=move |_| use_skill()
-                            disabled=move || !is_ready.get() || disabled.get()
+                            disabled=move || !is_ready.get() || disabled_auto.get()
                         >
                             {move || {
                                 skill_static
@@ -740,7 +742,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                                                 skill_icon=skill_icon.clone()
                                                 value=progress_value
                                                 reset=just_triggered
-                                                disabled=disabled
+                                                disabled=is_dead
                                                 bar_width=4
                                             />
                                         }
@@ -762,7 +764,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                         toggle_callback=set_auto_skill
                         initial=initial_auto_use
                         disabled=disabled_auto
-                        class="h-full max-h-full leading-none  py-1 xl:py-1"
+                        class="h-full max-h-full leading-none  py-1 xl:py-1.5"
                     >
                         // "↻"
                         <AutoUseIcon />
