@@ -80,7 +80,7 @@
     },
     {
       "item_id": "edict_treasure_map",
-      "weight": 999
+      "weight": 1999
     },
     {
       "item_id": "rune",
@@ -94,7 +94,7 @@
     },
     {
       "item_id": "rune_mana_damage",
-      "weight": 49
+      "weight": 99
     }
   ]
 }

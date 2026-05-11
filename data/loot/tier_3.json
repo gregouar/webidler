@@ -58,7 +58,7 @@
     },
     {
       "item_id": "edict_menu",
-      "weight": 999
+      "weight": 1999
     },
     {
       "item_id": "rune",
@@ -67,7 +67,7 @@
     },
     {
       "item_id": "rune_berserker",
-      "weight": 499
+      "weight": 999
     }
   ]
 }

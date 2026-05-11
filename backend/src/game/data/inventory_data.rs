@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 use shared::data::{
@@ -16,6 +16,9 @@ pub struct InventoryData {
     pub equipped: HashMap<ItemSlot, ItemModifiers>,
     pub bag: Vec<ItemModifiers>,
     pub max_bag_size: u8,
+
+    #[serde(default)]
+    pub sheathed: HashSet<ItemSlot>,
 }
 
 pub fn inventory_data_to_player_inventory(
@@ -30,6 +33,7 @@ pub fn inventory_data_to_player_inventory(
             .filter_map(|item_modifiers| init_item_specs_from_store(items_store, item_modifiers))
             .collect(),
         max_bag_size: inventory_data.max_bag_size,
+        sheathed: inventory_data.sheathed,
     };
 
     for item_specs in inventory_data

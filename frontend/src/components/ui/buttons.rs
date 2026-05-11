@@ -315,7 +315,7 @@ pub fn FancyButton(
             // <Show when=move || settings.uses_heavy_effects()>
             // <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
             // </Show>
-            <span class="relative z-10">{children()}</span>
+            <span class="relative z-10 flex h-full w-full items-center justify-center">{children()}</span>
         </button>
     }
 }
@@ -324,6 +324,7 @@ pub fn FancyButton(
 pub fn Toggle(
     #[prop(default = false)] initial: bool,
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
+    #[prop(optional)] class: Option<&'static str>,
     mut toggle_callback: impl FnMut(bool) + 'static,
     children: Children,
 ) -> impl IntoView {
@@ -391,7 +392,7 @@ pub fn Toggle(
                 format!(
                     "btn relative {}
                     tracking-[0.08em]
-                    px-2 xl:px-3
+                    px-1 xl:px-2
                     text-sm xl:text-base
                     font-extrabold {}
                     rounded-[4px] xl:rounded-[6px]
@@ -406,6 +407,7 @@ pub fn Toggle(
                     disabled:before:hidden
                     transition-all duration-200
                     group
+                    {}
                     {}
                     ",
                     "isolate overflow-clip",
@@ -426,6 +428,7 @@ pub fn Toggle(
                         }
                     },
                     toggle_class(),
+                    class.unwrap_or_default(),
                 )
             }
             disabled=disabled
@@ -440,7 +443,7 @@ pub fn Toggle(
                     style="background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%, rgba(0,0,0,0.04));"
                 ></span>
             </Show>
-            <span class="relative z-1">{children()}</span>
+            <span class="relative z-1 flex h-full w-full items-center justify-center">{children()}</span>
         </button>
     }
 }

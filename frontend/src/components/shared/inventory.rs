@@ -54,6 +54,7 @@ pub struct InventoryConfig {
     // pub loot_preference: Option<RwSignal<Option<ItemCategory>>>,
     pub on_loot_filter: Option<Arc<dyn Fn() + Send + Sync>>,
     pub on_unequip: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
+    pub on_sheathe: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
     pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
     pub sell_type: SellType,
@@ -215,6 +216,17 @@ fn EquippedItemEquippedSlot(
     let events_context: EventsContext = expect_context();
 
     let equipped_item_rarity = item_specs.modifiers.rarity;
+    let is_weapon = item_specs.weapon_specs.is_some();
+    let is_sheathed = Signal::derive({
+        let inventory = inventory.clone();
+        move || {
+            inventory
+                .player_inventory
+                .read()
+                .sheathed
+                .contains(&item_slot)
+        }
+    });
     let can_unequip = Signal::derive(move || {
         inventory
             .equip_filter
@@ -270,6 +282,8 @@ fn EquippedItemEquippedSlot(
                     is_being_unequipped=is_being_unequipped
                     on_close=Callback::new(move |_| show_menu.set(false))
                     can_unequip
+                    is_weapon
+                    is_sheathed
                 />
                 {
                     let item_specs = item_specs.clone();
@@ -340,9 +354,34 @@ pub fn EquippedItemContextMenu(
     on_close: Callback<()>,
     is_being_unequipped: RwSignal<bool>,
     can_unequip: Signal<bool>,
+    is_weapon: bool,
+    is_sheathed: Signal<bool>,
 ) -> impl IntoView {
     view! {
         <ContextMenu on_close=on_close>
+            {inventory
+                .on_sheathe
+                .clone()
+                .and_then(|on_sheathe| {
+                    is_weapon.then(|| {
+                        view! {
+                            <ActionMenuRow
+                                label_signal=Signal::derive(move || {
+                                    if is_sheathed.get() {
+                                        "Unsheathe".to_string()
+                                    } else {
+                                        "Sheathe".to_string()
+                                    }
+                                })
+                                tone=ActionMenuTone::Skill
+                                on_click=move || {
+                                    on_sheathe(item_slot);
+                                    on_close.run(());
+                                }
+                            />
+                        }
+                    })
+                })}
             {inventory
                 .on_unequip
                 .map(|on_unequip| {
@@ -810,6 +849,7 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
 #[derive(Clone, Copy)]
 enum ActionMenuTone {
     Success,
+    Skill,
     Warning,
     Neutral,
 }
@@ -827,6 +867,11 @@ fn action_menu_row_tone(tone: ActionMenuTone) -> ActionMenuRowTone {
             text: "text-amber-300",
             hover_text: "hover:text-[#f2e5bc]",
             wash: "rgba(247, 190, 77, 0.3)",
+        },
+        ActionMenuTone::Skill => ActionMenuRowTone {
+            text: "text-violet-300",
+            hover_text: "hover:text-fuchsia-100",
+            wash: "rgba(112,80,138,0.36)",
         },
         ActionMenuTone::Warning => ActionMenuRowTone {
             text: "text-[#f86c47]",

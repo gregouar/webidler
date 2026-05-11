@@ -554,7 +554,15 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             )
         }
         StatType::Speed(skill_filter) => {
-            format!("{}Speed", skill_filter_str(skill_filter, "", false))
+            let skill_str = skill_filter_str(skill_filter, "", false);
+            format!(
+                "{}Speed",
+                if skill_str.is_empty() {
+                    "Skills "
+                } else {
+                    &skill_str
+                }
+            )
         }
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),

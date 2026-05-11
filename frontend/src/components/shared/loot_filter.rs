@@ -26,11 +26,13 @@ use crate::components::{
     ui::{
         buttons::{FancyButton, MenuButton, Toggle},
         card::{CardHeader, CardInset, MenuCard},
+        checkbox::Checkbox,
         confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         list_row::MenuListRow,
         menu_panel::MenuPanel,
+        tooltip::{StaticTooltip, StaticTooltipPosition},
     },
     utils::file_loader::{save_json, use_json_loader},
 };
@@ -38,6 +40,9 @@ use crate::components::{
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct LootFilter {
     pub rules: IndexMap<Uuid, FilterRule>,
+
+    #[serde(default)]
+    pub immediate_mode: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, Hash, PartialEq, Eq)]
@@ -166,14 +171,41 @@ pub fn LootFilterPanel(
                 view! {
                     <MenuCard class="w-full h-full">
                         <CardHeader title="Loot Filter" on_close=move || open.set(false)>
-                            <div class="flex gap-2 mx-4">
+                            <div class="flex gap-4 mx-4">
                                 <MenuButton on:click=move |_| new_rule()>"New Rule"</MenuButton>
+                                <div class="flex items-center">
+                                    <Checkbox
+                                        label="Immediate Mode".into()
+                                        on_change=move |value| {
+                                            loot_filter.write().immediate_mode = value
+                                        }
+                                        checked=Signal::derive(move || {
+                                            loot_filter.read().immediate_mode
+                                        })
+                                    />
+
+                                    <StaticTooltip
+                                        position=StaticTooltipPosition::Bottom
+                                        tooltip=|| {
+                                            view! {
+                                                <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
+                                                    "By default, loot filter automatically picks up and/or sells items when they reach the end of the loot queue at the bottom right of the screen. In Immediate Mode, it instantly triggers instead."
+                                                </div>
+                                            }
+                                        }
+                                    >
+                                        <span class="ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
+                                            "?"
+                                        </span>
+                                    </StaticTooltip>
+                                </div>
+
                             </div>
 
-                            <div class="flex-1" />
-                            <p class="text-xs xl:text-sm font-medium text-zinc-400">
-                                "Loot filter automatically picks up and/or sells items when they reach the end of the loot queue at the bottom right of the screen."
-                            </p>
+                            // <div class="flex-1" />
+                            // <p class="text-xs xl:text-sm font-medium text-zinc-400">
+                            // "Loot filter automatically picks up and/or sells items when they reach the end of the loot queue at the bottom right of the screen."
+                            // </p>
                             <div class="flex-1" />
 
                             <div class="flex gap-2 mx-4">

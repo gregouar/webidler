@@ -110,8 +110,10 @@ pub fn unequip_item(
 ) -> Option<ItemSpecs> {
     match player_inventory.equipped.remove(&item_slot) {
         Some(EquippedSlot::MainSlot(old_item)) => {
+            player_inventory.sheathed.remove(&item_slot);
             for item_slot in old_item.base.extra_slots.iter() {
                 player_inventory.equipped.remove(item_slot);
+                player_inventory.sheathed.remove(item_slot);
             }
             Some(*old_item)
         }

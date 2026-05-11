@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use shared::{
     data::{item::ItemSlot, player::EquippedSlot},
-    messages::client::{EquipItemMessage, SellItemsMessage, UnequipItemMessage},
+    messages::client::{EquipItemMessage, SellItemsMessage, SheathItemMessage, UnequipItemMessage},
 };
 
 use crate::components::{
@@ -120,6 +120,33 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
+    // Sheathe / unsheathe
+    let try_sheathe = {
+        let conn = conn.clone();
+        let confirm_context = confirm_context.clone();
+
+        move |item_slot: ItemSlot| {
+            let conn = conn.clone();
+            let sheathe = Arc::new(move || {
+                conn.send(&SheathItemMessage { item_slot }.into());
+            });
+
+            let inventory = game_context.player_inventory.read();
+            let need_confirm = !inventory.sheathed.contains(&item_slot);
+
+            if need_confirm {
+                (confirm_context
+                        .confirm)(
+                        "Sheathing your weapon will remove your base weapon attack skill, losing all upgrade levels, are you sure?"
+                            .to_string(),
+                        sheathe.clone(),
+                    );
+            } else {
+                sheathe();
+            }
+        }
+    };
+
     // Sell
     let sell = {
         let conn = conn.clone();
@@ -133,6 +160,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         // loot_preference: Some(game_context.loot_preference),
         on_loot_filter: Some(Arc::new(move || open_loot_filter.set(true))),
         on_unequip: Some(Arc::new(try_unequip)),
+        on_sheathe: Some(Arc::new(try_sheathe)),
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
         sell_type: SellType::Sell,
