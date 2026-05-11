@@ -136,7 +136,6 @@ pub fn LootQueue() -> impl IntoView {
                 .queued_loot
                 .read()
                 .iter()
-                .rev()
                 .find(|l| !l.state.has_disappeared())
                 .cloned()
         } else {
