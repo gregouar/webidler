@@ -181,6 +181,7 @@ impl From<OldInventoryData> for InventoryData {
                 .collect(),
             bag: value.bag.into_iter().map(Into::into).collect(),
             max_bag_size: value.max_bag_size,
+            sheathed: Default::default(),
         }
     }
 }

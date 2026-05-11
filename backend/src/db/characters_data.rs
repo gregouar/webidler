@@ -43,6 +43,7 @@ pub async fn save_character_inventory<'c>(
             .map(|item_specs| item_specs.modifiers.clone())
             .collect(),
         max_bag_size: inventory.max_bag_size,
+        sheathed: inventory.sheathed.clone(),
     };
 
     Ok(

@@ -141,6 +141,21 @@ fn handle_client_message(
                 });
             }
         }
+        ClientMessage::SheathItem(m) => {
+            if let Err(err) = player_controller::toggle_sheathe_item(
+                game_data.player_base_specs.mutate(),
+                &mut game_data.player_state,
+                &mut game_data.player_controller,
+                game_data.player_inventory.mutate(),
+                m.item_slot,
+            ) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: err.to_string(),
+                    must_disconnect: false,
+                });
+            }
+        }
         ClientMessage::SellItems(m) => {
             let mut item_indexes = m.item_indexes;
             item_indexes.sort_by_key(|&i| i);

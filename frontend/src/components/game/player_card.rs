@@ -448,14 +448,23 @@ fn BuySkillButton() -> impl IntoView {
                 </button>
             </StaticTooltip>
 
-            <div class="flex justify-around invisible">
-                <Toggle toggle_callback=|_| {} disabled=Signal::derive(|| true)>
-                    <span class="inline xl:hidden">"A"</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Auto"</span>
+            <div class="flex h-6 items-stretch justify-around xl:px-1 gap-1 xl:h-8 xl:gap-2  invisible">
+                <Toggle
+                    toggle_callback=|_| {}
+                    disabled=Signal::derive(|| true)
+                    class="h-full max-h-full leading-none  py-1 xl:py-1.5"
+                >
+                    <AutoUseIcon />
                 </Toggle>
-                <FancyButton disabled=Signal::derive(|| true)>
-                    <span class="text-base xl:text-2xl">"+"</span>
-                </FancyButton>
+                <div class="flex-1 h-full">
+                    <FancyButton
+                        disabled=Signal::derive(|| true)
+                        class="w-full h-full max-h-full leading-none py-1"
+                    >
+                        <span class="inline xl:hidden text-base">"+"</span>
+                        <span class="hidden xl:inline text-lg">"Upgd."</span>
+                    </FancyButton>
+                </div>
             </div>
         </div>
     }

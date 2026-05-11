@@ -10,8 +10,8 @@ use shared::{
         item::{ItemSlot, ItemSpecs, WeaponSpecs},
         monster::{MonsterRarity, MonsterSpecs},
         player::{
-            PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs,
-            PlayerState,
+            EquippedSlot, PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources,
+            PlayerSpecs, PlayerState,
         },
         skill::{BaseSkillSpecs, SkillType},
     },
@@ -261,12 +261,51 @@ pub fn unequip_item_to_bag(
     item_slot: ItemSlot,
 ) -> Result<(), AppError> {
     inventory_controller::unequip_item_to_bag(player_inventory, item_slot)?;
-    unequip_weapon(
-        player_base_specs,
-        player_state,
-        player_controller,
-        item_slot,
-    );
+    if !player_inventory.sheathed.remove(&item_slot) {
+        unequip_weapon(
+            player_base_specs,
+            player_state,
+            player_controller,
+            item_slot,
+        );
+    }
+    Ok(())
+}
+
+pub fn toggle_sheathe_item(
+    player_base_specs: &mut PlayerBaseSpecs,
+    player_state: &mut PlayerState,
+    player_controller: &mut PlayerController,
+    player_inventory: &mut PlayerInventory,
+    item_slot: ItemSlot,
+) -> Result<(), AppError> {
+    let Some(EquippedSlot::MainSlot(item_specs)) = player_inventory.equipped.get(&item_slot) else {
+        return Err(AppError::NotFound);
+    };
+
+    let Some(weapon_specs) = item_specs.weapon_specs.as_ref() else {
+        return Err(AppError::UserError("item is not a weapon".into()));
+    };
+
+    if !player_inventory.sheathed.remove(&item_slot) {
+        player_inventory.sheathed.insert(item_slot);
+        unequip_weapon(
+            player_base_specs,
+            player_state,
+            player_controller,
+            item_slot,
+        )
+    } else {
+        equip_weapon(
+            player_base_specs,
+            player_state,
+            player_controller,
+            item_slot,
+            item_specs.modifiers.level,
+            weapon_specs,
+        );
+    }
+
     Ok(())
 }
 

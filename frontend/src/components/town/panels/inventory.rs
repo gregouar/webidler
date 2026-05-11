@@ -160,6 +160,7 @@ pub fn TownInventoryPanel(
             // loot_preference: None,
             on_loot_filter: Some(Arc::new(move || open_loot_filter.set(true))),
             on_unequip: Some(Arc::new(on_unequip)),
+            on_sheathe: None,
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),
             sell_type: SellType::Discard,

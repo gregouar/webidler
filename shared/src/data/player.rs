@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
@@ -83,6 +83,10 @@ pub struct PlayerInventory {
 
     pub bag: Vec<ItemSpecs>,
     pub max_bag_size: u8,
+
+    // TODO: Have proper migration and have sheathed as part of EquippedSlot
+    #[serde(default)]
+    pub sheathed: HashSet<ItemSlot>,
 }
 
 impl PlayerInventory {
