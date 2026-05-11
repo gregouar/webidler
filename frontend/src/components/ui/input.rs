@@ -97,6 +97,7 @@ where
     let node_ref = NodeRef::<leptos::html::Input>::new();
     let validation_error = RwSignal::new(None);
     let is_invalid = Memo::new(move |_| validation_error.read().is_some());
+    let invalid_input_message = "Invalid input.".to_string();
 
     let prop_value = RwSignal::new(String::new());
     Effect::new(move || {
@@ -158,42 +159,51 @@ where
                 placeholder=placeholder
                 step=step
                 prop:value=move || prop_value.get()
-                on:input:target=move |ev| match serde_plain::from_str(&ev.target().value()) {
-                    Ok(v) => {
-                        if bind.get_untracked().as_ref() != Some(&v) {
-                            bind.set(Some(v));
-                        }
-                        validation_error.set(None);
-                    }
-                    Err(err) => {
+                on:input:target=move |ev| {
+                    let input = ev.target();
+                    if input.validity().bad_input() {
+                        validation_error.set(Some(invalid_input_message.clone()));
                         bind.set(None);
-                        validation_error
-                            .set(
-                                Some(
-                                    match err {
-                                        serde_plain::Error::ImpossibleSerialization(_)
-                                        | serde_plain::Error::ImpossibleDeserialization(_) => {
-                                            "Invalid input.".to_string()
-                                        }
-                                        serde_plain::Error::Parse(x, y) => {
-                                            if y.starts_with("Expected valid") {
-                                                x.split(" Expected valid")
+                        return;
+                    }
+
+                    match serde_plain::from_str(&input.value()) {
+                        Ok(v) => {
+                            if bind.get_untracked().as_ref() != Some(&v) {
+                                bind.set(Some(v));
+                            }
+                            validation_error.set(None);
+                        }
+                        Err(err) => {
+                            validation_error
+                                .set(
+                                    Some(
+                                        match err {
+                                            serde_plain::Error::ImpossibleSerialization(_)
+                                            | serde_plain::Error::ImpossibleDeserialization(_) => {
+                                                invalid_input_message.clone()
+                                            }
+                                            serde_plain::Error::Parse(x, y) => {
+                                                if y.starts_with("Expected valid") {
+                                                    x.split(" Expected valid")
+                                                        .next()
+                                                        .unwrap_or_default()
+                                                        .to_string()
+                                                } else {
+                                                    invalid_input_message.clone()
+                                                }
+                                            }
+                                            serde_plain::Error::Message(m) => {
+                                                m.split(" Expected valid")
                                                     .next()
                                                     .unwrap_or_default()
                                                     .to_string()
-                                            } else {
-                                                "Invalid input.".to_string()
                                             }
-                                        }
-                                        serde_plain::Error::Message(m) => {
-                                            m.split(" Expected valid")
-                                                .next()
-                                                .unwrap_or_default()
-                                                .to_string()
-                                        }
-                                    },
-                                ),
-                            );
+                                        },
+                                    ),
+                                );
+                            bind.set(None);
+                        }
                     }
                 }
 
