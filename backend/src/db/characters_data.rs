@@ -1,14 +1,19 @@
 use sqlx::FromRow;
 
 use shared::data::{
-    passive::PassivesTreeAscension, player::PlayerInventory, temple::PlayerBenedictions,
+    passive::PassivesTreeAscension,
+    player::{EquippedSlot, PlayerInventory},
+    temple::PlayerBenedictions,
     user::UserCharacterId,
 };
 
 use crate::{
     constants::DATA_VERSION,
     db::pool::DbExecutor,
-    game::data::{inventory_data::InventoryData, passives::PassivesTreeAscensionData},
+    game::data::{
+        inventory_data::{EquippedItemData, InventoryData},
+        passives::PassivesTreeAscensionData,
+    },
 };
 
 use super::utc_datetime::UtcDateTime;
@@ -34,8 +39,21 @@ pub async fn save_character_inventory<'c>(
 ) -> anyhow::Result<()> {
     let inventory_data = InventoryData {
         equipped: inventory
-            .equipped_items()
-            .map(|(item_slot, item_specs)| (item_slot, item_specs.modifiers.clone()))
+            .equipped
+            .iter()
+            .filter_map(|(item_slot, equipped_slot)| match equipped_slot {
+                EquippedSlot::MainSlot {
+                    item_specs,
+                    sheathed,
+                } => Some((
+                    *item_slot,
+                    EquippedItemData {
+                        modifiers: item_specs.modifiers.clone(),
+                        sheathed: *sheathed,
+                    },
+                )),
+                EquippedSlot::ExtraSlot(_) => None,
+            })
             .collect(),
         bag: inventory
             .bag

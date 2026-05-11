@@ -16,7 +16,10 @@ use crate::{
 
 use super::{
     game_data::GameInstanceData,
-    systems::{loot_controller, passives_controller, player_controller, skills_controller},
+    systems::{
+        inventory_controller, loot_controller, passives_controller, player_controller,
+        skills_controller,
+    },
 };
 
 /// Handle client events, return whether the game should stop or continue
@@ -134,6 +137,17 @@ fn handle_client_message(
                 &mut game_data.player_controller,
                 m.item_slot,
             ) {
+                return Some(ErrorMessage {
+                    error_type: ErrorType::Game,
+                    message: err.to_string(),
+                    must_disconnect: false,
+                });
+            }
+        }
+        ClientMessage::SheatheItem(m) => {
+            if let Err(err) =
+                inventory_controller::sheathe_item(game_data.player_inventory.mutate(), m.item_slot)
+            {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: err.to_string(),

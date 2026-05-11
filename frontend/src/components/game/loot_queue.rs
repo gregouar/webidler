@@ -255,7 +255,7 @@ pub fn LootQueue() -> impl IntoView {
                                                     .equipped
                                                     .get(&slot)
                                                     .and_then(|equipped_slot| match equipped_slot {
-                                                        EquippedSlot::MainSlot(item_specs) => {
+                                                        EquippedSlot::MainSlot { item_specs, .. } => {
                                                             Some(Arc::from(item_specs.clone()))
                                                         }
                                                         EquippedSlot::ExtraSlot(_) => None,

@@ -60,8 +60,12 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
                     x => Some(x),
                 })
                 .map(|x| {
-                    if let EquippedSlot::MainSlot(x) = x {
-                        x.weapon_specs.is_some()
+                    if let EquippedSlot::MainSlot {
+                        item_specs,
+                        sheathed,
+                    } = x
+                    {
+                        item_specs.weapon_specs.is_some() && !sheathed
                     } else {
                         false
                     }
@@ -98,8 +102,12 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
                 .equipped
                 .get(&item_slot)
                 .map(|x| {
-                    if let EquippedSlot::MainSlot(x) = x {
-                        x.weapon_specs.is_some()
+                    if let EquippedSlot::MainSlot {
+                        item_specs,
+                        sheathed,
+                    } = x
+                    {
+                        item_specs.weapon_specs.is_some() && !sheathed
                     } else {
                         false
                     }

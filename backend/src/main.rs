@@ -148,6 +148,7 @@ async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyho
     db::migrations::migration_0_1_7_to_0_1_8::migrate(db_pool).await?;
     db::migrations::migration_0_1_8_to_0_1_9::migrate(db_pool, master_store).await?;
     db::migrations::migration_0_1_9_to_0_1_10::migrate(db_pool, master_store).await?;
+    db::migrations::migration_0_2_00_to_0_2_01::migrate(db_pool).await?;
     Ok(())
 }
 

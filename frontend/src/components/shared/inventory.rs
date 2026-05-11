@@ -162,7 +162,7 @@ fn EquippedItem(
     view! {
         <div class="relative group w-full aspect-[2/3]">
             {move || match equipped_item() {
-                Some(EquippedSlot::MainSlot(item_specs)) => {
+                Some(EquippedSlot::MainSlot { item_specs, .. }) => {
                     let item_specs = Arc::new(*item_specs.clone());
                     view! {
                         <EquippedItemEquippedSlot
@@ -175,7 +175,7 @@ fn EquippedItem(
                         .into_any()
                 }
                 Some(EquippedSlot::ExtraSlot(main_slot)) => {
-                    if let Some(EquippedSlot::MainSlot(item_specs)) = inventory
+                    if let Some(EquippedSlot::MainSlot { item_specs, .. }) = inventory
                         .player_inventory
                         .read()
                         .equipped
@@ -529,7 +529,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                                     .equipped
                                     .get(&slot)
                                     .and_then(|equipped_slot| match equipped_slot {
-                                        EquippedSlot::MainSlot(item_specs) => {
+                                        EquippedSlot::MainSlot { item_specs, .. } => {
                                             Some(Arc::from(item_specs.clone()))
                                         }
                                         EquippedSlot::ExtraSlot(_) => None,

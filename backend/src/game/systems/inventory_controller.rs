@@ -79,7 +79,7 @@ pub fn equip_item(
         .extra_slots
         .iter()
         .any(|x| match player_inventory.equipped.get(x) {
-            Some(EquippedSlot::MainSlot(_)) => true,
+            Some(EquippedSlot::MainSlot { .. }) => true,
             Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot != slot,
             None => false,
         })
@@ -97,9 +97,13 @@ pub fn equip_item(
             .insert(*item_slot, EquippedSlot::ExtraSlot(slot));
     }
 
-    player_inventory
-        .equipped
-        .insert(slot, EquippedSlot::MainSlot(Box::new(item_specs)));
+    player_inventory.equipped.insert(
+        slot,
+        EquippedSlot::MainSlot {
+            item_specs: Box::new(item_specs),
+            sheathed: false,
+        },
+    );
 
     Ok(old_item)
 }
@@ -109,7 +113,10 @@ pub fn unequip_item(
     item_slot: ItemSlot,
 ) -> Option<ItemSpecs> {
     match player_inventory.equipped.remove(&item_slot) {
-        Some(EquippedSlot::MainSlot(old_item)) => {
+        Some(EquippedSlot::MainSlot {
+            item_specs: old_item,
+            ..
+        }) => {
             for item_slot in old_item.base.extra_slots.iter() {
                 player_inventory.equipped.remove(item_slot);
             }
@@ -129,5 +136,31 @@ pub fn remove_item_from_bag(
         Ok(player_inventory.bag.remove(item_index))
     } else {
         Err(AppError::NotFound)
+    }
+}
+
+pub fn sheathe_item(
+    player_inventory: &mut PlayerInventory,
+    item_slot: ItemSlot,
+) -> Result<(), AppError> {
+    let item_slot = match player_inventory.equipped.get(&item_slot) {
+        Some(EquippedSlot::ExtraSlot(main_slot)) => *main_slot,
+        Some(EquippedSlot::MainSlot { .. }) => item_slot,
+        None => return Err(AppError::NotFound),
+    };
+
+    match player_inventory.equipped.get_mut(&item_slot) {
+        Some(EquippedSlot::MainSlot {
+            item_specs,
+            sheathed,
+        }) if item_specs.weapon_specs.is_some() => {
+            *sheathed = !*sheathed;
+            Ok(())
+        }
+        Some(EquippedSlot::MainSlot { .. }) => {
+            Err(AppError::UserError("item cannot be sheathed".into()))
+        }
+        Some(EquippedSlot::ExtraSlot(_)) => unreachable!("extra slot resolved to main slot"),
+        None => Err(AppError::NotFound),
     }
 }

@@ -1,7 +1,10 @@
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 use sqlx::{Transaction, types::JsonValue};
 
 use shared::data::{
-    item::ItemModifiers,
+    item::{ItemModifiers, ItemSlot},
     modifier::Modifier,
     stat_effect::{StatEffect, StatType},
     user::UserCharacterId,
@@ -15,7 +18,7 @@ use crate::{
         characters_data::CharacterDataEntry,
         pool::{Database, DbPool},
     },
-    game::data::inventory_data::InventoryData,
+    game::data::inventory_data::{EquippedItemData, InventoryData},
 };
 
 pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
@@ -88,16 +91,18 @@ async fn migrate_player_data(executor: &mut Transaction<'static, Database>) -> a
     .await?;
 
     for character_data in characters_data {
-        let mut inventory_data: InventoryData =
+        let mut old_inventory_data: OldInventoryData =
             rmp_serde::from_slice(&character_data.inventory_data)?;
 
-        for item_modifiers in inventory_data
+        for item_modifiers in old_inventory_data
             .bag
             .iter_mut()
-            .chain(inventory_data.equipped.values_mut())
+            .chain(old_inventory_data.equipped.values_mut())
         {
             fix_bouffon_shield(item_modifiers);
         }
+
+        let inventory_data = InventoryData::from(old_inventory_data);
 
         db::characters_data::upsert_character_inventory_data(
             &mut **executor,
@@ -146,6 +151,35 @@ async fn migrate_stash_items(executor: &mut Transaction<'static, Database>) -> a
         .await?;
     }
     Ok(())
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+struct OldInventoryData {
+    equipped: HashMap<ItemSlot, ItemModifiers>,
+    bag: Vec<ItemModifiers>,
+    max_bag_size: u8,
+}
+
+impl From<OldInventoryData> for InventoryData {
+    fn from(value: OldInventoryData) -> Self {
+        Self {
+            equipped: value
+                .equipped
+                .into_iter()
+                .map(|(item_slot, modifiers)| {
+                    (
+                        item_slot,
+                        EquippedItemData {
+                            modifiers,
+                            sheathed: false,
+                        },
+                    )
+                })
+                .collect(),
+            bag: value.bag,
+            max_bag_size: value.max_bag_size,
+        }
+    }
 }
 
 fn fix_bouffon_shield(item_modifiers: &mut ItemModifiers) {

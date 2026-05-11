@@ -360,7 +360,7 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
             .get(&item_slot)
             .cloned();
 
-        if let Some(EquippedSlot::MainSlot(item_specs)) = item_specs {
+        if let Some(EquippedSlot::MainSlot { item_specs, .. }) = item_specs {
             let item_specs = Arc::new(*item_specs);
             tooltip_id.set(tooltip_context.set_content(
                 move || {

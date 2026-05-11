@@ -73,7 +73,10 @@ pub struct PlayerResources {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EquippedSlot {
-    MainSlot(Box<ItemSpecs>),
+    MainSlot {
+        item_specs: Box<ItemSpecs>,
+        sheathed: bool,
+    },
     ExtraSlot(ItemSlot), // Link to main slot taking the extra slot
 }
 
@@ -89,7 +92,7 @@ impl PlayerInventory {
     // Get equipped items, preserving slot order
     pub fn equipped_items(&self) -> impl Iterator<Item = (ItemSlot, &Box<ItemSpecs>)> + Clone {
         ItemSlot::iter().filter_map(|slot| match self.equipped.get(&slot) {
-            Some(EquippedSlot::MainSlot(item_specs)) => Some((slot, item_specs)),
+            Some(EquippedSlot::MainSlot { item_specs, .. }) => Some((slot, item_specs)),
             _ => None,
         })
     }
@@ -106,7 +109,7 @@ impl PlayerInventory {
         self.equipped
             .iter_mut()
             .filter_map(|(slot, equipped_slot)| match equipped_slot {
-                EquippedSlot::MainSlot(item_specs) => Some((*slot, item_specs)),
+                EquippedSlot::MainSlot { item_specs, .. } => Some((*slot, item_specs)),
                 EquippedSlot::ExtraSlot(_) => None,
             })
     }
@@ -123,7 +126,7 @@ impl PlayerInventory {
             self.equipped
                 .iter_mut()
                 .filter_map(|(slot, equipped_slot)| match equipped_slot {
-                    EquippedSlot::MainSlot(item_specs) => Some((*slot, item_specs)),
+                    EquippedSlot::MainSlot { item_specs, .. } => Some((*slot, item_specs)),
                     EquippedSlot::ExtraSlot(_) => None,
                 })
                 .map(|(_, item_specs)| item_specs.as_mut()),
@@ -135,7 +138,7 @@ impl PlayerInventory {
             self.equipped
                 .get(&index.try_into().ok()?)
                 .and_then(|equipped_item| match equipped_item {
-                    EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_ref()),
+                    EquippedSlot::MainSlot { item_specs, .. } => Some(item_specs.as_ref()),
                     _ => None,
                 })
         } else {
@@ -148,7 +151,7 @@ impl PlayerInventory {
             self.equipped
                 .get_mut(&index.try_into().ok()?)
                 .and_then(|equipped_item| match equipped_item {
-                    EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_mut()),
+                    EquippedSlot::MainSlot { item_specs, .. } => Some(item_specs.as_mut()),
                     _ => None,
                 })
         } else {

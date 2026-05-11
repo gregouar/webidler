@@ -266,7 +266,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                         .get(&item.index.try_into().unwrap())
                                         .cloned()
                                         .and_then(|equipped_item| match equipped_item {
-                                            EquippedSlot::MainSlot(item_specs) => Some(*item_specs),
+                                            EquippedSlot::MainSlot { item_specs, .. } => {
+                                                Some(*item_specs)
+                                            }
                                             _ => None,
                                         })
                                 } else {
@@ -550,7 +552,9 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                                         .get(&item.index.try_into().unwrap())
                                         .cloned()
                                         .and_then(|equipped_item| match equipped_item {
-                                            EquippedSlot::MainSlot(item_specs) => Some(*item_specs),
+                                            EquippedSlot::MainSlot { item_specs, .. } => {
+                                                Some(*item_specs)
+                                            }
                                             _ => None,
                                         })
                                 } else {

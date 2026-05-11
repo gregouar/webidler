@@ -26,6 +26,7 @@ impl_into_message! {
 
         EquipItem(EquipItemMessage),
         UnequipItem(UnequipItemMessage),
+        SheatheItem(SheathItemMessage),
         SellItems(SellItemsMessage),
 
         // FilterLoot(FilterLootMessage),
@@ -96,6 +97,11 @@ pub struct EquipItemMessage {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UnequipItemMessage {
+    pub item_slot: ItemSlot,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SheathItemMessage {
     pub item_slot: ItemSlot,
 }
 

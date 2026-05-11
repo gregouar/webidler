@@ -29,7 +29,7 @@ use crate::{
         pool::{Database, DbExecutor, DbPool},
     },
     game::{
-        data::inventory_data::InventoryData,
+        data::inventory_data::{EquippedItemData, InventoryData},
         systems::{benedictions_controller, passives_controller},
     },
 };
@@ -177,7 +177,15 @@ impl From<OldInventoryData> for InventoryData {
             equipped: value
                 .equipped
                 .into_iter()
-                .map(|(item_slot, item_modifiers)| (item_slot, item_modifiers.into()))
+                .map(|(item_slot, item_modifiers)| {
+                    (
+                        item_slot,
+                        EquippedItemData {
+                            modifiers: item_modifiers.into(),
+                            sheathed: false,
+                        },
+                    )
+                })
                 .collect(),
             bag: value.bag.into_iter().map(Into::into).collect(),
             max_bag_size: value.max_bag_size,
