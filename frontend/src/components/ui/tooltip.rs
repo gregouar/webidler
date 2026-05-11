@@ -270,6 +270,7 @@ pub fn StaticTooltip<F, IV>(
     children: Children,
     position: StaticTooltipPosition,
     tooltip: F,
+    #[prop(optional)] class: Option<&'static str>,
 ) -> impl IntoView
 where
     F: Fn() -> IV + Send + Sync + Clone + 'static,
@@ -363,6 +364,7 @@ where
     view! {
         <div
             // class="inline-block"
+            class=class.unwrap_or_default()
             on:touchstart=move |_| is_open.set(true)
             on:mouseenter=move |_| is_open.set(true)
             on:mouseleave=move |_| is_open.set(false)

@@ -13,6 +13,7 @@ use shared::{
 use crate::components::{
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
+    icons::battle_scene::AutoUseIcon,
     shared::{
         skills::{SKILL_PROGRESS_RING_COLOR, SkillProgressBar},
         tooltips::SkillTooltip,
@@ -376,7 +377,7 @@ pub fn PlayerName() -> impl IntoView {
     });
 
     view! {
-        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl font-display">
+        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-xl font-display">
             <span class="font-bold">
                 {player_name} " - " {move || game_context.player_base_specs.read().level}
             </span>
@@ -714,6 +715,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             .unwrap_or_default(),
     );
 
+    let disabled = Memo::new(move |_| is_dead.get() || disabled_auto.get());
+
     view! {
         <div class="flex flex-col">
             <DynamicTooltipTarget content=tooltip position=DynamicTooltipPosition::TopRight>
@@ -724,7 +727,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             class="btn p-1 w-full h-full isolate
                             active:brightness-50 active:sepia"
                             on:click=move |_| use_skill()
-                            disabled=move || !is_ready.get()
+                            disabled=move || !is_ready.get() || disabled.get()
                         >
                             {move || {
                                 skill_static
@@ -737,7 +740,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                                                 skill_icon=skill_icon.clone()
                                                 value=progress_value
                                                 reset=just_triggered
-                                                disabled=is_dead
+                                                disabled=disabled
                                                 bar_width=4
                                             />
                                         }
@@ -749,20 +752,55 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 }
             </DynamicTooltipTarget>
 
-            <div class="flex justify-around">
-                <Toggle
-                    toggle_callback=set_auto_skill
-                    initial=initial_auto_use
-                    disabled=disabled_auto
+            <div class="flex h-6 items-stretch justify-around xl:px-1 gap-1 xl:h-8 xl:gap-2">
+                <StaticTooltip
+                    tooltip=|| "Auto-use Skill"
+                    position=StaticTooltipPosition::Top
+                    class="flex h-full"
                 >
-                    <span class="inline xl:hidden">"A"</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Auto"</span>
-                </Toggle>
-                <StaticTooltip tooltip=cost_tooltip position=StaticTooltipPosition::Top>
-                    <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-base xl:text-2xl">"+"</span>
-                    </FancyButton>
+                    <Toggle
+                        toggle_callback=set_auto_skill
+                        initial=initial_auto_use
+                        disabled=disabled_auto
+                        class="h-full max-h-full leading-none  py-1 xl:py-1"
+                    >
+                        // "↻"
+                        <AutoUseIcon />
+                    </Toggle>
                 </StaticTooltip>
+                <div class="flex-1 h-full">
+                    <StaticTooltip
+                        tooltip=cost_tooltip
+                        position=StaticTooltipPosition::Top
+                        class="flex h-full w-full"
+                    >
+                        <FancyButton
+                            disabled=disable_level_up
+                            on:click=level_up
+                            class="w-full h-full max-h-full leading-none py-1"
+                        >
+                            // <span class="text-base font-bold xl:text-2xl">"+"</span>
+
+                            <span class="inline xl:hidden text-base">"+"</span>
+                            <span class="hidden xl:inline text-lg">"Upgd."</span>
+
+                        // <svg
+                        // xmlns="http://www.w3.org/2000/svg"
+                        // class="block h-full max-h-full aspect-square"
+                        // fill="none"
+                        // viewBox="0 0 24 24"
+                        // stroke="currentColor"
+                        // stroke-width="2"
+                        // >
+                        // <path
+                        // stroke-linecap="round"
+                        // stroke-linejoin="round"
+                        // d="M12 4v16m8-8H4"
+                        // />
+                        // </svg>
+                        </FancyButton>
+                    </StaticTooltip>
+                </div>
             </div>
         </div>
     }
