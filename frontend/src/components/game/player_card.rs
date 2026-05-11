@@ -407,10 +407,10 @@ fn BuySkillButton() -> impl IntoView {
     };
 
     view! {
-        <div class="flex flex-col">
+        <div class="flex flex-col  xl:gap-1">
             <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
                 <button
-                    class="btn p-1 w-full h-full
+                    class="btn w-full h-full
                     hover:brightness-125
                     active:brightness-50 active:sepia active:translate-y-[2px]
                     disabled:brightness-75 disabled:saturate-10 disabled:opacity-40
@@ -462,7 +462,7 @@ fn BuySkillButton() -> impl IntoView {
                         class="w-full h-full max-h-full leading-none py-1"
                     >
                         <span class="inline xl:hidden text-base">"+"</span>
-                        <span class="hidden xl:inline text-lg">"Upgd."</span>
+                        <span class="hidden xl:inline text-lg">"Upg."</span>
                     </FancyButton>
                 </div>
             </div>
@@ -793,7 +793,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             // <span class="text-base font-bold xl:text-2xl">"+"</span>
 
                             <span class="inline xl:hidden text-base">"+"</span>
-                            <span class="hidden xl:inline text-lg">"Upgd."</span>
+                            <span class="hidden xl:inline text-lg">"Upg."</span>
 
                         // <svg
                         // xmlns="http://www.w3.org/2000/svg"
