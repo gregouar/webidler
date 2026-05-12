@@ -275,6 +275,7 @@ fn compute_player_specs(
                 conditional_modifiers: Default::default(),
             }],
             owner: Some(CharacterId::Player),
+            trigger_propagate: false,
         });
     }
 

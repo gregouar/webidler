@@ -72,7 +72,7 @@ pub struct SkillSpecs {
 
     pub level_modifier: u16,
 
-    #[serde(default, skip_serializing, skip_deserializing)]
+    #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
 }
 

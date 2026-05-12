@@ -11748,7 +11748,7 @@
               "is_crit": null,
               "is_blocked": null,
               "is_hurt": true,
-              "is_triggered": null,
+              "is_triggered": false,
               "damage_type": null
             },
             "target": "SameTarget",
@@ -11818,6 +11818,13 @@
                               },
                               "ignore_stat_effects": [
                                 {
+                                  "CritDamage": {
+                                    "skill_type": null,
+                                    "skill_id": null,
+                                    "skill_description": null
+                                  }
+                                },
+                                {
                                   "Damage": {
                                     "skill_type": null,
                                     "skill_id": null,
@@ -11825,13 +11832,6 @@
                                     "damage_type": null,
                                     "min_max": null,
                                     "is_hit": null
-                                  }
-                                },
-                                {
-                                  "CritDamage": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null
                                   }
                                 },
                                 {
@@ -13628,7 +13628,7 @@
               "is_crit": null,
               "is_blocked": null,
               "is_hurt": true,
-              "is_triggered": false,
+              "is_triggered": null,
               "damage_type": "Storm"
             },
             "target": "SameTarget",

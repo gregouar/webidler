@@ -579,7 +579,7 @@
                       "OnTakeHit": {
                         "is_crit": true,
                         "is_hurt": true,
-                        "is_triggered": false
+                        "is_triggered": null
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
@@ -669,7 +669,7 @@
                       "icon": "skills/curse_conductivity.svg",
                       "OnTakeHit": {
                         "damage_type": "Storm",
-                        "is_triggered": false
+                        "is_triggered": null
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
@@ -721,7 +721,7 @@
                       "OnTakeHit": {
                         "is_crit": true,
                         "damage_type": "Storm",
-                        "is_triggered": false
+                        "is_triggered": null
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
@@ -935,7 +935,7 @@
                       "OnTakeHit": {
                         "is_hurt": true,
                         "damage_type": "Fire",
-                        "is_triggered": false
+                        "is_triggered": null
                       },
                       "target": "SameTarget",
                       "skill_range": "Any",
@@ -2064,6 +2064,7 @@
       {
         "trigger_id": "retaliate",
         "skill_type": "Attack",
+        "trigger_propagate": true,
         "OnTakeHit": {
           "is_blocked": true
         },
@@ -2102,6 +2103,7 @@
       {
         "trigger_id": "retaliate_evade",
         "skill_type": "Attack",
+        "trigger_propagate": true,
         "OnReceiveStatus": {
           "skill_type": null,
           "status_type": {
