@@ -276,7 +276,7 @@
                           "is_hit": null
                         }
                       },
-                      "modifier": "Increased",
+                      "modifier": "More",
                       "debuff": false
                     }
                   },
@@ -743,13 +743,6 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
@@ -757,6 +750,13 @@
                   "damage_type": "Storm",
                   "min_max": null,
                   "is_hit": null
+                }
+              },
+              {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null
                 }
               }
             ],
