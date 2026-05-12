@@ -31,6 +31,7 @@ use crate::{
             player_count::PlayerCount, settings::SettingsModal,
         },
         ui::{
+            ALink,
             buttons::{MenuButton, MenuButtonRed},
             card::{Card, CardInset, CardTitle, MenuCard},
             checkbox::Checkbox,
@@ -445,7 +446,9 @@ fn CharacterSlot(
 
                 <div class="xl:space-y-1 overflow-x-hidden text-left pr-10">
                     <div class="text-lg font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
-                        {character.name.clone()}
+                        <ALink underline=false href=format!("/view-character/{}", character.name)>
+                            {character.name.clone()}
+                        </ALink>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-1">

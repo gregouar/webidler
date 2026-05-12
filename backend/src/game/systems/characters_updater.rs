@@ -371,6 +371,7 @@ fn compute_character_specs(
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
+            | StatType::StatusEscalation { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }

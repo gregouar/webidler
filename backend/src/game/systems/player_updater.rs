@@ -275,6 +275,7 @@ fn compute_player_specs(
                 conditional_modifiers: Default::default(),
             }],
             owner: Some(CharacterId::Player),
+            trigger_propagate: false,
         });
     }
 
@@ -367,6 +368,7 @@ fn modify_player_specs(
             | StatType::CritDamage(_)
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
+            | StatType::StatusEscalation { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {

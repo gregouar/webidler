@@ -57,7 +57,7 @@ fn update_status(
     status_state: &mut StatusState,
     elapsed_time_f64: NonNegative,
 ) -> bool {
-    if let StatusSpecs::DamageOverTime { damage_type, .. } = status_specs {
+    if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
         characters_controller::damage_character(
             character_attrs,
             character_life,
@@ -73,6 +73,11 @@ fn update_status(
             status_state.skill_type,
             false,
         );
+    }
+
+    if status_state.escalation > 0.0 {
+        status_state.value = status_state.value
+            * (1.0 + status_state.escalation * 0.01).powf(elapsed_time_f64.get());
     }
 
     if let Some(duration) = status_state.duration.as_mut() {

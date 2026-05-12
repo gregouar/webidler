@@ -330,6 +330,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                     cumulate: false,
                     unavoidable: false,
                     replace_on_value_only: false,
+                    escalation: Default::default(),
                 }],
             },
             success_chance: Chance::new_sure(),

@@ -730,7 +730,7 @@ pub fn apply_stat_effect_on_skill_effect(
                     }
                 }
 
-                if let StatusSpecs::DamageOverTime { damage_type, .. } = status_effect.status_type {
+                if let StatusSpecs::DamageOverTime { damage_type } = status_effect.status_type {
                     if let StatType::Damage {
                         skill_filter,
                         damage_type: stat_damage_type,
@@ -760,6 +760,16 @@ pub fn apply_stat_effect_on_skill_effect(
                         && compare_options(stat_damage_type, &Some(damage_type))
                     {
                         status_effect.value.lucky_chance.apply_effect(effect);
+                    }
+
+                    if let StatType::StatusEscalation {
+                        skill_filter,
+                        damage_type: stat_damage_type,
+                    } = &effect.stat
+                        && skill_filter.is_match_with_skill(skill_type, skill_id)
+                        && compare_options(stat_damage_type, &Some(damage_type))
+                    {
+                        status_effect.escalation.apply_effect(effect);
                     }
                 }
             }

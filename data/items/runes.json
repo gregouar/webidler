@@ -151,7 +151,8 @@
                   "value": 25.0,
                   "cumulate": true,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 }
               ],
               "duration": 5.0
@@ -340,25 +341,21 @@
                     }
                   },
                   "value": 0.0,
-                  "cumulate": false,
+                  "cumulate": true,
                   "replace_on_value_only": false,
-                  "unavoidable": true
+                  "unavoidable": true,
+                  "escalation": 0.0
                 }
               ],
               "duration": 0.0
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
+                "StatusDuration": {
+                  "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
-                  "min_max": null
+                  "skill_description": null
                 }
               },
               {
@@ -372,11 +369,16 @@
                 }
               },
               {
-                "StatusDuration": {
-                  "status_type": null,
+                "StatusPower": {
+                  "status_type": {
+                    "DamageOverTime": {
+                      "damage_type": "Poison"
+                    }
+                  },
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null
+                  "skill_description": null,
+                  "min_max": null
                 }
               }
             ],
@@ -521,10 +523,11 @@
                   "value": 0.0,
                   "cumulate": false,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 }
               ],
-              "duration": 5.0
+              "duration": 2.0
             },
             "ignore_stat_effects": [
               {

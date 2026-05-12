@@ -245,7 +245,11 @@ pub fn apply_trigger_effects(
                 trigger_context.trigger.skill_range,
                 &trigger_effects,
                 &mut targets,
-                Some(&trigger_context.trigger.trigger_id),
+                if trigger_context.trigger.trigger_propagate {
+                    None
+                } else {
+                    Some(&trigger_context.trigger.trigger_id)
+                },
             );
         }
     }

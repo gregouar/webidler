@@ -72,7 +72,7 @@ pub struct SkillSpecs {
 
     pub level_modifier: u16,
 
-    #[serde(default, skip_serializing, skip_deserializing)]
+    #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
 }
 
@@ -244,6 +244,8 @@ pub struct ApplyStatusEffect {
     pub replace_on_value_only: bool,
     #[serde(default)]
     pub unavoidable: bool,
+    #[serde(default)]
+    pub escalation: ModifiableValue<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]

@@ -537,6 +537,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 skill_status_type_str(skill_filter, status_type.as_ref(), true)
             )
         }
+        StatType::StatusEscalation {
+            damage_type,
+            skill_filter,
+        } => {
+            format!(
+                "{} Escalation {}",
+                damage_over_time_type_str(*damage_type),
+                skill_filter_str(skill_filter, " with ", true),
+            )
+        }
         StatType::StatusResistance {
             skill_type,
             status_type,
@@ -794,6 +804,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     skill_status_type_str(skill_filter, status_type.as_ref(), true)
                 )
             }
+        }
+        StatType::StatusEscalation {
+            damage_type,
+            skill_filter,
+        } => {
+            format!(
+                "{}{} Escalates by {}% More Damage per Second",
+                damage_over_time_type_str(*damage_type),
+                skill_filter_str(skill_filter, " inflicted by ", true),
+                format_flat_number(value, false),
+            )
         }
         StatType::StatusResistance {
             status_type,
