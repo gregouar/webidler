@@ -84,7 +84,7 @@ fn handle_hit_event<'a>(
 
     for (character_id, character_specs) in characters {
         for triggered_effects in character_specs.triggers.iter() {
-            let hit_trigger = match triggered_effects.trigger {
+            let hit_trigger = match &triggered_effects.trigger {
                 EventTrigger::OnHit(ht) if hit_event.source == character_id => ht,
                 EventTrigger::OnTakeHit(ht) if hit_event.target == character_id => ht,
                 _ => continue,
@@ -97,7 +97,7 @@ fn handle_hit_event<'a>(
                 && hit_trigger.is_hurt.unwrap_or(hit_event.is_hurt) == hit_event.is_hurt
                 && compare_options(
                     &hit_trigger.is_triggered,
-                    &Some(hit_event.trigger_id.is_some()),
+                    &Some(hit_event.trigger_depth > 0),
                 )
                 && hit_trigger
                     .damage_type
@@ -110,7 +110,16 @@ fn handle_hit_event<'a>(
                             > 0.0
                     })
                     .unwrap_or(true)
-                && hit_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
+                && hit_event.skill_id != triggered_effects.trigger_id
+                && hit_trigger
+                    .skill_ids
+                    .as_ref()
+                    .map(|skill_ids| {
+                        skill_ids
+                            .iter()
+                            .any(|skill_id| *skill_id == hit_event.skill_id)
+                    })
+                    .unwrap_or(true)
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
@@ -119,6 +128,7 @@ fn handle_hit_event<'a>(
                     hit_context: Some(hit_event),
                     status_context: None,
                     level: game_data.area_state.read().area_level as usize,
+                    trigger_depth: hit_event.trigger_depth,
                 });
             }
         }
@@ -175,14 +185,14 @@ fn handle_status_event<'a>(
             if compare_options(&status_trigger.skill_type, &Some(status_event.skill_type))
                 && compare_options(
                     &status_trigger.is_triggered,
-                    &Some(status_event.trigger_id.is_some()),
+                    &Some(status_event.trigger_depth > 0),
                 )
                 && compare_options(
                     &status_trigger.status_type.as_ref(),
                     &Some(&status_event.status_type),
                 )
                 && compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
-                && status_event.trigger_id.as_ref() != Some(&triggered_effects.trigger_id)
+                && status_event.skill_id != triggered_effects.trigger_id
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),
@@ -191,6 +201,7 @@ fn handle_status_event<'a>(
                     hit_context: None,
                     status_context: Some(status_event),
                     level: game_data.area_state.read().area_level as usize,
+                    trigger_depth: status_event.trigger_depth,
                 });
             }
         }
@@ -242,6 +253,7 @@ fn handle_kill_event(
                                 hit_context: None,
                                 status_context: None,
                                 level: game_data.area_state.read().area_level as usize,
+                                trigger_depth: 0,
                             });
                         }
                     }
@@ -275,6 +287,7 @@ fn handle_kill_event(
                                     hit_context: None,
                                     status_context: None,
                                     level: game_data.area_state.read().area_level as usize,
+                                    trigger_depth: 0,
                                 });
                             }
                         }
@@ -393,6 +406,7 @@ fn handle_wave_completed_event(
                 hit_context: None,
                 status_context: None,
                 level: area_level as usize,
+                trigger_depth: 0,
             });
         }
     }
@@ -424,6 +438,7 @@ fn handle_threat_increased_event(
                 hit_context: None,
                 status_context: None,
                 level: threat_level as usize,
+                trigger_depth: 0,
             });
         }
     }

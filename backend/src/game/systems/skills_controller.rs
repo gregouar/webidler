@@ -164,7 +164,7 @@ fn apply_repeated_skill_on_targets<'a>(
         targets_group.range,
         &targets_group.effects,
         &mut targets,
-        None,
+        0,
     );
 
     applied.then_some(main_target_id)
@@ -334,7 +334,7 @@ pub fn apply_skill_effects(
     range: SkillRange,
     skill_effects: &[SkillEffect],
     targets: &mut [&mut Target],
-    trigger_id: Option<&str>,
+    trigger_depth: u8,
 ) -> bool {
     let seed = rng::roll_seed();
 
@@ -361,7 +361,8 @@ pub fn apply_skill_effects(
                 range,
                 skill_effect,
                 target,
-                trigger_id,
+                skill_id,
+                trigger_depth,
                 &mut seed.clone(),
             ) {
                 break;
@@ -453,7 +454,8 @@ fn apply_skill_effect_on_target(
     range: SkillRange,
     skill_effect: &SkillEffect,
     target: &mut Target,
-    trigger_id: Option<&str>,
+    skill_id: &str,
+    trigger_depth: u8,
     seed: &mut RngSeed,
 ) -> bool {
     if !skill_effect.success_chance.roll_with_seed(seed) {
@@ -493,7 +495,8 @@ fn apply_skill_effect_on_target(
                 range,
                 is_crit,
                 *unblockable,
-                trigger_id,
+                skill_id,
+                trigger_depth,
             )
         }
         SkillEffectType::ApplyStatus { duration, statuses } => {
@@ -519,7 +522,8 @@ fn apply_skill_effect_on_target(
                         *status_effect.escalation,
                         status_effect.cumulate,
                         status_effect.unavoidable,
-                        trigger_id,
+                        skill_id,
+                        trigger_depth,
                     )
                 })
         }

@@ -1,0 +1,22 @@
+{
+    "entries": [
+        {
+            "item_id": "cloth_wraps_unique",
+            "weight": 9999,
+            "min_area_level": 5
+        },
+        {
+            "item_id": "dagger_unique",
+            "weight": 9999,
+            "min_area_level": 5
+        },
+        {
+            "item_id": "shortsword_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "woodcutter_axe_unique",
+            "weight": 9999
+        }
+    ]
+}
