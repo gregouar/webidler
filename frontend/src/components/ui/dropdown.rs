@@ -2,7 +2,10 @@ use indexmap::IndexMap;
 use leptos::{prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
-use crate::components::settings::{GraphicsQuality, SettingsContext};
+use crate::components::{
+    events::keyboard_event_key,
+    settings::{GraphicsQuality, SettingsContext},
+};
 
 #[component]
 pub fn DropdownMenu<T>(
@@ -361,7 +364,7 @@ where
                         on:input=move |ev| search.set(event_target_value(&ev))
 
                         on:keydown=move |ev| {
-                            if ev.key() == "Enter" {
+                            if keyboard_event_key(&ev).as_deref() == Some("Enter") {
                                 ev.prevent_default();
                                 if let Some(el) = search_ref.get() {
                                     let input: web_sys::HtmlInputElement = el;

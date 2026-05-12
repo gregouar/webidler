@@ -15,7 +15,7 @@ use crate::{
     assets::img_asset,
     components::{
         chat::chat_context::ChatContext,
-        events::{EventsContext, Key},
+        events::{EventsContext, Key, keyboard_event_key},
         shared::tooltips::{ItemTooltip, item_tooltip},
         ui::{
             checkbox::Checkbox,
@@ -360,7 +360,7 @@ pub fn ChatPanel() -> impl IntoView {
                                                 input_value.set(event_target_value(&ev));
                                             }
                                             on:keydown=move |ev| {
-                                                if ev.key() == "Enter" && !ev.shift_key() {
+                                                if keyboard_event_key(&ev).as_deref() == Some("Enter") && !ev.shift_key() {
                                                     ev.prevent_default();
                                                     send_message();
                                                 }
