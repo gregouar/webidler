@@ -1,7 +1,10 @@
 use leptos::{prelude::*, web_sys};
 use serde_plain;
 
-use crate::components::settings::{GraphicsQuality, SettingsContext};
+use crate::components::{
+    events::keyboard_event_key,
+    settings::{GraphicsQuality, SettingsContext},
+};
 
 #[component]
 pub fn Input<T>(
@@ -32,7 +35,7 @@ where
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
 
             on:keydown=move |ev| {
-                if ev.key() == "Enter" {
+                if keyboard_event_key(&ev).as_deref() == Some("Enter") {
                     ev.prevent_default();
                     if let Some(el) = node_ref.get() {
                         let input: web_sys::HtmlInputElement = el;
@@ -166,7 +169,6 @@ where
                         bind.set(None);
                         return;
                     }
-
                     match serde_plain::from_str(&input.value()) {
                         Ok(v) => {
                             if bind.get_untracked().as_ref() != Some(&v) {
@@ -208,7 +210,7 @@ where
                 }
 
                 on:keydown=move |ev| {
-                    if ev.key() == "Enter" {
+                    if keyboard_event_key(&ev).as_deref() == Some("Enter") {
                         ev.prevent_default();
                         if let Some(el) = node_ref.get() {
                             let input: web_sys::HtmlInputElement = el;

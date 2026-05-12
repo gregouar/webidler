@@ -15,6 +15,7 @@ use crate::{
         auth::AuthContext,
         backend_client::BackendClient,
         captcha::*,
+        events::keyboard_event_key,
         shared::{leaderboard::LeaderboardPanel, player_count::PlayerCount},
         ui::{
             ALink,
@@ -149,7 +150,9 @@ fn MainMenu() -> impl IntoView {
                             placeholder="Enter your username"
                             bind=username
                             on:keydown=move |ev: leptos::ev::KeyboardEvent| {
-                                if ev.key() == "Enter" && let Some(pw) = password_ref.get() {
+                                if keyboard_event_key(&ev).as_deref() == Some("Enter")
+                                    && let Some(pw) = password_ref.get()
+                                {
                                     pw.focus().unwrap();
                                 }
                             }
@@ -165,7 +168,7 @@ fn MainMenu() -> impl IntoView {
                             on:keydown={
                                 let signin = signin.clone();
                                 move |ev| {
-                                    if ev.key() == "Enter" {
+                                    if keyboard_event_key(&ev).as_deref() == Some("Enter") {
                                         signin();
                                     }
                                 }

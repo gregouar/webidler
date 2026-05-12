@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use leptos::{ev::KeyboardEvent, html::*, prelude::*};
 
-use crate::components::ui::tooltip::DynamicTooltipContext;
+use crate::components::{events::keyboard_event_key, ui::tooltip::DynamicTooltipContext};
 
 #[component]
 pub fn MenuPanel(
@@ -25,7 +25,7 @@ pub fn MenuPanel(
     });
 
     let handle_key = move |e: KeyboardEvent| {
-        if e.key() == "Escape" {
+        if keyboard_event_key(&e).as_deref() == Some("Escape") {
             open.try_set(false);
         }
     };
