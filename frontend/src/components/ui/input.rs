@@ -1,5 +1,6 @@
 use leptos::{prelude::*, web_sys};
 use serde_plain;
+use web_sys::js_sys;
 
 use crate::components::settings::{GraphicsQuality, SettingsContext};
 
@@ -32,11 +33,15 @@ where
             on:input:target=move |ev| bind.set(serde_plain::from_str(&ev.target().value()).ok())
 
             on:keydown=move |ev| {
-                if ev.key() == "Enter" {
-                    ev.prevent_default();
-                    if let Some(el) = node_ref.get() {
-                        let input: web_sys::HtmlInputElement = el;
-                        let _ = input.blur();
+                if let Ok(key_value) = js_sys::Reflect::get(&ev, &"key".into()) {
+                    if let Some(key) = key_value.as_string() {
+                        if key == "Enter" {
+                            ev.prevent_default();
+                            if let Some(el) = node_ref.get() {
+                                let input: web_sys::HtmlInputElement = el;
+                                let _ = input.blur();
+                            }
+                        }
                     }
                 }
             }
@@ -166,7 +171,6 @@ where
                         bind.set(None);
                         return;
                     }
-
                     match serde_plain::from_str(&input.value()) {
                         Ok(v) => {
                             if bind.get_untracked().as_ref() != Some(&v) {
@@ -208,11 +212,15 @@ where
                 }
 
                 on:keydown=move |ev| {
-                    if ev.key() == "Enter" {
-                        ev.prevent_default();
-                        if let Some(el) = node_ref.get() {
-                            let input: web_sys::HtmlInputElement = el;
-                            let _ = input.blur();
+                    if let Ok(key_value) = js_sys::Reflect::get(&ev, &"key".into()) {
+                        if let Some(key) = key_value.as_string() {
+                            if key == "Enter" {
+                                ev.prevent_default();
+                                if let Some(el) = node_ref.get() {
+                                    let input: web_sys::HtmlInputElement = el;
+                                    let _ = input.blur();
+                                }
+                            }
                         }
                     }
                 }
