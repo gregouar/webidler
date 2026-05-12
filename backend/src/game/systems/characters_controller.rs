@@ -311,6 +311,7 @@ pub fn apply_status(
     skill_type: SkillType,
     value: NonNegative,
     duration: Option<NonNegative>,
+    escalation: f64,
     cumulate: bool,
     unavoidable: bool,
     trigger_id: Option<&str>,
@@ -346,7 +347,7 @@ pub fn apply_status(
     }
 
     let is_evaded =
-        if !unavoidable && let StatusSpecs::DamageOverTime { damage_type } = status_specs {
+        if !unavoidable && let StatusSpecs::DamageOverTime { damage_type, .. } = status_specs {
             target_specs
                 .character_attrs
                 .evade
@@ -396,6 +397,7 @@ pub fn apply_status(
                     duration,
                     cumulate,
                     skill_type,
+                    escalation,
                 },
             ));
 
@@ -442,6 +444,7 @@ pub fn apply_status(
                         duration,
                         cumulate,
                         skill_type,
+                        escalation,
                     },
                 ));
         }
@@ -485,6 +488,7 @@ pub fn apply_status(
             SkillType::Other,
             100.0.into(),
             duration.map(|d| d + stun_lockout),
+            0.0,
             false,
             true,
             Some("stun_lockout"),
@@ -507,7 +511,7 @@ fn compute_effect_weight(
             value
         }
     } else {
-        value * duration.map(|x| x.get()).unwrap_or(10_000.0)
+        value * duration.map(|x| x.get().min(2.0)).unwrap_or(2.0)
     }
 }
 

@@ -474,7 +474,7 @@ pub fn format_skill_effect(
                         }
                         .into_any()
                     }
-                    StatusSpecs::DamageOverTime { damage_type, .. } => {
+                    StatusSpecs::DamageOverTime { damage_type } => {
                         let success_chance = success_chance.clone();
                         let damage_color = damage_color(damage_type);
                         let trigger_modifier_damage_str = format_trigger_modifier(
@@ -502,6 +502,12 @@ pub fn format_skill_effect(
                             "",
                         );
 
+                        let escalation_effect = (*status_effect.escalation > 0.0).then(|| view! {
+                            ", Escalating by "
+                            {format_number(*status_effect.escalation)}
+                            "% More Damage per Second"
+                        });
+
                         (status_effect.value.min.get() > 0.0
                             || status_effect.value.max.get() > 0.0
                             || trigger_modifier_damage_str.is_some())
@@ -521,7 +527,7 @@ pub fn format_skill_effect(
                                         // {damage_type_str(Some(damage_type))} "Damage per Second "
                                         {damage_over_time_type_value_str(Some(damage_type))}
                                         " per Second " {format_duration(duration)}
-                                        {trigger_modifier_duration_str}
+                                        {trigger_modifier_duration_str} {escalation_effect}
                                     </EffectLi>
                                 }
                             }

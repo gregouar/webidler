@@ -601,7 +601,7 @@
         "socket": false
       },
       "0d3e0bf2-3d3a-4444-9765-4fe6955ad0ea": {
-        "name": "Curse Effects",
+        "name": "Curses Effects",
         "icon": "passives/cursed_star.svg",
         "x": 100.0,
         "y": -162.5,
@@ -891,7 +891,7 @@
         "socket": false
       },
       "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8": {
-        "name": "Poison Amplification",
+        "name": "Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 20.0,
         "y": -65.0,
@@ -901,37 +901,15 @@
         "effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -939,37 +917,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2116,7 +2072,7 @@
         "socket": false
       },
       "27516530-2e79-4c79-a6a8-dfdf1f05d7ba": {
-        "name": "Curse Effects",
+        "name": "Curses Effects",
         "icon": "passives/cursed_star.svg",
         "x": 117.5,
         "y": -145.0,
@@ -2602,8 +2558,8 @@
         "socket": false
       },
       "30c0d9b9-1137-4f95-8c38-6d33efc98822": {
-        "name": "Curse Duration",
-        "icon": "passives/trap_mask.svg",
+        "name": "Curses Duration",
+        "icon": "passives/dripping_star.svg",
         "x": 170.0,
         "y": 72.5,
         "size": 0,
@@ -3028,7 +2984,7 @@
         "socket": false
       },
       "39b2026c-9b8d-4133-8fd9-1342e2dcd513": {
-        "name": "Poison Amplification",
+        "name": "Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 10.0,
         "y": -120.0,
@@ -3038,37 +2994,15 @@
         "effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -3076,37 +3010,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4032,7 +3944,8 @@
                       "value": 20.0,
                       "cumulate": true,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 5.0
@@ -4052,7 +3965,7 @@
         "socket": false
       },
       "49a12154-6920-470b-b8ac-7074963cd554": {
-        "name": "Curse Effects",
+        "name": "Curses Effects",
         "icon": "passives/cursed_star.svg",
         "x": 97.5,
         "y": -147.5,
@@ -4365,7 +4278,7 @@
         "socket": false
       },
       "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4": {
-        "name": "Poison Amplification",
+        "name": "Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 32.5,
         "y": -45.0,
@@ -4375,37 +4288,15 @@
         "effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 25.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4413,97 +4304,53 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "5223c739-dd9e-413d-804a-6b14ea39c1f7": {
-        "name": "Cursed Mouth",
-        "icon": "passives/infinite_curse.svg",
+        "name": "Forbidden Cadence",
+        "icon": "passives/evil_comet.svg",
         "x": 35.0,
         "y": -120.0,
         "size": 2,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Mana",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_type": null,
-                "skill_type": "Curse",
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "skill_description": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": "Spell",
                 "skill_id": null,
                 "skill_description": null
               }
             },
             "modifier": "More",
-            "value": -33.0
+            "value": 200.0
           }
         ],
-        "triggers": [
-          {
-            "name": null,
-            "icon": null,
-            "description": null,
-            "trigger_id": "cursed_mouth",
-            "OnWaveCompleted": null,
-            "target": "Me",
-            "modifiers": [],
-            "skill_range": "Melee",
-            "skill_type": "Other",
-            "effects": [
-              {
-                "success_chance": {
-                  "value": 100.0,
-                  "lucky_chance": 0.0
-                },
-                "RefreshCooldown": {
-                  "skill_type": "Curse",
-                  "skill_id": null,
-                  "skill_description": null,
-                  "value": 100.0,
-                  "modifier": "Percent"
-                },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
-              }
-            ],
-            "skill_shape": "Single",
-            "owner": null,
-            "is_debuff": false
-          }
-        ],
+        "triggers": [],
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
@@ -4890,7 +4737,7 @@
         "socket": false
       },
       "58538882-d58c-4956-bdb3-c8e9d6d0ed89": {
-        "name": "Curse Mana Cost",
+        "name": "Curses Mana Cost",
         "icon": "passives/death_note.svg",
         "x": 170.0,
         "y": 52.5,
@@ -5744,7 +5591,7 @@
         "socket": false
       },
       "641ea2e9-be62-40ad-b81a-e2502dbee41d": {
-        "name": "Poison Amplification",
+        "name": "Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 0.0,
         "y": -127.5,
@@ -5754,37 +5601,15 @@
         "effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 25.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -5792,37 +5617,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6244,38 +6047,60 @@
         "socket": false
       },
       "6afbaa18-6923-4d9f-af6e-d0edf482b786": {
-        "name": "Forbidden Cadence",
-        "icon": "passives/evil_comet.svg",
+        "name": "Cursed Mouth",
+        "icon": "passives/infinite_curse.svg",
         "x": 80.0,
         "y": -142.5,
         "size": 2,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "Speed": {
-                "skill_type": "Spell",
-                "skill_id": null,
-                "skill_description": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 50.0
-          },
-          {
-            "stat": {
-              "ManaCost": {
-                "skill_type": "Spell",
+              "StatusDuration": {
+                "status_type": null,
+                "skill_type": "Curse",
                 "skill_id": null,
                 "skill_description": null
               }
             },
             "modifier": "More",
-            "value": 200.0
+            "value": -33.0
           }
         ],
-        "triggers": [],
+        "triggers": [
+          {
+            "name": null,
+            "icon": null,
+            "description": null,
+            "trigger_id": "cursed_mouth",
+            "OnWaveCompleted": null,
+            "target": "Me",
+            "modifiers": [],
+            "skill_range": "Melee",
+            "skill_type": "Other",
+            "effects": [
+              {
+                "success_chance": {
+                  "value": 100.0,
+                  "lucky_chance": 0.0
+                },
+                "RefreshCooldown": {
+                  "skill_type": "Curse",
+                  "skill_id": null,
+                  "skill_description": null,
+                  "value": 100.0,
+                  "modifier": "Percent"
+                },
+                "ignore_stat_effects": [],
+                "conditional_modifiers": []
+              }
+            ],
+            "skill_shape": "Single",
+            "owner": null,
+            "is_debuff": false
+          }
+        ],
         "locked": true,
         "upgrade_effects": [],
         "max_upgrade_level": null,
@@ -7138,7 +6963,8 @@
                       "value": 10.0,
                       "cumulate": true,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 5.0
@@ -7401,46 +7227,24 @@
         "socket": false
       },
       "77d9af74-3e5d-4263-b3e0-1134c10fda2e": {
-        "name": "Damage over Time Efficacity",
-        "icon": "passives/chemical_bolt.svg",
+        "name": "Curse Speed",
+        "icon": "passives/trap_mask.svg",
         "x": 62.5,
         "y": -152.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Poison",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "min_max": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 25.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
+              "Speed": {
+                "skill_type": "Curse",
                 "skill_id": null,
                 "skill_description": null
               }
             },
             "modifier": "Increased",
-            "value": -25.0
+            "value": 8.0
           }
         ],
         "triggers": [],
@@ -7448,36 +7252,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "min_max": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 10.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
+              "Speed": {
+                "skill_type": "Curse",
                 "skill_id": null,
                 "skill_description": null
               }
             },
             "modifier": "Increased",
-            "value": -10.0
+            "value": 4.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8366,7 +8148,7 @@
         "socket": false
       },
       "84764c3f-3ec6-4c8a-821b-b56850cbc188": {
-        "name": "Curse Mana Cost",
+        "name": "Curses Mana Cost",
         "icon": "passives/death_note.svg",
         "x": 185.0,
         "y": 52.5,
@@ -9141,46 +8923,24 @@
         "socket": false
       },
       "907e3dc9-8052-4120-ab01-0abf0ee825c0": {
-        "name": "Damage over Time Efficacity",
-        "icon": "passives/chemical_bolt.svg",
+        "name": "Curse Speed",
+        "icon": "passives/trap_mask.svg",
         "x": 62.5,
         "y": -130.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Poison",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "min_max": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 25.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
+              "Speed": {
+                "skill_type": "Curse",
                 "skill_id": null,
                 "skill_description": null
               }
             },
             "modifier": "Increased",
-            "value": -25.0
+            "value": 8.0
           }
         ],
         "triggers": [],
@@ -9188,36 +8948,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "min_max": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 10.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
-                "skill_type": null,
+              "Speed": {
+                "skill_type": "Curse",
                 "skill_id": null,
                 "skill_description": null
               }
             },
             "modifier": "Increased",
-            "value": -10.0
+            "value": 4.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9768,7 +9506,8 @@
                       "value": 100.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     },
                     {
                       "status_type": {
@@ -9787,7 +9526,8 @@
                       "value": 33.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 0.0
@@ -10078,7 +9818,7 @@
         "socket": false
       },
       "a2beb5ab-9c0c-485f-b5b1-f8aa631c95df": {
-        "name": "Rapid Toxin",
+        "name": "Escalating Toxins",
         "icon": "passives/rapid_toxin.svg",
         "x": 0.0,
         "y": -60.0,
@@ -10088,70 +9828,21 @@
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "damage_type": "Poison"
               }
             },
-            "modifier": "Increased",
-            "value": 100.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
-              }
-            },
-            "modifier": "Increased",
-            "value": -100.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "triggers": [],
         "locked": true,
-        "upgrade_effects": [
-          {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 100.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
-              }
-            },
-            "modifier": "Increased",
-            "value": -100.0
-          }
-        ],
-        "max_upgrade_level": 3,
+        "upgrade_effects": [],
+        "max_upgrade_level": null,
         "socket": false
       },
       "a45aec91-23fa-4c2e-a9b9-e70bc2916a0f": {
@@ -10583,7 +10274,8 @@
                       "value": 0.0,
                       "cumulate": true,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 3.0
@@ -11829,7 +11521,8 @@
                       "value": 150.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 8.0
@@ -12020,7 +11713,7 @@
         "socket": false
       },
       "c6d1985a-af8b-4c62-a5f6-8afd826f5457": {
-        "name": "Savage Attacker",
+        "name": "Open Wound",
         "icon": "passives/open_wound.svg",
         "x": -60.0,
         "y": 0.0,
@@ -12110,13 +11803,6 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "CritChance": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null
-                                  }
-                                },
-                                {
                                   "Damage": {
                                     "skill_type": null,
                                     "skill_id": null,
@@ -12128,6 +11814,13 @@
                                 },
                                 {
                                   "CritDamage": {
+                                    "skill_type": null,
+                                    "skill_id": null,
+                                    "skill_description": null
+                                  }
+                                },
+                                {
+                                  "CritChance": {
                                     "skill_type": null,
                                     "skill_id": null,
                                     "skill_description": null
@@ -12145,7 +11838,8 @@
                       "value": 0.0,
                       "cumulate": true,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 5.0
@@ -12836,20 +12530,13 @@
                       "value": 0.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 0.0
                 },
                 "ignore_stat_effects": [
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
-                    }
-                  },
                   {
                     "StatusPower": {
                       "status_type": null,
@@ -12867,6 +12554,14 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
                     }
                   }
                 ],
@@ -12969,12 +12664,21 @@
                       "value": 0.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 0.0
                 },
                 "ignore_stat_effects": [
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
+                    }
+                  },
                   {
                     "StatusPower": {
                       "status_type": null,
@@ -12992,14 +12696,6 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
                     }
                   }
                 ],
@@ -13102,22 +12798,13 @@
                       "value": 0.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 0.0
                 },
                 "ignore_stat_effects": [
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
                   {
                     "StatusDuration": {
                       "status_type": null,
@@ -13133,6 +12820,16 @@
                       "skill_id": null,
                       "skill_description": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -13785,7 +13482,7 @@
         "socket": false
       },
       "d95d327a-d5ae-4754-be2d-a8afdeb998bc": {
-        "name": "Poison Amplification",
+        "name": "Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": -10.0,
         "y": -120.0,
@@ -13795,37 +13492,15 @@
         "effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -13833,37 +13508,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13980,7 +13633,8 @@
                       "value": 0.0,
                       "cumulate": false,
                       "replace_on_value_only": false,
-                      "unavoidable": false
+                      "unavoidable": false,
+                      "escalation": 0.0
                     }
                   ],
                   "duration": 2.0
@@ -15692,8 +15346,8 @@
         "socket": false
       },
       "f38a9d8c-d649-46e2-bcf5-e5285cc27c96": {
-        "name": "Curse Duration",
-        "icon": "passives/trap_mask.svg",
+        "name": "Curses Duration",
+        "icon": "passives/dripping_star.svg",
         "x": 185.0,
         "y": 72.5,
         "size": 0,
@@ -16029,7 +15683,7 @@
         "socket": false
       },
       "fd4f4880-52d3-4d41-aaa4-df291390229c": {
-        "name": "Poison Amplification",
+        "name": "Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 30.0,
         "y": -57.5,
@@ -16039,37 +15693,15 @@
         "effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -16077,37 +15709,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SkillConditionalModifier": {
-                "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": "Poison",
-                    "min_max": null,
-                    "is_hit": null
-                  }
-                },
+              "StatusEscalation": {
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "conditions": [
-                  {
-                    "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "skill_type": null,
-                      "not": false
-                    }
-                  }
-                ]
+                "damage_type": "Poison"
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,

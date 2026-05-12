@@ -117,4 +117,5 @@ pub struct StatusState {
     pub duration: Option<NonNegative>,
     pub cumulate: bool,
     pub skill_type: SkillType,
+    pub escalation: f64,
 }

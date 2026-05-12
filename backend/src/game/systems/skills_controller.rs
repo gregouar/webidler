@@ -516,6 +516,7 @@ fn apply_skill_effect_on_target(
                         skill_type,
                         *value,
                         duration,
+                        *status_effect.escalation,
                         status_effect.cumulate,
                         status_effect.unavoidable,
                         trigger_id,
