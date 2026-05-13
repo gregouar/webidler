@@ -887,7 +887,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8": {
@@ -8316,7 +8316,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "86d031ab-5ce2-489a-a479-e25520d98f9a": {
@@ -9198,7 +9198,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "93d9f067-e298-4271-a8a2-6f332aa115f5": {
@@ -9270,7 +9270,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "962af5ca-3403-48ca-ba9a-94121d6deae6": {
@@ -10134,7 +10134,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "ab6ccb2e-de7c-4b20-84ac-529bcf35ae58": {
@@ -10575,7 +10575,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "b2c78b24-f0ad-4f3f-84eb-6d6fb97c2d42": {
@@ -11162,7 +11162,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "c03d8e17-a800-4f92-8e1e-240d64036176": {
@@ -12183,7 +12183,7 @@
             "value": 10.0
           }
         ],
-        "max_upgrade_level": 1,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "cd7cd1d4-b0cc-447d-bcda-430451efd674": {

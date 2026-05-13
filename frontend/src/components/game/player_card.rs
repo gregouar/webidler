@@ -79,13 +79,18 @@ pub fn PlayerCard() -> impl IntoView {
             {
                 0.0
             } else {
-                player_specs
+                let max_skill_mana = player_specs
                     .character_specs
                     .skills_specs
                     .iter()
                     .map(|s| s.mana_cost.get())
                     .max_by(|a, b| a.total_cmp(b))
-                    .unwrap_or_default()
+                    .unwrap_or_default();
+                if max_skill_mana * 2.0 > (attrs.max_mana.get()) {
+                    0.0
+                } else {
+                    max_skill_mana
+                }
             }
         })
     });
