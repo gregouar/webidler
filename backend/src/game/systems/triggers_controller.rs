@@ -30,7 +30,11 @@ pub fn apply_trigger_effects(
     game_data: &mut GameInstanceData,
     trigger_contexts: Vec<TriggerContext>,
 ) {
-    for trigger_context in trigger_contexts {
+    if trigger_contexts.len() > 100 {
+        tracing::error!("Too many triggers: {}", trigger_contexts.len());
+    }
+
+    for trigger_context in trigger_contexts.into_iter().take(100) {
         if trigger_context.trigger_depth > 3 {
             tracing::error!(
                 "Trigger reached max depth: {:?}",
