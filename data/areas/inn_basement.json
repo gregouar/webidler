@@ -14,7 +14,8 @@
     "tier_5.json",
     "tier_6.json",
     "tier_7.json",
-    "tier_8.json"
+    "tier_8.json",
+    "area_inn.json"
   ],
   "bosses": [
     {

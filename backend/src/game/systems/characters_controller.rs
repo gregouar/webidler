@@ -5,7 +5,7 @@ use shared::{
     constants::{self, ARMOR_FACTOR},
     data::{
         character::{CharacterAttrs, CharacterId, CharacterState},
-        character_status::{StatusId, StatusSpecs, StatusState},
+        character_status::{StatusId, StatusSpecs},
         item::SkillRange,
         modifier::Modifier,
         player::CharacterSpecs,
@@ -17,6 +17,7 @@ use shared::{
 
 use crate::game::{
     data::event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
+    systems::statuses_controller,
     utils::rng::Rollable,
 };
 
@@ -260,12 +261,14 @@ pub fn refresh_skills_cooldown(
     refreshed
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn should_apply_status(
     target: &Target,
     status_specs: &StatusSpecs,
     skill_type: SkillType,
     value: NonNegative,
     duration: Option<NonNegative>,
+    escalation: f64,
     cumulate: bool,
     replace_on_value_only: bool,
 ) -> bool {
@@ -293,10 +296,11 @@ pub fn should_apply_status(
         .unique_statuses
         .get(&status_specs.into_status_id(skill_type))
     {
-        return compute_effect_weight(value, duration, replace_on_value_only)
+        return compute_effect_weight(value, duration, escalation, replace_on_value_only)
             > compute_effect_weight(
-                cur_status_state.value,
+                cur_status_state.base_value,
                 cur_status_state.duration,
+                cur_status_state.escalation,
                 replace_on_value_only,
             );
     }
@@ -395,14 +399,9 @@ pub fn apply_status(
         if cumulate {
             target_state.statuses.cumulative_statuses.push((
                 new_status_specs,
-                StatusState {
-                    base_value: value,
-                    value,
-                    duration,
-                    cumulate,
-                    skill_type,
-                    escalation,
-                },
+                statuses_controller::initialize_status_state(
+                    skill_type, value, duration, escalation, cumulate,
+                ),
             ));
 
             if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
@@ -427,15 +426,18 @@ pub fn apply_status(
                 .unique_statuses
                 .entry(status_specs.into_status_id(skill_type))
                 .and_modify(|(cur_status_specs, cur_status_state)| {
-                    if compute_effect_weight(value, duration, false)
+                    if compute_effect_weight(value, duration, escalation, false)
                         > compute_effect_weight(
-                            cur_status_state.value,
+                            cur_status_state.base_value,
                             cur_status_state.duration,
+                            cur_status_state.escalation,
                             false,
                         )
                     {
+                        cur_status_state.base_value = value;
                         cur_status_state.value = value;
                         cur_status_state.duration = duration;
+                        cur_status_state.max_escalation = duration;
                         *cur_status_specs = new_status_specs.clone();
                     } else {
                         applied = false;
@@ -443,14 +445,9 @@ pub fn apply_status(
                 })
                 .or_insert((
                     new_status_specs,
-                    StatusState {
-                        base_value: value,
-                        value,
-                        duration,
-                        cumulate,
-                        skill_type,
-                        escalation,
-                    },
+                    statuses_controller::initialize_status_state(
+                        skill_type, value, duration, escalation, cumulate,
+                    ),
                 ));
         }
     }
@@ -508,9 +505,10 @@ pub fn apply_status(
 fn compute_effect_weight(
     value: NonNegative,
     duration: Option<NonNegative>,
+    escalation: f64,
     value_only: bool,
 ) -> f64 {
-    let value = value.get() + 1.0;
+    let value = value.get() * (1.0 + escalation * 0.01) + 1.0;
     if value_only {
         if duration.map(|x| x.get()).unwrap_or(1.0) < 0.2 {
             value * 0.1
@@ -518,7 +516,7 @@ fn compute_effect_weight(
             value
         }
     } else {
-        value * duration.map(|x| x.get().min(2.0)).unwrap_or(2.0)
+        value * duration.map(|x| x.get()).unwrap_or(999.0)
     }
 }
 

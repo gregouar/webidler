@@ -1,0 +1,85 @@
+{
+    "entries": [
+        {
+            "item_id": "scale_vest_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "rune",
+            "weight": 800,
+            "min_area_level": 140
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 80
+        },
+        {
+            "item_id": "rune",
+            "weight": 1600,
+            "min_area_level": 190
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 160,
+            "min_area_level": 190
+        },
+        {
+            "item_id": "rune",
+            "weight": 3200,
+            "min_area_level": 250
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 320,
+            "min_area_level": 250
+        },
+        {
+            "item_id": "rune",
+            "weight": 6400,
+            "min_area_level": 320
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 640,
+            "min_area_level": 320
+        },
+        {
+            "item_id": "rune",
+            "weight": 12800,
+            "min_area_level": 400
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 1280,
+            "min_area_level": 400
+        },
+        {
+            "item_id": "rune_gilded",
+            "weight": 499
+        },
+        {
+            "item_id": "rune_berserker",
+            "weight": 999
+        },
+        {
+            "item_id": "rune_storm_average",
+            "weight": 999
+        },
+        {
+            "item_id": "rune_poison_fire",
+            "weight": 999
+        },
+        {
+            "item_id": "rune_mana_damage",
+            "weight": 99
+        },
+        {
+            "item_id": "rune_storm_poison",
+            "weight": 999
+        },
+        {
+            "item_id": "rune_phys_fire",
+            "weight": 499
+        }
+    ]
+}

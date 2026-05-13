@@ -4,6 +4,7 @@ use shared::data::{
     character::CharacterAttrs,
     character_status::{StatusMap, StatusSpecs, StatusState},
     player::CharacterState,
+    skill::SkillType,
     stat_effect::EffectsMap,
     values::NonNegative,
 };
@@ -57,6 +58,20 @@ fn update_status(
     status_state: &mut StatusState,
     elapsed_time_f64: NonNegative,
 ) -> bool {
+    if status_state.escalation > 0.0 {
+        // status_state.value = status_state.value
+        //     * (1.0 + status_state.escalation * 0.01).powf(elapsed_time_f64.get());
+        status_state.value = status_state.base_value
+            * (1.0 + status_state.escalation * 0.01 * status_state.elapsed_escalation.get());
+
+        status_state.elapsed_escalation += elapsed_time_f64;
+
+        let max_escalation = status_state.max_escalation.unwrap_or(100.0.into());
+        if status_state.elapsed_escalation.get() > max_escalation.get() {
+            status_state.elapsed_escalation = max_escalation;
+        }
+    }
+
     if let StatusSpecs::DamageOverTime { damage_type } = status_specs {
         characters_controller::damage_character(
             character_attrs,
@@ -73,13 +88,6 @@ fn update_status(
             status_state.skill_type,
             false,
         );
-    }
-
-    if status_state.escalation > 0.0 {
-        // status_state.value = status_state.value
-        //     * (1.0 + status_state.escalation * 0.01).powf(elapsed_time_f64.get());
-        status_state.value +=
-            status_state.base_value * status_state.escalation * 0.01 * elapsed_time_f64.get();
     }
 
     if let Some(duration) = status_state.duration.as_mut() {
@@ -147,4 +155,23 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
                 effects_map
             },
         )
+}
+
+pub fn initialize_status_state(
+    skill_type: SkillType,
+    value: NonNegative,
+    duration: Option<NonNegative>,
+    escalation: f64,
+    cumulate: bool,
+) -> StatusState {
+    StatusState {
+        value,
+        duration,
+        cumulate,
+        skill_type,
+        base_value: value,
+        elapsed_escalation: Default::default(),
+        max_escalation: duration,
+        escalation,
+    }
 }

@@ -114,10 +114,12 @@ pub enum StatModifierType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusState {
     pub value: NonNegative,
-    pub duration: Option<NonNegative>,
+    pub duration: Option<NonNegative>, // Remaining duration
     pub cumulate: bool,
     pub skill_type: SkillType,
 
     pub base_value: NonNegative,
+    pub elapsed_escalation: NonNegative,
+    pub max_escalation: Option<NonNegative>,
     pub escalation: f64,
 }
