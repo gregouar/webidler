@@ -498,7 +498,7 @@ pub fn apply_status(
             false,
             true,
             "stun_lockout",
-            trigger_depth.saturating_add(1),
+            0,
         );
     }
 
