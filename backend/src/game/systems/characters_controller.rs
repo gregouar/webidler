@@ -261,6 +261,7 @@ pub fn refresh_skills_cooldown(
     refreshed
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn should_apply_status(
     target: &Target,
     status_specs: &StatusSpecs,
