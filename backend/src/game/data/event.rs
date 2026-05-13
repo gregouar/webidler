@@ -29,7 +29,8 @@ pub struct HitEvent {
     pub source: CharacterId,
     pub target: CharacterId,
 
-    pub trigger_id: Option<String>,
+    pub trigger_depth: u8,
+    pub skill_id: String,
 
     pub skill_type: SkillType,
     pub range: SkillRange,
@@ -44,7 +45,8 @@ pub struct StatusEvent {
     pub source: CharacterId,
     pub target: CharacterId,
 
-    pub trigger_id: Option<String>,
+    pub trigger_depth: u8,
+    pub skill_id: String,
 
     pub skill_type: SkillType,
 

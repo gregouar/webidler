@@ -171,10 +171,20 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
 
 fn format_trigger_event(event_trigger: &EventTrigger) -> String {
     match event_trigger {
-        EventTrigger::OnHit(hit_trigger) => format!("On {}Hit", format_hit_trigger(hit_trigger)),
+        EventTrigger::OnHit(hit_trigger) => format!(
+            "On {}Hit{}",
+            format_hit_trigger(hit_trigger),
+            format_hit_trigger_conditions(hit_trigger, " against ", " Enemies")
+        ),
         EventTrigger::OnTakeHit(hit_trigger) => match hit_trigger.is_blocked {
             Some(true) => format!("On {}Block", format_blocked_hit_trigger(hit_trigger)),
-            _ => format!("On {}Hit Taken", format_hit_trigger(hit_trigger)),
+            _ => {
+                format!(
+                    "On {}Hit Taken{}",
+                    format_hit_trigger(hit_trigger),
+                    format_hit_trigger_conditions(hit_trigger, " when ", "")
+                )
+            }
         },
         EventTrigger::OnKill(kill_trigger) => format_kill_trigger(kill_trigger),
         EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
@@ -205,6 +215,24 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
         skill_type_str(hit_trigger.skill_type),
         damage_type_str(hit_trigger.damage_type),
     )
+}
+
+fn format_hit_trigger_conditions(
+    hit_trigger: &HitTrigger,
+    prefix: &'static str,
+    middlefix: &'static str,
+) -> String {
+    if hit_trigger.conditions.is_empty() {
+        "".into()
+    } else {
+        format!(
+            "{}{}{}{}",
+            prefix,
+            conditions_tooltip::format_skill_modifier_conditions_pre(&hit_trigger.conditions, ""),
+            middlefix,
+            conditions_tooltip::format_skill_modifier_conditions_post(&hit_trigger.conditions, "")
+        )
+    }
 }
 
 fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {

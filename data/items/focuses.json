@@ -167,7 +167,8 @@
                   "value": 200.0,
                   "cumulate": false,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 }
               ],
               "duration": 10.0
@@ -178,6 +179,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],
@@ -580,7 +582,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 200.0,
+        "value": 400.0,
         "ignore_quality": true
       }
     ],
@@ -588,20 +590,60 @@
       {
         "name": null,
         "icon": null,
-        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for 10 seconds. You gain 30% More Poison Damage per stack of Venom.",
+        "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for the same Duration. You gain 50% More Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
-        "OnApplyStatus": {
+        "OnHit": {
           "skill_type": null,
-          "status_type": {
-            "DamageOverTime": {
-              "damage_type": "Poison"
-            }
-          },
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
           "is_triggered": null,
-          "is_evaded": false
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": [
+            {
+              "HasStatus": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "not": false
+              }
+            }
+          ]
         },
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 1.0,
+            "source": {
+              "StatusDuration": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null
+              }
+            }
+          }
+        ],
         "skill_range": "Any",
         "skill_type": "Other",
         "effects": [
@@ -621,7 +663,8 @@
                   "value": 20.0,
                   "cumulate": true,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 },
                 {
                   "status_type": {
@@ -640,30 +683,30 @@
                       "debuff": false
                     }
                   },
-                  "value": 30.0,
+                  "value": 50.0,
                   "cumulate": true,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 }
               ],
-              "duration": 10.0
+              "duration": 0.0
             },
             "ignore_stat_effects": [
-              {
-                "StatusPower": {
-                  "status_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null,
-                  "min_max": null
-                }
-              },
               {
                 "StatusDuration": {
                   "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null
+                }
+              },
+              {
+                "StatusEscalation": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": null
                 }
               },
               {
@@ -675,6 +718,15 @@
                   "min_max": null,
                   "is_hit": null
                 }
+              },
+              {
+                "StatusPower": {
+                  "status_type": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "min_max": null
+                }
               }
             ],
             "conditional_modifiers": []
@@ -682,6 +734,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],

@@ -254,6 +254,8 @@ fn compute_player_specs(
                 is_hurt: Some(true),
                 is_triggered: Some(false),
                 damage_type: None,
+                skill_ids: Default::default(),
+                conditions: Default::default(),
             }),
             target: TriggerTarget::Source,
             skill_range: SkillRange::Any,

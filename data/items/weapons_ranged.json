@@ -230,6 +230,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],
@@ -543,7 +544,8 @@
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "trigger_ids": null
         },
         "target": "SameTarget",
         "modifiers": [
@@ -588,7 +590,7 @@
                   "escalation": 0.0
                 }
               ],
-              "duration": 3.0
+              "duration": 2.0
             },
             "ignore_stat_effects": [
               {
@@ -607,6 +609,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],
@@ -1120,7 +1123,8 @@
           "is_blocked": null,
           "is_hurt": null,
           "is_triggered": false,
-          "damage_type": null
+          "damage_type": null,
+          "trigger_ids": null
         },
         "target": "SameTarget",
         "modifiers": [
@@ -1184,6 +1188,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],

@@ -33,7 +33,8 @@ pub fn attack_character(
     range: SkillRange,
     is_crit: bool,
     unblockable: bool,
-    trigger_id: Option<&str>,
+    skill_id: &str,
+    trigger_depth: u8,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
 
@@ -88,7 +89,8 @@ pub fn attack_character(
         is_crit,
         is_blocked,
         is_hurt,
-        trigger_id: trigger_id.map(String::from),
+        skill_id: skill_id.into(),
+        trigger_depth,
     }));
 
     !is_blocked
@@ -314,7 +316,8 @@ pub fn apply_status(
     escalation: f64,
     cumulate: bool,
     unavoidable: bool,
-    trigger_id: Option<&str>,
+    skill_id: &str,
+    trigger_depth: u8,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
 
@@ -393,6 +396,7 @@ pub fn apply_status(
             target_state.statuses.cumulative_statuses.push((
                 new_status_specs,
                 StatusState {
+                    base_value: value,
                     value,
                     duration,
                     cumulate,
@@ -440,6 +444,7 @@ pub fn apply_status(
                 .or_insert((
                     new_status_specs,
                     StatusState {
+                        base_value: value,
                         value,
                         duration,
                         cumulate,
@@ -461,8 +466,9 @@ pub fn apply_status(
         status_type: status_specs.into(),
         value,
         duration,
-        trigger_id: trigger_id.map(String::from),
         is_evaded,
+        skill_id: skill_id.into(),
+        trigger_depth,
     }));
 
     if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
@@ -491,7 +497,8 @@ pub fn apply_status(
             0.0,
             false,
             true,
-            Some("stun_lockout"),
+            "stun_lockout",
+            0,
         );
     }
 

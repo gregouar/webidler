@@ -3925,7 +3925,8 @@
               "is_blocked": true,
               "is_hurt": null,
               "is_triggered": null,
-              "damage_type": null
+              "damage_type": null,
+              "skill_ids": null
             },
             "target": "SameTarget",
             "modifiers": [],
@@ -3971,6 +3972,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -6113,6 +6115,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -6217,6 +6220,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -6990,6 +6994,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -9503,7 +9508,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 30.0,
+                  "value": 50.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -9562,6 +9567,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -9851,7 +9857,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 30.0
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -10248,7 +10254,8 @@
               "is_blocked": null,
               "is_hurt": null,
               "is_triggered": null,
-              "damage_type": null
+              "damage_type": null,
+              "skill_ids": null
             },
             "target": "SameTarget",
             "modifiers": [
@@ -10312,6 +10319,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -11496,7 +11504,8 @@
               "is_blocked": null,
               "is_hurt": null,
               "is_triggered": null,
-              "damage_type": "Fire"
+              "damage_type": "Fire",
+              "skill_ids": null
             },
             "target": "Me",
             "modifiers": [],
@@ -11548,6 +11557,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -11749,7 +11759,8 @@
               "is_blocked": null,
               "is_hurt": true,
               "is_triggered": false,
-              "damage_type": null
+              "damage_type": null,
+              "skill_ids": null
             },
             "target": "SameTarget",
             "modifiers": [
@@ -11795,7 +11806,8 @@
                             "is_blocked": null,
                             "is_hurt": null,
                             "is_triggered": null,
-                            "damage_type": null
+                            "damage_type": null,
+                            "skill_ids": null
                           },
                           "target": "SameTarget",
                           "modifiers": [],
@@ -11818,13 +11830,6 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "CritDamage": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null
-                                  }
-                                },
-                                {
                                   "Damage": {
                                     "skill_type": null,
                                     "skill_id": null,
@@ -11832,6 +11837,13 @@
                                     "damage_type": null,
                                     "min_max": null,
                                     "is_hit": null
+                                  }
+                                },
+                                {
+                                  "CritDamage": {
+                                    "skill_type": null,
+                                    "skill_id": null,
+                                    "skill_description": null
                                   }
                                 },
                                 {
@@ -11847,6 +11859,7 @@
                           ],
                           "skill_shape": "Single",
                           "owner": null,
+                          "trigger_propagate": false,
                           "is_debuff": true
                         }
                       },
@@ -11865,6 +11878,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -12585,6 +12599,7 @@
             ],
             "skill_shape": "Contact",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           },
           {
@@ -12719,6 +12734,7 @@
             ],
             "skill_shape": "Contact",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           },
           {
@@ -12853,6 +12869,7 @@
             ],
             "skill_shape": "Contact",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],
@@ -13629,7 +13646,8 @@
               "is_blocked": null,
               "is_hurt": true,
               "is_triggered": null,
-              "damage_type": "Storm"
+              "damage_type": "Storm",
+              "skill_ids": null
             },
             "target": "SameTarget",
             "modifiers": [],
@@ -13660,6 +13678,7 @@
             ],
             "skill_shape": "Single",
             "owner": null,
+            "trigger_propagate": false,
             "is_debuff": false
           }
         ],

@@ -472,7 +472,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 4,
+              "duration": 2,
               "statuses": [
                 {
                   "status_type": {
