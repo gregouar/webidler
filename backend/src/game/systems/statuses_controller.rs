@@ -172,6 +172,6 @@ pub fn initialize_status_state(
         base_value: value,
         elapsed_escalation: Default::default(),
         max_escalation: duration,
-        escalation: escalation,
+        escalation,
     }
 }
