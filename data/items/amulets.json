@@ -535,38 +535,16 @@
       },
       {
         "stat": {
-          "SkillConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
-              }
-            },
+          "StatusEscalation": {
             "skill_type": null,
             "skill_id": null,
             "skill_description": null,
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "skill_type": null,
-                  "not": false
-                }
-              }
-            ]
+            "damage_type": "Poison"
           }
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 200.0,
+        "value": 50.0,
         "ignore_quality": true
       },
       {
