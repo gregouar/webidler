@@ -545,7 +545,7 @@ pub fn CircularProgressBar(
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             format!(
-                                "absolute inset-{} xl:inset-{bar_width} rounded-full
+                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
                             bg-radial {} to-zinc-950 to-70%
                             border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
                                 bar_width / 2,
@@ -554,7 +554,7 @@ pub fn CircularProgressBar(
                         }
                         GraphicsQuality::Medium => {
                             format!(
-                                "absolute inset-{} xl:inset-{bar_width} rounded-full
+                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
                             bg-radial {} to-zinc-950 to-70%
                             border border-[#6d532e]/70",
                                 bar_width / 2,
@@ -563,7 +563,7 @@ pub fn CircularProgressBar(
                         }
                         GraphicsQuality::Low => {
                             format!(
-                                "absolute inset-{} xl:inset-{bar_width} rounded-full
+                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
                             bg-radial {} to-zinc-950 to-70%
                             border border-[#5c4a2e]",
                                 bar_width / 2,

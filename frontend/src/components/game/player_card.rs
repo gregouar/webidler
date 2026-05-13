@@ -461,8 +461,8 @@ fn BuySkillButton() -> impl IntoView {
                         disabled=Signal::derive(|| true)
                         class="w-full h-full max-h-full leading-none py-1"
                     >
-                        <span class="inline xl:hidden text-base">"+"</span>
-                        <span class="hidden xl:inline text-lg">"Upg."</span>
+                        <span class="inline 2xl:hidden text-base">"+"</span>
+                        <span class="hidden 2xl:inline text-lg">"Upg."</span>
                     </FancyButton>
                 </div>
             </div>
@@ -792,8 +792,8 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                         >
                             // <span class="text-base font-bold xl:text-2xl">"+"</span>
 
-                            <span class="inline xl:hidden text-base">"+"</span>
-                            <span class="hidden xl:inline text-lg">"Upg."</span>
+                            <span class="inline 2xl:hidden text-base">"+"</span>
+                            <span class="hidden 2xl:inline text-lg">"Upg."</span>
 
                         // <svg
                         // xmlns="http://www.w3.org/2000/svg"

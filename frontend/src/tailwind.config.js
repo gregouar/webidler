@@ -31,6 +31,8 @@ module.exports = {
     'opacity-100',
     'animate-monster-fade-in',
     'animate-monster-fade-out',
-    'animate-monster-flee'
+    'animate-monster-flee',
+    '2xl:inset-2',
+    '2xl:inset-4'
   ]
 };
