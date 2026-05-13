@@ -3926,7 +3926,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": null,
-              "skill_ids": null
+              "skill_ids": null,
+              "conditions": []
             },
             "target": "SameTarget",
             "modifiers": [],
@@ -9508,7 +9509,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 50.0,
+                  "value": 35.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -10255,7 +10256,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": null,
-              "skill_ids": null
+              "skill_ids": null,
+              "conditions": []
             },
             "target": "SameTarget",
             "modifiers": [
@@ -11505,7 +11507,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": "Fire",
-              "skill_ids": null
+              "skill_ids": null,
+              "conditions": []
             },
             "target": "Me",
             "modifiers": [],
@@ -11760,7 +11763,8 @@
               "is_hurt": true,
               "is_triggered": false,
               "damage_type": null,
-              "skill_ids": null
+              "skill_ids": null,
+              "conditions": []
             },
             "target": "SameTarget",
             "modifiers": [
@@ -11807,7 +11811,8 @@
                             "is_hurt": null,
                             "is_triggered": null,
                             "damage_type": null,
-                            "skill_ids": null
+                            "skill_ids": null,
+                            "conditions": []
                           },
                           "target": "SameTarget",
                           "modifiers": [],
@@ -11830,13 +11835,10 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "Damage": {
+                                  "CritChance": {
                                     "skill_type": null,
                                     "skill_id": null,
-                                    "skill_description": null,
-                                    "damage_type": null,
-                                    "min_max": null,
-                                    "is_hit": null
+                                    "skill_description": null
                                   }
                                 },
                                 {
@@ -11847,10 +11849,13 @@
                                   }
                                 },
                                 {
-                                  "CritChance": {
+                                  "Damage": {
                                     "skill_type": null,
                                     "skill_id": null,
-                                    "skill_description": null
+                                    "skill_description": null,
+                                    "damage_type": null,
+                                    "min_max": null,
+                                    "is_hit": null
                                   }
                                 }
                               ],
@@ -12567,6 +12572,14 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -12583,14 +12596,6 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
                     }
                   }
                 ],
@@ -12702,14 +12707,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -12726,6 +12723,14 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
                     }
                   }
                 ],
@@ -12837,6 +12842,16 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null,
@@ -12851,16 +12866,6 @@
                       "skill_id": null,
                       "skill_description": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -13647,7 +13652,8 @@
               "is_hurt": true,
               "is_triggered": null,
               "damage_type": "Storm",
-              "skill_ids": null
+              "skill_ids": null,
+              "conditions": []
             },
             "target": "SameTarget",
             "modifiers": [],

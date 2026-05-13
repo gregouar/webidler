@@ -422,6 +422,7 @@ fn is_skill_effect_applicable_on_target(
                         skill_type,
                         **value,
                         duration.map(|duration| *duration),
+                        *status_effect.escalation,
                         status_effect.cumulate,
                         status_effect.replace_on_value_only,
                     )
