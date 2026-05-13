@@ -76,8 +76,10 @@ fn update_status(
     }
 
     if status_state.escalation > 0.0 {
-        status_state.value = status_state.value
-            * (1.0 + status_state.escalation * 0.01).powf(elapsed_time_f64.get());
+        // status_state.value = status_state.value
+        //     * (1.0 + status_state.escalation * 0.01).powf(elapsed_time_f64.get());
+        status_state.value +=
+            status_state.base_value * status_state.escalation * 0.01 * elapsed_time_f64.get();
     }
 
     if let Some(duration) = status_state.duration.as_mut() {

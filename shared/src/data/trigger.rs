@@ -41,7 +41,8 @@ pub struct HitTrigger {
     pub damage_type: Option<DamageType>,
     #[serde(default)]
     pub skill_ids: Option<Vec<String>>,
-    // TODO: Track skill id?
+    #[serde(default)]
+    pub conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]

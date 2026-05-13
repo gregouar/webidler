@@ -90,6 +90,24 @@ fn handle_hit_event<'a>(
                 _ => continue,
             };
 
+            let (target_specs, target_state) = match hit_event.target {
+                CharacterId::Player => (
+                    &game_data.player_specs.read().character_specs,
+                    &game_data.player_state.character_state,
+                ),
+
+                CharacterId::Monster(idx) => {
+                    match game_data
+                        .monster_specs
+                        .get(idx)
+                        .zip(game_data.monster_states.get(idx))
+                    {
+                        Some((specs, state)) => (&specs.character_specs, &state.character_state),
+                        None => continue,
+                    }
+                }
+            };
+
             if hit_trigger.skill_type.unwrap_or(hit_event.skill_type) == hit_event.skill_type
                 && hit_trigger.range.unwrap_or(hit_event.range) == hit_event.range
                 && hit_trigger.is_crit.unwrap_or(hit_event.is_crit) == hit_event.is_crit
@@ -120,6 +138,14 @@ fn handle_hit_event<'a>(
                             .any(|skill_id| *skill_id == hit_event.skill_id)
                     })
                     .unwrap_or(true)
+                && all(hit_trigger.conditions.iter(), |condition| {
+                    check_condition(
+                        &game_data.area_threat,
+                        &target_specs.character_attrs,
+                        target_state,
+                        condition,
+                    ) > 0.0
+                })
             {
                 trigger_contexts.push(TriggerContext {
                     trigger: triggered_effects.clone(),

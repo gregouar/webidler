@@ -396,6 +396,7 @@ pub fn apply_status(
             target_state.statuses.cumulative_statuses.push((
                 new_status_specs,
                 StatusState {
+                    base_value: value,
                     value,
                     duration,
                     cumulate,
@@ -443,6 +444,7 @@ pub fn apply_status(
                 .or_insert((
                     new_status_specs,
                     StatusState {
+                        base_value: value,
                         value,
                         duration,
                         cumulate,
