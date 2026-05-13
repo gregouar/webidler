@@ -15,11 +15,17 @@
       "tier_6.json",
       "tier_7.json",
       "tier_8.json",
-      "menu.json",
-      "pirate_treasure.json",
-      "witch.json",
-      "witch_2.json",
-      "wyrm.json"
+      "area_inn.json",
+      "area_forest.json",
+      "area_witch.json",
+      "area_castle.json",
+      "area_island.json",
+      "area_wyrm.json",
+      "area_yokai.json",
+      "area_chaos.json",
+      "edict_menu.json",
+      "edict_treasure.json",
+      "edict_witch.json"
     ]
   }
 }

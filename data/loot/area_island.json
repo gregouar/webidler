@@ -1,0 +1,28 @@
+{
+    "entries": [
+        {
+            "item_id": "brigandine_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "bardiche_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "throwing_shield",
+            "weight": 9999
+        },
+        {
+            "item_id": "jellyfish",
+            "weight": 9999
+        },
+        {
+            "item_id": "kite_shield_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "edict_treasure_map",
+            "weight": 2999
+        }
+    ]
+}

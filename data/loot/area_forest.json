@@ -1,0 +1,36 @@
+{
+    "entries": [
+        {
+            "item_id": "leather_cap_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "leather_armor_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "leather_gloves_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "hunting_bow_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "small_round_shield_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "hooded_wrap_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "medallion_unique",
+            "weight": 9999
+        },
+        {
+            "item_id": "composite_bow_unique",
+            "weight": 9999
+        }
+    ]
+}
