@@ -31,8 +31,11 @@ pub fn apply_trigger_effects(
     trigger_contexts: Vec<TriggerContext>,
 ) {
     for trigger_context in trigger_contexts {
-        if trigger_context.trigger_depth > 5 {
-            tracing::error!("Trigger reached max depth: {:?}", trigger_context);
+        if trigger_context.trigger_depth > 3 {
+            tracing::error!(
+                "Trigger reached max depth: {:?}",
+                trigger_context.trigger.trigger_id
+            );
             continue;
         }
 

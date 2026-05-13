@@ -174,7 +174,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnHit(hit_trigger) => format!(
             "On {}Hit{}",
             format_hit_trigger(hit_trigger),
-            format_hit_trigger_conditions(hit_trigger, " against ", " Enemies ")
+            format_hit_trigger_conditions(hit_trigger, " against ", " Enemies")
         ),
         EventTrigger::OnTakeHit(hit_trigger) => match hit_trigger.is_blocked {
             Some(true) => format!("On {}Block", format_blocked_hit_trigger(hit_trigger)),
