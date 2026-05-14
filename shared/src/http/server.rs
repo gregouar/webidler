@@ -124,6 +124,7 @@ pub struct GetCharacterDetailsResponse {
     pub passives_build: PurchasedNodes,
     pub benedictions: PlayerBenedictions,
 
+    pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
     pub market_stash: Option<Stash>,
 

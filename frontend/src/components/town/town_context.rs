@@ -18,6 +18,7 @@ pub struct TownContext {
     pub areas: RwSignal<Vec<UserGrindArea>>,
     pub inventory: RwSignal<PlayerInventory>,
 
+    pub character_stash: RwSignal<Stash>,
     pub user_stash: RwSignal<Stash>,
     pub market_stash: RwSignal<Stash>,
 
@@ -50,6 +51,10 @@ impl Default for TownContext {
             character: Default::default(),
             areas: Default::default(),
             inventory: Default::default(),
+            character_stash: RwSignal::new(Stash {
+                stash_type: StashType::Character,
+                ..Default::default()
+            }),
             user_stash: RwSignal::new(Stash {
                 stash_type: StashType::User,
                 ..Default::default()

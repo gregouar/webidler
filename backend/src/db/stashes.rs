@@ -1,11 +1,11 @@
 use shared::data::{
     realms::RealmId,
     stash::{StashId, StashType},
-    user::{UserCharacterId, UserId},
+    user::UserId,
 };
 use sqlx::{FromRow, types::Json};
 
-use crate::db::pool::DbExecutor;
+use crate::db::{characters::CharacterEntry, pool::DbExecutor};
 
 // pub type DbStashType
 
@@ -13,6 +13,7 @@ use crate::db::pool::DbExecutor;
 pub struct StashEntry {
     pub stash_id: StashId,
     pub user_id: UserId,
+    pub owner_id: uuid::Uuid,
 
     pub realm_id: RealmId,
 
@@ -27,6 +28,7 @@ pub struct StashEntry {
 pub async fn create_stash<'c>(
     executor: impl DbExecutor<'c>,
     user_id: UserId,
+    owner_id: uuid::Uuid,
     realm_id: RealmId,
     stash_type: StashType,
     max_items: i64,
@@ -38,11 +40,12 @@ pub async fn create_stash<'c>(
     let stash_type_value = serde_json::to_value(stash_type).unwrap();
     sqlx::query!(
         r#"
-        INSERT INTO stashes (stash_id, user_id, stash_type, title, max_items, realm_id)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO stashes (stash_id, user_id, owner_id, stash_type, title, max_items, realm_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         "#,
         stash_id,
         user_id,
+        owner_id,
         stash_type_value,
         title,
         max_items,
@@ -54,6 +57,7 @@ pub async fn create_stash<'c>(
     Ok(StashEntry {
         stash_id,
         user_id,
+        owner_id,
         realm_id,
         stash_type,
         title: Some(title.to_string()),
@@ -74,6 +78,7 @@ pub async fn get_stash<'c>(
         SELECT
             stash_id as "stash_id: StashId",
             user_id as "user_id: UserId",
+            owner_id as "owner_id: uuid::Uuid",
             realm_id as "realm_id!",
             stash_type as "stash_type: Json<StashType>",
             title as "title?",
@@ -101,9 +106,13 @@ pub async fn get_stash<'c>(
 
 pub async fn get_character_stash_by_type<'c>(
     executor: impl DbExecutor<'c>,
-    character_id: &UserCharacterId,
+    character: &CharacterEntry,
     stash_type: StashType,
 ) -> Result<Option<StashEntry>, sqlx::Error> {
+    let owner_id = match stash_type {
+        StashType::Character => character.character_id,
+        StashType::User | StashType::Market => character.user_id,
+    };
     let stash_type = serde_json::to_value(Json(stash_type)).unwrap();
     sqlx::query_as!(
         StashEntry,
@@ -111,6 +120,7 @@ pub async fn get_character_stash_by_type<'c>(
         SELECT
             stashes.stash_id as "stash_id: StashId",
             stashes.user_id as "user_id: UserId",
+            stashes.owner_id as "owner_id: uuid::Uuid",
             stashes.realm_id as "realm_id!",
             stashes.stash_type as "stash_type: Json<StashType>",
             stashes.title as "title?",
@@ -124,15 +134,15 @@ pub async fn get_character_stash_by_type<'c>(
                 AND stash_items.stash_id = stashes.stash_id
             ) as "items_amount!: i64"
         FROM stashes
-        INNER JOIN characters ON characters.user_id = stashes.user_id
         WHERE 
-            character_id = $1
-            AND stash_type = $2 
-            AND stashes.realm_id = characters.realm_id
+            owner_id = $1
+            AND stash_type = $2
+            AND realm_id = $3
             AND stashes.deleted_at IS NULL
         "#,
-        character_id,
-        stash_type
+        owner_id,
+        stash_type,
+        character.realm_id
     )
     .fetch_optional(executor)
     .await

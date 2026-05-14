@@ -586,7 +586,7 @@ pub fn BuildPanelHeader(
     let has_changed = Memo::new(move |_| {
         town_context
             .passives_tree_build
-            .with(|base_build| !passives_tree_build.read().eq(base_build))
+            .with(|base_build| passives_tree_build.read().iter().ne(base_build.iter()))
     });
 
     view! {
