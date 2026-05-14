@@ -13,6 +13,7 @@ pub enum StashType {
     #[default]
     User,
     Market,
+    Character,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -91,6 +91,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         benedictions,
                         last_grind,
                         passives_build,
+                        character_stash: _,
                         user_stash: _,
                         market_stash: _,
                     }) => {

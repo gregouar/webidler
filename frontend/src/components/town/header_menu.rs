@@ -160,13 +160,13 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
                     "Inventory"
                 </MenuButton>
+                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
+                    "Stash"
+                </MenuButton>
                 {move || {
                     (!disable_trade.get())
                         .then(|| {
                             view! {
-                                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
-                                    "Stash"
-                                </MenuButton>
                                 <MenuButton on:click=move |_| open_market() disabled=disable_panels>
                                     "Market"
                                     {move || {

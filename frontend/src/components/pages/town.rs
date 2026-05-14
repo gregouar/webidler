@@ -79,6 +79,7 @@ pub fn TownPage() -> impl IntoView {
                     passives_build,
                     benedictions,
                     last_grind,
+                    character_stash,
                     user_stash,
                     market_stash,
                 }) => {
@@ -92,6 +93,9 @@ pub fn TownPage() -> impl IntoView {
                     town_context.passives_tree_build.set(passives_build);
                     town_context.player_benedictions.set(benedictions);
                     town_context.last_grind.set(last_grind);
+                    if let Some(character_stash) = character_stash {
+                        town_context.character_stash.set(character_stash);
+                    }
                     if let Some(user_stash) = user_stash {
                         town_context.user_stash.set(user_stash);
                     }

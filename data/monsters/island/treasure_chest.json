@@ -42,6 +42,25 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Finger Snap",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "skill_type": "Attack",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Physical": [ 1, 1 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -241,8 +241,7 @@ pub fn Node(
             }
 
             on:mousedown=move |ev| {
-                if ev.button() == 0 && node_status().purchase_status == PurchaseStatus::Purchaseable
-                {
+                if ev.button() == 0 {
                     ev.stop_propagation()
                 }
             }
@@ -766,7 +765,6 @@ pub fn PassiveSkillStats(
                     let Some(passives_tree_specs) = passives_tree_specs.try_get() else {
                         return Vec::new();
                     };
-
                     passives_tree_specs
                         .nodes
                         .iter()
@@ -774,6 +772,7 @@ pub fn PassiveSkillStats(
                         .flat_map(|(_, node_specs)| node_specs.triggers.iter())
                         .cloned()
                         .map(|trigger_specs| {
+
                             view! {
                                 <div class="pb-2 list-none">
                                     <Separator />

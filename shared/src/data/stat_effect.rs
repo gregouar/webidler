@@ -155,6 +155,12 @@ pub enum StatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
+    StatusFaster {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
     SuccessChance {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
@@ -336,6 +342,18 @@ impl Matchable for StatType {
                     skill_filter,
                 },
                 StatusEscalation {
+                    damage_type: damage_type_2,
+                    skill_filter: skill_filter_2,
+                },
+            ) => {
+                compare_options(damage_type, damage_type_2) && skill_filter.is_match(skill_filter_2)
+            }
+            (
+                StatusFaster {
+                    damage_type,
+                    skill_filter,
+                },
+                StatusFaster {
                     damage_type: damage_type_2,
                     skill_filter: skill_filter_2,
                 },

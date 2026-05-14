@@ -515,12 +515,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         }
     });
 
-    // TODO: Make dynamic in case of reset?
-    let initial_auto_use = *game_context
-        .player_auto_skills
-        .read_untracked()
-        .get(index)
-        .unwrap_or(&true);
+    let auto_use = Signal::derive(move || {
+        *game_context
+            .player_auto_skills
+            .read()
+            .get(index)
+            .unwrap_or(&true)
+    });
 
     let just_triggered = Memo::new(move |_| {
         !rush_mode.get()
@@ -559,6 +560,12 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let set_auto_skill = move |value| {
+        game_context.player_auto_skills.update(|auto_skills| {
+            if let Some(auto_skill) = auto_skills.get_mut(index) {
+                *auto_skill = value;
+            }
+        });
+
         conn.send(
             &SetAutoSkillMessage {
                 skill_index: index as u8,
@@ -776,7 +783,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 >
                     <Toggle
                         toggle_callback=set_auto_skill
-                        initial=initial_auto_use
+                        initial=auto_use
                         disabled=disabled_auto
                         class="h-full max-h-full leading-none  py-1 xl:py-1.5"
                     >

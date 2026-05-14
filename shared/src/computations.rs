@@ -48,6 +48,7 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
     let stash_price = match stash.stash_type {
         StashType::User => constants::STASH_USER_PRICE,
         StashType::Market => constants::STASH_MARKET_PRICE,
+        StashType::Character => constants::STASH_USER_PRICE,
     };
 
     if stash.max_items < stash_price.start_size {

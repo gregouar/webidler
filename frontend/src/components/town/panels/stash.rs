@@ -50,7 +50,11 @@ enum StashTab {
 #[component]
 pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
     let town_context: TownContext = expect_context();
-    let stash = town_context.user_stash;
+    let stash = if town_context.character.read_untracked().is_ssf {
+        town_context.character_stash
+    } else {
+        town_context.user_stash
+    };
 
     let selected_item = RwSignal::new(SelectedItem::None);
     let selected_stash = RwSignal::new(None);
@@ -185,11 +189,22 @@ impl From<StashItem> for SelectedMarketItem {
 #[component]
 fn SelectBuyStash(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
     let town_context: TownContext = expect_context();
-    view! {
-        <div class="gap-2 p-1 xl:p-2 flex flex-col">
-            <StashTypeRow stash=town_context.user_stash selected_stash />
-            <StashTypeRow stash=town_context.market_stash selected_stash />
-        </div>
+
+    if town_context.character.read().is_ssf {
+        view! {
+            <div class="gap-2 p-1 xl:p-2 flex flex-col">
+                <StashTypeRow stash=town_context.character_stash selected_stash />
+            </div>
+        }
+        .into_any()
+    } else {
+        view! {
+            <div class="gap-2 p-1 xl:p-2 flex flex-col">
+                <StashTypeRow stash=town_context.user_stash selected_stash />
+                <StashTypeRow stash=town_context.market_stash selected_stash />
+            </div>
+        }
+        .into_any()
     }
 }
 
@@ -197,6 +212,7 @@ fn stash_type_str(stash_type: StashType) -> &'static str {
     match stash_type {
         StashType::User => "User Stash",
         StashType::Market => "Market Stash",
+        StashType::Character => "Character Stash",
     }
 }
 
@@ -288,6 +304,9 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                                 selected_stash.set(Some(response.stash.clone()));
                                 match response.stash.stash_type {
                                     StashType::User => town_context.user_stash.set(response.stash),
+                                    StashType::Character => {
+                                        town_context.character_stash.set(response.stash)
+                                    }
                                     StashType::Market => {
                                         town_context.market_stash.set(response.stash)
                                     }
@@ -583,7 +602,7 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
                         {
                             Ok(response) => {
                                 town_context.inventory.set(response.inventory);
-                                town_context.user_stash.set(response.stash);
+                                stash.set(response.stash);
                                 selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(
@@ -654,7 +673,7 @@ pub fn StoreDetails(
                         {
                             Ok(response) => {
                                 town_context.inventory.set(response.inventory);
-                                town_context.user_stash.set(response.stash);
+                                stash.set(response.stash);
                                 selected_item.set(SelectedItem::Removed(item.index));
                             }
                             Err(e) => show_toast(

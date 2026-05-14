@@ -156,6 +156,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         player_specs,
         player_inventory,
         player_state,
+        auto_skills,
         player_resources,
         player_stamina,
         monster_specs,
@@ -172,6 +173,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.player_specs.sync(player_specs);
     if let Some(player_inventory) = player_inventory {
         game_context.player_inventory.set(player_inventory);
+    }
+    if let Some(auto_skills) = auto_skills {
+        game_context.player_auto_skills.set(auto_skills);
     }
     game_context.player_resources.sync(player_resources);
     game_context.player_state.set(player_state);

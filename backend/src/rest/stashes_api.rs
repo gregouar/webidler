@@ -30,7 +30,7 @@ use crate::{
         data::inventory_data::inventory_data_to_player_inventory,
         systems::{inventory_controller, stashes_controller},
     },
-    rest::utils::{verify_character_in_town, verify_character_user, verify_ssf},
+    rest::utils::{verify_character_in_town, verify_character_user, verify_not_ssf},
 };
 
 use super::AppError;
@@ -52,19 +52,18 @@ fn verify_stash_access_write(
     character: &CharacterEntry,
     stash: &StashEntry,
 ) -> Result<(), AppError> {
-    if stash.user_id != character.user_id || stash.realm_id != character.realm_id {
+    if stash.realm_id != character.realm_id {
         return Err(AppError::Forbidden);
     }
-    Ok(())
-}
 
-fn verify_stash_access_read(user: &User, stash: &StashEntry) -> Result<(), AppError> {
-    if !match stash.stash_type.0 {
-        StashType::Market => true,
-        StashType::User => stash.user_id == user.user_id,
-    } {
+    if stash.user_id != character.user_id {
         return Err(AppError::Forbidden);
     }
+
+    if !matches!(stash.stash_type.0, StashType::Character) {
+        verify_not_ssf(character)?;
+    }
+
     Ok(())
 }
 
@@ -79,30 +78,39 @@ pub async fn post_upgrade_stash(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_ssf(&character)?;
+    if !match payload.stash_type {
+        StashType::Character => character.is_ssf,
+        StashType::User | StashType::Market => !character.is_ssf,
+    } {
+        return Err(AppError::UserError("invalid stash type".into()));
+    }
+
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let stash = match db::stashes::get_character_stash_by_type(
-        &mut *tx,
-        &payload.character_id,
-        payload.stash_type,
-    )
-    .await?
-    {
-        Some(stash) => stash,
-        None => {
-            db::stashes::create_stash(
-                &mut *tx,
-                character.user_id,
-                character.realm_id.clone(),
-                payload.stash_type,
-                0,
-                "New stash",
-            )
+    let stash =
+        match db::stashes::get_character_stash_by_type(&mut *tx, &character, payload.stash_type)
             .await?
-        }
-    };
+        {
+            Some(stash) => stash,
+            None => {
+                let stash_owner_id = match payload.stash_type {
+                    StashType::Character => character.character_id,
+                    StashType::User | StashType::Market => character.user_id,
+                };
+
+                db::stashes::create_stash(
+                    &mut *tx,
+                    character.user_id,
+                    stash_owner_id,
+                    character.realm_id.clone(),
+                    payload.stash_type,
+                    0,
+                    "New stash",
+                )
+                .await?
+            }
+        };
 
     verify_stash_access_write(&character, &stash)?;
 
@@ -146,7 +154,6 @@ pub async fn post_exchange_gems(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_ssf(&character)?;
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
@@ -194,7 +201,9 @@ pub async fn post_browse_stash(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_stash_access_read(&user, &stash)?;
+    if stash.user_id != user.user_id {
+        return Err(AppError::Forbidden);
+    }
 
     let (items, has_more) = db::stash_items::read_stash_items(
         &db_pool,
@@ -229,7 +238,6 @@ pub async fn post_take_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_ssf(&character)?;
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
@@ -283,7 +291,6 @@ pub async fn post_store_stash_item(
         .await?
         .ok_or(AppError::NotFound)?;
 
-    verify_ssf(&character)?;
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 

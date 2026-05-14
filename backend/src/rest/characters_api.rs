@@ -143,28 +143,32 @@ async fn read_character_details(
     master_store: MasterStore,
     character_id: UserCharacterId,
 ) -> Result<MsgPack<GetCharacterDetailsResponse>, AppError> {
+    let character = db::characters::read_character(&db_pool, &character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
     let (
-        character,
         areas_completed,
         character_data,
         passives_build,
         last_grind_data,
+        character_stash,
         user_stash,
         market_stash,
     ) = tokio::join!(
-        db::characters::read_character(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
         db::characters_builds::load_character_build(&db_pool, &character_id),
         db::game_stats::load_last_game_stats(&db_pool, &character_id),
-        db::stashes::get_character_stash_by_type(&db_pool, &character_id, StashType::User),
-        db::stashes::get_character_stash_by_type(&db_pool, &character_id, StashType::Market),
+        db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Character),
+        db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::User),
+        db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Market),
     );
 
-    let character = character?.ok_or(AppError::NotFound)?.into();
     let areas_completed = areas_completed?;
     let (inventory_data, ascension_data, benedictions) = character_data?.unwrap_or_default();
     let last_grind_data = last_grind_data?;
+    let character_stash = character_stash?.map(|x| x.into());
     let user_stash = user_stash?.map(|x| x.into());
     let market_stash = market_stash?.map(|x| x.into());
 
@@ -194,13 +198,14 @@ async fn read_character_details(
     });
 
     Ok(MsgPack(GetCharacterDetailsResponse {
-        character,
+        character: character.into(),
         areas,
         inventory,
         ascension,
         passives_build,
         benedictions,
         last_grind,
+        character_stash,
         user_stash,
         market_stash,
     }))

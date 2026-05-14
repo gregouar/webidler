@@ -322,14 +322,17 @@ pub fn FancyButton(
 
 #[component]
 pub fn Toggle(
-    #[prop(default = false)] initial: bool,
+    #[prop(default = Signal::derive(|| false), into)] initial: Signal<bool>,
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
     #[prop(optional)] class: Option<&'static str>,
     mut toggle_callback: impl FnMut(bool) + 'static,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
-    let checked: RwSignal<bool> = RwSignal::new(initial);
+    let checked: RwSignal<bool> = RwSignal::new(initial.get_untracked());
+
+    Effect::new(move || checked.set(initial.get()));
+
     let switch_value = move |ev: web_sys::MouseEvent| {
         ev.stop_propagation();
         let new_value = !checked.get();

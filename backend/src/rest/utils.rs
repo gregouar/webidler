@@ -29,7 +29,7 @@ pub fn verify_character_in_town(character: &CharacterEntry) -> Result<(), AppErr
     Ok(())
 }
 
-pub fn verify_ssf(character: &CharacterEntry) -> Result<(), AppError> {
+pub fn verify_not_ssf(character: &CharacterEntry) -> Result<(), AppError> {
     if character.is_ssf {
         return Err(AppError::UserError(
             "SSF character cannot do that".to_string(),

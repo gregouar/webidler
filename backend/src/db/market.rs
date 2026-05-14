@@ -196,7 +196,7 @@ pub async fn read_market_items<'c>(
         SELECT 
             market.market_id,
             stash_items.stash_item_id, 
-            owner.user_id as "owner_id!: UserCharacterId", 
+            owner.user_id as "owner_id!: UserId", 
             owner.username as "owner_name!: String",
             market.recipient_id as "recipient_id?: UserId",
             recipient.username as "recipient_name?: String",

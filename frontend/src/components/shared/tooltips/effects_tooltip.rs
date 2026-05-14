@@ -547,6 +547,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 skill_filter_str(skill_filter, " with ", true),
             )
         }
+        StatType::StatusFaster {
+            damage_type,
+            skill_filter,
+        } => {
+            format!(
+                "{}{} Compression",
+                damage_over_time_type_str(*damage_type),
+                skill_filter_str(skill_filter, " with ", true),
+            )
+        }
         StatType::StatusResistance {
             skill_type,
             status_type,
@@ -811,6 +821,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             format!(
                 "{}{} Escalates by {}% More Damage per Second",
+                damage_over_time_type_str(*damage_type),
+                skill_filter_str(skill_filter, " inflicted by ", true),
+                format_flat_number(value, false),
+            )
+        }
+        StatType::StatusFaster {
+            damage_type,
+            skill_filter,
+        } => {
+            format!(
+                "{}{} Deal Damage {}% Faster",
                 damage_over_time_type_str(*damage_type),
                 skill_filter_str(skill_filter, " inflicted by ", true),
                 format_flat_number(value, false),

@@ -72,6 +72,7 @@ fn handle_client_message(
             if let Some(x) = game_data
                 .player_controller
                 .auto_skills
+                .mutate()
                 .get_mut(m.skill_index as usize)
             {
                 *x = m.auto_use;
