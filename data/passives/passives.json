@@ -117,16 +117,16 @@
         "socket": false
       },
       "03373c2b-2526-4ca7-bc0e-d18b008284c7": {
-        "name": "Maximum Mana",
-        "icon": "passives/mana.svg",
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
         "x": -47.5,
         "y": 172.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Life",
         "effects": [
           {
-            "stat": "Mana",
+            "stat": "Life",
             "modifier": "Increased",
             "value": 4.0
           }
@@ -135,7 +135,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Mana",
+            "stat": "Life",
             "modifier": "Increased",
             "value": 2.0
           }
@@ -3066,16 +3066,16 @@
         "socket": false
       },
       "3a0b7c1b-5411-4cf9-808c-f0ec5ea514db": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
         "x": 72.5,
         "y": -167.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Life",
+        "node_type": "Mana",
         "effects": [
           {
-            "stat": "Life",
+            "stat": "Mana",
             "modifier": "Increased",
             "value": 4.0
           }
@@ -3084,7 +3084,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Life",
+            "stat": "Mana",
             "modifier": "Increased",
             "value": 2.0
           }
@@ -5432,16 +5432,16 @@
         "socket": false
       },
       "607e1e65-9325-4859-bcc9-c36e798059c8": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
         "x": 85.0,
         "y": -175.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Life",
+        "node_type": "Mana",
         "effects": [
           {
-            "stat": "Life",
+            "stat": "Mana",
             "modifier": "Increased",
             "value": 4.0
           }
@@ -5450,7 +5450,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Life",
+            "stat": "Mana",
             "modifier": "Increased",
             "value": 2.0
           }
@@ -5708,16 +5708,16 @@
         "socket": false
       },
       "656cf6f9-32f1-488e-b188-e81cae806e70": {
-        "name": "Maximum Life",
-        "icon": "passives/life.svg",
+        "name": "Maximum Mana",
+        "icon": "passives/mana.svg",
         "x": 72.5,
         "y": -182.5,
         "size": 1,
         "root_node": false,
-        "node_type": "Life",
+        "node_type": "Mana",
         "effects": [
           {
-            "stat": "Life",
+            "stat": "Mana",
             "modifier": "Increased",
             "value": 6.0
           }
@@ -5726,7 +5726,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Life",
+            "stat": "Mana",
             "modifier": "Increased",
             "value": 3.0
           }
@@ -8208,16 +8208,16 @@
         "socket": false
       },
       "84896a91-0b06-4860-92be-b52a225a0b10": {
-        "name": "Maximum Mana",
-        "icon": "passives/mana.svg",
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
         "x": -57.5,
         "y": 165.0,
         "size": 1,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Life",
         "effects": [
           {
-            "stat": "Mana",
+            "stat": "Life",
             "modifier": "Increased",
             "value": 6.0
           }
@@ -8226,7 +8226,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Mana",
+            "stat": "Life",
             "modifier": "Increased",
             "value": 3.0
           }
@@ -11835,10 +11835,13 @@
                               },
                               "ignore_stat_effects": [
                                 {
-                                  "CritChance": {
+                                  "Damage": {
                                     "skill_type": null,
                                     "skill_id": null,
-                                    "skill_description": null
+                                    "skill_description": null,
+                                    "damage_type": null,
+                                    "min_max": null,
+                                    "is_hit": null
                                   }
                                 },
                                 {
@@ -11849,13 +11852,10 @@
                                   }
                                 },
                                 {
-                                  "Damage": {
+                                  "CritChance": {
                                     "skill_type": null,
                                     "skill_id": null,
-                                    "skill_description": null,
-                                    "damage_type": null,
-                                    "min_max": null,
-                                    "is_hit": null
+                                    "skill_description": null
                                   }
                                 }
                               ],
@@ -12572,14 +12572,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -12596,6 +12588,14 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
                     }
                   }
                 ],
@@ -12707,6 +12707,14 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -12723,14 +12731,6 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
                     }
                   }
                 ],
@@ -12842,16 +12842,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null,
@@ -12866,6 +12856,16 @@
                       "skill_id": null,
                       "skill_description": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14304,16 +14304,16 @@
         "socket": false
       },
       "e34d0808-72ff-461f-b352-0e450ede36f6": {
-        "name": "Maximum Mana",
-        "icon": "passives/mana.svg",
+        "name": "Maximum Life",
+        "icon": "passives/life.svg",
         "x": -52.5,
         "y": 185.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Mana",
+        "node_type": "Life",
         "effects": [
           {
-            "stat": "Mana",
+            "stat": "Life",
             "modifier": "Increased",
             "value": 4.0
           }
@@ -14322,7 +14322,7 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": "Mana",
+            "stat": "Life",
             "modifier": "Increased",
             "value": 2.0
           }
