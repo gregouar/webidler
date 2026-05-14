@@ -21,6 +21,7 @@ use crate::{
     game::{
         data::{event::EventsQueue, master_store::SkillsStore},
         systems::{characters_controller, inventory_controller, player_updater, stats_updater},
+        utils::LazySyncer,
     },
     rest::AppError,
 };
@@ -29,7 +30,7 @@ use super::{characters_controller::Target, items_controller, skills_controller};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlayerController {
-    pub auto_skills: Vec<bool>,
+    pub auto_skills: LazySyncer<Vec<bool>>,
 
     #[serde(skip_serializing, skip_deserializing)]
     pub use_skills: Vec<usize>,
@@ -38,7 +39,7 @@ pub struct PlayerController {
 impl PlayerController {
     pub fn init(specs: &PlayerBaseSpecs) -> Self {
         PlayerController {
-            auto_skills: Vec::with_capacity(specs.max_skills as usize),
+            auto_skills: Vec::with_capacity(specs.max_skills as usize).into(),
             use_skills: Vec::with_capacity(specs.max_skills as usize),
         }
     }
@@ -143,7 +144,7 @@ impl PlayerController {
             .enumerate()
         {
             // Always keep enough mana for a manual trigger, could be optional
-            if (!self.auto_skills.get(i).unwrap_or(&false)
+            if (!self.auto_skills.read().get(i).unwrap_or(&false)
                 || no_auto_use
                 || (skill_specs.mana_cost.get() > 0.0
                     && mana_available.get() < min_mana_needed + skill_specs.mana_cost.get()))
@@ -440,7 +441,10 @@ pub fn equip_base_skill(
         },
     );
 
-    player_controller.auto_skills.insert(index, auto_use);
+    player_controller
+        .auto_skills
+        .mutate()
+        .insert(index, auto_use);
 }
 
 pub fn unequip_base_skill(
@@ -460,8 +464,8 @@ pub fn unequip_base_skill(
             .remove(skill_index);
     }
 
-    if skill_index < player_controller.auto_skills.len() {
-        player_controller.auto_skills.remove(skill_index);
+    if skill_index < player_controller.auto_skills.read().len() {
+        player_controller.auto_skills.mutate().remove(skill_index);
     }
 }
 

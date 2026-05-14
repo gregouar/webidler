@@ -32,7 +32,7 @@ pub async fn sync_init_game(
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
                 last_skills_bought,
-                auto_skills: game_data.player_controller.auto_skills.clone(),
+                auto_skills: game_data.player_controller.auto_skills.read().clone(),
             }
             .into(),
         )
@@ -54,6 +54,7 @@ pub async fn sync_update_game(
                 player_specs: game_data.player_specs.sync(),
                 player_inventory: game_data.player_inventory.sync(),
                 player_state: game_data.player_state.clone(),
+                auto_skills: game_data.player_controller.auto_skills.sync(),
                 player_resources: game_data.player_resources.sync(),
                 player_stamina: game_data.player_stamina,
                 monster_specs: game_data.monster_base_specs.sync(),

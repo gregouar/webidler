@@ -1,9 +1,17 @@
 /// A helper class to keep track of whether a data struct should be resync with the client.
 /// Based on the fact the data was accessed as mutable.
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[serde(
+    transparent,
+    bound(
+        serialize = "T: serde::Serialize",
+        deserialize = "T: serde::de::DeserializeOwned"
+    )
+)]
 pub struct LazySyncer<T: Clone> {
     inner: T,
+    #[serde(skip)]
     need_to_sync: bool,
 }
 
@@ -41,5 +49,11 @@ impl<T: Clone> LazySyncer<T> {
 
     pub fn need_to_sync(&self) -> bool {
         self.need_to_sync
+    }
+}
+
+impl<T: Clone> From<T> for LazySyncer<T> {
+    fn from(value: T) -> Self {
+        LazySyncer::new(value)
     }
 }

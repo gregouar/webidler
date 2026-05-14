@@ -70,6 +70,7 @@ pub struct SyncGameStateMessage {
     pub player_specs: Option<PlayerSpecs>,
     pub player_inventory: Option<PlayerInventory>,
     pub player_state: PlayerState,
+    pub auto_skills: Option<Vec<bool>>,
     pub player_resources: Option<PlayerResources>,
     pub player_stamina: Duration,
     pub monster_specs: Option<Vec<MonsterSpecs>>,
