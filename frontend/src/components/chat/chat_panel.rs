@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 use codee::{Decoder, binary::MsgpackSerdeCodec};
 use leptos::{
@@ -130,23 +130,25 @@ pub fn ChatPanel() -> impl IntoView {
     };
 
     let messages_node = NodeRef::<leptos::html::Div>::new();
+    let should_stick_to_bottom = RwSignal::new(true);
+
     Effect::new(move || {
         let _ = chat_context.messages.read();
-        if let Some(el) = messages_node.get()
-            && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
-            && is_near_bottom(&html_el)
+        let _ = chat_context.selected_channels.read();
+        if should_stick_to_bottom.get_untracked()
+            && !chat_context.minimized.get_untracked()
+            && chat_context.opened.get_untracked()
         {
-            html_el.set_scroll_top(html_el.scroll_height());
+            scroll_messages_to_bottom_after_render(messages_node);
         }
     });
 
     Effect::new(move || {
         if !chat_context.minimized.get()
             && chat_context.opened.get()
-            && let Some(el) = messages_node.get()
-            && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
         {
-            html_el.set_scroll_top(html_el.scroll_height());
+            should_stick_to_bottom.set(true);
+            scroll_messages_to_bottom_after_render(messages_node);
         }
     });
 
@@ -263,6 +265,13 @@ pub fn ChatPanel() -> impl IntoView {
                                 class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
                                 text-wrap wrap-break-word"
                                 node_ref=messages_node
+                                on:scroll=move |_| {
+                                    if let Some(el) = messages_node.get()
+                                        && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
+                                    {
+                                        should_stick_to_bottom.set(is_near_bottom(&html_el));
+                                    }
+                                }
                             >
                                 <For
                                     each=filtered_messages
@@ -553,4 +562,21 @@ fn is_near_bottom(el: &web_sys::HtmlElement) -> bool {
     let client_height = el.client_height() as f64;
 
     (scroll_height - scroll_top - client_height) < 80.0
+}
+
+fn scroll_messages_to_bottom_after_render(messages_node: NodeRef<leptos::html::Div>) {
+    set_timeout(
+        move || {
+            if let Some(el) = messages_node.get()
+                && let Ok(html_el) = el.dyn_into::<web_sys::HtmlElement>()
+            {
+                scroll_to_bottom(&html_el);
+            }
+        },
+        Duration::from_millis(0),
+    );
+}
+
+fn scroll_to_bottom(el: &web_sys::HtmlElement) {
+    el.set_scroll_top(el.scroll_height());
 }
