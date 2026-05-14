@@ -13,7 +13,7 @@ pub enum ChatChannel {
     Whisper(UserId),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatMessage {
     pub channel: ChatChannel,
     pub sent_at: DateTime<Utc>,
@@ -47,6 +47,6 @@ pub fn strip_control_chars(input: String) -> String {
     validate(
         predicate = |bytes: &Vec<u8>| bytes.len() <= MAX_LINKED_ITEM_SIZE
     ),
-    derive(Serialize, Deserialize, Debug, Clone, AsRef)
+    derive(Serialize, Deserialize, Debug, Clone, PartialEq, AsRef)
 )]
 pub struct LinkedItemBytes(Vec<u8>);

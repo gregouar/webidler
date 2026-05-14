@@ -1,8 +1,8 @@
-use codee::{Encoder, binary::MsgpackSerdeCodec};
+use codee::{Encoder, binary::MsgpackSerdeCodec, string::JsonSerdeCodec};
 use leptos::prelude::*;
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
-    core::ConnectionReadyState, use_websocket_with_options,
+    core::ConnectionReadyState, storage, use_websocket_with_options,
 };
 use shared::data::item::ItemSpecs;
 use std::{
@@ -24,6 +24,8 @@ use shared_chat::{
 use crate::components::{accessibility::AccessibilityContext, auth::AuthContext, ui::toast::*};
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
+const CHAT_HISTORY_CAPACITY: usize = 100;
+const CHAT_HISTORY_STORAGE_KEY: &str = "chat_history";
 
 #[derive(Clone)]
 pub struct ChatContext {
@@ -32,6 +34,7 @@ pub struct ChatContext {
     pub users_map: RwSignal<HashMap<UserId, String>>,
     // TODO: Split in multiple buckets to keep longer system message than global
     pub messages: RwSignal<RingBuffer<ChatMessage>>,
+    set_stored_messages: WriteSignal<Vec<ChatMessage>>,
     pub send: Callback<String>,
 
     pub minimized: RwSignal<bool>,
@@ -130,6 +133,8 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     // Chat
     let write_channel = RwSignal::new(ChatChannel::Global);
     let linked_item = RwSignal::new(None);
+    let (stored_messages, set_stored_messages, _) =
+        storage::use_session_storage::<Vec<ChatMessage>, JsonSerdeCodec>(CHAT_HISTORY_STORAGE_KEY);
 
     let send = Callback::new(move |msg| {
         if let Ok(content) = ChatContent::try_new(msg) {
@@ -162,7 +167,11 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         user_id: RwSignal::new(None),
         send,
         users_map: Default::default(),
-        messages: RwSignal::new(RingBuffer::new(100)),
+        messages: RwSignal::new(ring_buffer_from_messages(
+            stored_messages.get_untracked(),
+            CHAT_HISTORY_CAPACITY,
+        )),
+        set_stored_messages,
         // TODO: Store in storage
         minimized: RwSignal::new(true),
         opened,
@@ -229,6 +238,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                     .insert(m.target_user_id, username);
             }
             chat_context.messages.write().push(m.chat_message);
+            persist_messages(chat_context);
             chat_context
                 .write_channel
                 .set(ChatChannel::Whisper(m.target_user_id));
@@ -254,5 +264,26 @@ fn push_message(chat_context: &ChatContext, message: ChatMessage) {
         .any(|m| m.sent_at == message.sent_at && m.user_id == message.user_id)
     {
         chat_context.messages.write().push(message);
+        persist_messages(chat_context);
     }
+}
+
+fn ring_buffer_from_messages(
+    messages: Vec<ChatMessage>,
+    capacity: usize,
+) -> RingBuffer<ChatMessage> {
+    let mut buffer = RingBuffer::new(capacity);
+    buffer.extend(messages.into_iter());
+    buffer
+}
+
+fn persist_messages(chat_context: &ChatContext) {
+    chat_context.set_stored_messages.set(
+        chat_context
+            .messages
+            .read_untracked()
+            .iter()
+            .cloned()
+            .collect(),
+    );
 }
