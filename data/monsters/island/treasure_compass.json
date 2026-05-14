@@ -42,6 +42,25 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Electrostatic Discharge",
+      "icon": "skills/attack.svg",
+      "cooldown": 2.0,
+      "skill_type": "Spell",
+      "targets": [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": {
+                  "Storm": [ 0, 1 ]
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
