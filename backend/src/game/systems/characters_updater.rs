@@ -372,6 +372,7 @@ fn compute_character_specs(
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
             | StatType::StatusEscalation { .. }
+            | StatType::StatusFaster { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }

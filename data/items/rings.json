@@ -924,7 +924,7 @@
   },
   "ring_8": {
     "name": "Regal Ring",
-    "icon": "items/rings/runic_ring.webp",
+    "icon": "items/rings/regal_ring.webp",
     "description": null,
     "slot": "Ring",
     "extra_slots": [ ],

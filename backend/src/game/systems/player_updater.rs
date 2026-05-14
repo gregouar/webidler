@@ -371,6 +371,7 @@ fn modify_player_specs(
             | StatType::StatusDuration { .. }
             | StatType::StatusPower { .. }
             | StatType::StatusEscalation { .. }
+            | StatType::StatusFaster { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {

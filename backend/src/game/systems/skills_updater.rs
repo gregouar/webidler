@@ -771,6 +771,19 @@ pub fn apply_stat_effect_on_skill_effect(
                     {
                         status_effect.escalation.apply_effect(effect);
                     }
+
+                    if let StatType::StatusFaster {
+                        skill_filter,
+                        damage_type: stat_damage_type,
+                    } = &effect.stat
+                        && skill_filter.is_match_with_skill(skill_type, skill_id)
+                        && compare_options(stat_damage_type, &Some(damage_type))
+                    {
+                        status_effect.value.min.apply_effect(effect);
+                        status_effect.value.max.apply_effect(effect);
+                        duration.min.apply_negative_effect(effect);
+                        duration.max.apply_negative_effect(effect);
+                    }
                 }
             }
         }

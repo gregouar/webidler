@@ -4,8 +4,8 @@
       "0088c436-0b23-4993-a966-b57d2444e996": {
         "name": "Evade Chance",
         "icon": "passives/curled_leaf.svg",
-        "x": 87.5,
-        "y": -127.5,
+        "x": 90.0,
+        "y": -130.0,
         "size": 1,
         "root_node": false,
         "node_type": "Armor",
@@ -691,8 +691,8 @@
       "0d8871b2-5eba-4bf5-8a71-e246fad4ffa8": {
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
-        "x": -135.0,
-        "y": -112.5,
+        "x": -115.0,
+        "y": -102.5,
         "size": 1,
         "root_node": false,
         "node_type": "Physical",
@@ -1354,7 +1354,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -1363,7 +1363,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1386,7 +1386,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -1400,7 +1400,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1606,7 +1606,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1622,7 +1622,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1697,8 +1697,8 @@
       "2136383e-ac78-453c-ac64-aabb713cc809": {
         "name": "Evade Chance",
         "icon": "passives/curled_leaf.svg",
-        "x": 97.5,
-        "y": -110.0,
+        "x": 92.5,
+        "y": -112.5,
         "size": 0,
         "root_node": false,
         "node_type": "Armor",
@@ -2298,7 +2298,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2307,7 +2307,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2458,7 +2458,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -2467,7 +2467,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3166,7 +3166,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -3175,7 +3175,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3221,6 +3221,143 @@
             },
             "modifier": "More",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "3ce0fc3b-c756-4ca9-be29-2662cbc13c9f": {
+        "name": "Damage against Cursed Enemies",
+        "icon": "passives/warlock_eye.svg",
+        "x": 110.0,
+        "y": -120.0,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": -20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": -10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3793,8 +3930,8 @@
       "47fae422-2a59-43d7-88bd-93f91ddcb01f": {
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
-        "x": -120.0,
-        "y": -107.5,
+        "x": -127.5,
+        "y": -97.5,
         "size": 0,
         "root_node": false,
         "node_type": "Physical",
@@ -4419,7 +4556,7 @@
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
         "x": -105.0,
-        "y": -127.5,
+        "y": -130.0,
         "size": 1,
         "root_node": false,
         "node_type": "Attack",
@@ -4904,7 +5041,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -4918,7 +5055,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5085,6 +5222,143 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "5d2f12d2-62ac-433d-adfb-f314d4b58554": {
+        "name": "Damage against Cursed Enemies",
+        "icon": "passives/warlock_eye.svg",
+        "x": 105.0,
+        "y": -130.0,
+        "size": 1,
+        "root_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 25.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": -25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": -15.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "5d4d334b-962b-49ea-8968-c289ad08bffd": {
         "name": "Stun Chance",
         "icon": "passives/star_swirl.svg",
@@ -5137,7 +5411,7 @@
       "5dcad32d-9043-48ac-9766-757aba9751de": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -97.5,
+        "x": -110.0,
         "y": -120.0,
         "size": 0,
         "root_node": false,
@@ -5311,7 +5585,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -5325,7 +5599,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5593,7 +5867,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -5602,7 +5876,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5924,6 +6198,143 @@
             },
             "modifier": "Increased",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "6974ae9c-fbea-4029-9809-6247f5371c11": {
+        "name": "Damage against Cursed Enemies",
+        "icon": "passives/warlock_eye.svg",
+        "x": 102.5,
+        "y": -112.5,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Utility",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": -20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_type": null,
+                      "skill_type": "Curse",
+                      "not": true
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": -10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6463,7 +6874,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -6472,7 +6883,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6540,7 +6951,7 @@
                 "skill_description": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -10.0
           }
         ],
@@ -6555,7 +6966,7 @@
                 "skill_description": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -5.0
           }
         ],
@@ -6821,7 +7232,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -6830,7 +7241,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7413,7 +7824,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -7427,7 +7838,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7765,7 +8176,7 @@
       "8006615c-85c9-4d08-8330-13138fd6e918": {
         "name": "Open Wound Chance",
         "icon": "passives/sword_wound.svg",
-        "x": -117.5,
+        "x": -115.0,
         "y": -92.5,
         "size": 0,
         "root_node": false,
@@ -8632,7 +9043,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -8641,7 +9052,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8704,7 +9115,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -8713,7 +9124,7 @@
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10029,6 +10440,47 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "a791e310-90d6-4835-80ea-9d204f57a0e6": {
+        "name": "Faster Damage over Time",
+        "icon": "passives/chemical_bolt.svg",
+        "x": -92.5,
+        "y": -112.5,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "More",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "a8c6e35c-bd30-4211-9e6d-65d59ad7e375": {
         "name": "Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
@@ -10756,7 +11208,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -10770,7 +11222,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11119,7 +11571,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -11128,7 +11580,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11685,8 +12137,8 @@
       "c673deb7-950b-4b12-9c10-888e6cf575c2": {
         "name": "Evade Chance",
         "icon": "passives/curled_leaf.svg",
-        "x": 100.0,
-        "y": -122.5,
+        "x": 85.0,
+        "y": -120.0,
         "size": 0,
         "root_node": false,
         "node_type": "Armor",
@@ -12300,7 +12752,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -12309,7 +12761,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12963,7 +13415,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -13607,7 +14059,7 @@
                 "skill_description": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -20.0
           }
         ],
@@ -13622,7 +14074,7 @@
                 "skill_description": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -10.0
           }
         ],
@@ -13931,7 +14383,7 @@
                 "skill_description": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -10.0
           }
         ],
@@ -13946,7 +14398,7 @@
                 "skill_description": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": -5.0
           }
         ],
@@ -13972,7 +14424,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -13988,7 +14440,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14325,6 +14777,47 @@
             "stat": "Life",
             "modifier": "Increased",
             "value": 2.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "e3db851e-32c3-4d37-a2c3-371dbff0fdf6": {
+        "name": "Faster Damage over Time",
+        "icon": "passives/chemical_bolt.svg",
+        "x": -90.0,
+        "y": -130.0,
+        "size": 1,
+        "root_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "More",
+            "value": 25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14779,7 +15272,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 40.0
+            "value": 50.0
           },
           {
             "stat": {
@@ -14810,7 +15303,7 @@
               }
             },
             "modifier": "More",
-            "value": 40.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -15179,7 +15672,7 @@
                 ]
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": 50.0
           },
           {
@@ -15228,8 +15721,8 @@
                 ]
               }
             },
-            "modifier": "Increased",
-            "value": 30.0
+            "modifier": "More",
+            "value": 10.0
           },
           {
             "stat": {
@@ -15646,6 +16139,47 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "f7105a6f-a1a9-455d-9518-459860111e27": {
+        "name": "Faster Damage over Time",
+        "icon": "passives/chemical_bolt.svg",
+        "x": -85.0,
+        "y": -120.0,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "More",
+            "value": 20.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "More",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "f7dcbf75-2d58-4b4c-822c-4a11343432d9": {
         "name": "Socket",
         "icon": "",
@@ -15664,8 +16198,8 @@
       "fbb650a9-a9a1-4a15-a435-7ffbb4489be5": {
         "name": "Threat Damage",
         "icon": "passives/threat_damage.svg",
-        "x": -100.0,
-        "y": -110.0,
+        "x": -102.5,
+        "y": -112.5,
         "size": 0,
         "root_node": false,
         "node_type": "Attack",
@@ -17708,6 +18242,30 @@
       {
         "from": "44f37475-c28a-435a-be6c-591a14d6fd64",
         "to": "833fb00d-098c-43bc-890b-acae0d1a7187"
+      },
+      {
+        "from": "a791e310-90d6-4835-80ea-9d204f57a0e6",
+        "to": "03836189-8913-45b5-bd89-e658b31e79bd"
+      },
+      {
+        "from": "a791e310-90d6-4835-80ea-9d204f57a0e6",
+        "to": "f7105a6f-a1a9-455d-9518-459860111e27"
+      },
+      {
+        "from": "f7105a6f-a1a9-455d-9518-459860111e27",
+        "to": "e3db851e-32c3-4d37-a2c3-371dbff0fdf6"
+      },
+      {
+        "from": "140fa424-f0f3-42b3-927e-b13777d1070e",
+        "to": "6974ae9c-fbea-4029-9809-6247f5371c11"
+      },
+      {
+        "from": "6974ae9c-fbea-4029-9809-6247f5371c11",
+        "to": "3ce0fc3b-c756-4ca9-be29-2662cbc13c9f"
+      },
+      {
+        "from": "3ce0fc3b-c756-4ca9-be29-2662cbc13c9f",
+        "to": "5d2f12d2-62ac-433d-adfb-f314d4b58554"
       }
     ]
   }
