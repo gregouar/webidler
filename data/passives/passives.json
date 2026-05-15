@@ -689,8 +689,8 @@
         "socket": false
       },
       "0d8871b2-5eba-4bf5-8a71-e246fad4ffa8": {
-        "name": "Open Wound Chance",
-        "icon": "passives/sword_wound.svg",
+        "name": "Open Wound Effects",
+        "icon": "passives/large_wound.svg",
         "x": -115.0,
         "y": -102.5,
         "size": 1,
@@ -699,28 +699,7 @@
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "modifier": "Increased",
-            "value": 15.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
+              "StatusPower": {
                 "status_type": {
                   "Trigger": {
                     "trigger_id": "open_wound",
@@ -729,11 +708,12 @@
                 },
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null
+                "skill_description": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -741,28 +721,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "modifier": "Increased",
-            "value": 5.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
+              "StatusPower": {
                 "status_type": {
                   "Trigger": {
                     "trigger_id": "open_wound",
@@ -771,11 +730,12 @@
                 },
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null
+                "skill_description": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3928,8 +3888,8 @@
         "socket": false
       },
       "47fae422-2a59-43d7-88bd-93f91ddcb01f": {
-        "name": "Open Wound Chance",
-        "icon": "passives/sword_wound.svg",
+        "name": "Open Wound Effects",
+        "icon": "passives/large_wound.svg",
         "x": -127.5,
         "y": -97.5,
         "size": 0,
@@ -3938,20 +3898,17 @@
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusPower": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
-                  }
-                }
+                "min_max": null
               }
             },
             "modifier": "Increased",
@@ -3963,20 +3920,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusPower": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
-                  }
-                }
+                "min_max": null
               }
             },
             "modifier": "Increased",
@@ -8174,8 +8128,8 @@
         "socket": false
       },
       "8006615c-85c9-4d08-8330-13138fd6e918": {
-        "name": "Open Wound Chance",
-        "icon": "passives/sword_wound.svg",
+        "name": "Open Wound Effects",
+        "icon": "passives/large_wound.svg",
         "x": -115.0,
         "y": -92.5,
         "size": 0,
@@ -8184,20 +8138,17 @@
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusPower": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
-                  }
-                }
+                "min_max": null
               }
             },
             "modifier": "Increased",
@@ -8209,20 +8160,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusPower": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
-                  }
-                }
+                "min_max": null
               }
             },
             "modifier": "Increased",
@@ -12222,13 +12170,17 @@
             "modifiers": [
               {
                 "stat": {
-                  "Damage": {
+                  "StatusPower": {
+                    "status_type": {
+                      "Trigger": {
+                        "trigger_id": "open_wound",
+                        "trigger_description": "Open Wound"
+                      }
+                    },
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null,
-                    "damage_type": "Physical",
-                    "min_max": null,
-                    "is_hit": null
+                    "min_max": null
                   }
                 },
                 "modifier": "Flat",
@@ -12243,7 +12195,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 25.0,
+                  "value": 35.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -12253,7 +12205,7 @@
                         "Trigger": {
                           "name": "Open Wound",
                           "icon": "passives/open_wound.svg",
-                          "description": "Takes 50% of the initial hit's Physical Damage",
+                          "description": null,
                           "trigger_id": "open_wound",
                           "OnTakeHit": {
                             "skill_type": null,
@@ -12267,7 +12219,23 @@
                             "conditions": []
                           },
                           "target": "SameTarget",
-                          "modifiers": [],
+                          "modifiers": [
+                            {
+                              "stat": {
+                                "Damage": {
+                                  "skill_type": null,
+                                  "skill_id": null,
+                                  "skill_description": null,
+                                  "damage_type": "Physical",
+                                  "min_max": null,
+                                  "is_hit": null
+                                }
+                              },
+                              "modifier": "Flat",
+                              "factor": 1.0,
+                              "source": "TriggerStatusValue"
+                            }
+                          ],
                           "skill_range": "Melee",
                           "skill_type": "Other",
                           "effects": [
@@ -12297,14 +12265,14 @@
                                   }
                                 },
                                 {
-                                  "CritDamage": {
+                                  "CritChance": {
                                     "skill_type": null,
                                     "skill_id": null,
                                     "skill_description": null
                                   }
                                 },
                                 {
-                                  "CritChance": {
+                                  "CritDamage": {
                                     "skill_type": null,
                                     "skill_id": null,
                                     "skill_description": null
@@ -13033,6 +13001,30 @@
                     }
                   },
                   {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -13040,14 +13032,6 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
                     }
                   }
                 ],
@@ -13159,20 +13143,36 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
                       "skill_id": null,
                       "skill_description": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
                     }
                   },
                   {
@@ -13294,11 +13294,11 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_type": null,
+                    "StatusEscalation": {
                       "skill_type": null,
                       "skill_id": null,
-                      "skill_description": null
+                      "skill_description": null,
+                      "damage_type": null
                     }
                   },
                   {
@@ -13308,6 +13308,22 @@
                       "skill_id": null,
                       "skill_description": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null
                     }
                   },
                   {
@@ -15511,7 +15527,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -15520,7 +15536,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,

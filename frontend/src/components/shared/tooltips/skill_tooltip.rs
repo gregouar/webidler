@@ -566,8 +566,43 @@ pub fn format_skill_effect(
                     }
                     StatusSpecs::Trigger(trigger_specs) => {
                         if let Some(name) = &trigger_specs.name {
-                            trigger_name = Some(name.clone());
+                            trigger_name =Some(format_trigger_modifier(
+                            find_trigger_modifier(
+                                StatType::StatusPower {
+                                    status_type: Some(StatStatusType::Trigger {  trigger_id: None, trigger_description: None } ),
+                                    skill_filter: Default::default(),
+                                    min_max: None,
+                                },
+                                modifiers,
+                            ),
+                            "",
+                        ).map(|modifier_str| view! {
+                            {name.clone()}
+                            " with Effects being "
+                            {modifier_str}
+                        }   .into_any()
+                            ).unwrap_or(name.clone().into_any()))
+
                         }
+
+                        // let trigger_modifier_value_str = format_trigger_modifier(
+                        //     find_trigger_modifier(
+                        //         StatType::StatusPower {
+                        //             status_type: Some(StatStatusType::Trigger {  trigger_id: None, trigger_description: None } ),
+                        //             skill_filter: Default::default(),
+                        //             min_max: None,
+                        //         },
+                        //         modifiers,
+                        //     ),
+                        //     "",
+                        // ).map(|modifier_str| view! {
+                        //     {trigger_name.clone()}
+                        //     " effects are "
+                        //     {modifier_str}
+                        // }   
+                        //     );      
+                        
+                        // {trigger_modifier_value_str}
                         trigger_effects
                             .push(view! { <ul>{format_trigger(*trigger_specs, false)}</ul> });
                         ().into_any()
@@ -604,7 +639,7 @@ pub fn format_skill_effect(
                         };
                         let status_str = match trigger_name {
                             Some(trigger_name) => trigger_name,
-                            None => format!("the following {status_skill_type}" ),
+                            None => format!("the following {status_skill_type}" ).into_any(),
                         };
                     view! {
                         <EffectLi>

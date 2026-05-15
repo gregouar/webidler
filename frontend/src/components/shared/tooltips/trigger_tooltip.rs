@@ -47,12 +47,14 @@ pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoVie
     let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
         .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
 
+    let name_str = trigger.name.map(|name| format!("{} do ", name));
+
     view! {
         <EffectLi>
             <ul>
                 <EffectLi>
-                    {format_trigger_event(&trigger.triggered_effect.trigger)}{shape_infos}
-                    {details_infos}":"
+                    {name_str} {format_trigger_event(&trigger.triggered_effect.trigger)}
+                    {shape_infos} {details_infos}":"
                 </EffectLi>
                 {trigger
                     .description
@@ -68,13 +70,18 @@ pub fn format_trigger_modifier(
     suffix: &'static str,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
-        let factor_str = match modifier.modifier {
-            Modifier::Increased | Modifier::More => format!("{:0}", modifier.factor),
-            Modifier::Flat => format!("{:0}", 100.0 * modifier.factor),
-        };
+        let factor_str = (modifier.factor != 1.0).then(|| {
+            let factor_str = match modifier.modifier {
+                Modifier::Increased | Modifier::More => format!("{:0}", modifier.factor),
+                Modifier::Flat => format!("{:0}", 100.0 * modifier.factor),
+            };
+            view! {
+                <span class="font-semibold">{factor_str}"%"</span>
+                " of "
+            }
+        });
         view! {
-            <span class="font-semibold">{factor_str}"%"</span>
-            " of "
+            {factor_str}
             {trigger_modifier_source_str(&modifier.source)}
             {suffix}
         }
@@ -99,6 +106,7 @@ pub fn format_extra_trigger_modifiers(
         .filter(|modifier| match modifier.stat {
             StatType::Damage { .. } => modifier.modifier == Modifier::Increased,
             StatType::StatusDuration { .. } => modifier.modifier == Modifier::Increased,
+            StatType::StatusPower { .. } => modifier.modifier == Modifier::Increased,
             StatType::Restore{..} => modifier.modifier == Modifier::Increased,
             _ => true,
         })
@@ -165,6 +173,9 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
                     false
                 )
             )
+        }
+        TriggerEffectModifierSource::TriggerStatusValue => {
+            format!("Status Effects")
         }
     }
 }

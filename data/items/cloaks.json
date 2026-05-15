@@ -190,7 +190,9 @@
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": null,
-          "damage_type": "Storm"
+          "damage_type": "Storm",
+          "skill_ids": null,
+          "conditions": []
         },
         "target": "SameTarget",
         "modifiers": [],
@@ -224,7 +226,8 @@
                   "value": 100.0,
                   "cumulate": false,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 }
               ],
               "duration": 5.0
@@ -235,6 +238,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],
@@ -416,7 +420,8 @@
                   "value": 100.0,
                   "cumulate": false,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 },
                 {
                   "status_type": {
@@ -438,7 +443,8 @@
                   "value": 200.0,
                   "cumulate": false,
                   "replace_on_value_only": false,
-                  "unavoidable": false
+                  "unavoidable": false,
+                  "escalation": 0.0
                 }
               ],
               "duration": 10.0
@@ -449,6 +455,7 @@
         ],
         "skill_shape": "Single",
         "owner": null,
+        "trigger_propagate": false,
         "is_debuff": false
       }
     ],
@@ -776,6 +783,208 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "butcher_apron": {
+    "name": "Walking Abattoir",
+    "icon": "items/cloaks/butcher_apron.webp",
+    "description": "No carcass leaves the table whole.",
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          140.0,
+          160.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          15.0,
+          20.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "name": null,
+        "icon": null,
+        "description": null,
+        "trigger_id": "butcher_apron",
+        "OnKill": {
+          "conditions": [
+            {
+              "HasStatus": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wounded"
+                  }
+                },
+                "skill_type": null,
+                "not": false
+              }
+            }
+          ]
+        },
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "StatusValue": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                },
+                "skill_type": null
+              }
+            }
+          }
+        ],
+        "skill_range": "Melee",
+        "skill_type": "Other",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": []
+          }
+        ],
+        "skill_shape": "Contact",
+        "owner": null,
+        "trigger_propagate": true,
+        "is_debuff": false
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Speed": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "skill_description": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 3.0
+        }
+      }
+    ]
   },
   "great_cloak": {
     "name": "Great Cloak",
