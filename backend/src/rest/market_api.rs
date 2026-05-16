@@ -196,13 +196,10 @@ pub async fn post_sell_market_item(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let mut stash = db::stashes::get_character_stash_by_type(
-        &mut *tx,
-        &character,
-        StashType::Market,
-    )
-    .await?
-    .ok_or(AppError::NotFound)?;
+    let mut stash =
+        db::stashes::get_character_stash_by_type(&mut *tx, &character, StashType::Market)
+            .await?
+            .ok_or(AppError::NotFound)?;
 
     let (inventory_data, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)

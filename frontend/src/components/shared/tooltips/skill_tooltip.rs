@@ -347,6 +347,32 @@ fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
+fn format_status_trigger_value(
+    modifiers: Option<&[TriggerEffectModifier]>,
+    prefix: &'static str,
+) -> Option<impl IntoView + use<>> {
+    format_trigger_modifier(
+        find_trigger_modifier(
+            StatType::StatusPower {
+                status_type: Some(StatStatusType::Trigger {
+                    trigger_id: None,
+                    trigger_description: None,
+                }),
+                skill_filter: Default::default(),
+                min_max: None,
+            },
+            modifiers,
+        ),
+        "",
+    )
+    .map(|modifier_str| {
+        view! {
+            {prefix}
+            {modifier_str}
+        }
+    })
+}
+
 pub fn format_chance(chance: &Chance, precise: bool) -> String {
     if precise {
         let luck_chance = chance
@@ -502,10 +528,12 @@ pub fn format_skill_effect(
                             "",
                         );
 
-                        let escalation_effect = (*status_effect.escalation > 0.0).then(|| view! {
-                            ", Escalating by "
-                            {format_number(*status_effect.escalation)}
-                            "% More Damage per Second"
+                        let escalation_effect = (*status_effect.escalation > 0.0).then(|| {
+                            view! {
+                                ", Escalating by "
+                                {format_number(*status_effect.escalation)}
+                                "% More Damage per Second"
+                            }
                         });
 
                         (status_effect.value.min.get() > 0.0
@@ -566,23 +594,13 @@ pub fn format_skill_effect(
                     }
                     StatusSpecs::Trigger(trigger_specs) => {
                         if let Some(name) = &trigger_specs.name {
-                            trigger_name =Some(format_trigger_modifier(
-                            find_trigger_modifier(
-                                StatType::StatusPower {
-                                    status_type: Some(StatStatusType::Trigger {  trigger_id: None, trigger_description: None } ),
-                                    skill_filter: Default::default(),
-                                    min_max: None,
-                                },
-                                modifiers,
-                            ),
-                            "",
-                        ).map(|modifier_str| view! {
-                            {name.clone()}
-                            " with Effects being "
-                            {modifier_str}
-                        }   .into_any()
-                            ).unwrap_or(name.clone().into_any()))
+                            let trigger_value_str =
+                                format_status_trigger_value(modifiers, " with Effects being ");
 
+                            trigger_name = Some(view! {
+                                {name.clone()}
+                                {trigger_value_str}
+                            });
                         }
 
                         // let trigger_modifier_value_str = format_trigger_modifier(
@@ -599,9 +617,9 @@ pub fn format_skill_effect(
                         //     {trigger_name.clone()}
                         //     " effects are "
                         //     {modifier_str}
-                        // }   
-                        //     );      
-                        
+                        // }
+                        //     );
+
                         // {trigger_modifier_value_str}
                         trigger_effects
                             .push(view! { <ul>{format_trigger(*trigger_specs, false)}</ul> });
@@ -638,7 +656,7 @@ pub fn format_skill_effect(
                             _ => "Status"
                         };
                         let status_str = match trigger_name {
-                            Some(trigger_name) => trigger_name,
+                            Some(trigger_name) => trigger_name.into_any(),
                             None => format!("the following {status_skill_type}" ).into_any(),
                         };
                     view! {
