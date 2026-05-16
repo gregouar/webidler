@@ -58,13 +58,13 @@ impl Factor {
         //     return base.multiply_value(0.0);
         // }
 
-        let factor = (1.0 + self.more * 0.01)
-            * (1.0 + self.increased * 0.01)
-            * (if div > 0.0 { 1.0 / div } else { 1.0 });
+        
 
         // base.multiply_value(factor)
 
-        factor
+        (1.0 + self.more * 0.01)
+            * (1.0 + self.increased * 0.01)
+            * (if div > 0.0 { 1.0 / div } else { 1.0 })
     }
 
     fn apply_effect(&mut self, stat_effect: &StatEffect) {
