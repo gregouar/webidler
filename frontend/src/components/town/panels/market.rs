@@ -1184,11 +1184,12 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         <div class="w-full h-full flex flex-col gap-2 xl:gap-4 relative p-1 xl:p-4">
             <div class="flex gap-2 absolute top-3 right-3 z-10">
                 <MenuButton on:click=move |_| {
-                    *filters.write() = MarketFilters {
+                    let new_filters = MarketFilters {
                         max_req_level: Some(town_context.character.read_untracked().max_area_level),
                         stat_filters: filters.read_untracked().stat_filters.clone(),
                         ..Default::default()
                     };
+                    *filters.write() = new_filters;
                 }>"Reset"</MenuButton>
             </div>
             <CardInsetTitle>"Main Filters"</CardInsetTitle>
