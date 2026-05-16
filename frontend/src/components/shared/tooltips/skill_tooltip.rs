@@ -16,7 +16,8 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{
-        Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType, StatType,
+        EffectsMap, Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
+        StatType,
     },
     trigger::TriggerEffectModifier,
 };
@@ -41,6 +42,7 @@ use crate::components::{
         Separator,
         number::{self, format_number},
     },
+    utils::stats_computations,
 };
 
 use super::effects_tooltip::damage_type_str;
@@ -131,7 +133,7 @@ pub fn SkillTooltip(
         .triggers
         .clone()
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false))
+        .map(|trigger| format_trigger(trigger, false, None))
         .collect::<Vec<_>>();
 
     let auto_use_conditions = player_base_skill
@@ -303,7 +305,7 @@ fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> imp
     let effects = targets_group
         .effects
         .into_iter()
-        .map(|x| format_skill_effect(x, None, skill_type))
+        .map(|x| format_skill_effect(skill_type, x, None, None))
         .collect::<Vec<_>>();
 
     view! {
@@ -347,6 +349,34 @@ fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
+fn format_status_trigger_value(
+    modifiers: Option<&[TriggerEffectModifier]>,
+    prefix: &'static str,
+    factor: Option<f64>,
+) -> Option<impl IntoView + use<>> {
+    format_trigger_modifier(
+        find_trigger_modifier(
+            StatType::StatusPower {
+                status_type: Some(StatStatusType::Trigger {
+                    trigger_id: None,
+                    trigger_description: None,
+                }),
+                skill_filter: Default::default(),
+                min_max: None,
+            },
+            modifiers,
+        ),
+        "",
+        factor,
+    )
+    .map(|modifier_str| {
+        view! {
+            {prefix}
+            {modifier_str}
+        }
+    })
+}
+
 pub fn format_chance(chance: &Chance, precise: bool) -> String {
     if precise {
         let luck_chance = chance
@@ -366,20 +396,21 @@ pub fn format_chance(chance: &Chance, precise: bool) -> String {
 }
 
 pub fn format_skill_effect(
-    effect: SkillEffect,
-    modifiers: Option<&[TriggerEffectModifier]>,
     skill_type: SkillType,
+    skill_effect: SkillEffect,
+    modifiers: Option<&[TriggerEffectModifier]>,
+    effects_map: Option<&EffectsMap>,
 ) -> impl IntoView + use<> {
-    let success_chance = if effect.success_chance.value.get() < 100.0 {
+    let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
-            <span class="font-semibold">{format_chance(&effect.success_chance, false)}</span>
+            <span class="font-semibold">{format_chance(&skill_effect.success_chance, false)}</span>
             " chance to "
         })
     } else {
         None
     };
 
-    let base_effects = match effect.effect_type {
+    let base_effects = match skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,
@@ -403,6 +434,7 @@ pub fn format_skill_effect(
                             modifiers,
                         ),
                         " as",
+                        None,
                     );
                     if value.min.get() > 0.0 || value.max.get() > 0.0
                         || trigger_modifier_str.is_some()
@@ -465,6 +497,7 @@ pub fn format_skill_effect(
                                 modifiers,
                             ),
                             "",
+                            None,
                         );
                         view! {
                             <EffectLi>
@@ -488,6 +521,7 @@ pub fn format_skill_effect(
                                 modifiers,
                             ),
                             " as",
+                            None,
                         );
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
@@ -500,12 +534,15 @@ pub fn format_skill_effect(
                                 modifiers,
                             ),
                             "",
+                            None,
                         );
 
-                        let escalation_effect = (*status_effect.escalation > 0.0).then(|| view! {
-                            ", Escalating by "
-                            {format_number(*status_effect.escalation)}
-                            "% More Damage per Second"
+                        let escalation_effect = (*status_effect.escalation > 0.0).then(|| {
+                            view! {
+                                ", Escalating by "
+                                {format_number(*status_effect.escalation)}
+                                "% More Damage per Second"
+                            }
                         });
 
                         (status_effect.value.min.get() > 0.0
@@ -564,12 +601,44 @@ pub fn format_skill_effect(
                         }
                         ().into_any()
                     }
-                    StatusSpecs::Trigger(trigger_specs) => {
+                    StatusSpecs::Trigger(ref trigger_specs) => {
                         if let Some(name) = &trigger_specs.name {
-                            trigger_name = Some(name.clone());
+                            let value_factor = effects_map.map(|effects_map| {
+                                stats_computations::compute_stats_effects_status_value(
+                                    effects_map,
+                                    &status_effect,
+                                )
+                            });
+
+                            let trigger_value_str =
+                                format_status_trigger_value(modifiers, " with Effects being ", value_factor);
+
+                            trigger_name = Some(view! {
+                                {name.clone()}
+                                {trigger_value_str}
+                            });
                         }
+
+                        // let trigger_modifier_value_str = format_trigger_modifier(
+                        //     find_trigger_modifier(
+                        //         StatType::StatusPower {
+                        //             status_type: Some(StatStatusType::Trigger {  trigger_id: None, trigger_description: None } ),
+                        //             skill_filter: Default::default(),
+                        //             min_max: None,
+                        //         },
+                        //         modifiers,
+                        //     ),
+                        //     "",
+                        // ).map(|modifier_str| view! {
+                        //     {trigger_name.clone()}
+                        //     " effects are "
+                        //     {modifier_str}
+                        // }
+                        //     );
+
+                        // {trigger_modifier_value_str}
                         trigger_effects
-                            .push(view! { <ul>{format_trigger(*trigger_specs, false)}</ul> });
+                            .push(view! { <ul>{format_trigger(*trigger_specs.clone(), false, None)}</ul> });
                         ().into_any()
                     }
                 })
@@ -592,6 +661,7 @@ pub fn format_skill_effect(
                         let trigger_modifier_duration_str = format_trigger_modifier(
                          trigger_modifier_duration   ,
                             "",
+                            None,
                         );
                         let apply_str = match stackable_stat_effects {
                             true => "Stack",
@@ -603,8 +673,8 @@ pub fn format_skill_effect(
                             _ => "Status"
                         };
                         let status_str = match trigger_name {
-                            Some(trigger_name) => trigger_name,
-                            None => format!("the following {status_skill_type}" ),
+                            Some(trigger_name) => trigger_name.into_any(),
+                            None => format!("the following {status_skill_type}" ).into_any(),
                         };
                     view! {
                         <EffectLi>
@@ -706,7 +776,7 @@ pub fn format_skill_effect(
 
     let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
 
-    let mut conditional_modifiers = effect.conditional_modifiers.clone();
+    let mut conditional_modifiers = skill_effect.conditional_modifiers.clone();
     conditional_modifiers.sort_by_key(|conditional_modifier| {
         (
             conditional_modifier.conditions.first().cloned(),

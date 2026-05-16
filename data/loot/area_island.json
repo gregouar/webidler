@@ -21,6 +21,10 @@
             "weight": 9999
         },
         {
+            "item_id": "butcher_apron",
+            "weight": 9999
+        },
+        {
             "item_id": "edict_treasure_map",
             "weight": 2999
         }

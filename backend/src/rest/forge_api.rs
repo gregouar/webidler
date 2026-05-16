@@ -100,6 +100,12 @@ pub async fn post_affix(
 
     *item = items_controller::create_item_specs(item.base.clone(), item.modifiers.clone(), 0.0);
 
+    if payload.item_index < 9 && item.required_level as i32 > character.max_area_level {
+        return Err(AppError::UserError(
+            "cannot forge equipped item of that power level".into(),
+        ));
+    }
+
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
 
@@ -157,6 +163,12 @@ pub async fn post_upgrade(
     }
 
     *item = items_controller::upgrade_item(item)?;
+
+    if payload.item_index < 9 && item.required_level as i32 > character.max_area_level {
+        return Err(AppError::UserError(
+            "cannot empower equipped item of that power level".into(),
+        ));
+    }
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;

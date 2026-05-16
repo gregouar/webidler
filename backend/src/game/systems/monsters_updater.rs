@@ -5,7 +5,6 @@ use shared::{
     data::{
         area::AreaThreat,
         character::CharacterId,
-        character_status::StatusSpecs,
         modifier::Modifier,
         monster::{MonsterSpecs, MonsterState},
         stat_effect::{StatEffect, StatType},
@@ -98,22 +97,8 @@ pub fn update_monster_specs(
         }
     }
 
-    monster_specs.character_specs.triggers.extend(
-        monster_state
-            .character_state
-            .statuses
-            .iter()
-            .filter_map(|(status_specs, _)| match status_specs {
-                StatusSpecs::Trigger(trigger_specs) => Some(trigger_specs.as_ref()),
-                _ => None,
-            })
-            .chain(
-                monster_specs
-                    .character_specs
-                    .skills_specs
-                    .iter()
-                    .flat_map(|skill_specs| skill_specs.triggers.iter()),
-            )
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    characters_updater::extend_triggers_from_skills_and_statuses(
+        &mut monster_specs.character_specs,
+        &monster_state.character_state,
     );
 }

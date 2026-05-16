@@ -144,9 +144,7 @@ pub fn ChatPanel() -> impl IntoView {
     });
 
     Effect::new(move || {
-        if !chat_context.minimized.get()
-            && chat_context.opened.get()
-        {
+        if !chat_context.minimized.get() && chat_context.opened.get() {
             should_stick_to_bottom.set(true);
             scroll_messages_to_bottom_after_render(messages_node);
         }

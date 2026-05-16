@@ -6,10 +6,12 @@ use shared::{
     data::{
         area::AreaThreat,
         character::{CharacterAttrs, CharacterId, CharacterState},
+        character_status::StatusSpecs,
         conditional_modifier::ConditionalModifier,
         player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
+        trigger::TriggerEffectModifierSource,
     },
 };
 
@@ -475,4 +477,49 @@ pub fn compute_stat_converter(
         // | StatConverterSource::DamageOverTime { .. } 
         => 0.0,
     }
+}
+
+pub fn extend_triggers_from_skills_and_statuses(
+    character_specs: &mut CharacterSpecs,
+    character_state: &CharacterState,
+) {
+    character_specs.triggers.extend(
+        character_state
+            .statuses
+            .iter()
+            .filter_map(|(status_specs, status_state)| match status_specs {
+                StatusSpecs::Trigger(trigger_specs) => {
+                    let mut triggered_effect = trigger_specs.triggered_effect.clone();
+                    for modifier_effect in triggered_effect.modifiers.iter() {
+                        if let TriggerEffectModifierSource::TriggerStatusValue =
+                            modifier_effect.source
+                        {
+                            for skill_effect in triggered_effect.effects.iter_mut() {
+                                skills_updater::compute_skill_specs_effect(
+                                    &triggered_effect.trigger_id,
+                                    triggered_effect.skill_type,
+                                    skill_effect,
+                                    [StatEffect {
+                                        stat: modifier_effect.stat.clone(),
+                                        modifier: modifier_effect.modifier,
+                                        value: status_state.value.get() * modifier_effect.factor,
+                                        bypass_ignore: true,
+                                    }]
+                                    .iter(),
+                                );
+                            }
+                        }
+                    }
+                    Some(triggered_effect)
+                }
+                _ => None,
+            })
+            .chain(
+                character_specs
+                    .skills_specs
+                    .iter()
+                    .flat_map(|skill_specs| skill_specs.triggers.iter())
+                    .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+            ),
+    );
 }

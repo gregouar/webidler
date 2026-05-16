@@ -132,9 +132,7 @@ fn handle_hit_event<'a>(
                 && hit_trigger
                     .skill_ids
                     .as_ref()
-                    .map(|skill_ids| {
-                        skill_ids.contains(&hit_event.skill_id)
-                    })
+                    .map(|skill_ids| skill_ids.contains(&hit_event.skill_id))
                     .unwrap_or(true)
                 && all(hit_trigger.conditions.iter(), |condition| {
                     check_condition(
