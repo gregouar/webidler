@@ -5,29 +5,39 @@ use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
     skill::{SkillType, TargetType},
-    stat_effect::{StatEffect, StatSkillFilter, StatType},
+    stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
     },
 };
 
-use crate::components::shared::tooltips::{
-    conditions_tooltip,
-    effects_tooltip::{damage_type_str, format_stat, skill_status_type_str, status_type_value_str},
-    skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+use crate::components::{
+    shared::tooltips::{
+        conditions_tooltip,
+        effects_tooltip::{
+            damage_type_str, format_stat, skill_status_type_str, status_type_value_str,
+        },
+        skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
+    },
+    ui::number::format_number,
 };
 
-pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoView {
+pub fn format_trigger(
+    trigger: TriggerSpecs,
+    show_details: bool,
+    effects_map: Option<&EffectsMap>,
+) -> impl IntoView + use<> {
     let effects = trigger
         .triggered_effect
         .effects
         .into_iter()
         .map(|x| {
             skill_tooltip::format_skill_effect(
+                trigger.triggered_effect.skill_type,
                 x,
                 Some(&trigger.triggered_effect.modifiers),
-                trigger.triggered_effect.skill_type,
+                effects_map,
             )
         })
         .collect::<Vec<_>>();
@@ -68,12 +78,14 @@ pub fn format_trigger(trigger: TriggerSpecs, show_details: bool) -> impl IntoVie
 pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
     suffix: &'static str,
+    factor: Option<f64>,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
-        let factor_str = (modifier.factor != 1.0).then(|| {
+        let factor = modifier.factor * factor.unwrap_or(1.0);
+        let factor_str = (factor != 1.0).then(|| {
             let factor_str = match modifier.modifier {
-                Modifier::Increased | Modifier::More => format!("{:0}", modifier.factor),
-                Modifier::Flat => format!("{:0}", 100.0 * modifier.factor),
+                Modifier::Increased | Modifier::More => format!("{:0}", format_number(factor)),
+                Modifier::Flat => format!("{:0}", format_number(100.0 * factor)),
             };
             view! {
                 <span class="font-semibold">{factor_str}"%"</span>

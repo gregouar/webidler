@@ -832,16 +832,25 @@ fn TriggersStats() -> impl IntoView {
                     let(triggered_effect)
                 >
                     <div class="relative pb-2 list-none break-inside-avoid">
-                        {trigger_tooltip::format_trigger(
-                            TriggerSpecs {
-                                name: None,
-                                icon: None,
-                                description: None,
-                                triggered_effect: triggered_effect.clone(),
-                                is_debuff: false,
-                            },
-                            true,
-                        )} <Separator />
+                        {move || {
+                            let stat_effects = game_context
+                                .player_specs
+                                .read()
+                                .character_specs
+                                .effects
+                                .clone();
+                            trigger_tooltip::format_trigger(
+                                TriggerSpecs {
+                                    name: None,
+                                    icon: None,
+                                    description: None,
+                                    triggered_effect: triggered_effect.clone(),
+                                    is_debuff: false,
+                                },
+                                true,
+                                Some(&stat_effects),
+                            )
+                        }} <Separator />
                     </div>
                 </For>
 
