@@ -808,6 +808,15 @@
       },
       {
         "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
           "Damage": {
             "skill_type": "Attack",
             "skill_id": null,
@@ -838,6 +847,16 @@
         "value": [
           15.0,
           20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
         ],
         "ignore_quality": true
       }

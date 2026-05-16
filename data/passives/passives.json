@@ -1970,7 +1970,7 @@
         "effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 10.0
@@ -1988,7 +1988,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 5.0
@@ -5915,7 +5915,7 @@
         "effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 10.0
@@ -5926,7 +5926,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 5.0
@@ -12255,6 +12255,13 @@
                               },
                               "ignore_stat_effects": [
                                 {
+                                  "CritDamage": {
+                                    "skill_type": null,
+                                    "skill_id": null,
+                                    "skill_description": null
+                                  }
+                                },
+                                {
                                   "Damage": {
                                     "skill_type": null,
                                     "skill_id": null,
@@ -12266,13 +12273,6 @@
                                 },
                                 {
                                   "CritChance": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null
-                                  }
-                                },
-                                {
-                                  "CritDamage": {
                                     "skill_type": null,
                                     "skill_id": null,
                                     "skill_description": null
@@ -12453,7 +12453,7 @@
         "effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 10.0
@@ -12469,7 +12469,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 5.0
@@ -12992,32 +12992,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
                       "skill_type": null,
                       "skill_id": null,
                       "skill_description": null,
@@ -13032,6 +13007,31 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null
                     }
                   }
                 ],
@@ -13143,6 +13143,16 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_type": null,
                       "skill_type": null,
@@ -13173,16 +13183,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "skill_description": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -13311,6 +13311,16 @@
                     }
                   },
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "skill_description": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_type": null,
                       "skill_type": null,
@@ -13324,16 +13334,6 @@
                       "skill_id": null,
                       "skill_description": null,
                       "damage_type": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "skill_description": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -13540,7 +13540,7 @@
         "effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 10.0
@@ -13551,7 +13551,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 5.0
@@ -14038,7 +14038,7 @@
         "effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 10.0
@@ -14049,7 +14049,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Block": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 5.0
