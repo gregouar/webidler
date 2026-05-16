@@ -299,8 +299,11 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                         )
                     })
                     .collect(),
-                crit_chance: weapon_specs.crit_chance,
-                crit_damage: weapon_specs.crit_damage,
+                crit_chance: Chance {
+                    value: weapon_specs.crit_chance.value.as_new_base(),
+                    lucky_chance: weapon_specs.crit_chance.lucky_chance.as_new_base(),
+                },
+                crit_damage: weapon_specs.crit_damage.as_new_base(),
                 unblockable: false,
             },
             success_chance: Chance::new_sure(),
