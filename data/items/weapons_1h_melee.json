@@ -270,7 +270,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
