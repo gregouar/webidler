@@ -36,6 +36,11 @@
       "min_area_level": 5
     },
     {
+      "item_id": "poop_knife",
+      "weight": 499,
+      "min_area_level": 5
+    },
+    {
       "item_id": "quarterstaff",
       "weight": 1000,
       "min_area_level": 5

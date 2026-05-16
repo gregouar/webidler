@@ -153,6 +153,261 @@
       }
     ]
   },
+  "poop_knife": {
+    "name": "The Poop Knife",
+    "icon": "items/weapons_1h/poop_knife.webp",
+    "description": "Forgotten by an old patron, still used by the cook.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Poison",
+            "min_max": "Min",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 4.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": "Poison",
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 4.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          20.0,
+          40.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "skill_description": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          5.0,
+          10.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "StatusPower": {
+                "status_type": {
+                  "DamageOverTime": {
+                    "damage_type": "Poison"
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "skill_description": null,
+                "min_max": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_type": {
+                    "Trigger": {
+                      "trigger_id": "open_wound",
+                      "trigger_description": "Open Wound"
+                    }
+                  },
+                  "skill_type": null
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          2.0,
+          4.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      50,
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 3.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Poison",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Poison",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Speed": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "skill_description": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 3.0
+        }
+      }
+    ]
+  },
   "shortsword": {
     "name": "Shortsword",
     "icon": "items/weapons_1h/shortsword.webp",
@@ -257,6 +512,29 @@
         "value": 200.0,
         "ignore_quality": true,
         "bypass_ignore": true
+      },
+      {
+        "stat": {
+          "SuccessChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_type": {
+                  "Trigger": {
+                    "trigger_id": "open_wound",
+                    "trigger_description": "Open Wound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -476,7 +754,7 @@
         },
         "modifier": "Increased",
         "scope": "Local",
-        "value": -100.0,
+        "value": -400.0,
         "ignore_quality": true
       },
       {
@@ -493,8 +771,8 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": [
-          80.0,
-          120.0
+          100.0,
+          150.0
         ],
         "ignore_quality": true
       },
@@ -624,12 +902,46 @@
               "skill_id": null,
               "skill_description": null,
               "damage_type": "Poison",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Poison",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Poison",
               "min_max": null,
               "is_hit": null
             }
           },
           "modifier": "Increased",
-          "value": 30.0
+          "value": 40.0
         }
       }
     ]
