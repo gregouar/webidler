@@ -16,7 +16,7 @@ use crate::{
         },
         icons::{
             area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
-            battle_scene::{EdictIcon, RushIcon, ThreatIcon},
+            battle_scene::{AreaLevelIcon, EdictIcon, RushIcon, ThreatIcon},
         },
         ui::{
             card::Card,
@@ -357,8 +357,12 @@ pub fn BattleSceneFooter() -> impl IntoView {
                 </div>
             </div>
 
-            <div class="relative flex items-center justify-center h-full px-2 text-base xl:text-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <div class="relative flex items-center justify-center h-full px-2
+            gap-2
+            text-yellow-500
+            text-base xl:text-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
                 <GemsLoot />
+                <NewAreaLevel />
             </div>
 
             <div class="flex items-center justify-end h-full w-full">
@@ -404,6 +408,30 @@ pub fn GemsLoot() -> impl IntoView {
                 class="h-[2em] aspect-square"
                 class:grayscale=move || gems_chance.get() == 0.0
             />
+        </StaticTooltip>
+    }
+}
+
+#[component]
+pub fn NewAreaLevel() -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+
+    let new_area_level = Memo::new(move |_| {
+        game_context
+            .area_state
+            .with(|area_state| area_state.area_level > area_state.max_area_level)
+    });
+
+    let tooltip = move || {
+        if new_area_level.get() {
+            "New Area Level, Unique Items can drop."
+        } else {
+            "Cleared Area Level, Unique Items cannot drop."
+        }
+    };
+    view! {
+        <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Top>
+            <AreaLevelIcon class:grayscale=move || !new_area_level.get() />
         </StaticTooltip>
     }
 }
