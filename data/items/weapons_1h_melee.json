@@ -244,7 +244,7 @@
                     "damage_type": "Poison"
                   }
                 },
-                "skill_type": null,
+                "skill_type": "Attack",
                 "skill_id": null,
                 "skill_description": null,
                 "min_max": null
