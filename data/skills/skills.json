@@ -418,7 +418,7 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 4,
               "statuses": [
                 {
                   "status_type": {
@@ -440,7 +440,7 @@
   },
   "irradiate": {
     "name": "Irradiate",
-    "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time..",
+    "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time.",
     "icon": "skills/irradiate.svg",
     "skill_type": "Spell",
     "cooldown": 3,
@@ -472,7 +472,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 4,
               "statuses": [
                 {
                   "status_type": {
@@ -2084,7 +2084,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -2130,7 +2130,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -2236,7 +2236,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -2283,7 +2283,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -2665,7 +2665,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {
@@ -3060,7 +3060,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 2,
+              "duration": 3,
               "statuses": [
                 {
                   "status_type": {

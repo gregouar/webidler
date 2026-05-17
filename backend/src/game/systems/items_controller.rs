@@ -20,7 +20,7 @@ use shared::data::{
 
 use crate::{game::data::items_store::ItemsStore, rest::AppError};
 
-const WEAPON_POISON_DAMAGE_DURATION: f64 = 2.0;
+const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
 
 pub fn init_item_specs_from_store(
     items_store: &ItemsStore,
