@@ -491,7 +491,7 @@ fn apply_skill_effect_on_target(
                 events_queue,
                 target,
                 attacker,
-                damage.clone(),
+                damage,
                 skill_type,
                 range,
                 is_crit,

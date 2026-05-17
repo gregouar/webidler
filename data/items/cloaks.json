@@ -818,10 +818,10 @@
       {
         "stat": {
           "Damage": {
-            "skill_type": "Attack",
+            "skill_type": null,
             "skill_id": null,
             "skill_description": null,
-            "damage_type": null,
+            "damage_type": "Physical",
             "min_max": null,
             "is_hit": null
           }
@@ -831,6 +831,29 @@
         "value": [
           140.0,
           160.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "Trigger": {
+                "trigger_id": "open_wound",
+                "trigger_description": "Open Wound"
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "skill_description": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       },
@@ -977,10 +1000,10 @@
         "stat_effect": {
           "stat": {
             "Damage": {
-              "skill_type": "Attack",
+              "skill_type": null,
               "skill_id": null,
               "skill_description": null,
-              "damage_type": null,
+              "damage_type": "Physical",
               "min_max": null,
               "is_hit": null
             }
