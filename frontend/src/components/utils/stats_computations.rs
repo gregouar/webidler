@@ -58,8 +58,6 @@ impl Factor {
         //     return base.multiply_value(0.0);
         // }
 
-        
-
         // base.multiply_value(factor)
 
         (1.0 + self.more * 0.01)

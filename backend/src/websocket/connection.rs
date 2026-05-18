@@ -14,7 +14,7 @@ use futures::{
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
-use shared::messages::{client::ClientMessage, server::ServerMessage};
+use shared::messages::{client::ClientMessage, compression, server::ServerMessage};
 
 pub struct WebSocketConnection {
     receiver_rx: mpsc::Receiver<ClientMessage>,
@@ -122,11 +122,11 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
 }
 
 fn into_ws_msg(message: &ServerMessage) -> Result<Message> {
-    Ok(Message::Binary(Bytes::from_owner(rmp_serde::to_vec(
-        message,
-    )?)))
+    let bytes = compression::encode_payload(rmp_serde::to_vec(message)?)?;
+    Ok(Message::Binary(Bytes::from_owner(bytes)))
 }
 
 fn from_ws_msg(message: &Bytes) -> Result<ClientMessage> {
-    Ok(rmp_serde::from_slice(message)?)
+    let message = compression::decode_payload(message)?;
+    Ok(rmp_serde::from_slice(&message)?)
 }

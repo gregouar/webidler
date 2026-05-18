@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
 use leptos_use::{
@@ -7,7 +8,8 @@ use leptos_use::{
     core::ConnectionReadyState, use_websocket_with_options,
 };
 
-use codee::binary::MsgpackSerdeCodec;
+use codee::{Decoder, Encoder, binary::MsgpackSerdeCodec};
+use serde::{Serialize, de::DeserializeOwned};
 
 use shared::messages::client::ClientMessage;
 use shared::messages::server::ServerMessage;
@@ -15,6 +17,41 @@ use shared::messages::server::ServerMessage;
 use crate::components::ui::toast::*;
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
+
+struct CompressedMsgpackSerdeCodec;
+
+impl<T> Encoder<T> for CompressedMsgpackSerdeCodec
+where
+    T: Serialize,
+{
+    type Error = String;
+    type Encoded = Vec<u8>;
+
+    fn encode(val: &T) -> Result<Self::Encoded, Self::Error> {
+        let encoded = MsgpackSerdeCodec::encode(val).map_err(|e| e.to_string())?;
+        shared::messages::compression::encode_payload(encoded).map_err(|e| e.to_string())
+    }
+}
+
+impl<T> Decoder<T> for CompressedMsgpackSerdeCodec
+where
+    T: DeserializeOwned,
+{
+    type Error = String;
+    type Encoded = [u8];
+
+    fn decode(val: &Self::Encoded) -> Result<T, Self::Error> {
+        let decoded =
+            shared::messages::compression::decode_payload(val).map_err(|e| e.to_string())?;
+        console_log(&format!(
+            "{:.0}%: {} vs {}",
+            (val.len() as f64 / decoded.len() as f64) * 100.0,
+            val.len(),
+            decoded.len()
+        ));
+        MsgpackSerdeCodec::decode(&decoded).map_err(|e| e.to_string())
+    }
+}
 
 #[derive(Clone)]
 pub struct WebsocketContext {
@@ -68,14 +105,14 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
         open,
         close,
         ..
-    } = use_websocket_with_options::<ClientMessage, ServerMessage, MsgpackSerdeCodec, _, _>(
+    } = use_websocket_with_options::<ClientMessage, ServerMessage, CompressedMsgpackSerdeCodec, _, _>(
         &url,
         UseWebSocketOptions::default()
             // .immediate(false)
             .reconnect_limit(ReconnectLimit::Infinite)
             .on_error(on_error_callback)
             .on_close(on_close_callback)
-            .heartbeat::<ClientMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
+            .heartbeat::<ClientMessage, CompressedMsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
     let _ = open;
