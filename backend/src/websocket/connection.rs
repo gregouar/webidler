@@ -11,6 +11,7 @@ use futures::{
     sink::SinkExt,
     stream::{SplitSink, StreamExt},
 };
+use serde::Serialize;
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
 
@@ -19,6 +20,7 @@ use shared::messages::{client::ClientMessage, compression, server::ServerMessage
 pub struct WebSocketConnection {
     receiver_rx: mpsc::Receiver<ClientMessage>,
     ws_sender: SplitSink<WebSocket, Message>,
+    send_buffer: Vec<u8>,
 }
 
 impl WebSocketConnection {
@@ -57,15 +59,13 @@ impl WebSocketConnection {
         WebSocketConnection {
             receiver_rx,
             ws_sender,
+            send_buffer: Vec::with_capacity(16 * 1024),
         }
     }
 
     pub async fn send(&mut self, msg: &ServerMessage) -> Result<()> {
-        timeout(
-            Duration::from_secs(5),
-            self.ws_sender.send(into_ws_msg(msg)?),
-        )
-        .await??;
+        let ws_msg = into_ws_msg(msg, &mut self.send_buffer)?;
+        timeout(Duration::from_secs(5), self.ws_sender.send(ws_msg)).await??;
         // self.ws_sender.send(into_ws_msg(msg)?).await?;
         Ok(())
     }
@@ -121,8 +121,17 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<Clie
     }
 }
 
-fn into_ws_msg(message: &ServerMessage) -> Result<Message> {
-    let bytes = compression::encode_payload(rmp_serde::to_vec(message)?)?;
+fn into_ws_msg(message: &ServerMessage, send_buffer: &mut Vec<u8>) -> Result<Message> {
+    send_buffer.clear();
+    message.serialize(&mut rmp_serde::Serializer::new(&mut *send_buffer))?;
+
+    let bytes = if let Some(encoded) = compression::encode_payload_from_slice(send_buffer)? {
+        send_buffer.clear();
+        encoded
+    } else {
+        std::mem::take(send_buffer)
+    };
+
     Ok(Message::Binary(Bytes::from_owner(bytes)))
 }
 
