@@ -247,7 +247,11 @@ fn compute_total_shards(
         .map(|area| {
             if area_blueprints_store
                 .get(&area.area_id)
-                .map(|area_blueprint| !area_blueprint.specs.crucible)
+                .map(|area_blueprint| {
+                    !area_blueprint.specs.crucible
+                        && !area_blueprint.specs.hidden
+                        && !area_blueprint.specs.training
+                })
                 .unwrap_or_default()
             {
                 (area.max_area_level / 10) as f64
