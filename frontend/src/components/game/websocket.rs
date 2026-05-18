@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
 use leptos_use::{
@@ -12,6 +11,7 @@ use codee::{Decoder, Encoder, binary::MsgpackSerdeCodec};
 use serde::{Serialize, de::DeserializeOwned};
 
 use shared::messages::client::ClientMessage;
+use shared::messages::compression;
 use shared::messages::server::ServerMessage;
 
 use crate::components::ui::toast::*;
@@ -29,7 +29,7 @@ where
 
     fn encode(val: &T) -> Result<Self::Encoded, Self::Error> {
         let encoded = MsgpackSerdeCodec::encode(val).map_err(|e| e.to_string())?;
-        shared::messages::compression::encode_payload(encoded).map_err(|e| e.to_string())
+        compression::encode_payload(encoded).map_err(|e| e.to_string())
     }
 }
 
@@ -41,14 +41,7 @@ where
     type Encoded = [u8];
 
     fn decode(val: &Self::Encoded) -> Result<T, Self::Error> {
-        let decoded =
-            shared::messages::compression::decode_payload(val).map_err(|e| e.to_string())?;
-        console_log(&format!(
-            "{:.0}%: {} vs {}",
-            (val.len() as f64 / decoded.len() as f64) * 100.0,
-            val.len(),
-            decoded.len()
-        ));
+        let decoded = compression::decode_payload(val).map_err(|e| e.to_string())?;
         MsgpackSerdeCodec::decode(&decoded).map_err(|e| e.to_string())
     }
 }

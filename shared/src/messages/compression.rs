@@ -37,7 +37,7 @@ fn encode_payload_inner(raw: &[u8]) -> Result<Option<Vec<u8>>> {
     encoded.push(ZSTD);
 
     let mut encoder = zstd::stream::write::Encoder::new(encoded, 1)?;
-    encoder.write_all(&raw)?;
+    encoder.write_all(raw)?;
     let encoded = encoder.finish()?;
 
     if encoded.len() >= raw.len() {
