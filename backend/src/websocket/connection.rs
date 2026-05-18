@@ -64,9 +64,12 @@ impl WebSocketConnection {
     }
 
     pub async fn send(&mut self, msg: &ServerMessage) -> Result<()> {
-        let ws_msg = into_ws_msg(msg, &mut self.send_buffer)?;
-        timeout(Duration::from_secs(5), self.ws_sender.send(ws_msg)).await??;
-        // self.ws_sender.send(into_ws_msg(msg)?).await?;
+        timeout(
+            Duration::from_secs(5),
+            self.ws_sender
+                .send(into_ws_msg(msg, &mut self.send_buffer)?),
+        )
+        .await??;
         Ok(())
     }
 
@@ -125,17 +128,14 @@ fn into_ws_msg(message: &ServerMessage, send_buffer: &mut Vec<u8>) -> Result<Mes
     send_buffer.clear();
     message.serialize(&mut rmp_serde::Serializer::new(&mut *send_buffer))?;
 
-    let bytes = if let Some(encoded) = compression::encode_payload_from_slice(send_buffer)? {
-        send_buffer.clear();
-        encoded
-    } else {
-        std::mem::take(send_buffer)
-    };
+    let bytes =
+        compression::encode_payload_from_slice(send_buffer)?.unwrap_or(std::mem::take(send_buffer));
 
     Ok(Message::Binary(Bytes::from_owner(bytes)))
 }
 
 fn from_ws_msg(message: &Bytes) -> Result<ClientMessage> {
-    let message = compression::decode_payload(message)?;
-    Ok(rmp_serde::from_slice(&message)?)
+    Ok(rmp_serde::from_slice(&compression::decode_payload(
+        message,
+    )?)?)
 }
