@@ -3912,7 +3912,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3934,7 +3934,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
