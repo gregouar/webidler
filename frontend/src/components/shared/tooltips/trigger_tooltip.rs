@@ -186,9 +186,7 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
                 )
             )
         }
-        TriggerEffectModifierSource::TriggerStatusValue => {
-            "Status Effects".to_string()
-        }
+        TriggerEffectModifierSource::TriggerStatusValue => "Status Effects".to_string(),
     }
 }
 

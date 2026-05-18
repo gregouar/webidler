@@ -116,8 +116,13 @@ impl<'a> GameInstance<'a> {
                 .await?;
             }
 
-            if let Err(e) = game_sync::sync_update_game(self.client_conn, self.game_data).await {
-                tracing::warn!("failed to sync client: {}", e);
+            match game_sync::sync_update_game(self.client_conn, self.game_data).await {
+                Ok(true) => {}
+                Ok(false) => tracing::debug!("skipping sync update while previous send is pending"),
+                Err(e) => {
+                    tracing::warn!("failed to sync client: {}", e);
+                    break;
+                }
             }
 
             if game_timer.should_autosave() {

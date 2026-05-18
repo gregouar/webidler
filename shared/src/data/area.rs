@@ -54,7 +54,7 @@ pub struct AreaSpecs {
 
 impl AreaSpecs {
     pub fn can_reward_shards(&self) -> bool {
-        !self.crucible && !self.training
+        !self.crucible && !self.training && !self.hidden
     }
 
     pub fn can_reward_gold(&self) -> bool {
