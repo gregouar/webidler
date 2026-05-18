@@ -14,12 +14,17 @@ use futures::{
 use serde::Serialize;
 use std::ops::ControlFlow;
 use std::{net::SocketAddr, time::Duration};
+use tokio::task::JoinHandle;
 
 use shared::messages::{client::ClientMessage, compression, server::ServerMessage};
 
+type WsSender = SplitSink<WebSocket, Message>;
+type SendTask = JoinHandle<Result<WsSender>>;
+
 pub struct WebSocketConnection {
     receiver_rx: mpsc::Receiver<ClientMessage>,
-    ws_sender: SplitSink<WebSocket, Message>,
+    ws_sender: Option<WsSender>,
+    send_task: Option<SendTask>,
     send_buffer: Vec<u8>,
 }
 
@@ -58,21 +63,54 @@ impl WebSocketConnection {
 
         WebSocketConnection {
             receiver_rx,
-            ws_sender,
+            ws_sender: Some(ws_sender),
+            send_task: None,
             send_buffer: Vec::with_capacity(16 * 1024),
         }
     }
 
     pub async fn send(&mut self, msg: &ServerMessage) -> Result<()> {
-        timeout(
-            Duration::from_secs(5),
-            self.ws_sender
-                .send(into_ws_msg(msg, &mut self.send_buffer)?),
-        )
-        .await??;
+        self.wait_for_pending_send().await?;
+        self.start_background_send(msg)?;
+        self.wait_for_pending_send().await?;
+
         Ok(())
     }
 
+    pub fn start_background_send(&mut self, msg: &ServerMessage) -> Result<()> {
+        let sender = self
+            .ws_sender
+            .take()
+            .ok_or_else(|| anyhow::format_err!("websocket sender is not ready"))?;
+        self.send_task = Some(tokio::spawn(send_task(
+            sender,
+            into_ws_msg(msg, &mut self.send_buffer)?,
+        )));
+
+        Ok(())
+    }
+
+    async fn wait_for_pending_send(&mut self) -> Result<()> {
+        if let Some(send_task) = self.send_task.take() {
+            self.ws_sender = Some(send_task.await??);
+        }
+
+        Ok(())
+    }
+
+    pub async fn poll_pending_send(&mut self) -> Result<bool> {
+        if self
+            .send_task
+            .as_ref()
+            .is_some_and(|task| !task.is_finished())
+        {
+            return Ok(false);
+        }
+
+        self.wait_for_pending_send().await?;
+
+        Ok(true)
+    }
     /// Poll new messages. Return
     /// - ControlFlow::Continue(Some(m)) if new message m received, and remove m from the queue
     /// - ControlFlow::Continue(None) if no message available
@@ -132,6 +170,11 @@ fn into_ws_msg(message: &ServerMessage, send_buffer: &mut Vec<u8>) -> Result<Mes
         compression::encode_payload_from_slice(send_buffer)?.unwrap_or(std::mem::take(send_buffer));
 
     Ok(Message::Binary(Bytes::from_owner(bytes)))
+}
+
+async fn send_task(mut sender: WsSender, ws_msg: Message) -> Result<WsSender> {
+    timeout(Duration::from_secs(2), sender.send(ws_msg)).await??;
+    Ok(sender)
 }
 
 fn from_ws_msg(message: &Bytes) -> Result<ClientMessage> {
