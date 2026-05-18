@@ -18,18 +18,17 @@ pub fn encode_payload(raw: Vec<u8>) -> Result<Vec<u8>> {
         return Ok(raw);
     }
 
-    let mut encoder = DeflateEncoder::new(Vec::with_capacity(raw.len() / 2), Compression::fast());
-    encoder.write_all(&raw)?;
-    let compressed = encoder.finish()?;
-
-    if compressed.len() + MAGIC.len() + 1 >= raw.len() {
-        return Ok(raw);
-    }
-
-    let mut encoded = Vec::with_capacity(compressed.len() + MAGIC.len() + 1);
+    let mut encoded = Vec::with_capacity(raw.len() / 2);
     encoded.extend_from_slice(MAGIC);
     encoded.push(DEFLATE);
-    encoded.extend_from_slice(&compressed);
+
+    let mut encoder = DeflateEncoder::new(encoded, Compression::fast());
+    encoder.write_all(&raw)?;
+    let encoded = encoder.finish()?;
+
+    if encoded.len() >= raw.len() {
+        return Ok(raw);
+    }
 
     Ok(encoded)
 }
