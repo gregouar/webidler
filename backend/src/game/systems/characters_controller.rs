@@ -437,6 +437,7 @@ pub fn apply_status(
                         cur_status_state.base_value = value;
                         cur_status_state.value = value;
                         cur_status_state.duration = duration;
+                        cur_status_state.escalation = escalation;
                         cur_status_state.max_escalation = duration;
                         *cur_status_specs = new_status_specs.clone();
                     } else {
