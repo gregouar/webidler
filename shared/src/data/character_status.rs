@@ -22,6 +22,12 @@ impl StatusMap {
             .values()
             .chain(self.cumulative_statuses.iter())
     }
+
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut (StatusSpecs, StatusState)> {
+        self.unique_statuses
+            .values_mut()
+            .chain(self.cumulative_statuses.iter_mut())
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -75,6 +81,15 @@ impl StatusSpecs {
             StatusSpecs::Trigger(trigger_specs) => {
                 StatusId::Trigger(trigger_specs.triggered_effect.trigger_id.clone())
             }
+        }
+    }
+
+    pub fn is_debuff(&self) -> bool {
+        match self {
+            StatusSpecs::Stun => true,
+            StatusSpecs::DamageOverTime { .. } => true,
+            StatusSpecs::StatModifier { debuff, .. } => *debuff,
+            StatusSpecs::Trigger(trigger_specs) => trigger_specs.is_debuff,
         }
     }
 }

@@ -257,6 +257,8 @@ pub fn equip_item_from_bag(
         );
     }
 
+    characters_controller::reset_buff_statuses(&mut player_state.character_state);
+
     Ok(())
 }
 
@@ -276,6 +278,9 @@ pub fn unequip_item_to_bag(
             item_slot,
         );
     }
+
+    characters_controller::reset_buff_statuses(&mut player_state.character_state);
+
     Ok(())
 }
 

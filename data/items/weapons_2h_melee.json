@@ -784,13 +784,10 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": "Attack",
+                "CritChance": {
+                  "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
-                  "damage_type": "Physical",
-                  "min_max": null,
-                  "is_hit": null
+                  "skill_description": null
                 }
               },
               {
@@ -801,10 +798,13 @@
                 }
               },
               {
-                "CritChance": {
-                  "skill_type": null,
+                "Damage": {
+                  "skill_type": "Attack",
                   "skill_id": null,
-                  "skill_description": null
+                  "skill_description": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],
@@ -989,7 +989,7 @@
       {
         "stat": {
           "Speed": {
-            "skill_type": null,
+            "skill_type": "Attack",
             "skill_id": null,
             "skill_description": null
           }

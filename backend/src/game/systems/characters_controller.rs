@@ -544,3 +544,11 @@ pub fn spend_mana(
     character_state.life -= take_from_life.into();
     character_state.mana -= take_from_mana.into();
 }
+
+pub fn reset_buff_statuses(character_state: &mut CharacterState) {
+    for (status_specs, status_state) in character_state.statuses.iter_mut() {
+        if !status_specs.is_debuff() {
+            status_state.duration = Some(0.0.into());
+        }
+    }
+}
