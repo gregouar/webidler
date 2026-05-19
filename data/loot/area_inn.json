@@ -12,7 +12,8 @@
         },
         {
             "item_id": "poop_knife",
-            "weight": 999
+            "weight": 999,
+            "min_area_level": 5
         },
         {
             "item_id": "shortsword_unique",

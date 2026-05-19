@@ -164,7 +164,7 @@
       "MeleeWeapon",
       "MeleeWeapon1H"
     ],
-    "min_area_level": 150,
+    "min_area_level": 5,
     "rarity": "Unique",
     "affixes": [
       {
