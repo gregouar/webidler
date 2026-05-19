@@ -1,4 +1,8 @@
 use std::sync::Arc;
+use std::{
+    cell::{Cell, RefCell},
+    thread_local,
+};
 
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
@@ -18,6 +22,45 @@ use crate::components::ui::toast::*;
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
 
+thread_local! {
+    static COMPRESSION_DICTIONARY: RefCell<Option<Vec<u8>>> = const { RefCell::new(None) };
+    static COMPRESSION_ENABLED: Cell<bool> = const { Cell::new(false) };
+}
+
+fn set_compression_dictionary(dictionary: Vec<u8>) {
+    COMPRESSION_DICTIONARY.with(|stored| {
+        *stored.borrow_mut() = (!dictionary.is_empty()).then_some(dictionary);
+    });
+    COMPRESSION_ENABLED.with(|enabled| enabled.set(true));
+}
+
+fn clear_compression_dictionary() {
+    COMPRESSION_DICTIONARY.with(|stored| {
+        stored.borrow_mut().take();
+    });
+    COMPRESSION_ENABLED.with(|enabled| enabled.set(false));
+}
+
+fn encode_with_current_dictionary(raw: Vec<u8>) -> Result<Vec<u8>, String> {
+    if !COMPRESSION_ENABLED.with(Cell::get) {
+        return Ok(raw);
+    }
+
+    COMPRESSION_DICTIONARY.with(|stored| {
+        let stored = stored.borrow();
+        compression::encode_payload_with_dictionary(raw, stored.as_deref())
+            .map_err(|e| e.to_string())
+    })
+}
+
+fn decode_with_current_dictionary(val: &[u8]) -> Result<std::borrow::Cow<'_, [u8]>, String> {
+    COMPRESSION_DICTIONARY.with(|stored| {
+        let stored = stored.borrow();
+        compression::decode_payload_with_dictionary(val, stored.as_deref())
+            .map_err(|e| e.to_string())
+    })
+}
+
 struct CompressedMsgpackSerdeCodec;
 
 impl<T> Encoder<T> for CompressedMsgpackSerdeCodec
@@ -29,7 +72,7 @@ where
 
     fn encode(val: &T) -> Result<Self::Encoded, Self::Error> {
         let encoded = MsgpackSerdeCodec::encode(val).map_err(|e| e.to_string())?;
-        compression::encode_payload(encoded).map_err(|e| e.to_string())
+        encode_with_current_dictionary(encoded)
     }
 }
 
@@ -41,7 +84,7 @@ where
     type Encoded = [u8];
 
     fn decode(val: &Self::Encoded) -> Result<T, Self::Error> {
-        let decoded = compression::decode_payload(val).map_err(|e| e.to_string())?;
+        let decoded = decode_with_current_dictionary(val)?;
         MsgpackSerdeCodec::decode(&decoded).map_err(|e| e.to_string())
     }
 }
@@ -110,8 +153,26 @@ pub fn Websocket(url: String, children: Children) -> impl IntoView {
 
     let _ = open;
     let _ = close;
+    let handshake_complete = RwSignal::new(false);
+
+    Effect::new(move |_| {
+        if ready_state.get() != ConnectionReadyState::Open {
+            clear_compression_dictionary();
+            handshake_complete.set(false);
+        }
+    });
+
+    Effect::new(move |_| {
+        if let Some(ServerMessage::Connect(connect_message)) = message.get() {
+            set_compression_dictionary(connect_message.compression_dictionary);
+            handshake_complete.set(true);
+        }
+    });
+
     provide_context(WebsocketContext {
-        connected: Memo::new(move |_| ready_state.get() == ConnectionReadyState::Open),
+        connected: Memo::new(move |_| {
+            ready_state.get() == ConnectionReadyState::Open && handshake_complete.get()
+        }),
         message,
         // open: Arc::new(open.clone()),
         send: Arc::new(send.clone()),

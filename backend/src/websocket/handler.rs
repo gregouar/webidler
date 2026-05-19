@@ -19,7 +19,7 @@ use std::{
 
 use shared::messages::{
     client::{ClientConnectMessage, ClientMessage},
-    server::{ErrorMessage, ErrorType},
+    server::{ConnectMessage, ErrorMessage, ErrorType},
 };
 
 use crate::{
@@ -39,6 +39,7 @@ use crate::{
 };
 
 const CLIENT_INACTIVITY_TIMEOUT: Duration = Duration::from_secs(60);
+const SYNC_ZSTD_DICTIONARY_PATH: &str = "backend/.local/sync_zstd_dictionary.bin";
 
 pub async fn handler(
     ws: WebSocketUpgrade,
@@ -53,13 +54,33 @@ pub async fn handler(
     };
     tracing::info!("`{user_agent}` at {addr} connected.");
 
-    ws.max_frame_size(8192)
-        .max_message_size(8192)
+    ws.max_frame_size(64 * 1024)
+        .max_message_size(64 * 1024)
         .on_upgrade(move |socket| handle_socket(socket, addr, app_state))
 }
 
 async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState) {
-    let mut conn = WebSocketConnection::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
+    let compression_dictionary = load_sync_zstd_dictionary();
+    let mut conn = WebSocketConnection::establish(
+        socket,
+        addr,
+        CLIENT_INACTIVITY_TIMEOUT,
+        compression_dictionary.clone(),
+    );
+
+    if let Err(e) = conn
+        .send(
+            &ConnectMessage {
+                compression_dictionary: compression_dictionary.unwrap_or_default(),
+            }
+            .into(),
+        )
+        .await
+    {
+        tracing::error!("failed to send websocket handshake: {e}");
+        return;
+    }
+    conn.enable_compression();
 
     tracing::debug!("waiting for client to connect...");
     let mut session = match timeout(
@@ -117,6 +138,22 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
 
     // returning from the handler closes the websocket connection
     tracing::info!("websocket context '{addr}' destroyed");
+}
+
+fn load_sync_zstd_dictionary() -> Option<Vec<u8>> {
+    match std::fs::read(SYNC_ZSTD_DICTIONARY_PATH) {
+        Ok(dictionary) if !dictionary.is_empty() => Some(dictionary),
+        Ok(_) => {
+            tracing::warn!("sync zstd dictionary at '{SYNC_ZSTD_DICTIONARY_PATH}' is empty");
+            None
+        }
+        Err(e) => {
+            tracing::warn!(
+                "sync zstd dictionary not loaded from '{SYNC_ZSTD_DICTIONARY_PATH}': {e}"
+            );
+            None
+        }
+    }
 }
 
 async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) -> Result<Session> {
