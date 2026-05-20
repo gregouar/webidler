@@ -262,6 +262,8 @@ pub struct MapSpecs {
     pub loot_tables: Vec<String>,
     #[serde(default)]
     pub replace_area_id: Option<String>,
+    #[serde(default)]
+    pub reward_loot_table: Option<String>,
 }
 
 impl ItemModifiers {

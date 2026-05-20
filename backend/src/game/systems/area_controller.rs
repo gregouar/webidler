@@ -37,6 +37,12 @@ pub fn init_area_specs(
                         .extend(loot_table.entries.iter().cloned());
                 }
             }
+
+            area_blueprint.reward_loot_table = map_specs
+                .reward_loot_table
+                .as_ref()
+                .and_then(|loot_table_id| loot_tables_store.get(loot_table_id))
+                .cloned();
         }
 
         area_specs.triggers.extend(

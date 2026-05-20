@@ -163,7 +163,7 @@ async fn new_game_instance(
             {
                 let _ = inventory_controller::equip_item(
                     &mut player_inventory,
-                    loot_generator::roll_item(
+                    loot_generator::roll_item_stats(
                         base_weapon_id,
                         base_weapon,
                         ItemRarity::Normal,

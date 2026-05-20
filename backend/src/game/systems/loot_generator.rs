@@ -44,35 +44,21 @@ pub fn generate_loot(
     if !allow_unique {
         rarity = rarity.min(ItemRarity::Rare);
     }
-    let is_unique = rarity == ItemRarity::Unique;
-    roll_base_item(
+    roll_item(
         loot_table,
         items_store,
+        affixes_table,
+        adjectives_table,
+        nouns_table,
         level,
+        power_level_modifier,
         is_boss_level,
-        is_unique,
-        max_base & !is_unique,
+        max_base && rarity != ItemRarity::Unique,
+        max_affixes,
         filter_category,
+        rarity,
+        gold_find,
     )
-    .map(|(base_item_id, base)| {
-        if base.rarity != ItemRarity::Unique {
-            rarity = rarity.min(ItemRarity::Rare);
-        }
-        rarity = rarity.max(base.rarity);
-        roll_item(
-            base_item_id,
-            base,
-            rarity,
-            level,
-            power_level_modifier,
-            affixes_table,
-            adjectives_table,
-            nouns_table,
-            max_affixes,
-            gold_find,
-            // &items_store.signature_key,
-        )
-    })
 }
 
 fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
@@ -90,6 +76,53 @@ fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
 
 #[allow(clippy::too_many_arguments)]
 pub fn roll_item(
+    loot_table: &LootTable,
+    items_store: &ItemsStore,
+    affixes_table: &ItemAffixesTable,
+    adjectives_table: &ItemAdjectivesTable,
+    nouns_table: &ItemNounsTable,
+    level: AreaLevel,
+    power_level_modifier: AreaLevel,
+    is_boss_level: bool,
+    max_base: bool,
+    max_affixes: bool,
+    filter_category: Option<ItemCategory>,
+    rarity: ItemRarity,
+    gold_find: f64,
+) -> Option<ItemSpecs> {
+    roll_base_item(
+        loot_table,
+        items_store,
+        level,
+        is_boss_level,
+        rarity == ItemRarity::Unique,
+        max_base,
+        filter_category,
+    )
+    .map(|(base_item_id, base)| {
+        let rarity = if base.rarity != ItemRarity::Unique {
+            rarity.clamp(base.rarity, ItemRarity::Rare)
+        } else {
+            ItemRarity::Unique
+        };
+        roll_item_stats(
+            base_item_id,
+            base,
+            rarity,
+            level,
+            power_level_modifier,
+            affixes_table,
+            adjectives_table,
+            nouns_table,
+            max_affixes,
+            gold_find,
+            // &items_store.signature_key,
+        )
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn roll_item_stats(
     base_item_id: String,
     base: ItemBase,
     rarity: ItemRarity,

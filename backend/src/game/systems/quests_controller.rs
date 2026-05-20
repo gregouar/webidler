@@ -1,6 +1,9 @@
 use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
-    data::{item::ItemCategory, quest::QuestRewards},
+    data::{
+        item::{ItemCategory, ItemRarity},
+        quest::QuestRewards,
+    },
 };
 
 use crate::{
@@ -122,22 +125,40 @@ fn generate_end_quest_rewards(
             )
         }))
         .chain((0..amount_rare_rewards).flat_map(|_| {
-            loot_generator::generate_loot(
-                &game_data.area_blueprint.loot_table,
-                &master_store.items_store,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
-                item_level,
-                0,
-                true,
-                true,
-                false,
-                false,
-                None,
-                *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
-                0.0,
-            )
+            if let Some(reward_loot_table) = &game_data.area_blueprint.reward_loot_table {
+                loot_generator::roll_item(
+                    reward_loot_table,
+                    &master_store.items_store,
+                    &master_store.item_affixes_table,
+                    &master_store.item_adjectives_table,
+                    &master_store.item_nouns_table,
+                    item_level,
+                    0,
+                    true,
+                    false,
+                    false,
+                    None,
+                    ItemRarity::Unique,
+                    0.0,
+                )
+            } else {
+                loot_generator::generate_loot(
+                    &game_data.area_blueprint.loot_table,
+                    &master_store.items_store,
+                    &master_store.item_affixes_table,
+                    &master_store.item_adjectives_table,
+                    &master_store.item_nouns_table,
+                    item_level,
+                    0,
+                    true,
+                    true,
+                    false,
+                    false,
+                    None,
+                    *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
+                    0.0,
+                )
+            }
         }))
         .collect();
 
