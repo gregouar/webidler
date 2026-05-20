@@ -2,11 +2,13 @@
     "entries": [
         {
             "item_id": "sandal",
-            "weight": 19999
+            "weight": 9999,
+            "min_area_level": 60
         },
         {
             "item_id": "cloak_backstab",
-            "weight": 19999
+            "weight": 9999,
+            "min_area_level": 60
         }
     ]
 }

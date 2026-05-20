@@ -3,7 +3,7 @@
     {
       "item_id": "treasure_gun",
       "weight": 9999,
-      "min_area_level": 240
+      "min_area_level": 200
     },
     {
       "item_id": "treasure_crown",
@@ -16,7 +16,7 @@
     {
       "item_id": "treasure_idol",
       "weight": 9999,
-      "min_area_level": 240
+      "min_area_level": 200
     },
     {
       "item_id": "treasure_chest",
@@ -25,7 +25,7 @@
     {
       "item_id": "treasure_compass",
       "weight": 999,
-      "min_area_level": 240
+      "min_area_level": 200
     }
   ]
 }

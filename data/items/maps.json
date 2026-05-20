@@ -164,7 +164,8 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "loot_tables": [ ],
-      "replace_area_id": "inn_basement_2.json"
+      "replace_area_id": "inn_basement_2.json",
+      "reward_loot_table": "edict_menu.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [ ],
@@ -300,11 +301,12 @@
     "map_specs": {
       "area_id": "island.json",
       "reward_picks": 1,
-      "reward_slots": 2,
+      "reward_slots": 1,
       "loot_tables": [
         "pirate_treasure.json"
       ],
-      "replace_area_id": null
+      "replace_area_id": null,
+      "reward_loot_table": "edict_treasure.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [ ],
@@ -416,9 +418,10 @@
     "map_specs": {
       "area_id": "witch_lair.json",
       "reward_picks": 1,
-      "reward_slots": 2,
+      "reward_slots": 1,
       "loot_tables": [ ],
-      "replace_area_id": "witch_lair_2.json"
+      "replace_area_id": "witch_lair_2.json",
+      "reward_loot_table": "edict_witch.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [ ],
