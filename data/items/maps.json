@@ -301,7 +301,7 @@
     "map_specs": {
       "area_id": "island.json",
       "reward_picks": 1,
-      "reward_slots": 2,
+      "reward_slots": 1,
       "loot_tables": [
         "pirate_treasure.json"
       ],
@@ -418,7 +418,7 @@
     "map_specs": {
       "area_id": "witch_lair.json",
       "reward_picks": 1,
-      "reward_slots": 2,
+      "reward_slots": 1,
       "loot_tables": [ ],
       "replace_area_id": "witch_lair_2.json",
       "reward_loot_table": "edict_witch.json"
