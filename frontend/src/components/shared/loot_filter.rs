@@ -177,10 +177,10 @@ pub fn LootFilterPanel(
                                     <Checkbox
                                         label="Immediate Mode".into()
                                         on_change=move |value| {
-                                            loot_filter.write().immediate_mode = value
+                                            local_loot_filter.write().immediate_mode = value
                                         }
                                         checked=Signal::derive(move || {
-                                            loot_filter.read().immediate_mode
+                                            local_loot_filter.read().immediate_mode
                                         })
                                     />
 
@@ -199,7 +199,6 @@ pub fn LootFilterPanel(
                                         </span>
                                     </StaticTooltip>
                                 </div>
-
                             </div>
 
                             // <div class="flex-1" />
