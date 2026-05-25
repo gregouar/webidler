@@ -4037,7 +4037,7 @@
                         "StatModifier": {
                           "stat": {
                             "Damage": {
-                              "skill_type": null,
+                              "skill_type": "Attack",
                               "skill_id": null,
                               "skill_description": null,
                               "damage_type": null,
