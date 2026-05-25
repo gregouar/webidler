@@ -47,7 +47,7 @@ jobs:
 
       - name: Prepare SQLx Offline Data
         run: |
-          cargo install sqlx-cli --no-default-features --features postgres
+          cargo install sqlx-cli@0.8.6 --no-default-features --features postgres
           cargo sqlx migrate run --source migrations/postgres
           cargo sqlx prepare --workspace -- --bin backend --features postgres --no-default-features
         env:
