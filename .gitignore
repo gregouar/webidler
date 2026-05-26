@@ -34,3 +34,4 @@ Cargo.lock
 
 logs
 .codex*
+backend/.local/

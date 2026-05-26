@@ -62,3 +62,14 @@ jobs:
         run: cargo test --no-default-features --features postgres
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      - name: Train websocket sync zstd dictionary
+        run: cargo run -p backend --bin train_sync_zstd_dictionary --no-default-features --features postgres -- --ticks 40 --output target/sync_zstd_dictionary.bin
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      - name: Upload websocket sync zstd dictionary
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-zstd-dictionary
+          path: target/sync_zstd_dictionary.bin
