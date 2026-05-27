@@ -1,0 +1,42 @@
+{
+    "stun": {
+        "name": "Stun",
+        "icon": "statuses/stunned.svg",
+        "debuff": true,
+        "duration": 0,
+        "stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": null
+                    },
+                    "modifier": "More",
+                    "debuff": true
+                },
+                "value": 1e+200,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "stun_lockout": {
+        "name": "Stun Lockout",
+        "icon": "statuses/stun_immune.svg",
+        "debuff": false,
+        "duration": 0,
+        "stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "StatusResistance": {
+                            "status_id": "stun"
+                        }
+                    },
+                    "value": 100,
+                    "modifier": "Flat"
+                }
+            }
+        ]
+    }
+}

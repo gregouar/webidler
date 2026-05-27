@@ -357,7 +357,7 @@ fn format_status_trigger_value(
     format_trigger_modifier(
         find_trigger_modifier(
             StatType::StatusPower {
-                status_type: Some(StatStatusType::Trigger {
+                status_filter: Some(StatStatusType::Trigger {
                     trigger_id: None,
                     trigger_description: None,
                 }),
@@ -491,7 +491,7 @@ pub fn format_skill_effect(
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
-                                    status_type: Some(StatStatusType::Stun),
+                                    status_filter: Some(StatStatusType::Stun),
                                     skill_filter: Default::default(),
                                 },
                                 modifiers,
@@ -526,7 +526,7 @@ pub fn format_skill_effect(
                         let trigger_modifier_duration_str = format_trigger_modifier(
                             find_trigger_modifier(
                                 StatType::StatusDuration {
-                                    status_type: Some(StatStatusType::DamageOverTime {
+                                    status_filter: Some(StatStatusType::DamageOverTime {
                                         damage_type: Some(damage_type),
                                     }),
                                     skill_filter: Default::default(),
@@ -648,7 +648,7 @@ pub fn format_skill_effect(
                 (!stat_effects.is_empty() || !trigger_effects.is_empty()).then(|| {
                         let trigger_modifier_duration = find_trigger_modifier(
                                 StatType::StatusDuration {
-                                    status_type: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
+                                    status_filter: Some(StatStatusType::StatModifier { debuff: None, stat:None }) ,
                                     skill_filter:  Default::default(),
                                 },
                                 modifiers,

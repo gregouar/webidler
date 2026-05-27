@@ -296,7 +296,9 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
-            StatSkillEffectType::ApplyStatus { status_type } => {
+            StatSkillEffectType::ApplyStatus {
+                status_filter: status_type,
+            } => {
                 format!("Apply {}", opt_status_type_str(status_type.as_ref()))
             }
             StatSkillEffectType::Restore { restore_type } => {
@@ -517,7 +519,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             )
         }
         StatType::StatusPower {
-            status_type,
+            status_filter: status_type,
             skill_filter,
             min_max,
         } => {
@@ -529,7 +531,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             )
         }
         StatType::StatusDuration {
-            status_type,
+            status_filter: status_type,
             skill_filter,
         } => {
             format!(
@@ -773,7 +775,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter_str(skill_filter, " to ", true)
         ),
         StatType::StatusPower {
-            status_type,
+            status_filter: status_type,
             skill_filter,
             min_max,
         } => {
@@ -794,7 +796,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::StatusDuration {
-            status_type,
+            status_filter: status_type,
             skill_filter,
         } => {
             if value.unwrap_or_default() >= 99999.0 {

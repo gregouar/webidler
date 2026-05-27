@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, conditional_modifier::Condition, item::SkillShape, modifier::Modifier,
-    skill::TargetType, stat_effect::StatStatusType,
+    character_status::StatusId, conditional_modifier::Condition, item::SkillShape,
+    modifier::Modifier, skill::TargetType,
 };
 
 use super::{
@@ -50,7 +50,7 @@ pub struct StatusTrigger {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
     #[serde(default)]
-    pub status_type: Option<StatStatusType>,
+    pub status_id: Option<StatusId>,
     #[serde(default)]
     pub is_triggered: Option<bool>,
     #[serde(default)]
@@ -72,8 +72,8 @@ pub struct TriggerSpecs {
     pub description: Option<String>,
     #[serde(flatten)]
     pub triggered_effect: TriggeredEffect,
-    #[serde(default)]
-    pub is_debuff: bool,
+    // #[serde(default)]
+    // pub is_debuff: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -96,9 +96,6 @@ pub struct TriggeredEffect {
     pub skill_shape: SkillShape,
 
     #[serde(default)]
-    pub owner: Option<CharacterId>,
-
-    #[serde(default)]
     pub trigger_propagate: bool,
 }
 
@@ -116,19 +113,19 @@ pub enum TriggerEffectModifierSource {
     AreaLevel,
     StatusValue {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_id: Option<StatusId>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusDuration {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_id: Option<StatusId>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusStacks {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_id: Option<StatusId>,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },

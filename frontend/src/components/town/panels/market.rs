@@ -1529,7 +1529,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
+                status_filter: Some(StatStatusType::DamageOverTime { damage_type: None }),
                 skill_filter: Default::default(),
                 min_max: None,
             },
@@ -1537,7 +1537,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: None,
+                status_filter: None,
                 skill_filter: StatSkillFilter {
                     skill_type: Some(SkillType::Curse),
                     ..Default::default()
@@ -1548,7 +1548,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusDuration {
-                status_type: None,
+                status_filter: None,
                 skill_filter: Default::default(),
             },
             Modifier::Increased,
@@ -1556,7 +1556,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::SuccessChance {
                 skill_filter: Default::default(),
-                effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
+                effect_type: Some(StatSkillEffectType::ApplyStatus { status_filter: None }),
             },
             Modifier::Increased,
         ),

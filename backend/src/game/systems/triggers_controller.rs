@@ -18,8 +18,10 @@ pub struct TriggerContext<'a> {
     pub trigger: TriggeredEffect,
     pub trigger_depth: u8,
 
+    pub owner: CharacterId,
     pub source: CharacterId,
     pub target: CharacterId,
+
     pub hit_context: Option<&'a HitEvent>,
     pub status_context: Option<&'a StatusEvent>,
     pub level: usize,

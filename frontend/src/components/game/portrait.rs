@@ -641,7 +641,7 @@ fn StatusIcon(
                     StatType::CritDamage(_) => "passives/critical_damage.svg".into(),
                     StatType::Speed(_) => "passives/sprint.svg".into(),
                     StatType::StatusDuration {
-                        status_type:
+                        status_filter:
                             Some(StatStatusType::DamageOverTime {
                                 damage_type: Some(DamageType::Poison),
                             }),
@@ -658,7 +658,7 @@ fn StatusIcon(
                         (
                             _,
                             Some(StatSkillEffectType::ApplyStatus {
-                                status_type:
+                                status_filter:
                                     Some(StatStatusType::DamageOverTime {
                                         damage_type: Some(DamageType::Fire),
                                     }),

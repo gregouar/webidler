@@ -502,14 +502,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_stat(
                                     StatType::StatusDuration {
-                                        status_type: None,
+                                        status_filter: None,
                                         skill_filter: Default::default(),
                                     },
                                     Modifier::Increased,
                                 )}
                                 {make_stat(
                                     StatType::StatusPower {
-                                        status_type: None,
+                                        status_filter: None,
                                         skill_filter: Default::default(),
                                         min_max: None,
                                     },
@@ -518,7 +518,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 // TODO: More for stun?
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_type: None,
+                                        status_filter: None,
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Blessing),
                                             ..Default::default()
@@ -530,7 +530,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::StatusDuration {
-                                        status_type: None,
+                                        status_filter: None,
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Blessing),
                                             ..Default::default()
@@ -541,7 +541,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_type: None,
+                                        status_filter: None,
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Curse),
                                             ..Default::default()
@@ -553,7 +553,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::StatusDuration {
-                                        status_type: None,
+                                        status_filter: None,
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Curse),
                                             ..Default::default()
@@ -695,7 +695,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )} // TODO: Elemental dot?
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_type: Some(StatStatusType::DamageOverTime {
+                                        status_filter: Some(StatStatusType::DamageOverTime {
                                             damage_type: None,
                                         }),
                                         skill_filter: Default::default(),

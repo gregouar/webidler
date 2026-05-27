@@ -1,0 +1,8 @@
+{
+    "meta": {
+        "enabled": true
+    },
+    "resources": {
+        "statuses": [ "base.json", "blessings.json", "curses.json", "dot.json" ]
+    }
+}

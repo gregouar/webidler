@@ -3,24 +3,20 @@ use strum::IntoEnumIterator;
 
 use shared::data::{
     chance::{Chance, ChanceRange},
-    character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
     skill::{
-        ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
-        SkillTargetsGroup, SkillType, TargetType,
+        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
+        TargetType,
     },
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
         compare_options,
     },
-    values::NonNegative,
 };
 
 use crate::{game::data::items_store::ItemsStore, rest::AppError};
-
-const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
 
 pub fn init_item_specs_from_store(
     items_store: &ItemsStore,
@@ -312,16 +308,12 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         },
         SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
-                duration: ChanceRange {
-                    min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
-                    max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
-                    lucky_chance: Default::default(),
-                },
-                statuses: vec![ApplyStatusEffect {
-                    status_type: StatusSpecs::DamageOverTime {
-                        damage_type: DamageType::Poison,
-                    },
-                    value: weapon_specs
+                duration: None,
+                status_id: "poison".to_string(),
+                replace_on_value_only: false,
+                unavoidable: false,
+                value: Some(
+                    weapon_specs
                         .damage
                         .get(&DamageType::Poison)
                         .map(|v| ChanceRange {
@@ -330,11 +322,9 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                             lucky_chance: v.lucky_chance.as_new_base(),
                         })
                         .unwrap_or_default(),
-                    cumulate: false,
-                    unavoidable: false,
-                    replace_on_value_only: false,
-                    escalation: Default::default(),
-                }],
+                ),
+                escalation: None,
+                stacks: None,
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
@@ -343,7 +333,6 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
     ];
 
     BaseSkillSpecs {
-        // skill_id: "weapon_attack".to_string(),
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),

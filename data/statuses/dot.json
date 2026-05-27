@@ -1,0 +1,18 @@
+{
+    "burn": {
+        "name": "Burn",
+        "icon": "statuses/burning.svg",
+        "debuff": true,
+        "duration": 3.0,
+        "stacks": 10,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Fire"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

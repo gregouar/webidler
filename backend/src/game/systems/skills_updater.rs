@@ -701,7 +701,7 @@ pub fn apply_stat_effect_on_skill_effect(
         }
         SkillEffectType::ApplyStatus { statuses, duration } => {
             if let StatType::StatusDuration {
-                status_type,
+                status_filter: status_type,
                 skill_filter,
             } = &effect.stat
                 && statuses.iter().any(|status_effect| {
@@ -715,7 +715,7 @@ pub fn apply_stat_effect_on_skill_effect(
 
             for status_effect in statuses.iter_mut() {
                 if let StatType::StatusPower {
-                    status_type,
+                    status_filter: status_type,
                     skill_filter,
                     min_max,
                 } = &effect.stat

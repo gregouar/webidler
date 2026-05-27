@@ -11,7 +11,7 @@ pub fn compute_stats_effects_status_value(
     let mut factor = Factor::new();
 
     let status_power = StatType::StatusPower {
-        status_type: Some((&status_effect.status_type).into()),
+        status_filter: Some((&status_effect.status_type).into()),
         skill_filter: Default::default(), // TODO
         min_max: None,
     };

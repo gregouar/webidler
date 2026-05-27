@@ -6,7 +6,7 @@ use strum_macros::EnumIter;
 use crate::{
     data::{
         chance::ChanceRange,
-        character_status::StatusSpecs,
+        character_status::StatusId,
         conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
@@ -64,12 +64,8 @@ impl Matchable for MinMax {
 pub struct StatSkillFilter {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
-
     #[serde(default)]
     pub skill_id: Option<String>,
-    // TODO: This is awful....
-    #[serde(default)]
-    pub skill_description: Option<String>,
 }
 
 impl Matchable for StatSkillFilter {
@@ -119,9 +115,9 @@ pub enum StatType {
     EvadeDamageTaken,
     StatusResistance {
         #[serde(default)]
-        skill_type: Option<SkillType>,
+        status_id: Option<StatusId>,
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        skill_type: Option<SkillType>,
     },
     Damage {
         #[serde(flatten)]
@@ -137,7 +133,7 @@ pub enum StatType {
     CritDamage(#[serde(default)] StatSkillFilter),
     StatusPower {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_id: Option<StatusId>,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
@@ -145,15 +141,15 @@ pub enum StatType {
     },
     StatusDuration {
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        status_id: Option<StatusId>,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
     StatusEscalation {
+        #[serde(default)]
+        status_id: Option<StatusId>,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
     },
     StatusFaster {
         #[serde(flatten)]
@@ -310,44 +306,40 @@ impl Matchable for StatType {
             (Evade(first), Evade(second)) => compare_options(first, second),
             (
                 StatusPower {
-                    status_type,
+                    status_id,
                     skill_filter,
                     min_max,
                 },
                 StatusPower {
-                    status_type: status_type_2,
+                    status_id: status_id_2,
                     skill_filter: skill_filter_2,
                     min_max: min_max_2,
                 },
             ) => {
-                compare_options(status_type, status_type_2)
+                compare_options(status_id, status_id_2)
                     && skill_filter.is_match(skill_filter_2)
                     && compare_options(min_max, min_max_2)
             }
             (
                 StatusDuration {
-                    status_type,
+                    status_id,
                     skill_filter,
                 },
                 StatusDuration {
-                    status_type: status_type_2,
+                    status_id: status_id_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => {
-                compare_options(status_type, status_type_2) && skill_filter.is_match(skill_filter_2)
-            }
+            ) => compare_options(status_id, status_id_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusEscalation {
-                    damage_type,
+                    status_id,
                     skill_filter,
                 },
                 StatusEscalation {
-                    damage_type: damage_type_2,
+                    status_id: status_id_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => {
-                compare_options(damage_type, damage_type_2) && skill_filter.is_match(skill_filter_2)
-            }
+            ) => compare_options(status_id, status_id_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusFaster {
                     damage_type,
@@ -362,16 +354,15 @@ impl Matchable for StatType {
             }
             (
                 StatusResistance {
-                    status_type,
+                    status_id,
                     skill_type,
                 },
                 StatusResistance {
-                    status_type: status_type_2,
+                    status_id: status_id_2,
                     skill_type: skill_type_2,
                 },
             ) => {
-                compare_options(status_type, status_type_2)
-                    && compare_options(skill_type, skill_type_2)
+                compare_options(status_id, status_id_2) && compare_options(skill_type, skill_type_2)
             }
             (SkillLevel(first), SkillLevel(second)) => first.is_match(second),
             (
@@ -384,21 +375,6 @@ impl Matchable for StatType {
             _ => self == stat_type,
         }
     }
-
-    // pub fn is_multiplicative(&self) -> bool {
-    //     use StatType::*;
-
-    //     matches!(
-    //         self,
-    //         Damage { .. }
-    //             | CritDamage(_)
-    //             | StatusPower {
-    //                 status_type: Some(StatStatusType::DamageOverTime { .. }),
-    //                 ..
-    //             }
-    //             | GoldFind
-    //     )
-    // }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -439,93 +415,13 @@ impl ArmorStatType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum StatStatusType {
-    Stun,
-    DamageOverTime {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    StatModifier {
-        #[serde(default)]
-        debuff: Option<bool>,
-        #[serde(default)]
-        stat: Option<Box<StatType>>,
-    },
-    Trigger {
-        #[serde(default)]
-        trigger_id: Option<String>,
-
-        // TODO: This is awful....
-        #[serde(default)]
-        trigger_description: Option<String>,
-    },
-}
-
-impl Matchable for StatStatusType {
-    fn is_match(&self, status_type: &StatStatusType) -> bool {
-        if self == status_type {
-            return true;
-        }
-
-        use StatStatusType::*;
-        match (self, status_type) {
-            (
-                DamageOverTime { damage_type },
-                DamageOverTime {
-                    damage_type: damage_type_2,
-                },
-            ) => compare_options(damage_type, damage_type_2),
-            (
-                StatModifier { debuff, stat },
-                StatModifier {
-                    debuff: debuff_2,
-                    stat: stat2,
-                },
-            ) => {
-                compare_options(debuff, debuff_2)
-                    && compare_options(&stat.as_deref(), &stat2.as_deref())
-            }
-            (
-                Trigger {
-                    trigger_id,
-                    trigger_description: _,
-                },
-                Trigger {
-                    trigger_id: trigger_id_2,
-                    trigger_description: _,
-                },
-            ) => compare_options(trigger_id, trigger_id_2),
-            _ => false,
-        }
-    }
-}
-
-impl From<&StatusSpecs> for StatStatusType {
-    fn from(value: &StatusSpecs) -> Self {
-        match value {
-            StatusSpecs::Stun => StatStatusType::Stun,
-            StatusSpecs::DamageOverTime { damage_type, .. } => StatStatusType::DamageOverTime {
-                damage_type: Some(*damage_type),
-            },
-            StatusSpecs::StatModifier { debuff, stat, .. } => StatStatusType::StatModifier {
-                debuff: Some(*debuff),
-                stat: Some(stat.clone().into()),
-            },
-            StatusSpecs::Trigger(trigger_specs) => StatStatusType::Trigger {
-                trigger_id: Some(trigger_specs.triggered_effect.trigger_id.clone()),
-                trigger_description: None,
-            },
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatSkillEffectType {
     FlatDamage {
         // damage_type: Option<DamageType>,
     },
     ApplyStatus {
-        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        status_id: Option<String>,
     },
     Restore {
         #[serde(default)]
@@ -546,11 +442,11 @@ impl Matchable for StatSkillEffectType {
                 },
             ) => compare_options(restore_type, restore_type_2),
             (
-                ApplyStatus { status_type },
+                ApplyStatus { status_id },
                 ApplyStatus {
-                    status_type: status_type_2,
+                    status_id: status_id_2,
                 },
-            ) => compare_options(status_type, status_type_2),
+            ) => compare_options(status_id, status_id_2),
             _ => self == skill_effect_type,
         }
     }
@@ -560,9 +456,9 @@ impl From<&SkillEffectType> for Option<StatSkillEffectType> {
     fn from(value: &SkillEffectType) -> Self {
         match value {
             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
-            SkillEffectType::ApplyStatus { statuses, .. } => {
+            SkillEffectType::ApplyStatus { status_id, .. } => {
                 Some(StatSkillEffectType::ApplyStatus {
-                    status_type: statuses.first().map(|status| (&status.status_type).into()),
+                    status_id: Some(status_id.clone()),
                 })
             }
             SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {

@@ -404,7 +404,15 @@ fn is_skill_effect_applicable_on_target(
 ) -> bool {
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage { .. } => target.1.1.is_alive,
-        SkillEffectType::ApplyStatus { duration, statuses } => {
+        SkillEffectType::ApplyStatus {
+            status_id,
+            value,
+            duration,
+            escalation,
+            stacks,
+            replace_on_value_only,
+            unavoidable,
+        } => {
             let values: Vec<_> = statuses
                 .iter()
                 .map(|status_effect| status_effect.value.max)
@@ -500,7 +508,15 @@ fn apply_skill_effect_on_target(
                 trigger_depth,
             )
         }
-        SkillEffectType::ApplyStatus { duration, statuses } => {
+        SkillEffectType::ApplyStatus {
+            status_id,
+            value,
+            duration,
+            escalation,
+            stacks,
+            replace_on_value_only,
+            unavoidable,
+        } => {
             let values: Vec<_> = statuses
                 .iter()
                 .map(|status_effect| status_effect.value.roll_with_seed(seed))

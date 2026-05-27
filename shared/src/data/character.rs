@@ -8,7 +8,7 @@ use crate::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
     skill::{DamageType, RepeatedSkillEffect, SkillType},
-    stat_effect::{EffectsMap, StatStatusType},
+    stat_effect::EffectsMap,
     trigger::TriggeredEffect,
     values::{AtLeastOne, NonNegative, Percent},
 };
@@ -112,7 +112,7 @@ pub struct CharacterAttrs {
     pub evade_damage: ModifiableValue<Percent>,
 
     #[serde(default)]
-    pub status_resistances: HashMap<(SkillType, Option<StatStatusType>), ModifiableValue<f64>>,
+    pub status_resistances: HashMap<(SkillType, Option<StatusId>), ModifiableValue<f64>>,
     #[serde(default)]
     pub stun_lockout: ModifiableValue<NonNegative>,
 
@@ -151,11 +151,9 @@ pub struct MonitoredCondition {
 }
 
 impl CharacterState {
+    // TODO: Should we get rid of that?
     pub fn is_stunned(&self) -> bool {
         // TODO: Also iter over non unique?
-        self.statuses
-            .unique_statuses
-            .iter()
-            .any(|(status_id, _)| *status_id == StatusId::Stun)
+        self.statuses.keys().any(|status_id| *status_id == "stun")
     }
 }

@@ -6,6 +6,7 @@ use strum_macros::EnumIter;
 use crate::data::{
     chance::{Chance, ChanceRange},
     character::CharacterId,
+    character_status::StatusId,
     conditional_modifier::{Condition, ConditionalModifier},
     item::ItemCategory,
     modifier::ModifiableValue,
@@ -15,7 +16,7 @@ use crate::data::{
 };
 
 pub use super::stat_effect::DamageType;
-use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
+use super::{item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseSkillSpecs {
@@ -47,15 +48,12 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub auto_use_conditions: Vec<Condition>,
 
-    // #[serde(default)]
-    // pub skill_id: String,
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillSpecs {
-    // pub base: BaseSkillSpecs,
     pub skill_id: String,
 
     pub name: String,
@@ -210,8 +208,23 @@ pub enum SkillEffectType {
         unblockable: bool,
     },
     ApplyStatus {
-        statuses: Vec<ApplyStatusEffect>,
-        duration: ChanceRange<ModifiableValue<NonNegative>>,
+        status_id: StatusId,
+
+        value: ChanceRange<ModifiableValue<NonNegative>>,
+
+        // On skill definition, overwrite default status value when some
+        // On skill computed specs, get derived values
+        #[serde(default)]
+        duration: Option<ChanceRange<ModifiableValue<NonNegative>>>,
+        #[serde(default)]
+        escalation: Option<ModifiableValue<NonNegative>>,
+        #[serde(default)]
+        stacks: Option<u8>,
+        #[serde(default)]
+        avoidable: Option<DamageType>,
+
+        #[serde(default)]
+        replace_on_value_only: bool,
     },
     Restore {
         restore_type: RestoreType,
@@ -231,21 +244,6 @@ pub enum SkillEffectType {
 pub enum RestoreModifier {
     Flat,
     Percent,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ApplyStatusEffect {
-    pub status_type: StatusSpecs,
-    #[serde(default)]
-    pub value: ChanceRange<ModifiableValue<NonNegative>>,
-    #[serde(default)]
-    pub cumulate: bool,
-    #[serde(default)]
-    pub replace_on_value_only: bool,
-    #[serde(default)]
-    pub unavoidable: bool,
-    #[serde(default)]
-    pub escalation: ModifiableValue<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]

@@ -9,8 +9,8 @@ use std::{
 };
 
 use shared::data::{
-    monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs,
-    temple::BenedictionsCategory,
+    character_status::StatusSpecs, monster::MonsterSpecs, passive::PassivesTreeSpecs,
+    skill::BaseSkillSpecs, temple::BenedictionsCategory,
 };
 
 use super::{
@@ -34,6 +34,7 @@ use crate::game::{
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
 pub type BenedictionsStore = IndexMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
+pub type StatusesStore = HashMap<String, StatusSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
 pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
@@ -43,6 +44,7 @@ pub struct MasterStore {
     pub passives_store: Arc<PassivesStore>,
     pub benedictions_store: Arc<BenedictionsStore>,
     pub skills_store: Arc<SkillsStore>,
+    pub statuses_store: Arc<StatusesStore>,
     pub items_store: Arc<ItemsStore>,
     pub item_affixes_table: Arc<ItemAffixesTable>,
     pub item_adjectives_table: Arc<ItemAdjectivesTable>,
@@ -55,6 +57,7 @@ pub struct MasterStore {
 
 impl LoadJsonFromFile for MonsterSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
+impl LoadJsonFromFile for StatusSpecs {}
 impl LoadJsonFromFile for PassivesTreeSpecs {}
 impl LoadJsonFromFile for BenedictionsCategory {}
 
@@ -69,6 +72,7 @@ impl MasterStore {
             passives_store,
             benedictions_store,
             skills_store,
+            statuses_store,
             items_store_content,
             item_affixes_table,
             item_adjectives_table,
@@ -80,6 +84,7 @@ impl MasterStore {
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Passives)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Benedictions)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Skills)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Statuses)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Items)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAffixes)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAdjectives)),
@@ -128,6 +133,7 @@ impl MasterStore {
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),
             skills_store: Arc::new(skills_store?),
+            statuses_store: Arc::new(statuses_store?),
             items_store: Arc::new(ItemsStore {
                 content: items_store_content?,
                 signature_key: item_signature_key,

@@ -160,14 +160,12 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
 pub fn initialize_status_state(
     skill_type: SkillType,
     value: NonNegative,
-    duration: Option<NonNegative>,
-    escalation: f64,
-    cumulate: bool,
+    duration: NonNegative,
+    escalation: NonNegative,
 ) -> StatusState {
     StatusState {
         value,
         duration,
-        cumulate,
         skill_type,
         base_value: value,
         elapsed_escalation: Default::default(),

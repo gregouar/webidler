@@ -6,7 +6,7 @@ use shared::{
     data::{
         area::AreaThreat,
         character::{CharacterAttrs, CharacterId, CharacterState},
-        character_status::StatusSpecs,
+        character_status::StatusEffectType,
         conditional_modifier::ConditionalModifier,
         player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
@@ -16,7 +16,10 @@ use shared::{
 };
 
 use crate::game::{
-    data::event::{EventsQueue, GameEvent},
+    data::{
+        event::{EventsQueue, GameEvent},
+        master_store::StatusesStore,
+    },
     systems::{characters_controller::restore_character, skills_updater, stats_updater},
 };
 
@@ -280,7 +283,7 @@ fn compute_character_specs(
             }
             StatType::StatusResistance {
                 skill_type,
-                status_type,
+                status_id,
             } => {
                 let skill_types = match skill_type {
                     Some(skill_type) => vec![*skill_type],
@@ -290,7 +293,7 @@ fn compute_character_specs(
                 for &skill in &skill_types {
                     character_attrs
                         .status_resistances
-                        .entry((skill, status_type.clone()))
+                        .entry((skill, status_id.clone()))
                         .or_default()
                         .apply_effect(effect);
                 }
@@ -480,15 +483,19 @@ pub fn compute_stat_converter(
 }
 
 pub fn extend_triggers_from_skills_and_statuses(
+    statuses_store: &StatusesStore,
     character_specs: &mut CharacterSpecs,
     character_state: &CharacterState,
 ) {
-    character_specs.triggers.extend(
-        character_state
-            .statuses
-            .iter()
-            .filter_map(|(status_specs, status_state)| match status_specs {
-                StatusSpecs::Trigger(trigger_specs) => {
+    for (status_id, status_stacks) in character_state.statuses.iter() {
+        let Some(status_specs) = statuses_store.get(status_id) else {
+            tracing::warn!("missing status: {status_id}");
+            continue;
+        };
+
+        for status_effect in status_specs.effects.iter() {
+            if let StatusEffectType::Trigger(trigger_specs) = &status_effect.status_effect_type {
+                for status_state in status_stacks.iter() {
                     let mut triggered_effect = trigger_specs.triggered_effect.clone();
                     for modifier_effect in triggered_effect.modifiers.iter() {
                         if let TriggerEffectModifierSource::TriggerStatusValue =
@@ -510,16 +517,58 @@ pub fn extend_triggers_from_skills_and_statuses(
                             }
                         }
                     }
-                    Some(triggered_effect)
+                    character_specs.triggers.push(triggered_effect);
                 }
-                _ => None,
-            })
-            .chain(
-                character_specs
-                    .skills_specs
-                    .iter()
-                    .flat_map(|skill_specs| skill_specs.triggers.iter())
-                    .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-            ),
+            }
+        }
+    }
+
+    character_specs.triggers.extend(
+        character_specs
+            .skills_specs
+            .iter()
+            .flat_map(|skill_specs| skill_specs.triggers.iter())
+            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
     );
+
+    // character_specs.triggers.extend(
+    //     character_state
+    //         .statuses
+    //         .iter()
+    //         .flat_map(|(status_id, status_stacks)| status_stacks.iter())
+    //         .filter_map(|(status_specs, status_state)| match status_specs {
+    //             StatusSpecs::Trigger(trigger_specs) => {
+    //                 let mut triggered_effect = trigger_specs.triggered_effect.clone();
+    //                 for modifier_effect in triggered_effect.modifiers.iter() {
+    //                     if let TriggerEffectModifierSource::TriggerStatusValue =
+    //                         modifier_effect.source
+    //                     {
+    //                         for skill_effect in triggered_effect.effects.iter_mut() {
+    //                             skills_updater::compute_skill_specs_effect(
+    //                                 &triggered_effect.trigger_id,
+    //                                 triggered_effect.skill_type,
+    //                                 skill_effect,
+    //                                 [StatEffect {
+    //                                     stat: modifier_effect.stat.clone(),
+    //                                     modifier: modifier_effect.modifier,
+    //                                     value: status_state.value.get() * modifier_effect.factor,
+    //                                     bypass_ignore: true,
+    //                                 }]
+    //                                 .iter(),
+    //                             );
+    //                         }
+    //                     }
+    //                 }
+    //                 Some(triggered_effect)
+    //             }
+    //             _ => None,
+    //         })
+    //         .chain(
+    //             character_specs
+    //                 .skills_specs
+    //                 .iter()
+    //                 .flat_map(|skill_specs| skill_specs.triggers.iter())
+    //                 .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    //         ),
+    // );
 }

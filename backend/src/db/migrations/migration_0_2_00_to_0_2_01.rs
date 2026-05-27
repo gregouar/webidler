@@ -1,69 +1,61 @@
-// use std::collections::{BTreeSet, HashMap};
+use std::collections::{BTreeSet, HashMap};
 
-// use anyhow::Context;
-// use serde::{Deserialize, Serialize};
-// use sqlx::{Transaction, types::JsonValue};
+use anyhow::Context;
+use serde::{Deserialize, Serialize};
+use sqlx::{Transaction, types::JsonValue};
 
-// use shared::data::{
-//     area::AreaLevel,
-//     conditional_modifier::Condition,
-//     item::{ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
-//     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
-//     modifier::Modifier,
-//     passive::PassivesTreeAscension,
-//     skill::{DamageType, RestoreType, SkillType},
-//     stat_effect::{
-//         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
-//         StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusType, StatType,
-//     },
-//     temple::PlayerBenedictions,
-//     user::UserCharacterId,
-// };
+use shared::data::{
+    area::AreaLevel,
+    conditional_modifier::Condition,
+    item::{ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
+    item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    modifier::Modifier,
+    passive::PassivesTreeAscension,
+    skill::{DamageType, RestoreType, SkillType},
+    stat_effect::{
+        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
+        StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatType,
+    },
+    temple::PlayerBenedictions,
+    user::UserCharacterId,
+};
 
-// use crate::{
-//     app_state::MasterStore,
-//     constants::DATA_VERSION,
-//     db::{
-//         self,
-//         characters_data::{CharacterDataEntry, upsert_character_inventory_data},
-//         pool::{Database, DbExecutor, DbPool},
-//     },
-//     game::{
-//         data::inventory_data::InventoryData,
-//         systems::{benedictions_controller, passives_controller},
-//     },
-// };
+use crate::{
+    app_state::MasterStore,
+    constants::DATA_VERSION,
+    db::{
+        self,
+        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        pool::{Database, DbExecutor, DbPool},
+    },
+    game::{
+        data::inventory_data::InventoryData,
+        systems::{benedictions_controller, passives_controller},
+    },
+};
 
-// pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
-//     let mut tx = db_pool.begin().await?;
+pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
+    let mut tx = db_pool.begin().await?;
 
-//     stop_all_grinds(&mut *tx).await?;
-//     clear_game_stats(&mut *tx).await?;
+    stop_all_grinds(&mut *tx).await?;
 
-//     migrate_character_data(&mut tx, master_store)
-//         .await
-//         .context("migrate_character_data")?;
-//     migrate_stash_items(&mut tx)
-//         .await
-//         .context("migrate_stash_items")?;
+    // migrate_character_data(&mut tx, master_store)
+    //     .await
+    //     .context("migrate_character_data")?;
+    // migrate_stash_items(&mut tx)
+    //     .await
+    //     .context("migrate_stash_items")?;
 
-//     tx.commit().await?;
-//     Ok(())
-// }
+    tx.commit().await?;
+    Ok(())
+}
 
-// async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()> {
-//     sqlx::query!("DELETE FROM saved_game_instances WHERE data_version <= '0.1.9'")
-//         .execute(executor)
-//         .await?;
-//     Ok(())
-// }
-
-// async fn clear_game_stats<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()> {
-//     sqlx::query!("DELETE FROM game_stats WHERE data_version <= '0.1.9'")
-//         .execute(executor)
-//         .await?;
-//     Ok(())
-// }
+async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()> {
+    sqlx::query!("DELETE FROM saved_game_instances WHERE data_version <= '0.2.00'")
+        .execute(executor)
+        .await?;
+    Ok(())
+}
 
 // async fn migrate_character_data(
 //     executor: &mut Transaction<'static, Database>,
