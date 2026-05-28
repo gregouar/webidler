@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::data::{
-    chance::ChanceRange, modifier::Modifier, skill::SkillType, trigger::TriggerSpecs,
-    values::NonNegative,
+    chance::ChanceRange, character::CharacterId, modifier::Modifier, skill::SkillType,
+    trigger::TriggerSpecs, values::NonNegative,
 };
 
 use super::{skill::DamageType, stat_effect::StatType};
@@ -140,6 +140,8 @@ pub enum StatusModifier {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusState {
+    pub owner: CharacterId,
+
     pub value: NonNegative,
     pub duration: NonNegative, // Remaining duration
     pub skill_type: SkillType, // TODO: Should move to status specs???

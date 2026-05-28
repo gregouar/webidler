@@ -1,8 +1,9 @@
 use shared::data::{
     character::CharacterId,
+    character_status::StatusId,
     skill::SkillType,
-    stat_effect::{StatEffect, StatStatusType, compare_options},
-    trigger::{TriggerEffectModifierSource, TriggerTarget, TriggeredEffect},
+    stat_effect::{StatEffect, compare_options},
+    trigger::{OwnedTrigger, TriggerEffectModifierSource, TriggerTarget},
     values::NonNegative,
 };
 
@@ -15,10 +16,9 @@ use super::{skills_controller, skills_updater};
 
 #[derive(Debug)]
 pub struct TriggerContext<'a> {
-    pub trigger: TriggeredEffect,
+    pub owned_trigger: OwnedTrigger, //TODO: Replace by lazy?
     pub trigger_depth: u8,
 
-    pub owner: CharacterId,
     pub source: CharacterId,
     pub target: CharacterId,
 
@@ -271,8 +271,8 @@ pub fn apply_trigger_effects(
 }
 
 struct StatusModifierData {
-    status_type: StatStatusType,
+    status_id: StatusId,
     skill_type: SkillType,
     value: NonNegative,
-    duration: Option<NonNegative>,
+    duration: NonNegative,
 }

@@ -1,0 +1,275 @@
+{
+  "blessing_haste": {
+    "name": "Blessing of Haste",
+    "description": "A blessing that increases your speed, allowing quicker actions in battle.",
+    "icon": "skills/haste.svg",
+    "skill_type": "Blessing",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "skill_type": "Blessing"
+          }
+        },
+        "modifier": "Increased",
+        "value": 2
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": {
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "modifier": "Increased"
+                    }
+                  },
+                  "value": 20
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Speed": {
+                          "skill_type": "Spell"
+                        }
+                      },
+                      "modifier": "Increased"
+                    }
+                  },
+                  "value": 20
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blessing_crit": {
+    "name": "Blessing of Precision",
+    "description": "A blessing that increase your chance of critical strike, and make them stronger.",
+    "icon": "skills/blessing_crit.svg",
+    "skill_type": "Blessing",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "skill_type": "Blessing"
+          }
+        },
+        "modifier": "Flat",
+        "value": 2
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Lucky": {
+                          "roll_type": "CritChance"
+                        }
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 200
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "CritDamage": { }
+                      },
+                      "modifier": "More"
+                    }
+                  },
+                  "value": 20
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blessing_protection": {
+    "name": "Blessing of Protection",
+    "description": "A blessing that massively increase your defense.",
+    "icon": "skills/blessing_protection.svg",
+    "skill_type": "Blessing",
+    "cooldown": 10,
+    "mana_cost": 30,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_type": {
+              "StatModifier": {
+                "stat": {
+                  "Armor": null
+                },
+                "debuff": false
+              }
+            }
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 5,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "DamageResistance": { }
+                      },
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 15
+                },
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": {
+                        "Armor": null
+                      },
+                      "modifier": "Increased"
+                    }
+                  },
+                  "value": 10
+                }
+              ]
+            },
+            "ignore_stat_effects": [ ]
+          }
+        ]
+      }
+    ]
+  },
+  "blessing_heal": {
+    "name": "Blessing of Renewal",
+    "description": "A blessing that increase your life regeneration.",
+    "icon": "skills/blessing_renewal.svg",
+    "skill_type": "Blessing",
+    "cooldown": 20,
+    "mana_cost": 25,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "skill_type": "Blessing"
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "duration": 3,
+              "statuses": [
+                {
+                  "replace_on_value_only": true,
+                  "status_type": {
+                    "StatModifier": {
+                      "stat": "LifeRegen",
+                      "modifier": "Flat"
+                    }
+                  },
+                  "value": 25
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "meditate": {
+    "name": "Meditate",
+    "description": "Focus your mind to recover mana, replenishing your magical energy.",
+    "icon": "skills/meditate.svg",
+    "skill_type": "Blessing",
+    "cooldown": 5,
+    "mana_cost": 0,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Restore": {
+            "restore_type": "Mana"
+          }
+        },
+        "modifier": "Flat",
+        "value": 1
+      },
+      {
+        "stat": {
+          "Speed": { }
+        },
+        "modifier": "Flat",
+        "value": -0.3
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "Restore": {
+              "restore_type": "Mana",
+              "value": 5,
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -15,14 +15,14 @@ use shared::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
         stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
-        trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
+        trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
         values::{AtLeastOne, NonNegative},
     },
 };
 use strum::IntoEnumIterator;
 
 use crate::game::{
-    data::{DataInit, event::EventsQueue},
+    data::{DataInit, event::EventsQueue, master_store::StatusesStore},
     systems::{stats_updater, statuses_controller},
 };
 
@@ -96,6 +96,7 @@ pub fn reset_player(player_state: &mut PlayerState) {
 // I hate the fact player state influences player specs... But I couldn't figure out a way
 // to have it working with the dynamic statuses.
 pub fn update_player_specs(
+    statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
     player_specs: &PlayerSpecs,
     player_state: &PlayerState,
@@ -137,32 +138,38 @@ pub fn update_player_specs(
 
     let mut player_specs = compute_player_specs(player_base_specs, player_inventory, &mut effects);
 
-    player_specs.character_specs.triggers.extend(
-        passives_tree_state
-            .purchased_nodes
-            .iter()
-            .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
-            .flat_map(|node| node.triggers.iter())
-            .chain(
-                player_inventory
-                    .equipped_items()
-                    .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
-            )
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-    );
+    for trigger_specs in passives_tree_state
+        .purchased_nodes
+        .iter()
+        .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
+        .flat_map(|node| node.triggers.iter())
+        .chain(
+            player_inventory
+                .equipped_items()
+                .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
+        )
+    {
+        player_specs.character_specs.triggers.push(
+            trigger_specs.trigger.clone(),
+            trigger_specs.trigger_effect.clone(),
+            Some(CharacterId::Player),
+        );
+    }
 
-    for trigger_specs in player_specs.character_specs.triggers.iter_mut() {
-        for trigger_effect in trigger_specs.effects.iter_mut() {
+    for trigger_effect in player_specs.character_specs.triggers.effects_iter_mut() {
+        for skill_effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
-                &trigger_specs.trigger_id,
-                trigger_specs.skill_type,
-                trigger_effect,
+                &trigger_effect.trigger_id,
+                trigger_effect.skill_type,
+                skill_effect,
                 effects.iter(),
             );
         }
     }
 
     characters_updater::extend_triggers_from_skills_and_statuses(
+        statuses_store,
+        CharacterId::Player,
         &mut player_specs.character_specs,
         &player_state.character_state,
     );
@@ -229,41 +236,38 @@ fn compute_player_specs(
     player_specs.threat_gain = *threat_gain;
 
     for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {
-        player_specs.character_specs.triggers.push(TriggeredEffect {
-            trigger_id: format!("restore_on_hit_{:?}_{:?}", restore_type, skill_type),
-            trigger: EventTrigger::OnHit(HitTrigger {
+        player_specs.character_specs.triggers.push(
+            EventTrigger::OnHit(HitTrigger {
                 skill_type: Some(skill_type),
-                range: None,
-                is_crit: None,
-                is_blocked: None,
                 is_hurt: Some(true),
                 is_triggered: Some(false),
-                damage_type: None,
-                skill_ids: Default::default(),
-                conditions: Default::default(),
+                ..Default::default()
             }),
-            target: TriggerTarget::Source,
-            skill_range: SkillRange::Any,
-            skill_type,
-            skill_shape: SkillShape::Single,
-            modifiers: Vec::new(),
-            effects: vec![SkillEffect {
-                success_chance: Chance::new_sure(),
-                effect_type: SkillEffectType::Restore {
-                    restore_type,
-                    value: ChanceRange {
-                        min: value,
-                        max: value,
-                        lucky_chance: Default::default(),
+            TriggerEffect {
+                trigger_id: format!("restore_on_hit_{:?}_{:?}", restore_type, skill_type),
+                target: TriggerTarget::Source,
+                skill_range: SkillRange::Any,
+                skill_type,
+                skill_shape: SkillShape::Single,
+                modifiers: Vec::new(),
+                effects: vec![SkillEffect {
+                    success_chance: Chance::new_sure(),
+                    effect_type: SkillEffectType::Restore {
+                        restore_type,
+                        value: ChanceRange {
+                            min: value,
+                            max: value,
+                            lucky_chance: Default::default(),
+                        },
+                        modifier: RestoreModifier::Flat,
                     },
-                    modifier: RestoreModifier::Flat,
-                },
-                ignore_stat_effects: Default::default(),
-                conditional_modifiers: Default::default(),
-            }],
-            owner: Some(CharacterId::Player),
-            trigger_propagate: false,
-        });
+                    ignore_stat_effects: Default::default(),
+                    conditional_modifiers: Default::default(),
+                }],
+                trigger_propagate: false,
+            },
+            Some(CharacterId::Player),
+        );
     }
 
     player_specs.character_specs.skills_specs = player_base_specs

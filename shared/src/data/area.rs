@@ -5,7 +5,7 @@ use crate::{
     data::{
         modifier::ModifiableValue,
         stat_effect::EffectsMap,
-        trigger::TriggeredEffect,
+        trigger::TriggersMap,
         values::{Cooldown, NonNegative},
     },
 };
@@ -49,7 +49,7 @@ pub struct AreaSpecs {
     #[serde(default)]
     pub effects: EffectsMap,
     #[serde(default)]
-    pub triggers: Vec<TriggeredEffect>,
+    pub triggers: TriggersMap,
 }
 
 impl AreaSpecs {

@@ -9,7 +9,7 @@ use crate::data::{
     modifier::ModifiableValue,
     skill::{DamageType, RepeatedSkillEffect, SkillType},
     stat_effect::EffectsMap,
-    trigger::TriggeredEffect,
+    trigger::TriggersMap,
     values::{AtLeastOne, NonNegative, Percent},
 };
 
@@ -60,7 +60,7 @@ pub struct CharacterSpecs {
     pub skills_specs: Vec<SkillSpecs>,
 
     #[serde(default)]
-    pub triggers: Vec<TriggeredEffect>,
+    pub triggers: TriggersMap,
     #[serde(default)]
     pub effects: EffectsMap,
 
@@ -153,7 +153,6 @@ pub struct MonitoredCondition {
 impl CharacterState {
     // TODO: Should we get rid of that?
     pub fn is_stunned(&self) -> bool {
-        // TODO: Also iter over non unique?
         self.statuses.keys().any(|status_id| *status_id == "stun")
     }
 }

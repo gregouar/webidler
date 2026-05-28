@@ -18,18 +18,16 @@ use shared::{
 };
 
 use crate::game::{
-    data::event::EventsQueue,
+    data::{event::EventsQueue, master_store::StatusesStore},
     systems::{skills_updater, stats_updater},
-    utils::{
-        AnyAll,
-        rng::{self, RngSeed, Rollable, flip_coin},
-    },
+    utils::rng::{self, RngSeed, Rollable, flip_coin},
 };
 
 use super::{characters_controller, characters_controller::Target};
 
 /// Return remaining mana available
 pub fn use_skill<'a>(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     skill_index: usize,
     me: &mut Target<'a>,
@@ -52,6 +50,7 @@ pub fn use_skill<'a>(
     let mut applied = false;
     for targets_group in skill_specs.targets.iter() {
         applied |= apply_skill_on_targets(
+            statuses_store,
             events_queue,
             &skill_specs.skill_id,
             skill_specs.skill_type,
@@ -75,6 +74,7 @@ pub fn use_skill<'a>(
 }
 
 fn apply_skill_on_targets<'a>(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     skill_id: &String,
     skill_type: SkillType,
@@ -90,6 +90,7 @@ fn apply_skill_on_targets<'a>(
     }
 
     let character_hit = apply_repeated_skill_on_targets(
+        statuses_store,
         events_queue,
         skill_id,
         skill_type,
@@ -121,6 +122,7 @@ fn apply_skill_on_targets<'a>(
 
 #[allow(clippy::too_many_arguments)]
 fn apply_repeated_skill_on_targets<'a>(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     skill_id: &String,
     skill_type: SkillType,
@@ -157,6 +159,7 @@ fn apply_repeated_skill_on_targets<'a>(
     }?;
 
     let applied = apply_skill_effects(
+        statuses_store,
         events_queue,
         attacker,
         skill_id,
@@ -327,6 +330,7 @@ pub fn find_sub_targets<'a, 'b>(
 
 #[allow(clippy::too_many_arguments)]
 pub fn apply_skill_effects(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
     skill_id: &String,
@@ -339,9 +343,9 @@ pub fn apply_skill_effects(
     let seed = rng::roll_seed();
 
     if !targets.iter().any(|target| {
-        skill_effects.iter().any(|skill_effect| {
-            is_skill_effect_applicable_on_target(skill_type, skill_effect, target)
-        })
+        skill_effects
+            .iter()
+            .any(|skill_effect| is_skill_effect_applicable_on_target(skill_effect, target))
     }) {
         return false;
     }
@@ -355,6 +359,7 @@ pub fn apply_skill_effects(
             };
 
             if !apply_skill_effect_on_target(
+                statuses_store,
                 events_queue,
                 attacker,
                 skill_type,
@@ -397,11 +402,7 @@ fn apply_conditional_modifiers(
     new_skill_effect
 }
 
-fn is_skill_effect_applicable_on_target(
-    skill_type: SkillType,
-    skill_effect: &SkillEffect,
-    target: &Target,
-) -> bool {
+fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Target) -> bool {
     match &skill_effect.effect_type {
         SkillEffectType::FlatDamage { .. } => target.1.1.is_alive,
         SkillEffectType::ApplyStatus {
@@ -409,32 +410,22 @@ fn is_skill_effect_applicable_on_target(
             value,
             duration,
             escalation,
-            stacks,
+            max_stacks,
+            avoidable: _,
             replace_on_value_only,
-            unavoidable,
         } => {
-            let values: Vec<_> = statuses
-                .iter()
-                .map(|status_effect| status_effect.value.max)
-                .collect();
+            let value = *value.max;
+            let duration = *duration.unwrap_or_default().max;
 
-            let duration = Some(duration.max);
-
-            statuses
-                .iter()
-                .zip(values.iter())
-                .any(|(status_effect, value)| {
-                    characters_controller::should_apply_status(
-                        target,
-                        &status_effect.status_type,
-                        skill_type,
-                        **value,
-                        duration.map(|duration| *duration),
-                        *status_effect.escalation,
-                        status_effect.cumulate,
-                        status_effect.replace_on_value_only,
-                    )
-                })
+            characters_controller::should_apply_status(
+                target,
+                status_id,
+                value,
+                duration,
+                *escalation.unwrap_or_default(),
+                max_stacks.unwrap_or_default(),
+                *replace_on_value_only,
+            )
         }
         SkillEffectType::Restore { restore_type, .. } => {
             target.1.1.is_alive
@@ -457,6 +448,7 @@ fn is_skill_effect_applicable_on_target(
 /// Return if it did apply (like not blocked)
 #[allow(clippy::too_many_arguments)]
 fn apply_skill_effect_on_target(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     attacker: CharacterId,
     skill_type: SkillType,
@@ -513,36 +505,28 @@ fn apply_skill_effect_on_target(
             value,
             duration,
             escalation,
-            stacks,
-            replace_on_value_only,
-            unavoidable,
+            max_stacks,
+            avoidable,
+            replace_on_value_only: _,
         } => {
-            let values: Vec<_> = statuses
-                .iter()
-                .map(|status_effect| status_effect.value.roll_with_seed(seed))
-                .collect();
+            let value = value.roll_with_seed(seed);
+            let duration = duration.unwrap_or_default().roll_with_seed(seed);
 
-            let duration = Some(duration.roll_with_seed(seed));
-
-            statuses
-                .iter()
-                .zip(values.iter())
-                .any_all(|(status_effect, value)| {
-                    characters_controller::apply_status(
-                        events_queue,
-                        target,
-                        attacker,
-                        &status_effect.status_type,
-                        skill_type,
-                        *value,
-                        duration,
-                        *status_effect.escalation,
-                        status_effect.cumulate,
-                        status_effect.unavoidable,
-                        skill_id,
-                        trigger_depth,
-                    )
-                })
+            characters_controller::apply_status(
+                statuses_store,
+                events_queue,
+                target,
+                attacker,
+                status_id,
+                skill_type,
+                value,
+                duration,
+                *escalation.unwrap_or_default(),
+                max_stacks.unwrap_or_default(),
+                *avoidable,
+                skill_id,
+                trigger_depth,
+            )
         }
         SkillEffectType::Restore {
             restore_type,
@@ -569,6 +553,7 @@ fn apply_skill_effect_on_target(
 }
 
 pub fn repeat_skills<'a>(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
@@ -576,13 +561,21 @@ pub fn repeat_skills<'a>(
 ) {
     let mut repeated_skills = std::mem::take(&mut me.1.1.repeated_skills);
     repeated_skills.retain_mut(|repeated_skill| {
-        repeat_skill(events_queue, repeated_skill, me, friends, enemies)
+        repeat_skill(
+            statuses_store,
+            events_queue,
+            repeated_skill,
+            me,
+            friends,
+            enemies,
+        )
     });
     me.1.1.repeated_skills = repeated_skills;
 }
 
 // Return whether the repeat effect is ended
 fn repeat_skill<'a>(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     repeated_skill_effect: &mut RepeatedSkillEffect,
     me: &mut Target<'a>,
@@ -602,6 +595,7 @@ fn repeat_skill<'a>(
     }
 
     let character_hit = apply_repeated_skill_on_targets(
+        statuses_store,
         events_queue,
         &repeated_skill_effect.skill_id,
         repeated_skill_effect.skill_type,

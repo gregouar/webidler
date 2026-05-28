@@ -19,7 +19,10 @@ use shared::{
 
 use crate::{
     game::{
-        data::{event::EventsQueue, master_store::SkillsStore},
+        data::{
+            event::EventsQueue,
+            master_store::{SkillsStore, StatusesStore},
+        },
         systems::{characters_controller, inventory_controller, player_updater, stats_updater},
         utils::LazySyncer,
     },
@@ -51,6 +54,7 @@ impl PlayerController {
     #[allow(clippy::too_many_arguments)]
     pub fn control_player<'a>(
         &mut self,
+        statuses_store: &StatusesStore,
         events_queue: &mut EventsQueue,
         area_threat: &AreaThreat,
         player_base_specs: &'a PlayerBaseSpecs,
@@ -102,7 +106,13 @@ impl PlayerController {
 
         let mut friends = vec![];
 
-        skills_controller::repeat_skills(events_queue, &mut player, &mut friends, monsters);
+        skills_controller::repeat_skills(
+            statuses_store,
+            events_queue,
+            &mut player,
+            &mut friends,
+            monsters,
+        );
 
         let min_mana_needed = if player_specs
             .character_specs
@@ -153,8 +163,14 @@ impl PlayerController {
                 continue;
             }
 
-            mana_available =
-                skills_controller::use_skill(events_queue, i, &mut player, &mut friends, monsters);
+            mana_available = skills_controller::use_skill(
+                statuses_store,
+                events_queue,
+                i,
+                &mut player,
+                &mut friends,
+                monsters,
+            );
         }
 
         self.reset();
@@ -226,6 +242,7 @@ pub fn level_up_no_cost(
 }
 
 pub fn equip_item_from_bag(
+    statuses_store: &StatusesStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
@@ -257,12 +274,13 @@ pub fn equip_item_from_bag(
         );
     }
 
-    characters_controller::reset_buff_statuses(&mut player_state.character_state);
+    characters_controller::reset_buff_statuses(statuses_store, &mut player_state.character_state);
 
     Ok(())
 }
 
 pub fn unequip_item_to_bag(
+    statuses_store: &StatusesStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
@@ -279,7 +297,7 @@ pub fn unequip_item_to_bag(
         );
     }
 
-    characters_controller::reset_buff_statuses(&mut player_state.character_state);
+    characters_controller::reset_buff_statuses(statuses_store, &mut player_state.character_state);
 
     Ok(())
 }

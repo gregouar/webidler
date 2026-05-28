@@ -12,7 +12,7 @@ use shared::{
 };
 
 use crate::game::{
-    data::event::EventsQueue,
+    data::{event::EventsQueue, master_store::StatusesStore},
     systems::{stats_updater, statuses_controller},
 };
 
@@ -49,6 +49,8 @@ pub fn reset_monsters(monster_states: &mut [MonsterState]) {
 }
 
 pub fn update_monster_specs(
+    statuses_store: &StatusesStore,
+    character_id: CharacterId,
     base_specs: &MonsterSpecs,
     monster_specs: &mut MonsterSpecs,
     monster_state: &MonsterState,
@@ -86,18 +88,20 @@ pub fn update_monster_specs(
         skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
     }
 
-    for trigger_specs in monster_specs.character_specs.triggers.iter_mut() {
-        for trigger_effect in trigger_specs.effects.iter_mut() {
+    for trigger_effect in monster_specs.character_specs.triggers.effects_iter_mut() {
+        for skill_effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
-                &trigger_specs.trigger_id,
-                trigger_specs.skill_type,
-                trigger_effect,
+                &trigger_effect.trigger_id,
+                trigger_effect.skill_type,
+                skill_effect,
                 effects.iter(),
             );
         }
     }
 
     characters_updater::extend_triggers_from_skills_and_statuses(
+        statuses_store,
+        character_id,
         &mut monster_specs.character_specs,
         &monster_state.character_state,
     );

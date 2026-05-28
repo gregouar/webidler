@@ -3,6 +3,6 @@
     "enabled": false
   },
   "resources": {
-    "skills": [ "skills.json" ]
+    "skills": [ "attacks.json", "blessings.json", "curses.json", "spells.json" ]
   }
 }

@@ -8,11 +8,8 @@ use shared::{
     },
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
-        character::CharacterId,
-        character_status::StatusSpecs,
         modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
-        skill::SkillEffectType,
         stat_effect::{StatEffect, StatType},
     },
 };
@@ -141,12 +138,7 @@ fn generate_all_monsters_specs(
                         .get_xy_size(),
                 );
 
-                let mut specs = generate_monster_specs(
-                    area_specs,
-                    area_state,
-                    base_monster_specs,
-                    CharacterId::Monster(monsters.len()),
-                );
+                let mut specs = generate_monster_specs(area_specs, area_state, base_monster_specs);
                 specs.character_specs.character_static.position_x = (x + 1) as u8;
                 specs.character_specs.character_static.position_y = (y + 1) as u8;
                 monsters.push(specs);
@@ -192,18 +184,12 @@ fn generate_monster_specs(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     base_monster_specs: &BaseMonsterSpecs,
-    monster_id: CharacterId,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(base_monster_specs);
     let mut monster_level = area_state.area_level + *area_specs.power_level;
-    monster_specs
-        .character_specs
-        .triggers
-        .extend(area_specs.triggers.clone());
 
-    for trigger in monster_specs.character_specs.triggers.iter_mut() {
-        trigger.owner = Some(monster_id);
-    }
+    // TODO: Add owner?
+    monster_specs.character_specs.triggers = area_specs.triggers.clone();
 
     if monster_specs.rarity == MonsterRarity::Normal
         && rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state)
@@ -246,7 +232,7 @@ fn generate_monster_specs(
         .skills
         .iter()
         .map(|base_skill_specs| {
-            let mut skill_specs = if base_skill_specs.upgrade_effects.is_empty() {
+            if base_skill_specs.upgrade_effects.is_empty() {
                 skills_updater::update_skill_specs(
                     "".to_string(),
                     base_skill_specs,
@@ -269,31 +255,7 @@ fn generate_monster_specs(
                     &monster_specs.character_specs.character_attrs,
                     None,
                 )
-            };
-
-            // Link monster_id to triggers of skills
-            for trigger in skill_specs.triggers.iter_mut() {
-                trigger.triggered_effect.owner = Some(monster_id);
             }
-
-            for effect in skill_specs
-                .targets
-                .iter_mut()
-                .flat_map(|target| target.effects.iter_mut())
-            {
-                if let SkillEffectType::ApplyStatus {
-                    ref mut statuses, ..
-                } = effect.effect_type
-                {
-                    for status in statuses {
-                        if let StatusSpecs::Trigger(ref mut trigger_specs) = status.status_type {
-                            trigger_specs.triggered_effect.owner = Some(monster_id);
-                        }
-                    }
-                }
-            }
-
-            skill_specs
         })
         .collect();
 

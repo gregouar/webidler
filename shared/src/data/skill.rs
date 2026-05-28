@@ -219,7 +219,7 @@ pub enum SkillEffectType {
         #[serde(default)]
         escalation: Option<ModifiableValue<NonNegative>>,
         #[serde(default)]
-        stacks: Option<u8>,
+        max_stacks: Option<u8>,
         #[serde(default)]
         avoidable: Option<DamageType>,
 
@@ -262,6 +262,12 @@ pub enum SkillRange {
     Melee,
     Distance,
     Any,
+}
+
+impl Matchable for SkillRange {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
 }
 
 #[derive(

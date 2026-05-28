@@ -311,20 +311,18 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                 duration: None,
                 status_id: "poison".to_string(),
                 replace_on_value_only: false,
-                unavoidable: false,
-                value: Some(
-                    weapon_specs
-                        .damage
-                        .get(&DamageType::Poison)
-                        .map(|v| ChanceRange {
-                            min: v.min.as_new_base(),
-                            max: v.max.as_new_base(),
-                            lucky_chance: v.lucky_chance.as_new_base(),
-                        })
-                        .unwrap_or_default(),
-                ),
+                avoidable: Some(DamageType::Poison),
+                value: weapon_specs
+                    .damage
+                    .get(&DamageType::Poison)
+                    .map(|v| ChanceRange {
+                        min: v.min.as_new_base(),
+                        max: v.max.as_new_base(),
+                        lucky_chance: v.lucky_chance.as_new_base(),
+                    })
+                    .unwrap_or_default(),
                 escalation: None,
-                stacks: None,
+                max_stacks: None,
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),

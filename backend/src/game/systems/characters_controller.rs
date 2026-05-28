@@ -232,6 +232,7 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     //     .statuses
     //     .cumulative_statuses
     //     .retain(|(_, status_state)| status_state.duration.is_none());
+    target_state.statuses.clear();
 
     true
 }
@@ -282,15 +283,6 @@ pub fn should_apply_status(
         return false;
     }
 
-    // match status_specs {
-    //     StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
-    //         if value.get() <= 0.0 {
-    //             return false;
-    //         }
-    //     }
-    //     StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
-    // }
-
     if value.get() <= 0.0 {
         return false;
     }
@@ -328,7 +320,7 @@ pub fn apply_status(
     value: NonNegative,
     duration: NonNegative,
     escalation: NonNegative,
-    stacks: u8,
+    max_stacks: u8,
     avoidable: Option<DamageType>,
     skill_id: &str,
     trigger_depth: u8,
@@ -386,11 +378,11 @@ pub fn apply_status(
         let status_stacks = target_state
             .statuses
             .entry(status_id.clone())
-            .or_insert(Vec::with_capacity(stacks as usize));
+            .or_insert(Vec::with_capacity(max_stacks as usize));
 
-        if status_stacks.len() < stacks as usize {
+        if status_stacks.len() < max_stacks as usize {
             status_stacks.push(statuses_controller::initialize_status_state(
-                skill_type, value, duration, escalation,
+                attacker, skill_type, value, duration, escalation,
             ));
         } else {
             if let Some(cur_status_state) = status_stacks.iter_mut().find(|cur_status_state| {
@@ -402,6 +394,7 @@ pub fn apply_status(
                         false,
                     )
             }) {
+                cur_status_state.owner = attacker;
                 cur_status_state.base_value = value;
                 cur_status_state.value = value;
                 cur_status_state.duration = duration;
@@ -413,64 +406,6 @@ pub fn apply_status(
             }
         }
     }
-
-    // if try_apply {
-    //     if cumulate {
-    //         target_state.statuses.cumulative_statuses.push((
-    //             new_status_specs,
-    //             statuses_controller::initialize_status_state(
-    //                 skill_type, value, duration, escalation, cumulate,
-    //             ),
-    //         ));
-
-    //         if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
-    //             let status_id: StatusId = status_specs.into_status_id(skill_type);
-
-    //             if let Some(i) = target_state
-    //                 .statuses
-    //                 .cumulative_statuses
-    //                 .iter()
-    //                 .enumerate()
-    //                 .rev()
-    //                 .filter(|(_, (specs, _))| specs.into_status_id(skill_type) == status_id)
-    //                 .nth(constants::MAX_STATUS_STACKS)
-    //                 .map(|(i, _)| i)
-    //             {
-    //                 target_state.statuses.cumulative_statuses.remove(i);
-    //             }
-    //         }
-    //     } else {
-    //         target_state
-    //             .statuses
-    //             .unique_statuses
-    //             .entry(status_specs.into_status_id(skill_type))
-    //             .and_modify(|(cur_status_specs, cur_status_state)| {
-    //                 if compute_effect_weight(value, duration, escalation, false)
-    //                     > compute_effect_weight(
-    //                         cur_status_state.base_value,
-    //                         cur_status_state.duration,
-    //                         cur_status_state.escalation,
-    //                         false,
-    //                     )
-    //                 {
-    //                     cur_status_state.base_value = value;
-    //                     cur_status_state.value = value;
-    //                     cur_status_state.duration = duration;
-    //                     cur_status_state.escalation = escalation;
-    //                     cur_status_state.max_escalation = duration;
-    //                     *cur_status_specs = new_status_specs.clone();
-    //                 } else {
-    //                     applied = false;
-    //                 }
-    //             })
-    //             .or_insert((
-    //                 new_status_specs,
-    //                 statuses_controller::initialize_status_state(
-    //                     skill_type, value, duration, escalation, cumulate,
-    //                 ),
-    //             ));
-    //     }
-    // }
 
     if !applied && !is_evaded {
         return false;

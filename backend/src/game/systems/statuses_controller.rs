@@ -1,7 +1,7 @@
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
-    character::CharacterAttrs,
+    character::{CharacterAttrs, CharacterId},
     character_status::{StatusMap, StatusSpecs, StatusState},
     player::CharacterState,
     skill::SkillType,
@@ -158,12 +158,14 @@ pub fn generate_effects_map_from_statuses(statuses: &StatusMap) -> EffectsMap {
 }
 
 pub fn initialize_status_state(
+    owner: CharacterId,
     skill_type: SkillType,
     value: NonNegative,
     duration: NonNegative,
     escalation: NonNegative,
 ) -> StatusState {
     StatusState {
+        owner,
         value,
         duration,
         skill_type,

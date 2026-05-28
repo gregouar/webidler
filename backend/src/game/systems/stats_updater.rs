@@ -88,26 +88,26 @@ pub fn check_condition(
 ) -> f64 {
     match condition {
         Condition::HasStatus {
-            status_type,
+            status_id,
             skill_type,
             not,
         } => {
             (character_state
                 .statuses
                 .iter()
-                .any(|(status_specs, status_state)| {
+                .any(|(status_specs, status_states)| {
                     compare_options(status_type, &Some(status_specs.into()))
                         && compare_options(skill_type, &Some(status_state.skill_type))
                 })
                 != *not) as usize as f64
         }
         Condition::StatusStacks {
-            status_type,
+            status_id,
             skill_type,
         } => character_state
             .statuses
             .iter()
-            .filter(|(status_specs, status_state)| {
+            .filter(|(status_specs, status_states)| {
                 compare_options(status_type, &Some(status_specs.into()))
                     && compare_options(skill_type, &Some(status_state.skill_type))
             })

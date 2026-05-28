@@ -1,14 +1,49 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character_status::StatusId, conditional_modifier::Condition, item::SkillShape,
-    modifier::Modifier, skill::TargetType,
+    character::CharacterId, character_status::StatusId, conditional_modifier::Condition,
+    item::SkillShape, modifier::Modifier, skill::TargetType,
 };
 
 use super::{
     skill::{DamageType, SkillEffect, SkillRange, SkillType},
     stat_effect::StatType,
 };
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
+pub struct TriggersMap(HashMap<EventTrigger, Vec<OwnedTrigger>>);
+
+impl TriggersMap {
+    pub fn new() -> Self {
+        Self(Default::default())
+    }
+
+    pub fn push(
+        &mut self,
+        trigger: EventTrigger,
+        trigger_effect: TriggerEffect,
+        owner: Option<CharacterId>,
+    ) {
+        self.0.entry(trigger).or_default().push(OwnedTrigger {
+            trigger_effect,
+            owner,
+        })
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = (&EventTrigger, &Vec<OwnedTrigger>)> {
+        self.0.iter()
+    }
+
+    pub fn effects_iter_mut(&mut self) -> impl Iterator<Item = &mut TriggerEffect> {
+        self.0.values_mut().flat_map(|owned_effects| {
+            owned_effects
+                .iter_mut()
+                .map(|owned_effect| &mut owned_effect.trigger_effect)
+        })
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum EventTrigger {
@@ -64,39 +99,32 @@ pub struct KillTrigger {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerSpecs {
-    #[serde(default)]
-    pub name: Option<String>,
-    #[serde(default)]
-    pub icon: Option<String>,
-    #[serde(default)]
-    pub description: Option<String>,
     #[serde(flatten)]
-    pub triggered_effect: TriggeredEffect,
-    // #[serde(default)]
-    // pub is_debuff: bool,
+    pub trigger: EventTrigger,
+    #[serde(default)]
+    pub description: Option<String>, // TODO: Do something else?
+
+    #[serde(flatten)]
+    pub trigger_effect: TriggerEffect,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct TriggeredEffect {
+pub struct TriggerEffect {
     pub trigger_id: String,
-
-    #[serde(flatten)]
-    pub trigger: EventTrigger,
     #[serde(default)]
     pub target: TriggerTarget,
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,
+    #[serde(default)]
+    pub trigger_propagate: bool, // If true, will reset trigger depth
 
+    pub skill_type: SkillType,
     #[serde(default)]
     pub skill_range: SkillRange,
-    pub skill_type: SkillType,
-    pub effects: Vec<SkillEffect>,
-
     #[serde(default)]
     pub skill_shape: SkillShape,
 
-    #[serde(default)]
-    pub trigger_propagate: bool,
+    pub effects: Vec<SkillEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -141,4 +169,10 @@ pub enum TriggerTarget {
     Source,
     Me,
     // TODO: others?
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct OwnedTrigger {
+    pub trigger_effect: TriggerEffect,
+    pub owner: Option<CharacterId>,
 }
