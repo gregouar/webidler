@@ -26,6 +26,7 @@ use crate::game::{
 use super::statuses_controller;
 
 pub fn update_character_state(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     character_id: CharacterId,
@@ -40,6 +41,7 @@ pub fn update_character_state(
     let elapsed_time_f64 = elapsed_time.as_secs_f64();
 
     statuses_controller::update_character_statuses(
+        statuses_store,
         &character_specs.character_attrs,
         character_state,
         elapsed_time,

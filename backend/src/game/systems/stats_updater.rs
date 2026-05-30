@@ -95,9 +95,15 @@ pub fn check_condition(
             (character_state
                 .statuses
                 .iter()
-                .any(|(status_specs, status_states)| {
-                    compare_options(status_type, &Some(status_specs.into()))
-                        && compare_options(skill_type, &Some(status_state.skill_type))
+                .any(|(char_status_id, status_states)| {
+                    compare_options(&status_id.as_ref(), &Some(char_status_id))
+                        && skill_type
+                            .map(|skill_type| {
+                                status_states
+                                    .iter()
+                                    .any(|status_state| status_state.skill_type == skill_type)
+                            })
+                            .unwrap_or(true)
                 })
                 != *not) as usize as f64
         }
@@ -107,9 +113,15 @@ pub fn check_condition(
         } => character_state
             .statuses
             .iter()
-            .filter(|(status_specs, status_states)| {
-                compare_options(status_type, &Some(status_specs.into()))
-                    && compare_options(skill_type, &Some(status_state.skill_type))
+            .filter(|(char_status_id, status_states)| {
+                compare_options(&status_id.as_ref(), &Some(char_status_id))
+                    && skill_type
+                        .map(|skill_type| {
+                            status_states
+                                .iter()
+                                .any(|status_state| status_state.skill_type == skill_type)
+                        })
+                        .unwrap_or(true)
             })
             .count() as f64,
         Condition::MaximumLife => {

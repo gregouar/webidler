@@ -69,6 +69,7 @@ pub fn init_player_base_specs(
 }
 
 pub fn update_player_state(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     player_specs: &PlayerSpecs,
@@ -80,6 +81,7 @@ pub fn update_player_state(
     }
 
     characters_updater::update_character_state(
+        statuses_store,
         events_queue,
         elapsed_time,
         CharacterId::Player,
@@ -119,6 +121,7 @@ pub fn update_player_specs(
             )))
             .chain(iter::once(
                 statuses_controller::generate_effects_map_from_statuses(
+                    statuses_store,
                     &player_state.character_state.statuses,
                 ),
             ))

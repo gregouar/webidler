@@ -60,6 +60,15 @@ pub struct StatusEffect {
     pub modifier: StatusModifier,
 }
 
+impl StatusEffect {
+    pub fn computed_value(&self, status_value: NonNegative) -> NonNegative {
+        match self.modifier {
+            StatusModifier::Flat => self.value,
+            StatusModifier::Percent => status_value * (self.value.get() * 0.01),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum StatusEffectType {
     // Stun, // TODO: Replace by statmodifier speed

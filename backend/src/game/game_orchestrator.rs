@@ -105,7 +105,7 @@ pub async fn tick(
     if !events_queue.is_empty() {
         events_resolver::resolve_events(events_queue, game_data, master_store).await;
     }
-    update_entities(events_queue, game_data, elapsed_time).await;
+    update_entities(events_queue, game_data, master_store, elapsed_time).await;
 
     game_data.game_stats.elapsed_time += elapsed_time;
     Ok(())
@@ -245,6 +245,7 @@ pub fn update_threat(
 async fn update_entities(
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
     elapsed_time: Duration,
 ) {
     game_data.player_respawn_delay = game_data.player_respawn_delay.saturating_sub(elapsed_time);
@@ -257,6 +258,7 @@ async fn update_entities(
     }
 
     player_updater::update_player_state(
+        &master_store.statuses_store,
         events_queue,
         elapsed_time,
         game_data.player_specs.read(),
@@ -264,6 +266,7 @@ async fn update_entities(
         &game_data.area_threat,
     );
     monsters_updater::update_monster_states(
+        &master_store.statuses_store,
         events_queue,
         elapsed_time,
         &game_data.monster_specs,

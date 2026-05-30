@@ -19,6 +19,7 @@ use crate::game::{
 use super::{characters_updater, skills_updater};
 
 pub fn update_monster_states(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     monster_specs: &[MonsterSpecs],
@@ -32,6 +33,7 @@ pub fn update_monster_states(
         .filter(|(_, (s, _))| s.character_state.is_alive)
     {
         characters_updater::update_character_state(
+            statuses_store,
             events_queue,
             elapsed_time,
             CharacterId::Monster(monster_id),
@@ -57,6 +59,7 @@ pub fn update_monster_specs(
     area_threat: &AreaThreat,
 ) {
     let mut effects: Vec<_> = (&statuses_controller::generate_effects_map_from_statuses(
+        statuses_store,
         &monster_state.character_state.statuses,
     ))
         .into();
