@@ -56,7 +56,7 @@ pub fn ResourceCounter(
                     format!(
                         "font-number font-semibold text-right {} {}",
                         if w_full { "w-[8ch]" } else { "" },
-                        if disabled.get() { "text-gray-300" } else { text_color },
+                        if disabled.get() { "text-zinc-300" } else { text_color },
                     )
                 }>
                     <Number value=value />

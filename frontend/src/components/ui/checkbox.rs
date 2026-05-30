@@ -7,7 +7,7 @@ pub fn Checkbox(
     #[prop(into)] checked: Signal<bool>,
 ) -> impl IntoView {
     view! {
-        <label class="flex items-center gap-1 text-gray-400 hover:text-white cursor-pointer">
+        <label class="flex items-center gap-1 text-zinc-400 hover:text-white cursor-pointer">
             <input
                 type="checkbox"
                 class="appearance-none w-4 h-4 rounded-xs

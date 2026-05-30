@@ -222,7 +222,7 @@ pub fn ChatPanel() -> impl IntoView {
                             .collect::<Vec<_>>()}
                     </div>
 
-                    <div class="flex gap-3 text-gray-400">
+                    <div class="flex gap-3 text-zinc-400">
                         <button
                             class="hover:text-white"
                             on:click=move |_| { chat_context.minimized.update(|m| *m = !*m) }
@@ -243,7 +243,7 @@ pub fn ChatPanel() -> impl IntoView {
                     if chat_context.minimized.get() {
                         view! {
                             <div
-                                class="px-4 py-2 bg-zinc-900/70 text-[13px] text-gray-400 text-ellipsis cursor-pointer"
+                                class="px-4 py-2 bg-zinc-900/70 text-[13px] text-zinc-400 text-ellipsis cursor-pointer"
                                 on:click=move |_| chat_context.minimized.set(false)
                             >
                                 {move || {
@@ -367,7 +367,9 @@ pub fn ChatPanel() -> impl IntoView {
                                                 input_value.set(event_target_value(&ev));
                                             }
                                             on:keydown=move |ev| {
-                                                if keyboard_event_key(&ev).as_deref() == Some("Enter") && !ev.shift_key() {
+                                                if keyboard_event_key(&ev).as_deref() == Some("Enter")
+                                                    && !ev.shift_key()
+                                                {
                                                     ev.prevent_default();
                                                     send_message();
                                                 }
@@ -401,8 +403,7 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                 .and_then(|chat_badge| serde_plain::from_str(chat_badge).ok())
                 .map(|badge| {
                     view! { <ChatBadge badge /> }
-                })}
-            <p class="min-w-0 flex-1 text-gray-200 select-text">
+                })} <p class="min-w-0 flex-1 text-gray-200 select-text">
                 <span
                     class=move || {
                         format!(

@@ -21,7 +21,7 @@ pub fn GamePage() -> impl IntoView {
 
     view! {
         <Transition fallback=move || {
-            view! { <p class="text-gray-400">"Loading..."</p> }
+            view! { <p class="text-zinc-400">"Loading..."</p> }
         }>
             {move || Suspend::new(async move {
                 data_load.await;

@@ -59,7 +59,7 @@ pub fn TemplePanel(
                             view! {
                                 <div class="flex-1" />
 
-                                <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
+                                <div class="flex h-full items-center gap-1 text-sm xl:text-base text-zinc-300 mb-1">
                                     "Benedictions Cost: " <GoldCounter value=cost w_full=true />
                                 </div>
 
@@ -524,7 +524,7 @@ fn BenedictionRow(
                         {view_only
                             .then(|| {
                                 view! {
-                                    <div class="shrink-0 text-xs xl:text-sm text-gray-400">
+                                    <div class="shrink-0 text-xs xl:text-sm text-zinc-400">
                                         "Level "
                                         <span class="font-bold text-zinc-100">
                                             {move || upgrade_level.get()}
@@ -536,7 +536,7 @@ fn BenedictionRow(
 
                     <div class="grid grid-cols-1 2xl:grid-cols-2 gap-2">
                         <div class="min-w-0 rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
-                            <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                            <div class="text-xs text-zinc-400 mb-1">"Current"</div>
                             <EffectDescription
                                 benediction_specs=benediction_specs.clone()
                                 upgrade_level=Signal::derive(move || upgrade_level.get())
@@ -544,7 +544,7 @@ fn BenedictionRow(
                         </div>
 
                         <div class="min-w-0 rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
-                            <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                            <div class="text-xs text-zinc-400 mb-1">"Next"</div>
                             <EffectDescription
                                 benediction_specs=benediction_specs.clone()
                                 upgrade_level=Signal::derive(move || {

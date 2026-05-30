@@ -102,7 +102,7 @@ where
         </style>
 
         <div class="flex flex-col xl:space-y-1 text-left">
-            <label class="text-xs font-medium text-gray-400">{label}</label>
+            <label class="text-xs font-medium text-zinc-400">{label}</label>
 
             <div class=format!("relative flex w-full {h_size}")>
                 <div

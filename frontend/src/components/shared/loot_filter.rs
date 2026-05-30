@@ -62,6 +62,8 @@ pub struct FilterRule {
     pub item_name: Option<ItemName>,
     pub item_level: Option<AreaLevel>,
     pub req_item_level: Option<AreaLevel>,
+    #[serde(default)]
+    pub req_affix_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
@@ -459,6 +461,7 @@ pub fn EditRule(
     rule_field!(rule_name);
     rule_field!(item_name);
     rule_field!(req_item_level);
+    rule_field!(req_affix_level);
     rule_field!(item_level);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
@@ -578,16 +581,6 @@ pub fn EditRule(
                     />
 
                     <ValidatedInput
-                        id="req_item_level"
-                        label="Required Level:"
-                        input_type="number"
-                        placeholder="Enter required level"
-                        bind=req_item_level
-                    />
-                </div>
-
-                <div class="flex flex-col gap-4">
-                    <ValidatedInput
                         id="item_level"
                         label="Item Level:"
                         input_type="number"
@@ -595,15 +588,33 @@ pub fn EditRule(
                         bind=item_level
                     />
 
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Category:"</span>
                         <SearchableDropdownMenu
                             options=item_category_options
                             chosen_option=item_category
                         />
                     </div>
+                </div>
 
-                    <div class="flex items-center justify-between text-gray-300 text-sm">
+                <div class="flex flex-col gap-4">
+                    <ValidatedInput
+                        id="req_item_level"
+                        label="Required Level:"
+                        input_type="number"
+                        placeholder="Enter required level"
+                        bind=req_item_level
+                    />
+
+                    <ValidatedInput
+                        id="req_affix_level"
+                        label="Required Affix Level:"
+                        input_type="number"
+                        placeholder="Enter required affix level"
+                        bind=req_affix_level
+                    />
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Rarity:"</span>
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                     </div>

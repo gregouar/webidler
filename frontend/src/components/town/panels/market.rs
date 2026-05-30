@@ -167,7 +167,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
                     <div class="flex-1"></div>
 
-                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                    <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!("({} / {})", stash.read().items_amount, stash.read().max_items)
                         }}
@@ -321,7 +321,7 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
 
     view! {
         <div class="flex gap-2 items-center">
-            <span class="hidden xl:inline text-gray-400 text-xs xl:text-base font-medium">
+            <span class="hidden xl:inline text-zinc-400 text-xs xl:text-base font-medium">
                 "Revenue:"
             </span>
             <GemsCounter value w_full=true />
@@ -621,7 +621,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     {move || private_offer().then_some("Private Offer")}
                 </span>
                 <ItemDetails selected_item show_affixes=true />
-                <div class="flex justify-between items-center text-xs xl:text-sm text-gray-400 p-2">
+                <div class="flex justify-between items-center text-xs xl:text-sm text-zinc-400 p-2">
                     <span>
                         "Listed by: "
                         <span
@@ -651,7 +651,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             <div class="w-full">
                 <Separator />
                 <div class="flex justify-between items-center p-4">
-                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                    <div class="flex items-center gap-1 text-lg text-zinc-400">
                         {move || {
                             price()
                                 .map(|price| {
@@ -766,7 +766,7 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             <div class="w-full">
                 <Separator />
                 <div class="flex justify-between items-end p-1 xl:p-4">
-                    <div class="flex items-end gap-1 text-lg text-gray-400 ">
+                    <div class="flex items-end gap-1 text-lg text-zinc-400 ">
                         <ValidatedInput
                             id="price"
                             label="Price:"
@@ -940,7 +940,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     }}
                 </span>
                 <ItemDetails selected_item show_affixes=true />
-                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                <div class="flex justify-between items-center text-sm text-zinc-400 p-2">
                     <span>"Listed by: " {move || seller_name()}</span>
                     <span>{move || listed_at().map(format_datetime)}</span>
                 </div>
@@ -949,7 +949,7 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             <div class="w-full">
                 <Separator />
                 <div class="flex justify-between items-end p-1 xl:p-4">
-                    <div class="flex items-end gap-1 text-lg text-gray-400 ">
+                    <div class="flex items-end gap-1 text-lg text-zinc-400 ">
                         <ValidatedInput
                             id="price"
                             label="Price:"
@@ -1028,7 +1028,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
-                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                <div class="flex justify-between items-center text-sm text-zinc-400 p-2">
                     {if removed() {
                         view! { <span>"Removed"</span> }.into_any()
                     } else {
@@ -1044,7 +1044,7 @@ pub fn LogsDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             <div class="w-full">
                 <Separator />
                 <div class="flex justify-between items-end p-4">
-                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                    <div class="flex items-center gap-1 text-lg text-zinc-400">
                         {move || {
                             price()
                                 .map(|price| {

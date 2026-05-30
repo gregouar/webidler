@@ -129,13 +129,13 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 
                 <div class="flex flex-col gap-1 px-6 text-sm xl:text-base">
                     <div class="flex justify-between">
-                        <span class="text-gray-400">"Total Time"</span>
+                        <span class="text-zinc-400">"Total Time"</span>
                         <span class="text-amber-100 font-medium font-number">
                             {move || format_duration(stats().elapsed_time, true)}
                         </span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-400">"Area Completed"</span>
+                        <span class="text-zinc-400">"Area Completed"</span>
                         <span class="text-amber-100 font-medium font-number">{area_completed}</span>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                     "Pick a Reward"
                 </span>
 
-                <span class="text-center text-sm xl:text-base text-gray-400 ">
+                <span class="text-center text-sm xl:text-base text-zinc-400 ">
                     {move || {
                         (game_context
                             .quest_rewards
@@ -216,7 +216,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                     .is_empty()
                                     .then(|| {
                                         view! {
-                                            <div class="flex-1 text-gray-400">
+                                            <div class="flex-1 text-zinc-400">
                                                 {format!(
                                                     "Complete at least {} Areas to get an Item Reward, and at least {} to get a guaranteed Edict Item drop.",
                                                     ITEM_REWARDS_MIN_LEVEL,

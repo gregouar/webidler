@@ -1489,7 +1489,7 @@ pub fn VerticalProgressBar(
 #[component]
 pub fn CloseButton() -> impl IntoView {
     view! {
-        <button class="btn ml-2 text-white hover:text-gray-400 transition-colors">
+        <button class="btn ml-2 text-white hover:text-zinc-400 transition-colors">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

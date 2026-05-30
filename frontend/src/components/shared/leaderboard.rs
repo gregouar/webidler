@@ -148,7 +148,7 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                                                                                 {entry.character_name.clone()}
                                                                             </span>
                                                                         </div>
-                                                                        <div class="text-sm text-gray-400">{entry.username}</div>
+                                                                        <div class="text-sm text-zinc-400">{entry.username}</div>
                                                                     </div>
 
                                                                     <div class="flex justify-between items-center">

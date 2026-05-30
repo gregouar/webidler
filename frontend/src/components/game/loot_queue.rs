@@ -340,6 +340,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         item_name,
         item_level,
         req_item_level,
+        req_affix_level,
         item_rarity,
         item_category,
         item_damages,
@@ -404,6 +405,24 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         .map(|req_item_level| !match rule_type {
             FilterRuleType::Pickup => item_specs.required_level >= req_item_level,
             FilterRuleType::Sell => item_specs.required_level <= req_item_level,
+        })
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    if req_affix_level
+        .map(|req_affix_level| !match rule_type {
+            FilterRuleType::Pickup => item_specs
+                .modifiers
+                .affixes
+                .iter()
+                .any(|affix| affix.item_level >= req_affix_level),
+            FilterRuleType::Sell => item_specs
+                .modifiers
+                .affixes
+                .iter()
+                .all(|affix| affix.item_level <= req_affix_level),
         })
         .unwrap_or_default()
     {

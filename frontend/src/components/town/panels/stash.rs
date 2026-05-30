@@ -121,7 +121,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                         <Gems stash />
                     </div>
                     <div class="flex-1"></div>
-                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                    <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!("({} / {})", stash.read().items_amount, stash.read().max_items)
                         }}
@@ -241,7 +241,7 @@ fn StashTypeRow(stash: RwSignal<Stash>, selected_stash: RwSignal<Option<Stash>>)
                         {stash_type_str(stash.read_untracked().stash_type)}
                     </div>
 
-                    <div class="text-sm text-gray-400">
+                    <div class="text-sm text-zinc-400">
                         {move || {
                             if stash.read().max_items > 0 {
                                 format!("{}/{}", stash.read().items_amount, stash.read().max_items)
@@ -346,7 +346,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                     <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
                     <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></div>
                     <div class="relative z-10">
-                        <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                        <div class="text-xs text-zinc-400 mb-1">"Current"</div>
                         <div class="text-blue-400 font-medium">
                             {move || {
                                 selected_stash
@@ -371,7 +371,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                     <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
                     <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></div>
                     <div class="relative z-10">
-                        <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                        <div class="text-xs text-zinc-400 mb-1">"Next"</div>
                         <div class="text-blue-400 font-medium">
                             {move || { format!("Storage Space: {}", upgrade.get().0) }}
                         </div>
@@ -382,7 +382,7 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
             <div class="w-full">
                 <Separator />
                 <div class="flex justify-between items-center p-4">
-                    <div class="flex items-center gap-1 text-lg text-gray-400">
+                    <div class="flex items-center gap-1 text-lg text-zinc-400">
                         {move || {
                             view! {
                                 "Price: "
@@ -623,7 +623,7 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
 
             <div class="flex flex-col">
                 <ItemDetails selected_item show_affixes=true />
-                <div class="flex justify-between items-center text-sm text-gray-400 p-2">
+                <div class="flex justify-between items-center text-sm text-zinc-400 p-2">
                     <span>"Stored by: "{move || owner_name()}</span>
                     <span>{move || stored_at().map(format_datetime)}</span>
                 </div>
