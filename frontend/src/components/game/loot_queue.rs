@@ -166,7 +166,7 @@ pub fn LootQueue() -> impl IntoView {
                 }
             }
         },
-        5000.0,
+        1000.0,
     );
 
     view! {
