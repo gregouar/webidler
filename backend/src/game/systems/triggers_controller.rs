@@ -113,56 +113,6 @@ pub fn apply_trigger_effects(
                 }
             };
 
-        let mut player_target = (
-            CharacterId::Player,
-            (
-                &game_data.player_specs.read().character_specs,
-                &mut game_data.player_state.character_state,
-            ),
-        );
-
-        let mut monsters_still_alive: Vec<_> = game_data
-            .monster_specs
-            .iter()
-            .zip(game_data.monster_states.iter_mut())
-            .enumerate()
-            .filter(|(_, (_, m))| m.character_state.is_alive)
-            .map(|(i, (x, y))| {
-                (
-                    CharacterId::Monster(i),
-                    (&x.character_specs, &mut y.character_state),
-                )
-            })
-            .collect();
-
-        let mut targets = match target_id {
-            CharacterId::Player => {
-                vec![&mut player_target]
-            }
-            CharacterId::Monster(i) => {
-                let (target_position, target_size) = game_data
-                    .monster_specs
-                    .get(i)
-                    .map(|m| {
-                        (
-                            (
-                                m.character_specs.character_static.position_x,
-                                m.character_specs.character_static.position_y,
-                            ),
-                            m.character_specs.character_static.size.get_xy_size(),
-                        )
-                    })
-                    .unwrap_or_default();
-                skills_controller::find_sub_targets(
-                    trigger_effect.skill_range,
-                    trigger_effect.skill_shape,
-                    target_position,
-                    target_size,
-                    &mut monsters_still_alive,
-                )
-            }
-        };
-
         let trigger_effects: Vec<_> = if trigger_effect.modifiers.is_empty() {
             trigger_effect.effects
         } else {
@@ -262,6 +212,56 @@ pub fn apply_trigger_effects(
                     effect
                 })
                 .collect()
+        };
+
+        let mut player_target = (
+            CharacterId::Player,
+            (
+                &game_data.player_specs.read().character_specs,
+                &mut game_data.player_state.character_state,
+            ),
+        );
+
+        let mut monsters_still_alive: Vec<_> = game_data
+            .monster_specs
+            .iter()
+            .zip(game_data.monster_states.iter_mut())
+            .enumerate()
+            .filter(|(_, (_, m))| m.character_state.is_alive)
+            .map(|(i, (x, y))| {
+                (
+                    CharacterId::Monster(i),
+                    (&x.character_specs, &mut y.character_state),
+                )
+            })
+            .collect();
+
+        let mut targets = match target_id {
+            CharacterId::Player => {
+                vec![&mut player_target]
+            }
+            CharacterId::Monster(i) => {
+                let (target_position, target_size) = game_data
+                    .monster_specs
+                    .get(i)
+                    .map(|m| {
+                        (
+                            (
+                                m.character_specs.character_static.position_x,
+                                m.character_specs.character_static.position_y,
+                            ),
+                            m.character_specs.character_static.size.get_xy_size(),
+                        )
+                    })
+                    .unwrap_or_default();
+                skills_controller::find_sub_targets(
+                    trigger_effect.skill_range,
+                    trigger_effect.skill_shape,
+                    target_position,
+                    target_size,
+                    &mut monsters_still_alive,
+                )
+            }
         };
 
         skills_controller::apply_skill_effects(
