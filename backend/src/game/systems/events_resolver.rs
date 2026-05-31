@@ -60,7 +60,12 @@ pub async fn resolve_events(
         }
     }
 
-    triggers_controller::apply_trigger_effects(events_queue, game_data, trigger_contexts);
+    triggers_controller::apply_trigger_effects(
+        &master_store.statuses_store,
+        events_queue,
+        game_data,
+        trigger_contexts,
+    );
 }
 
 fn handle_hit_event<'a>(

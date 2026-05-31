@@ -8,7 +8,10 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::event::{EventsQueue, HitEvent, StatusEvent},
+    data::{
+        event::{EventsQueue, HitEvent, StatusEvent},
+        master_store::StatusesStore,
+    },
     game_data::GameInstanceData,
 };
 
@@ -28,6 +31,7 @@ pub struct TriggerContext<'a> {
 }
 
 pub fn apply_trigger_effects(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
     trigger_contexts: Vec<TriggerContext>,
@@ -37,28 +41,35 @@ pub fn apply_trigger_effects(
     }
 
     for trigger_context in trigger_contexts.into_iter().take(100) {
+        let trigger_effect = trigger_context.owned_trigger.trigger_effect;
+
         if trigger_context.trigger_depth > 3 {
             tracing::error!(
                 "Trigger reached max depth: {:?}",
-                trigger_context.trigger.trigger_id
+                &trigger_effect.trigger_id
             );
             continue;
         }
 
-        let (target_id, attacker) = match trigger_context.trigger.target {
+        let (target_id, attacker) = match trigger_effect.target {
             TriggerTarget::SameTarget => (trigger_context.target, trigger_context.source),
             TriggerTarget::Source => (trigger_context.source, trigger_context.target),
             TriggerTarget::Me => (
-                trigger_context.trigger.owner.unwrap_or(CharacterId::Player),
-                trigger_context.trigger.owner.unwrap_or(CharacterId::Player),
+                trigger_context
+                    .owned_trigger
+                    .owner
+                    .unwrap_or(CharacterId::Player),
+                trigger_context
+                    .owned_trigger
+                    .owner
+                    .unwrap_or(CharacterId::Player),
             ),
         };
 
-        // TODO: I don't think these should be StatusEvents...
         let statuses_context: Vec<StatusModifierData> =
             if let Some(status_context) = trigger_context.status_context {
                 [StatusModifierData {
-                    status_type: status_context.status_type.clone(),
+                    status_id: &status_context.status_id,
                     skill_type: status_context.skill_type,
                     value: status_context.value,
                     duration: status_context.duration,
@@ -71,11 +82,13 @@ pub fn apply_trigger_effects(
                         .character_state
                         .statuses
                         .iter()
-                        .map(|(status_specs, status_state)| StatusModifierData {
-                            skill_type: status_state.skill_type,
-                            status_type: status_specs.into(),
-                            value: status_state.value,
-                            duration: status_state.duration,
+                        .flat_map(|(status_id, status_stacks)| {
+                            status_stacks.iter().map(|status_state| StatusModifierData {
+                                skill_type: status_state.skill_type,
+                                status_id: status_id,
+                                value: status_state.value,
+                                duration: status_state.duration,
+                            })
                         })
                         .collect(),
                     CharacterId::Monster(index) => game_data
@@ -86,11 +99,13 @@ pub fn apply_trigger_effects(
                                 .character_state
                                 .statuses
                                 .iter()
-                                .map(|(status_specs, status_state)| StatusModifierData {
-                                    skill_type: status_state.skill_type,
-                                    status_type: status_specs.into(),
-                                    value: status_state.value,
-                                    duration: status_state.duration,
+                                .flat_map(|(status_id, status_stacks)| {
+                                    status_stacks.iter().map(|status_state| StatusModifierData {
+                                        skill_type: status_state.skill_type,
+                                        status_id: status_id,
+                                        value: status_state.value,
+                                        duration: status_state.duration,
+                                    })
                                 })
                                 .collect()
                         })
@@ -139,8 +154,8 @@ pub fn apply_trigger_effects(
                     })
                     .unwrap_or_default();
                 skills_controller::find_sub_targets(
-                    trigger_context.trigger.skill_range,
-                    trigger_context.trigger.skill_shape,
+                    trigger_effect.skill_range,
+                    trigger_effect.skill_shape,
                     target_position,
                     target_size,
                     &mut monsters_still_alive,
@@ -148,11 +163,10 @@ pub fn apply_trigger_effects(
             }
         };
 
-        let trigger_effects: Vec<_> = if trigger_context.trigger.modifiers.is_empty() {
-            trigger_context.trigger.effects
+        let trigger_effects: Vec<_> = if trigger_effect.modifiers.is_empty() {
+            trigger_effect.effects
         } else {
-            let source_effects: Vec<_> = trigger_context
-                .trigger
+            let source_effects: Vec<_> = trigger_effect
                 .modifiers
                 .iter()
                 .map(|modifier| StatEffect {
@@ -183,14 +197,14 @@ pub fn apply_trigger_effects(
                                     + *game_data.area_specs.power_level as f64
                             }
                             TriggerEffectModifierSource::StatusValue {
-                                status_type,
+                                status_id,
                                 skill_type,
                             } => statuses_context
                                 .iter()
                                 .filter(|status_data| {
                                     compare_options(
-                                        &status_type.as_ref(),
-                                        &Some(&status_data.status_type),
+                                        &status_id.as_ref(),
+                                        &Some(status_data.status_id),
                                     ) && compare_options(
                                         &skill_type.as_ref(),
                                         &Some(&status_data.skill_type),
@@ -199,32 +213,30 @@ pub fn apply_trigger_effects(
                                 .map(|status_event| status_event.value.get())
                                 .sum(),
                             TriggerEffectModifierSource::StatusDuration {
-                                status_type,
+                                status_id,
                                 skill_type,
                             } => statuses_context
                                 .iter()
                                 .filter(|status_data| {
                                     compare_options(
-                                        &status_type.as_ref(),
-                                        &Some(&status_data.status_type),
+                                        &status_id.as_ref(),
+                                        &Some(status_data.status_id),
                                     ) && compare_options(
                                         &skill_type.as_ref(),
                                         &Some(&status_data.skill_type),
                                     )
                                 })
-                                .map(|status_data| {
-                                    status_data.duration.map(|d| d.get()).unwrap_or(1e20)
-                                })
+                                .map(|status_data| status_data.duration.get())
                                 .sum(),
                             TriggerEffectModifierSource::StatusStacks {
-                                status_type,
+                                status_id,
                                 skill_type,
                             } => statuses_context
                                 .iter()
                                 .filter(|status_event| {
                                     compare_options(
-                                        &status_type.as_ref(),
-                                        &Some(&status_event.status_type),
+                                        &status_id.as_ref(),
+                                        &Some(status_event.status_id),
                                     ) && compare_options(
                                         &skill_type.as_ref(),
                                         &Some(&status_event.skill_type),
@@ -237,14 +249,13 @@ pub fn apply_trigger_effects(
                 })
                 .collect();
 
-            trigger_context
-                .trigger
+            trigger_effect
                 .effects
                 .into_iter()
                 .map(|mut effect| {
                     skills_updater::compute_skill_specs_effect(
-                        &trigger_context.trigger.trigger_id,
-                        trigger_context.trigger.skill_type,
+                        &trigger_effect.trigger_id,
+                        trigger_effect.skill_type,
                         &mut effect,
                         source_effects.iter(),
                     );
@@ -254,14 +265,15 @@ pub fn apply_trigger_effects(
         };
 
         skills_controller::apply_skill_effects(
+            statuses_store,
             events_queue,
             attacker,
-            &trigger_context.trigger.trigger_id,
-            trigger_context.trigger.skill_type,
-            trigger_context.trigger.skill_range,
+            &trigger_effect.trigger_id,
+            trigger_effect.skill_type,
+            trigger_effect.skill_range,
             &trigger_effects,
             &mut targets,
-            if trigger_context.trigger.trigger_propagate {
+            if trigger_effect.trigger_propagate {
                 0
             } else {
                 trigger_context.trigger_depth.saturating_add(1)
@@ -270,8 +282,8 @@ pub fn apply_trigger_effects(
     }
 }
 
-struct StatusModifierData {
-    status_id: StatusId,
+struct StatusModifierData<'a> {
+    status_id: &'a StatusId,
     skill_type: SkillType,
     value: NonNegative,
     duration: NonNegative,
