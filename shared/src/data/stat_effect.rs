@@ -639,7 +639,7 @@ impl EffectsMap {
             HashMap::new(),
             |mut result, ((target, modifier, bypass_ignore), value)| {
                 result
-                    .entry((target.clone(), modifier, bypass_ignore))
+                    .entry((target, modifier, bypass_ignore))
                     .and_modify(|entry| match modifier {
                         Modifier::More => {
                             if *entry == 0.0 {
