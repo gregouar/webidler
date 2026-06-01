@@ -4,7 +4,6 @@ use strum::IntoEnumIterator;
 use shared::data::{
     chance::ChanceRange,
     character::CharacterAttrs,
-    character_status::StatusSpecs,
     conditional_modifier::ConditionalModifier,
     modifier::Modifier,
     player::PlayerInventory,
@@ -767,11 +766,11 @@ pub fn apply_stat_effect_on_skill_effect(
             if let (
                 Some(duration),
                 StatType::StatusDuration {
-                    status_id,
+                    status_filter,
                     skill_filter,
                 },
-            ) = (duration, &effect.stat)
-                && compare_options(&status_id.as_ref(), &Some(skill_status_id))
+            ) = (duration.as_mut(), &effect.stat)
+                && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
             {
                 duration.min.apply_effect(effect);
@@ -779,12 +778,11 @@ pub fn apply_stat_effect_on_skill_effect(
             }
 
             if let StatType::StatusPower {
-                status_id,
+                status_filter,
                 skill_filter,
                 min_max,
-                damage_type,
             } = &effect.stat
-                && compare_options(&status_id.as_ref(), &Some(skill_status_id))
+                && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
             {
                 if compare_options(min_max, &Some(MinMax::Min)) {
@@ -795,38 +793,36 @@ pub fn apply_stat_effect_on_skill_effect(
                 }
             }
 
+            if let (
+                Some(escalation),
+                StatType::StatusEscalation {
+                    status_filter,
+                    skill_filter,
+                },
+            ) = (escalation, &effect.stat)
+                && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                escalation.apply_effect(effect);
+            }
+
+            if let (
+                Some(duration),
+                StatType::StatusFaster {
+                    status_filter,
+                    skill_filter,
+                },
+            ) = (duration.as_mut(), &effect.stat)
+                && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                value.min.apply_effect(effect);
+                value.max.apply_effect(effect);
+                duration.min.apply_negative_effect(effect);
+                duration.max.apply_negative_effect(effect);
+            }
+
             if skill_damage_type.is_some() {
-                if let (
-                    Some(escalation),
-                    StatType::StatusEscalation {
-                        status_id,
-                        skill_filter,
-                        damage_type,
-                    },
-                ) = (escalation, &effect.stat)
-                    && compare_options(&status_id.as_ref(), &Some(skill_status_id))
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                {
-                    escalation.apply_effect(effect);
-                }
-
-                if let (
-                    Some(duration),
-                    StatType::StatusFaster {
-                        status_id,
-                        skill_filter,
-                        damage_type,
-                    },
-                ) = (duration, &effect.stat)
-                    && skill_filter.is_match_with_skill(skill_type, skill_id)
-                    && compare_options(damage_type, skill_damage_type)
-                {
-                    value.min.apply_effect(effect);
-                    value.max.apply_effect(effect);
-                    duration.min.apply_negative_effect(effect);
-                    duration.max.apply_negative_effect(effect);
-                }
-
                 if let StatType::Damage {
                     skill_filter,
                     damage_type,

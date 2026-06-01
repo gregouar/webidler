@@ -97,6 +97,7 @@ pub fn update_character_state(
     for conditional_modifier in character_specs.conditional_modifiers.iter() {
         for condition in conditional_modifier.conditions.iter() {
             let value = stats_updater::check_condition(
+                statuses_store,
                 area_threat,
                 &character_specs.character_attrs,
                 character_state,

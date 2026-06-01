@@ -3,8 +3,10 @@ use shared::data::{
     character::CharacterAttrs,
     conditional_modifier::{Condition, ConditionalModifier},
     player::CharacterState,
-    stat_effect::{StatEffect, compare_options},
+    stat_effect::StatEffect,
 };
+
+use crate::game::data::master_store::StatusesStore;
 
 // pub fn stats_map_to_vec(effects: &EffectsMap) -> Vec<StatEffect> {
 //     combine_effects(effects.into())
@@ -34,6 +36,7 @@ use shared::data::{
 // }
 
 pub fn compute_conditional_modifiers(
+    statuses_store: &StatusesStore,
     area_threat: &AreaThreat,
     character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
@@ -54,7 +57,13 @@ pub fn compute_conditional_modifiers(
                         monitored_condition.value
                     } else if conditional_modifier.conditions_duration == 0 {
                         // Last minute check, useful for skill modifiers that are not tracked
-                        check_condition(area_threat, character_attrs, character_state, condition)
+                        check_condition(
+                            statuses_store,
+                            area_threat,
+                            character_attrs,
+                            character_state,
+                            condition,
+                        )
                     } else {
                         0.0
                     }
@@ -81,6 +90,7 @@ pub fn compute_conditional_modifiers(
 }
 
 pub fn check_condition(
+    statuses_store: &StatusesStore,
     area_threat: &AreaThreat,
     character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
@@ -96,7 +106,10 @@ pub fn check_condition(
                 .statuses
                 .iter()
                 .any(|(status_id, status_states)| {
-                    status_filter.is_match_with_status(status_id, damage_type)
+                    let Some(status_specs) = statuses_store.get(status_id) else {
+                        return false;
+                    };
+                    status_filter.is_match_with_status(status_id, status_specs.damage_type)
                         && skill_type
                             .map(|skill_type| {
                                 status_states
@@ -114,7 +127,10 @@ pub fn check_condition(
             .statuses
             .iter()
             .filter(|(status_id, status_states)| {
-                status_filter.is_match_with_status(status_id, damage_type)
+                let Some(status_specs) = statuses_store.get(status_id) else {
+                    return false;
+                };
+                status_filter.is_match_with_status(status_id, status_specs.damage_type)
                     && skill_type
                         .map(|skill_type| {
                             status_states

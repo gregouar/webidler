@@ -153,6 +153,8 @@ pub struct MonitoredCondition {
 impl CharacterState {
     // TODO: Should we get rid of that?
     pub fn is_stunned(&self) -> bool {
-        self.statuses.keys().any(|status_id| *status_id == "stun")
+        self.statuses
+            .keys()
+            .any(|status_id| status_id.as_str() == "stun")
     }
 }

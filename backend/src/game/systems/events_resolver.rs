@@ -36,10 +36,10 @@ pub async fn resolve_events(
     for event in events.iter() {
         match event {
             GameEvent::Hit(hit_event) => {
-                handle_hit_event(&mut trigger_contexts, game_data, hit_event)
+                handle_hit_event(&mut trigger_contexts, game_data, master_store, hit_event)
             }
             GameEvent::Kill { target } => {
-                handle_kill_event(&mut trigger_contexts, game_data, *target)
+                handle_kill_event(&mut trigger_contexts, game_data, master_store, *target)
             }
             GameEvent::AreaCompleted {
                 area_level,
@@ -71,6 +71,7 @@ pub async fn resolve_events(
 fn handle_hit_event<'a>(
     trigger_contexts: &mut Vec<TriggerContext<'a>>,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
     hit_event: &'a HitEvent,
 ) {
     let characters = iter::once((
@@ -140,6 +141,7 @@ fn handle_hit_event<'a>(
                     .unwrap_or_default()
                 || hit_trigger.conditions.iter().any(|condition| {
                     check_condition(
+                        &master_store.statuses_store,
                         &game_data.area_threat,
                         &target_specs.character_attrs,
                         target_state,
@@ -242,6 +244,7 @@ fn handle_status_event<'a>(
 fn handle_kill_event(
     trigger_contexts: &mut Vec<TriggerContext>,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
     target: CharacterId,
 ) {
     match target {
@@ -270,6 +273,7 @@ fn handle_kill_event(
                         if let EventTrigger::OnKill(kill_trigger) = trigger
                             && all(kill_trigger.conditions.iter(), |condition| {
                                 check_condition(
+                                    &master_store.statuses_store,
                                     &game_data.area_threat,
                                     &monster_specs.character_specs.character_attrs,
                                     &monster_state.character_state,

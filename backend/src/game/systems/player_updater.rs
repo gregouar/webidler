@@ -127,6 +127,7 @@ pub fn update_player_specs(
             ))
             .chain(iter::once(
                 stats_updater::compute_conditional_modifiers(
+                    statuses_store,
                     area_threat,
                     &player_specs.character_specs.character_attrs,
                     &player_state.character_state,

@@ -15,6 +15,7 @@ use shared::data::{
 
 use super::{
     area::AreaBlueprint,
+    indexed_store::IndexedStore,
     items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
     loot_table::LootTable,
     manifest,
@@ -34,7 +35,7 @@ use crate::game::{
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
 pub type BenedictionsStore = IndexMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
-pub type StatusesStore = HashMap<String, StatusSpecs>;
+pub type StatusesStore = IndexedStore<String, StatusSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
 pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
@@ -84,7 +85,9 @@ impl MasterStore {
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Passives)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Benedictions)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Skills)),
-            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Statuses)),
+            join_load_and_merge_tables::<StatusesStore>(
+                manifest.get_resources(ManifestCategory::Statuses),
+            ),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Items)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAffixes)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAdjectives)),
@@ -133,7 +136,7 @@ impl MasterStore {
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),
             skills_store: Arc::new(skills_store?),
-            statuses_store: Arc::new(statuses_store?),
+            statuses_store: Arc::new(statuses_store?.into_indexed_keys()),
             items_store: Arc::new(ItemsStore {
                 content: items_store_content?,
                 signature_key: item_signature_key,

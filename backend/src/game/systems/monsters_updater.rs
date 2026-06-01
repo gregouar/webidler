@@ -75,6 +75,7 @@ pub fn update_monster_specs(
         bypass_ignore: false,
     });
     effects.extend(stats_updater::compute_conditional_modifiers(
+        statuses_store,
         area_threat,
         &monster_specs.character_specs.character_attrs,
         &monster_state.character_state,

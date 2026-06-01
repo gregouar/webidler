@@ -308,7 +308,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         },
         SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
-                status_id: "poison".to_string(),
+                status_id: "poison".into(),
                 value: weapon_specs
                     .damage
                     .get(&DamageType::Poison)

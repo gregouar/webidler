@@ -2,13 +2,13 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::data::{
-    chance::ChanceRange, character::CharacterId, modifier::Modifier, skill::SkillType,
-    trigger::TriggerSpecs, values::NonNegative,
+    chance::ChanceRange, character::CharacterId, indexed_key::IndexedKey, modifier::Modifier,
+    skill::SkillType, trigger::TriggerSpecs, values::NonNegative,
 };
 
 use super::{skill::DamageType, stat_effect::StatType};
 
-pub type StatusId = String;
+pub type StatusId = IndexedKey<String>;
 
 pub type StatusMap = HashMap<StatusId, Vec<StatusState>>;
 

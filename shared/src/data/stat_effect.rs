@@ -85,7 +85,7 @@ impl StatSkillFilter {
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct StatStatusFilter {
     #[serde(default)]
-    pub status_id: Option<String>,
+    pub status_id: Option<StatusId>,
     #[serde(default)]
     pub damage_type: Option<Option<DamageType>>,
 }
@@ -106,10 +106,13 @@ impl Matchable for StatStatusFilter {
 impl StatStatusFilter {
     pub fn is_match_with_status(
         &self,
-        status_id: &String,
+        status_id: &StatusId,
         damage_type: Option<DamageType>,
     ) -> bool {
-        compare_options(&self.status_id.as_ref(), &Some(status_id))
+        self.status_id
+            .as_ref()
+            .map(|filter_status_id| filter_status_id == status_id.as_str())
+            .unwrap_or(true)
             && self
                 .damage_type
                 .as_ref()
@@ -453,7 +456,7 @@ pub enum StatSkillEffectType {
     },
     ApplyStatus {
         #[serde(default)]
-        status_id: Option<String>,
+        status_id: Option<StatusId>,
     },
     Restore {
         #[serde(default)]
@@ -694,6 +697,12 @@ impl Matchable for bool {
 impl Matchable for String {
     fn is_match(&self, other: &Self) -> bool {
         *self == *other
+    }
+}
+
+impl Matchable for StatusId {
+    fn is_match(&self, other: &Self) -> bool {
+        self == other
     }
 }
 

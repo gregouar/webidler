@@ -77,6 +77,7 @@ impl PlayerController {
                     .iter()
                     .any(|condition| {
                         stats_updater::check_condition(
+                            statuses_store,
                             area_threat,
                             &player_specs.character_specs.character_attrs,
                             &player_state.character_state,

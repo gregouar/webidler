@@ -326,9 +326,12 @@ pub fn apply_status(
     trigger_depth: u8,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
-    let Some(status_specs) = statuses_store.get(status_id) else {
+    let status_id = statuses_store.id_with_key(status_id.clone());
+    let Some(status_specs) = statuses_store.get(&status_id) else {
         return false;
     };
+
+    let is_stun = status_id == "stun";
 
     let status_resistance: f64 = target_specs
         .character_attrs
@@ -336,7 +339,7 @@ pub fn apply_status(
         .iter()
         .filter_map(|((res_skill_type, res_status_id), resistance)| {
             ((*res_skill_type == skill_type)
-                && compare_options(&res_status_id.as_ref(), &Some(status_id)))
+                && compare_options(&res_status_id.as_ref(), &Some(&status_id)))
             .then_some(**resistance)
         })
         .sum();
@@ -424,7 +427,7 @@ pub fn apply_status(
         source: attacker,
         target: *target_id,
         skill_type,
-        status_id: status_id.clone(),
+        status_id,
         value,
         duration,
         is_evaded,
@@ -433,13 +436,13 @@ pub fn apply_status(
     }));
 
     let stun_lockout = *target_specs.character_attrs.stun_lockout;
-    if status_id == "stun" && stun_lockout.get() > 0.0 {
+    if is_stun && stun_lockout.get() > 0.0 {
         apply_status(
             statuses_store,
             events_queue,
             target,
             attacker,
-            &("stun_lockout".to_string()), //This feels moronic
+            &"stun_lockout".into(), //This feels moronic
             SkillType::Other,
             100.0.into(),
             duration + stun_lockout,

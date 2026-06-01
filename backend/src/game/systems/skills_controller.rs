@@ -399,6 +399,7 @@ fn apply_conditional_modifiers(
         skill_type,
         &mut new_skill_effect,
         stats_updater::compute_conditional_modifiers(
+            statuses_store,
             &Default::default(),
             &target.1.0.character_attrs,
             target.1.1,
