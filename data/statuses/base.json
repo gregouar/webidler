@@ -4,12 +4,12 @@
         "icon": "statuses/stunned.svg",
         "debuff": true,
         "duration": 0,
-        "stacks": 1,
+        "max_stacks": 1,
         "effects": [
             {
                 "StatModifier": {
                     "stat": {
-                        "Speed": null
+                        "Speed": { }
                     },
                     "modifier": "More",
                     "debuff": true
@@ -24,7 +24,7 @@
         "icon": "statuses/stun_immune.svg",
         "debuff": false,
         "duration": 0,
-        "stacks": 1,
+        "max_stacks": 1,
         "effects": [
             {
                 "StatModifier": {
@@ -32,10 +32,10 @@
                         "StatusResistance": {
                             "status_id": "stun"
                         }
-                    },
-                    "value": 100,
-                    "modifier": "Flat"
-                }
+                    }
+                },
+                "value": 100,
+                "modifier": "Flat"
             }
         ]
     }
