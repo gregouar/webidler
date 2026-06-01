@@ -18,7 +18,7 @@ use crate::game::{
     data::{
         DataInit,
         area::{BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
-        master_store::MonstersSpecsStore,
+        master_store::{MonstersSpecsStore, StatusesStore},
         monster::BaseMonsterSpecs,
     },
     systems::characters_updater,
@@ -42,13 +42,20 @@ impl RandomWeighted for &BossBlueprint {
 /// Return generated monsters
 pub fn generate_monsters_wave(
     monsters_specs_store: &MonstersSpecsStore,
+    statuses_store: &StatusesStore,
     waves: &[MonsterWaveBlueprint],
     bosses: &[BossBlueprint],
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
-    let (monster_specs, is_boss) =
-        generate_monsters_wave_specs(monsters_specs_store, waves, bosses, area_specs, area_state)?;
+    let (monster_specs, is_boss) = generate_monsters_wave_specs(
+        monsters_specs_store,
+        statuses_store,
+        waves,
+        bosses,
+        area_specs,
+        area_state,
+    )?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
     area_state.is_boss = is_boss;
     Ok((monster_specs, monster_states))
@@ -57,6 +64,7 @@ pub fn generate_monsters_wave(
 /// Return generated monsters + if it is boss
 fn generate_monsters_wave_specs(
     monsters_specs_store: &MonstersSpecsStore,
+    statuses_store: &StatusesStore,
     waves: &[MonsterWaveBlueprint],
     bosses: &[BossBlueprint],
     area_specs: &AreaSpecs,
@@ -77,6 +85,7 @@ fn generate_monsters_wave_specs(
             return Ok((
                 generate_all_monsters_specs(
                     monsters_specs_store,
+                    statuses_store,
                     area_specs,
                     area_state,
                     &boss.spawns,
@@ -96,7 +105,13 @@ fn generate_monsters_wave_specs(
 
     if let Some(wave) = rng::random_weighted_pick(&available_waves) {
         return Ok((
-            generate_all_monsters_specs(monsters_specs_store, area_specs, area_state, &wave.spawns),
+            generate_all_monsters_specs(
+                monsters_specs_store,
+                statuses_store,
+                area_specs,
+                area_state,
+                &wave.spawns,
+            ),
             false,
         ));
     }
@@ -106,6 +121,7 @@ fn generate_monsters_wave_specs(
 
 fn generate_all_monsters_specs(
     monsters_specs_store: &MonstersSpecsStore,
+    statuses_store: &StatusesStore,
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     spawns: &[MonsterWaveSpawnBlueprint],
@@ -138,7 +154,12 @@ fn generate_all_monsters_specs(
                         .get_xy_size(),
                 );
 
-                let mut specs = generate_monster_specs(area_specs, area_state, base_monster_specs);
+                let mut specs = generate_monster_specs(
+                    statuses_store,
+                    area_specs,
+                    area_state,
+                    base_monster_specs,
+                );
                 specs.character_specs.character_static.position_x = (x + 1) as u8;
                 specs.character_specs.character_static.position_y = (y + 1) as u8;
                 monsters.push(specs);
@@ -181,6 +202,7 @@ fn occupy_space(
 }
 
 fn generate_monster_specs(
+    statuses_store: &StatusesStore,
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     base_monster_specs: &BaseMonsterSpecs,
@@ -234,6 +256,7 @@ fn generate_monster_specs(
         .map(|base_skill_specs| {
             if base_skill_specs.upgrade_effects.is_empty() {
                 skills_updater::update_skill_specs(
+                    statuses_store,
                     "".to_string(),
                     base_skill_specs,
                     1,
@@ -248,6 +271,7 @@ fn generate_monster_specs(
                 ))
                     .into();
                 skills_updater::update_skill_specs(
+                    statuses_store,
                     "".to_string(),
                     base_skill_specs,
                     1,
@@ -266,7 +290,7 @@ fn generate_monster_specs(
     effects.extend(converted_effects);
     // monster_specs.character_specs.effects = effects_map;
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
     }
 
     monster_specs

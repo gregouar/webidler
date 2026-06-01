@@ -88,12 +88,13 @@ pub fn update_monster_specs(
     effects.extend(converted_effects);
 
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
     }
 
     for trigger_effect in monster_specs.character_specs.triggers.effects_iter_mut() {
         for skill_effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
+                statuses_store,
                 &trigger_effect.trigger_id,
                 trigger_effect.skill_type,
                 skill_effect,

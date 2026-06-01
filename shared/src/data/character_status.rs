@@ -42,10 +42,13 @@ pub struct StatusSpecs {
     pub icon: String,
 
     pub debuff: bool,
-    pub avoidable: Option<DamageType>,
+    #[serde(default)]
+    pub damage_type: Option<DamageType>,
+    #[serde(default)]
+    pub avoidable: bool,
 
     pub duration: ChanceRange<NonNegative>,
-    pub stacks: u8,
+    pub max_stacks: u8,
     #[serde(default)]
     pub escalation: NonNegative,
 

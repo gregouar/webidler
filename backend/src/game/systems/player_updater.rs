@@ -139,7 +139,12 @@ pub fn update_player_specs(
 
     let mut effects: Vec<_> = (&effects_map).into();
 
-    let mut player_specs = compute_player_specs(player_base_specs, player_inventory, &mut effects);
+    let mut player_specs = compute_player_specs(
+        statuses_store,
+        player_base_specs,
+        player_inventory,
+        &mut effects,
+    );
 
     for trigger_specs in passives_tree_state
         .purchased_nodes
@@ -162,6 +167,7 @@ pub fn update_player_specs(
     for trigger_effect in player_specs.character_specs.triggers.effects_iter_mut() {
         for skill_effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
+                statuses_store,
                 &trigger_effect.trigger_id,
                 trigger_effect.skill_type,
                 skill_effect,
@@ -183,6 +189,7 @@ pub fn update_player_specs(
 }
 
 fn compute_player_specs(
+    statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
     player_inventory: &PlayerInventory,
     effects: &mut Vec<StatEffect>,
@@ -278,6 +285,7 @@ fn compute_player_specs(
         .iter()
         .map(|(skill_id, player_base_skill)| {
             skills_updater::update_skill_specs(
+                statuses_store,
                 skill_id.to_string(),
                 &player_base_skill.base_skill_specs,
                 player_base_skill.upgrade_level,

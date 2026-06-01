@@ -506,6 +506,7 @@ pub fn extend_triggers_from_skills_and_statuses(
                         {
                             for skill_effect in trigger_effect.effects.iter_mut() {
                                 skills_updater::compute_skill_specs_effect(
+                                    statuses_store,
                                     &trigger_effect.trigger_id,
                                     trigger_effect.skill_type,
                                     skill_effect,

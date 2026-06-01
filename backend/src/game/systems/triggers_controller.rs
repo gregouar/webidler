@@ -204,6 +204,7 @@ pub fn apply_trigger_effects(
                 .into_iter()
                 .map(|mut effect| {
                     skills_updater::compute_skill_specs_effect(
+                        statuses_store,
                         &trigger_effect.trigger_id,
                         trigger_effect.skill_type,
                         &mut effect,

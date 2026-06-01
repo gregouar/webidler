@@ -180,6 +180,7 @@ async fn control_entities(
 
             let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
                 &master_store.monster_specs_store,
+                &master_store.statuses_store,
                 &game_data.area_blueprint.waves,
                 &game_data.area_blueprint.bosses,
                 &game_data.area_specs,

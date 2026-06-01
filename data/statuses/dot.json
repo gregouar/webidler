@@ -3,6 +3,8 @@
         "name": "Burn",
         "icon": "statuses/burning.svg",
         "debuff": true,
+        "damage_type": "Fire",
+        "avoidable": true,
         "duration": 3.0,
         "stacks": 10,
         "effects": [

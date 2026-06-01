@@ -221,7 +221,9 @@ pub enum SkillEffectType {
         #[serde(default)]
         max_stacks: Option<u8>,
         #[serde(default)]
-        avoidable: Option<DamageType>,
+        damage_type: Option<DamageType>,
+        #[serde(default)]
+        avoidable: Option<bool>,
 
         #[serde(default)]
         replace_on_value_only: bool,

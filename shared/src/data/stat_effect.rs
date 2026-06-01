@@ -75,15 +75,49 @@ impl Matchable for StatSkillFilter {
     }
 }
 
-// pub trait SkillFilterMatchable {
-//     fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool;
-// }
-
-// impl SkillFilterMatchable for StatSkillFilter {
 impl StatSkillFilter {
     pub fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
         compare_options(&self.skill_type, &Some(skill_type))
             && compare_options(&self.skill_id.as_ref(), &Some(skill_id))
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatStatusFilter {
+    #[serde(default)]
+    pub status_id: Option<String>,
+    #[serde(default)]
+    pub damage_type: Option<Option<DamageType>>,
+}
+
+impl Matchable for StatStatusFilter {
+    fn is_match(&self, second: &StatStatusFilter) -> bool {
+        compare_options(&self.status_id, &second.status_id)
+            && match (self.damage_type, second.damage_type) {
+                (None, None) => true,
+                (None, Some(_)) | (Some(_), None) => false,
+                (Some(damage_type), Some(damage_type_2)) => {
+                    compare_options(&damage_type, &damage_type_2)
+                }
+            }
+    }
+}
+
+impl StatStatusFilter {
+    pub fn is_match_with_status(
+        &self,
+        status_id: &String,
+        damage_type: Option<DamageType>,
+    ) -> bool {
+        compare_options(&self.status_id.as_ref(), &Some(status_id))
+            && self
+                .damage_type
+                .as_ref()
+                .map(|filter_damage_type| match damage_type {
+                    None => false, // not damage over time
+                    damage_type => compare_options(filter_damage_type, &damage_type),
+                })
+                .unwrap_or(true)
     }
 }
 
@@ -132,30 +166,30 @@ pub enum StatType {
     CritChance(#[serde(default)] StatSkillFilter),
     CritDamage(#[serde(default)] StatSkillFilter),
     StatusPower {
-        #[serde(default)]
-        status_id: Option<StatusId>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
         min_max: Option<MinMax>,
     },
     StatusDuration {
-        #[serde(default)]
-        status_id: Option<StatusId>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
     StatusEscalation {
-        #[serde(default)]
-        status_id: Option<StatusId>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
     StatusFaster {
         #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        #[serde(flatten)]
         skill_filter: StatSkillFilter,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
     },
     SuccessChance {
         #[serde(flatten)]
@@ -306,52 +340,50 @@ impl Matchable for StatType {
             (Evade(first), Evade(second)) => compare_options(first, second),
             (
                 StatusPower {
-                    status_id,
+                    status_filter,
                     skill_filter,
                     min_max,
                 },
                 StatusPower {
-                    status_id: status_id_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                     min_max: min_max_2,
                 },
             ) => {
-                compare_options(status_id, status_id_2)
+                status_filter.is_match(status_filter_2)
                     && skill_filter.is_match(skill_filter_2)
                     && compare_options(min_max, min_max_2)
             }
             (
                 StatusDuration {
-                    status_id,
+                    status_filter,
                     skill_filter,
                 },
                 StatusDuration {
-                    status_id: status_id_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => compare_options(status_id, status_id_2) && skill_filter.is_match(skill_filter_2),
+            ) => status_filter.is_match(status_filter_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusEscalation {
-                    status_id,
+                    status_filter,
                     skill_filter,
                 },
                 StatusEscalation {
-                    status_id: status_id_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => compare_options(status_id, status_id_2) && skill_filter.is_match(skill_filter_2),
+            ) => status_filter.is_match(status_filter_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusFaster {
-                    damage_type,
+                    status_filter,
                     skill_filter,
                 },
                 StatusFaster {
-                    damage_type: damage_type_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => {
-                compare_options(damage_type, damage_type_2) && skill_filter.is_match(skill_filter_2)
-            }
+            ) => status_filter.is_match(status_filter_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusResistance {
                     status_id,

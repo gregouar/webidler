@@ -355,7 +355,13 @@ pub fn apply_skill_effects(
             let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
                 skill_effect
             } else {
-                &apply_conditional_modifiers(target, skill_effect, skill_id, skill_type)
+                &apply_conditional_modifiers(
+                    statuses_store,
+                    target,
+                    skill_effect,
+                    skill_id,
+                    skill_type,
+                )
             };
 
             if !apply_skill_effect_on_target(
@@ -379,6 +385,7 @@ pub fn apply_skill_effects(
 }
 
 fn apply_conditional_modifiers(
+    statuses_store: &StatusesStore,
     target: &mut Target,
     skill_effect: &SkillEffect,
     skill_id: &String,
@@ -387,6 +394,7 @@ fn apply_conditional_modifiers(
     let mut new_skill_effect = skill_effect.clone();
 
     skills_updater::compute_skill_specs_effect(
+        statuses_store,
         skill_id,
         skill_type,
         &mut new_skill_effect,
@@ -412,6 +420,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
             escalation,
             max_stacks,
             avoidable: _,
+            damage_type: _,
             replace_on_value_only,
         } => {
             let value = *value.max;
@@ -507,6 +516,7 @@ fn apply_skill_effect_on_target(
             escalation,
             max_stacks,
             avoidable,
+            damage_type,
             replace_on_value_only: _,
         } => {
             let value = value.roll_with_seed(seed);
@@ -523,7 +533,11 @@ fn apply_skill_effect_on_target(
                 duration,
                 *escalation.unwrap_or_default(),
                 max_stacks.unwrap_or_default(),
-                *avoidable,
+                if avoidable.unwrap_or_default() {
+                    *damage_type
+                } else {
+                    None
+                },
                 skill_id,
                 trigger_depth,
             )
