@@ -12,6 +12,8 @@ use shared::data::passive::{
 use strum::IntoEnumIterator;
 
 use frontend::components::{
+    backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus, node_text,
@@ -74,6 +76,15 @@ impl SelectedNode {
 #[component]
 pub fn PassivesPage() -> impl IntoView {
     let events_context: EventsContext = expect_context();
+
+    let backend: BackendClient = expect_context();
+    let data_context: DataContext = expect_context();
+
+    let _data_load = LocalResource::new({
+        move || async move {
+            let _ = data_context.load_data(backend).await;
+        }
+    });
 
     let (loaded_file, _, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());

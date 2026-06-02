@@ -4,15 +4,14 @@ use std::{collections::HashMap, time::Duration};
 use shared::data::{
     character_status::{StatusId, StatusMap, StatusSpecs},
     monster::MonsterRarity,
-    skill::{DamageType, SkillType},
-    stat_effect::{MinMax, StatEffect, StatSkillEffectType, StatType},
+    skill::DamageType,
 };
 
 use crate::{
     assets::img_asset,
     components::{
+        data_context::DataContext,
         settings::{GraphicsQuality, SettingsContext},
-        shared::tooltips::{conditions_tooltip, effects_tooltip, trigger_tooltip},
         ui::{
             number::format_number,
             tooltip::{StaticTooltip, StaticTooltipPosition},
@@ -76,44 +75,46 @@ pub fn CharacterPortrait(
         }
     });
 
-    // let statuses_map = Memo::new({
-    //     move |_| {
-    //         statuses.read().iter().fold(
-    //             HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
-    //             |mut acc, (status_specs, status_state)| {
-    //                 let entry = acc
-    //                     .entry(status_specs.into_status_id(SkillType::Other))
-    //                     .or_default();
-    //                 entry.0 += 1;
-    //                 entry.1 += status_state.value.get();
-    //                 entry.2 = Some(status_specs.clone());
-    //                 acc
-    //             },
-    //         )
-    //     }
-    // });
+    let data_context: DataContext = expect_context();
 
-    // let active_debuffs = Memo::new(move |_| {
-    //     let mut active_statuses: Vec<_> = statuses_map
-    //         .read()
-    //         .iter()
-    //         .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
-    //         .cloned()
-    //         .collect();
-    //     active_statuses.sort();
-    //     active_statuses
-    // });
+    let statuses_map = Memo::new(move |_| {
+        let statuses_specs = data_context.statuses_specs.read();
+        statuses.read().iter().fold(
+            HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
+            |mut acc, (status_id, status_states)| {
+                let entry = acc.entry(status_id.clone()).or_default();
+                entry.0 += status_states.len();
+                entry.1 += status_states
+                    .iter()
+                    .map(|status_state| status_state.value.get())
+                    .sum::<f64>();
+                entry.2 = statuses_specs.get(status_id).cloned();
+                acc
+            },
+        )
+    });
 
-    // let active_buffs = Memo::new(move |_| {
-    //     let mut active_statuses: Vec<_> = statuses_map
-    //         .read()
-    //         .iter()
-    //         .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
-    //         .cloned()
-    //         .collect();
-    //     active_statuses.sort();
-    //     active_statuses
-    // });
+    let active_debuffs = Memo::new(move |_| {
+        let mut active_statuses: Vec<_> = statuses_map
+            .read()
+            .iter()
+            .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
+            .cloned()
+            .collect();
+        active_statuses.sort();
+        active_statuses
+    });
+
+    let active_buffs = Memo::new(move |_| {
+        let mut active_statuses: Vec<_> = statuses_map
+            .read()
+            .iter()
+            .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
+            .cloned()
+            .collect();
+        active_statuses.sort();
+        active_statuses
+    });
 
     let (accent_class, shimmer_effect, fixture_class) = match rarity {
         MonsterRarity::Normal => (
@@ -194,11 +195,8 @@ pub fn CharacterPortrait(
     };
 
     let activate_bleeding = RwSignal::new(false);
-    let is_bleeding = Memo::new(move |_| {
-        active_debuffs.read().contains(&StatusId::DamageOverTime {
-            damage_type: DamageType::Physical,
-        })
-    });
+    let is_bleeding =
+        Memo::new(move |_| has_damage_status(&statuses_map.read(), DamageType::Physical));
     Effect::new(move || {
         if is_bleeding.get() {
             activate_bleeding.set(true)
@@ -206,11 +204,7 @@ pub fn CharacterPortrait(
     });
 
     let activate_burning = RwSignal::new(false);
-    let is_burning = Memo::new(move |_| {
-        active_debuffs.read().contains(&StatusId::DamageOverTime {
-            damage_type: DamageType::Fire,
-        })
-    });
+    let is_burning = Memo::new(move |_| has_damage_status(&statuses_map.read(), DamageType::Fire));
     Effect::new(move || {
         if is_burning.get() {
             activate_burning.set(true)
@@ -218,11 +212,8 @@ pub fn CharacterPortrait(
     });
 
     let activate_poisoned = RwSignal::new(false);
-    let is_poisoned = Memo::new(move |_| {
-        active_debuffs.read().contains(&StatusId::DamageOverTime {
-            damage_type: DamageType::Poison,
-        })
-    });
+    let is_poisoned =
+        Memo::new(move |_| has_damage_status(&statuses_map.read(), DamageType::Poison));
     Effect::new(move || {
         if is_poisoned.get() {
             activate_poisoned.set(true)
@@ -525,27 +516,21 @@ pub fn CharacterPortrait(
 }
 
 fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
-    match status_specs {
-        Some(status_specs) => match status_specs {
-            StatusSpecs::Stun => true,
-            StatusSpecs::DamageOverTime { .. } => true,
-            StatusSpecs::StatModifier { debuff, stat, .. } => {
-                if matches!(
-                    stat,
-                    StatType::BlockDamageTaken | StatType::EvadeDamageTaken
-                ) {
-                    !*debuff
-                } else {
-                    *debuff
-                }
-            }
-            StatusSpecs::Trigger(trigger_specs) => {
-                trigger_specs.is_debuff
-                    || matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
-            }
-        },
-        None => false,
-    }
+    status_specs
+        .map(|status_specs| status_specs.debuff)
+        .unwrap_or_default()
+}
+
+fn has_damage_status(
+    statuses_map: &HashMap<StatusId, (usize, f64, Option<StatusSpecs>)>,
+    damage_type: DamageType,
+) -> bool {
+    statuses_map.values().any(|(_, _, status_specs)| {
+        status_specs
+            .as_ref()
+            .and_then(|status_specs| status_specs.damage_type)
+            == Some(damage_type)
+    })
 }
 
 #[component]
@@ -555,113 +540,13 @@ fn StatusIcon(
     tooltip_position: StaticTooltipPosition,
 ) -> impl IntoView {
     let icon_uri = {
-        let status_id = status_id.clone();
         move || {
-            match &status_id {
-                StatusId::Stun => "statuses/stunned.svg".to_string(),
-                StatusId::DamageOverTime { damage_type, .. } => match damage_type {
-                    DamageType::Physical => "statuses/bleed.svg".to_string(),
-                    DamageType::Fire => "statuses/burning.svg".to_string(),
-                    DamageType::Poison => "statuses/poison.svg".to_string(),
-                    DamageType::Storm => "statuses/storm.svg".to_string(),
-                },
-                // TODO: More buff types
-                StatusId::StatModifier {
-                    stat,
-                    debuff: false,
-                    ..
-                } => match stat {
-                    StatType::LifeRegen => "passives/life_regen.svg".into(),
-                    StatType::Damage {
-                        skill_filter,
-                        damage_type,
-                        min_max,
-                        is_hit: _,
-                    } => {
-                        if let Some(damage_type) = damage_type {
-                            match damage_type {
-                                DamageType::Physical => "passives/mace_head.svg".into(),
-                                DamageType::Fire => "passives/fire_damage.svg".into(),
-                                DamageType::Poison => "passives/scorpion_tail.svg".into(),
-                                DamageType::Storm => "passives/storm_damage.svg".into(),
-                            }
-                        } else if let Some(skill_type) = skill_filter.skill_type {
-                            match skill_type {
-                                SkillType::Attack => "passives/attack.svg".into(),
-                                SkillType::Spell => "passives/spell.svg".into(),
-                                _ => "statuses/buff.svg".into(),
-                            }
-                        } else if let Some(min_max) = min_max {
-                            match min_max {
-                                MinMax::Min => "statuses/buff.svg".into(),
-                                MinMax::Max => "passives/thrust.svg".into(),
-                            }
-                        } else {
-                            "statuses/buff.svg".into()
-                        }
-                    }
-                    StatType::CritChance(_) => "passives/critical_chance.svg".into(),
-                    StatType::CritDamage(_) => "passives/critical_damage.svg".into(),
-                    StatType::Speed(_) => "passives/sprint.svg".into(),
-                    StatType::StatusDuration {
-                        status_filter:
-                            Some(StatStatusType::DamageOverTime {
-                                damage_type: Some(DamageType::Poison),
-                            }),
-                        ..
-                    } => "passives/ouroboros.svg".into(),
-                    StatType::StatusResistance {
-                        status_type: Some(StatStatusType::Stun),
-                        ..
-                    } => "statuses/stun_immune.svg".into(),
-                    StatType::SuccessChance {
-                        skill_filter,
-                        effect_type,
-                    } => match (skill_filter.skill_type, effect_type) {
-                        (
-                            _,
-                            Some(StatSkillEffectType::ApplyStatus {
-                                status_filter:
-                                    Some(StatStatusType::DamageOverTime {
-                                        damage_type: Some(DamageType::Fire),
-                                    }),
-                            }),
-                        ) => "passives/smoking_finger.svg".into(),
-                        _ => "passives/success.svg".into(),
-                    },
-                    StatType::BlockDamageTaken => "statuses/shield_impact.svg".to_string(),
-                    StatType::EvadeDamageTaken => "statuses/falling.svg".to_string(),
-                    StatType::GoldFind => "passives/gold.svg".to_string(),
-                    StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
-                    _ => "statuses/buff.svg".to_string(),
-                },
-                // TODO: More debuff types
-                StatusId::StatModifier {
-                    stat, debuff: true, ..
-                } => match stat {
-                    StatType::Armor(_) | StatType::DamageResistance { .. } => {
-                        "statuses/debuff_armor.svg".to_string()
-                    }
-                    StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
-                    StatType::Speed(_) => "statuses/slow.svg".to_string(),
-                    StatType::Block(_) => "statuses/shield_impact.svg".to_string(),
-                    StatType::Evade(_) => "statuses/falling.svg".to_string(),
-                    StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
-                    _ => "statuses/debuff.svg".to_string(),
-                },
-                StatusId::Trigger(_) => stack
-                    .read()
-                    .2
-                    .as_ref()
-                    .and_then(|status_specs| {
-                        if let StatusSpecs::Trigger(trigger_specs) = status_specs {
-                            trigger_specs.icon.clone()
-                        } else {
-                            None
-                        }
-                    })
-                    .unwrap_or("statuses/debuff.svg".into()),
-            }
+            stack
+                .read()
+                .2
+                .as_ref()
+                .map(|status_specs| status_specs.icon.clone())
+                .unwrap_or("statuses/buff.svg".into())
         }
     };
 
@@ -696,37 +581,8 @@ pub fn status_description(
     value: f64,
     status_specs: &Option<StatusSpecs>,
 ) -> String {
-    match status_id {
-        StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
-        StatusId::DamageOverTime { damage_type } => {
-            format!(
-                "{} for {} Damage per Second",
-                conditions_tooltip::damaged_over_time_str(Some(*damage_type)),
-                format_number(value)
-            )
-        }
-        StatusId::StatModifier {
-            skill_type: _,
-            stat,
-            modifier,
-            debuff,
-        } => effects_tooltip::format_stat(&StatEffect {
-            stat: stat.clone(),
-            modifier: *modifier,
-            value: if *debuff { -value } else { value },
-            bypass_ignore: false,
-        }),
-        StatusId::Trigger(_) => {
-            if let Some(StatusSpecs::Trigger(trigger_specs)) = status_specs {
-                trigger_specs.name.clone().unwrap_or(
-                    trigger_specs
-                        .description
-                        .clone()
-                        .unwrap_or(trigger_tooltip::trigger_text(*trigger_specs.clone())),
-                )
-            } else {
-                "Special Effect".into()
-            }
-        }
-    }
+    status_specs
+        .as_ref()
+        .map(|status_specs| format!("{} ({})", status_specs.name, format_number(value)))
+        .unwrap_or_else(|| status_id.to_string())
 }

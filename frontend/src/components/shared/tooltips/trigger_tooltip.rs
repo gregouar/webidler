@@ -5,7 +5,7 @@ use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
     skill::{SkillType, TargetType},
-    stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatType},
+    stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
@@ -27,44 +27,45 @@ pub fn format_trigger(
     trigger: TriggerSpecs,
     show_details: bool,
     effects_map: Option<&EffectsMap>,
+    name: Option<String>,
 ) -> impl IntoView + use<> {
     let effects = trigger
-        .triggered_effect
+        .trigger_effect
         .effects
         .into_iter()
         .map(|x| {
             skill_tooltip::format_skill_effect(
-                trigger.triggered_effect.skill_type,
+                trigger.trigger_effect.skill_type,
                 x,
-                Some(&trigger.triggered_effect.modifiers),
+                Some(&trigger.trigger_effect.modifiers),
                 effects_map,
             )
         })
         .collect::<Vec<_>>();
 
     let details_infos = show_details.then(|| {
-        if matches!(trigger.triggered_effect.skill_type, SkillType::Other) {
-            format!(" ({})", trigger_target_str(trigger.triggered_effect.target))
+        if matches!(trigger.trigger_effect.skill_type, SkillType::Other) {
+            format!(" ({})", trigger_target_str(trigger.trigger_effect.target))
         } else {
             format!(
                 " ({}, {})",
-                skill_type_str(Some(trigger.triggered_effect.skill_type)),
-                trigger_target_str(trigger.triggered_effect.target)
+                skill_type_str(Some(trigger.trigger_effect.skill_type)),
+                trigger_target_str(trigger.trigger_effect.target)
             )
         }
     });
 
-    let shape_infos = (trigger.triggered_effect.skill_shape != SkillShape::Single)
-        .then(|| format!(", {}", shape_str(trigger.triggered_effect.skill_shape)));
+    let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single)
+        .then(|| format!(", {}", shape_str(trigger.trigger_effect.skill_shape)));
 
-    let name_str = trigger.name.map(|name| format!("{} do ", name));
+    let name_str = name.map(|name| format!("{} do ", name));
 
     view! {
         <EffectLi>
             <ul>
                 <EffectLi>
-                    {name_str} {format_trigger_event(&trigger.triggered_effect.trigger)}
-                    {shape_infos} {details_infos}":"
+                    {name_str} {format_trigger_event(&trigger.trigger)} {shape_infos}
+                    {details_infos}":"
                 </EffectLi>
                 {trigger
                     .description
@@ -145,19 +146,27 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Power Level".to_string(),
         TriggerEffectModifierSource::StatusValue {
-            status_type,
+            status_id,
             skill_type,
         } => {
+            let status_filter = StatStatusFilter {
+                status_id: status_id.clone(),
+                ..Default::default()
+            };
             format!(
                 "{}{}",
                 skill_type_str(*skill_type),
-                status_type_value_str(status_type.as_ref())
+                status_type_value_str(&status_filter)
             )
         }
         TriggerEffectModifierSource::StatusDuration {
-            status_type,
+            status_id,
             skill_type,
         } => {
+            let status_filter = StatStatusFilter {
+                status_id: status_id.clone(),
+                ..Default::default()
+            };
             format!(
                 "{} Duration",
                 skill_status_type_str(
@@ -165,15 +174,19 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
                         skill_type: *skill_type,
                         ..Default::default()
                     },
-                    status_type.as_ref(),
+                    &status_filter,
                     false
                 )
             )
         }
         TriggerEffectModifierSource::StatusStacks {
-            status_type,
+            status_id,
             skill_type,
         } => {
+            let status_filter = StatStatusFilter {
+                status_id: status_id.clone(),
+                ..Default::default()
+            };
             format!(
                 "{} Stacks",
                 skill_status_type_str(
@@ -181,7 +194,7 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
                         skill_type: *skill_type,
                         ..Default::default()
                     },
-                    status_type.as_ref(),
+                    &status_filter,
                     false
                 )
             )
@@ -217,8 +230,12 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             format!("On Applying {}", format_status_trigger(status_trigger))
         }
         EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
-            Some(true) => match (&status_trigger.skill_type, &status_trigger.status_type) {
-                (None, None) => "On Evade".to_string(),
+            Some(true) => match (&status_trigger.skill_type, &status_trigger.status_filter) {
+                (None, status_filter)
+                    if status_filter.status_id.is_none() && status_filter.damage_type.is_none() =>
+                {
+                    "On Evade".to_string()
+                }
                 _ => format!("On Evaded {}", format_status_trigger(status_trigger)),
             },
             _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
@@ -272,7 +289,7 @@ fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
             skill_type: status_trigger.skill_type,
             ..Default::default()
         },
-        status_trigger.status_type.as_ref(),
+        &status_trigger.status_filter,
         false,
     )
     .to_string()
@@ -346,13 +363,13 @@ fn format_target_type(target_type: &TargetType) -> &'static str {
 pub fn trigger_text(trigger: TriggerSpecs) -> String {
     format!(
         "{} {} {}",
-        format_trigger_event(&trigger.triggered_effect.trigger),
+        format_trigger_event(&trigger.trigger),
         trigger.description.unwrap_or_default(),
         trigger
-            .triggered_effect
+            .trigger_effect
             .effects
             .into_iter()
-            .map(|x| skill_tooltip::skill_effect_text(x, Some(&trigger.triggered_effect.modifiers)))
+            .map(|x| skill_tooltip::skill_effect_text(x, Some(&trigger.trigger_effect.modifiers)))
             .join(" ")
     )
 }

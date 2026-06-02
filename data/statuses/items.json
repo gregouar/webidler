@@ -1,6 +1,6 @@
 {
     "drink_storm": {
-        "name": "Drink Storm",
+        "name": "Stormfeast",
         "icon": "statuses/lightning_flame.svg",
         "debuff": false,
         "duration": 5,

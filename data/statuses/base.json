@@ -1,6 +1,7 @@
 {
     "stun": {
         "name": "Stun",
+        "adjective": "Stunned",
         "icon": "statuses/stunned.svg",
         "debuff": true,
         "duration": 0,

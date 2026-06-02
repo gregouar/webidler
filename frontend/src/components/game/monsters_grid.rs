@@ -7,7 +7,7 @@ use rand::Rng;
 use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
 use shared::data::skill::{DamageType, SkillType};
-use shared::data::stat_effect::StatSkillFilter;
+use shared::data::stat_effect::{StatSkillFilter, StatStatusFilter};
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 use strum::IntoEnumIterator;
 
@@ -653,11 +653,14 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
         }
     };
 
-    let mut grouped: HashMap<Option<StatStatusType>, Vec<(SkillType, f64)>> = HashMap::new();
-    for ((skill_type, status_type), value) in attrs.status_resistances.iter() {
+    let mut grouped: HashMap<StatStatusFilter, Vec<(SkillType, f64)>> = HashMap::new();
+    for ((skill_type, status_id), value) in attrs.status_resistances.iter() {
         if **value > 0.0 {
             grouped
-                .entry(status_type.clone())
+                .entry(StatStatusFilter {
+                    status_id: status_id.clone(),
+                    ..Default::default()
+                })
                 .or_default()
                 .push((*skill_type, **value));
         }
@@ -665,7 +668,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 
     let skill_type_count = SkillType::iter().count();
     let mut resilient_values = Vec::new();
-    for (status_type, mut entries) in grouped {
+    for (status_filter, mut entries) in grouped {
         entries.sort_by_key(|(skill_type, _)| *skill_type);
         if entries.len() == skill_type_count
             && entries
@@ -679,7 +682,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                 entries[0].1,
                 format!(
                     "{} Resilience",
-                    effects_tooltip::opt_status_type_str(status_type.as_ref()),
+                    effects_tooltip::status_filter_str(&status_filter),
                 ),
             ));
         } else {
@@ -693,7 +696,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                                 skill_type: Some(skill_type),
                                 ..Default::default()
                             },
-                            status_type.as_ref(),
+                            &status_filter,
                             true,
                         ),
                     ),

@@ -5,6 +5,8 @@ use indexmap::IndexMap;
 use leptos::{html::*, prelude::*};
 
 use frontend::components::{
+    backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::{item_card::ItemCard, tooltips::item_tooltip::name_color_rarity},
     ui::{
@@ -35,6 +37,15 @@ type ItemsStore = IndexMap<String, ItemBase>;
 #[component]
 pub fn ItemsPage() -> impl IntoView {
     let events_context: EventsContext = expect_context();
+
+    let backend: BackendClient = expect_context();
+    let data_context: DataContext = expect_context();
+
+    let _data_load = LocalResource::new({
+        move || async move {
+            let _ = data_context.load_data(backend).await;
+        }
+    });
 
     let items_store = RwSignal::new(Default::default());
     let selected_item = RwSignal::new(None);

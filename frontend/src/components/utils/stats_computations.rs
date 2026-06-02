@@ -1,16 +1,17 @@
 use shared::data::{
+    character_status::StatusId,
     modifier::Modifier,
-    stat_effect::{EffectsMap, Matchable, StatEffect, StatType},
+    stat_effect::{EffectsMap, Matchable, StatEffect, StatStatusFilter, StatType},
 };
 
-pub fn compute_stats_effects_status_value(
-    effects_map: &EffectsMap,
-    status_effect: &ApplyStatusEffect,
-) -> f64 {
+pub fn compute_stats_effects_status_value(effects_map: &EffectsMap, status_id: &StatusId) -> f64 {
     let mut factor = Factor::new();
 
     let status_power = StatType::StatusPower {
-        status_filter: Some((&status_effect.status_type).into()),
+        status_filter: StatStatusFilter {
+            status_id: Some(status_id.clone()),
+            ..Default::default()
+        },
         skill_filter: Default::default(), // TODO
         min_max: None,
     };

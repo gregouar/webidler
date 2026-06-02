@@ -5,7 +5,7 @@ use shared::data::{
     conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusFilter, StatStatusType, StatType, StatusDamageType},
+    stat_effect::{StatSkillFilter, StatStatusFilter, StatType, StatusDamageType},
     trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
@@ -854,6 +854,7 @@ fn TriggersStats() -> impl IntoView {
                                 },
                                 true,
                                 Some(&stat_effects),
+                                None,
                             )
                         }} <Separator />
                     </div>
