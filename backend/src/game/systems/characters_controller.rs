@@ -428,6 +428,7 @@ pub fn apply_status(
         target: *target_id,
         skill_type,
         status_id,
+        damage_type: status_specs.damage_type,
         value,
         duration,
         is_evaded,

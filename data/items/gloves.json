@@ -66,7 +66,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -198,8 +197,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -354,7 +352,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -371,7 +368,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -673,7 +669,6 @@
             },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "conditions": [
               {
                 "HasStatus": {

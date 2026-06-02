@@ -49,6 +49,7 @@ pub struct StatusEvent {
     pub skill_id: String,
 
     pub status_id: StatusId,
+    pub damage_type: Option<DamageType>,
     pub skill_type: SkillType,
 
     pub is_evaded: bool,

@@ -4,7 +4,7 @@
     "icon": "items/cloaks/wool_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -22,21 +22,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hooded_wrap": {
     "name": "Hooded Wrap",
     "icon": "items/cloaks/hooded_wrap.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -54,21 +54,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hooded_wrap_unique": {
     "name": "Stormfeast Shroud",
     "icon": "items/cloaks/stormfeast_shroud.webp",
     "description": "Born of tempest and trial by fire, it drinks the sky's fury and exhales flame.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -98,7 +98,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Fire",
                 "min_max": null,
                 "is_hit": null
@@ -118,7 +117,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -148,8 +146,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -164,8 +161,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -192,10 +188,10 @@
           "is_triggered": null,
           "damage_type": "Storm",
           "skill_ids": null,
-          "conditions": []
+          "conditions": [ ]
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -205,35 +201,11 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Fire",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 5.0
+              "status_id": "drink_storm",
+              "value": 100
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -275,7 +247,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": null,
               "is_hit": null
@@ -292,7 +263,7 @@
     "icon": "items/cloaks/heavy_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -310,21 +281,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "cloak_backstab": {
     "name": "Gareth's Misdirection",
     "icon": "items/cloaks/cloak_backstab.webp",
     "description": "He insisted it wasn't betrayal, just better positioning.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -345,8 +316,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -383,16 +353,12 @@
         "trigger_id": "backstab_cloak",
         "OnReceiveStatus": {
           "skill_type": null,
-          "status_type": {
-            "DamageOverTime": {
-              "damage_type": null
-            }
-          },
+          "damage_type": "Any",
           "is_triggered": null,
           "is_evaded": true
         },
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Other",
         "effects": [
@@ -402,55 +368,11 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "CritChance": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": null,
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 10.0
+              "status_id": "backstab_cloak",
+              "value": 1
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -490,8 +412,7 @@
           "stat": {
             "Speed": {
               "skill_type": "Attack",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -513,7 +434,7 @@
     "icon": "items/cloaks/fur_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -531,21 +452,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "fur_cloak_unique": {
     "name": "Shadowmoth Embrace",
     "icon": "items/cloaks/princess_cloak.webp",
     "description": "Spread your wings, let the world fear what follows.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -572,14 +493,9 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
-              }
-            },
+            "damage_type": "Poison",
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -595,7 +511,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": null,
             "is_hit": null
@@ -636,15 +551,10 @@
             },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
+                  "damage_type": "Poison",
                   "skill_type": null,
                   "not": false
                 }
@@ -661,7 +571,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -693,7 +603,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Poison",
               "min_max": null,
               "is_hit": null
@@ -720,15 +629,10 @@
               },
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "damage_type": "Poison",
                     "skill_type": null,
                     "not": false
                   }
@@ -757,7 +661,7 @@
     "icon": "items/cloaks/reinforced_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -775,21 +679,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "butcher_apron": {
     "name": "Walking Abattoir",
     "icon": "items/cloaks/butcher_apron.webp",
     "description": "No carcass leaves the table whole.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -820,7 +724,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": null,
             "is_hit": null
@@ -837,15 +740,9 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "Trigger": {
-                "trigger_id": "open_wound",
-                "trigger_description": "Open Wound"
-              }
-            },
+            "status_id": "open_wound",
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "min_max": null
           }
         },
@@ -861,8 +758,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -894,12 +790,7 @@
           "conditions": [
             {
               "HasStatus": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wounded"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "not": false
               }
@@ -923,12 +814,7 @@
             "factor": 0.5,
             "source": {
               "StatusValue": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null
               }
             }
@@ -943,7 +829,7 @@
               "lucky_chance": 0.0
             },
             "FlatDamage": {
-              "damage": {},
+              "damage": { },
               "crit_chance": {
                 "value": 0.0,
                 "lucky_chance": 0.0
@@ -963,7 +849,7 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Contact",
@@ -1002,7 +888,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": null,
               "is_hit": null
@@ -1018,8 +903,7 @@
           "stat": {
             "Speed": {
               "skill_type": "Attack",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -1033,7 +917,7 @@
     "icon": "items/cloaks/great_cloak.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -1051,21 +935,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_chest": {
     "name": "Gilded Chest",
     "icon": "items/cloaks/treasure_chest.webp",
     "description": "You finally found it. Now what will it take from you?",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory"
     ],
@@ -1102,7 +986,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -1130,7 +1014,7 @@
     "icon": "items/cloaks/elven_cape.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -1148,21 +1032,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "cloak_exorcist": {
     "name": "Veil of a Thousand Seals",
     "icon": "items/cloaks/cloak_exorcist.webp",
     "description": "Each seal binds a whisper. Together, they silence the chorus.",
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -1182,8 +1066,7 @@
       {
         "stat": {
           "StatusResistance": {
-            "skill_type": "Curse",
-            "status_type": null
+            "skill_type": "Curse"
           }
         },
         "modifier": "Flat",
@@ -1194,10 +1077,8 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
             "skill_type": "Curse",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -1221,7 +1102,6 @@
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": null,
                   "skill_type": "Blessing",
                   "not": false
                 }
@@ -1239,7 +1119,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -1279,7 +1159,6 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": null,
                     "skill_type": "Blessing",
                     "not": false
                   }
@@ -1299,7 +1178,7 @@
     "icon": "items/cloaks/regal_mantle.webp",
     "description": null,
     "slot": "Accessory",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Accessory",
       "Cloak"
@@ -1317,13 +1196,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

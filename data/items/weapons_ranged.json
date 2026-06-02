@@ -13,8 +13,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -35,8 +35,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hunting_bow": {
     "name": "Hunting Bow",
@@ -52,8 +52,8 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -74,8 +74,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hunting_bow_unique": {
     "name": "Bloodspiller",
@@ -97,7 +97,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -116,7 +115,6 @@
           "SuccessChance": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "effect_type": {
               "ApplyStatus": {
                 "status_type": {
@@ -163,7 +161,6 @@
             },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "conditions": [
               {
                 "HasStatus": {
@@ -207,7 +204,7 @@
           ]
         },
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "skill_range": "Melee",
         "skill_type": "Spell",
         "effects": [
@@ -224,8 +221,8 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -272,7 +269,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -289,7 +285,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -306,7 +301,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -333,7 +327,6 @@
               },
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "conditions": [
                 {
                   "HasStatus": {
@@ -369,8 +362,8 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -391,8 +384,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "composite_bow": {
     "name": "Composite Bow",
@@ -408,8 +401,8 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -430,8 +423,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "composite_bow_unique": {
     "name": "Voltrach Bite",
@@ -453,7 +446,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Storm",
             "min_max": "Max",
             "is_hit": null
@@ -469,7 +461,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": null,
             "is_hit": null
@@ -485,7 +476,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -503,8 +493,7 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -604,7 +593,7 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -649,7 +638,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Storm",
               "min_max": "Max",
               "is_hit": null
@@ -666,7 +654,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -682,8 +669,7 @@
           "stat": {
             "CritDamage": {
               "skill_type": null,
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -706,8 +692,8 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -728,15 +714,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_gun": {
     "name": "Pistol of the Damned",
     "icon": "items/weapons_ranged/treasure_gun.webp",
     "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "RangedWeapon"
@@ -758,7 +744,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Min",
             "is_hit": null
@@ -777,7 +762,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Max",
             "is_hit": null
@@ -796,7 +780,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -814,8 +797,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -830,8 +812,7 @@
         "stat": {
           "CritChance": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -853,7 +834,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -889,7 +870,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -906,7 +886,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -923,7 +902,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Min",
               "is_hit": null
@@ -940,7 +918,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Max",
               "is_hit": null
@@ -957,7 +934,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -983,8 +959,8 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1005,8 +981,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
@@ -1028,7 +1004,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Min",
             "is_hit": null
@@ -1047,7 +1022,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Max",
             "is_hit": null
@@ -1066,7 +1040,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -1084,8 +1057,7 @@
         "stat": {
           "CritChance": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -1097,8 +1069,7 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -1183,7 +1154,7 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [ ]
           }
         ],
         "skill_shape": "Single",
@@ -1226,7 +1197,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -1243,7 +1213,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -1260,7 +1229,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Min",
               "is_hit": null
@@ -1277,7 +1245,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Max",
               "is_hit": null
@@ -1303,8 +1270,8 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1325,8 +1292,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "weapon_ranged_8": {
     "name": "Arbalest",
@@ -1342,8 +1309,8 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1364,7 +1331,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

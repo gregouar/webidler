@@ -81,7 +81,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": null,
             "is_hit": null
@@ -222,7 +221,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Poison",
               "min_max": null,
               "is_hit": null
@@ -287,7 +285,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -305,8 +302,7 @@
         "stat": {
           "CritChance": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -321,8 +317,7 @@
         "stat": {
           "CritDamage": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "More",
@@ -350,7 +345,6 @@
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "fireball",
-            "skill_description": null,
             "range": null,
             "shape": "All",
             "repeat": null
@@ -402,8 +396,7 @@
           "stat": {
             "CritChance": {
               "skill_type": "Spell",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -416,8 +409,7 @@
           "stat": {
             "CritDamage": {
               "skill_type": "Spell",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "More",
@@ -431,7 +423,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": null,
               "is_hit": null
@@ -549,8 +540,7 @@
               }
             },
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -822,7 +812,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -840,8 +829,7 @@
         "stat": {
           "CritChance": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -856,8 +844,7 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "More",
@@ -873,7 +860,6 @@
           "Lucky": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "roll_type": {
               "Damage": {
                 "damage_type": null
@@ -915,7 +901,6 @@
             "Damage": {
               "skill_type": "Spell",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null

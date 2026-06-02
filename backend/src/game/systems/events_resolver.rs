@@ -211,10 +211,9 @@ fn handle_status_event<'a>(
                     &status_trigger.is_triggered,
                     &Some(status_event.trigger_depth > 0),
                 )
-                || !compare_options(
-                    &status_trigger.status_id.as_ref(),
-                    &Some(&status_event.status_id),
-                )
+                || !status_trigger
+                    .status_filter
+                    .is_match_with_status(&status_event.status_id, status_event.damage_type)
                 || !compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
             {
                 continue;

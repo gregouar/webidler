@@ -82,12 +82,44 @@ impl StatSkillFilter {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatusDamageType {
+    Any,
+    Physical,
+    Fire,
+    Poison,
+    Storm,
+}
+
+impl Matchable for StatusDamageType {
+    fn is_match(&self, other: &Self) -> bool {
+        use StatusDamageType::*;
+        match (self, other) {
+            (Any, _) | (_, Any) => true,
+            (x, y) if x == y => true,
+            _ => false,
+        }
+    }
+}
+
+impl From<DamageType> for StatusDamageType {
+    fn from(value: DamageType) -> Self {
+        use StatusDamageType::*;
+        match value {
+            DamageType::Physical => Physical,
+            DamageType::Fire => Fire,
+            DamageType::Poison => Poison,
+            DamageType::Storm => Storm,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct StatStatusFilter {
     #[serde(default)]
     pub status_id: Option<StatusId>,
     #[serde(default)]
-    pub damage_type: Option<Option<DamageType>>,
+    pub damage_type: Option<StatusDamageType>,
 }
 
 impl Matchable for StatStatusFilter {
@@ -96,9 +128,7 @@ impl Matchable for StatStatusFilter {
             && match (self.damage_type, second.damage_type) {
                 (None, None) => true,
                 (None, Some(_)) | (Some(_), None) => false,
-                (Some(damage_type), Some(damage_type_2)) => {
-                    compare_options(&damage_type, &damage_type_2)
-                }
+                (Some(damage_type), Some(damage_type_2)) => damage_type.is_match(&damage_type_2),
             }
     }
 }
@@ -118,7 +148,7 @@ impl StatStatusFilter {
                 .as_ref()
                 .map(|filter_damage_type| match damage_type {
                     None => false, // not damage over time
-                    damage_type => compare_options(filter_damage_type, &damage_type),
+                    Some(damage_type) => filter_damage_type.is_match(&damage_type.into()),
                 })
                 .unwrap_or(true)
     }

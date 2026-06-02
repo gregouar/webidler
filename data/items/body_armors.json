@@ -50,8 +50,7 @@
         "stat": {
           "SkillLevel": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -118,8 +117,7 @@
           "Restore": {
             "restore_type": "Life",
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",

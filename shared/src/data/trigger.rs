@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     character::CharacterId, character_status::StatusId, conditional_modifier::Condition,
-    item::SkillShape, modifier::Modifier, skill::TargetType,
+    item::SkillShape, modifier::Modifier, skill::TargetType, stat_effect::StatStatusFilter,
 };
 
 use super::{
@@ -84,8 +84,8 @@ pub struct HitTrigger {
 pub struct StatusTrigger {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
-    #[serde(default)]
-    pub status_id: Option<StatusId>,
+    #[serde(flatten)]
+    pub status_filter: StatStatusFilter,
     #[serde(default)]
     pub is_triggered: Option<bool>,
     #[serde(default)]

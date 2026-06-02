@@ -39,6 +39,8 @@ pub type StatusMap = HashMap<StatusId, Vec<StatusState>>;
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StatusSpecs {
     pub name: String,
+    #[serde(default)]
+    pub adjective: Option<String>,
     pub icon: String,
 
     pub debuff: bool,
