@@ -16,7 +16,7 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{
-        EffectsMap, Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
+        EffectsMap, Matchable, StatEffect, StatSkillEffectType, StatSkillFilter,
         StatType,
     },
     trigger::TriggerEffectModifier,

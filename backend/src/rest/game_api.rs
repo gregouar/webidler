@@ -16,8 +16,8 @@ use shared::{
         },
         server::{
             AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, SavePassivesResponse,
-            SocketPassiveResponse,
+            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, GetStatusesResponse,
+            SavePassivesResponse, SocketPassiveResponse,
         },
     },
 };
@@ -52,6 +52,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/game/areas", get(get_areas))
         .route("/game/skills", get(get_skills))
+        .route("/game/statuses", get(get_statuses))
         .route("/game/passives", get(get_passives))
         .route("/game/benedictions", get(get_benedictions))
         .merge(auth_routes)
@@ -74,6 +75,14 @@ pub async fn get_skills(
 ) -> Result<Json<GetSkillsResponse>, AppError> {
     Ok(Json(GetSkillsResponse {
         skills: (*master_store.skills_store).clone(),
+    }))
+}
+
+pub async fn get_statuses(
+    State(master_store): State<MasterStore>,
+) -> Result<Json<GetStatusesResponse>, AppError> {
+    Ok(Json(GetStatusesResponse {
+        statuses: (*master_store.statuses_store).clone().into_iter().collect(),
     }))
 }
 

@@ -7,7 +7,7 @@ use rand::Rng;
 use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
 use shared::data::skill::{DamageType, SkillType};
-use shared::data::stat_effect::{StatSkillFilter, StatStatusType};
+use shared::data::stat_effect::StatSkillFilter;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 use strum::IntoEnumIterator;
 

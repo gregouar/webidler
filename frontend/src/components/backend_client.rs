@@ -26,12 +26,13 @@ use shared::{
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
             ForgotPasswordResponse, GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
             GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
-            GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
-            InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
-            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
-            ResetPasswordResponse, SavePassivesResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpdateAccountResponse, UpgradeStashResponse,
+            GetSkillsResponse, GetStatusesResponse, GetUserCharactersResponse,
+            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
+            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
+            RejectMarketItemResponse, ResetPasswordResponse, SavePassivesResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
+            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
+            UpgradeStashResponse,
         },
     },
 };
@@ -100,6 +101,10 @@ impl BackendClient {
 
     pub async fn get_skills(&self) -> Result<GetSkillsResponse, BackendError> {
         self.get("game/skills").await
+    }
+
+    pub async fn get_statuses(&self) -> Result<GetStatusesResponse, BackendError> {
+        self.get("game/statuses").await
     }
 
     pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {

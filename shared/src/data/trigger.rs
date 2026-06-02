@@ -36,6 +36,10 @@ impl TriggersMap {
         self.0.iter()
     }
 
+    pub fn into_iter(self) -> impl Iterator<Item = (EventTrigger, Vec<OwnedTrigger>)> {
+        self.0.into_iter()
+    }
+
     pub fn effects_iter_mut(&mut self) -> impl Iterator<Item = &mut TriggerEffect> {
         self.0.values_mut().flat_map(|owned_effects| {
             owned_effects

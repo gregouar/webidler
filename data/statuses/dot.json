@@ -2,7 +2,7 @@
     "bleed": {
         "name": "Bleed",
         "adjective": "Bleeding",
-        "icon": "statuses/bleeding.svg",
+        "icon": "statuses/bleed.svg",
         "debuff": true,
         "damage_type": "Physical",
         "avoidable": true,
@@ -40,7 +40,7 @@
     "poison": {
         "name": "Poison",
         "adjective": "Poisoned",
-        "icon": "statuses/poisoned.svg",
+        "icon": "statuses/poison.svg",
         "debuff": true,
         "damage_type": "Poison",
         "avoidable": true,

@@ -1,7 +1,7 @@
 use shared::data::{
     conditional_modifier::Condition,
     skill::{DamageType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusType, StatType},
+    stat_effect::{StatSkillFilter, StatType},
 };
 
 use crate::components::shared::tooltips::effects_tooltip;

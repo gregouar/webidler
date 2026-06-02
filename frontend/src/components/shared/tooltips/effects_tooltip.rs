@@ -9,7 +9,7 @@ use shared::data::{
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
-        StatSkillFilter, StatStatusType, StatType,
+        StatSkillFilter, StatType,
     },
 };
 

@@ -1,6 +1,5 @@
 use shared::data::{
     modifier::Modifier,
-    skill::ApplyStatusEffect,
     stat_effect::{EffectsMap, Matchable, StatEffect, StatType},
 };
 
