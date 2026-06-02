@@ -54,4 +54,25 @@ impl DataContext {
             .map(|skill| skill.name.clone())
             .unwrap_or(skill_id.to_string())
     }
+
+    pub fn status_name(&self, status_id: &StatusId) -> String {
+        self.statuses_specs
+            .read_untracked()
+            .get(status_id)
+            .map(|status_specs| status_specs.name.clone())
+            .unwrap_or(status_id.to_string())
+    }
+
+    pub fn status_adjective(&self, status_id: &StatusId) -> String {
+        self.statuses_specs
+            .read_untracked()
+            .get(status_id)
+            .map(|status_specs| {
+                status_specs
+                    .adjective
+                    .clone()
+                    .unwrap_or(status_specs.name.clone())
+            })
+            .unwrap_or(status_id.to_string())
+    }
 }

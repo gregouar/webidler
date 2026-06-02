@@ -5,7 +5,7 @@ use shared::data::{
     conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusType, StatType},
+    stat_effect::{StatSkillFilter, StatStatusFilter, StatStatusType, StatType, StatusDamageType},
     trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
@@ -695,9 +695,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )} // TODO: Elemental dot?
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_filter: Some(StatStatusType::DamageOverTime {
-                                            damage_type: None,
-                                        }),
+                                        status_filter: StatStatusFilter {
+                                            status_id: None,
+                                            damage_type: Some(StatusDamageType::Any),
+                                        },
                                         skill_filter: Default::default(),
                                         min_max: None,
                                     },
@@ -835,7 +836,7 @@ fn TriggersStats() -> impl IntoView {
                 <For
                     each=move || triggers.get().into_iter()
                     key=|(_, trigger_effect)| trigger_effect.trigger_id.clone()
-                    let((event_trigger, trigger_effect))
+                    let((trigger, trigger_effect))
                 >
                     <div class="relative pb-2 list-none break-inside-avoid">
                         {move || {
@@ -847,11 +848,9 @@ fn TriggersStats() -> impl IntoView {
                                 .clone();
                             trigger_tooltip::format_trigger(
                                 TriggerSpecs {
-                                    name: None,
-                                    icon: None,
+                                    trigger: trigger.clone(),
                                     description: None,
-                                    triggered_effect: triggered_effect.clone(),
-                                    is_debuff: false,
+                                    trigger_effect: trigger_effect.clone(),
                                 },
                                 true,
                                 Some(&stat_effects),

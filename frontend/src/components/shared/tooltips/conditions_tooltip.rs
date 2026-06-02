@@ -1,7 +1,7 @@
 use shared::data::{
     conditional_modifier::Condition,
     skill::{DamageType, SkillType},
-    stat_effect::{StatSkillFilter, StatType},
+    stat_effect::{StatSkillFilter, StatStatusFilter, StatType},
 };
 
 use crate::components::shared::tooltips::effects_tooltip;
@@ -15,14 +15,14 @@ pub fn format_skill_modifier_conditions_pre(
         .iter()
         .map(|condition| match condition {
             Condition::HasStatus {
-                status_type,
+                status_filter,
                 skill_type,
                 not,
             } => format!(
                 " {}{}{} ",
                 prefix,
                 if *not { "Non-" } else { "" },
-                format_under_status_type_condition(status_type.as_ref(), *skill_type),
+                format_under_status_type_condition(status_filter, *skill_type),
             ),
             Condition::StatusStacks { .. } => "".into(),
             Condition::MaximumLife => "".into(),
@@ -94,7 +94,7 @@ pub fn format_skill_modifier_conditions_post(
 }
 
 pub fn format_under_status_type_condition(
-    status_type: Option<&StatStatusType>,
+    status_filter: &StatStatusFilter,
     skill_type: Option<SkillType>,
 ) -> String {
     let status_type_str = match status_type {

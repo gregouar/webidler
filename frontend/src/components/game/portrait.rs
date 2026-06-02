@@ -5,7 +5,7 @@ use shared::data::{
     character_status::{StatusId, StatusMap, StatusSpecs},
     monster::MonsterRarity,
     skill::{DamageType, SkillType},
-    stat_effect::{MinMax, StatEffect, StatSkillEffectType, StatStatusType, StatType},
+    stat_effect::{MinMax, StatEffect, StatSkillEffectType, StatType},
 };
 
 use crate::{
@@ -76,62 +76,44 @@ pub fn CharacterPortrait(
         }
     });
 
-    let statuses_map = Memo::new({
-        move |_| {
-            statuses.read().iter().fold(
-                HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
-                |mut acc, (status_specs, status_state)| {
-                    let entry = acc
-                        .entry(status_specs.into_status_id(SkillType::Other))
-                        .or_default();
-                    entry.0 += 1;
-                    entry.1 += status_state.value.get();
-                    entry.2 = Some(status_specs.clone());
-                    acc
-                },
-            )
-        }
-    });
+    // let statuses_map = Memo::new({
+    //     move |_| {
+    //         statuses.read().iter().fold(
+    //             HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
+    //             |mut acc, (status_specs, status_state)| {
+    //                 let entry = acc
+    //                     .entry(status_specs.into_status_id(SkillType::Other))
+    //                     .or_default();
+    //                 entry.0 += 1;
+    //                 entry.1 += status_state.value.get();
+    //                 entry.2 = Some(status_specs.clone());
+    //                 acc
+    //             },
+    //         )
+    //     }
+    // });
 
-    // let active_statuses = Memo::new(move |_| {
-    //     let mut active_statuses: Vec<_> = statuses_map.read().keys().cloned().collect();
+    // let active_debuffs = Memo::new(move |_| {
+    //     let mut active_statuses: Vec<_> = statuses_map
+    //         .read()
+    //         .iter()
+    //         .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
+    //         .cloned()
+    //         .collect();
     //     active_statuses.sort();
     //     active_statuses
     // });
 
-    let active_debuffs = Memo::new(move |_| {
-        let mut active_statuses: Vec<_> = statuses_map
-            .read()
-            .iter()
-            .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
-            .cloned()
-            .collect();
-        active_statuses.sort();
-        active_statuses
-    });
-
-    let active_buffs = Memo::new(move |_| {
-        let mut active_statuses: Vec<_> = statuses_map
-            .read()
-            .iter()
-            .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
-            .cloned()
-            .collect();
-        active_statuses.sort();
-        active_statuses
-    });
-
-    // let (border_class, shimmer_effect) = match rarity {
-    //     MonsterRarity::Normal => ("border-6 xl:border-8 border-double border-stone-500", ""),
-    //     MonsterRarity::Champion => (
-    //         "border-6 xl:border-8 border-double border-indigo-700",
-    //         "champion-shimmer",
-    //     ),
-    //     MonsterRarity::Boss => (
-    //         "border-8 xl:border-12 border-double border-red-700",
-    //         "boss-shimmer",
-    //     ),
-    // };
+    // let active_buffs = Memo::new(move |_| {
+    //     let mut active_statuses: Vec<_> = statuses_map
+    //         .read()
+    //         .iter()
+    //         .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
+    //         .cloned()
+    //         .collect();
+    //     active_statuses.sort();
+    //     active_statuses
+    // });
 
     let (accent_class, shimmer_effect, fixture_class) = match rarity {
         MonsterRarity::Normal => (
@@ -210,21 +192,6 @@ pub fn CharacterPortrait(
             ),
         }
     };
-
-    // let (hit_signal, set_hit_signal) = signal(false);
-
-    // Effect::new(move || {
-    //     if just_hurt.get() && enable_blink {
-    //         set_hit_signal.set(true);
-
-    //         set_timeout(
-    //             move || {
-    //                 set_hit_signal.set(false);
-    //             },
-    //             Duration::from_millis(300),
-    //         );
-    //     }
-    // });
 
     let activate_bleeding = RwSignal::new(false);
     let is_bleeding = Memo::new(move |_| {
@@ -310,10 +277,6 @@ pub fn CharacterPortrait(
             style="contain: layout paint style;"
         >
             <div class=portrait_frame_class style=crit_animation_style>
-                // <Show when=move || settings.uses_heavy_effects()>
-                // <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                // // <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
-                // </Show>
                 <div
                     class=move || {
                         format!(

@@ -77,10 +77,7 @@ pub fn skill_filter_str(skill_filter: &StatSkillFilter, prefix: &str, plural: bo
             let data_context: DataContext = expect_context();
             format!(
                 "{} ",
-                skill_filter
-                    .skill_description
-                    .clone()
-                    .unwrap_or(data_context.skill_name(skill_id))
+                data_context.skill_name(skill_id)
             )
         })
         .unwrap_or_default();
