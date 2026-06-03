@@ -16,7 +16,7 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
-            damage_type_str, format_stat, skill_status_type_str, status_type_value_str,
+            damage_type_str, format_stat, skill_status_filter_str, status_type_value_str,
         },
         skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
     },
@@ -169,7 +169,7 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
             };
             format!(
                 "{} Duration",
-                skill_status_type_str(
+                skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
                         ..Default::default()
@@ -189,7 +189,7 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
             };
             format!(
                 "{} Stacks",
-                skill_status_type_str(
+                skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
                         ..Default::default()
@@ -284,7 +284,7 @@ fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {
 }
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
-    skill_status_type_str(
+    skill_status_filter_str(
         &StatSkillFilter {
             skill_type: status_trigger.skill_type,
             ..Default::default()

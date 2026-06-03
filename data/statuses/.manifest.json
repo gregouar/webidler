@@ -8,7 +8,8 @@
             "blessings.json",
             "curses.json",
             "dot.json",
-            "items.json",
+            "items_boots.json",
+            "items_cloaks.json",
             "passives.json"
         ]
     }

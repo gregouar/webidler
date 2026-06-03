@@ -691,7 +691,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                     value,
                     format!(
                         "{} Resilience",
-                        effects_tooltip::skill_status_type_str(
+                        effects_tooltip::skill_status_filter_str(
                             &StatSkillFilter {
                                 skill_type: Some(skill_type),
                                 ..Default::default()

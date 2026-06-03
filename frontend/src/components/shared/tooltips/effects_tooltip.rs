@@ -185,7 +185,7 @@ pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> 
 //     }
 // }
 
-pub fn skill_status_type_str(
+pub fn skill_status_filter_str(
     skill_filter: &StatSkillFilter,
     status_filter: &StatStatusFilter,
     plural: bool,
@@ -505,7 +505,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => {
             format!(
                 "{} Duration",
-                skill_status_type_str(skill_filter, status_filter, true)
+                skill_status_filter_str(skill_filter, status_filter, true)
             )
         }
         StatType::StatusEscalation {
@@ -538,7 +538,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             };
             format!(
                 "{} Resilience",
-                skill_status_type_str(
+                skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
                         ..Default::default()
@@ -767,18 +767,18 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if value.unwrap_or_default() >= 99999.0 {
                 format!(
                     "{} never expire",
-                    skill_status_type_str(skill_filter, status_filter, true)
+                    skill_status_filter_str(skill_filter, status_filter, true)
                 )
             } else if value.unwrap_or_default() <= -99999.0 {
                 format!(
                     "{} have no effects",
-                    skill_status_type_str(skill_filter, status_filter, true)
+                    skill_status_filter_str(skill_filter, status_filter, true)
                 )
             } else {
                 format!(
                     "{} seconds duration to {}",
                     format_adds_removes(value, true, ""),
-                    skill_status_type_str(skill_filter, status_filter, true)
+                    skill_status_filter_str(skill_filter, status_filter, true)
                 )
             }
         }

@@ -1,0 +1,190 @@
+{
+    "compass_speed": {
+        "name": "Northwest",
+        "icon": "statuses/compass.svg",
+        "debuff": false,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": {
+                            "skill_type": "Attack",
+                            "skill_id": null,
+                            "skill_description": null
+                        }
+                    },
+                    "modifier": "Increased",
+                    "debuff": false
+                },
+                "value": 30,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": {
+                            "skill_type": "Spell",
+                            "skill_id": null,
+                            "skill_description": null
+                        }
+                    },
+                    "modifier": "Increased",
+                    "debuff": false
+                },
+                "value": 30,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "compass_damage": {
+        "name": "Southwest",
+        "icon": "statuses/compass.svg",
+        "debuff": false,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null,
+                            "damage_type": null,
+                            "min_max": null,
+                            "is_hit": null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "compass_regen": {
+        "name": "East",
+        "icon": "statuses/compass.svg",
+        "debuff": false,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 30,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": "ManaRegen",
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 30,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "compass_degen": {
+        "name": "East",
+        "icon": "statuses/compass.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": "ManaRegen",
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "compass_resistance": {
+        "name": "East",
+        "icon": "statuses/compass.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": null
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 1000,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "drake_voyage": {
+        "name": "Zael's Voyage",
+        "icon": "statuses/dragon_spiral.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null,
+                            "damage_type": "Storm",
+                            "min_max": null,
+                            "is_hit": null
+                        }
+                    },
+                    "modifier": "Increased",
+                    "debuff": false
+                },
+                "value": 200,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "spirit_walker": {
+        "name": "Ghoststep",
+        "icon": "statuses/footsteps.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 20,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "MovementSpeed",
+                    "modifier": "Increased",
+                    "debuff": false
+                },
+                "value": 5.0,
+                "modifier": "Flat"
+            }
+        ]
+    }
+}

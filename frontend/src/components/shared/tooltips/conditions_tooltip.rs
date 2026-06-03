@@ -22,7 +22,7 @@ pub fn format_skill_modifier_conditions_pre(
                 " {}{}{} ",
                 prefix,
                 if *not { "Non-" } else { "" },
-                format_under_status_type_condition(status_filter, *skill_type),
+                format_under_status_condition(status_filter, *skill_type),
             ),
             Condition::StatusStacks { .. } => "".into(),
             Condition::Slowed => "Slowed ".into(),
@@ -64,7 +64,7 @@ pub fn format_skill_modifier_conditions_post(
                 skill_type,
             } => Some(format!(
                 " per {} on them",
-                effects_tooltip::skill_status_type_str(
+                effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
                         ..Default::default()
@@ -96,7 +96,7 @@ pub fn format_skill_modifier_conditions_post(
     }
 }
 
-pub fn format_under_status_type_condition(
+pub fn format_under_status_condition(
     status_filter: &StatStatusFilter,
     skill_type: Option<SkillType>,
 ) -> String {

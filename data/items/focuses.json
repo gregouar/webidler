@@ -127,7 +127,6 @@
           "conditions": [
             {
               "HasStatus": {
-                "status_type": null,
                 "skill_type": "Curse",
                 "not": false
               }
@@ -145,32 +144,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Poison",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 10.0
+              "status_id": "vile_codex",
+              "value": 200
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -534,11 +509,7 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
-              }
-            },
+            "status_id": "poison",
             "skill_type": null,
             "skill_id": null
           }
@@ -582,39 +553,14 @@
         "icon": null,
         "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for the same Duration. You gain 50% More Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
-        "OnHit": {
-          "skill_type": null,
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": null,
-          "is_triggered": null,
-          "damage_type": null,
-          "skill_ids": null,
-          "conditions": [
-            {
-              "HasStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null,
-                "not": false
-              }
-            }
-          ]
+        "OnApplyStatus": {
+          "status_id": "poison"
         },
         "target": "Me",
         "modifiers": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -624,11 +570,7 @@
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null
               }
             }
@@ -643,49 +585,12 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 20.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Poison",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 50.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 0.0
+              "status_id": "treasure_idol",
+              "value": 1
             },
             "ignore_stat_effects": [
               {
                 "StatusDuration": {
-                  "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null
@@ -711,7 +616,6 @@
               },
               {
                 "StatusPower": {
-                  "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null,

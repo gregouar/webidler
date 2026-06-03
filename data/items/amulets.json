@@ -100,11 +100,7 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Fire"
-              }
-            },
+            "damage_type": "Fire",
             "skill_type": null,
             "skill_id": null,
             "min_max": null
@@ -121,11 +117,7 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Fire"
-              }
-            },
+            "status_id": "burn",
             "skill_type": null,
             "skill_id": null
           }
@@ -145,11 +137,7 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                }
+                "status_id": "burn"
               }
             }
           }
@@ -229,11 +217,7 @@
         "stat_effect": {
           "stat": {
             "StatusPower": {
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": "Fire"
-                }
-              },
+              "damage_type": "Fire",
               "skill_type": null,
               "skill_id": null,
               "min_max": null
@@ -611,11 +595,7 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "status_id": "burn",
                     "skill_type": null,
                     "not": false
                   }
