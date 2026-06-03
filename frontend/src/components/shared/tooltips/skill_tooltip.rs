@@ -42,7 +42,7 @@ use crate::components::{
     ui::{
         Separator,
         number::{self, format_number},
-    },
+    }, utils::stats_computations,
 };
 
 use super::effects_tooltip::damage_type_str;
@@ -343,30 +343,30 @@ fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
-// fn format_status_trigger_value(
-//     modifiers: Option<&[TriggerEffectModifier]>,
-//     prefix: &'static str,
-//     factor: Option<f64>,
-// ) -> Option<impl IntoView + use<>> {
-//     format_trigger_modifier(
-//         find_trigger_modifier(
-//             StatType::StatusPower {
-//                 status_filter: Default::default(),
-//                 skill_filter: Default::default(),
-//                 min_max: None,
-//             },
-//             modifiers,
-//         ),
-//         "",
-//         factor,
-//     )
-//     .map(|modifier_str| {
-//         view! {
-//             {prefix}
-//             {modifier_str}
-//         }
-//     })
-// }
+fn format_status_trigger_value(
+    modifiers: Option<&[TriggerEffectModifier]>,
+    prefix: &'static str,
+    factor: Option<f64>,
+) -> Option<impl IntoView + use<>> {
+    format_trigger_modifier(
+        find_trigger_modifier(
+            StatType::StatusPower {
+                status_filter: Default::default(),
+                skill_filter: Default::default(),
+                min_max: None,
+            },
+            modifiers,
+        ),
+        "",
+        factor,
+    )
+    .map(|modifier_str| {
+        view! {
+            {prefix}
+            {modifier_str}
+        }
+    })
+}
 
 fn format_status_effect_line(
     status_name: &str,
@@ -437,12 +437,7 @@ fn format_status_effect_line(
             }
         }
         StatusEffectType::Trigger(trigger_specs) => {
-            // let value_factor = effects_map.map(|effects_map| {
-            //     stats_computations::compute_stats_effects_status_value(effects_map, status_id)
-            // });
-            // let trigger_value_str =
-            //     format_status_trigger_value(modifiers, " with Effects being ", value_factor);
-
+         
             format_trigger(
                 *trigger_specs,
                 false,
@@ -603,6 +598,8 @@ pub fn format_skill_effect(
 
             match status_specs {
                 Some(status_specs) => {
+
+                        
                     let duration = duration
                         .map(|duration| (duration.min.get(), duration.max.get()))
                         .unwrap_or_else(|| {
@@ -647,6 +644,13 @@ pub fn format_skill_effect(
                         })
                         .collect::<Vec<_>>();
 
+                    
+                    let value_factor = effects_map.map(|effects_map| {
+                        stats_computations::compute_stats_effects_status_value(effects_map, &status_filter)
+                    });
+                    let modified_value_str =
+                        format_status_trigger_value(modifiers, " with Effects being ", value_factor);
+
                     let empty_status = effect_lines.is_empty();
                     if empty_status {
                         view! {}
@@ -665,7 +669,7 @@ pub fn format_skill_effect(
                     else {
                         view! {
                             <EffectLi>
-                                {success_chance}{apply_str}" "{status_name}" "
+                                {success_chance}{apply_str}" "{status_name}{modified_value_str}" "
                                 {format_duration_values(duration.0, duration.1)}
                                 {trigger_modifier_duration_str} ":"
                                 <ul>

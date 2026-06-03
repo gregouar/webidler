@@ -223,7 +223,21 @@ pub fn status_filter_str(status_filter: &StatStatusFilter) -> String {
 pub fn status_type_value_str(status_filter: &StatStatusFilter) -> String {
     if let Some(status_id) = &status_filter.status_id {
         let data_context: DataContext = expect_context();
-        format!("{} Effects", data_context.status_name(status_id))
+        format!(
+            "{} {}",
+            data_context.status_name(status_id),
+            if data_context
+                .statuses_specs
+                .read_untracked()
+                .get(status_id)
+                .map(|status_specs| status_specs.damage_type.is_some())
+                .unwrap_or_default()
+            {
+                "Damage"
+            } else {
+                "Effects"
+            }
+        )
     } else if let Some(damage_type) = status_filter.damage_type {
         status_damage_type_str(damage_type).into()
     } else {

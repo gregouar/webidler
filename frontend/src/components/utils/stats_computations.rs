@@ -1,23 +1,22 @@
 use shared::data::{
-    character_status::StatusId,
     modifier::Modifier,
     stat_effect::{EffectsMap, Matchable, StatEffect, StatStatusFilter, StatType},
 };
 
-pub fn compute_stats_effects_status_value(effects_map: &EffectsMap, status_id: &StatusId) -> f64 {
+pub fn compute_stats_effects_status_value(
+    effects_map: &EffectsMap,
+    skill_status_filter: &StatStatusFilter,
+) -> f64 {
     let mut factor = Factor::new();
 
-    let status_power = StatType::StatusPower {
-        status_filter: StatStatusFilter {
-            status_id: Some(status_id.clone()),
-            ..Default::default()
-        },
-        skill_filter: Default::default(), // TODO
-        min_max: None,
-    };
-
     for effect in effects_map.iter() {
-        if effect.stat.is_match(&status_power) {
+        if let StatType::StatusPower {
+            status_filter,
+            skill_filter: _,
+            min_max: _,
+        } = &effect.stat
+            && skill_status_filter.is_match(status_filter)
+        {
             factor.apply_effect(&effect);
         }
     }
