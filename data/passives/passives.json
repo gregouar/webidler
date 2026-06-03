@@ -18,7 +18,7 @@
             "value": 5.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -53,7 +53,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -95,7 +95,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -131,7 +131,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -158,7 +158,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -182,7 +182,6 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "skill_description": null,
@@ -193,13 +192,12 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "skill_description": null,
@@ -237,7 +235,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -282,7 +280,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -318,7 +316,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -338,10 +336,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -353,10 +351,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -372,11 +370,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -386,17 +380,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "damage_type": "Poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -424,7 +414,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -478,9 +468,9 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -505,7 +495,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -563,7 +553,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -623,7 +613,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -667,7 +657,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -700,12 +690,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -716,18 +701,13 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -762,7 +742,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -801,7 +781,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -836,7 +816,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -872,7 +852,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -914,7 +894,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -946,11 +926,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -960,17 +936,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -998,7 +970,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1050,7 +1022,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1102,7 +1074,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1138,7 +1110,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1195,9 +1167,9 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -1227,11 +1199,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -1242,7 +1210,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1284,7 +1252,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1317,7 +1285,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1349,7 +1317,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1381,7 +1349,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1408,7 +1376,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1444,7 +1412,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1486,7 +1454,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1527,7 +1495,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1569,7 +1537,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1609,7 +1577,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1642,7 +1610,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1671,7 +1639,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1722,9 +1690,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -1736,10 +1704,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -1767,7 +1735,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1810,7 +1778,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1844,7 +1812,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1868,11 +1836,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -1882,17 +1846,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -1913,10 +1873,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -1941,7 +1901,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -1983,7 +1943,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2019,7 +1979,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2054,7 +2014,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2095,7 +2055,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2137,7 +2097,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2190,7 +2150,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2234,7 +2194,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2261,7 +2221,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2288,7 +2248,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2324,7 +2284,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2377,7 +2337,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2421,7 +2381,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2457,7 +2417,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2499,7 +2459,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2539,7 +2499,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2570,11 +2530,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -2586,11 +2542,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -2601,17 +2553,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -2623,11 +2571,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -2673,7 +2617,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2724,7 +2668,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2769,11 +2713,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -2784,7 +2724,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2820,7 +2760,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2847,7 +2787,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2883,7 +2823,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2925,7 +2865,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -2965,7 +2905,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3006,7 +2946,7 @@
             "value": 12.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3040,7 +2980,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3064,11 +3004,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -3093,7 +3029,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -3129,7 +3065,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3165,7 +3101,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3256,7 +3192,7 @@
             "value": -20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3335,11 +3271,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -3350,17 +3282,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -3398,7 +3326,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3457,7 +3385,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3516,7 +3444,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3563,7 +3491,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3607,7 +3535,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3651,11 +3579,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -3666,7 +3590,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3711,7 +3635,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3758,9 +3682,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -3779,7 +3703,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3812,7 +3736,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3847,11 +3771,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    }
+                    "status_id": "burn"
                   }
                 }
               }
@@ -3860,7 +3780,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3871,11 +3791,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    }
+                    "status_id": "burn"
                   }
                 }
               }
@@ -3899,12 +3815,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -3915,18 +3826,14 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
+
               "StatusPower": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -3955,7 +3862,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -3982,7 +3889,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4002,7 +3909,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -4018,10 +3925,10 @@
               "is_triggered": null,
               "damage_type": null,
               "skill_ids": null,
-              "conditions": []
+              "conditions": [ ]
             },
             "target": "SameTarget",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Any",
             "skill_type": "Other",
             "effects": [
@@ -4031,35 +3938,11 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "StatModifier": {
-                          "stat": {
-                            "Damage": {
-                              "skill_type": null,
-                              "skill_id": null,
-                              "skill_description": null,
-                              "damage_type": null,
-                              "min_max": null,
-                              "is_hit": null
-                            }
-                          },
-                          "modifier": "More",
-                          "debuff": false
-                        }
-                      },
-                      "value": 20.0,
-                      "cumulate": true,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 5.0
+                  "status_id": "legionnaire_stance",
+                  "value": 20.0
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -4069,7 +3952,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -4096,7 +3979,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4140,7 +4023,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4185,7 +4068,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4230,7 +4113,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4277,7 +4160,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4324,7 +4207,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4367,7 +4250,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4408,7 +4291,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4459,9 +4342,9 @@
             "value": 200.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -4487,7 +4370,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4538,7 +4421,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4582,7 +4465,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4611,12 +4494,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
+                    "status_id": "open_wound"
                   }
                 }
               }
@@ -4627,12 +4505,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -4642,7 +4515,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4653,12 +4526,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
+                    "status_id": "open_wound"
                   }
                 }
               }
@@ -4669,12 +4537,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -4719,7 +4582,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4763,7 +4626,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -4796,7 +4659,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4831,7 +4694,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4866,7 +4729,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4908,7 +4771,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -4941,11 +4804,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -4955,17 +4814,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -4998,7 +4853,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5041,11 +4896,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -5056,7 +4907,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5101,7 +4952,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5137,7 +4988,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5164,7 +5015,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5246,7 +5097,7 @@
             "value": -25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5339,7 +5190,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5394,7 +5245,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5474,7 +5325,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5542,7 +5393,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5591,7 +5442,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5641,7 +5492,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5674,7 +5525,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5698,11 +5549,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -5713,17 +5560,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -5752,7 +5595,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5788,7 +5631,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5824,7 +5667,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5858,7 +5701,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5892,7 +5735,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5921,7 +5764,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5950,7 +5793,7 @@
             "value": 6.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -5977,7 +5820,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6009,7 +5852,7 @@
             "value": 1.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6050,7 +5893,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6095,7 +5938,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6138,7 +5981,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6227,7 +6070,7 @@
             "value": -20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6315,7 +6158,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6357,7 +6200,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6390,11 +6233,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -6405,17 +6244,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -6459,7 +6294,7 @@
             "trigger_id": "cursed_mouth",
             "OnWaveCompleted": null,
             "target": "Me",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
             "skill_type": "Other",
             "effects": [
@@ -6475,8 +6310,8 @@
                   "value": 100.0,
                   "modifier": "Percent"
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -6486,7 +6321,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -6514,7 +6349,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6543,7 +6378,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Life",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -6580,8 +6415,8 @@
                   "value": 0.0,
                   "modifier": "Flat"
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -6591,7 +6426,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -6627,9 +6462,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -6648,7 +6483,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6684,7 +6519,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6726,7 +6561,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6761,7 +6596,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6797,7 +6632,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6831,7 +6666,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6867,7 +6702,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6909,7 +6744,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6947,7 +6782,7 @@
             "value": 1.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -6988,7 +6823,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7030,7 +6865,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7087,7 +6922,7 @@
             "value": 2.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7135,11 +6970,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -7150,17 +6981,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -7189,7 +7016,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7225,7 +7052,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7270,7 +7097,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7299,7 +7126,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -7308,18 +7135,14 @@
             "trigger_id": "pyromaniac",
             "OnApplyStatus": {
               "skill_type": null,
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": "Fire"
-                }
-              },
+              "damage_type": "Fire",
               "is_triggered": null,
               "is_evaded": false
             },
             "target": "Me",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
-            "skill_type": "Attack",
+            "skill_type": "Other",
             "effects": [
               {
                 "success_chance": {
@@ -7327,35 +7150,11 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "StatModifier": {
-                          "stat": {
-                            "Damage": {
-                              "skill_type": null,
-                              "skill_id": null,
-                              "skill_description": null,
-                              "damage_type": "Fire",
-                              "min_max": null,
-                              "is_hit": null
-                            }
-                          },
-                          "modifier": "More",
-                          "debuff": false
-                        }
-                      },
-                      "value": 10.0,
-                      "cumulate": true,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 5.0
+                  "status_id": "pyromaniac",
+                  "value": 10
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -7365,7 +7164,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -7401,7 +7200,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7456,7 +7255,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7503,7 +7302,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7539,7 +7338,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7583,7 +7382,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7633,7 +7432,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7683,7 +7482,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7724,11 +7523,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -7738,17 +7533,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -7781,7 +7572,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7813,7 +7604,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7847,7 +7638,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7901,7 +7692,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7947,11 +7738,7 @@
               "SkillConditionalModifier": {
                 "stat": {
                   "StatusPower": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": null
-                      }
-                    },
+                    "damage_type": "Any",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null,
@@ -7970,7 +7757,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -7978,11 +7765,7 @@
               "SkillConditionalModifier": {
                 "stat": {
                   "StatusPower": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": null
-                      }
-                    },
+                    "damage_type": "Any",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null,
@@ -8028,7 +7811,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8064,7 +7847,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8088,11 +7871,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8103,17 +7882,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8138,13 +7913,9 @@
         "effects": [
           {
             "stat": {
+
               "StatusPower": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8155,18 +7926,14 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
+
               "StatusPower": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8195,7 +7962,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8231,7 +7998,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8267,7 +8034,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8303,7 +8070,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8348,7 +8115,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8393,7 +8160,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8440,11 +8207,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8455,7 +8218,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8488,11 +8251,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8503,17 +8262,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8548,7 +8303,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8581,7 +8336,7 @@
             "value": 6.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8608,7 +8363,7 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8635,7 +8390,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8664,7 +8419,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8690,11 +8445,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -8704,17 +8455,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -8742,7 +8489,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8769,7 +8516,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8802,7 +8549,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8832,11 +8579,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8847,17 +8590,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -8911,7 +8650,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8965,7 +8704,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -8994,7 +8733,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9030,7 +8769,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9066,7 +8805,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9102,7 +8841,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9147,7 +8886,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9183,7 +8922,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9219,7 +8958,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9257,7 +8996,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9288,7 +9027,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9323,7 +9062,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9365,7 +9104,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9400,11 +9139,7 @@
               "SkillConditionalModifier": {
                 "stat": {
                   "StatusPower": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
+                    "status_id": "bleed",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null,
@@ -9417,12 +9152,7 @@
                 "conditions": [
                   {
                     "StatusStacks": {
-                      "status_type": {
-                        "Trigger": {
-                          "trigger_id": "open_wound",
-                          "trigger_description": "Open Wound"
-                        }
-                      },
+                      "status_id": "open_wound",
                       "skill_type": null
                     }
                   }
@@ -9433,9 +9163,9 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -9460,7 +9190,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9490,11 +9220,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -9505,17 +9231,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -9546,7 +9268,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9582,7 +9304,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9618,7 +9340,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9649,12 +9371,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
+                    "status_id": "open_wound"
                   }
                 }
               }
@@ -9663,7 +9380,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9674,12 +9391,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
+                    "status_id": "open_wound"
                   }
                 }
               }
@@ -9731,7 +9443,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9792,7 +9504,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -9821,7 +9533,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Poison",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -9830,11 +9542,7 @@
             "trigger_id": "sickening_concoction",
             "OnApplyStatus": {
               "skill_type": null,
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": "Poison"
-                }
-              },
+              "damage_type": "Poison",
               "is_triggered": null,
               "is_evaded": false
             },
@@ -9843,28 +9551,23 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "status_type": null,
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null
                   }
                 },
                 "modifier": "Flat",
-                "factor": 2.0,
+                "factor": 1.0,
                 "source": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "damage_type": "Poison",
                     "skill_type": null
                   }
                 }
               }
             ],
             "skill_range": "Any",
-            "skill_type": "Curse",
+            "skill_type": "Other",
             "effects": [
               {
                 "success_chance": {
@@ -9872,57 +9575,19 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "StatModifier": {
-                          "stat": {
-                            "Armor": "Poison"
-                          },
-                          "modifier": "Increased",
-                          "debuff": true
-                        }
-                      },
-                      "value": 100.0,
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    },
-                    {
-                      "status_type": {
-                        "StatModifier": {
-                          "stat": {
-                            "Speed": {
-                              "skill_type": null,
-                              "skill_id": null,
-                              "skill_description": null
-                            }
-                          },
-                          "modifier": "Increased",
-                          "debuff": true
-                        }
-                      },
-                      "value": 33.0,
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 0.0
+                  "status_id": "sickening_concoction",
+                  "value": 1
                 },
                 "ignore_stat_effects": [
                   {
                     "StatusDuration": {
-                      "status_type": null,
                       "skill_type": null,
                       "skill_id": null,
                       "skill_description": null
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -9932,7 +9597,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -9951,7 +9616,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10014,7 +9679,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10070,10 +9735,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -10098,7 +9763,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10147,9 +9812,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10177,7 +9842,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10220,9 +9885,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10250,7 +9915,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10283,11 +9948,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -10298,17 +9959,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -10337,7 +9994,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10370,7 +10027,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10410,7 +10067,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10469,7 +10126,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10523,7 +10180,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10549,11 +10206,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -10564,17 +10217,13 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": null
-                  }
-                },
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -10612,7 +10261,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10641,7 +10290,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -10657,19 +10306,13 @@
               "is_triggered": null,
               "damage_type": null,
               "skill_ids": null,
-              "conditions": []
+              "conditions": [ ]
             },
             "target": "SameTarget",
             "modifiers": [
               {
                 "stat": {
-                  "Damage": {
-                    "skill_type": null,
-                    "skill_id": null,
-                    "skill_description": null,
-                    "damage_type": null,
-                    "min_max": null,
-                    "is_hit": null
+                  "StatusPower": {
                   }
                 },
                 "modifier": "Flat",
@@ -10679,8 +10322,8 @@
                 }
               }
             ],
-            "skill_range": "Melee",
-            "skill_type": "Attack",
+            "skill_range": "Any",
+            "skill_type": "Other",
             "effects": [
               {
                 "success_chance": {
@@ -10688,21 +10331,8 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Fire"
-                        }
-                      },
-                      "value": 0.0,
-                      "cumulate": true,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 3.0
+                  "status_id": "burn",
+                  "value": 0
                 },
                 "ignore_stat_effects": [
                   {
@@ -10716,7 +10346,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -10726,7 +10356,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -10762,7 +10392,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10806,7 +10436,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10850,7 +10480,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10901,7 +10531,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10935,7 +10565,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -10964,7 +10594,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11004,11 +10634,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -11019,7 +10645,7 @@
             "value": -100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11091,7 +10717,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11159,7 +10785,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11200,7 +10826,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11236,7 +10862,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11265,7 +10891,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11294,7 +10920,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11338,7 +10964,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11389,7 +11015,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11432,7 +11058,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11468,7 +11094,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11495,7 +11121,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11522,7 +11148,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11551,7 +11177,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11580,7 +11206,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11643,7 +11269,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11713,7 +11339,7 @@
             "value": 8.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11764,7 +11390,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11801,10 +11427,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -11832,7 +11458,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11870,7 +11496,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -11892,7 +11518,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -11908,10 +11534,10 @@
               "is_triggered": null,
               "damage_type": "Fire",
               "skill_ids": null,
-              "conditions": []
+              "conditions": [ ]
             },
             "target": "Me",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
             "skill_type": "Other",
             "effects": [
@@ -11921,51 +11547,20 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "StatModifier": {
-                          "stat": {
-                            "SuccessChance": {
-                              "skill_type": null,
-                              "skill_id": null,
-                              "skill_description": null,
-                              "effect_type": {
-                                "ApplyStatus": {
-                                  "status_type": {
-                                    "DamageOverTime": {
-                                      "damage_type": "Fire"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "modifier": "More",
-                          "debuff": false
-                        }
-                      },
-                      "value": 150.0,
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 8.0
+                  "status_id": "bonfire",
+                  "value": 1
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
             "owner": null,
-            "trigger_propagate": false,
-            "is_debuff": false
+            "trigger_propagate": false
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -11991,7 +11586,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12034,7 +11629,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12070,7 +11665,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12099,7 +11694,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12128,7 +11723,7 @@
             "value": 60.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -12148,7 +11743,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -12164,19 +11759,14 @@
               "is_triggered": false,
               "damage_type": null,
               "skill_ids": null,
-              "conditions": []
+              "conditions": [ ]
             },
             "target": "SameTarget",
             "modifiers": [
               {
                 "stat": {
                   "StatusPower": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    },
+                    "status_id": "open_wound",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null,
@@ -12199,106 +11789,11 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "Trigger": {
-                          "name": "Open Wound",
-                          "icon": "passives/open_wound.svg",
-                          "description": null,
-                          "trigger_id": "open_wound",
-                          "OnTakeHit": {
-                            "skill_type": null,
-                            "range": null,
-                            "is_crit": null,
-                            "is_blocked": null,
-                            "is_hurt": null,
-                            "is_triggered": null,
-                            "damage_type": null,
-                            "skill_ids": null,
-                            "conditions": []
-                          },
-                          "target": "SameTarget",
-                          "modifiers": [
-                            {
-                              "stat": {
-                                "Damage": {
-                                  "skill_type": null,
-                                  "skill_id": null,
-                                  "skill_description": null,
-                                  "damage_type": "Physical",
-                                  "min_max": null,
-                                  "is_hit": null
-                                }
-                              },
-                              "modifier": "Flat",
-                              "factor": 1.0,
-                              "source": "TriggerStatusValue"
-                            }
-                          ],
-                          "skill_range": "Melee",
-                          "skill_type": "Other",
-                          "effects": [
-                            {
-                              "success_chance": {
-                                "value": 100.0,
-                                "lucky_chance": 0.0
-                              },
-                              "FlatDamage": {
-                                "damage": {},
-                                "crit_chance": {
-                                  "value": 0.0,
-                                  "lucky_chance": 0.0
-                                },
-                                "crit_damage": 0.0,
-                                "unblockable": true
-                              },
-                              "ignore_stat_effects": [
-                                {
-                                  "Damage": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null,
-                                    "damage_type": null,
-                                    "min_max": null,
-                                    "is_hit": null
-                                  }
-                                },
-                                {
-                                  "CritDamage": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null
-                                  }
-                                },
-                                {
-                                  "CritChance": {
-                                    "skill_type": null,
-                                    "skill_id": null,
-                                    "skill_description": null
-                                  }
-                                }
-                              ],
-                              "conditional_modifiers": []
-                            }
-                          ],
-                          "skill_shape": "Single",
-                          "owner": null,
-                          "trigger_propagate": false,
-                          "is_debuff": true
-                        }
-                      },
-                      "value": 0.0,
-                      "cumulate": true,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 5.0
+                  "status_id": "open_wound",
+                  "value": 0
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -12308,7 +11803,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -12336,7 +11831,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12391,9 +11886,9 @@
             "value": -33.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -12421,7 +11916,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12464,7 +11959,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12515,7 +12010,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12561,7 +12056,7 @@
             "value": 5.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12592,7 +12087,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12645,7 +12140,7 @@
             "value": 2.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12696,7 +12191,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12723,7 +12218,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12762,9 +12257,9 @@
             "value": 100.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -12803,7 +12298,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -12861,9 +12356,9 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -12875,10 +12370,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -12890,7 +12385,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Status",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -12901,11 +12396,7 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
+                    "status_id": "bleed",
                     "skill_type": null,
                     "not": false
                   }
@@ -12929,11 +12420,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
+                    "status_id": "bleed",
                     "skill_type": null
                   }
                 }
@@ -12941,11 +12428,7 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
+                    "status_id": "bleed",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null
@@ -12955,11 +12438,7 @@
                 "factor": 0.5,
                 "source": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
+                    "status_id": "bleed",
                     "skill_type": null
                   }
                 }
@@ -12974,21 +12453,8 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "value": 0.0,
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 0.0
+                  "status_id": "bleed",
+                  "value": 0
                 },
                 "ignore_stat_effects": [
                   {
@@ -13035,7 +12501,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Contact",
@@ -13052,11 +12518,7 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
+                    "status_id": "burn",
                     "skill_type": null,
                     "not": false
                   }
@@ -13080,11 +12542,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
+                    "status_id": "burn",
                     "skill_type": null
                   }
                 }
@@ -13092,11 +12550,7 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
+                    "status_id": "burn",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null
@@ -13106,11 +12560,7 @@
                 "factor": 0.5,
                 "source": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
+                    "status_id": "burn",
                     "skill_type": null
                   }
                 }
@@ -13125,21 +12575,7 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Fire"
-                        }
-                      },
-                      "value": 0.0,
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 0.0
+                  "status_id": "burn", "value": 1
                 },
                 "ignore_stat_effects": [
                   {
@@ -13186,7 +12622,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Contact",
@@ -13203,11 +12639,7 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "status_id": "poison",
                     "skill_type": null,
                     "not": false
                   }
@@ -13231,11 +12663,7 @@
                 "factor": 1.0,
                 "source": {
                   "StatusValue": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "status_id": "poison",
                     "skill_type": null
                   }
                 }
@@ -13243,11 +12671,7 @@
               {
                 "stat": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "status_id": "poison",
                     "skill_type": null,
                     "skill_id": null,
                     "skill_description": null
@@ -13257,11 +12681,7 @@
                 "factor": 0.5,
                 "source": {
                   "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "status_id": "poison",
                     "skill_type": null
                   }
                 }
@@ -13276,21 +12696,7 @@
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
-                  "statuses": [
-                    {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "value": 0.0,
-                      "cumulate": false,
-                      "replace_on_value_only": false,
-                      "unavoidable": false,
-                      "escalation": 0.0
-                    }
-                  ],
-                  "duration": 0.0
+                  "status_id": "poison", "value": 1
                 },
                 "ignore_stat_effects": [
                   {
@@ -13337,7 +12743,7 @@
                     }
                   }
                 ],
-                "conditional_modifiers": []
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Contact",
@@ -13347,7 +12753,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -13383,7 +12789,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13434,7 +12840,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13479,7 +12885,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -13517,7 +12923,7 @@
             "value": 60.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -13546,7 +12952,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13584,7 +12990,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13637,7 +13043,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13701,7 +13107,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13757,7 +13163,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13795,7 +13201,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13824,7 +13230,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13887,7 +13293,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -13947,11 +13353,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -13962,17 +13364,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -14008,7 +13406,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14044,7 +13442,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14079,7 +13477,7 @@
             "value": -20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14105,7 +13503,7 @@
         "size": 2,
         "root_node": false,
         "node_type": "Storm",
-        "effects": [],
+        "effects": [ ],
         "triggers": [
           {
             "name": null,
@@ -14121,10 +13519,10 @@
               "is_triggered": null,
               "damage_type": "Storm",
               "skill_ids": null,
-              "conditions": []
+              "conditions": [ ]
             },
             "target": "SameTarget",
-            "modifiers": [],
+            "modifiers": [ ],
             "skill_range": "Melee",
             "skill_type": "Attack",
             "effects": [
@@ -14146,8 +13544,8 @@
                   ],
                   "duration": 2.0
                 },
-                "ignore_stat_effects": [],
-                "conditional_modifiers": []
+                "ignore_stat_effects": [ ],
+                "conditional_modifiers": [ ]
               }
             ],
             "skill_shape": "Single",
@@ -14157,7 +13555,7 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": false
       },
@@ -14185,7 +13583,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14221,7 +13619,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14257,7 +13655,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14293,7 +13691,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14345,7 +13743,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14403,7 +13801,7 @@
             "value": -10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14443,7 +13841,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14474,11 +13872,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -14491,11 +13885,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -14505,17 +13895,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null,
@@ -14528,11 +13914,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -14565,7 +13947,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14597,7 +13979,7 @@
             "value": 60.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -14624,7 +14006,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14648,11 +14030,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -14662,17 +14040,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -14707,7 +14081,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14750,7 +14124,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14786,7 +14160,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14820,7 +14194,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14863,7 +14237,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14901,12 +14275,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
+                    "status_id": "open_wound"
                   }
                 }
               }
@@ -14915,7 +14284,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14926,12 +14295,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "Trigger": {
-                        "trigger_id": "open_wound",
-                        "trigger_description": "Open Wound"
-                      }
-                    }
+                    "status_id": "open_wound"
                   }
                 }
               }
@@ -14958,7 +14322,7 @@
             "value": 10.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -14994,7 +14358,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15036,7 +14400,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15078,7 +14442,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15123,7 +14487,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15168,7 +14532,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15221,7 +14585,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15275,11 +14639,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
+                      "status_id": "bleed",
                       "skill_type": null,
                       "not": false
                     }
@@ -15306,11 +14666,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
+                      "status_id": "bleed",
                       "skill_type": null,
                       "not": false
                     }
@@ -15322,7 +14678,7 @@
             "value": 50.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15341,11 +14697,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
+                      "status_id": "bleed",
                       "skill_type": null,
                       "not": false
                     }
@@ -15372,11 +14724,7 @@
                 "conditions": [
                   {
                     "HasStatus": {
-                      "status_type": {
-                        "DamageOverTime": {
-                          "damage_type": "Physical"
-                        }
-                      },
+                      "status_id": "bleed",
                       "skill_type": null,
                       "not": false
                     }
@@ -15403,11 +14751,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -15417,17 +14761,13 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -15479,7 +14819,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15530,7 +14870,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15564,7 +14904,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15604,7 +14944,7 @@
             "value": 4.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15643,7 +14983,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15716,7 +15056,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15819,7 +15159,7 @@
             "value": 25.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15882,7 +15222,7 @@
             "value": 60.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": true,
         "upgrade_effects": [
           {
@@ -15916,7 +15256,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15952,11 +15292,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    }
+                    "status_id": "burn"
                   }
                 }
               }
@@ -15965,7 +15301,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -15976,11 +15312,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    }
+                    "status_id": "burn"
                   }
                 }
               }
@@ -16024,7 +15356,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16077,7 +15409,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16115,11 +15447,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    }
+                    "status_id": "burn"
                   }
                 }
               }
@@ -16128,7 +15456,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16139,11 +15467,7 @@
                 "skill_description": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    }
+                    "status_id": "burn"
                   }
                 }
               }
@@ -16177,7 +15501,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16204,10 +15528,10 @@
         "size": 4,
         "root_node": false,
         "node_type": "Armor",
-        "effects": [],
-        "triggers": [],
+        "effects": [ ],
+        "triggers": [ ],
         "locked": true,
-        "upgrade_effects": [],
+        "upgrade_effects": [ ],
         "max_upgrade_level": null,
         "socket": true
       },
@@ -16243,7 +15567,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16294,7 +15618,7 @@
             "value": 15.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16325,11 +15649,7 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -16339,17 +15659,13 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                },
+                "status_id": "burn",
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -16386,7 +15702,7 @@
             "value": 20.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16422,7 +15738,7 @@
             "value": 30.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
@@ -16469,7 +15785,7 @@
             "value": 3.0
           }
         ],
-        "triggers": [],
+        "triggers": [ ],
         "locked": false,
         "upgrade_effects": [
           {
