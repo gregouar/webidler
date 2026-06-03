@@ -31,6 +31,7 @@ pub enum Condition {
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
+    Slowed,
     // StatusValue(Option<StatStatusType>),
     // StatusDuration(Option<StatStatusType>),
     MaximumLife,

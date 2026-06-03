@@ -1,9 +1,10 @@
 use shared::data::{
     area::AreaThreat,
     character::CharacterAttrs,
+    character_status::StatusEffectType,
     conditional_modifier::{Condition, ConditionalModifier},
     player::CharacterState,
-    stat_effect::StatEffect,
+    stat_effect::{StatEffect, StatType},
 };
 
 use crate::game::data::master_store::StatusesStore;
@@ -140,6 +141,22 @@ pub fn check_condition(
                         .unwrap_or(true)
             })
             .count() as f64,
+        Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
+            let Some(status_specs) = statuses_store.get(status_id) else {
+                return false;
+            };
+            status_specs.effects.iter().any(|effect| {
+                matches!(
+                    effect.status_effect_type,
+                    StatusEffectType::StatModifier {
+                        stat: StatType::Speed(_),
+                        modifier: _,
+                        debuff: true
+                    }
+                )
+            })
+        }) as usize as f64,
+
         Condition::MaximumLife => {
             (character_state.life.get() >= character_attrs.max_life.get() * 0.9999) as usize as f64
         }

@@ -23,7 +23,7 @@
                     "modifier": "More",
                     "debuff": false
                 },
-                "value": 150,
+                "value": 100,
                 "modifier": "Flat"
             }
         ]

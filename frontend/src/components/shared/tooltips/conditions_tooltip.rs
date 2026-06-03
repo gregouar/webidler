@@ -25,6 +25,7 @@ pub fn format_skill_modifier_conditions_pre(
                 format_under_status_type_condition(status_filter, *skill_type),
             ),
             Condition::StatusStacks { .. } => "".into(),
+            Condition::Slowed => "Slowed ".into(),
             Condition::MaximumLife => "".into(),
             Condition::MaximumMana => "".into(),
             Condition::LowLife => "".into(),
@@ -45,6 +46,7 @@ pub fn format_skill_modifier_conditions_post(
         .filter_map(|condition| match condition {
             Condition::HasStatus { .. } => None,
             Condition::StatusStacks { .. } => None,
+            Condition::Slowed => None,
             Condition::MaximumLife => Some(" on Maximum Life"),
             Condition::MaximumMana => Some(" on Maximum Mana"),
             Condition::LowLife => Some(" on Low Life"),
@@ -61,7 +63,7 @@ pub fn format_skill_modifier_conditions_post(
                 status_filter,
                 skill_type,
             } => Some(format!(
-                " per {}",
+                " per {} on them",
                 effects_tooltip::skill_status_type_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -71,7 +73,8 @@ pub fn format_skill_modifier_conditions_post(
                     false
                 ),
             )),
-            Condition::MaximumLife
+            Condition::Slowed
+            | Condition::MaximumLife
             | Condition::MaximumMana
             | Condition::LowLife
             | Condition::LowMana => None,
