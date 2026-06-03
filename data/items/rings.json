@@ -447,7 +447,6 @@
         "trigger_id": "signet_ring_unique_mana",
         "OnReceiveStatus": {
           "skill_type": null,
-          "status_type": null,
           "is_triggered": null,
           "is_evaded": true
         },
@@ -603,7 +602,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": "Blessing",
             "min_max": null
           }
@@ -619,7 +617,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": "Curse",
             "min_max": null
           }
@@ -632,7 +629,6 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
             "skill_type": "Blessing"
           }
         },
@@ -744,7 +740,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": "Curse",
             "min_max": null
           }
@@ -760,7 +755,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": "Blessing",
             "min_max": null
           }
@@ -773,7 +767,6 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
             "skill_type": "Curse"
           }
         },
@@ -1009,7 +1002,6 @@
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": null,
                   "skill_type": "Curse",
                   "not": false
                 }

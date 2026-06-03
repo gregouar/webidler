@@ -117,11 +117,7 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                }
+                "status_id": "bleed"
               }
             }
           }
@@ -164,11 +160,7 @@
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Physical"
-                    }
-                  },
+                  "status_id": "bleed",
                   "skill_type": null,
                   "not": false
                 }
@@ -192,11 +184,7 @@
           "conditions": [
             {
               "HasStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Physical"
-                  }
-                },
+                "status_id": "bleed",
                 "skill_type": null,
                 "not": false
               }
@@ -330,11 +318,7 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
+                    "status_id": "bleed",
                     "skill_type": null,
                     "not": false
                   }
@@ -550,7 +534,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.3,
+            "factor": 0.5,
             "source": {
               "HitDamage": "Storm"
             }
@@ -565,21 +549,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 2.0
+              "status_id": "poison",
+              "value": 0
             },
             "ignore_stat_effects": [
               {
@@ -1126,21 +1097,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "value": 0.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 2.0
+              "status_id": "burn",
+              "value": 0
             },
             "ignore_stat_effects": [
               {

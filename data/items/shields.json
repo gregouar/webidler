@@ -122,15 +122,7 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": "Stun",
-                  "value": 0.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
+              "status_id": "stun",
               "duration": [
                 1.0,
                 3.0
@@ -680,7 +672,6 @@
         "trigger_id": "kite_shield_unique",
         "OnApplyStatus": {
           "skill_type": "Curse",
-          "status_type": null,
           "is_triggered": false,
           "is_evaded": false
         },
@@ -689,7 +680,6 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": null,
                 "skill_type": null,
                 "skill_id": null,
                 "skill_description": null
@@ -699,13 +689,12 @@
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_type": null,
                 "skill_type": "Curse"
               }
             }
           }
         ],
-        "skill_range": "Melee",
+        "skill_range": "Any",
         "skill_type": "Curse",
         "effects": [
           {
@@ -714,49 +703,12 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": null,
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 50.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 1.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 0.0
+              "status_id": "king_oath",
+              "value": 100
             },
             "ignore_stat_effects": [
               {
                 "StatusPower": {
-                  "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null,
@@ -765,7 +717,6 @@
               },
               {
                 "StatusDuration": {
-                  "status_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "skill_description": null

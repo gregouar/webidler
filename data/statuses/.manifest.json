@@ -13,6 +13,9 @@
             "items_focuses.json",
             "items_gloves.json",
             "items_maps.json",
+            "items_runes.json",
+            "items_shields.json",
+            "items_weapons.json",
             "monsters.json",
             "passives.json"
         ]

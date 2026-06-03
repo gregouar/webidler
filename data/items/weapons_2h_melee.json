@@ -165,11 +165,7 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                }
+                "status_id": "burn"
               }
             }
           }
@@ -427,7 +423,6 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
             "skill_type": "Curse",
             "skill_id": null
           }
@@ -458,7 +453,6 @@
             "conditions": [
               {
                 "StatusStacks": {
-                  "status_type": null,
                   "skill_type": "Curse"
                 }
               }
@@ -569,7 +563,6 @@
               "conditions": [
                 {
                   "StatusStacks": {
-                    "status_type": null,
                     "skill_type": "Curse"
                   }
                 }

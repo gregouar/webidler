@@ -231,11 +231,7 @@
           "SkillConditionalModifier": {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "skill_type": "Attack",
                 "skill_id": null,
                 "skill_description": null,
@@ -247,12 +243,7 @@
             "conditions": [
               {
                 "StatusStacks": {
-                  "status_type": {
-                    "Trigger": {
-                      "trigger_id": "open_wound",
-                      "trigger_description": "Open Wound"
-                    }
-                  },
+                  "status_id": "open_wound",
                   "skill_type": null
                 }
               }
@@ -478,12 +469,7 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "Trigger": {
-                "trigger_id": "open_wound",
-                "trigger_description": "Open Wound"
-              }
-            },
+            "status_id": "open_wound",
             "skill_type": null,
             "skill_id": null,
             "min_max": null
@@ -502,12 +488,7 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                }
+                "status_id": "open_wound"
               }
             }
           }
@@ -616,12 +597,7 @@
         "stat_effect": {
           "stat": {
             "StatusPower": {
-              "status_type": {
-                "Trigger": {
-                  "trigger_id": "open_wound",
-                  "trigger_description": "Open Wound"
-                }
-              },
+              "status_id": "open_wound",
               "skill_type": null,
               "skill_id": null,
               "min_max": null
@@ -751,11 +727,7 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
-              }
-            },
+            "status_id": "poison",
             "skill_type": null,
             "skill_id": null
           }
@@ -1073,7 +1045,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": "Curse",
             "skill_id": null,
             "min_max": null
@@ -1090,11 +1061,7 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": null
-              }
-            },
+            "damage_type": "Any",
             "skill_type": null,
             "skill_id": null,
             "min_max": null
@@ -1129,42 +1096,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "GoldFind",
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 20.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": {
-                          "skill_type": null,
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 5.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 60.0
+              "status_id": "greed",
+              "value": 1
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -1256,11 +1189,7 @@
         "stat_effect": {
           "stat": {
             "StatusPower": {
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": null
-                }
-              },
+              "damage_type": "Any",
               "skill_type": null,
               "skill_id": null,
               "min_max": null

@@ -1,0 +1,39 @@
+{
+    "king_oath": {
+        "name": "King's Oath",
+        "icon": "statuses/crowned_skull.svg",
+        "debuff": false,
+        "max_stacks": 20,
+        "duration": 0,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null,
+                            "damage_type": null,
+                            "min_max": null,
+                            "is_hit": null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+
+                },
+                "value": 50.0,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 2.0,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}
