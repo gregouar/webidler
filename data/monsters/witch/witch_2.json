@@ -17,7 +17,7 @@
   "skills": [
     {
       "name": "Evil Cackling",
-      "icon": "skills/curse_weakness.svg",
+      "icon": "skills/pointy_hat.svg",
       "skill_type": "Curse",
       "cooldown": 10.0,
       "targets": [
@@ -28,12 +28,7 @@
                 "duration": 5,
                 "statuses": [
                   {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "SuccessChance": { } },
-                        "debuff": true
-                      }
-                    },
+                    "status_id": "witch_curse",
                     "value": 33
                   }
                 ]

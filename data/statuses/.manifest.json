@@ -10,6 +10,10 @@
             "dot.json",
             "items_boots.json",
             "items_cloaks.json",
+            "items_focuses.json",
+            "items_gloves.json",
+            "items_maps.json",
+            "monsters.json",
             "passives.json"
         ]
     }

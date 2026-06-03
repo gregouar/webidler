@@ -1,0 +1,37 @@
+{
+    "pirate_curse": {
+        "name": "Pirates Curse",
+        "icon": "skills/pirate_grave.svg",
+        "debuff": true,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "witch_curse": {
+        "name": "Witch's Curse",
+        "icon": "skills/pointy_hat.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "SuccessChance": { }
+                    },
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

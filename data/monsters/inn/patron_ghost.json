@@ -13,7 +13,7 @@
   "skills": [
     {
       "name": "Drunken Cheers",
-      "icon": "skills/curse_frailty.svg",
+      "icon": "skills/beer_stein.svg",
       "skill_type": "Spell",
       "cooldown": 3.0,
       "targets": [

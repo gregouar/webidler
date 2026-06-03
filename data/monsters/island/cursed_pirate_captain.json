@@ -28,7 +28,7 @@
     },
     {
       "name": "Spread the Curse",
-      "icon": "skills/curse_weakness.svg",
+      "icon": "skills/pirate_grave.svg",
       "cooldown": 5.0,
       "skill_type": "Curse",
       "targets": [
@@ -36,19 +36,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": "LifeRegen",
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 30
-                  }
-                ]
+                "status_id": "pirate_curse",
+                "value": 30.0
               }
             }
           ]

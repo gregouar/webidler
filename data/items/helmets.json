@@ -245,7 +245,6 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
             "skill_type": null,
             "skill_id": null
           }
@@ -296,7 +295,7 @@
         },
         "target": "Source",
         "modifiers": [ ],
-        "skill_range": "Melee",
+        "skill_range": "Any",
         "skill_type": "Curse",
         "effects": [
           {
@@ -305,29 +304,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "SuccessChance": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "effect_type": null
-                        }
-                      },
-                      "modifier": "Increased",
-                      "debuff": true
-                    }
-                  },
-                  "value": 25.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 5.0
+              "status_id": "witch_curse",
+              "value": 33
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -519,7 +497,7 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": "Stun"
+                "status_id": "stun"
               }
             }
           }
@@ -696,11 +674,7 @@
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
+                  "damage_type": "Fire",
                   "skill_type": null,
                   "not": false
                 }
@@ -772,11 +746,7 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
+                    "damage_type": "Fire",
                     "skill_type": null,
                     "not": false
                   }
