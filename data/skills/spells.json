@@ -80,7 +80,7 @@
               ],
               "statuses": [
                 {
-                  "status_type": "Stun"
+                  "status_id": "stun"
                 }
               ]
             }

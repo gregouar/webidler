@@ -48,7 +48,7 @@
     },
     {
       "name": "Appeasing Song",
-      "icon": "skills/curse_weakness.svg",
+      "icon": "skills/double_quaver.svg",
       "cooldown": 5.0,
       "skill_type": "Curse",
       "targets": [

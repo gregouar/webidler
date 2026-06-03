@@ -426,7 +426,7 @@ fn format_status_effect_line(
                     ..effect.clone()
                 };
                 view! {
-                    <span>
+                    <span class="text-blue-400 whitespace-pre-line">
                         {effects_tooltip::format_stat(&effect)} " to "
                         {effects_tooltip::format_stat(&max_effect)}
                     </span>
@@ -628,6 +628,7 @@ pub fn format_skill_effect(
                     } else {
                         "Apply"
                     };
+                    
                     let effect_lines = status_specs
                         .effects
                         .iter()

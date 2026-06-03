@@ -87,10 +87,10 @@
                         "DamageResistance": {
                             "skill_type": null,
                             "damage_type": "Physical"
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                    }
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
                 },
                 "value": 5.0,
                 "modifier": "Flat"

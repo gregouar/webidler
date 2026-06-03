@@ -457,17 +457,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "damage_type": "Poison",
-                  "value": 0.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 2.0
+              "status_id": "poison",
+              "value": 0
             },
             "ignore_stat_effects": [
               {

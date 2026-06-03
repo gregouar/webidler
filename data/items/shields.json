@@ -123,6 +123,7 @@
             },
             "ApplyStatus": {
               "status_id": "stun",
+              "value": 1,
               "duration": [
                 1.0,
                 3.0

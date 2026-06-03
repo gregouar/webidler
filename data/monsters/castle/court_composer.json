@@ -31,7 +31,7 @@
     },
     {
       "name": "Entrancing Song",
-      "icon": "skills/haste.svg",
+      "icon": "skills/double_quaver.svg",
       "cooldown": 10.0,
       "skill_type": "Blessing",
       "targets": [

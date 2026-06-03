@@ -1,6 +1,6 @@
 {
     "vile_codex": {
-        "name": "Vile Codex",
+        "name": "Vile Incantation",
         "icon": "statuses/evil_book.svg",
         "debuff": false,
         "duration": 10,
