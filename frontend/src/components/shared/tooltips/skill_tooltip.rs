@@ -120,7 +120,7 @@ pub fn SkillTooltip(
         .targets
         .clone()
         .into_iter()
-        .map(|target| format_target(target, skill_specs.skill_type))
+        .map(|target| format_target(target))
         .collect::<Vec<_>>();
 
     let trigger_lines = skill_specs
@@ -275,7 +275,7 @@ pub fn SkillTooltip(
     }
 }
 
-fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> impl IntoView {
+fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let shape = shape_str(targets_group.shape);
 
     let range = match targets_group.range {
@@ -299,7 +299,7 @@ fn format_target(targets_group: SkillTargetsGroup, skill_type: SkillType) -> imp
     let effects = targets_group
         .effects
         .into_iter()
-        .map(|x| format_skill_effect(skill_type, x, None, None))
+        .map(|x| format_skill_effect( x, None, None, targets_group.target_type == TargetType::Me, None ))
         .collect::<Vec<_>>();
 
     view! {
@@ -347,6 +347,7 @@ fn format_status_trigger_value(
     modifiers: Option<&[TriggerEffectModifier]>,
     prefix: &'static str,
     factor: Option<f64>,
+    trigger_status_name: Option<&str>,
 ) -> Option<impl IntoView + use<>> {
     format_trigger_modifier(
         find_trigger_modifier(
@@ -359,6 +360,7 @@ fn format_status_trigger_value(
         ),
         "",
         factor,
+        trigger_status_name
     )
     .map(|modifier_str| {
         view! {
@@ -394,6 +396,7 @@ fn format_status_effect_line(
                 ),
                 " as",
                 None,
+                Some(status_name),
             );
 
             view! {
@@ -404,7 +407,7 @@ fn format_status_effect_line(
                     {trigger_modifier_damage_str}
                     " "
                     {damage_type_str(Some(damage_type))}
-                    " per Second"
+                    " Damage per Second"
                 </span>
             }
             .into_any()
@@ -433,7 +436,11 @@ fn format_status_effect_line(
                 }
                 .into_any()
             } else {
-                view! { <span>{effects_tooltip::format_stat(&effect)}</span> }.into_any()
+                view! {
+                    <span class="text-blue-400 whitespace-pre-line">
+                        {effects_tooltip::format_stat(&effect)}
+                    </span>
+                }.into_any()
             }
         }
         StatusEffectType::Trigger(trigger_specs) => {
@@ -442,7 +449,7 @@ fn format_status_effect_line(
                 *trigger_specs,
                 false,
                 effects_map,
-                Some(status_name.to_string()),
+                Some(status_name),
             )
             .into_any()
             // view! {
@@ -501,10 +508,11 @@ pub fn format_chance(chance: &Chance, precise: bool) -> String {
 }
 
 pub fn format_skill_effect(
-    _skill_type: SkillType,
     skill_effect: SkillEffect,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
+    self_target: bool,
+    trigger_status_name: Option<&str>,
 ) -> impl IntoView + use<> {
     let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
@@ -540,6 +548,7 @@ pub fn format_skill_effect(
                         ),
                         " as",
                         None,
+                        trigger_status_name,
                     );
                     if value.min.get() > 0.0 || value.max.get() > 0.0
                         || trigger_modifier_str.is_some()
@@ -622,12 +631,15 @@ pub fn format_skill_effect(
                         ),
                         "",
                         None,
+                        trigger_status_name
                     );
-                    let apply_str = if status_specs.max_stacks > 1 {
-                        "Stack"
+                    let apply_str = if self_target {
+                        "Gain"
                     } else {
-                        "Apply"
+                        "Inflict"
                     };
+
+                    let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
                     
                     let effect_lines = status_specs
                         .effects
@@ -650,7 +662,7 @@ pub fn format_skill_effect(
                         stats_computations::compute_stats_effects_status_value(effects_map, &status_filter)
                     });
                     let modified_value_str =
-                        format_status_trigger_value(modifiers, " with Effects being ", value_factor);
+                        format_status_trigger_value(modifiers, " based on ", value_factor,trigger_status_name);
 
                     let empty_status = effect_lines.is_empty();
                     if empty_status {
@@ -672,7 +684,7 @@ pub fn format_skill_effect(
                             <EffectLi>
                                 {success_chance}{apply_str}" "{status_name}{modified_value_str}" "
                                 {format_duration_values(duration.0, duration.1)}
-                                {trigger_modifier_duration_str} ":"
+                                {trigger_modifier_duration_str} {stacks_str}":"
                                 <ul>
                                     {effect_lines
                                         .into_iter()
@@ -989,24 +1001,15 @@ pub fn skill_effect_text(
         SkillEffectType::ApplyStatus { status_id, .. } => {
             let data_context: DataContext = expect_context();
             let status_name = data_context.status_name(&status_id);
-            let status_specs = data_context
-                .statuses_specs
-                .read_untracked()
-                .get(&status_id)
-                .cloned();
-            let apply_str = if status_specs
-                .as_ref()
-                .map(|status_specs| status_specs.max_stacks > 1)
-                .unwrap_or_default()
-            {
-                "Stack"
-            } else {
-                "Apply"
-            };
+            // let status_specs = data_context
+            //     .statuses_specs
+            //     .read_untracked()
+            //     .get(&status_id)
+            //     .cloned();
 
             // TODO: status_str
 
-            format!("{apply_str} {status_name}")
+            format!("Apply {status_name}")
         }
         SkillEffectType::Resurrect
         | SkillEffectType::Restore { .. }

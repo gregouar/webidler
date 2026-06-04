@@ -27,7 +27,7 @@ pub fn format_trigger(
     trigger: TriggerSpecs,
     show_details: bool,
     effects_map: Option<&EffectsMap>,
-    name: Option<String>,
+    trigger_status_name: Option<&str>,
 ) -> impl IntoView + use<> {
     let effects = trigger
         .trigger_effect
@@ -35,10 +35,11 @@ pub fn format_trigger(
         .into_iter()
         .map(|x| {
             skill_tooltip::format_skill_effect(
-                trigger.trigger_effect.skill_type,
                 x,
                 Some(&trigger.trigger_effect.modifiers),
                 effects_map,
+                trigger.trigger_effect.target == TriggerTarget::Me,
+                trigger_status_name,
             )
         })
         .collect::<Vec<_>>();
@@ -58,7 +59,7 @@ pub fn format_trigger(
     let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single)
         .then(|| format!(", {}", shape_str(trigger.trigger_effect.skill_shape)));
 
-    let name_str = name.map(|name| format!("{} do ", name));
+    let name_str = trigger_status_name.map(|name| format!("{} do ", name));
 
     view! {
         <EffectLi>
@@ -80,6 +81,7 @@ pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
     suffix: &'static str,
     factor: Option<f64>,
+    trigger_status_name: Option<&str>,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor = modifier.factor * factor.unwrap_or(1.0);
@@ -95,7 +97,7 @@ pub fn format_trigger_modifier(
         });
         view! {
             {factor_str}
-            {trigger_modifier_source_str(&modifier.source)}
+            {trigger_modifier_source_str(&modifier.source, trigger_status_name)}
             {suffix}
         }
     })
@@ -106,7 +108,10 @@ pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> 
         if let TriggerEffectModifierSource::HitCrit = modifier.source {
             " on Critical Hit".to_string()
         } else {
-            format!(" per {}", trigger_modifier_source_str(&modifier.source))
+            format!(
+                " per {}",
+                trigger_modifier_source_str(&modifier.source, None)
+            )
         }
     })
 }
@@ -138,7 +143,10 @@ pub fn format_extra_trigger_modifiers(
     view! { <ul>{modifiers_str}</ul> }
 }
 
-pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource) -> String {
+pub fn trigger_modifier_source_str(
+    modifier_source: &TriggerEffectModifierSource,
+    trigger_status_name: Option<&str>,
+) -> String {
     match modifier_source {
         TriggerEffectModifierSource::HitDamage(damage_type) => {
             format!("{}Hit Damage", damage_type_str(*damage_type))
@@ -199,7 +207,10 @@ pub fn trigger_modifier_source_str(modifier_source: &TriggerEffectModifierSource
                 )
             )
         }
-        TriggerEffectModifierSource::TriggerStatusValue => "Status Effects".to_string(),
+        TriggerEffectModifierSource::TriggerStatusValue => match trigger_status_name {
+            Some(trigger_status_name) => format!("{} Value", trigger_status_name),
+            None => "Status Value".to_string(),
+        },
     }
 }
 

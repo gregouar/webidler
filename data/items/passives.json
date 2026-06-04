@@ -824,8 +824,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -840,8 +840,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -1485,7 +1485,7 @@
         "socket": false
       },
       "1edc1a3f-dc55-41fa-a8ad-fa90466ddd4a": {
-        "name": "Restoration",
+        "name": "Spell Restoration",
         "icon": "passives/regeneration.svg",
         "x": 82.5,
         "y": 100.0,
@@ -2833,8 +2833,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -2849,8 +2849,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4181,8 +4181,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4197,8 +4197,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5519,8 +5519,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5535,8 +5535,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5694,7 +5694,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 2,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "66b833a4-e75f-40ec-b393-ffc1f96e0c17": {
@@ -6588,7 +6588,7 @@
             "value": 1.0
           }
         ],
-        "max_upgrade_level": 2,
+        "max_upgrade_level": 5,
         "socket": false
       },
       "744ba3d4-2008-44ed-90bc-5e48acde4f9b": {
@@ -9569,8 +9569,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -9748,7 +9748,7 @@
             "stat": {
               "StatusFaster": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -9764,7 +9764,7 @@
             "stat": {
               "StatusFaster": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -9986,7 +9986,7 @@
               "is_blocked": null,
               "is_hurt": null,
               "is_triggered": null,
-              "damage_type": null,
+              "damage_type": "Fire",
               "skill_ids": null,
               "conditions": []
             },
@@ -12049,23 +12049,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
+                    "Damage": {
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
                     "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12082,12 +12075,19 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusDuration": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -12172,14 +12172,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -12194,6 +12186,14 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -12304,7 +12304,7 @@
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12329,7 +12329,7 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12407,7 +12407,7 @@
         "socket": false
       },
       "d4732e9c-3efb-4604-8b67-24a0587166b6": {
-        "name": "Restoration",
+        "name": "Spell Restoration",
         "icon": "passives/regeneration.svg",
         "x": 70.0,
         "y": 105.0,
@@ -12936,8 +12936,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12952,8 +12952,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -13343,7 +13343,7 @@
         "socket": false
       },
       "de4fefa1-145a-4825-8de9-ad5c52140395": {
-        "name": "Restoration",
+        "name": "Spell Restoration",
         "icon": "passives/regeneration.svg",
         "x": 57.5,
         "y": 110.0,
@@ -13704,7 +13704,7 @@
             "stat": {
               "StatusFaster": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -13720,7 +13720,7 @@
             "stat": {
               "StatusFaster": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14931,7 +14931,7 @@
             "stat": {
               "StatusFaster": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14947,7 +14947,7 @@
             "stat": {
               "StatusFaster": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15045,8 +15045,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15061,8 +15061,8 @@
           {
             "stat": {
               "StatusEscalation": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
