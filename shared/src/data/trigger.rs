@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, character_status::StatusId, conditional_modifier::Condition,
-    item::SkillShape, modifier::Modifier, skill::TargetType, stat_effect::StatStatusFilter,
+    character::CharacterId, conditional_modifier::Condition, item::SkillShape, modifier::Modifier,
+    skill::TargetType, stat_effect::StatStatusFilter,
 };
 
 use super::{
@@ -144,20 +144,20 @@ pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
     StatusValue {
-        #[serde(default)]
-        status_id: Option<StatusId>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusDuration {
-        #[serde(default)]
-        status_id: Option<StatusId>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
     StatusStacks {
-        #[serde(default)]
-        status_id: Option<StatusId>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },

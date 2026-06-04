@@ -9,8 +9,11 @@ use std::{
 };
 
 use shared::data::{
-    character_status::StatusSpecs, monster::MonsterSpecs, passive::PassivesTreeSpecs,
-    skill::BaseSkillSpecs, temple::BenedictionsCategory,
+    character_status::{StatusEffectType, StatusSpecs},
+    monster::MonsterSpecs,
+    passive::PassivesTreeSpecs,
+    skill::{BaseSkillSpecs, SkillEffectType},
+    temple::BenedictionsCategory,
 };
 
 use super::{
@@ -215,6 +218,88 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
             .is_none()
         {
             errors.push(anyhow!("Missing monster '{}' from store", spawn.monster));
+        }
+    }
+
+    for skill_effect in master_store
+        .skills_store
+        .values()
+        .flat_map(|skill_specs| {
+            skill_specs
+                .targets
+                .iter()
+                .flat_map(|target| target.effects.iter())
+                .chain(
+                    skill_specs
+                        .triggers
+                        .iter()
+                        .flat_map(|trigger| trigger.trigger_effect.effects.iter()),
+                )
+        })
+        .chain(
+            master_store
+                .monster_specs_store
+                .iter()
+                .flat_map(|(_, monster)| {
+                    monster.skills.iter().flat_map(|skill_specs| {
+                        skill_specs
+                            .targets
+                            .iter()
+                            .flat_map(|target| target.effects.iter())
+                            .chain(
+                                skill_specs
+                                    .triggers
+                                    .iter()
+                                    .flat_map(|trigger| trigger.trigger_effect.effects.iter()),
+                            )
+                    })
+                }),
+        )
+        .chain(
+            master_store
+                .passives_store
+                .get("default")
+                .unwrap()
+                .nodes
+                .iter()
+                .flat_map(|(_, passive)| {
+                    passive
+                        .triggers
+                        .iter()
+                        .flat_map(|trigger| trigger.trigger_effect.effects.iter())
+                }),
+        )
+        .chain(
+            master_store
+                .items_store
+                .content
+                .iter()
+                .flat_map(|(_, item)| {
+                    item.triggers
+                        .iter()
+                        .flat_map(|trigger| trigger.trigger_effect.effects.iter())
+                }),
+        )
+        .chain(
+            master_store
+                .statuses_store
+                .iter()
+                .flat_map(|(_, status_specs)| {
+                    status_specs.effects.iter().flat_map(|status_effect| {
+                        match &status_effect.status_effect_type {
+                            StatusEffectType::Trigger(trigger) => {
+                                trigger.trigger_effect.effects.iter()
+                            }
+                            _ => [].iter(),
+                        }
+                    })
+                }),
+        )
+    {
+        if let SkillEffectType::ApplyStatus { status_id, .. } = &skill_effect.effect_type
+            && master_store.statuses_store.get(status_id).is_none()
+        {
+            errors.push(anyhow!("Missing status '{}' from store", status_id));
         }
     }
 

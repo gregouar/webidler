@@ -17,6 +17,10 @@ impl<K, T> IndexedStore<K, T>
 where
     K: Clone + Eq + Hash,
 {
+    pub fn iter(&self) -> indexmap::map::Iter<'_, IndexedKey<K>, T> {
+        self.0.iter()
+    }
+
     pub fn get(&self, id: &IndexedKey<K>) -> Option<&T> {
         if let Some(key) = id.key()
             && let Some((stored_id, value)) = self.0.get_index(key)

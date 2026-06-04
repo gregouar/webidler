@@ -5,7 +5,7 @@ use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::Modifier,
     skill::{SkillType, TargetType},
-    stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
+    stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
@@ -154,27 +154,19 @@ pub fn trigger_modifier_source_str(
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Power Level".to_string(),
         TriggerEffectModifierSource::StatusValue {
-            status_id,
+            status_filter,
             skill_type,
         } => {
-            let status_filter = StatStatusFilter {
-                status_id: status_id.clone(),
-                ..Default::default()
-            };
             format!(
                 "{}{}",
                 skill_type_str(*skill_type),
-                status_type_value_str(&status_filter)
+                status_type_value_str(status_filter)
             )
         }
         TriggerEffectModifierSource::StatusDuration {
-            status_id,
+            status_filter,
             skill_type,
         } => {
-            let status_filter = StatStatusFilter {
-                status_id: status_id.clone(),
-                ..Default::default()
-            };
             format!(
                 "{} Duration",
                 skill_status_filter_str(
@@ -182,19 +174,15 @@ pub fn trigger_modifier_source_str(
                         skill_type: *skill_type,
                         ..Default::default()
                     },
-                    &status_filter,
+                    status_filter,
                     false
                 )
             )
         }
         TriggerEffectModifierSource::StatusStacks {
-            status_id,
+            status_filter,
             skill_type,
         } => {
-            let status_filter = StatStatusFilter {
-                status_id: status_id.clone(),
-                ..Default::default()
-            };
             format!(
                 "{} Stacks",
                 skill_status_filter_str(
@@ -202,7 +190,7 @@ pub fn trigger_modifier_source_str(
                         skill_type: *skill_type,
                         ..Default::default()
                     },
-                    &status_filter,
+                    status_filter,
                     false
                 )
             )

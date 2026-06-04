@@ -1,7 +1,7 @@
 use shared::data::{
     character::CharacterId,
     character_status::StatusId,
-    skill::SkillType,
+    skill::{DamageType, SkillType},
     stat_effect::{StatEffect, compare_options},
     trigger::{OwnedTrigger, TriggerEffectModifierSource, TriggerTarget},
     values::NonNegative,
@@ -70,6 +70,7 @@ pub fn apply_trigger_effects(
             if let Some(status_context) = trigger_context.status_context {
                 [StatusModifierData {
                     status_id: &status_context.status_id,
+                    damage_type: status_context.damage_type,
                     skill_type: status_context.skill_type,
                     value: status_context.value,
                     duration: status_context.duration,
@@ -83,12 +84,18 @@ pub fn apply_trigger_effects(
                         .statuses
                         .iter()
                         .flat_map(|(status_id, status_stacks)| {
-                            status_stacks.iter().map(|status_state| StatusModifierData {
-                                skill_type: status_state.skill_type,
-                                status_id: status_id,
-                                value: status_state.value,
-                                duration: status_state.duration,
-                            })
+                            let damage_type = statuses_store
+                                .get(status_id)
+                                .and_then(|status_specs| status_specs.damage_type);
+                            status_stacks
+                                .iter()
+                                .map(move |status_state| StatusModifierData {
+                                    skill_type: status_state.skill_type,
+                                    damage_type,
+                                    status_id: status_id,
+                                    value: status_state.value,
+                                    duration: status_state.duration,
+                                })
                         })
                         .collect(),
                     CharacterId::Monster(index) => game_data
@@ -100,11 +107,17 @@ pub fn apply_trigger_effects(
                                 .statuses
                                 .iter()
                                 .flat_map(|(status_id, status_stacks)| {
-                                    status_stacks.iter().map(|status_state| StatusModifierData {
-                                        skill_type: status_state.skill_type,
-                                        status_id: status_id,
-                                        value: status_state.value,
-                                        duration: status_state.duration,
+                                    let damage_type = statuses_store
+                                        .get(status_id)
+                                        .and_then(|status_specs| status_specs.damage_type);
+                                    status_stacks.iter().map(move |status_state| {
+                                        StatusModifierData {
+                                            skill_type: status_state.skill_type,
+                                            damage_type,
+                                            status_id: status_id,
+                                            value: status_state.value,
+                                            duration: status_state.duration,
+                                        }
                                     })
                                 })
                                 .collect()
@@ -147,14 +160,14 @@ pub fn apply_trigger_effects(
                                     + *game_data.area_specs.power_level as f64
                             }
                             TriggerEffectModifierSource::StatusValue {
-                                status_id,
+                                status_filter,
                                 skill_type,
                             } => statuses_context
                                 .iter()
                                 .filter(|status_data| {
-                                    compare_options(
-                                        &status_id.as_ref(),
-                                        &Some(status_data.status_id),
+                                    status_filter.is_match_with_status(
+                                        status_data.status_id,
+                                        status_data.damage_type,
                                     ) && compare_options(
                                         &skill_type.as_ref(),
                                         &Some(&status_data.skill_type),
@@ -163,14 +176,14 @@ pub fn apply_trigger_effects(
                                 .map(|status_event| status_event.value.get())
                                 .sum(),
                             TriggerEffectModifierSource::StatusDuration {
-                                status_id,
+                                status_filter,
                                 skill_type,
                             } => statuses_context
                                 .iter()
                                 .filter(|status_data| {
-                                    compare_options(
-                                        &status_id.as_ref(),
-                                        &Some(status_data.status_id),
+                                    status_filter.is_match_with_status(
+                                        status_data.status_id,
+                                        status_data.damage_type,
                                     ) && compare_options(
                                         &skill_type.as_ref(),
                                         &Some(&status_data.skill_type),
@@ -179,17 +192,17 @@ pub fn apply_trigger_effects(
                                 .map(|status_data| status_data.duration.get())
                                 .sum(),
                             TriggerEffectModifierSource::StatusStacks {
-                                status_id,
+                                status_filter,
                                 skill_type,
                             } => statuses_context
                                 .iter()
-                                .filter(|status_event| {
-                                    compare_options(
-                                        &status_id.as_ref(),
-                                        &Some(status_event.status_id),
+                                .filter(|status_data| {
+                                    status_filter.is_match_with_status(
+                                        status_data.status_id,
+                                        status_data.damage_type,
                                     ) && compare_options(
                                         &skill_type.as_ref(),
-                                        &Some(&status_event.skill_type),
+                                        &Some(&status_data.skill_type),
                                     )
                                 })
                                 .count() as f64,
@@ -286,6 +299,7 @@ pub fn apply_trigger_effects(
 
 struct StatusModifierData<'a> {
     status_id: &'a StatusId,
+    damage_type: Option<DamageType>,
     skill_type: SkillType,
     value: NonNegative,
     duration: NonNegative,

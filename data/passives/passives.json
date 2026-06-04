@@ -9991,12 +9991,12 @@
             "modifiers": [
               {
                 "stat": {
-                  "StatusPower": {
-                    "status_id": null,
-                    "damage_type": null,
+                  "Damage": {
                     "skill_type": null,
                     "skill_id": null,
-                    "min_max": null
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
                   }
                 },
                 "modifier": "Flat",
@@ -12044,15 +12044,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -12069,6 +12060,14 @@
                     }
                   },
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -12078,11 +12077,12 @@
                     }
                   },
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
+                    "Damage": {
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -12167,15 +12167,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -12189,6 +12180,15 @@
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
                     }
                   },
                   {
@@ -12290,6 +12290,32 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -12303,32 +12329,6 @@
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],

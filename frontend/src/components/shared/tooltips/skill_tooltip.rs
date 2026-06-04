@@ -615,7 +615,7 @@ pub fn format_skill_effect(
                         .unwrap_or(status_specs.escalation.get());
                     let status_filter = StatStatusFilter {
                         status_id: Some(status_id.clone()),
-                        damage_type: damage_type.or(status_specs.damage_type).map(Into::into),
+                        damage_type: None,
                     };
                     let trigger_modifier_duration_str = format_trigger_modifier(
                         find_trigger_modifier(
