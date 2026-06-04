@@ -265,7 +265,7 @@
             "factor": 0.1,
             "source": {
               "StatusValue": {
-                "status_id": null,
+                "status_id": "poison",
                 "damage_type": null,
                 "skill_type": null
               }
@@ -284,7 +284,7 @@
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_id": null,
+                "status_id": "poison",
                 "damage_type": null,
                 "skill_type": null
               }
@@ -304,7 +304,7 @@
             "ApplyStatus": {
               "status_id": "burn",
               "value": 0.0,
-              "duration": null,
+              "duration": 0.0,
               "escalation": null,
               "max_stacks": null,
               "damage_type": null,
@@ -313,12 +313,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": "Poison",
+                "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "min_max": null
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -330,12 +330,12 @@
                 }
               },
               {
-                "Damage": {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": "Poison",
                   "skill_type": null,
                   "skill_id": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
+                  "min_max": null
                 }
               }
             ],

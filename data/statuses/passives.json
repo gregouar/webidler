@@ -15,7 +15,7 @@
                             "skill_description": null,
                             "effect_type": {
                                 "ApplyStatus": {
-                                    "damage_type": "Fire"
+                                    "status_id": "burn"
                                 }
                             }
                         }

@@ -631,9 +631,13 @@ pub fn format_skill_effect(
                     );
                     let apply_str = if self_target {
                         "Gain"
-                    } else {
+                    } else if status_specs.debuff {
                         "Inflict"
+                    } else {
+                        "Apply"
                     };
+
+                    let grant_str = if status_specs.debuff  {"inflict"} else {"grant"};
 
                     let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
                     
@@ -685,7 +689,7 @@ pub fn format_skill_effect(
                                 view! { <EffectLi>{status_name} " " {status_effect}</EffectLi> }.into_any()
                             } else{view! {
                                 <ul>
-                                    <EffectLi>{status_name} " grant:"</EffectLi>
+                                    <EffectLi>{status_name} " "{grant_str}":"</EffectLi>
                                     {effect_lines
                                         .into_iter()
                                         .map(|line| view! { <EffectLi>{line}</EffectLi> })

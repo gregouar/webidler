@@ -59,14 +59,14 @@ pub fn format_trigger(
     let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single)
         .then(|| format!(", {}", shape_str(trigger.trigger_effect.skill_shape)));
 
-    let name_str = trigger_status_name.map(|name| format!("{} do ", name));
+    // let name_str = trigger_status_name.map(|name| format!("{} do ", name));
 
     view! {
         <EffectLi>
             <ul>
                 <EffectLi>
-                    {name_str} {format_trigger_event(&trigger.trigger)} {shape_infos}
-                    {details_infos}":"
+                    // {name_str}
+                    {format_trigger_event(&trigger.trigger)} {shape_infos} {details_infos}":"
                 </EffectLi>
                 {trigger
                     .description
