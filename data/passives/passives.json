@@ -3833,7 +3833,7 @@
             },
             "description": null,
             "trigger_id": "legionnaire_stance",
-            "target": "SameTarget",
+            "target": "Me",
             "modifiers": [],
             "trigger_propagate": false,
             "skill_type": "Other",
@@ -6204,7 +6204,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 2.0,
+                "factor": 1.0,
                 "source": "AreaLevel"
               }
             ],
@@ -9289,12 +9289,7 @@
                 },
                 "modifier": "Flat",
                 "factor": 1.0,
-                "source": {
-                  "StatusDuration": {
-                    "status_id": null,
-                    "skill_type": null
-                  }
-                }
+                "source": "TriggerStatusDuration"
               }
             ],
             "trigger_propagate": false,
@@ -12172,31 +12167,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -12211,6 +12181,31 @@
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -12319,21 +12314,21 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],

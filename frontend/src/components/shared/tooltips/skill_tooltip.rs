@@ -401,13 +401,11 @@ fn format_status_effect_line(
 
             view! {
                 <span>
+                    "Deal "
                     <span class=format!(
                         "font-semibold {damage_color}",
-                    )>{format_min_max_f64(value.0, value.1)}</span>
-                    {trigger_modifier_damage_str}
-                    " "
-                    {damage_type_str(Some(damage_type))}
-                    " Damage per Second"
+                    )>{format_min_max_f64(value.0, value.1)}</span> {trigger_modifier_damage_str}
+                    " " {damage_type_str(Some(damage_type))} " Damage per Second"
                 </span>
             }
             .into_any()
@@ -607,8 +605,6 @@ pub fn format_skill_effect(
 
             match status_specs {
                 Some(status_specs) => {
-
-                        
                     let duration = duration
                         .map(|duration| (duration.min.get(), duration.max.get()))
                         .unwrap_or_else(|| {
@@ -668,7 +664,7 @@ pub fn format_skill_effect(
                     if empty_status {
                         view! {}
                         .into_any()
-                    } 
+                    }
                     // else if effect_lines.len() == 1 {
                     //     view! {
                     //         <EffectLi>
@@ -679,19 +675,32 @@ pub fn format_skill_effect(
                     //     }
                     //     .into_any()
                     // } 
+
+
                     else {
-                        view! {
-                            <EffectLi>
-                                {success_chance}{apply_str}" "{status_name}{modified_value_str}" "
-                                {format_duration_values(duration.0, duration.1)}
-                                {trigger_modifier_duration_str} {stacks_str}":"
+                        let status_effects = {
+                            let status_name = status_name.clone();
+                            if effect_lines.len() == 1 && status_specs.damage_type.is_some()  {
+                                let status_effect = effect_lines.into_iter().next();
+                                view! { <EffectLi>{status_name} " " {status_effect}</EffectLi> }.into_any()
+                            } else{view! {
                                 <ul>
+                                    <EffectLi>{status_name} " grant:"</EffectLi>
                                     {effect_lines
                                         .into_iter()
                                         .map(|line| view! { <EffectLi>{line}</EffectLi> })
                                         .collect::<Vec<_>>()}
-                                </ul> {format_escalation(escalation)}
+                                </ul>
+                            }.into_any()}
+                        };
+                        view! {
+                            <EffectLi>
+                                {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
+                                {format_duration_values(duration.0, duration.1)}
+                                {trigger_modifier_duration_str}{format_escalation(escalation)}
+                                {stacks_str}
                             </EffectLi>
+                            {status_effects}
                         }
                         .into_any()
                     }

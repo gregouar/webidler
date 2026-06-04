@@ -193,6 +193,7 @@ pub fn apply_trigger_effects(
                                     )
                                 })
                                 .count() as f64,
+                            TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
                             TriggerEffectModifierSource::TriggerStatusValue => 0.0,
                         },
                     bypass_ignore: true,

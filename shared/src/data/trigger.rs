@@ -161,6 +161,7 @@ pub enum TriggerEffectModifierSource {
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
+    TriggerStatusDuration,
     TriggerStatusValue,
     // TODO: Move to conditional modifiers?
     HitCrit,

@@ -207,6 +207,10 @@ pub fn trigger_modifier_source_str(
                 )
             )
         }
+        TriggerEffectModifierSource::TriggerStatusDuration => match trigger_status_name {
+            Some(trigger_status_name) => format!("{} Duration", trigger_status_name),
+            None => "Status Duration".to_string(),
+        },
         TriggerEffectModifierSource::TriggerStatusValue => match trigger_status_name {
             Some(trigger_status_name) => format!("{} Value", trigger_status_name),
             None => "Status Value".to_string(),

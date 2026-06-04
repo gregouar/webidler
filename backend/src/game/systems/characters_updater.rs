@@ -502,9 +502,17 @@ pub fn extend_triggers_from_skills_and_statuses(
                 for status_state in status_stacks.iter() {
                     let mut trigger_effect = trigger_specs.trigger_effect.clone();
                     for modifier_effect in trigger_effect.modifiers.iter() {
-                        if let TriggerEffectModifierSource::TriggerStatusValue =
-                            modifier_effect.source
-                        {
+                        let modifier_value = match modifier_effect.source {
+                            TriggerEffectModifierSource::TriggerStatusValue => {
+                                status_state.value.get()
+                            }
+                            TriggerEffectModifierSource::TriggerStatusDuration => {
+                                status_state.duration.get()
+                            }
+                            _ => 0.0,
+                        };
+
+                        if modifier_value > 0.0 {
                             for skill_effect in trigger_effect.effects.iter_mut() {
                                 skills_updater::compute_skill_specs_effect(
                                     statuses_store,
@@ -514,7 +522,7 @@ pub fn extend_triggers_from_skills_and_statuses(
                                     [StatEffect {
                                         stat: modifier_effect.stat.clone(),
                                         modifier: modifier_effect.modifier,
-                                        value: status_state.value.get() * modifier_effect.factor,
+                                        value: modifier_value * modifier_effect.factor,
                                         bypass_ignore: true,
                                     }]
                                     .iter(),
