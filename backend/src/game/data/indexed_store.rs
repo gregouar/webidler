@@ -32,19 +32,22 @@ where
         self.0.get(id)
     }
 
-    pub fn id_with_key(&self, id: IndexedKey<K>) -> IndexedKey<K> {
+    pub fn attach_key(&self, id: &mut IndexedKey<K>) {
         if let Some(key) = id.key()
             && let Some((stored_id, _)) = self.0.get_index(key)
-            && *stored_id == id
+            && *stored_id == *id
         {
-            return id;
+            return;
         }
 
-        if let Some(key) = self.0.get_index_of(&id) {
-            id.with_key(key)
-        } else {
-            id
+        if let Some(key) = self.0.get_index_of(id) {
+            id.attach_key(key)
         }
+    }
+
+    pub fn id_with_key(&self, mut id: IndexedKey<K>) -> IndexedKey<K> {
+        self.attach_key(&mut id);
+        id
     }
 
     pub fn into_indexed_keys(self) -> Self {

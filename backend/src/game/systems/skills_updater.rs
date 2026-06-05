@@ -379,6 +379,7 @@ pub fn compute_skill_specs_effect<'a>(
         replace_on_value_only: _,
     } = &mut skill_effect.effect_type
     {
+        statuses_store.attach_key(status_id);
         let Some(status_specs) = statuses_store.get(status_id) else {
             tracing::error!("missing status: {}", skill_id);
             return;

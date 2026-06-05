@@ -22,8 +22,12 @@ impl<T> IndexedKey<T> {
         }
     }
 
-    pub fn with_key(mut self, key: usize) -> Self {
+    pub fn attach_key(&mut self, key: usize) {
         self.key = Some(key);
+    }
+
+    pub fn with_key(mut self, key: usize) -> Self {
+        self.attach_key(key);
         self
     }
 
