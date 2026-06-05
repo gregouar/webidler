@@ -39,5 +39,26 @@
                 "modifier": "Flat"
             }
         ]
+    },
+    "chill": {
+        "name": "Chill",
+        "adjective": "Chilled",
+        "icon": "statuses/chilled.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 5,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": { }
+                    },
+                    "modifier": "Increased",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
     }
 }

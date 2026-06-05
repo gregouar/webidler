@@ -128,21 +128,8 @@
           },
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": { }
-                      },
-                      "modifier": "Increased",
-                      "debuff": true
-                    }
-                  },
-                  "value": 33
-                }
-              ]
+              "status_id": "chill",
+              "value": 5
             }
           }
         ]
