@@ -1,0 +1,214 @@
+{
+    "poison_coating": {
+        "name": "Poison Coating",
+        "icon": "skills/poison_coating.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": "Attack",
+                            "damage_type": "Poison",
+                            "min_max": "Min"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 2,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": "Attack",
+                            "damage_type": "Poison",
+                            "min_max": "Max"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 4,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "StatusDuration": {
+                            "status_type": {
+                                "DamageOverTime": {
+                                    "damage_type": "Poison"
+                                }
+                            },
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 10,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "pyroclastic_infusion": {
+        "name": "Pyroclastic Infusion",
+        "icon": "skills/pyroclastic_infusion.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Fire",
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More"
+                },
+                "value": 30,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Storm",
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More"
+                },
+                "value": 30,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "StatConverter": {
+                            "source": {
+                                "Damage": {
+                                    "damage_type": "Physical"
+                                }
+                            },
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Fire"
+                                }
+                            }
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 50,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "StatConverter": {
+                            "source": {
+                                "Damage": {
+                                    "damage_type": "Physical"
+                                }
+                            },
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Storm",
+                                    "min_max": "Max"
+                                }
+                            }
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 50,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "sharpen_weapon": {
+        "name": "Sharpen Weapon",
+        "icon": "skills/sharpen_weapon.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Physical",
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More"
+                },
+                "value": 10,
+                "modifier": "Percent"
+            },
+            {
+                "Trigger": {
+                    "trigger_id": "sharpen_weapon",
+                    "target": "SameTarget",
+                    "skill_type": "Attack",
+                    "OnHit": {
+                        "skill_type": "Attack",
+                        "is_hurt": true
+                    },
+                    "effects": [
+                        {
+                            "success_chance": 30,
+                            "ApplyStatus": {
+                                "status_id": "bleed",
+                                "value": 0
+                            },
+                            "ignore_stat_effects": [
+                                {
+                                    "Damage": {
+                                        "skill_type": "Attack",
+                                        "damage_type": "Physical"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Damage": { }
+                            },
+                            "modifier": "Flat",
+                            "factor": 0.5,
+                            "source": {
+                                "HitDamage": "Physical"
+                            }
+                        },
+                        {
+                            "stat": {
+                                "SuccessChance": {
+                                    "effect_type": {
+                                        "ApplyStatus": {
+                                            "status_id": "bleed"
+                                        }
+                                    }
+                                }
+                            },
+                            "modifier": "Flat",
+                            "factor": 100,
+                            "source": {
+                                "HitCrit": null
+                            }
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            }
+        ]
+    }
+}

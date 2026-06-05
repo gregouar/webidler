@@ -1,4 +1,39 @@
 {
+    "gold_negative": {
+        "name": "Pick Pocket",
+        "icon": "passives/gold_negative.svg",
+        "debuff": true,
+        "duration": 30,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "GoldFind",
+                    "modifier": "More",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "life_regen": {
+        "name": "Life Regen",
+        "icon": "passives/life_regen.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
     "pirate_curse": {
         "name": "Pirates Curse",
         "icon": "skills/pirate_grave.svg",
@@ -13,6 +48,40 @@
                 },
                 "value": 100,
                 "modifier": "Percent"
+            }
+        ]
+    },
+    "rage": {
+        "name": "Rage",
+        "adjective": "Enraged",
+        "icon": "statuses/enrage.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": { }
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": { }
+                    },
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 50,
+                "modifier": "Flat"
             }
         ]
     },

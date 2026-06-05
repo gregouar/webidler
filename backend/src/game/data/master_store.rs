@@ -135,6 +135,8 @@ impl MasterStore {
             item_rarity: gamble_table_blueprint.item_rarity,
         };
 
+        // TODO: Pre attack indexed keys?
+
         let master_store = MasterStore {
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),

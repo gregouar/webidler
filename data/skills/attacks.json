@@ -10,40 +10,10 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": {
-            "status_type": {
-              "StatModifier": {
-                "stat": {
-                  "Damage": { }
-                }
-              }
-            }
-          }
+          "StatusPower": { }
         },
         "modifier": "Increased",
         "value": 5
-      },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_type": {
-              "StatModifier": {
-                "stat": {
-                  "StatusDuration": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    }
-                  }
-                },
-                "debuff": false
-              }
-            }
-          }
-        },
-        "modifier": "Flat",
-        "value": 1
       }
     ],
     "ignore_stat_effects": [
@@ -57,121 +27,15 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": "Attack",
-                          "damage_type": "Poison",
-                          "min_max": "Min"
-                        }
-                      },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 2
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": "Attack",
-                          "damage_type": "Poison",
-                          "min_max": "Max"
-                        }
-                      },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 4
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "StatusDuration": {
-                          "status_type": {
-                            "DamageOverTime": {
-                              "damage_type": "Poison"
-                            }
-                          },
-                          "skill_type": "Attack"
-                        }
-                      },
-                      "modifier": "Increased"
-                    }
-                  },
-                  "value": 10
-                }
-              ]
+              "replace_on_value_only": true,
+              "status_id": "poison_coating",
+              "value": 100
             }
           }
         ]
       }
     ],
-    "modifier_effects": [
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 1
-      }
-    ]
+    "modifier_effects": [ ]
   },
   "pyroclastic_infusion": {
     "name": "Pyroclastic Infusion",
@@ -184,16 +48,7 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": {
-            "status_type": {
-              "StatModifier": {
-                "stat": {
-                  "Damage": { }
-                },
-                "debuff": false
-              }
-            }
-          }
+          "StatusPower": { }
         },
         "modifier": "Flat",
         "value": 3
@@ -210,86 +65,9 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Fire",
-                          "skill_type": "Attack"
-                        }
-                      },
-                      "modifier": "More"
-                    }
-                  },
-                  "value": 30
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Storm",
-                          "skill_type": "Attack"
-                        }
-                      },
-                      "modifier": "More"
-                    }
-                  },
-                  "value": 30
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "StatConverter": {
-                          "source": {
-                            "Damage": {
-                              "damage_type": "Physical"
-                            }
-                          },
-                          "stat": {
-                            "Damage": {
-                              "damage_type": "Fire"
-                            }
-                          }
-                        }
-                      },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 50
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "StatConverter": {
-                          "source": {
-                            "Damage": {
-                              "damage_type": "Physical"
-                            }
-                          },
-                          "stat": {
-                            "Damage": {
-                              "damage_type": "Storm",
-                              "min_max": "Max"
-                            }
-                          }
-                        }
-                      },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 50
-                }
-              ]
+              "replace_on_value_only": true,
+              "status_id": "pyroclastic_infusion",
+              "value": 100
             }
           }
         ]
@@ -307,16 +85,7 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": {
-            "status_type": {
-              "StatModifier": {
-                "stat": {
-                  "Damage": { }
-                },
-                "debuff": false
-              }
-            }
-          }
+          "StatusPower": { }
         },
         "modifier": "Flat",
         "value": 1
@@ -333,97 +102,9 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "damage_type": "Physical",
-                          "skill_type": "Attack"
-                        }
-                      },
-                      "modifier": "More"
-                    }
-                  },
-                  "value": 10
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "Trigger": {
-                      "trigger_id": "sharpen_weapon",
-                      "icon": "skills/sharpen_weapon.svg",
-                      "target": "SameTarget",
-                      "skill_type": "Attack",
-                      "OnHit": {
-                        "skill_type": "Attack",
-                        "is_hurt": true
-                      },
-                      "effects": [
-                        {
-                          "success_chance": 30,
-                          "ApplyStatus": {
-                            "duration": 4,
-                            "statuses": [
-                              {
-                                "status_type": {
-                                  "DamageOverTime": {
-                                    "damage_type": "Physical"
-                                  }
-                                },
-                                "value": 0
-                              }
-                            ]
-                          },
-                          "ignore_stat_effects": [
-                            {
-                              "Damage": {
-                                "skill_type": "Attack",
-                                "damage_type": "Physical"
-                              }
-                            }
-                          ]
-                        }
-                      ],
-                      "modifiers": [
-                        {
-                          "stat": {
-                            "Damage": { }
-                          },
-                          "modifier": "Flat",
-                          "factor": 0.5,
-                          "source": {
-                            "HitDamage": "Physical"
-                          }
-                        },
-                        {
-                          "stat": {
-                            "SuccessChance": {
-                              "effect_type": {
-                                "ApplyStatus": {
-                                  "status_type": {
-                                    "DamageOverTime": {
-                                      "damage_type": "Physical"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "modifier": "Flat",
-                          "factor": 100,
-                          "source": {
-                            "HitCrit": null
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
+              "replace_on_value_only": true,
+              "status_id": "sharpen_weapon",
+              "value": 100
             }
           }
         ]
@@ -504,18 +185,8 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0,
-                  "cumulate": false
-                }
-              ]
+              "status_id": "poison",
+              "value": 0
             }
           }
         ]
@@ -526,11 +197,6 @@
         "trigger_propagate": true,
         "OnReceiveStatus": {
           "skill_type": null,
-          "status_type": {
-            "DamageOverTime": {
-              "damage_type": null
-            }
-          },
           "is_triggered": null,
           "is_evaded": true
         },
@@ -550,18 +216,8 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0,
-                  "cumulate": false
-                }
-              ]
+              "status_id": "poison",
+              "value": 0
             }
           }
         ]
@@ -656,18 +312,8 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0,
-                  "cumulate": false
-                }
-              ]
+              "status_id": "poison",
+              "value": 0
             }
           }
         ]
@@ -703,18 +349,8 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0,
-                  "cumulate": false
-                }
-              ]
+              "status_id": "poison",
+              "value": 0
             }
           }
         ]
@@ -990,11 +626,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "min_max": "Min"
               }
             },
@@ -1021,11 +653,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "min_max": "Max"
               }
             },
@@ -1085,18 +713,8 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0,
-                  "cumulate": false
-                }
-              ]
+              "status_id": "poison",
+              "value": 0
             }
           }
         ]
@@ -1383,11 +1001,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "min_max": "Min"
               }
             },
@@ -1415,11 +1029,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "min_max": "Max"
               }
             },
@@ -1480,18 +1090,7 @@
           },
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0,
-                  "cumulate": false
-                }
-              ]
+              "status_id": "poison", "value": 0
             }
           }
         ]
@@ -1738,11 +1337,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "min_max": "Min"
               }
             },
@@ -1770,11 +1365,7 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
                 "min_max": "Max"
               }
             },

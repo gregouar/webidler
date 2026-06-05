@@ -34,7 +34,7 @@
     },
     {
       "name": "RAGE !!!",
-      "icon": "skills/haste.svg",
+      "icon": "statuses/enrage.svg",
       "skill_type": "Blessing",
       "cooldown": 20.0,
       "targets": [
@@ -43,30 +43,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Damage": { } },
-                        "modifier": "Increased"
-                      }
-                    },
-                    "value": 100
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": { }
-                        },
-                        "modifier": "Flat",
-                        "debuff": false
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "rage",
+                "value": 100
               }
             }
           ]
