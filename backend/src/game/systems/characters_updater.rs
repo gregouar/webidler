@@ -490,6 +490,7 @@ pub fn extend_triggers_from_skills_and_statuses(
     character_id: CharacterId,
     character_specs: &mut CharacterSpecs,
     character_state: &CharacterState,
+    effects: &[StatEffect],
 ) {
     for (status_id, status_stacks) in character_state.statuses.iter() {
         let Some(status_specs) = statuses_store.get(status_id) else {
@@ -498,7 +499,11 @@ pub fn extend_triggers_from_skills_and_statuses(
         };
 
         for status_effect in status_specs.effects.iter() {
-            if let StatusEffectType::Trigger(trigger_specs) = &status_effect.status_effect_type {
+            if let StatusEffectType::Trigger {
+                trigger_specs,
+                inherit_owner_effects,
+            } = &status_effect.status_effect_type
+            {
                 for status_state in status_stacks.iter() {
                     let mut trigger_effect = trigger_specs.trigger_effect.clone();
 
@@ -525,35 +530,12 @@ pub fn extend_triggers_from_skills_and_statuses(
                         })
                         .collect();
 
-                    // for modifier_effect in trigger_effect.modifiers.iter() {
-                    //     let modifier_value = match modifier_effect.source {
-                    //         TriggerEffectModifierSource::TriggerStatusValue => {
-                    //             status_state.value.get()
-                    //         }
-                    //         TriggerEffectModifierSource::TriggerStatusDuration => {
-                    //             status_state.duration.get()
-                    //         }
-                    //         _ => 0.0,
-                    //     };
-
-                    //     if modifier_value > 0.0 {
-                    //         for skill_effect in trigger_effect.effects.iter_mut() {
-                    //             skills_updater::compute_skill_specs_effect(
-                    //                 statuses_store,
-                    //                 &trigger_effect.trigger_id,
-                    //                 trigger_effect.skill_type,
-                    //                 skill_effect,
-                    //                 [StatEffect {
-                    //                     stat: modifier_effect.stat.clone(),
-                    //                     modifier: modifier_effect.modifier,
-                    //                     value: modifier_value * modifier_effect.factor,
-                    //                     bypass_ignore: true,
-                    //                 }]
-                    //                 .iter(),
-                    //             );
-                    //         }
-                    //     }
-                    // }
+                    let combined_effects =
+                        modifier_effects.iter().chain(if *inherit_owner_effects {
+                            effects.iter()
+                        } else {
+                            [].iter()
+                        });
 
                     // Mandatory to compute skill effects even if modifier_effects is empty to
                     // initialize trigger status with base values
@@ -563,7 +545,7 @@ pub fn extend_triggers_from_skills_and_statuses(
                             &trigger_effect.trigger_id,
                             trigger_effect.skill_type,
                             skill_effect,
-                            modifier_effects.iter(),
+                            combined_effects.clone(),
                         );
                     }
 

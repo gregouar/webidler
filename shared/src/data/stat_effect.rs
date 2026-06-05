@@ -642,23 +642,23 @@ impl From<&EffectsMap> for Vec<StatEffect> {
 
 impl From<Vec<StatEffect>> for EffectsMap {
     fn from(value: Vec<StatEffect>) -> Self {
-        EffectsMap::combine_all(value.into_iter().map(|x| {
-            EffectsMap(HashMap::from([(
-                (x.stat, x.modifier, x.bypass_ignore),
-                x.value,
-            )]))
-        }))
+        value
+            .into_iter()
+            .fold(EffectsMap::default(), |mut effects_map, stat_effect| {
+                effects_map.add_effect(stat_effect);
+                effects_map
+            })
     }
 }
 
 impl From<Vec<&StatEffect>> for EffectsMap {
     fn from(value: Vec<&StatEffect>) -> Self {
-        EffectsMap::combine_all(value.iter().map(|x| {
-            EffectsMap(HashMap::from([(
-                (x.stat.clone(), x.modifier, x.bypass_ignore),
-                x.value,
-            )]))
-        }))
+        value
+            .iter()
+            .fold(EffectsMap::default(), |mut effects_map, stat_effect| {
+                effects_map.add_effect((*stat_effect).clone());
+                effects_map
+            })
     }
 }
 
@@ -667,36 +667,50 @@ impl EffectsMap {
         self.0.is_empty()
     }
 
-    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
-        EffectsMap(maps.flat_map(|m| m.0.into_iter()).fold(
-            HashMap::new(),
-            |mut result, ((target, modifier, bypass_ignore), value)| {
-                result
-                    .entry((target, modifier, bypass_ignore))
-                    .and_modify(|entry| match modifier {
-                        Modifier::More => {
-                            if *entry == 0.0 {
-                                *entry = value;
-                                return;
-                            }
+    pub fn add_effect(&mut self, stat_effect: StatEffect) {
+        let StatEffect {
+            stat,
+            modifier,
+            value,
+            bypass_ignore,
+        } = stat_effect;
 
-                            let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+        self.0
+            .entry((stat, modifier, bypass_ignore))
+            .and_modify(|entry| match modifier {
+                Modifier::More => {
+                    if *entry == 0.0 {
+                        *entry = value;
+                        return;
+                    }
 
-                            let factor = compute_more_factor(sign * value);
-                            *entry = sign
-                                * compute_more_factor(
-                                    entry.abs() + factor + entry.abs() * factor * 0.01,
-                                );
-                        }
-                        _ => *entry += value,
-                    })
-                    .or_insert(value);
-                result
-            },
-        ))
+                    let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+
+                    let factor = compute_more_factor(sign * value);
+                    *entry = sign
+                        * compute_more_factor(entry.abs() + factor + entry.abs() * factor * 0.01);
+                }
+                _ => *entry += value,
+            })
+            .or_insert(value);
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = StatEffect> {
+    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
+        maps.flat_map(|m| m.0.into_iter()).fold(
+            EffectsMap::default(),
+            |mut result, ((stat, modifier, bypass_ignore), value)| {
+                result.add_effect(StatEffect {
+                    stat,
+                    modifier,
+                    value,
+                    bypass_ignore,
+                });
+                result
+            },
+        )
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = StatEffect> + Clone {
         self.0
             .iter()
             .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {

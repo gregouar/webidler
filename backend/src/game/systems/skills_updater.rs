@@ -1,4 +1,4 @@
-use std::{collections::HashMap, time::Duration};
+use std::time::Duration;
 use strum::IntoEnumIterator;
 
 use shared::data::{
@@ -204,7 +204,7 @@ pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u
     let level = level as f64 - 1.0;
 
     base_skill_specs.upgrade_effects.iter().fold(
-        EffectsMap(HashMap::new()),
+        EffectsMap::default(),
         |mut effects_map, effect| {
             *effects_map
                 .0
@@ -355,7 +355,7 @@ fn compute_skill_modifier_effects<'a>(
                 )
             })
         })
-        .fold(EffectsMap(HashMap::new()), |mut map, (key, val)| {
+        .fold(EffectsMap::default(), |mut map, (key, val)| {
             *map.0.entry(key).or_default() += val;
             map
         })

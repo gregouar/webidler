@@ -289,8 +289,8 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
                 .flat_map(|(_, status_specs)| {
                     status_specs.effects.iter().flat_map(|status_effect| {
                         match &status_effect.status_effect_type {
-                            StatusEffectType::Trigger(trigger) => {
-                                trigger.trigger_effect.effects.iter()
+                            StatusEffectType::Trigger { trigger_specs, .. } => {
+                                trigger_specs.trigger_effect.effects.iter()
                             }
                             _ => [].iter(),
                         }

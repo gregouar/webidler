@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeSet, HashSet};
 
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
@@ -272,7 +272,7 @@ impl ItemModifiers {
             .iter()
             .flat_map(|affix| affix.effects.iter())
             .filter(|e| e.scope == scope)
-            .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
+            .fold(EffectsMap::default(), |mut effects_map, effect| {
                 if split_elements
                     && matches!(
                         &effect.stat_effect.stat,

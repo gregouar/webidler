@@ -109,5 +109,6 @@ pub fn update_monster_specs(
         character_id,
         &mut monster_specs.character_specs,
         &monster_state.character_state,
+        &effects,
     );
 }

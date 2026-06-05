@@ -87,7 +87,12 @@ pub enum StatusEffectType {
         #[serde(default)]
         debuff: bool,
     },
-    Trigger(Box<TriggerSpecs>),
+    Trigger {
+        #[serde(flatten)]
+        trigger_specs: Box<TriggerSpecs>,
+        #[serde(default)]
+        inherit_owner_effects: bool,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]

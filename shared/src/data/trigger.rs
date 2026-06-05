@@ -120,6 +120,8 @@ pub struct TriggerEffect {
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,
     #[serde(default)]
+    pub inherit_source_effects: bool,
+    #[serde(default)]
     pub trigger_propagate: bool, // If true, will reset trigger depth
 
     pub skill_type: SkillType,

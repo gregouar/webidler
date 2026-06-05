@@ -144,7 +144,10 @@ fn format_status_effect_line(
                 .into_any()
             })
         }
-        StatusEffectType::Trigger(trigger_specs) => {
+        StatusEffectType::Trigger {
+            trigger_specs,
+            inherit_owner_effects: _,
+        } => {
             if value == (0.0, 0.0) {
                 return None;
             }

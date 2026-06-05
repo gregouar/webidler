@@ -182,6 +182,7 @@ pub fn update_player_specs(
         CharacterId::Player,
         &mut player_specs.character_specs,
         &player_state.character_state,
+        &effects,
     );
 
     player_specs.character_specs.effects = effects.into();
@@ -276,6 +277,7 @@ fn compute_player_specs(
                     conditional_modifiers: Default::default(),
                 }],
                 trigger_propagate: false,
+                inherit_source_effects: false,
             },
             Some(CharacterId::Player),
         );

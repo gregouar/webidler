@@ -94,7 +94,7 @@ impl PassiveNodeSpecs {
         let effects_map =
             self.effects
                 .iter()
-                .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
+                .fold(EffectsMap::default(), |mut effects_map, effect| {
                     *effects_map
                         .0
                         .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
@@ -148,7 +148,7 @@ pub fn generate_effects_map_from_passives<'a>(
         })
         .flat_map(|node_effects| node_effects.0.into_iter())
         .fold(
-            EffectsMap(HashMap::new()),
+            EffectsMap::default(),
             |mut effects_map, (effect_type, effect_value)| {
                 *effects_map.0.entry(effect_type).or_default() += effect_value;
                 effects_map
