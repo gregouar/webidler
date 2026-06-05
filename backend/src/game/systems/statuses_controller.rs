@@ -73,8 +73,7 @@ fn update_status(
                 &HashMap::from([(
                     *damage_type,
                     (status_effect.computed_value(status_state.value)
-                        * elapsed_time_f64.get().min(status_state.duration.get()))
-                    .into(),
+                        * elapsed_time_f64.get().min(status_state.duration.get())),
                 )]),
                 status_state.skill_type,
                 false,

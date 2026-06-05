@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{hash_map, HashMap};
 
 use serde::{Deserialize, Serialize};
 
@@ -36,16 +36,39 @@ impl TriggersMap {
         self.0.iter()
     }
 
-    pub fn into_iter(self) -> impl Iterator<Item = (EventTrigger, Vec<OwnedTrigger>)> {
-        self.0.into_iter()
-    }
-
     pub fn effects_iter_mut(&mut self) -> impl Iterator<Item = &mut TriggerEffect> {
         self.0.values_mut().flat_map(|owned_effects| {
             owned_effects
                 .iter_mut()
                 .map(|owned_effect| &mut owned_effect.trigger_effect)
         })
+    }
+}
+
+impl IntoIterator for TriggersMap {
+    type Item = (EventTrigger, Vec<OwnedTrigger>);
+    type IntoIter = hash_map::IntoIter<EventTrigger, Vec<OwnedTrigger>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a TriggersMap {
+    type Item = (&'a EventTrigger, &'a Vec<OwnedTrigger>);
+    type IntoIter = hash_map::Iter<'a, EventTrigger, Vec<OwnedTrigger>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut TriggersMap {
+    type Item = (&'a EventTrigger, &'a mut Vec<OwnedTrigger>);
+    type IntoIter = hash_map::IterMut<'a, EventTrigger, Vec<OwnedTrigger>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.iter_mut()
     }
 }
 

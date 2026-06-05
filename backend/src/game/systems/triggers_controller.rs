@@ -92,7 +92,7 @@ pub fn apply_trigger_effects(
                                     .map(move |status_state| StatusModifierData {
                                         skill_type: status_state.skill_type,
                                         damage_type,
-                                        status_id: status_id,
+                                        status_id,
                                         value: status_state.value,
                                         duration: status_state.duration,
                                     })

@@ -117,7 +117,7 @@ pub fn SkillTooltip(
         .targets
         .clone()
         .into_iter()
-        .map(|target| format_target(target))
+        .map(format_target)
         .collect::<Vec<_>>();
 
     let trigger_lines = skill_specs

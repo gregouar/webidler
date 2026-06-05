@@ -73,6 +73,7 @@ pub fn use_skill<'a>(
     characters_controller::mana_available(&me.1.0.character_attrs, me.1.1)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn apply_skill_on_targets<'a>(
     statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,

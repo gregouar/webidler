@@ -389,7 +389,7 @@ pub fn compute_skill_specs_effect<'a>(
             *duration = Some(ChanceRange {
                 min: status_specs.duration.min.into(),
                 max: status_specs.duration.max.into(),
-                lucky_chance: status_specs.duration.lucky_chance.clone(),
+                lucky_chance: status_specs.duration.lucky_chance,
             });
         }
 
@@ -398,7 +398,7 @@ pub fn compute_skill_specs_effect<'a>(
         }
 
         if max_stacks.is_none() {
-            *max_stacks = Some(status_specs.max_stacks.into());
+            *max_stacks = Some(status_specs.max_stacks);
         }
 
         if damage_type.is_none() {

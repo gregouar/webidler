@@ -387,26 +387,24 @@ pub fn apply_status(
             status_stacks.push(statuses_controller::initialize_status_state(
                 attacker, skill_type, value, duration, escalation,
             ));
+        } else if let Some(cur_status_state) = status_stacks.iter_mut().find(|cur_status_state| {
+            compute_effect_weight(value, duration, escalation, false)
+                > compute_effect_weight(
+                    cur_status_state.base_value,
+                    cur_status_state.duration,
+                    cur_status_state.escalation,
+                    false,
+                )
+        }) {
+            cur_status_state.owner = attacker;
+            cur_status_state.base_value = value;
+            cur_status_state.value = value;
+            cur_status_state.duration = duration;
+            cur_status_state.escalation = escalation;
+            cur_status_state.max_escalation = duration;
+            cur_status_state.skill_type = skill_type;
         } else {
-            if let Some(cur_status_state) = status_stacks.iter_mut().find(|cur_status_state| {
-                compute_effect_weight(value, duration, escalation, false)
-                    > compute_effect_weight(
-                        cur_status_state.base_value,
-                        cur_status_state.duration,
-                        cur_status_state.escalation,
-                        false,
-                    )
-            }) {
-                cur_status_state.owner = attacker;
-                cur_status_state.base_value = value;
-                cur_status_state.value = value;
-                cur_status_state.duration = duration;
-                cur_status_state.escalation = escalation;
-                cur_status_state.max_escalation = duration;
-                cur_status_state.skill_type = skill_type;
-            } else {
-                applied = false;
-            }
+            applied = false;
         }
     }
 

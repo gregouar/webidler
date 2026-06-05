@@ -97,6 +97,7 @@ pub fn reset_player(player_state: &mut PlayerState) {
 
 // I hate the fact player state influences player specs... But I couldn't figure out a way
 // to have it working with the dynamic statuses.
+#[allow(clippy::too_many_arguments)]
 pub fn update_player_specs(
     statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,

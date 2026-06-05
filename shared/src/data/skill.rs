@@ -196,6 +196,7 @@ pub struct SkillEffect {
     pub conditional_modifiers: Vec<ConditionalModifier>,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
     FlatDamage {
