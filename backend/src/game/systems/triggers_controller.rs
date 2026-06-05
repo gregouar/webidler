@@ -279,6 +279,8 @@ pub fn apply_trigger_effects(
             }
         };
 
+        tracing::warn!("{:?}", trigger_effects);
+
         skills_controller::apply_skill_effects(
             statuses_store,
             events_queue,

@@ -20,6 +20,7 @@ pub fn format_status_effects(
     value: &ChanceRange<ModifiableValue<NonNegative>>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
+    stacks: usize,
 ) -> Option<impl IntoView> {
     let effect_lines = status_specs
         .effects
@@ -32,6 +33,7 @@ pub fn format_status_effects(
                 value,
                 modifiers,
                 effects_map,
+                stacks,
             )
         })
         .collect::<Vec<_>>();
@@ -69,8 +71,9 @@ fn format_status_effect_line(
     skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
+    stacks: usize,
 ) -> Option<impl IntoView + use<>> {
-    let value = computed_status_effect_value(&status_effect, skill_value);
+    let value = computed_status_effect_value(&status_effect, skill_value, stacks);
 
     match status_effect.status_effect_type {
         StatusEffectType::DamageOverTime { damage_type } => {
@@ -161,9 +164,13 @@ fn format_status_effect_line(
 fn computed_status_effect_value(
     status_effect: &StatusEffect,
     skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
+    stacks: usize,
 ) -> (f64, f64) {
     match status_effect.modifier {
-        StatusModifier::Flat => (status_effect.value.get(), status_effect.value.get()),
+        StatusModifier::Flat => (
+            status_effect.value.get() * stacks as f64,
+            status_effect.value.get() * stacks as f64,
+        ),
         StatusModifier::Percent => {
             let factor = status_effect.value.get() * 0.01;
             (

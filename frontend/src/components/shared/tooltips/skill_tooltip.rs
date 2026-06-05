@@ -547,7 +547,7 @@ pub fn format_skill_effect(
                                 status_specs,
                                 &value,
                                 modifiers,
-                                effects_map).map(|status_effects| {
+                                effects_map,1).map(|status_effects| {
 
                         view! {
                             <EffectLi>

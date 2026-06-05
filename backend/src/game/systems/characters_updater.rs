@@ -501,35 +501,72 @@ pub fn extend_triggers_from_skills_and_statuses(
             if let StatusEffectType::Trigger(trigger_specs) = &status_effect.status_effect_type {
                 for status_state in status_stacks.iter() {
                     let mut trigger_effect = trigger_specs.trigger_effect.clone();
-                    for modifier_effect in trigger_effect.modifiers.iter() {
-                        let modifier_value = match modifier_effect.source {
-                            TriggerEffectModifierSource::TriggerStatusValue => {
-                                status_state.value.get()
-                            }
-                            TriggerEffectModifierSource::TriggerStatusDuration => {
-                                status_state.duration.get()
-                            }
-                            _ => 0.0,
-                        };
 
-                        if modifier_value > 0.0 {
-                            for skill_effect in trigger_effect.effects.iter_mut() {
-                                skills_updater::compute_skill_specs_effect(
-                                    statuses_store,
-                                    &trigger_effect.trigger_id,
-                                    trigger_effect.skill_type,
-                                    skill_effect,
-                                    [StatEffect {
-                                        stat: modifier_effect.stat.clone(),
-                                        modifier: modifier_effect.modifier,
-                                        value: modifier_value * modifier_effect.factor,
-                                        bypass_ignore: true,
-                                    }]
-                                    .iter(),
-                                );
-                            }
-                        }
+                    let modifier_effects: Vec<_> = trigger_effect
+                        .modifiers
+                        .iter()
+                        .filter_map(|modifier_effect| {
+                            let modifier_value = match modifier_effect.source {
+                                TriggerEffectModifierSource::TriggerStatusValue => {
+                                    status_state.value.get()
+                                }
+                                TriggerEffectModifierSource::TriggerStatusDuration => {
+                                    status_state.duration.get()
+                                }
+                                _ => 0.0,
+                            };
+
+                            (modifier_value > 0.0).then(|| StatEffect {
+                                stat: modifier_effect.stat.clone(),
+                                modifier: modifier_effect.modifier,
+                                value: modifier_value * modifier_effect.factor,
+                                bypass_ignore: true,
+                            })
+                        })
+                        .collect();
+
+                    // for modifier_effect in trigger_effect.modifiers.iter() {
+                    //     let modifier_value = match modifier_effect.source {
+                    //         TriggerEffectModifierSource::TriggerStatusValue => {
+                    //             status_state.value.get()
+                    //         }
+                    //         TriggerEffectModifierSource::TriggerStatusDuration => {
+                    //             status_state.duration.get()
+                    //         }
+                    //         _ => 0.0,
+                    //     };
+
+                    //     if modifier_value > 0.0 {
+                    //         for skill_effect in trigger_effect.effects.iter_mut() {
+                    //             skills_updater::compute_skill_specs_effect(
+                    //                 statuses_store,
+                    //                 &trigger_effect.trigger_id,
+                    //                 trigger_effect.skill_type,
+                    //                 skill_effect,
+                    //                 [StatEffect {
+                    //                     stat: modifier_effect.stat.clone(),
+                    //                     modifier: modifier_effect.modifier,
+                    //                     value: modifier_value * modifier_effect.factor,
+                    //                     bypass_ignore: true,
+                    //                 }]
+                    //                 .iter(),
+                    //             );
+                    //         }
+                    //     }
+                    // }
+
+                    // Mandatory to compute skill effects even if modifier_effects is empty to
+                    // initialize trigger status with base values
+                    for skill_effect in trigger_effect.effects.iter_mut() {
+                        skills_updater::compute_skill_specs_effect(
+                            statuses_store,
+                            &trigger_effect.trigger_id,
+                            trigger_effect.skill_type,
+                            skill_effect,
+                            modifier_effects.iter(),
+                        );
                     }
+
                     character_specs.triggers.push(
                         trigger_specs.trigger.clone(),
                         trigger_effect,

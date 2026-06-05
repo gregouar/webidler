@@ -579,13 +579,13 @@ fn StatusIcon(
         let status_id = status_id.clone();
         let status_specs = status_specs.clone();
         move || {
-            let (_, value) = stack.get();
+            let (stacks, value) = stack.get();
             match status_specs.clone() {
                 Some(status_specs) => {
                     let value = status_value_range(value);
                     view! {
                         <div class="max-w-xl text-center list-none">
-                            {format_status_effects(status_specs, &value, None, None)}
+                            {format_status_effects(status_specs, &value, None, None, stacks)}
                         </div>
                     }
                     .into_any()
