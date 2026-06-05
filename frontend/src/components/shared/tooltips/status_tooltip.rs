@@ -20,12 +20,12 @@ pub fn format_status_effects(
     value: &ChanceRange<ModifiableValue<NonNegative>>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
-) -> impl IntoView {
+) -> Option<impl IntoView> {
     let effect_lines = status_specs
         .effects
         .iter()
         .cloned()
-        .map(|status_effect| {
+        .filter_map(|status_effect| {
             format_status_effect_line(
                 &status_specs.name,
                 status_effect,
@@ -42,20 +42,24 @@ pub fn format_status_effects(
         "grant"
     };
 
-    if effect_lines.len() == 1 && status_specs.damage_type.is_some() {
+    if effect_lines.is_empty() {
+        None
+    } else if effect_lines.len() == 1 && status_specs.damage_type.is_some() {
         let status_effect = effect_lines.into_iter().next();
-        view! { <EffectLi>{status_specs.name} " " {status_effect}</EffectLi> }.into_any()
+        Some(view! { <EffectLi>{status_specs.name} " " {status_effect}</EffectLi> }.into_any())
     } else {
-        view! {
-            <ul>
-                <EffectLi>{status_specs.name} " "{grant_str}":"</EffectLi>
-                {effect_lines
-                    .into_iter()
-                    .map(|line| view! { <EffectLi>{line}</EffectLi> })
-                    .collect::<Vec<_>>()}
-            </ul>
-        }
-        .into_any()
+        Some(
+            view! {
+                <ul>
+                    <EffectLi>{status_specs.name} " "{grant_str}":"</EffectLi>
+                    {effect_lines
+                        .into_iter()
+                        .map(|line| view! { <EffectLi>{line}</EffectLi> })
+                        .collect::<Vec<_>>()}
+                </ul>
+            }
+            .into_any(),
+        )
     }
 }
 
@@ -65,7 +69,7 @@ fn format_status_effect_line(
     skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
-) -> impl IntoView + use<> {
+) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value);
 
     match status_effect.status_effect_type {
@@ -86,7 +90,11 @@ fn format_status_effect_line(
                 Some(status_name),
             );
 
-            view! {
+            if value == (0.0, 0.0) && trigger_modifier_damage_str.is_none() {
+                return None;
+            }
+
+            Some(view! {
                 <span>
                     "Deal "
                     <span class=format!(
@@ -95,20 +103,24 @@ fn format_status_effect_line(
                     " " {effects_tooltip::damage_type_str(Some(damage_type))} " Damage per Second"
                 </span>
             }
-            .into_any()
+            .into_any())
         }
         StatusEffectType::StatModifier {
             stat,
             modifier,
             debuff,
         } => {
+            if value == (0.0, 0.0) {
+                return None;
+            }
+
             let effect = StatEffect {
                 stat,
                 modifier,
                 value: if debuff { -value.0 } else { value.0 },
                 bypass_ignore: false,
             };
-            if value.0 != value.1 {
+            Some(if value.0 != value.1 {
                 let max_effect = StatEffect {
                     value: if debuff { -value.1 } else { value.1 },
                     ..effect.clone()
@@ -127,10 +139,14 @@ fn format_status_effect_line(
                     </span>
                 }
                 .into_any()
-            }
+            })
         }
         StatusEffectType::Trigger(trigger_specs) => {
-            format_trigger(*trigger_specs, false, effects_map, Some(status_name)).into_any()
+            if value == (0.0, 0.0) {
+                return None;
+            }
+
+            Some(format_trigger(*trigger_specs, false, effects_map, Some(status_name)).into_any())
             // view! {
             //     <span>
             //         {format_min_max_f64(value.0, value.1)} " " {trigger_text(*trigger_specs)}

@@ -537,18 +537,18 @@ pub fn format_skill_effect(
 
 
                     let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
-                    
                     let value_factor = effects_map.map(|effects_map| {
                         stats_computations::compute_stats_effects_status_value(effects_map, &status_filter)
                     });
                     let modified_value_str =
                         format_status_trigger_value(modifiers, " based on ", value_factor,trigger_status_name);
 
-                    let status_effects = status_tooltip::format_status_effects(
+                    status_tooltip::format_status_effects(
                                 status_specs,
                                 &value,
                                 modifiers,
-                                effects_map);
+                                effects_map).map(|status_effects| {
+
                         view! {
                             <EffectLi>
                                 {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
@@ -558,6 +558,7 @@ pub fn format_skill_effect(
                             </EffectLi>
                             {status_effects}
                         }
+                                })
                         .into_any()
                 }
                 None => view! { <EffectLi>{success_chance}"Apply "{status_name}" " {format_min_max(value)}</EffectLi> }
