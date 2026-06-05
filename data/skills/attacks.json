@@ -10,7 +10,9 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": { }
+          "StatusPower": {
+            "status_id": "poison_coating"
+          }
         },
         "modifier": "Increased",
         "value": 5

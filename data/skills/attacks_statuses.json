@@ -38,11 +38,7 @@
                 "StatModifier": {
                     "stat": {
                         "StatusDuration": {
-                            "status_type": {
-                                "DamageOverTime": {
-                                    "damage_type": "Poison"
-                                }
-                            },
+                            "status_id": "poison",
                             "skill_type": "Attack"
                         }
                     },

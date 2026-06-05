@@ -5,7 +5,6 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::{Chance, ChanceRange},
-    character_status::{StatusEffect, StatusEffectType, StatusModifier},
     conditional_modifier::ConditionalModifier,
     item::{ItemSlot, SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
@@ -20,7 +19,6 @@ use shared::data::{
         StatType,
     },
     trigger::TriggerEffectModifier,
-    values::NonNegative,
 };
 use strum::IntoEnumIterator;
 
@@ -29,11 +27,11 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
-            self, format_multiplier_stat_name,
-            formatted_effects_list, min_max_str, stat_skill_effect_type_str,
+            self, damage_type_str, format_multiplier_stat_name, formatted_effects_list,
+            min_max_str, stat_skill_effect_type_str,
         },
         frame::{TooltipFrame, TooltipFramePalette},
-        item_tooltip,
+        item_tooltip, status_tooltip,
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
             format_trigger_modifier_per,
@@ -42,10 +40,9 @@ use crate::components::{
     ui::{
         Separator,
         number::{self, format_number},
-    }, utils::stats_computations,
+    },
+    utils::stats_computations,
 };
-
-use super::effects_tooltip::damage_type_str;
 
 pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
@@ -299,7 +296,15 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let effects = targets_group
         .effects
         .into_iter()
-        .map(|x| format_skill_effect( x, None, None, targets_group.target_type == TargetType::Me, None ))
+        .map(|x| {
+            format_skill_effect(
+                x,
+                None,
+                None,
+                targets_group.target_type == TargetType::Me,
+                None,
+            )
+        })
         .collect::<Vec<_>>();
 
     view! {
@@ -333,7 +338,7 @@ pub fn shape_str(shape: SkillShape) -> &'static str {
     }
 }
 
-fn find_trigger_modifier(
+pub fn find_trigger_modifier(
     stat: StatType,
     modifiers: Option<&[TriggerEffectModifier]>,
 ) -> Option<&TriggerEffectModifier> {
@@ -360,7 +365,7 @@ fn format_status_trigger_value(
         ),
         "",
         factor,
-        trigger_status_name
+        trigger_status_name,
     )
     .map(|modifier_str| {
         view! {
@@ -368,113 +373,6 @@ fn format_status_trigger_value(
             {modifier_str}
         }
     })
-}
-
-fn format_status_effect_line(
-    status_name: &str,
-    status_effect: StatusEffect,
-    skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
-    skill_damage_type: Option<DamageType>,
-    modifiers: Option<&[TriggerEffectModifier]>,
-    effects_map: Option<&EffectsMap>,
-) -> impl IntoView + use<> {
-    let value = computed_status_effect_value(&status_effect, skill_value);
-
-    match status_effect.status_effect_type {
-        StatusEffectType::DamageOverTime { damage_type } => {
-            let damage_type = skill_damage_type.unwrap_or(damage_type);
-            let damage_color = damage_color(damage_type);
-            let trigger_modifier_damage_str = format_trigger_modifier(
-                find_trigger_modifier(
-                    StatType::Damage {
-                        damage_type: Some(damage_type),
-                        skill_filter: Default::default(),
-                        min_max: None,
-                        is_hit: None,
-                    },
-                    modifiers,
-                ),
-                " as",
-                None,
-                Some(status_name),
-            );
-
-            view! {
-                <span>
-                    "Deal "
-                    <span class=format!(
-                        "font-semibold {damage_color}",
-                    )>{format_min_max_f64(value.0, value.1)}</span> {trigger_modifier_damage_str}
-                    " " {damage_type_str(Some(damage_type))} " Damage per Second"
-                </span>
-            }
-            .into_any()
-        }
-        StatusEffectType::StatModifier {
-            stat,
-            modifier,
-            debuff,
-        } => {
-            let effect = StatEffect {
-                stat,
-                modifier,
-                value: if debuff { -value.0 } else { value.0 },
-                bypass_ignore: false,
-            };
-            if value.0 != value.1 {
-                let max_effect = StatEffect {
-                    value: if debuff { -value.1 } else { value.1 },
-                    ..effect.clone()
-                };
-                view! {
-                    <span class="text-blue-400 whitespace-pre-line">
-                        {effects_tooltip::format_stat(&effect)} " to "
-                        {effects_tooltip::format_stat(&max_effect)}
-                    </span>
-                }
-                .into_any()
-            } else {
-                view! {
-                    <span class="text-blue-400 whitespace-pre-line">
-                        {effects_tooltip::format_stat(&effect)}
-                    </span>
-                }.into_any()
-            }
-        }
-        StatusEffectType::Trigger(trigger_specs) => {
-         
-            format_trigger(
-                *trigger_specs,
-                false,
-                effects_map,
-                Some(status_name),
-            )
-            .into_any()
-            // view! {
-            //     <span>
-            //         {format_min_max_f64(value.0, value.1)} " " {trigger_text(*trigger_specs)}
-            //         {trigger_value_str}
-            //     </span>
-            // }
-            // .into_any()
-        }
-    }
-}
-
-fn computed_status_effect_value(
-    status_effect: &StatusEffect,
-    skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
-) -> (f64, f64) {
-    match status_effect.modifier {
-        StatusModifier::Flat => (status_effect.value.get(), status_effect.value.get()),
-        StatusModifier::Percent => {
-            let factor = status_effect.value.get() * 0.01;
-            (
-                skill_value.min.get() * factor,
-                skill_value.max.get() * factor,
-            )
-        }
-    }
 }
 
 fn format_escalation(escalation: f64) -> Option<impl IntoView + use<>> {
@@ -592,7 +490,7 @@ pub fn format_skill_effect(
             value,
             duration,
             escalation,
-            damage_type,
+            damage_type: _,
             ..
         } => {
             let data_context: DataContext = expect_context();
@@ -637,26 +535,8 @@ pub fn format_skill_effect(
                         "Apply"
                     };
 
-                    let grant_str = if status_specs.debuff  {"inflict"} else {"grant"};
 
                     let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
-                    
-                    let effect_lines = status_specs
-                        .effects
-                        .iter()
-                        .cloned()
-                        .map(|status_effect| {
-                            format_status_effect_line(
-                                &status_specs.name,
-                                status_effect,
-                                &value,
-                                damage_type,
-                                modifiers,
-                                effects_map,
-                            )
-                        })
-                        .collect::<Vec<_>>();
-
                     
                     let value_factor = effects_map.map(|effects_map| {
                         stats_computations::compute_stats_effects_status_value(effects_map, &status_filter)
@@ -664,39 +544,11 @@ pub fn format_skill_effect(
                     let modified_value_str =
                         format_status_trigger_value(modifiers, " based on ", value_factor,trigger_status_name);
 
-                    let empty_status = effect_lines.is_empty();
-                    if empty_status {
-                        view! {}
-                        .into_any()
-                    }
-                    // else if effect_lines.len() == 1 {
-                    //     view! {
-                    //         <EffectLi>
-                    //             {success_chance}{apply_str}" "{status_name}" "{effect_lines}" "
-                    //             {format_duration_values(duration.0, duration.1)}
-                    //             {trigger_modifier_duration_str} {format_escalation(escalation)}
-                    //         </EffectLi>
-                    //     }
-                    //     .into_any()
-                    // } 
-
-
-                    else {
-                        let status_effects = {
-                            let status_name = status_name.clone();
-                            if effect_lines.len() == 1 && status_specs.damage_type.is_some()  {
-                                let status_effect = effect_lines.into_iter().next();
-                                view! { <EffectLi>{status_name} " " {status_effect}</EffectLi> }.into_any()
-                            } else{view! {
-                                <ul>
-                                    <EffectLi>{status_name} " "{grant_str}":"</EffectLi>
-                                    {effect_lines
-                                        .into_iter()
-                                        .map(|line| view! { <EffectLi>{line}</EffectLi> })
-                                        .collect::<Vec<_>>()}
-                                </ul>
-                            }.into_any()}
-                        };
+                    let status_effects = status_tooltip::format_status_effects(
+                                status_specs,
+                                &value,
+                                modifiers,
+                                effects_map);
                         view! {
                             <EffectLi>
                                 {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
@@ -707,7 +559,6 @@ pub fn format_skill_effect(
                             {status_effects}
                         }
                         .into_any()
-                    }
                 }
                 None => view! { <EffectLi>{success_chance}"Apply "{status_name}" " {format_min_max(value)}</EffectLi> }
                 .into_any(),
@@ -808,7 +659,7 @@ pub fn format_skill_effect(
     }
 }
 
-fn damage_color(damage_type: DamageType) -> &'static str {
+pub fn damage_color(damage_type: DamageType) -> &'static str {
     match damage_type {
         DamageType::Physical => "text-white",
         DamageType::Fire => "text-red-400",
@@ -817,7 +668,7 @@ fn damage_color(damage_type: DamageType) -> &'static str {
     }
 }
 
-fn format_min_max_f64<T>(min: T, max: T) -> String
+pub fn format_min_max_f64<T>(min: T, max: T) -> String
 where
     T: Into<f64> + PartialEq + Copy,
 {

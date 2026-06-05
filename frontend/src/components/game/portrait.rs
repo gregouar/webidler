@@ -2,9 +2,12 @@ use leptos::{html::*, prelude::*};
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
+    chance::ChanceRange,
     character_status::{StatusId, StatusMap, StatusSpecs},
+    modifier::ModifiableValue,
     monster::MonsterRarity,
     skill::DamageType,
+    values::NonNegative,
 };
 
 use crate::{
@@ -12,10 +15,8 @@ use crate::{
     components::{
         data_context::DataContext,
         settings::{GraphicsQuality, SettingsContext},
-        ui::{
-            number::format_number,
-            tooltip::{StaticTooltip, StaticTooltipPosition},
-        },
+        shared::tooltips::status_tooltip::format_status_effects,
+        ui::tooltip::{StaticTooltip, StaticTooltipPosition},
     },
 };
 
@@ -78,9 +79,8 @@ pub fn CharacterPortrait(
     let data_context: DataContext = expect_context();
 
     let statuses_map = Memo::new(move |_| {
-        let statuses_specs = data_context.statuses_specs.read();
         statuses.read().iter().fold(
-            HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
+            HashMap::<StatusId, (usize, f64)>::new(),
             |mut acc, (status_id, status_states)| {
                 let entry = acc.entry(status_id.clone()).or_default();
                 entry.0 += status_states.len();
@@ -88,31 +88,20 @@ pub fn CharacterPortrait(
                     .iter()
                     .map(|status_state| status_state.value.get())
                     .sum::<f64>();
-                entry.2 = statuses_specs.get(status_id).cloned();
                 acc
             },
         )
     });
 
-    let active_debuffs = Memo::new(move |_| {
+    let active_status_ids = Memo::new(move |_| {
+        let statuses_specs = data_context.statuses_specs.read();
         let mut active_statuses: Vec<_> = statuses_map
             .read()
-            .iter()
-            .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
-            .cloned()
+            .keys()
+            .map(|status_id| (status_id.clone(), statuses_specs.get(status_id).cloned()))
             .collect();
-        active_statuses.sort();
         active_statuses
-    });
-
-    let active_buffs = Memo::new(move |_| {
-        let mut active_statuses: Vec<_> = statuses_map
-            .read()
-            .iter()
-            .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
-            .cloned()
-            .collect();
-        active_statuses.sort();
+            .sort_by(|(status_id, _), (other_status_id, _)| status_id.cmp(other_status_id));
         active_statuses
     });
 
@@ -196,7 +185,7 @@ pub fn CharacterPortrait(
 
     let activate_bleeding = RwSignal::new(false);
     let is_bleeding =
-        Memo::new(move |_| has_damage_status(&statuses_map.read(), DamageType::Physical));
+        Memo::new(move |_| has_damage_status(&active_status_ids.read(), DamageType::Physical));
     Effect::new(move || {
         if is_bleeding.get() {
             activate_bleeding.set(true)
@@ -204,7 +193,8 @@ pub fn CharacterPortrait(
     });
 
     let activate_burning = RwSignal::new(false);
-    let is_burning = Memo::new(move |_| has_damage_status(&statuses_map.read(), DamageType::Fire));
+    let is_burning =
+        Memo::new(move |_| has_damage_status(&active_status_ids.read(), DamageType::Fire));
     Effect::new(move || {
         if is_burning.get() {
             activate_burning.set(true)
@@ -213,7 +203,7 @@ pub fn CharacterPortrait(
 
     let activate_poisoned = RwSignal::new(false);
     let is_poisoned =
-        Memo::new(move |_| has_damage_status(&statuses_map.read(), DamageType::Poison));
+        Memo::new(move |_| has_damage_status(&active_status_ids.read(), DamageType::Poison));
     Effect::new(move || {
         if is_poisoned.get() {
             activate_poisoned.set(true)
@@ -329,15 +319,27 @@ pub fn CharacterPortrait(
                         style="contain: paint;"
                     >
                         <For
-                            each=move || { active_debuffs.get().into_iter() }
-                            key=|k| k.clone()
-                            let(k)
+                            each=move || {
+                                active_status_ids
+                                    .get()
+                                    .into_iter()
+                                    .filter(|(_, status_specs)| is_debuff(status_specs.as_ref()))
+                                    .collect::<Vec<_>>()
+                            }
+                            key=|(status_id, _)| status_id.clone()
+                            let(status)
                         >
                             <StatusIcon
-                                status_id=k.clone()
+                                status_id=status.0.clone()
+                                status_specs=status.1
                                 stack=Signal::derive({
+                                    let status_id = status.0.clone();
                                     move || {
-                                        statuses_map.read().get(&k).cloned().unwrap_or_default()
+                                        statuses_map
+                                            .read()
+                                            .get(&status_id)
+                                            .cloned()
+                                            .unwrap_or_default()
                                     }
                                 })
                                 tooltip_position=StaticTooltipPosition::Bottom
@@ -350,15 +352,27 @@ pub fn CharacterPortrait(
                         style="contain: paint;"
                     >
                         <For
-                            each=move || { active_buffs.get().into_iter() }
-                            key=|k| k.clone()
-                            let(k)
+                            each=move || {
+                                active_status_ids
+                                    .get()
+                                    .into_iter()
+                                    .filter(|(_, status_specs)| !is_debuff(status_specs.as_ref()))
+                                    .collect::<Vec<_>>()
+                            }
+                            key=|(status_id, _)| status_id.clone()
+                            let(status)
                         >
                             <StatusIcon
-                                status_id=k.clone()
+                                status_id=status.0.clone()
+                                status_specs=status.1
                                 stack=Signal::derive({
+                                    let status_id = status.0.clone();
                                     move || {
-                                        statuses_map.read().get(&k).cloned().unwrap_or_default()
+                                        statuses_map
+                                            .read()
+                                            .get(&status_id)
+                                            .cloned()
+                                            .unwrap_or_default()
                                     }
                                 })
                                 tooltip_position=StaticTooltipPosition::Top
@@ -522,10 +536,10 @@ fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
 }
 
 fn has_damage_status(
-    statuses_map: &HashMap<StatusId, (usize, f64, Option<StatusSpecs>)>,
+    active_statuses: &[(StatusId, Option<StatusSpecs>)],
     damage_type: DamageType,
 ) -> bool {
-    statuses_map.values().any(|(_, _, status_specs)| {
+    active_statuses.iter().any(|(_, status_specs)| {
         status_specs
             .as_ref()
             .and_then(|status_specs| status_specs.damage_type)
@@ -536,25 +550,49 @@ fn has_damage_status(
 #[component]
 fn StatusIcon(
     status_id: StatusId,
-    stack: Signal<(usize, f64, Option<StatusSpecs>)>,
+    status_specs: Option<StatusSpecs>,
+    stack: Signal<(usize, f64)>,
     tooltip_position: StaticTooltipPosition,
 ) -> impl IntoView {
-    let icon_uri = {
+    let status_name = {
+        let status_id = status_id.clone();
+        let status_specs = status_specs.clone();
         move || {
-            stack
-                .read()
-                .2
+            status_specs
+                .as_ref()
+                .map(|status_specs| status_specs.name.clone())
+                .unwrap_or_else(|| status_id.to_string())
+        }
+    };
+
+    let icon_uri = {
+        let status_specs = status_specs.clone();
+        move || {
+            status_specs
                 .as_ref()
                 .map(|status_specs| status_specs.icon.clone())
                 .unwrap_or("statuses/buff.svg".into())
         }
     };
 
-    let description = move || status_description(&status_id, stack.read().1, &stack.read().2);
-
     let tooltip = {
-        let description = description.clone();
-        move || view! { <span class="max-w-xl">{description.clone()}</span> }
+        let status_id = status_id.clone();
+        let status_specs = status_specs.clone();
+        move || {
+            let (_, value) = stack.get();
+            match status_specs.clone() {
+                Some(status_specs) => {
+                    let value = status_value_range(value);
+                    view! {
+                        <div class="max-w-xl text-center list-none">
+                            {format_status_effects(status_specs, &value, None, None)}
+                        </div>
+                    }
+                    .into_any()
+                }
+                None => view! { <span class="max-w-xl">{status_id.to_string()}</span> }.into_any(),
+            }
+        }
     };
 
     view! {
@@ -563,7 +601,7 @@ fn StatusIcon(
                 <img
                     draggable="false"
                     src=move || img_asset(&icon_uri())
-                    alt=description
+                    alt=status_name
                     class="w-full h-full xl:drop-shadow-sm/80 invert"
                 />
                 <Show when=move || { stack.read().0 > 1 }>
@@ -576,13 +614,11 @@ fn StatusIcon(
     }
 }
 
-pub fn status_description(
-    status_id: &StatusId,
-    value: f64,
-    status_specs: &Option<StatusSpecs>,
-) -> String {
-    status_specs
-        .as_ref()
-        .map(|status_specs| format!("{} ({})", status_specs.name, format_number(value)))
-        .unwrap_or_else(|| status_id.to_string())
+fn status_value_range(value: f64) -> ChanceRange<ModifiableValue<NonNegative>> {
+    let value: ModifiableValue<NonNegative> = NonNegative::new(value).into();
+    ChanceRange {
+        min: value,
+        max: value,
+        lucky_chance: Default::default(),
+    }
 }
