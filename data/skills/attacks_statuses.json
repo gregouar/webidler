@@ -149,6 +149,7 @@
             },
             {
                 "Trigger": {
+                    "inherit_owner_effects": true,
                     "trigger_id": "sharpen_weapon",
                     "target": "SameTarget",
                     "skill_type": "Attack",

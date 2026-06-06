@@ -855,6 +855,7 @@ fn TriggersStats() -> impl IntoView {
                                 true,
                                 Some(&stat_effects),
                                 None,
+                                None,
                             )
                         }} <Separator />
                     </div>

@@ -1,0 +1,82 @@
+{
+    "curse_putridity": {
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "status_type": {
+                    "StatModifier": {
+                        "stat": {
+                            "DamageResistance": {
+                                "skill_type": null,
+                                "damage_type": "Poison"
+                            }
+                        },
+                        "modifier": "Flat",
+                        "debuff": true
+                    }
+                },
+                "value": 30
+            },
+            {
+                "replace_on_value_only": true,
+                "status_type": {
+                    "Trigger": {
+                        "inherit_source_effects": true,
+                        "trigger_id": "curse_putridity",
+                        "name": "Curse of Putridity",
+                        "icon": "skills/curse_putridity.svg",
+                        "OnTakeHit": {
+                            "is_hurt": true,
+                            "is_triggered": false
+                        },
+                        "target": "SameTarget",
+                        "skill_range": "Any",
+                        "skill_type": "Curse",
+                        "effects": [
+                            {
+                                "FlatDamage": {
+                                    "damage": { }
+                                },
+                                "ignore_stat_effects": [
+                                    {
+                                        "CritChance": { }
+                                    },
+                                    {
+                                        "CritDamage": { }
+                                    },
+                                    {
+                                        "Damage": {
+                                            "skill_type": null,
+                                            "damage_type": "Poison",
+                                            "min_max": null
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "stat": {
+                                    "Damage": {
+                                        "damage_type": "Physical"
+                                    }
+                                },
+                                "modifier": "Flat",
+                                "factor": 0.25,
+                                "source": {
+                                    "StatusValue": {
+                                        "status_type": {
+                                            "DamageOverTime": {
+                                                "damage_type": "Poison"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

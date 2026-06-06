@@ -91,6 +91,7 @@ fn format_status_effect_line(
                 " as",
                 None,
                 Some(status_name),
+                Some(skill_value),
             );
 
             if value == (0.0, 0.0) && trigger_modifier_damage_str.is_none() {
@@ -113,7 +114,7 @@ fn format_status_effect_line(
             modifier,
             debuff,
         } => {
-            if value == (0.0, 0.0) {
+            if value == (0.0, 0.0) && modifiers.is_none() {
                 return None;
             }
 
@@ -148,11 +149,20 @@ fn format_status_effect_line(
             trigger_specs,
             inherit_owner_effects: _,
         } => {
-            if value == (0.0, 0.0) {
+            if value == (0.0, 0.0) && modifiers.is_none() {
                 return None;
             }
 
-            Some(format_trigger(*trigger_specs, false, effects_map, Some(status_name)).into_any())
+            Some(
+                format_trigger(
+                    *trigger_specs,
+                    false,
+                    effects_map,
+                    Some(status_name),
+                    Some(skill_value),
+                )
+                .into_any(),
+            )
             // view! {
             //     <span>
             //         {format_min_max_f64(value.0, value.1)} " " {trigger_text(*trigger_specs)}

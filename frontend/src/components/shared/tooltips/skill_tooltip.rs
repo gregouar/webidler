@@ -19,6 +19,7 @@ use shared::data::{
         StatType,
     },
     trigger::TriggerEffectModifier,
+    values::NonNegative,
 };
 use strum::IntoEnumIterator;
 
@@ -124,7 +125,7 @@ pub fn SkillTooltip(
         .triggers
         .clone()
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false, None, None))
+        .map(|trigger| format_trigger(trigger, false, None, None, None))
         .collect::<Vec<_>>();
 
     let auto_use_conditions = player_base_skill
@@ -303,6 +304,7 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
                 None,
                 targets_group.target_type == TargetType::Me,
                 None,
+                None,
             )
         })
         .collect::<Vec<_>>();
@@ -366,6 +368,7 @@ fn format_status_trigger_value(
         "",
         factor,
         trigger_status_name,
+        None,
     )
     .map(|modifier_str| {
         view! {
@@ -409,6 +412,7 @@ pub fn format_skill_effect(
     effects_map: Option<&EffectsMap>,
     self_target: bool,
     trigger_status_name: Option<&str>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
     let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
@@ -445,6 +449,7 @@ pub fn format_skill_effect(
                         " as",
                         None,
                         trigger_status_name,
+                        trigger_status_value,
                     );
                     if value.min.get() > 0.0 || value.max.get() > 0.0
                         || trigger_modifier_str.is_some()
@@ -456,7 +461,7 @@ pub fn format_skill_effect(
                                         {success_chance}"Hit for "
                                         <span class=format!(
                                             "font-semibold {damage_color}",
-                                        )>{format_min_max(value)}</span> {trigger_modifier_str} " "
+                                        )>{format_min_max(value)} {trigger_modifier_str}</span> " "
                                         {damage_type_str(Some(damage_type))} "Damage"
                                     </EffectLi>
                                 },
@@ -525,7 +530,7 @@ pub fn format_skill_effect(
                         ),
                         "",
                         None,
-                        trigger_status_name
+                        trigger_status_name,trigger_status_value
                     );
                     let apply_str = if self_target {
                         "Gain"
@@ -684,7 +689,7 @@ where
     }
 }
 
-fn format_min_max<T>(value: ChanceRange<ModifiableValue<T>>) -> String
+pub fn format_min_max<T>(value: ChanceRange<ModifiableValue<T>>) -> String
 where
     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
     T: Into<f64> + PartialEq,

@@ -2,14 +2,16 @@ use itertools::Itertools;
 use leptos::prelude::*;
 
 use shared::data::{
+    chance::ChanceRange,
     item::{SkillRange, SkillShape},
-    modifier::Modifier,
+    modifier::{ModifiableValue, Modifier},
     skill::{SkillType, TargetType},
     stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
     },
+    values::NonNegative,
 };
 
 use crate::components::{
@@ -28,6 +30,7 @@ pub fn format_trigger(
     show_details: bool,
     effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
     let effects = trigger
         .trigger_effect
@@ -40,6 +43,7 @@ pub fn format_trigger(
                 effects_map,
                 trigger.trigger_effect.target == TriggerTarget::Me,
                 trigger_status_name,
+                trigger_status_value,
             )
         })
         .collect::<Vec<_>>();
@@ -82,9 +86,25 @@ pub fn format_trigger_modifier(
     suffix: &'static str,
     factor: Option<f64>,
     trigger_status_name: Option<&str>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
         let factor = modifier.factor * factor.unwrap_or(1.0);
+
+        if let TriggerEffectModifierSource::TriggerStatusValue = modifier.source
+            && let Some(trigger_status_value) = trigger_status_value
+            && trigger_status_value.max.get() > 0.0
+        {
+            return view! {
+                {skill_tooltip::format_min_max(ChanceRange {
+                    min: (trigger_status_value.min.get() * factor).into(),
+                    max: (trigger_status_value.max.get() * factor).into(),
+                    lucky_chance: trigger_status_value.lucky_chance,
+                })}
+            }
+            .into_any();
+        }
+
         let factor_str = (factor != 1.0).then(|| {
             let factor_str = match modifier.modifier {
                 Modifier::Increased | Modifier::More => format!("{:0}", format_number(factor)),
@@ -100,6 +120,7 @@ pub fn format_trigger_modifier(
             {trigger_modifier_source_str(&modifier.source, trigger_status_name)}
             {suffix}
         }
+        .into_any()
     })
 }
 
@@ -146,6 +167,7 @@ pub fn format_extra_trigger_modifiers(
 pub fn trigger_modifier_source_str(
     modifier_source: &TriggerEffectModifierSource,
     trigger_status_name: Option<&str>,
+    // trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> String {
     match modifier_source {
         TriggerEffectModifierSource::HitDamage(damage_type) => {

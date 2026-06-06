@@ -87,10 +87,10 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": { }
+          "StatusPower": { "status_id": "sharpen_weapon" }
         },
-        "modifier": "Flat",
-        "value": 1
+        "modifier": "Increased",
+        "value": 10
       }
     ],
     "ignore_stat_effects": [
