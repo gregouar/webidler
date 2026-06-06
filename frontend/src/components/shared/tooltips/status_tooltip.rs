@@ -1,27 +1,43 @@
+use std::collections::HashSet;
+
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
-    character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
+    character_status::{StatusEffect, StatusEffectType, StatusId, StatusModifier, StatusSpecs},
     modifier::ModifiableValue,
     stat_effect::{EffectsMap, StatEffect, StatType},
     trigger::TriggerEffectModifier,
     values::NonNegative,
 };
 
-use crate::components::shared::tooltips::{
-    effects_tooltip,
-    skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
-    trigger_tooltip::{format_trigger, format_trigger_modifier},
+use crate::components::{
+    shared::tooltips::{
+        effects_tooltip,
+        skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
+        trigger_tooltip::{format_trigger, format_trigger_modifier},
+    },
+    utils::stats_computations,
 };
 
 pub fn format_status_effects(
+    status_id: &StatusId,
     status_specs: StatusSpecs,
     value: &ChanceRange<ModifiableValue<NonNegative>>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
+    ignore_stat_effects: Option<&HashSet<StatType>>,
     stacks: usize,
 ) -> Option<impl IntoView> {
+    let value_factor = effects_map.map(|effects_map| {
+        stats_computations::compute_stats_effects_status_value(
+            effects_map,
+            ignore_stat_effects.unwrap_or(&Default::default()),
+            status_id,
+            status_specs.damage_type,
+        )
+    });
+
     let effect_lines = status_specs
         .effects
         .iter()
@@ -31,6 +47,7 @@ pub fn format_status_effects(
                 &status_specs.name,
                 status_effect,
                 value,
+                value_factor,
                 modifiers,
                 effects_map,
                 stacks,
@@ -69,12 +86,12 @@ fn format_status_effect_line(
     status_name: &str,
     status_effect: StatusEffect,
     skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
+    value_factor: Option<f64>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
     stacks: usize,
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
-
     match status_effect.status_effect_type {
         StatusEffectType::DamageOverTime { damage_type } => {
             let damage_color = damage_color(damage_type);
@@ -89,7 +106,8 @@ fn format_status_effect_line(
                     modifiers,
                 ),
                 " as",
-                None,
+                value_factor,
+                Some(damage_color),
                 Some(status_name),
                 Some(skill_value),
             );

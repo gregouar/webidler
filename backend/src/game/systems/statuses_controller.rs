@@ -85,12 +85,14 @@ fn update_status(
 
     let remove_status = status_state.duration.get() <= 0.0;
 
-    if status_specs.effects.iter().any(|status_effect| {
-        matches!(
-            status_effect.status_effect_type,
-            StatusEffectType::StatModifier { .. } | StatusEffectType::Trigger { .. }
-        )
-    }) {
+    if remove_status
+        && status_specs.effects.iter().any(|status_effect| {
+            matches!(
+                status_effect.status_effect_type,
+                StatusEffectType::StatModifier { .. } | StatusEffectType::Trigger { .. }
+            )
+        })
+    {
         *character_buff_status_change = true;
     }
 

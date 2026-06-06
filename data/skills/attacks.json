@@ -106,7 +106,7 @@
             "ApplyStatus": {
               "replace_on_value_only": true,
               "status_id": "sharpen_weapon",
-              "value": 100
+              "value": 1
             }
           }
         ]

@@ -1,21 +1,48 @@
+use std::collections::HashSet;
+
 use shared::data::{
-    modifier::Modifier,
-    stat_effect::{EffectsMap, Matchable, StatEffect, StatStatusFilter, StatType},
+    character_status::StatusId,
+    modifier::{Modifier, compute_more_factor},
+    skill::DamageType,
+    stat_effect::{EffectsMap, Matchable, StatEffect, StatType, compare_options},
 };
 
 pub fn compute_stats_effects_status_value(
     effects_map: &EffectsMap,
-    skill_status_filter: &StatStatusFilter,
+    ignore_stat_effects: &HashSet<StatType>,
+    status_id: &StatusId,
+    status_damage_type: Option<DamageType>,
 ) -> f64 {
     let mut factor = Factor::new();
 
     for effect in effects_map.iter() {
+        if ignore_stat_effects
+            .iter()
+            .any(|ignored_stat_effect| ignored_stat_effect.is_match(&effect.stat))
+        {
+            continue;
+        }
+
         if let StatType::StatusPower {
             status_filter,
             skill_filter: _,
             min_max: _,
         } = &effect.stat
-            && skill_status_filter.is_match(status_filter)
+            && status_filter.is_match_with_status(status_id, status_damage_type)
+        // && skill_filter.is_match_with_skill() TODO
+        {
+            factor.apply_effect(&effect);
+        }
+
+        if let StatType::Damage {
+            skill_filter: _,
+            damage_type,
+            min_max: _,
+            is_hit,
+        } = &effect.stat
+            && compare_options(is_hit, &Some(false))
+            && status_damage_type.is_some()
+            && compare_options(&status_damage_type, damage_type)
         {
             factor.apply_effect(&effect);
         }
@@ -70,12 +97,17 @@ impl Factor {
                 if stat_effect.value >= 0.0 {
                     self.increased += stat_effect.value;
                 } else {
-                    self.decreased -= stat_effect.value;
+                    self.decreased += stat_effect.value;
                 }
             }
             Modifier::Flat => {}
             Modifier::More => {
-                self.more *= stat_effect.value;
+                let value = compute_more_factor(stat_effect.value);
+                if value == -100.0 || self.more == -100.0 {
+                    self.more = -100.0
+                } else {
+                    self.more = self.more + value + self.more * value * 0.01;
+                }
             }
         }
     }

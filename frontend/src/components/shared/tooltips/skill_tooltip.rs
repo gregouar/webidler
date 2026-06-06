@@ -367,6 +367,7 @@ fn format_status_trigger_value(
         ),
         "",
         factor,
+        None,
         trigger_status_name,
         None,
     )
@@ -448,6 +449,7 @@ pub fn format_skill_effect(
                         ),
                         " as",
                         None,
+                        Some(damage_color),
                         trigger_status_name,
                         trigger_status_value,
                     );
@@ -461,7 +463,7 @@ pub fn format_skill_effect(
                                         {success_chance}"Hit for "
                                         <span class=format!(
                                             "font-semibold {damage_color}",
-                                        )>{format_min_max(value)} {trigger_modifier_str}</span> " "
+                                        )>{format_min_max(value)}</span> {trigger_modifier_str}" "
                                         {damage_type_str(Some(damage_type))} "Damage"
                                     </EffectLi>
                                 },
@@ -530,6 +532,7 @@ pub fn format_skill_effect(
                         ),
                         "",
                         None,
+                        None,
                         trigger_status_name,trigger_status_value
                     );
                     let apply_str = if self_target {
@@ -540,20 +543,27 @@ pub fn format_skill_effect(
                         "Apply"
                     };
 
-
                     let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
+
                     let value_factor = effects_map.map(|effects_map| {
-                        stats_computations::compute_stats_effects_status_value(effects_map, &status_filter)
+                        stats_computations::compute_stats_effects_status_value(
+                            effects_map, 
+                            &skill_effect.ignore_stat_effects,
+                            &status_id, 
+                            status_specs.damage_type)
                     });
                     let modified_value_str =
-                        format_status_trigger_value(modifiers, " based on ", value_factor,trigger_status_name);
+                        format_status_trigger_value(modifiers, " based on ", value_factor, trigger_status_name);
 
                     status_tooltip::format_status_effects(
+                                &status_id,
                                 status_specs,
                                 &value,
                                 modifiers,
-                                effects_map,1).map(|status_effects| {
-
+                                effects_map,
+                               Some(&skill_effect.ignore_stat_effects),
+                                1,
+                    ).map(|status_effects| {
                         view! {
                             <EffectLi>
                                 {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
@@ -563,7 +573,7 @@ pub fn format_skill_effect(
                             </EffectLi>
                             {status_effects}
                         }
-                                })
+                    })
                         .into_any()
                 }
                 None => view! { <EffectLi>{success_chance}"Apply "{status_name}" " {format_min_max(value)}</EffectLi> }

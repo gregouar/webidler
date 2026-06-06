@@ -85,6 +85,7 @@ pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
     suffix: &'static str,
     factor: Option<f64>,
+    value_color: Option<&str>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
@@ -96,11 +97,16 @@ pub fn format_trigger_modifier(
             && trigger_status_value.max.get() > 0.0
         {
             return view! {
-                {skill_tooltip::format_min_max(ChanceRange {
-                    min: (trigger_status_value.min.get() * factor).into(),
-                    max: (trigger_status_value.max.get() * factor).into(),
-                    lucky_chance: trigger_status_value.lucky_chance,
-                })}
+                <span class=format!(
+                    "font-semibold {}",
+                    value_color.unwrap_or_default(),
+                )>
+                    {skill_tooltip::format_min_max(ChanceRange {
+                        min: (trigger_status_value.min.get() * factor).into(),
+                        max: (trigger_status_value.max.get() * factor).into(),
+                        lucky_chance: trigger_status_value.lucky_chance,
+                    })}
+                </span>
             }
             .into_any();
         }

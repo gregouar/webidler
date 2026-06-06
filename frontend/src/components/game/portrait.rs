@@ -585,7 +585,15 @@ fn StatusIcon(
                     let value = status_value_range(value);
                     view! {
                         <div class="max-w-xl text-center list-none">
-                            {format_status_effects(status_specs, &value, None, None, stacks)}
+                            {format_status_effects(
+                                &status_id,
+                                status_specs,
+                                &value,
+                                None,
+                                None,
+                                None,
+                                stacks,
+                            )}
                         </div>
                     }
                     .into_any()
