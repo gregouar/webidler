@@ -36,12 +36,14 @@ pub fn format_trigger(
         .trigger_effect
         .effects
         .into_iter()
-        .map(|x| {
+        .map(|skill_effect| {
             skill_tooltip::format_skill_effect(
-                x,
+                &trigger.trigger_effect.trigger_id,
+                trigger.trigger_effect.skill_type,
+                skill_effect,
+                trigger.trigger_effect.target == TriggerTarget::Me,
                 Some(&trigger.trigger_effect.modifiers),
                 effects_map,
-                trigger.trigger_effect.target == TriggerTarget::Me,
                 trigger_status_name,
                 trigger_status_value,
             )

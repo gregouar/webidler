@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use shared::data::{
     character_status::StatusId,
     modifier::{Modifier, compute_more_factor},
-    skill::DamageType,
+    skill::{DamageType, SkillType},
     stat_effect::{EffectsMap, Matchable, StatEffect, StatType, compare_options},
 };
 
@@ -12,8 +12,14 @@ pub fn compute_stats_effects_status_value(
     ignore_stat_effects: &HashSet<StatType>,
     status_id: &StatusId,
     status_damage_type: Option<DamageType>,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
 ) -> f64 {
     let mut factor = Factor::new();
+
+    let default_skill_id = "".to_string();
+    let skill_id = skill_id.unwrap_or(&default_skill_id);
+    let skill_type = skill_type.unwrap_or(SkillType::Other);
 
     for effect in effects_map.iter() {
         if ignore_stat_effects
@@ -25,17 +31,17 @@ pub fn compute_stats_effects_status_value(
 
         if let StatType::StatusPower {
             status_filter,
-            skill_filter: _,
+            skill_filter,
             min_max: _,
         } = &effect.stat
             && status_filter.is_match_with_status(status_id, status_damage_type)
-        // && skill_filter.is_match_with_skill() TODO
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
         {
             factor.apply_effect(&effect);
         }
 
         if let StatType::Damage {
-            skill_filter: _,
+            skill_filter,
             damage_type,
             min_max: _,
             is_hit,
@@ -43,6 +49,7 @@ pub fn compute_stats_effects_status_value(
             && compare_options(is_hit, &Some(false))
             && status_damage_type.is_some()
             && compare_options(&status_damage_type, damage_type)
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
         {
             factor.apply_effect(&effect);
         }

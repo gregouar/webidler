@@ -6,6 +6,7 @@ use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffect, StatusEffectType, StatusId, StatusModifier, StatusSpecs},
     modifier::ModifiableValue,
+    skill::SkillType,
     stat_effect::{EffectsMap, StatEffect, StatType},
     trigger::TriggerEffectModifier,
     values::NonNegative,
@@ -24,10 +25,12 @@ pub fn format_status_effects(
     status_id: &StatusId,
     status_specs: StatusSpecs,
     value: &ChanceRange<ModifiableValue<NonNegative>>,
+    stacks: usize,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
     ignore_stat_effects: Option<&HashSet<StatType>>,
-    stacks: usize,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
 ) -> Option<impl IntoView> {
     let value_factor = effects_map.map(|effects_map| {
         stats_computations::compute_stats_effects_status_value(
@@ -35,6 +38,8 @@ pub fn format_status_effects(
             ignore_stat_effects.unwrap_or(&Default::default()),
             status_id,
             status_specs.damage_type,
+            skill_id,
+            skill_type,
         )
     });
 

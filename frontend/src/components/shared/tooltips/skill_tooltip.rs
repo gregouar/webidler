@@ -118,7 +118,10 @@ pub fn SkillTooltip(
         .targets
         .clone()
         .into_iter()
-        .map(format_target)
+        .map(|target| {
+            let skill_specs = skill_specs.clone();
+            format_target(&skill_specs.skill_id, skill_specs.skill_type, target)
+        })
         .collect::<Vec<_>>();
 
     let trigger_lines = skill_specs
@@ -273,7 +276,11 @@ pub fn SkillTooltip(
     }
 }
 
-fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
+fn format_target(
+    skill_id: &String,
+    skill_type: SkillType,
+    targets_group: SkillTargetsGroup,
+) -> impl IntoView + use<> {
     let shape = shape_str(targets_group.shape);
 
     let range = match targets_group.range {
@@ -297,12 +304,14 @@ fn format_target(targets_group: SkillTargetsGroup) -> impl IntoView {
     let effects = targets_group
         .effects
         .into_iter()
-        .map(|x| {
+        .map(|skill_effect| {
             format_skill_effect(
-                x,
-                None,
-                None,
+                skill_id,
+                skill_type,
+                skill_effect,
                 targets_group.target_type == TargetType::Me,
+                None,
+                None,
                 None,
                 None,
             )
@@ -408,10 +417,12 @@ pub fn format_chance(chance: &Chance, precise: bool) -> String {
 }
 
 pub fn format_skill_effect(
+    skill_id: &String,
+    skill_type: SkillType,
     skill_effect: SkillEffect,
+    self_target: bool,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
-    self_target: bool,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
@@ -547,10 +558,13 @@ pub fn format_skill_effect(
 
                     let value_factor = effects_map.map(|effects_map| {
                         stats_computations::compute_stats_effects_status_value(
-                            effects_map, 
+                            effects_map,
                             &skill_effect.ignore_stat_effects,
-                            &status_id, 
-                            status_specs.damage_type)
+                            &status_id,
+                            status_specs.damage_type,
+                            Some(skill_id),
+                            Some(skill_type),
+                        )
                     });
                     let modified_value_str =
                         format_status_trigger_value(modifiers, " based on ", value_factor, trigger_status_name);
@@ -559,10 +573,12 @@ pub fn format_skill_effect(
                                 &status_id,
                                 status_specs,
                                 &value,
+                                1,
                                 modifiers,
                                 effects_map,
-                               Some(&skill_effect.ignore_stat_effects),
-                                1,
+                                Some(&skill_effect.ignore_stat_effects),
+                                Some(skill_id),
+                                Some(skill_type),
                     ).map(|status_effects| {
                         view! {
                             <EffectLi>

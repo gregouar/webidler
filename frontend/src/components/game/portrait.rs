@@ -589,10 +589,12 @@ fn StatusIcon(
                                 &status_id,
                                 status_specs,
                                 &value,
-                                None,
-                                None,
-                                None,
                                 stacks,
+                                None,
+                                None,
+                                None,
+                                None,
+                                None,
                             )}
                         </div>
                     }
