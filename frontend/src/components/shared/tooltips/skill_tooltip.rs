@@ -107,6 +107,7 @@ pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
 pub fn SkillTooltip(
     skill_specs: Arc<SkillSpecs>,
     #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
+    #[prop(default= None)] effects_map: Option<EffectsMap>,
 ) -> impl IntoView {
     let palette = TooltipFramePalette {
         border_class: "border-[#70508a]/92",
@@ -120,7 +121,12 @@ pub fn SkillTooltip(
         .into_iter()
         .map(|target| {
             let skill_specs = skill_specs.clone();
-            format_target(&skill_specs.skill_id, skill_specs.skill_type, target)
+            format_target(
+                &skill_specs.skill_id,
+                skill_specs.skill_type,
+                target,
+                effects_map.as_ref(),
+            )
         })
         .collect::<Vec<_>>();
 
@@ -280,6 +286,7 @@ fn format_target(
     skill_id: &String,
     skill_type: SkillType,
     targets_group: SkillTargetsGroup,
+    effects_map: Option<&EffectsMap>,
 ) -> impl IntoView + use<> {
     let shape = shape_str(targets_group.shape);
 
@@ -311,7 +318,7 @@ fn format_target(
                 skill_effect,
                 targets_group.target_type == TargetType::Me,
                 None,
-                None,
+                effects_map,
                 None,
                 None,
             )

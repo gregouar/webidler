@@ -709,10 +709,17 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                     .get()
                     .map(|skill_specs| {
                         let player_base_skill = player_base_skill.get();
+                        let effects_map = game_context
+                            .player_specs
+                            .read()
+                            .character_specs
+                            .effects
+                            .clone();
                         view! {
                             <SkillTooltip
                                 skill_specs=skill_specs
                                 player_base_skill=player_base_skill
+                                effects_map=Some(effects_map)
                             />
                         }
                     })}
