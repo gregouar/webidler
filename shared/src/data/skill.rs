@@ -228,6 +228,7 @@ pub enum SkillEffectType {
 
         #[serde(default)]
         replace_on_value_only: bool,
+        // TODO? Computed status effects for inherit_trigger_owner?
     },
     Restore {
         restore_type: RestoreType,

@@ -31,6 +31,7 @@ pub fn format_trigger(
     effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    inherit_owner_effects: bool,
 ) -> impl IntoView + use<> {
     let effects = trigger
         .trigger_effect
@@ -46,6 +47,7 @@ pub fn format_trigger(
                 effects_map,
                 trigger_status_name,
                 trigger_status_value,
+                inherit_owner_effects,
             )
         })
         .collect::<Vec<_>>();

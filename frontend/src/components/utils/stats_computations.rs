@@ -3,17 +3,17 @@ use std::collections::HashSet;
 use shared::data::{
     character_status::StatusId,
     modifier::{Modifier, compute_more_factor},
-    skill::{DamageType, SkillType},
+    skill::{DamageType, SkillEffectType, SkillType},
     stat_effect::{EffectsMap, Matchable, StatEffect, StatType, compare_options},
 };
 
 pub fn compute_stats_effects_status_value(
     effects_map: &EffectsMap,
     ignore_stat_effects: &HashSet<StatType>,
-    status_id: &StatusId,
-    status_damage_type: Option<DamageType>,
     skill_id: Option<&String>,
     skill_type: Option<SkillType>,
+    status_id: &StatusId,
+    status_damage_type: Option<DamageType>,
 ) -> f64 {
     let mut factor = Factor::new();
 
@@ -50,6 +50,41 @@ pub fn compute_stats_effects_status_value(
             && status_damage_type.is_some()
             && compare_options(&status_damage_type, damage_type)
             && skill_filter.is_match_with_skill(skill_type, skill_id)
+        {
+            factor.apply_effect(&effect);
+        }
+    }
+
+    factor.evaluate()
+}
+
+pub fn compute_stats_effects_success(
+    effects_map: &EffectsMap,
+    ignore_stat_effects: &HashSet<StatType>,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
+    skill_effect_type: &SkillEffectType,
+) -> f64 {
+    let mut factor = Factor::new();
+
+    let default_skill_id = "".to_string();
+    let skill_id = skill_id.unwrap_or(&default_skill_id);
+    let skill_type = skill_type.unwrap_or(SkillType::Other);
+
+    for effect in effects_map.iter() {
+        if ignore_stat_effects
+            .iter()
+            .any(|ignored_stat_effect| ignored_stat_effect.is_match(&effect.stat))
+        {
+            continue;
+        }
+
+        if let StatType::SuccessChance {
+            skill_filter,
+            effect_type,
+        } = &effect.stat
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
+            && compare_options(effect_type, &(skill_effect_type).into())
         {
             factor.apply_effect(&effect);
         }

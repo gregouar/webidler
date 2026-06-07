@@ -36,10 +36,10 @@ pub fn format_status_effects(
         stats_computations::compute_stats_effects_status_value(
             effects_map,
             ignore_stat_effects.unwrap_or(&Default::default()),
-            status_id,
-            status_specs.damage_type,
             skill_id,
             skill_type,
+            status_id,
+            status_specs.damage_type,
         )
     });
 
@@ -170,7 +170,7 @@ fn format_status_effect_line(
         }
         StatusEffectType::Trigger {
             trigger_specs,
-            inherit_owner_effects: _,
+            inherit_owner_effects,
         } => {
             if value == (0.0, 0.0) && modifiers.is_none() {
                 return None;
@@ -183,6 +183,7 @@ fn format_status_effect_line(
                     effects_map,
                     Some(status_name),
                     Some(skill_value),
+                    inherit_owner_effects,
                 )
                 .into_any(),
             )

@@ -525,7 +525,7 @@ pub fn NodeTooltipContent(
         .triggers
         .clone()
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false, None, None, None))
+        .map(|trigger| format_trigger(trigger, false, None, None, None, false))
         .collect();
 
     let is_locked = move || node_specs_locked && node_level() == 0;
@@ -782,6 +782,7 @@ pub fn PassiveSkillStats(
                                         None,
                                         None,
                                         None,
+                                        false,
                                     )}
                                 </div>
                             }
