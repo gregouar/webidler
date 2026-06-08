@@ -248,6 +248,15 @@ pub fn PlayerCard() -> impl IntoView {
         skill_count < max_skills
     });
 
+    let character_triggers = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .triggers
+            .clone()
+    });
+
     // Effect::new({
     //     let toaster = expect_context::<Toasts>();
     //     move || {
@@ -297,6 +306,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
+                            character_triggers
                         />
                     // enable_blink=false
                     </div>

@@ -7,6 +7,7 @@ use shared::data::{
     modifier::ModifiableValue,
     monster::MonsterRarity,
     skill::DamageType,
+    trigger::TriggersMap,
     values::NonNegative,
 };
 
@@ -31,7 +32,7 @@ pub fn CharacterPortrait(
     #[prop(into)] just_evaded: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
-    // enable_blink: bool,
+    #[prop(optional)] character_triggers: Option<Memo<TriggersMap>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let heavy_effects = move || settings.uses_heavy_effects();
@@ -343,6 +344,7 @@ pub fn CharacterPortrait(
                                     }
                                 })
                                 tooltip_position=StaticTooltipPosition::Bottom
+                                character_triggers
                             />
                         </For>
                     </div>
@@ -376,6 +378,7 @@ pub fn CharacterPortrait(
                                     }
                                 })
                                 tooltip_position=StaticTooltipPosition::Top
+                                character_triggers
                             />
                         </For>
                     </div>
@@ -553,6 +556,7 @@ fn StatusIcon(
     status_specs: Option<StatusSpecs>,
     stack: Signal<(usize, f64)>,
     tooltip_position: StaticTooltipPosition,
+    character_triggers: Option<Memo<TriggersMap>>,
 ) -> impl IntoView {
     let status_name = {
         let status_id = status_id.clone();
@@ -593,6 +597,9 @@ fn StatusIcon(
                                 None,
                                 None,
                                 None,
+                                character_triggers
+                                    .map(|character_triggers| character_triggers.read())
+                                    .as_deref(),
                                 None,
                                 None,
                             )}

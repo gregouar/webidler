@@ -626,6 +626,7 @@ pub fn format_skill_effect(
                                 modifiers,
                                 effects_map,
                                 Some(&skill_effect.ignore_stat_effects),
+                                None,
                                 Some(skill_id),
                                 Some(skill_type),
                     ).map(|status_effects| {

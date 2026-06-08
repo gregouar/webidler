@@ -8,7 +8,7 @@ use shared::data::{
     modifier::ModifiableValue,
     skill::SkillType,
     stat_effect::{EffectsMap, StatEffect, StatType},
-    trigger::TriggerEffectModifier,
+    trigger::{TriggerEffectModifier, TriggerSpecs, TriggersMap},
     values::NonNegative,
 };
 
@@ -29,9 +29,10 @@ pub fn format_status_effects(
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
     ignore_stat_effects: Option<&HashSet<StatType>>,
+    character_triggers: Option<&TriggersMap>,
     skill_id: Option<&String>,
     skill_type: Option<SkillType>,
-) -> Option<impl IntoView> {
+) -> Option<impl IntoView + use<>> {
     let value_factor = effects_map.map(|effects_map| {
         stats_computations::compute_stats_effects_status_value(
             effects_map,
@@ -55,6 +56,7 @@ pub fn format_status_effects(
                 value_factor,
                 modifiers,
                 effects_map,
+                character_triggers,
                 stacks,
             )
         })
@@ -94,6 +96,7 @@ fn format_status_effect_line(
     value_factor: Option<f64>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
+    character_triggers: Option<&TriggersMap>,
     stacks: usize,
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
@@ -172,6 +175,31 @@ fn format_status_effect_line(
             trigger_specs,
             inherit_owner_effects,
         } => {
+            if inherit_owner_effects
+                && let Some(character_triggers) = character_triggers
+                && let Some(owned_trigger) = character_triggers
+                    .iter()
+                    .flat_map(|(_, triggers)| triggers)
+                    .find(|trigger| {
+                        trigger.trigger_effect.trigger_id == trigger_specs.trigger_effect.trigger_id
+                    })
+            {
+                return Some(
+                    format_trigger(
+                        TriggerSpecs {
+                            trigger_effect: owned_trigger.trigger_effect.clone(),
+                            ..*trigger_specs
+                        },
+                        false,
+                        effects_map,
+                        Some(status_name),
+                        Some(skill_value),
+                        false,
+                    )
+                    .into_any(),
+                );
+            }
+
             if value == (0.0, 0.0) && modifiers.is_none() {
                 return None;
             }
