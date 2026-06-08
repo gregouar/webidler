@@ -7,6 +7,17 @@ use shared::data::{
     stat_effect::{EffectsMap, Matchable, StatEffect, StatType, compare_options},
 };
 
+fn filter_effects(
+    effects_map: &EffectsMap,
+    ignore_stat_effects: &HashSet<StatType>,
+) -> impl Iterator<Item = StatEffect> {
+    effects_map.iter().filter(|stat_effect| {
+        !ignore_stat_effects
+            .iter()
+            .any(|ignored_stat_effect| ignored_stat_effect.is_match(&stat_effect.stat))
+    })
+}
+
 pub fn compute_stats_effects_status_value(
     effects_map: &EffectsMap,
     ignore_stat_effects: &HashSet<StatType>,
@@ -21,14 +32,7 @@ pub fn compute_stats_effects_status_value(
     let skill_id = skill_id.unwrap_or(&default_skill_id);
     let skill_type = skill_type.unwrap_or(SkillType::Other);
 
-    for effect in effects_map.iter() {
-        if ignore_stat_effects
-            .iter()
-            .any(|ignored_stat_effect| ignored_stat_effect.is_match(&effect.stat))
-        {
-            continue;
-        }
-
+    for effect in filter_effects(effects_map, ignore_stat_effects) {
         if let StatType::StatusPower {
             status_filter,
             skill_filter,
@@ -58,6 +62,35 @@ pub fn compute_stats_effects_status_value(
     factor.evaluate()
 }
 
+pub fn compute_stats_effects_status_duration(
+    effects_map: &EffectsMap,
+    ignore_stat_effects: &HashSet<StatType>,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
+    status_id: &StatusId,
+    status_damage_type: Option<DamageType>,
+) -> f64 {
+    let mut factor = Factor::new();
+
+    let default_skill_id = "".to_string();
+    let skill_id = skill_id.unwrap_or(&default_skill_id);
+    let skill_type = skill_type.unwrap_or(SkillType::Other);
+
+    for effect in filter_effects(effects_map, ignore_stat_effects) {
+        if let StatType::StatusDuration {
+            status_filter,
+            skill_filter,
+        } = &effect.stat
+            && status_filter.is_match_with_status(status_id, status_damage_type)
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
+        {
+            factor.apply_effect(&effect);
+        }
+    }
+
+    factor.evaluate()
+}
+
 pub fn compute_stats_effects_success(
     effects_map: &EffectsMap,
     ignore_stat_effects: &HashSet<StatType>,
@@ -71,14 +104,7 @@ pub fn compute_stats_effects_success(
     let skill_id = skill_id.unwrap_or(&default_skill_id);
     let skill_type = skill_type.unwrap_or(SkillType::Other);
 
-    for effect in effects_map.iter() {
-        if ignore_stat_effects
-            .iter()
-            .any(|ignored_stat_effect| ignored_stat_effect.is_match(&effect.stat))
-        {
-            continue;
-        }
-
+    for effect in filter_effects(effects_map, ignore_stat_effects) {
         if let StatType::SuccessChance {
             skill_filter,
             effect_type,

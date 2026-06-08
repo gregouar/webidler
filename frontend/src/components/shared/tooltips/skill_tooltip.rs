@@ -554,6 +554,25 @@ pub fn format_skill_effect(
                         .unwrap_or_else(|| {
                             (status_specs.duration.min.get(), status_specs.duration.max.get())
                         });
+                        
+                    let duration = {
+                        let factor = if let Some(effects_map) = effects_map
+                            && inherit_owner_effects
+                        {
+                            stats_computations::compute_stats_effects_status_duration(
+                            effects_map,
+                            &skill_effect.ignore_stat_effects,
+                            Some(skill_id),
+                            Some(skill_type),
+                            &status_id,
+                            status_specs.damage_type,
+                            )
+                        } else {
+                            1.0
+                        };
+                        (duration.0*factor, duration.1*factor)
+                    };
+                        
                     let escalation = escalation
                         .map(|escalation| escalation.get())
                         .unwrap_or(status_specs.escalation.get());
@@ -583,6 +602,8 @@ pub fn format_skill_effect(
                     };
 
                     let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
+
+
 
                     let value_factor = effects_map.map(|effects_map| {
                         stats_computations::compute_stats_effects_status_value(
