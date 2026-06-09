@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use itertools::Itertools;
 use leptos::{html::*, prelude::*};
@@ -18,7 +18,7 @@ use shared::data::{
         EffectsMap, Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
         StatType,
     },
-    trigger::TriggerEffectModifier,
+    trigger::{TriggerEffect, TriggerEffectModifier},
     values::NonNegative,
 };
 use strum::IntoEnumIterator;
@@ -107,6 +107,7 @@ pub fn SkillTooltip(
     skill_specs: Arc<SkillSpecs>,
     #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
     #[prop(default= None)] effects_map: Option<EffectsMap>,
+    #[prop(default= None)] computed_status_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
     let palette = TooltipFramePalette {
         border_class: "border-[#70508a]/92",
@@ -119,12 +120,12 @@ pub fn SkillTooltip(
         .clone()
         .into_iter()
         .map(|target| {
-            let skill_specs = skill_specs.clone();
             format_target(
-                &skill_specs.skill_id,
-                skill_specs.skill_type,
                 target,
                 effects_map.as_ref(),
+                computed_status_triggers
+                    .map(|computed_status_triggers| computed_status_triggers.read())
+                    .as_deref(),
             )
         })
         .collect::<Vec<_>>();
@@ -133,7 +134,7 @@ pub fn SkillTooltip(
         .triggers
         .clone()
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false, None, None, None, false))
+        .map(|trigger| format_trigger(trigger, false, None, None, None))
         .collect::<Vec<_>>();
 
     let auto_use_conditions = player_base_skill
@@ -282,10 +283,9 @@ pub fn SkillTooltip(
 }
 
 fn format_target(
-    skill_id: &String,
-    skill_type: SkillType,
     targets_group: SkillTargetsGroup,
     effects_map: Option<&EffectsMap>,
+    computed_status_triggers: Option<&HashMap<String, TriggerEffect>>,
 ) -> impl IntoView + use<> {
     let shape = shape_str(targets_group.shape);
 
@@ -312,15 +312,13 @@ fn format_target(
         .into_iter()
         .map(|skill_effect| {
             format_skill_effect(
-                skill_id,
-                skill_type,
                 skill_effect,
                 targets_group.target_type == TargetType::Me,
                 None,
                 effects_map,
+                computed_status_triggers,
                 None,
                 None,
-                false,
             )
         })
         .collect::<Vec<_>>();
@@ -424,35 +422,14 @@ pub fn format_chance(chance: &Chance, precise: bool) -> String {
 }
 
 pub fn format_skill_effect(
-    skill_id: &String,
-    skill_type: SkillType,
     skill_effect: SkillEffect,
     self_target: bool,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
+    computed_status_triggers: Option<&HashMap<String, TriggerEffect>>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
-    inherit_owner_effects: bool,
 ) -> impl IntoView + use<> {
-    // let success_chance = {
-    //     let factor = if let Some(effects_map) = effects_map
-    //         && inherit_owner_effects
-    //     {
-    //         stats_computations::compute_stats_effects_success(
-    //             effects_map,
-    //             &skill_effect.ignore_stat_effects,
-    //             Some(skill_id),
-    //             Some(skill_type),
-    //             &skill_effect.effect_type,
-    //         )
-    //     } else {
-    //         1.0
-    //     };
-    //     Chance {
-    //         value: (*skill_effect.success_chance.value * factor).into(),
-    //         lucky_chance: skill_effect.success_chance.lucky_chance,
-    //     }
-    // };
     let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
             <span class="font-semibold">{format_chance(&skill_effect.success_chance, false)}</span>
@@ -554,25 +531,6 @@ pub fn format_skill_effect(
                         .unwrap_or_else(|| {
                             (status_specs.duration.min.get(), status_specs.duration.max.get())
                         });
-                        
-                    // let duration = {
-                    //     let factor = if let Some(effects_map) = effects_map
-                    //         && inherit_owner_effects
-                    //     {
-                    //         stats_computations::compute_stats_effects_status_duration(
-                    //         effects_map,
-                    //         &skill_effect.ignore_stat_effects,
-                    //         Some(skill_id),
-                    //         Some(skill_type),
-                    //         &status_id,
-                    //         status_specs.damage_type,
-                    //         )
-                    //     } else {
-                    //         1.0
-                    //     };
-                    //     (duration.0*factor, duration.1*factor)
-                    // };
-                        
                     let escalation = escalation
                         .map(|escalation| escalation.get())
                         .unwrap_or(status_specs.escalation.get());
@@ -603,8 +561,6 @@ pub fn format_skill_effect(
 
                     let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
 
-
-
                     // let value_factor = effects_map.map(|effects_map| {
                     //     stats_computations::compute_stats_effects_status_value(
                     //         effects_map,
@@ -619,17 +575,13 @@ pub fn format_skill_effect(
                         format_status_trigger_value(modifiers, " based on ", Some(value_factor), trigger_status_name);
 
                     status_tooltip::format_status_effects(
-                                &status_id,
                                 status_specs,
                                 &value,
                                 Some(value_factor),
                                 1,
                                 modifiers,
                                 effects_map,
-                                Some(&skill_effect.ignore_stat_effects),
-                                None,
-                                Some(skill_id),
-                                Some(skill_type),
+                                computed_status_triggers,
                     ).map(|status_effects| {
                         view! {
                             <EffectLi>

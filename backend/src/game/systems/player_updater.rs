@@ -6,6 +6,7 @@ use shared::{
         area::{AreaLevel, AreaThreat},
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
+        character_status::StatusEffectType,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
@@ -300,6 +301,9 @@ fn compute_player_specs(
         })
         .collect();
 
+    player_specs.computed_status_triggers =
+        compute_status_triggers(statuses_store, &player_specs, effects);
+
     player_specs
 }
 
@@ -397,4 +401,60 @@ fn modify_player_specs(
     }
 
     modifiable_player_specs
+}
+
+fn compute_status_triggers(
+    statuses_store: &StatusesStore,
+    player_specs: &PlayerSpecs,
+    effects: &mut Vec<StatEffect>,
+) -> HashMap<String, TriggerEffect> {
+    // skills_updater::update_skill_specs(
+    //     statuses_store,
+    //     skill_id.to_string(),
+    //     &skill_specs,
+    //     0,
+    //     effects,
+    //     &player_specs.character_specs.character_attrs,
+    //     Some(player_inventory),
+    // )
+
+    let mut result: HashMap<String, TriggerEffect> = Default::default();
+
+    for skill_effect in player_specs
+        .character_specs
+        .skills_specs
+        .iter()
+        .flat_map(|skill_specs| skill_specs.targets.iter())
+        .flat_map(|target| target.effects.iter())
+    {
+        let SkillEffectType::ApplyStatus { status_id, .. } = &skill_effect.effect_type else {
+            continue;
+        };
+
+        let Some(status_specs) = statuses_store.get(status_id) else {
+            continue;
+        };
+
+        for status_effect in status_specs.effects.iter() {
+            if let StatusEffectType::Trigger {
+                trigger_specs,
+                inherit_owner_effects: true,
+            } = &status_effect.status_effect_type
+            {
+                let mut trigger_effect = trigger_specs.trigger_effect.clone();
+                for skill_effect in trigger_effect.effects.iter_mut() {
+                    skills_updater::compute_skill_specs_effect(
+                        statuses_store,
+                        &trigger_effect.trigger_id,
+                        trigger_effect.skill_type,
+                        skill_effect,
+                        effects.iter(),
+                    )
+                }
+                result.insert(trigger_effect.trigger_id.clone(), trigger_effect);
+            }
+        }
+    }
+
+    result
 }

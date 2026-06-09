@@ -1,14 +1,13 @@
-use std::collections::HashSet;
+use std::collections::HashMap;
 
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
-    character_status::{StatusEffect, StatusEffectType, StatusId, StatusModifier, StatusSpecs},
+    character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
     modifier::ModifiableValue,
-    skill::SkillType,
     stat_effect::{EffectsMap, StatEffect, StatType},
-    trigger::{TriggerEffectModifier, TriggerSpecs, TriggersMap},
+    trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
 
@@ -19,17 +18,13 @@ use crate::components::shared::tooltips::{
 };
 
 pub fn format_status_effects(
-    status_id: &StatusId,
     status_specs: StatusSpecs,
     value: &ChanceRange<ModifiableValue<NonNegative>>,
     value_factor: Option<f64>,
     stacks: usize,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
-    ignore_stat_effects: Option<&HashSet<StatType>>,
-    character_triggers: Option<&TriggersMap>,
-    skill_id: Option<&String>,
-    skill_type: Option<SkillType>,
+    character_triggers: Option<&HashMap<String, TriggerEffect>>,
 ) -> Option<impl IntoView + use<>> {
     // let value_factor = effects_map.map(|effects_map| {
     //     stats_computations::compute_stats_effects_status_value(
@@ -87,6 +82,7 @@ pub fn format_status_effects(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn format_status_effect_line(
     status_name: &str,
     status_effect: StatusEffect,
@@ -94,7 +90,7 @@ fn format_status_effect_line(
     value_factor: Option<f64>,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
-    character_triggers: Option<&TriggersMap>,
+    character_triggers: Option<&HashMap<String, TriggerEffect>>,
     stacks: usize,
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
@@ -175,24 +171,25 @@ fn format_status_effect_line(
         } => {
             if inherit_owner_effects
                 && let Some(character_triggers) = character_triggers
-                && let Some(owned_trigger) = character_triggers
-                    .iter()
-                    .flat_map(|(_, triggers)| triggers)
-                    .find(|trigger| {
-                        trigger.trigger_effect.trigger_id == trigger_specs.trigger_effect.trigger_id
-                    })
+                && let Some(trigger_effect) =
+                    character_triggers.get(&trigger_specs.trigger_effect.trigger_id)
+            // && let Some(owned_trigger) = character_triggers
+            //     .iter()
+            //     .flat_map(|(_, triggers)| triggers)
+            //     .find(|trigger| {
+            //         trigger.trigger_effect.trigger_id == trigger_specs.trigger_effect.trigger_id
+            //     })
             {
                 return Some(
                     format_trigger(
                         TriggerSpecs {
-                            trigger_effect: owned_trigger.trigger_effect.clone(),
+                            trigger_effect: trigger_effect.clone(),
                             ..*trigger_specs
                         },
                         false,
                         effects_map,
                         Some(status_name),
                         Some(skill_value),
-                        false,
                     )
                     .into_any(),
                 );
@@ -209,7 +206,6 @@ fn format_status_effect_line(
                     effects_map,
                     Some(status_name),
                     Some(skill_value),
-                    inherit_owner_effects,
                 )
                 .into_any(),
             )

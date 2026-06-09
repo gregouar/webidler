@@ -7,7 +7,7 @@ use shared::data::{
     modifier::ModifiableValue,
     monster::MonsterRarity,
     skill::DamageType,
-    trigger::TriggersMap,
+    trigger::TriggerEffect,
     values::NonNegative,
 };
 
@@ -32,7 +32,7 @@ pub fn CharacterPortrait(
     #[prop(into)] just_evaded: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
-    #[prop(optional)] character_triggers: Option<Memo<TriggersMap>>,
+    #[prop(optional)] character_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let heavy_effects = move || settings.uses_heavy_effects();
@@ -556,7 +556,7 @@ fn StatusIcon(
     status_specs: Option<StatusSpecs>,
     stack: Signal<(usize, f64)>,
     tooltip_position: StaticTooltipPosition,
-    character_triggers: Option<Memo<TriggersMap>>,
+    character_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
     let status_name = {
         let status_id = status_id.clone();
@@ -590,19 +590,15 @@ fn StatusIcon(
                     view! {
                         <div class="max-w-xl text-center list-none">
                             {format_status_effects(
-                                &status_id,
                                 status_specs,
                                 &value,
                                 None,
                                 stacks,
                                 None,
                                 None,
-                                None,
                                 character_triggers
                                     .map(|character_triggers| character_triggers.read())
                                     .as_deref(),
-                                None,
-                                None,
                             )}
                         </div>
                     }
