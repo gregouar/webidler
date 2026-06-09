@@ -418,6 +418,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
         SkillEffectType::ApplyStatus {
             status_id,
             value,
+            value_factor: _,
             duration,
             escalation,
             max_stacks,
@@ -514,6 +515,7 @@ fn apply_skill_effect_on_target(
         SkillEffectType::ApplyStatus {
             status_id,
             value,
+            value_factor: _,
             duration,
             escalation,
             max_stacks,

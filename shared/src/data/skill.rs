@@ -3,16 +3,21 @@ use std::collections::HashSet;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::{Chance, ChanceRange},
-    character::CharacterId,
-    character_status::StatusId,
-    conditional_modifier::{Condition, ConditionalModifier},
-    item::ItemCategory,
-    modifier::ModifiableValue,
-    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType},
-    trigger::TriggerSpecs,
-    values::{Cooldown, NonNegative},
+use crate::{
+    data::{
+        chance::{Chance, ChanceRange},
+        character::CharacterId,
+        character_status::StatusId,
+        conditional_modifier::{Condition, ConditionalModifier},
+        item::ItemCategory,
+        modifier::ModifiableValue,
+        stat_effect::{
+            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType,
+        },
+        trigger::TriggerSpecs,
+        values::{Cooldown, NonNegative},
+    },
+    serde_utils::default_1f64,
 };
 
 pub use super::stat_effect::DamageType;
@@ -212,6 +217,8 @@ pub enum SkillEffectType {
         status_id: StatusId,
 
         value: ChanceRange<ModifiableValue<NonNegative>>,
+        #[serde(default = "default_1f64")]
+        value_factor: f64, // For tooltip purposes
 
         // On skill definition, overwrite default status value when some
         // On skill computed specs, get derived values

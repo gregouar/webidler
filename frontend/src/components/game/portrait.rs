@@ -593,6 +593,7 @@ fn StatusIcon(
                                 &status_id,
                                 status_specs,
                                 &value,
+                                None,
                                 stacks,
                                 None,
                                 None,

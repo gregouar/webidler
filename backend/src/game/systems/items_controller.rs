@@ -318,6 +318,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
                         lucky_chance: v.lucky_chance.as_new_base(),
                     })
                     .unwrap_or_default(),
+                value_factor: 1.0,
                 duration: None,
                 escalation: None,
                 max_stacks: None,

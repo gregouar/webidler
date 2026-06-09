@@ -66,27 +66,30 @@ impl<T> ModifiableValue<T>
 where
     T: BaseModifiableValue + Default + Copy,
 {
-    fn evaluate(&self, convert: bool) -> T {
+    pub fn factor(&self) -> f64 {
+        if self.base.is_negative() {
+            return 1.0;
+        }
+
+        if self.more == -100.0 {
+            return 0.0;
+        }
+
         let div = (1.0 - self.decreased * 0.01).max(0.0);
+
+        (1.0 + self.more * 0.01)
+            * (1.0 + self.increased * 0.01)
+            * (if div > 0.0 { 1.0 / div } else { 1.0 })
+    }
+
+    fn evaluate(&self, convert: bool) -> T {
         let base = if convert {
             self.base.multiply_value(1.0 - self.converted * 0.01)
         } else {
             self.base
         };
 
-        if base.is_negative() {
-            return base;
-        }
-
-        if self.more == -100.0 {
-            return base.multiply_value(0.0);
-        }
-
-        let factor = (1.0 + self.more * 0.01)
-            * (1.0 + self.increased * 0.01)
-            * (if div > 0.0 { 1.0 / div } else { 1.0 });
-
-        base.multiply_value(factor)
+        base.multiply_value(self.factor())
     }
 
     fn compute(&mut self) {

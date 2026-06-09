@@ -12,19 +12,17 @@ use shared::data::{
     values::NonNegative,
 };
 
-use crate::components::{
-    shared::tooltips::{
-        effects_tooltip,
-        skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
-        trigger_tooltip::{format_trigger, format_trigger_modifier},
-    },
-    utils::stats_computations,
+use crate::components::shared::tooltips::{
+    effects_tooltip,
+    skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
+    trigger_tooltip::{format_trigger, format_trigger_modifier},
 };
 
 pub fn format_status_effects(
     status_id: &StatusId,
     status_specs: StatusSpecs,
     value: &ChanceRange<ModifiableValue<NonNegative>>,
+    value_factor: Option<f64>,
     stacks: usize,
     modifiers: Option<&[TriggerEffectModifier]>,
     effects_map: Option<&EffectsMap>,
@@ -33,16 +31,16 @@ pub fn format_status_effects(
     skill_id: Option<&String>,
     skill_type: Option<SkillType>,
 ) -> Option<impl IntoView + use<>> {
-    let value_factor = effects_map.map(|effects_map| {
-        stats_computations::compute_stats_effects_status_value(
-            effects_map,
-            ignore_stat_effects.unwrap_or(&Default::default()),
-            skill_id,
-            skill_type,
-            status_id,
-            status_specs.damage_type,
-        )
-    });
+    // let value_factor = effects_map.map(|effects_map| {
+    //     stats_computations::compute_stats_effects_status_value(
+    //         effects_map,
+    //         ignore_stat_effects.unwrap_or(&Default::default()),
+    //         skill_id,
+    //         skill_type,
+    //         status_id,
+    //         status_specs.damage_type,
+    //     )
+    // });
 
     let effect_lines = status_specs
         .effects

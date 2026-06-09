@@ -42,7 +42,6 @@ use crate::components::{
         Separator,
         number::{self, format_number},
     },
-    utils::stats_computations,
 };
 
 pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
@@ -435,28 +434,28 @@ pub fn format_skill_effect(
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
     inherit_owner_effects: bool,
 ) -> impl IntoView + use<> {
-    let success_chance = {
-        let factor = if let Some(effects_map) = effects_map
-            && inherit_owner_effects
-        {
-            stats_computations::compute_stats_effects_success(
-                effects_map,
-                &skill_effect.ignore_stat_effects,
-                Some(skill_id),
-                Some(skill_type),
-                &skill_effect.effect_type,
-            )
-        } else {
-            1.0
-        };
-        Chance {
-            value: (*skill_effect.success_chance.value * factor).into(),
-            lucky_chance: skill_effect.success_chance.lucky_chance,
-        }
-    };
-    let success_chance = if success_chance.value.get() < 100.0 {
+    // let success_chance = {
+    //     let factor = if let Some(effects_map) = effects_map
+    //         && inherit_owner_effects
+    //     {
+    //         stats_computations::compute_stats_effects_success(
+    //             effects_map,
+    //             &skill_effect.ignore_stat_effects,
+    //             Some(skill_id),
+    //             Some(skill_type),
+    //             &skill_effect.effect_type,
+    //         )
+    //     } else {
+    //         1.0
+    //     };
+    //     Chance {
+    //         value: (*skill_effect.success_chance.value * factor).into(),
+    //         lucky_chance: skill_effect.success_chance.lucky_chance,
+    //     }
+    // };
+    let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
-            <span class="font-semibold">{format_chance(&success_chance, false)}</span>
+            <span class="font-semibold">{format_chance(&skill_effect.success_chance, false)}</span>
             " chance to "
         })
     } else {
@@ -534,6 +533,7 @@ pub fn format_skill_effect(
         SkillEffectType::ApplyStatus {
             status_id,
             value,
+            value_factor,
             duration,
             escalation,
             damage_type: _,
@@ -555,23 +555,23 @@ pub fn format_skill_effect(
                             (status_specs.duration.min.get(), status_specs.duration.max.get())
                         });
                         
-                    let duration = {
-                        let factor = if let Some(effects_map) = effects_map
-                            && inherit_owner_effects
-                        {
-                            stats_computations::compute_stats_effects_status_duration(
-                            effects_map,
-                            &skill_effect.ignore_stat_effects,
-                            Some(skill_id),
-                            Some(skill_type),
-                            &status_id,
-                            status_specs.damage_type,
-                            )
-                        } else {
-                            1.0
-                        };
-                        (duration.0*factor, duration.1*factor)
-                    };
+                    // let duration = {
+                    //     let factor = if let Some(effects_map) = effects_map
+                    //         && inherit_owner_effects
+                    //     {
+                    //         stats_computations::compute_stats_effects_status_duration(
+                    //         effects_map,
+                    //         &skill_effect.ignore_stat_effects,
+                    //         Some(skill_id),
+                    //         Some(skill_type),
+                    //         &status_id,
+                    //         status_specs.damage_type,
+                    //         )
+                    //     } else {
+                    //         1.0
+                    //     };
+                    //     (duration.0*factor, duration.1*factor)
+                    // };
                         
                     let escalation = escalation
                         .map(|escalation| escalation.get())
@@ -605,23 +605,24 @@ pub fn format_skill_effect(
 
 
 
-                    let value_factor = effects_map.map(|effects_map| {
-                        stats_computations::compute_stats_effects_status_value(
-                            effects_map,
-                            &skill_effect.ignore_stat_effects,
-                            Some(skill_id),
-                            Some(skill_type),
-                            &status_id,
-                            status_specs.damage_type,
-                        )
-                    });
+                    // let value_factor = effects_map.map(|effects_map| {
+                    //     stats_computations::compute_stats_effects_status_value(
+                    //         effects_map,
+                    //         &skill_effect.ignore_stat_effects,
+                    //         Some(skill_id),
+                    //         Some(skill_type),
+                    //         &status_id,
+                    //         status_specs.damage_type,
+                    //     )
+                    // });
                     let modified_value_str =
-                        format_status_trigger_value(modifiers, " based on ", value_factor, trigger_status_name);
+                        format_status_trigger_value(modifiers, " based on ", Some(value_factor), trigger_status_name);
 
                     status_tooltip::format_status_effects(
                                 &status_id,
                                 status_specs,
                                 &value,
+                                Some(value_factor),
                                 1,
                                 modifiers,
                                 effects_map,

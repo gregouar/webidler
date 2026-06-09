@@ -370,7 +370,8 @@ pub fn compute_skill_specs_effect<'a>(
 ) {
     if let SkillEffectType::ApplyStatus {
         status_id,
-        value: _,
+        value,
+        value_factor,
         duration,
         escalation,
         max_stacks,
@@ -408,6 +409,8 @@ pub fn compute_skill_specs_effect<'a>(
         if avoidable.is_none() {
             *avoidable = Some(status_specs.avoidable);
         }
+
+        *value_factor = value.max.factor();
 
         // TODO: Verify if we need to put that back somehow:
         /////////////////////////////////////////////////////
@@ -757,6 +760,7 @@ pub fn apply_stat_effect_on_skill_effect(
         SkillEffectType::ApplyStatus {
             status_id: skill_status_id,
             value,
+            value_factor,
             duration,
             escalation,
             max_stacks,
@@ -852,6 +856,8 @@ pub fn apply_stat_effect_on_skill_effect(
                     value.lucky_chance.apply_effect(effect);
                 }
             }
+
+            *value_factor = value.max.factor();
         }
         SkillEffectType::Restore {
             restore_type,
