@@ -688,7 +688,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         ),
         StatType::BlockDamageTaken => {
             format!(
-                "Takes {}% of Blocked Damage",
+                "Take {}% of Blocked Damage",
                 format_flat_number(value, false)
             )
         }
@@ -699,7 +699,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         ),
         StatType::EvadeDamageTaken => {
             format!(
-                "Takes {}% of Evaded Damage over Time",
+                "Take {}% of Evaded Damage over Time",
                 format_flat_number(value, false)
             )
         }

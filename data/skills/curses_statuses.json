@@ -1,81 +1,544 @@
 {
-    "curse_putridity": {
+    "curse_conductivity": {
+        "name": "Curse of Conductivity",
+        "icon": "skills/curse_conductivity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
         "effects": [
             {
                 "replace_on_value_only": true,
-                "status_type": {
-                    "StatModifier": {
-                        "stat": {
-                            "DamageResistance": {
-                                "skill_type": null,
-                                "damage_type": "Poison"
-                            }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                    }
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Storm"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
                 },
-                "value": 30
+                "value": 100,
+                "modifier": "Percent"
             },
             {
                 "replace_on_value_only": true,
-                "status_type": {
-                    "Trigger": {
-                        "inherit_source_effects": true,
-                        "trigger_id": "curse_putridity",
-                        "name": "Curse of Putridity",
-                        "icon": "skills/curse_putridity.svg",
-                        "OnTakeHit": {
-                            "is_hurt": true,
-                            "is_triggered": false
-                        },
-                        "target": "SameTarget",
-                        "skill_range": "Any",
-                        "skill_type": "Curse",
-                        "effects": [
-                            {
-                                "FlatDamage": {
-                                    "damage": { }
-                                },
-                                "ignore_stat_effects": [
-                                    {
-                                        "CritChance": { }
-                                    },
-                                    {
-                                        "CritDamage": { }
-                                    },
-                                    {
-                                        "Damage": {
-                                            "skill_type": null,
-                                            "damage_type": "Poison",
-                                            "min_max": null
-                                        }
-                                    }
-                                ]
-                            }
-                        ],
-                        "modifiers": [
-                            {
-                                "stat": {
+                "Trigger": {
+                    "trigger_id": "curse_conductivity",
+                    "name": "Curse of Conductivity",
+                    "icon": "skills/curse_conductivity.svg",
+                    "OnTakeHit": {
+                        "damage_type": "Storm",
+                        "is_triggered": null
+                    },
+                    "target": "SameTarget",
+                    "skill_range": "Any",
+                    "skill_shape": "Contact",
+                    "skill_type": "Curse",
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": {
+                                    "Storm": 0
+                                }
+                            },
+                            "ignore_stat_effects": [
+                                {
                                     "Damage": {
-                                        "damage_type": "Physical"
+                                        "damage_type": "Storm"
                                     }
                                 },
-                                "modifier": "Flat",
-                                "factor": 0.25,
-                                "source": {
-                                    "StatusValue": {
-                                        "status_type": {
-                                            "DamageOverTime": {
-                                                "damage_type": "Poison"
-                                            }
-                                        }
+                                {
+                                    "CritChance": { }
+                                }
+                            ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Storm"
+                                }
+                            },
+                            "modifier": "Flat",
+                            "factor": 0.5,
+                            "source": {
+                                "HitDamage": "Storm"
+                            }
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "Trigger": {
+                    "trigger_id": "curse_conductivity",
+                    "name": "Curse of Conductivity",
+                    "icon": "skills/curse_conductivity.svg",
+                    "OnTakeHit": {
+                        "is_crit": true,
+                        "damage_type": "Storm",
+                        "is_triggered": null
+                    },
+                    "target": "SameTarget",
+                    "skill_range": "Any",
+                    "skill_shape": "All",
+                    "skill_type": "Curse",
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": {
+                                    "Storm": 0
+                                }
+                            },
+                            "ignore_stat_effects": [
+                                {
+                                    "Damage": {
+                                        "damage_type": "Storm"
+                                    }
+                                },
+                                {
+                                    "CritChance": { }
+                                }
+                            ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Storm"
+                                }
+                            },
+                            "modifier": "Flat",
+                            "factor": 0.1,
+                            "source": {
+                                "HitDamage": "Storm"
+                            }
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "curse_flammability": {
+        "name": "Cruse of Flammability",
+        "icon": "skills/curse_flammability.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "Trigger": {
+                    "trigger_id": "curse_flammability",
+                    "name": "Curse of Flammability",
+                    "icon": "skills/curse_flammability.svg",
+                    "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 10% of the Hit's Fire Damage for each Stack of Burn present on the target.",
+                    "OnTakeHit": {
+                        "is_hurt": true,
+                        "damage_type": "Fire",
+                        "is_triggered": null
+                    },
+                    "target": "SameTarget",
+                    "skill_range": "Any",
+                    "skill_shape": "Single",
+                    "skill_type": "Curse",
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": { }
+                            },
+                            "ignore_stat_effects": [
+                                {
+                                    "CritChance": { }
+                                },
+                                {
+                                    "CritDamage": { }
+                                },
+                                {
+                                    "Damage": {
+                                        "skill_type": null,
+                                        "damage_type": null,
+                                        "min_max": null
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Fire"
+                                }
+                            },
+                            "modifier": "More",
+                            "factor": 100,
+                            "source": {
+                                "HitDamage": "Fire"
+                            }
+                        },
+                        {
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Fire"
+                                }
+                            },
+                            "modifier": "Flat",
+                            "factor": 0.1,
+                            "source": {
+                                "StatusStacks": {
+                                    "DamageOverTime": {
+                                        "damage_type": "Fire"
                                     }
                                 }
                             }
-                        ]
-                    }
-                }
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "curse_frailty": {
+        "name": "Curse of Frailty",
+        "icon": "skills/curse_frailty.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "Trigger": {
+                    "trigger_id": "curse_frailty",
+                    "name": "Curse of Frailty",
+                    "icon": "skills/curse_frailty.svg",
+                    "OnTakeHit": {
+                        "is_crit": true,
+                        "is_hurt": true,
+                        "is_triggered": null
+                    },
+                    "target": "SameTarget",
+                    "skill_range": "Any",
+                    "skill_type": "Curse",
+                    "effects": [
+                        {
+                            "ApplyStatus": {
+                                "status_id": "curse_frailty_armor",
+                                "value": 1
+                            }
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "curse_frailty_armor": {
+        "name": "Broken Armor",
+        "icon": "statuses/debuff_armor.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Armor": "Physical"
+                    },
+                    "modifier": "More",
+                    "debuff": true
+                },
+                "value": 1e+200,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "curse_putridity": {
+        "name": "Curse of Putridity",
+        "icon": "skills/curse_putridity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Poison"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "Trigger": {
+                    "inherit_source_effects": true,
+                    "trigger_id": "curse_putridity",
+                    "OnTakeHit": {
+                        "is_hurt": true,
+                        "is_triggered": false
+                    },
+                    "target": "SameTarget",
+                    "skill_range": "Any",
+                    "skill_type": "Curse",
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": { }
+                            },
+                            "ignore_stat_effects": [
+                                {
+                                    "CritChance": { }
+                                },
+                                {
+                                    "CritDamage": { }
+                                },
+                                {
+                                    "Damage": {
+                                        "skill_type": null,
+                                        "damage_type": "Poison",
+                                        "min_max": null
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Physical"
+                                }
+                            },
+                            "modifier": "Flat",
+                            "factor": 0.25,
+                            "source": {
+                                "StatusValue": {
+                                    "damage_type": "Poison"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "curse_weakness": {
+        "name": "Curse of Weakness",
+        "icon": "skills/curse_weakness.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": null,
+                            "damage_type": null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "curse_clumsy": {
+        "name": "Curse of Clumsiness",
+        "icon": "skills/curse_clumsy.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": "BlockDamageTaken",
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 10,
+                "modifier": "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": "EvadeDamageTaken",
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 10,
+                "modifier": "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "SuccessChance": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null,
+                            "effect_type": null
+                        }
+                    },
+                    "modifier": "Increased",
+                    "debuff": true
+                },
+                "value": 11,
+                "modifier": "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Block": null
+                    },
+                    "modifier": "Increased",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Evade": null
+                    },
+                    "modifier": "Increased",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "curse_vampirism": {
+        "name": "Curse of Vampirism",
+        "icon": "skills/curse_vampirism.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "Trigger": {
+                    "trigger_id": "curse_vampirism",
+                    "name": "Curse of Vampirism",
+                    "icon": "skills/curse_vampirism.svg",
+                    "OnTakeHit": {
+                        "is_hurt": true,
+                        "skill_type": "Attack"
+                    },
+                    "target": "Source",
+                    "skill_range": "Any",
+                    "skill_shape": "Single",
+                    "skill_type": "Curse",
+                    "effects": [
+                        {
+                            "Restore": {
+                                "restore_type": "Life",
+                                "value": 0,
+                                "modifier": "Flat"
+                            },
+                            "ignore_stat_effects": [ ]
+                        },
+                        {
+                            "ApplyStatus": {
+                                "status_id": "curse_vampirism_damage",
+                                "value": 1
+                            },
+                            "ignore_stat_effects": [ ],
+                            "conditional_modifiers": [ ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Restore": {
+                                    "restore_type": "Life"
+                                }
+                            },
+                            "modifier": "Flat",
+                            "factor": 0.02,
+                            "source": "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "curse_vampirism_damage": {
+        "name": "Vampiric Power",
+        "icon": "skills/curse_vampirism.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 20,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": { }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 10,
+                "modifier": "Flat"
             }
         ]
     }

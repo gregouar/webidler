@@ -35,7 +35,7 @@ use crate::components::{
         item_tooltip, status_tooltip,
         trigger_tooltip::{
             format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
-            format_trigger_modifier_per,
+            format_trigger_modifier_per, get_trigger_modifier_value,
         },
     },
     ui::{
@@ -611,9 +611,22 @@ pub fn format_skill_effect(
                 },
                 modifiers,
             );
-            let trigger_modifier_str = format_trigger_modifier_per(trigger_modifier);
-            let trigger_modifier_factor_str =
-                trigger_modifier.map(|trigger_modifier| format!("{:.0}", trigger_modifier.factor));
+
+            let (trigger_modifier_str, trigger_modifier_factor_str) = trigger_modifier
+                .map(|trigger_modifier| {
+                    if let Some(trigger_modifier_value) =
+                        get_trigger_modifier_value(trigger_modifier, None, trigger_status_value)
+                    {
+                        return (None, Some(format_min_max(trigger_modifier_value)));
+                    }
+                    (
+                        Some(format_trigger_modifier_per(trigger_modifier)),
+                        Some(format!("{:.0}", trigger_modifier.factor)),
+                    )
+                })
+                .unwrap_or((None, None));
+            // let trigger_modifier_factor_str =
+            //     trigger_modifier.map(|trigger_modifier| format!("{:.0}", trigger_modifier.factor));
             view! {
                 <EffectLi>
                     {success_chance}"Restore "

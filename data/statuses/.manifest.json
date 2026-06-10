@@ -5,8 +5,6 @@
     "resources": {
         "statuses": [
             "base.json",
-            "blessings.json",
-            "curses.json",
             "dot.json",
             "items_boots.json",
             "items_cloaks.json",

@@ -82,6 +82,26 @@ pub fn format_trigger(
     }
 }
 
+pub fn get_trigger_modifier_value(
+    modifier: &TriggerEffectModifier,
+    factor: Option<f64>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+) -> Option<ChanceRange<ModifiableValue<f64>>> {
+    if let TriggerEffectModifierSource::TriggerStatusValue = modifier.source
+        && let Some(trigger_status_value) = trigger_status_value
+        && trigger_status_value.max.get() > 0.0
+    {
+        let factor = modifier.factor * factor.unwrap_or(1.0);
+        return Some(ChanceRange {
+            min: (trigger_status_value.min.get() * factor).into(),
+            max: (trigger_status_value.max.get() * factor).into(),
+            lucky_chance: trigger_status_value.lucky_chance,
+        });
+    }
+
+    None
+}
+
 pub fn format_trigger_modifier(
     modifier: Option<&TriggerEffectModifier>,
     suffix: &'static str,
@@ -91,27 +111,19 @@ pub fn format_trigger_modifier(
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
     modifier.map(|modifier| {
-        let factor = modifier.factor * factor.unwrap_or(1.0);
-
-        if let TriggerEffectModifierSource::TriggerStatusValue = modifier.source
-            && let Some(trigger_status_value) = trigger_status_value
-            && trigger_status_value.max.get() > 0.0
+        if let Some(trigger_modifier_value) =
+            get_trigger_modifier_value(modifier, factor, trigger_status_value)
         {
             return view! {
                 <span class=format!(
                     "font-semibold {}",
                     value_color.unwrap_or_default(),
-                )>
-                    {skill_tooltip::format_min_max(ChanceRange {
-                        min: (trigger_status_value.min.get() * factor).into(),
-                        max: (trigger_status_value.max.get() * factor).into(),
-                        lucky_chance: trigger_status_value.lucky_chance,
-                    })}
-                </span>
+                )>{skill_tooltip::format_min_max(trigger_modifier_value)}</span>
             }
             .into_any();
         }
 
+        let factor = modifier.factor * factor.unwrap_or(1.0);
         let factor_str = (factor != 1.0).then(|| {
             let factor_str = match modifier.modifier {
                 Modifier::Increased | Modifier::More => format!("{:0}", format_number(factor)),
@@ -131,17 +143,15 @@ pub fn format_trigger_modifier(
     })
 }
 
-pub fn format_trigger_modifier_per(modifier: Option<&TriggerEffectModifier>) -> Option<String> {
-    modifier.map(|modifier| {
-        if let TriggerEffectModifierSource::HitCrit = modifier.source {
-            " on Critical Hit".to_string()
-        } else {
-            format!(
-                " per {}",
-                trigger_modifier_source_str(&modifier.source, None)
-            )
-        }
-    })
+pub fn format_trigger_modifier_per(modifier: &TriggerEffectModifier) -> String {
+    if let TriggerEffectModifierSource::HitCrit = modifier.source {
+        " on Critical Hit".to_string()
+    } else {
+        format!(
+            " per {}",
+            trigger_modifier_source_str(&modifier.source, None)
+        )
+    }
 }
 
 pub fn format_extra_trigger_modifiers(
@@ -153,7 +163,7 @@ pub fn format_extra_trigger_modifiers(
             StatType::Damage { .. } => modifier.modifier == Modifier::Increased,
             StatType::StatusDuration { .. } => modifier.modifier == Modifier::Increased,
             StatType::StatusPower { .. } => modifier.modifier == Modifier::Increased,
-            StatType::Restore{..} => modifier.modifier == Modifier::Increased,
+            StatType::Restore { .. } => modifier.modifier == Modifier::Increased,
             _ => true,
         })
         .map(|modifier| {
@@ -163,8 +173,8 @@ pub fn format_extra_trigger_modifiers(
                 value: modifier.factor,
                 bypass_ignore: false,
             };
-            view! { <li>{format_stat(&stat_effect)}{format_trigger_modifier_per(Some(modifier))}</li> }
-            .into_any()
+            view! { <li>{format_stat(&stat_effect)} {format_trigger_modifier_per(modifier)}</li> }
+                .into_any()
         })
         .collect();
 

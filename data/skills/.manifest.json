@@ -1,8 +1,9 @@
 {
   "meta": {
-    "enabled": false
+    "enabled": true
   },
   "resources": {
-    "skills": [ "attacks.json", "blessings.json", "curses.json", "spells.json" ]
+    "skills": [ "attacks.json", "curses.json" ],
+    "statuses": [ "attacks_statuses.json", "curses_statuses.json" ]
   }
 }
