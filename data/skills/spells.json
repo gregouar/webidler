@@ -28,7 +28,7 @@
                   12
                 ]
               },
-              "crit_chance": 5,
+              "crit_chance": 10,
               "crit_damage": 100
             }
           }
@@ -68,21 +68,20 @@
                   0,
                   30
                 ]
-              }
+              },
+              "crit_chance": 5,
+              "crit_damage": 100
             }
           },
           {
             "success_chance": 30,
             "ApplyStatus": {
+              "status_id": "stun",
               "duration": [
                 1,
                 3
               ],
-              "statuses": [
-                {
-                  "status_id": "stun"
-                }
-              ]
+              "value": 1
             }
           }
         ]
@@ -151,31 +150,6 @@
         },
         "modifier": "More",
         "value": 30
-      },
-      {
-        "stat": {
-          "SkillConditionalModifier": {
-            "stat": {
-              "Damage": { }
-            },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "skill_type": null
-                }
-              }
-            ]
-          }
-        },
-        "modifier": "Increased",
-        "value": 5
       }
     ],
     "targets": [
@@ -190,9 +164,7 @@
                   5,
                   15
                 ]
-              },
-              "crit_chance": 5,
-              "crit_damage": 100
+              }
             }
           }
         ]
@@ -201,7 +173,7 @@
   },
   "burning_ray": {
     "name": "Burning Ray",
-    "description": "Release a horizontal beam of fire that burns enemies over time. Useful for hitting groups in a line.",
+    "description": "Release a horizontal beam of fire that burns enemies over time.",
     "icon": "skills/burning_ray.svg",
     "skill_type": "Spell",
     "cooldown": 3,
@@ -222,31 +194,11 @@
         "shape": "Horizontal3",
         "effects": [
           {
-            "FlatDamage": {
-              "damage": {
-                "Fire": [
-                  1,
-                  3
-                ]
-              }
-            }
-          },
-          {
             "ApplyStatus": {
-              "duration": 4,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "value": [
-                    1,
-                    3
-                  ],
-                  "cumulate": true
-                }
+              "status_id": "burn",
+              "value": [
+                2,
+                5
               ]
             }
           }
@@ -273,14 +225,9 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Fire"
-              }
-            }
+            "status_id": "righteous_fire_self"
           }
         },
-        "bypass_ignore": true,
         "modifier": "Increased",
         "value": 20
       }
@@ -297,23 +244,9 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 2,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "value": 1
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusDuration": { }
-              }
-            ]
+              "status_id": "righteous_fire",
+              "value": 1
+            }
           }
         ]
       },
@@ -322,30 +255,9 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 2,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "value": 2,
-                  "unavoidable": true
-                }
-              ]
-            },
-            "ignore_stat_effects": [
-              {
-                "StatusDuration": { }
-              },
-              {
-                "StatusPower": { }
-              },
-              {
-                "Damage": { }
-              }
-            ]
+              "status_id": "righteous_fire_self",
+              "value": 2
+            }
           }
         ]
       }
@@ -356,11 +268,6 @@
           {
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                }
               }
             },
             "bypass_ignore": true,
@@ -404,20 +311,8 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 4,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": [
-                    4,
-                    8
-                  ]
-                }
-              ]
+              "status_id": "poison",
+              "value": [ 4, 8 ]
             }
           }
         ]
@@ -458,20 +353,22 @@
           },
           {
             "ApplyStatus": {
-              "duration": 4,
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": [
-                    3,
-                    5
-                  ]
-                }
+              "status_id": "poison",
+              "value": [
+                3,
+                5
               ]
+            }
+          },
+          {
+            "success_chance": 30,
+            "ApplyStatus": {
+              "duration": [
+                1,
+                3
+              ],
+              "status_id": "stun",
+              "value": 1
             }
           }
         ]
