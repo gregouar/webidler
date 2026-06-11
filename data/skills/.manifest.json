@@ -3,7 +3,7 @@
     "enabled": true
   },
   "resources": {
-    "skills": [ "attacks.json", "curses.json" ],
-    "statuses": [ "attacks_statuses.json", "curses_statuses.json" ]
+    "skills": [ "attacks.json", "blessings.json", "curses.json" ],
+    "statuses": [ "attacks_statuses.json", "blessings_statuses.json", "curses_statuses.json" ]
   }
 }

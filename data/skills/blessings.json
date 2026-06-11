@@ -11,7 +11,7 @@
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Blessing"
+            "status_id": "blessing_haste"
           }
         },
         "modifier": "Increased",
@@ -24,37 +24,8 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": {
-                          "skill_type": "Attack"
-                        }
-                      },
-                      "modifier": "Increased"
-                    }
-                  },
-                  "value": 20
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": {
-                          "skill_type": "Spell"
-                        }
-                      },
-                      "modifier": "Increased"
-                    }
-                  },
-                  "value": 20
-                }
-              ]
+              "status_id": "blessing_haste",
+              "value": 20
             }
           }
         ]
@@ -73,11 +44,12 @@
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Blessing"
+            "status_id": "blessing_crit"
           }
         },
         "modifier": "Flat",
-        "value": 2
+        "value": 2,
+        "description": "+2% Increased Critical Hit Damage"
       }
     ],
     "targets": [
@@ -86,35 +58,8 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Lucky": {
-                          "roll_type": "CritChance"
-                        }
-                      },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 200
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "CritDamage": { }
-                      },
-                      "modifier": "More"
-                    }
-                  },
-                  "value": 20
-                }
-              ]
+              "status_id": "blessing_crit",
+              "value": 20
             }
           }
         ]
@@ -133,18 +78,11 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "StatModifier": {
-                "stat": {
-                  "Armor": null
-                },
-                "debuff": false
-              }
-            }
           }
         },
         "modifier": "Flat",
-        "value": 1
+        "value": 1,
+        "description": "+1% Increased Defenses"
       }
     ],
     "targets": [
@@ -153,33 +91,8 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 5,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": { }
-                      },
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 15
-                },
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Armor": null
-                      },
-                      "modifier": "Increased"
-                    }
-                  },
-                  "value": 10
-                }
-              ]
+              "status_id": "blessing_protection",
+              "value": 10
             },
             "ignore_stat_effects": [ ]
           }
@@ -192,18 +105,18 @@
     "description": "A blessing that increase your life regeneration.",
     "icon": "skills/blessing_renewal.svg",
     "skill_type": "Blessing",
-    "cooldown": 20,
+    "cooldown": 15,
     "mana_cost": 25,
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Blessing"
           }
         },
         "modifier": "Flat",
-        "value": 1
+        "value": 1,
+        "description": "+0.1% Restored Life per Second"
       }
     ],
     "targets": [
@@ -212,19 +125,8 @@
         "effects": [
           {
             "ApplyStatus": {
-              "duration": 3,
-              "statuses": [
-                {
-                  "replace_on_value_only": true,
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat"
-                    }
-                  },
-                  "value": 25
-                }
-              ]
+              "status_id": "blessing_heal",
+              "value": 25
             }
           }
         ]

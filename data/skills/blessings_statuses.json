@@ -1,0 +1,119 @@
+{
+    "blessing_haste": {
+        "name": "Blessing of Haste",
+        "icon": "skills/haste.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Speed": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Speed": {
+                            "skill_type": "Spell"
+                        }
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "blessing_crit": {
+        "name": "Blessing of Precision",
+        "icon": "skills/blessing_crit.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Lucky": {
+                            "roll_type": "CritChance"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 200,
+                "modifier": "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "CritDamage": { }
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "blessing_protection": {
+        "name": "Blessing of Protection",
+        "icon": "skills/blessing_protection.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": { }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 15,
+                "modifier": "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": {
+                        "Armor": null
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "blessing_heal": {
+        "name": "Blessing of Renewal",
+        "icon": "skills/blessing_renewal.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "replace_on_value_only": true,
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}
