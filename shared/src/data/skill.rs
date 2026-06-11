@@ -40,7 +40,7 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub upgrade_cost: f64,
     #[serde(default)]
-    pub upgrade_effects: Vec<StatEffect>,
+    pub upgrade_effects: Vec<SkillUpgradeEffect>,
 
     #[serde(default)]
     pub modifier_effects: Vec<ModifierEffect>,
@@ -55,6 +55,14 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SkillUpgradeEffect {
+    #[serde(flatten)]
+    pub stat_effect: StatEffect,
+    #[serde(default)]
+    pub description: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

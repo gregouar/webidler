@@ -208,10 +208,16 @@ pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u
         |mut effects_map, effect| {
             *effects_map
                 .0
-                .entry((effect.stat.clone(), effect.modifier, effect.bypass_ignore))
-                .or_default() += match effect.modifier {
-                Modifier::More => ((1.0 + effect.value * 0.01).powf(level) - 1.0) * 100.0,
-                _ => effect.value * level,
+                .entry((
+                    effect.stat_effect.stat.clone(),
+                    effect.stat_effect.modifier,
+                    effect.stat_effect.bypass_ignore,
+                ))
+                .or_default() += match effect.stat_effect.modifier {
+                Modifier::More => {
+                    ((1.0 + effect.stat_effect.value * 0.01).powf(level) - 1.0) * 100.0
+                }
+                _ => effect.stat_effect.value * level,
             };
             effects_map
         },

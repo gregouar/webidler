@@ -235,19 +235,40 @@ pub fn SkillTooltip(
                 .as_ref()
                 .filter(|player_base_skill| player_base_skill.next_upgrade_cost > 0.0)
                 .map(|player_base_skill| {
-                    let upgrade_effects = player_base_skill
-                        .base_skill_specs
-                        .upgrade_effects
-                        .clone();
                     let upgrade_level = player_base_skill.upgrade_level;
                     let next_upgrade_cost = player_base_skill.next_upgrade_cost;
+                    let description_effects: Vec<_> = player_base_skill
+                        .base_skill_specs
+                        .upgrade_effects
+                        .iter()
+                        .filter_map(|upgrade_effect| upgrade_effect.description.clone())
+                        .map(|description| effects_tooltip::effect_li(description))
+                        .collect();
+                    let auto_effects: Vec<_> = player_base_skill
+                        .base_skill_specs
+                        .upgrade_effects
+                        .iter()
+                        .filter_map(|upgrade_effect| {
+                            upgrade_effect
+                                .description
+                                .is_none()
+                                .then(|| upgrade_effect.stat_effect.clone())
+                        })
+                        .collect();
+
+                    // let upgrade_effects = player_base_skill
+                    // .base_skill_specs
+                    // .upgrade_effects
+                    // .clone();
+
                     view! {
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
                                 <span class="text-stone-400 ">"Next upgrade:"</span>
                             </li>
-                            {effects_tooltip::formatted_effects_list(upgrade_effects)}
+                            {description_effects}
+                            {effects_tooltip::formatted_effects_list(auto_effects)}
                         </ul>
 
                         <Separator />

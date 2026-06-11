@@ -15,7 +15,8 @@
           }
         },
         "modifier": "Flat",
-        "value": 3
+        "value": 3,
+        "description": "+3% Increased Physical Damage Taken"
       }
     ],
     "targets": [
@@ -45,11 +46,11 @@
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Curse"
           }
         },
         "modifier": "Flat",
-        "value": 3
+        "value": 3,
+        "description": "+3% Increased Storm Damage Taken"
       }
     ],
     "targets": [
@@ -79,11 +80,11 @@
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Curse"
           }
         },
         "modifier": "Flat",
-        "value": 3
+        "value": 3,
+        "description": "+3% Increased Poison Damage Taken"
       }
     ],
     "targets": [
@@ -113,11 +114,11 @@
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Curse"
           }
         },
         "modifier": "Flat",
-        "value": 3
+        "value": 3,
+        "description": "+3% Increased Fire Damage Taken"
       }
     ],
     "targets": [
@@ -147,11 +148,11 @@
       {
         "stat": {
           "StatusPower": {
-            "skill_type": "Curse"
           }
         },
         "modifier": "Flat",
-        "value": 1
+        "value": 1,
+        "description": "+1% Less Damage"
       }
     ],
     "targets": [
@@ -185,7 +186,8 @@
           }
         },
         "modifier": "Flat",
-        "value": 1
+        "value": 1,
+        "description": "+1% Reduced Block and Evade Chance"
       }
     ],
     "targets": [
@@ -214,12 +216,11 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": {
-            "skill_type": "Curse"
-          }
+          "StatusPower": { }
         },
         "modifier": "Flat",
-        "value": 5
+        "value": 5,
+        "description": "+0.1 Life Restored"
       }
     ],
     "targets": [

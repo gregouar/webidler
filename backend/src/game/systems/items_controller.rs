@@ -8,7 +8,7 @@ use shared::data::{
     modifier::Modifier,
     skill::{
         BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
-        TargetType,
+        SkillUpgradeEffect, TargetType,
     },
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
@@ -340,16 +340,19 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         cooldown: *weapon_specs.cooldown,
         mana_cost: Default::default(),
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
-        upgrade_effects: vec![StatEffect {
-            stat: StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
+        upgrade_effects: vec![SkillUpgradeEffect {
+            stat_effect: StatEffect {
+                stat: StatType::Damage {
+                    skill_filter: Default::default(),
+                    damage_type: None,
+                    min_max: None,
+                    is_hit: None,
+                },
+                modifier: Modifier::More,
+                value: 30.0,
+                bypass_ignore: true,
             },
-            modifier: Modifier::More,
-            value: 30.0,
-            bypass_ignore: true,
+            description: None,
         }],
         modifier_effects: Default::default(),
         targets: vec![SkillTargetsGroup {
