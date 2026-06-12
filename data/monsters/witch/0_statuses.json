@@ -1,0 +1,38 @@
+{
+    "witch_curse": {
+        "name": "Witch's Curse",
+        "icon": "skills/pointy_hat.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "SuccessChance": { }
+                    },
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "child_play": {
+        "name": "Child's Play",
+        "icon": "skills/carousel.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "ManaRegen",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

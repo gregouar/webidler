@@ -77,5 +77,22 @@
                 "modifier": "Percent"
             }
         ]
+    },
+    "pirate_curse": {
+        "name": "Pirates Curse",
+        "icon": "skills/pirate_grave.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
     }
 }
