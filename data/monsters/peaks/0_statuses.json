@@ -1,60 +1,57 @@
 {
-    "gold_negative": {
-        "name": "Pick Pocket",
-        "icon": "passives/gold_negative.svg",
+    "dragon_eye": {
+        "name": "Evil Eye",
+        "icon": "skills/beast_eye.svg",
         "debuff": true,
-        "duration": 30,
+        "duration": [
+            5,
+            10
+        ],
         "max_stacks": 1,
         "effects": [
             {
                 "StatModifier": {
-                    "stat": "GoldFind",
-                    "modifier": "More",
-                    "debuff": true
+                    "stat": {
+                        "CritChance": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Flat"
                 },
-                "value": 100,
-                "modifier": "Percent"
-            }
-        ]
-    },
-    "life_regen": {
-        "name": "Life Regen",
-        "icon": "passives/life_regen.svg",
-        "debuff": false,
-        "duration": 5,
-        "max_stacks": 1,
-        "effects": [
+                "value": 25,
+                "modifier": "Flat"
+            },
             {
                 "StatModifier": {
-                    "stat": "LifeRegen",
+                    "stat": {
+                        "CritDamage": {
+                            "skill_type": "Attack"
+                        }
+                    },
                     "modifier": "Flat"
                 },
                 "value": 100,
                 "modifier": "Percent"
-            }
-        ]
-    },
-    "pirate_curse": {
-        "name": "Pirates Curse",
-        "icon": "skills/pirate_grave.svg",
-        "debuff": true,
-        "duration": 3,
-        "max_stacks": 1,
-        "effects": [
+            },
             {
                 "StatModifier": {
-                    "stat": "LifeRegen",
-                    "debuff": true
+                    "stat": {
+                        "Lucky": {
+                            "roll_type": {
+                                "Damage": { }
+                            }
+                        }
+                    },
+                    "modifier": "Flat"
                 },
                 "value": 100,
-                "modifier": "Percent"
+                "modifier": "Flat"
             }
         ]
     },
-    "rage": {
-        "name": "Rage",
-        "adjective": "Enraged",
-        "icon": "statuses/enrage.svg",
+    "dragon_rage": {
+        "name": "Abal's Fury",
+        "icon": "skills/dragon_head.svg",
         "debuff": false,
         "duration": [
             5,
@@ -65,9 +62,19 @@
             {
                 "StatModifier": {
                     "stat": {
+                        "Speed": { }
+                    },
+                    "modifier": "More"
+                },
+                "value": 50,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
                         "Damage": { }
                     },
-                    "modifier": "Increased"
+                    "modifier": "More"
                 },
                 "value": 100,
                 "modifier": "Percent"
@@ -80,33 +87,14 @@
                     "modifier": "Flat",
                     "debuff": false
                 },
-                "value": 50,
+                "value": 30,
                 "modifier": "Flat"
             }
         ]
     },
-    "witch_curse": {
-        "name": "Witch's Curse",
-        "icon": "skills/pointy_hat.svg",
-        "debuff": true,
-        "duration": 5,
-        "max_stacks": 1,
-        "effects": [
-            {
-                "StatModifier": {
-                    "stat": {
-                        "SuccessChance": { }
-                    },
-                    "debuff": true
-                },
-                "value": 100,
-                "modifier": "Percent"
-            }
-        ]
-    },
-    "vulnerability_poison": {
-        "name": "Poison Vulnerability",
-        "icon": "skills/curse_putridity.svg",
+    "stinky": {
+        "name": "Stinky",
+        "icon": "skills/turd.svg",
         "debuff": true,
         "duration": 5,
         "max_stacks": 1,
@@ -115,7 +103,20 @@
                 "StatModifier": {
                     "stat": {
                         "DamageResistance": {
-                            "damage_type": "Poison"
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Storm"
                         }
                     },
                     "modifier": "Flat",

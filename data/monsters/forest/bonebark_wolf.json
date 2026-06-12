@@ -26,7 +26,7 @@
     },
     {
       "name": "Call of the Pack",
-      "icon": "skills/haste.svg",
+      "icon": "skills/wolf_howl.svg",
       "skill_type": "Blessing",
       "cooldown": 8.0,
       "targets": [
@@ -37,18 +37,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Damage": { "skill_type": "Attack" } }
-                      }
-                    },
-                    "value": 100,
-                    "cumulate": true
-                  }
-                ]
+                "status_id": "wolf_howl",
+                "value": 100
               }
             }
           ]

@@ -41,17 +41,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Damage": { "skill_type": "Attack" } }
-                      }
-                    },
-                    "value": 100
-                  }
-                ]
+                "status_id": "entrancing_song",
+                "value": 100
               }
             }
           ]

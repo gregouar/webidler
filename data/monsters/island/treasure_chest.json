@@ -16,7 +16,7 @@
   "skills": [
     {
       "name": "Protective Hull",
-      "icon": "skills/haste.svg",
+      "icon": "skills/chest.svg",
       "cooldown": 10.0,
       "skill_type": "Blessing",
       "targets": [
@@ -26,17 +26,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Armor": null }
-                      }
-                    },
-                    "value": 100
-                  }
-                ]
+                "status_id": "chest_protection",
+                "value": 50
               }
             }
           ]

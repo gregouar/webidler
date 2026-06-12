@@ -56,27 +56,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": "ManaRegen",
-                        "debuff": true
-                      }
-                    },
-                    "value": 100
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Speed": { } },
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "mermaid_song",
+                "value": 100
               }
             }
           ]

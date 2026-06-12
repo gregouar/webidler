@@ -29,17 +29,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 4,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "value": 7
-                  }
-                ]
+                "status_id": "poison",
+                "value": 7
               }
             }
           ]

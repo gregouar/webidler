@@ -36,19 +36,9 @@
           "effects": [
             {
               "ApplyStatus": {
+                "status_id": "gold_negative",
                 "duration": 30,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": "GoldFind",
-                        "modifier": "More",
-                        "debuff": true
-                      }
-                    },
-                    "value": 100
-                  }
-                ]
+                "value": 100
               }
             }
           ]

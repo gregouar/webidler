@@ -35,17 +35,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
-                    "value": [ 1, 2 ]
-                  }
-                ]
+                "status_id": "bleed",
+                "value": [ 1, 2 ]
               }
             }
           ]
@@ -63,17 +54,9 @@
           "effects": [
             {
               "ApplyStatus": {
+                "status_id": "poison",
                 "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "value": 5
-                  }
-                ]
+                "value": 5
               }
             },
             {
@@ -89,8 +72,8 @@
     },
     {
       "name": "Lost of a Friend",
-      "icon": "skills/heal.svg",
-      "skill_type": "Spell",
+      "icon": "skills/hunting_horn.svg",
+      "skill_type": "Blessing",
       "cooldown": 0.0,
       "triggers": [
         {
@@ -109,20 +92,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 10000,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "Damage": { }
-                        }
-                      }
-                    },
-                    "cumulate": true,
-                    "value": 100
-                  }
-                ]
+                "status_id": "hunter_vengeance",
+                "value": 100
               }
             }
           ]
