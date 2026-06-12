@@ -387,7 +387,7 @@ pub enum OldStatType {
         #[serde(default)]
         conditions_duration: u32,
     },
-    StatConverter(StatConverterSpecs),
+    StatConverter(OldStatConverterSpecs),
     SkillTargetModifier {
         // TODO: More control and options?
         #[serde(flatten)]
