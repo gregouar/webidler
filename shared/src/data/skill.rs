@@ -207,6 +207,9 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub conditional_modifiers: Vec<ConditionalModifier>,
+
+    #[serde(default)]
+    pub independent_application: bool,
 }
 
 #[allow(clippy::large_enum_variant)]

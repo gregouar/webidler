@@ -567,8 +567,8 @@ fn status_type_to_status_filter(value: Option<OldStatStatusType>) -> StatStatusF
                 status_id: None,
                 damage_type: None,
             },
-            OldStatStatusType::Trigger { .. } => StatStatusFilter {
-                status_id: None,
+            OldStatStatusType::Trigger { trigger_id, .. } => StatStatusFilter {
+                status_id: trigger_id.map(|x| x.into()),
                 damage_type: None,
             },
         },

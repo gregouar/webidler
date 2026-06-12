@@ -305,6 +305,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
             conditional_modifiers: Vec::new(),
+            independent_application: false,
         },
         SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
@@ -329,6 +330,7 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
             conditional_modifiers: Vec::new(),
+            independent_application: false,
         },
     ];
 

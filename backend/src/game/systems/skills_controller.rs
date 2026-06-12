@@ -352,7 +352,14 @@ pub fn apply_skill_effects(
     }
 
     for target in targets.iter_mut() {
+        let mut seed = seed.clone();
+        let mut succeed = true;
+
         for skill_effect in skill_effects.iter() {
+            if !succeed && !skill_effect.independent_application {
+                break;
+            }
+
             let skill_effect = if skill_effect.conditional_modifiers.is_empty() {
                 skill_effect
             } else {
@@ -365,7 +372,7 @@ pub fn apply_skill_effects(
                 )
             };
 
-            if !apply_skill_effect_on_target(
+            succeed = apply_skill_effect_on_target(
                 statuses_store,
                 events_queue,
                 attacker,
@@ -375,10 +382,8 @@ pub fn apply_skill_effects(
                 target,
                 skill_id,
                 trigger_depth,
-                &mut seed.clone(),
-            ) {
-                break;
-            }
+                &mut seed,
+            )
         }
     }
 

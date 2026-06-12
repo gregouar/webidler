@@ -161,7 +161,7 @@
                             "is_hit": null
                         }
                     },
-                    "modifier": "Increased",
+                    "modifier": "More",
                     "debuff": false
                 },
                 "value": 200,

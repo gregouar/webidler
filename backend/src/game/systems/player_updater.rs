@@ -277,6 +277,7 @@ fn compute_player_specs(
                     },
                     ignore_stat_effects: Default::default(),
                     conditional_modifiers: Default::default(),
+                    independent_application: false,
                 }],
                 trigger_propagate: false,
                 inherit_source_effects: false,
@@ -406,7 +407,7 @@ fn modify_player_specs(
 fn compute_status_triggers(
     statuses_store: &StatusesStore,
     player_specs: &PlayerSpecs,
-    effects: &mut Vec<StatEffect>,
+    effects: &mut [StatEffect],
 ) -> HashMap<String, TriggerEffect> {
     // skills_updater::update_skill_specs(
     //     statuses_store,

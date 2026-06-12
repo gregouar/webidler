@@ -124,7 +124,7 @@ pub fn SkillTooltip(
                 target,
                 effects_map.as_ref(),
                 computed_status_triggers
-                    .map(|computed_status_triggers| computed_status_triggers.read())
+                    .map(|computed_status_triggers| computed_status_triggers.read_untracked())
                     .as_deref(),
             )
         })
@@ -242,18 +242,14 @@ pub fn SkillTooltip(
                         .upgrade_effects
                         .iter()
                         .filter_map(|upgrade_effect| upgrade_effect.description.clone())
-                        .map(|description| effects_tooltip::effect_li(description))
+                        .map(effects_tooltip::effect_li)
                         .collect();
                     let auto_effects: Vec<_> = player_base_skill
                         .base_skill_specs
                         .upgrade_effects
                         .iter()
-                        .filter_map(|upgrade_effect| {
-                            upgrade_effect
-                                .description
-                                .is_none()
-                                .then(|| upgrade_effect.stat_effect.clone())
-                        })
+                        .filter(|&upgrade_effect| upgrade_effect.description.is_none())
+                        .map(|upgrade_effect| upgrade_effect.stat_effect.clone())
                         .collect();
 
                     // let upgrade_effects = player_base_skill
@@ -460,6 +456,8 @@ pub fn format_skill_effect(
         None
     };
 
+    let mut skip = false;
+
     let base_effects = match skill_effect.effect_type {
         SkillEffectType::FlatDamage {
             damage,
@@ -595,6 +593,7 @@ pub fn format_skill_effect(
                     let modified_value_str =
                         format_status_trigger_value(modifiers, " based on ", Some(value_factor), trigger_status_name);
 
+                    let status_effects_str =
                     status_tooltip::format_status_effects(
                                 status_specs,
                                 &value,
@@ -603,7 +602,13 @@ pub fn format_skill_effect(
                                 modifiers,
                                 effects_map,
                                 computed_status_triggers,
-                    ).map(|status_effects| {
+                    );
+
+                    if status_effects_str.is_none() {
+                        skip = true;
+                    }
+
+                    status_effects_str.map(|status_effects| {
                         view! {
                             <EffectLi>
                                 {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
@@ -721,10 +726,15 @@ pub fn format_skill_effect(
     //     .map(format_ignored_stat)
     //     .collect();
 
-    view! {
-        {base_effects}
-        {conditional_modifiers}
-        {formatted_modifiers}
+    if skip {
+        view! {}.into_any()
+    } else {
+        view! {
+            {base_effects}
+            {conditional_modifiers}
+            {formatted_modifiers}
+        }
+        .into_any()
     }
 }
 
