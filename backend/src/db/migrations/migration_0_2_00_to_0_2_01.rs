@@ -11,36 +11,29 @@ use shared::data::{
     item::{ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
     modifier::Modifier,
-    passive::PassivesTreeAscension,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
         StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusFilter, StatType,
     },
-    temple::PlayerBenedictions,
     user::UserCharacterId,
 };
 
 use crate::{
-    app_state::MasterStore,
     constants::DATA_VERSION,
     db::{
-        self,
         characters_data::{CharacterDataEntry, upsert_character_inventory_data},
         pool::{Database, DbExecutor, DbPool},
     },
-    game::{
-        data::inventory_data::InventoryData,
-        systems::{benedictions_controller, passives_controller},
-    },
+    game::data::inventory_data::InventoryData,
 };
 
-pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
+pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;
 
     stop_all_grinds(&mut *tx).await?;
 
-    migrate_character_data(&mut tx, master_store)
+    migrate_character_data(&mut tx)
         .await
         .context("migrate_character_data")?;
     migrate_stash_items(&mut tx)
@@ -60,7 +53,6 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
 
 async fn migrate_character_data(
     executor: &mut Transaction<'static, Database>,
-    master_store: &MasterStore,
 ) -> anyhow::Result<()> {
     let characters_data = sqlx::query_as!(
         CharacterDataEntry,
@@ -88,29 +80,6 @@ async fn migrate_character_data(
             &mut **executor,
             &character_data.character_id,
             rmp_serde::to_vec(&inventory_data)?,
-        )
-        .await?;
-
-        let character =
-            db::characters::read_character(&mut **executor, &character_data.character_id)
-                .await?
-                .ok_or(anyhow::anyhow!("character not found"))?;
-
-        passives_controller::update_ascension(
-            executor,
-            master_store,
-            &character_data.character_id,
-            character.resource_shards,
-            &PassivesTreeAscension::default(),
-        )
-        .await?;
-
-        benedictions_controller::update_benedictions(
-            executor,
-            master_store,
-            &character_data.character_id,
-            character.resource_gold,
-            &PlayerBenedictions::default(),
         )
         .await?;
     }
@@ -283,7 +252,7 @@ pub enum OldStatType {
     GemsFind,
     ItemRarity,
     ItemLevel,
-    SkillLevel(#[serde(default)] StatSkillFilter),
+    SkillLevel(#[serde(default)] OldStatSkillFilter),
     Armor(Option<ArmorStatType>),
     DamageResistance {
         #[serde(default)]
@@ -303,7 +272,7 @@ pub enum OldStatType {
     },
     Damage {
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         damage_type: Option<DamageType>,
         #[serde(default)]
@@ -311,13 +280,13 @@ pub enum OldStatType {
         #[serde(default)]
         is_hit: Option<bool>,
     },
-    CritChance(#[serde(default)] StatSkillFilter),
-    CritDamage(#[serde(default)] StatSkillFilter),
+    CritChance(#[serde(default)] OldStatSkillFilter),
+    CritDamage(#[serde(default)] OldStatSkillFilter),
     StatusPower {
         #[serde(default)]
         status_type: Option<OldStatStatusType>,
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         min_max: Option<MinMax>,
     },
@@ -325,27 +294,27 @@ pub enum OldStatType {
         #[serde(default)]
         status_type: Option<OldStatStatusType>,
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
     },
     StatusEscalation {
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
     StatusFaster {
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
     SuccessChance {
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         effect_type: Option<OldStatSkillEffectType>,
     },
-    Speed(#[serde(default)] StatSkillFilter),
+    Speed(#[serde(default)] OldStatSkillFilter),
     RestoreOnHit {
         restore_type: RestoreType,
         #[serde(default)]
@@ -355,7 +324,7 @@ pub enum OldStatType {
         #[serde(default)]
         restore_type: Option<RestoreType>,
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
     },
     Life,
     LifeRegen,
@@ -363,7 +332,7 @@ pub enum OldStatType {
     ManaRegen,
     ManaCost {
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
     },
     TakeFromManaBeforeLife,
     TakeFromLifeBeforeMana,
@@ -371,13 +340,13 @@ pub enum OldStatType {
     ThreatGain,
     Lucky {
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         roll_type: OldLuckyRollType,
     },
     SkillConditionalModifier {
         stat: Box<OldStatType>,
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         conditions: Vec<OldCondition>,
     },
@@ -391,7 +360,7 @@ pub enum OldStatType {
     SkillTargetModifier {
         // TODO: More control and options?
         #[serde(flatten)]
-        skill_filter: StatSkillFilter,
+        skill_filter: OldStatSkillFilter,
         #[serde(default)]
         range: Option<SkillRange>,
         #[serde(default)]
@@ -412,7 +381,9 @@ impl From<OldStatType> for StatType {
             OldStatType::LifeRegen => LifeRegen,
             OldStatType::Mana => Mana,
             OldStatType::ManaRegen => ManaRegen,
-            OldStatType::ManaCost { skill_filter } => ManaCost { skill_filter },
+            OldStatType::ManaCost { skill_filter } => ManaCost {
+                skill_filter: skill_filter.into(),
+            },
             OldStatType::Armor(damage_type) => Armor(damage_type),
             OldStatType::DamageResistance {
                 skill_type,
@@ -430,7 +401,7 @@ impl From<OldStatType> for StatType {
                 min_max,
                 is_hit,
             } => Damage {
-                skill_filter,
+                skill_filter: skill_filter.into(),
                 damage_type,
                 min_max,
                 is_hit,
@@ -447,17 +418,17 @@ impl From<OldStatType> for StatType {
                 skill_filter,
             } => Restore {
                 restore_type,
-                skill_filter,
+                skill_filter: skill_filter.into(),
             },
-            OldStatType::CritChance(skill_filter) => CritChance(skill_filter),
-            OldStatType::CritDamage(skill_filter) => CritDamage(skill_filter),
+            OldStatType::CritChance(skill_filter) => CritChance(skill_filter.into()),
+            OldStatType::CritDamage(skill_filter) => CritDamage(skill_filter.into()),
             OldStatType::StatusPower {
                 status_type,
                 skill_filter,
                 min_max,
             } => StatusPower {
                 status_filter: status_type_to_status_filter(status_type),
-                skill_filter,
+                skill_filter: skill_filter.into(),
                 min_max,
             },
             OldStatType::StatusDuration {
@@ -465,9 +436,9 @@ impl From<OldStatType> for StatType {
                 skill_filter,
             } => StatusDuration {
                 status_filter: status_type_to_status_filter(status_type),
-                skill_filter,
+                skill_filter: skill_filter.into(),
             },
-            OldStatType::Speed(skill_filter) => Speed(skill_filter),
+            OldStatType::Speed(skill_filter) => Speed(skill_filter.into()),
             OldStatType::MovementSpeed => MovementSpeed,
             OldStatType::GoldFind => GoldFind,
             OldStatType::ItemRarity => ItemRarity,
@@ -476,7 +447,7 @@ impl From<OldStatType> for StatType {
                 skill_filter,
                 roll_type,
             } => Lucky {
-                skill_filter,
+                skill_filter: skill_filter.into(),
                 roll_type: roll_type.into(),
             },
             OldStatType::SkillConditionalModifier {
@@ -485,10 +456,10 @@ impl From<OldStatType> for StatType {
                 conditions,
             } => SkillConditionalModifier {
                 stat: Box::new((*stat).into()),
-                skill_filter,
+                skill_filter: skill_filter.into(),
                 conditions: conditions.into_iter().map(|c| c.into()).collect(),
             },
-            OldStatType::SkillLevel(skill_filter) => SkillLevel(skill_filter),
+            OldStatType::SkillLevel(skill_filter) => SkillLevel(skill_filter.into()),
             OldStatType::StatConverter(stat_converter_specs) => {
                 StatConverter(stat_converter_specs.into())
             }
@@ -505,7 +476,7 @@ impl From<OldStatType> for StatType {
                 skill_filter,
                 effect_type,
             } => SuccessChance {
-                skill_filter,
+                skill_filter: skill_filter.into(),
                 effect_type: effect_type.map(|e| e.into()),
             },
             OldStatType::Description(d) => Description(d),
@@ -527,7 +498,7 @@ impl From<OldStatType> for StatType {
                 shape,
                 repeat,
             } => SkillTargetModifier {
-                skill_filter,
+                skill_filter: skill_filter.into(),
                 range,
                 shape,
                 repeat,
@@ -542,7 +513,7 @@ impl From<OldStatType> for StatType {
                     status_id: None,
                     damage_type: damage_type.map(|d| d.into()),
                 },
-                skill_filter,
+                skill_filter: skill_filter.into(),
             },
             OldStatType::StatusFaster {
                 skill_filter,
@@ -552,7 +523,7 @@ impl From<OldStatType> for StatType {
                     status_id: None,
                     damage_type: damage_type.map(|d| d.into()),
                 },
-                skill_filter,
+                skill_filter: skill_filter.into(),
             },
         }
     }
@@ -758,6 +729,27 @@ impl From<OldCondition> for Condition {
             OldCondition::LowLife => LowLife,
             OldCondition::LowMana => LowMana,
             OldCondition::ThreatLevel => ThreatLevel,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct OldStatSkillFilter {
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+
+    #[serde(default)]
+    pub skill_id: Option<String>,
+    // TODO: This is awful....
+    #[serde(default)]
+    pub skill_description: Option<String>,
+}
+
+impl From<OldStatSkillFilter> for StatSkillFilter {
+    fn from(value: OldStatSkillFilter) -> Self {
+        StatSkillFilter {
+            skill_type: value.skill_type,
+            skill_id: value.skill_id,
         }
     }
 }
