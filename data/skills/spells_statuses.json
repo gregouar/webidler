@@ -21,6 +21,7 @@
         "name": "Self-Righteous Fire",
         "icon": "skills/righteous_fire.svg",
         "debuff": true,
+        "damage_type": "Fire",
         "duration": 2,
         "max_stacks": 1,
         "effects": [

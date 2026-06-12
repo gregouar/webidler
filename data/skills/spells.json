@@ -217,7 +217,9 @@
     "upgrade_effects": [
       {
         "stat": {
-          "Damage": { }
+          "StatusPower": {
+            "status_id": "righteous_fire"
+          }
         },
         "modifier": "More",
         "value": 30
@@ -229,13 +231,11 @@
           }
         },
         "modifier": "Increased",
-        "value": 20
+        "value": 20,
+        "bypass_ignore": true
       }
     ],
     "ignore_stat_effects": [
-      {
-        "Speed": { }
-      }
     ],
     "targets": [
       {
@@ -257,7 +257,17 @@
             "ApplyStatus": {
               "status_id": "righteous_fire_self",
               "value": 2
-            }
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": { }
+              },
+              {
+                "StatusPower": {
+                  "damage_type": "Any"
+                }
+              }
+            ]
           }
         ]
       }
@@ -267,8 +277,7 @@
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-              }
+              "Damage": { }
             },
             "bypass_ignore": true,
             "modifier": "More",
@@ -312,7 +321,10 @@
           {
             "ApplyStatus": {
               "status_id": "poison",
-              "value": [ 4, 8 ]
+              "value": [
+                4,
+                8
+              ]
             }
           }
         ]
