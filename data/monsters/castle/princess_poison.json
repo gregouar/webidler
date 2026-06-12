@@ -30,7 +30,8 @@
             {
               "ApplyStatus": {
                 "status_id": "poison",
-                "value": 7
+                "value": 7,
+                "escalation": 20
               }
             }
           ]

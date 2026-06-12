@@ -65,22 +65,11 @@
                 {
                     "range": "Any",
                     "effects": [
-
                         {
                             "ApplyStatus": {
+                                "status_id": "chill",
                                 "duration": 4,
-                                "statuses": [
-                                    {
-                                        "status_type": {
-                                            "StatModifier": {
-                                                "stat": { "Speed": { } },
-                                                "modifier": "More",
-                                                "debuff": true
-                                            }
-                                        },
-                                        "value": 100
-                                    }
-                                ]
+                                "value": 100
                             }
                         }
 

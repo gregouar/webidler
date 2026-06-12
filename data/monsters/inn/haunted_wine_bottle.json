@@ -15,9 +15,9 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
                 "status_id": "poison",
-                "value": 1
+                "value": 1,
+                "escalation": 20
               }
             },
             {

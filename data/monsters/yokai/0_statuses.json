@@ -1,0 +1,73 @@
+{
+    "lantern_prank": {
+        "name": "Lantern Prank",
+        "icon": "skills/asian_lantern.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "ManaRegen",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 50,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "ward_evil": {
+        "name": "Ward Evil",
+        "icon": "skills/blessing_protection.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Armor": null
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "distracted": {
+        "name": "Distracted",
+        "icon": "skills/lips.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "SuccessChance": { }
+                    },
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

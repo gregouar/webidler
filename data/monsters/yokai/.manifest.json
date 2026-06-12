@@ -20,6 +20,9 @@
             "rokurokubi.json",
             "ushi_oni.json",
             "yurei.json"
+        ],
+        "statuses": [
+            "0_statuses.json"
         ]
     }
 }

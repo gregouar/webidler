@@ -68,6 +68,50 @@
             }
         ]
     },
+    "vulnerability_physical": {
+        "name": "Physical Vulnerability",
+        "icon": "skills/curse_frailty.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_fire": {
+        "name": "Fire Vulnerability",
+        "icon": "skills/curse_flammability.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
     "vulnerability_poison": {
         "name": "Poison Vulnerability",
         "icon": "skills/curse_putridity.svg",
@@ -80,6 +124,28 @@
                     "stat": {
                         "DamageResistance": {
                             "damage_type": "Poison"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_storm": {
+        "name": "Storm Vulnerability",
+        "icon": "skills/curse_conductivity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Storm"
                         }
                     },
                     "modifier": "Flat",
