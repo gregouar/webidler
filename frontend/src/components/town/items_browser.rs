@@ -112,8 +112,8 @@ pub fn ItemsBrowser(
             {move || (items_list.read().is_empty() && !has_more.map(|has_more| has_more.get()).unwrap_or_default()).then(|| view!{
                 <div class="w-full h-full flex items-center justify-center">
                     <div class="flex flex-col items-center text-center gap-1">
-                        <span class="text-gray-400">"No Item Found"</span>
-                        <span class="text-gray-400">"Maybe try other filters?"</span>
+                        <span class="text-zinc-400">"No Item Found"</span>
+                        <span class="text-zinc-400">"Maybe try other filters?"</span>
                     </div>
                 </div>
             })}
@@ -122,7 +122,7 @@ pub fn ItemsBrowser(
                     reached_end_of_list.and_then(|reached_end_of_list| {
                         (reached_end_of_list.get()
                             && has_more.map(|has_more| has_more.get()).unwrap_or_default())
-                        .then(|| view! { <span class="text-gray-400">"Loading..."</span> })
+                        .then(|| view! { <span class="text-zinc-400">"Loading..."</span> })
                     })
                 }
             }
@@ -208,7 +208,7 @@ pub fn ItemRow(
                     .then(|| {
                         view! {
                             <div class="absolute flex bottom-2 right-2 gap-1 items-center">
-                                <span class="text-gray-400 text-xs xl:text-sm">"Price:"</span>
+                                <span class="text-zinc-400 text-xs xl:text-sm">"Price:"</span>
                                 <span class="text-fuchsia-300 font-semibold">
                                     {format!("{:.0}", price)}
                                 </span>
@@ -333,7 +333,7 @@ pub fn ItemDetailsPanel(
                                 .unwrap_or_else(|| {
                                     view! {
                                         <div class=format!(
-                                            "flex h-full items-center justify-center text-sm xl:text-base text-gray-400",
+                                            "flex h-full items-center justify-center text-sm xl:text-base text-zinc-400",
                                         )>{children.read_value()()}</div>
                                     }
                                         .into_any()
@@ -405,7 +405,7 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
             }
             on:mouseleave=move |_| hide_tooltip()
         >
-            <span class="text-gray-400 text-xs xl:text-sm">"Compare"</span>
+            <span class="text-zinc-400 text-xs xl:text-sm">"Compare"</span>
         </div>
     }
 }

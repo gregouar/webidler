@@ -533,7 +533,7 @@ pub fn NodeTooltipContent(
     let starting_node_text = (node_specs.root_node).then(|| {
         view! {
             <ul class="list-none xl:space-y-1">
-                <li class="text-gray-400 text-sm ">"Root Node"</li>
+                <li class="text-zinc-400 text-sm ">"Root Node"</li>
             </ul>
             <Separator />
         }
@@ -556,13 +556,13 @@ pub fn NodeTooltipContent(
                     .then(|| {
                         view! {
                             <ul class="list-none xl:space-y-1">
-                                <li class="text-sm text-gray-400  italic">"Empty"</li>
+                                <li class="text-sm text-zinc-400  italic">"Empty"</li>
                             </ul>
                         }
                     })}
                 <Separator />
                 <ul>
-                    <li class="text-sm text-gray-400 ">"Ascend to Socket Rune"</li>
+                    <li class="text-sm text-zinc-400 ">"Ascend to Socket Rune"</li>
                 </ul>
             }
             .into_any()
@@ -578,7 +578,7 @@ pub fn NodeTooltipContent(
                         <Separator />
                         <ul>
                             <li>
-                                <span class="text-sm text-gray-400 ">
+                                <span class="text-sm text-zinc-400 ">
                                     "Ascend in Town to Unlock"
                                 </span>
                             </li>
@@ -590,7 +590,7 @@ pub fn NodeTooltipContent(
                 Some(
                     view! {
                         <Separator />
-                        <p class="text-xs xl:text-sm text-gray-400 ">
+                        <p class="text-xs xl:text-sm text-zinc-400 ">
                             "Ascended Level: " <span class="text-white">{node_level}</span>
                             {max_upgrade_level
                                 .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
@@ -604,7 +604,7 @@ pub fn NodeTooltipContent(
                 Some(
                     view! {
                         <Separator />
-                        <p class="text-xs xl:text-sm text-gray-400 ">
+                        <p class="text-xs xl:text-sm text-zinc-400 ">
                             "Level: " <span class="text-white">{node_level}</span>
                             {max_upgrade_level
                                 .map(|max_upgrade_level| format!("/{}", max_upgrade_level))
@@ -634,7 +634,7 @@ pub fn NodeTooltipContent(
                                     <Separator />
                                     <ul class="text-xs xl:text-sm">
                                         <li>
-                                            <span class="text-gray-400 ">"Ascend to get:"</span>
+                                            <span class="text-zinc-400 ">"Ascend to get:"</span>
                                         </li>
                                         {effects_tooltip::formatted_effects_list(
                                             node_specs.upgrade_effects.clone(),

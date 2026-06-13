@@ -430,7 +430,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
                     <CardTitle>"Inventory"</CardTitle>
-                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                    <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!(
                                 "({} / {})",
@@ -446,7 +446,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 // .map(|loot_preference| {
                 // view! {
                 // <div class="flex items-center gap-2">
-                // <span class="hidden xl:inline text-gray-400 text-sm">
+                // <span class="hidden xl:inline text-zinc-400 text-sm">
                 // "Loot Preference:"
                 // </span>
                 // <LootFilterDropdown loot_preference />

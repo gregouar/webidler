@@ -179,7 +179,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 <AccountSettingsPanel open=open_account refresh_trigger />
 
                 <Transition fallback=move || {
-                    view! { <p class="text-gray-400">"Loading..."</p> }
+                    view! { <p class="text-zinc-400">"Loading..."</p> }
                 }>
                     {move || {
                         Suspend::new(async move {
@@ -240,7 +240,7 @@ fn CharactersSelection(
         <Card class="h-full w-2xl">
             <div class="flex flex-row justify-between items-center px-4">
                 <CardTitle>"Your Characters"</CardTitle>
-                <span class="text-sm text-gray-400 font-medium">
+                <span class="text-sm text-zinc-400 font-medium">
                     {format!("{characters_len} / {}", user_details.max_characters)}
                 </span>
             </div>
@@ -483,7 +483,7 @@ fn CharacterSlot(
                         }}
                     </div>
 
-                    <div class="text-sm text-gray-400 truncate">
+                    <div class="text-sm text-zinc-400 truncate">
                         {if character.max_area_level > 0 {
                             format!("Power Level: {}", character.max_area_level)
                         } else {
@@ -491,7 +491,7 @@ fn CharacterSlot(
                         }}
                     </div>
 
-                    <div class="text-sm text-gray-400 truncate">
+                    <div class="text-sm text-zinc-400 truncate">
                         {match character.activity {
                             UserCharacterActivity::Rusting => view! { "Rusting in Town" }.into_any(),
                             UserCharacterActivity::Grinding(area_id, area_level) => {
@@ -788,7 +788,7 @@ pub fn CreateCharacterPanel(
                 </Show>
 
                 <CardInset class="flex-1 min-h-0">
-                    <span class="block text-sm font-medium text-gray-400">"Choose a Portrait"</span>
+                    <span class="block text-sm font-medium text-zinc-400">"Choose a Portrait"</span>
                     <div class="grid grid-cols-4 gap-1 xl:gap-2">
                         <For
                             each=move || portraits
@@ -929,7 +929,7 @@ fn NewsPanel() -> impl IntoView {
 
             <CardInset class="w-full gap-3">
                 <Transition fallback=move || {
-                    view! { <p class="text-gray-400">"Loading..."</p> }
+                    view! { <p class="text-zinc-400">"Loading..."</p> }
                 }>
                     {move || {
                         Suspend::new(async move {
@@ -978,7 +978,7 @@ fn NewsCard(news: NewsEntry) -> impl IntoView {
                 </span>
             </div>
 
-            <p class="relative z-10 text-gray-300 text-sm whitespace-pre-line leading-relaxed">
+            <p class="relative z-10 text-zinc-300 text-sm whitespace-pre-line leading-relaxed">
                 {body}
             </p>
         </div>

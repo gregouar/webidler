@@ -249,7 +249,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                     <span class="text-zinc-300">
                                         "Unavailable, no Stamina left"
                                     </span>
-                                    <span class="text-xs italic text-gray-400">
+                                    <span class="text-xs italic text-zinc-400">
                                         "Go Offline while in a Grind to recuperate."
                                     </span>
                                 </div>
@@ -263,7 +263,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                         {format_duration(game_context.player_stamina.get(), false)}
                                         " Stamina left"
                                     </span>
-                                    <span class="text-xs italic text-gray-400">
+                                    <span class="text-xs italic text-zinc-400">
                                         "Stamina will be lost when Stopping the Grind."
                                     </span>
                                 </div>

@@ -185,7 +185,7 @@ pub fn PassivesPage() -> impl IntoView {
                             <div class="flex justify-between mx-4 items-center">
                                 <div class="flex flex-row items-center gap-1 xl:gap-2">
                                     <CardTitle>"Passives"</CardTitle>
-                                    <span class="text-shadow-md shadow-gray-950 text-gray-400 text-xs xl:text-base font-medium">
+                                    <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
                                         "(" {move || { passives_tree_specs.read().nodes.len() }}")"
                                     </span>
                                 </div>
@@ -853,7 +853,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                         prop:checked=initial_node
                         on:input=move |ev| initial_node.set(event_target_checked(&ev))
                     />
-                    <label for="terms" class="text-sm text-gray-400">
+                    <label for="terms" class="text-sm text-zinc-400">
                         "Root Node"
                     </label>
                 </div>
@@ -866,7 +866,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                         prop:checked=node_locked
                         on:input=move |ev| node_locked.set(event_target_checked(&ev))
                     />
-                    <label for="terms" class="text-sm text-gray-400">
+                    <label for="terms" class="text-sm text-zinc-400">
                         "Locked"
                     </label>
                 </div>
@@ -879,7 +879,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                         prop:checked=node_socket
                         on:input=move |ev| node_socket.set(event_target_checked(&ev))
                     />
-                    <label for="terms" class="text-sm text-gray-400">
+                    <label for="terms" class="text-sm text-zinc-400">
                         "Socket"
                     </label>
                 </div>

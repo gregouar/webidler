@@ -10,6 +10,7 @@ use shared::{
 use crate::components::{
     auth::AuthContext,
     backend_client::BackendClient,
+    events::{EventsContext, Key},
     settings::SettingsContext,
     shared::{
         resources::{GoldCounter, GoldIcon},
@@ -58,7 +59,7 @@ pub fn TemplePanel(
                             view! {
                                 <div class="flex-1" />
 
-                                <div class="flex h-full items-center gap-1 text-sm xl:text-base text-gray-300 mb-1">
+                                <div class="flex h-full items-center gap-1 text-sm xl:text-base text-zinc-300 mb-1">
                                     "Benedictions Cost: " <GoldCounter value=cost w_full=true />
                                 </div>
 
@@ -191,6 +192,7 @@ fn BenedictionCategorySection(
     view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let events_context: EventsContext = expect_context();
 
     let category_title = category_specs.title.clone();
     let max_level_text = category_specs
@@ -249,23 +251,69 @@ fn BenedictionCategorySection(
     });
     let reset_disabled = Signal::derive(move || allocated_points.get() == 0);
 
+    let buy_points_batch = Memo::new({
+        let category_specs = category_specs.clone();
+        let category_id = category_id.clone();
+        move |_| {
+            let mut amount = 0;
+            let mut total_cost = 0.0;
+            let mut upgrade_level = player_benedictions.with(|player_benedictions| {
+                player_benedictions
+                    .categories
+                    .get(&category_id)
+                    .map(|category| category.upgrade_level)
+                    .unwrap_or_default()
+            });
+            let available_gold = town_context.character.read().resource_gold - cost.get();
+
+            for _ in 0..10 {
+                if category_specs
+                    .max_upgrade_level
+                    .map(|max_upgrade_level| upgrade_level >= max_upgrade_level)
+                    .unwrap_or_default()
+                {
+                    break;
+                }
+
+                let next_price = category_specs.compute_price(upgrade_level);
+                if total_cost + next_price > available_gold {
+                    break;
+                }
+
+                amount += 1;
+                total_cost += next_price;
+                upgrade_level += 1;
+            }
+
+            (amount, total_cost)
+        }
+    });
+
     let buy_point = {
         let category_id = category_id.clone();
         move |_| {
-            if max_level_reached.get_untracked()
+            let (amount, total_price) = if events_context.key_pressed(Key::Ctrl) {
+                buy_points_batch.get_untracked()
+            } else if max_level_reached.get_untracked()
                 || cost.get_untracked() + price.get_untracked()
                     > town_context.character.read_untracked().resource_gold
             {
+                (0, 0.0)
+            } else {
+                (1, price.get_untracked())
+            };
+
+            if amount == 0 {
                 return;
             }
 
-            cost.update(|cost| *cost += price.get_untracked());
+            cost.update(|cost| *cost += total_price);
             player_benedictions.update(|player_benedictions| {
                 player_benedictions
                     .categories
                     .entry(category_id.clone())
                     .or_default()
-                    .upgrade_level += 1;
+                    .upgrade_level += amount;
             });
         }
     };
@@ -371,6 +419,8 @@ fn BenedictionRow(
     player_benedictions: RwSignal<PlayerBenedictions>,
     view_only: bool,
 ) -> impl IntoView {
+    let events_context: EventsContext = expect_context();
+
     let upgrade_level = Memo::new({
         let category_id = category_id.clone();
         let benediction_id = benediction_id.clone();
@@ -405,18 +455,25 @@ fn BenedictionRow(
         let category_id = category_id.clone();
         let benediction_id = benediction_id.clone();
         move |_| {
+            let amount = if events_context.key_pressed(Key::Ctrl) {
+                10
+            } else {
+                1
+            };
+
             player_benedictions.update(|player_benedictions| {
                 let category = player_benedictions
                     .categories
                     .entry(category_id.clone())
                     .or_default();
                 let allocated_points = category.purchased_benedictions.values().sum::<u64>();
+                let available_points = category.upgrade_level.saturating_sub(allocated_points);
 
-                if allocated_points < category.upgrade_level {
+                if available_points > 0 {
                     *category
                         .purchased_benedictions
                         .entry(benediction_id.clone())
-                        .or_default() += 1;
+                        .or_default() += amount.min(available_points);
                 }
             });
         }
@@ -425,6 +482,12 @@ fn BenedictionRow(
         let category_id = category_id.clone();
         let benediction_id = benediction_id.clone();
         move |_| {
+            let amount = if events_context.key_pressed(Key::Ctrl) {
+                10
+            } else {
+                1
+            };
+
             player_benedictions.update(|player_benedictions| {
                 let Some(category) = player_benedictions.categories.get_mut(&category_id) else {
                     return;
@@ -434,7 +497,7 @@ fn BenedictionRow(
                     return;
                 };
 
-                *upgrade_level = upgrade_level.saturating_sub(1);
+                *upgrade_level = upgrade_level.saturating_sub(amount);
                 if *upgrade_level == 0 {
                     category.purchased_benedictions.remove(&benediction_id);
                 }
@@ -461,7 +524,7 @@ fn BenedictionRow(
                         {view_only
                             .then(|| {
                                 view! {
-                                    <div class="shrink-0 text-xs xl:text-sm text-gray-400">
+                                    <div class="shrink-0 text-xs xl:text-sm text-zinc-400">
                                         "Level "
                                         <span class="font-bold text-zinc-100">
                                             {move || upgrade_level.get()}
@@ -473,7 +536,7 @@ fn BenedictionRow(
 
                     <div class="grid grid-cols-1 2xl:grid-cols-2 gap-2">
                         <div class="min-w-0 rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
-                            <div class="text-xs text-gray-400 mb-1">"Current"</div>
+                            <div class="text-xs text-zinc-400 mb-1">"Current"</div>
                             <EffectDescription
                                 benediction_specs=benediction_specs.clone()
                                 upgrade_level=Signal::derive(move || upgrade_level.get())
@@ -481,7 +544,7 @@ fn BenedictionRow(
                         </div>
 
                         <div class="min-w-0 rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
-                            <div class="text-xs text-gray-400 mb-1">"Next"</div>
+                            <div class="text-xs text-zinc-400 mb-1">"Next"</div>
                             <EffectDescription
                                 benediction_specs=benediction_specs.clone()
                                 upgrade_level=Signal::derive(move || {

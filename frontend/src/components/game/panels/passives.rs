@@ -67,7 +67,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
 
                         <div class="flex-1" />
 
-                        <span class="flex text-sm xl:text-base text-gray-400 gap-1">
+                        <span class="flex text-sm xl:text-base text-zinc-400 gap-1">
                             "Remaining Points: " <NumberInset>
                                 <div class="w-[2ch] font-semibold text-white text-right">
                                     {move || {
@@ -125,7 +125,7 @@ fn AutoButton() -> impl IntoView {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                 <span class="text-white">"Assign points following previously saved build."</span>
-                <span class="text-xs italic text-gray-400">
+                <span class="text-xs italic text-zinc-400">
                     "Hold CTRL: +"{10.min(game_context.player_resources.read().passive_points)}
                 </span>
             </div>

@@ -367,7 +367,7 @@ pub fn ConfirmAccountDeletionModal(
                     class="bg-zinc-900 ring-1 ring-zinc-700 rounded-lg p-6 w-full max-w-md shadow-xl text-gray-200 space-y-4"
                 >
                     <h2 class="text-xl font-bold text-red-400">"Confirm Account Deletion"</h2>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <p class="text-zinc-400 text-sm leading-relaxed">
                         "This action is "
                         <span class="text-red-500 font-semibold">"permanent"</span>
                         ". All your characters, progress, and items will be lost."

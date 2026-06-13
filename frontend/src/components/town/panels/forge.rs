@@ -424,7 +424,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     class:mb-1
                     class:xl:mb-2
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
                         "Add random" <span class="text-white font-bold">"Affix"</span>
                         {move || {
                             affix_price()
@@ -447,7 +447,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                         move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
                         "Add random" <span class="text-white font-bold">"Prefix"</span>
                         {move || {
                             prefix_price()
@@ -467,7 +467,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                         move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
                         "Add random" <span class="text-white font-bold">"Suffix"</span>
                         {move || {
                             suffix_price()
@@ -490,7 +490,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     class:mt-1
                     class:xl:mt-2
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
                         "Remove random" <span class="text-white font-bold">"Affix"</span>
                         {move || {
                             remove_price()
@@ -620,7 +620,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                     class:mb-1
                     class:xl:mb-2
                 >
-                    <div class="w-full flex justify-center items-center gap-1 text-gray-400 h-[2em]">
+                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
                         {move || {
                             if wrong_item() {
                                 view! { "Item cannot be empowered" }.into_any()
@@ -773,7 +773,7 @@ pub fn GambleDetails(
                 // <div class="w-full flex items-center justify-center text-sm xl:text-base text-amber-400 font-bold gap-2">
                 // {move || { loot_filter_category_to_str(gamble_category.get()) }}
                 // </div>
-                <div class="w-full p-2 gap-2 flex items-center justify-center text-gray-300 text-sm">
+                <div class="w-full p-2 gap-2 flex items-center justify-center text-zinc-400 text-sm">
                     <span>"Item Category:"</span>
                     <SearchableDropdownMenu
                         options=GAMBLE_ITEM_CATEGORIES
@@ -791,7 +791,7 @@ pub fn GambleDetails(
 
             <div class="flex flex-col gap-2 w-full">
                 <Separator />
-                <div class="w-full flex items-center gap-1 text-lg text-gray-400 p-2">
+                <div class="w-full flex items-center gap-1 text-lg text-zinc-400 p-2">
                     "Price: "
                     <span class="text-fuchsia-300 font-bold">
                         {move || format!("{:.0}", gamble_price())}

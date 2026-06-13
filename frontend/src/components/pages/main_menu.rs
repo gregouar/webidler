@@ -499,7 +499,7 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
                     <h2 class="text-xl font-bold text-amber-300 font-display">"Forgot Password"</h2>
 
                     <Show when=move || !success.get()>
-                        <p class="text-gray-400 text-sm leading-relaxed">
+                        <p class="text-zinc-400 text-sm leading-relaxed">
                             "Enter the email associated with your account. We'll send you a link to reset your password."
                         </p>
 
@@ -524,7 +524,7 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
 
                     <Show when=move || success.get()>
                         <div class="text-center space-y-3">
-                            <p class="text-gray-400 text-sm">
+                            <p class="text-zinc-400 text-sm">
                                 "Check your email and follow the reset link to set a new password. Please check your spams, I don't have money to pay for a proper mail service."
                             </p>
                             <MenuButton on:click=on_close>"Close"</MenuButton>
@@ -663,7 +663,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                         >
                             <h2 class="text-xl font-bold text-amber-300 font-display">"Guest"</h2>
 
-                            <p class="text-gray-400 text-sm leading-relaxed">
+                            <p class="text-zinc-400 text-sm leading-relaxed">
                                 "Playing as guest will create a new account with random username and password stored locally in your browser.
                                 You will be able to change them later from the 'Account Settings' page."
                             </p>
@@ -686,7 +686,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                                         accepted_terms.set(event_target_checked(&ev));
                                     }
                                 />
-                                <label for="terms" class="text-sm text-gray-400">
+                                <label for="terms" class="text-sm text-zinc-400">
                                     "I agree to the "
                                     <span class="text-amber-300 underline hover:text-amber-200">
                                         <ALink href="/terms">"Terms & Conditions"</ALink>

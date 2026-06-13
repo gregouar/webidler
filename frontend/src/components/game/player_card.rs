@@ -713,7 +713,7 @@ fn PlayerSkill(
                         <Number class:font-semibold value=level_up_cost />
                         " Gold"
                     </span>
-                    <span class="text-xs italic text-gray-400">
+                    <span class="text-xs italic text-zinc-400">
                         {format!("Hold CTRL: +{}", level_up_batch.get().0)}
                     </span>
                 </div>

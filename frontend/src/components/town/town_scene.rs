@@ -459,7 +459,7 @@ fn GrindingAreaCard(
                                 "Locked"
                             }}
                         </div>
-                        <div class="text-gray-300 text-xs mt-1">
+                        <div class="text-zinc-300 text-xs mt-1">
                             {format!("Requires Level {}", area_specs.read().required_level)}
                         </div>
                         <div class="mt-2 text-xs text-gray-500 italic">

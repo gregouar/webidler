@@ -406,7 +406,7 @@ pub fn AscendPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400 flex items-center gap-2">
+                    <div class="text-sm xl:text-base text-zinc-400 flex items-center gap-2">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {
@@ -593,7 +593,7 @@ pub fn BuildPanelHeader(
         {(!view_only)
             .then(|| {
                 view! {
-                    <div class="text-sm xl:text-base text-gray-400 flex items-center gap-1">
+                    <div class="text-sm xl:text-base text-zinc-400 flex items-center gap-1">
                         {move || match invalid_tree.get() {
                             true => {
                                 view! {
