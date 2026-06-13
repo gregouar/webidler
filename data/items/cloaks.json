@@ -190,6 +190,7 @@
         "trigger_id": "drink_storm",
         "target": "SameTarget",
         "modifiers": [],
+        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -203,6 +204,7 @@
             "ApplyStatus": {
               "status_id": "drink_storm",
               "value": 100.0,
+              "value_factor": 1.0,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -211,7 +213,8 @@
               "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
         ]
       }
@@ -316,6 +319,18 @@
       },
       {
         "stat": {
+          "Evade": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          4.0,
+          6.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "Speed": {
             "skill_type": "Attack",
             "skill_id": null
@@ -360,6 +375,7 @@
         "trigger_id": "backstab_cloak",
         "target": "SameTarget",
         "modifiers": [],
+        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -373,6 +389,7 @@
             "ApplyStatus": {
               "status_id": "backstab_cloak",
               "value": 1.0,
+              "value_factor": 1.0,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -381,7 +398,8 @@
               "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
         ]
       }
@@ -409,6 +427,16 @@
           },
           "modifier": "Flat",
           "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Evade": null
+          },
+          "modifier": "Flat",
+          "value": 2.0
         }
       },
       {
@@ -627,7 +655,7 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "damage_type": "Poison",
+                  "damage_type": null,
                   "min_max": null,
                   "is_hit": null
                 }
@@ -820,11 +848,13 @@
             "source": {
               "StatusValue": {
                 "status_id": "open_wound",
+                "damage_type": null,
                 "skill_type": null
               }
             }
           }
         ],
+        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -855,7 +885,8 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
         ]
       }

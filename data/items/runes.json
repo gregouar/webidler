@@ -62,8 +62,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          400.0,
-          800.0
+          300.0,
+          500.0
         ],
         "ignore_quality": true
       }
@@ -121,6 +121,7 @@
         "trigger_id": "rune_berserker",
         "target": "Me",
         "modifiers": [],
+        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -134,6 +135,7 @@
             "ApplyStatus": {
               "status_id": "berserker",
               "value": 1.0,
+              "value_factor": 1.0,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -142,7 +144,8 @@
               "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
         ]
       }
@@ -262,7 +265,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.1,
+            "factor": 0.25,
             "source": {
               "StatusValue": {
                 "status_id": "poison",
@@ -291,6 +294,7 @@
             }
           }
         ],
+        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -304,6 +308,7 @@
             "ApplyStatus": {
               "status_id": "burn",
               "value": 0.0,
+              "value_factor": 1.0,
               "duration": 0.0,
               "escalation": null,
               "max_stacks": null,
@@ -313,20 +318,20 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
                   "damage_type": "Poison",
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null
                 }
               },
               {
@@ -339,7 +344,8 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
         ]
       }
@@ -456,6 +462,7 @@
             }
           }
         ],
+        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -469,6 +476,7 @@
             "ApplyStatus": {
               "status_id": "poison",
               "value": 0.0,
+              "value_factor": 1.0,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -487,7 +495,8 @@
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
         ]
       }

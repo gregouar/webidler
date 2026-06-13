@@ -88,6 +88,7 @@
             {
                 "StatModifier": {
                     "stat": "LifeRegen",
+                    "modifier": "Flat",
                     "debuff": true
                 },
                 "value": 100,

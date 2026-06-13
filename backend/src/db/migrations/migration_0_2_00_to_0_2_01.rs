@@ -237,6 +237,17 @@ pub struct OldStatEffect {
 
 impl From<OldStatEffect> for StatEffect {
     fn from(value: OldStatEffect) -> Self {
+        if let OldStatType::CritDamage(_) = value.stat
+            && value.modifier == Modifier::More
+        {
+            return Self {
+                stat: value.stat.into(),
+                modifier: Modifier::Increased,
+                value: value.value,
+                bypass_ignore: value.bypass_ignore,
+            };
+        }
+
         Self {
             stat: value.stat.into(),
             modifier: value.modifier,

@@ -4,7 +4,7 @@
     "icon": "items/weapons_spell/wooden_rod.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -27,21 +27,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "wand": {
     "name": "Magic Wand",
     "icon": "items/weapons_spell/wand.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -64,21 +64,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "wand_unique": {
     "name": "Baguette du Fromage",
     "icon": "items/weapons_spell/baguette_fromage.webp",
     "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -146,10 +146,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "baguette_fromage",
         "OnHit": {
           "skill_type": "Spell",
           "range": null,
@@ -157,12 +153,19 @@
           "is_blocked": null,
           "is_hurt": null,
           "is_triggered": null,
-          "damage_type": "Fire"
+          "damage_type": "Fire",
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "baguette_fromage",
         "target": "SameTarget",
-        "modifiers": [ ],
-        "skill_range": "Any",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Any",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -171,15 +174,20 @@
             },
             "ApplyStatus": {
               "status_id": "cheese",
-              "value": 100
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -211,7 +219,7 @@
             }
           },
           "modifier": "More",
-          "value": 20.0
+          "value": 25.0
         }
       },
       {
@@ -229,7 +237,7 @@
     "icon": "items/weapons_spell/bone_wand.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -252,21 +260,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "iron_wand": {
     "name": "Iron Wand",
     "icon": "items/weapons_spell/iron_wand.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -289,21 +297,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "iron_wand_unique": {
     "name": "Starlit Baton",
     "icon": "items/weapons_spell/princess_wand.webp",
     "description": "A flick of the wrist, and the stars learn to travel in pairs.",
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -390,7 +398,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -457,7 +465,7 @@
     "icon": "items/weapons_spell/carved_wand.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -480,21 +488,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "decorated_wand_unique": {
     "name": "Arcane Cornucopia",
     "icon": "items/weapons_spell/magic_horn.webp",
     "description": "Wizards say this horn was carved to pour mana, not keep it, and it has never stopped spilling since.",
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -566,7 +574,6 @@
               "Damage": {
                 "skill_type": "Spell",
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -591,7 +598,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -628,7 +635,7 @@
     "icon": "items/weapons_spell/crystal_wand.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -651,21 +658,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "wand_prism": {
     "name": "The Refracting Rod",
     "icon": "items/weapons_spell/prism.webp",
     "description": "A single line, broken into obedience.",
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -743,7 +750,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -795,7 +802,7 @@
     "icon": "items/weapons_spell/mage_wand.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -818,21 +825,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "weapon_spell_8": {
     "name": "Mystical Rod",
     "icon": "items/weapons_spell/mystical_rod.webp",
     "description": null,
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "SpellWeapon"
     ],
@@ -855,13 +862,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

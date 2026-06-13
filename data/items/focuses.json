@@ -4,7 +4,7 @@
     "icon": "items/focuses/grigri.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -19,21 +19,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "spellbook": {
     "name": "Spellbook",
     "icon": "items/focuses/spellbook.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -48,21 +48,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "spellbook_unique": {
     "name": "Vile Codex",
     "icon": "items/focuses/vile_codex.webp",
     "description": "Each cursed name written in its pages rots faster than flesh should.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -119,24 +119,27 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "vile_codex",
         "OnKill": {
           "conditions": [
             {
               "HasStatus": {
+                "status_id": null,
+                "damage_type": null,
                 "skill_type": "Curse",
                 "not": false
               }
             }
           ]
         },
+        "description": null,
+        "trigger_id": "vile_codex",
         "target": "Me",
-        "modifiers": [ ],
-        "skill_range": "Melee",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -145,16 +148,20 @@
             },
             "ApplyStatus": {
               "status_id": "vile_codex",
-              "value": 200
+              "value": 200.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -212,7 +219,7 @@
     "icon": "items/focuses/focus_stone.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -227,21 +234,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "sandal": {
     "name": "Eternal Flame Slipper",
     "icon": "items/focuses/sandal.webp",
     "description": "The otter swore it was a masterpiece of wizardry.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -295,7 +302,7 @@
             "skill_id": null
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
         "value": [
           50.0,
@@ -331,7 +338,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -387,7 +394,7 @@
               "skill_id": null
             }
           },
-          "modifier": "More",
+          "modifier": "Increased",
           "value": 20.0
         }
       },
@@ -414,7 +421,7 @@
     "icon": "items/focuses/engraved_tablet.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -429,21 +436,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "seer_lens": {
     "name": "Seer's Lens",
     "icon": "items/focuses/seer_lens.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -458,21 +465,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_idol": {
     "name": "Idol of the Serpent Queen",
     "icon": "items/focuses/treasure_idol.webp",
     "description": "Her children drank the poison willingly. The wise died quickly.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -510,6 +517,7 @@
         "stat": {
           "StatusDuration": {
             "status_id": "poison",
+            "damage_type": null,
             "skill_type": null,
             "skill_id": null
           }
@@ -529,7 +537,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Poison",
                 "min_max": null,
                 "is_hit": null
@@ -549,21 +556,24 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
+        "OnApplyStatus": {
+          "skill_type": null,
+          "status_id": "poison",
+          "damage_type": null,
+          "is_triggered": null,
+          "is_evaded": null
+        },
         "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for the same Duration. You gain 50% More Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
-        "OnApplyStatus": {
-          "status_id": "poison"
-        },
         "target": "Me",
         "modifiers": [
           {
             "stat": {
               "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
+                "skill_id": null
               }
             },
             "modifier": "Flat",
@@ -571,13 +581,17 @@
             "source": {
               "StatusDuration": {
                 "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null
               }
             }
           }
         ],
-        "skill_range": "Any",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Any",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -586,50 +600,55 @@
             },
             "ApplyStatus": {
               "status_id": "treasure_idol",
-              "value": 1
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null
+                  "min_max": null
                 }
               },
               {
-                "StatusEscalation": {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null,
-                  "damage_type": null
+                  "skill_id": null
                 }
               },
               {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
                 }
               },
               {
-                "StatusPower": {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null,
-                  "min_max": null
+                  "skill_id": null
                 }
               }
             ],
-            "conditional_modifiers": [ ]
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -668,7 +687,7 @@
     "icon": "items/focuses/ritual_orb.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -683,21 +702,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "ritual_orb_unique": {
     "name": "Zael's Eye",
     "icon": "items/focuses/dragon_eye.webp",
     "description": "Zael's gaze weighed the sky and found it wanting.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -732,7 +751,7 @@
       {
         "stat": {
           "CritChance": {
-            "skill_type": "Spell",
+            "skill_type": null,
             "skill_id": null
           }
         },
@@ -751,10 +770,10 @@
             "skill_id": null
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
         "value": [
-          150.0,
+          100.0,
           200.0
         ],
         "ignore_quality": true
@@ -777,7 +796,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -821,7 +840,7 @@
     "icon": "items/focuses/grimoire.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -836,21 +855,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "focus_8": {
     "name": "Astrolabe",
     "icon": "items/focuses/astrolabe.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -865,13 +884,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }
