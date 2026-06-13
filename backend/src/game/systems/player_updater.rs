@@ -381,6 +381,7 @@ fn modify_player_specs(
             | StatType::StatusPower { .. }
             | StatType::StatusEscalation { .. }
             | StatType::StatusFaster { .. }
+            | StatType::StatusStacks { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {

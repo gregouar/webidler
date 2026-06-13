@@ -284,14 +284,31 @@ impl BaseModifiableValue for f32 {
         (*self).round()
     }
 }
+impl BaseModifiableValue for u8 {
+    fn multiply_value(&self, value: f64) -> u8 {
+        self.saturating_mul(value as u8)
+    }
+
+    fn add_value(&self, value: f64) -> u8 {
+        self.saturating_add(value as u8)
+    }
+
+    fn is_negative(&self) -> bool {
+        false
+    }
+
+    fn round(&self) -> u8 {
+        *self
+    }
+}
 
 impl BaseModifiableValue for u16 {
     fn multiply_value(&self, value: f64) -> u16 {
-        self * value as u16
+        self.saturating_mul(value as u16)
     }
 
     fn add_value(&self, value: f64) -> u16 {
-        self + value as u16
+        self.saturating_add(value as u16)
     }
 
     fn is_negative(&self) -> bool {

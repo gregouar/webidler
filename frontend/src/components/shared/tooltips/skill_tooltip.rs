@@ -533,7 +533,9 @@ pub fn format_skill_effect(
             duration,
             escalation,
             damage_type: _,
-            ..
+            max_stacks,
+            avoidable: _,
+            replace_on_value_only: _,
         } => {
             let data_context: DataContext = expect_context();
             let status_specs = data_context
@@ -553,6 +555,7 @@ pub fn format_skill_effect(
                     let escalation = escalation
                         .map(|escalation| escalation.get())
                         .unwrap_or(status_specs.escalation.get());
+                    let max_stacks = max_stacks.map(|max_stacks| *max_stacks).unwrap_or(status_specs.max_stacks);
                     let status_filter = StatStatusFilter {
                         status_id: Some(status_id.clone()),
                         damage_type: None,
@@ -578,7 +581,7 @@ pub fn format_skill_effect(
                         "Apply"
                     };
 
-                    let stacks_str = (status_specs.max_stacks > 1).then(|| format!(", up to {} Stacks",status_specs.max_stacks ));
+                    let stacks_str = (max_stacks > 1).then(|| format!(", up to {} Stacks",max_stacks ));
 
                     // let value_factor = effects_map.map(|effects_map| {
                     //     stats_computations::compute_stats_effects_status_value(

@@ -238,7 +238,7 @@ pub enum SkillEffectType {
         #[serde(default)]
         escalation: Option<ModifiableValue<NonNegative>>,
         #[serde(default)]
-        max_stacks: Option<u8>,
+        max_stacks: Option<ModifiableValue<u8>>,
         #[serde(default)]
         damage_type: Option<DamageType>,
         #[serde(default)]

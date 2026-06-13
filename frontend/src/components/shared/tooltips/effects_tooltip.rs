@@ -518,6 +518,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 skill_filter_str(skill_filter, " with ", true),
             )
         }
+        StatType::StatusStacks {
+            status_filter,
+            skill_filter,
+        } => {
+            format!(
+                "{} Maximum Stacks {}",
+                status_filter_str(status_filter),
+                skill_filter_str(skill_filter, " with ", true),
+            )
+        }
         StatType::StatusFaster {
             status_filter,
             skill_filter,
@@ -799,6 +809,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             format!(
                 "{}{} Deal Damage {}% Faster",
+                status_filter_str(status_filter),
+                skill_filter_str(skill_filter, " inflicted by ", true),
+                format_flat_number(value, false),
+            )
+        }
+        StatType::StatusStacks {
+            status_filter,
+            skill_filter,
+        } => {
+            format!(
+                "{}{} can Stack up to {} additional times",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " inflicted by ", true),
                 format_flat_number(value, false),

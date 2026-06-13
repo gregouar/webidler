@@ -440,7 +440,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
                 value,
                 duration,
                 *escalation.unwrap_or_default(),
-                max_stacks.unwrap_or_default(),
+                max_stacks.map(|x| *x).unwrap_or_default(),
                 *replace_on_value_only,
             )
         }
@@ -541,7 +541,7 @@ fn apply_skill_effect_on_target(
                 value,
                 duration,
                 *escalation.unwrap_or_default(),
-                max_stacks.unwrap_or_default(),
+                max_stacks.map(|x| *x).unwrap_or_default(),
                 if avoidable.unwrap_or_default() {
                     *damage_type
                 } else {

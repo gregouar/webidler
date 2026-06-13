@@ -212,12 +212,12 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
-    // StatusStacks {
-    //     #[serde(flatten)]
-    //     status_filter: StatStatusFilter,
-    //     #[serde(flatten)]
-    //     skill_filter: StatSkillFilter,
-    // },
+    StatusStacks {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
     StatusEscalation {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
