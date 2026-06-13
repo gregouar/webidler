@@ -209,11 +209,11 @@
             "is_hit": null
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
         "value": [
-          40.0,
-          80.0
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       }
@@ -326,21 +326,21 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Poison",
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],
