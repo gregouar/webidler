@@ -5,7 +5,7 @@ use shared::data::{
     conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusType, StatType},
+    stat_effect::{StatSkillFilter, StatStatusFilter, StatType, StatusDamageType},
     trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
@@ -502,14 +502,14 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_stat(
                                     StatType::StatusDuration {
-                                        status_type: None,
+                                        status_filter: Default::default(),
                                         skill_filter: Default::default(),
                                     },
                                     Modifier::Increased,
                                 )}
                                 {make_stat(
                                     StatType::StatusPower {
-                                        status_type: None,
+                                        status_filter: Default::default(),
                                         skill_filter: Default::default(),
                                         min_max: None,
                                     },
@@ -518,7 +518,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 // TODO: More for stun?
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_type: None,
+                                        status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Blessing),
                                             ..Default::default()
@@ -530,7 +530,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::StatusDuration {
-                                        status_type: None,
+                                        status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Blessing),
                                             ..Default::default()
@@ -541,7 +541,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_type: None,
+                                        status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Curse),
                                             ..Default::default()
@@ -553,7 +553,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::StatusDuration {
-                                        status_type: None,
+                                        status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Curse),
                                             ..Default::default()
@@ -695,9 +695,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )} // TODO: Elemental dot?
                                 {make_opt_stat(
                                     StatType::StatusPower {
-                                        status_type: Some(StatStatusType::DamageOverTime {
-                                            damage_type: None,
-                                        }),
+                                        status_filter: StatStatusFilter {
+                                            status_id: None,
+                                            damage_type: Some(StatusDamageType::Any),
+                                        },
                                         skill_filter: Default::default(),
                                         min_max: None,
                                     },
@@ -812,8 +813,14 @@ fn TriggersStats() -> impl IntoView {
             .read()
             .character_specs
             .triggers
-            .clone();
-        triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
+            .iter()
+            .flat_map(|(event_trigger, owned_triggers)| {
+                owned_triggers.iter().map(|owned_trigger| {
+                    (event_trigger.clone(), owned_trigger.trigger_effect.clone())
+                })
+            })
+            .collect::<Vec<_>>();
+        triggers.sort_by_key(|(_, trigger_effect)| trigger_effect.trigger_id.clone());
         triggers
     });
 
@@ -828,8 +835,8 @@ fn TriggersStats() -> impl IntoView {
             <div class="columns-2 xl:columns-3 gap-1">
                 <For
                     each=move || triggers.get().into_iter()
-                    key=|triggered_effect| triggered_effect.trigger_id.clone()
-                    let(triggered_effect)
+                    key=|(_, trigger_effect)| trigger_effect.trigger_id.clone()
+                    let((trigger, trigger_effect))
                 >
                     <div class="relative pb-2 list-none break-inside-avoid">
                         {move || {
@@ -841,14 +848,14 @@ fn TriggersStats() -> impl IntoView {
                                 .clone();
                             trigger_tooltip::format_trigger(
                                 TriggerSpecs {
-                                    name: None,
-                                    icon: None,
+                                    trigger: trigger.clone(),
                                     description: None,
-                                    triggered_effect: triggered_effect.clone(),
-                                    is_debuff: false,
+                                    trigger_effect: trigger_effect.clone(),
                                 },
                                 true,
                                 Some(&stat_effects),
+                                None,
+                                None,
                             )
                         }} <Separator />
                     </div>

@@ -21,6 +21,7 @@ pub struct AreaBlueprint {
     pub bosses: Vec<BossBlueprint>,
     pub waves: Vec<MonsterWaveBlueprint>,
     pub loot_table: LootTable,
+    pub reward_loot_table: Option<LootTable>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -69,6 +70,7 @@ impl AreaBlueprint {
                     .flat_map(|t| t.entries.clone())
                     .collect(),
             },
+            reward_loot_table: None,
             specs: schema.specs,
             bosses: schema.bosses,
             waves: schema.waves,

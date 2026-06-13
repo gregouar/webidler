@@ -1,0 +1,159 @@
+{
+    "gold_negative": {
+        "name": "Pick Pocket",
+        "icon": "passives/gold_negative.svg",
+        "debuff": true,
+        "duration": 30,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "GoldFind",
+                    "modifier": "More",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "life_regen": {
+        "name": "Life Regen",
+        "icon": "passives/life_regen.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "rage": {
+        "name": "Rage",
+        "adjective": "Enraged",
+        "icon": "statuses/enrage.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": { }
+                    },
+                    "modifier": "Increased"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": { }
+                    },
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 50,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "vulnerability_physical": {
+        "name": "Physical Vulnerability",
+        "icon": "skills/curse_frailty.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_fire": {
+        "name": "Fire Vulnerability",
+        "icon": "skills/curse_flammability.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_poison": {
+        "name": "Poison Vulnerability",
+        "icon": "skills/curse_putridity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Poison"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_storm": {
+        "name": "Storm Vulnerability",
+        "icon": "skills/curse_conductivity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Storm"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

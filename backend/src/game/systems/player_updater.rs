@@ -6,6 +6,7 @@ use shared::{
         area::{AreaLevel, AreaThreat},
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
+        character_status::StatusEffectType,
         item::{SkillRange, SkillShape},
         item_affix::AffixEffectScope,
         modifier::{ModifiableValue, Modifier},
@@ -15,14 +16,14 @@ use shared::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
         stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
-        trigger::{EventTrigger, HitTrigger, TriggerTarget, TriggeredEffect},
+        trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
         values::{AtLeastOne, NonNegative},
     },
 };
 use strum::IntoEnumIterator;
 
 use crate::game::{
-    data::{DataInit, event::EventsQueue},
+    data::{DataInit, event::EventsQueue, master_store::StatusesStore},
     systems::{stats_updater, statuses_controller},
 };
 
@@ -69,6 +70,7 @@ pub fn init_player_base_specs(
 }
 
 pub fn update_player_state(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     player_specs: &PlayerSpecs,
@@ -80,6 +82,7 @@ pub fn update_player_state(
     }
 
     characters_updater::update_character_state(
+        statuses_store,
         events_queue,
         elapsed_time,
         CharacterId::Player,
@@ -95,7 +98,9 @@ pub fn reset_player(player_state: &mut PlayerState) {
 
 // I hate the fact player state influences player specs... But I couldn't figure out a way
 // to have it working with the dynamic statuses.
+#[allow(clippy::too_many_arguments)]
 pub fn update_player_specs(
+    statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
     player_specs: &PlayerSpecs,
     player_state: &PlayerState,
@@ -118,11 +123,13 @@ pub fn update_player_specs(
             )))
             .chain(iter::once(
                 statuses_controller::generate_effects_map_from_statuses(
+                    statuses_store,
                     &player_state.character_state.statuses,
                 ),
             ))
             .chain(iter::once(
                 stats_updater::compute_conditional_modifiers(
+                    statuses_store,
                     area_threat,
                     &player_specs.character_specs.character_attrs,
                     &player_state.character_state,
@@ -135,36 +142,49 @@ pub fn update_player_specs(
 
     let mut effects: Vec<_> = (&effects_map).into();
 
-    let mut player_specs = compute_player_specs(player_base_specs, player_inventory, &mut effects);
-
-    player_specs.character_specs.triggers.extend(
-        passives_tree_state
-            .purchased_nodes
-            .iter()
-            .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
-            .flat_map(|node| node.triggers.iter())
-            .chain(
-                player_inventory
-                    .equipped_items()
-                    .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
-            )
-            .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
+    let mut player_specs = compute_player_specs(
+        statuses_store,
+        player_base_specs,
+        player_inventory,
+        &mut effects,
     );
 
-    for trigger_specs in player_specs.character_specs.triggers.iter_mut() {
-        for trigger_effect in trigger_specs.effects.iter_mut() {
+    for trigger_specs in passives_tree_state
+        .purchased_nodes
+        .iter()
+        .filter_map(|node_id| passives_tree_specs.nodes.get(node_id))
+        .flat_map(|node| node.triggers.iter())
+        .chain(
+            player_inventory
+                .equipped_items()
+                .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
+        )
+    {
+        player_specs.character_specs.triggers.push(
+            trigger_specs.trigger.clone(),
+            trigger_specs.trigger_effect.clone(),
+            Some(CharacterId::Player),
+        );
+    }
+
+    for trigger_effect in player_specs.character_specs.triggers.effects_iter_mut() {
+        for skill_effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
-                &trigger_specs.trigger_id,
-                trigger_specs.skill_type,
-                trigger_effect,
+                statuses_store,
+                &trigger_effect.trigger_id,
+                trigger_effect.skill_type,
+                skill_effect,
                 effects.iter(),
             );
         }
     }
 
     characters_updater::extend_triggers_from_skills_and_statuses(
+        statuses_store,
+        CharacterId::Player,
         &mut player_specs.character_specs,
         &player_state.character_state,
+        &effects,
     );
 
     player_specs.character_specs.effects = effects.into();
@@ -173,6 +193,7 @@ pub fn update_player_specs(
 }
 
 fn compute_player_specs(
+    statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
     player_inventory: &PlayerInventory,
     effects: &mut Vec<StatEffect>,
@@ -229,41 +250,40 @@ fn compute_player_specs(
     player_specs.threat_gain = *threat_gain;
 
     for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {
-        player_specs.character_specs.triggers.push(TriggeredEffect {
-            trigger_id: format!("restore_on_hit_{:?}_{:?}", restore_type, skill_type),
-            trigger: EventTrigger::OnHit(HitTrigger {
+        player_specs.character_specs.triggers.push(
+            EventTrigger::OnHit(HitTrigger {
                 skill_type: Some(skill_type),
-                range: None,
-                is_crit: None,
-                is_blocked: None,
                 is_hurt: Some(true),
                 is_triggered: Some(false),
-                damage_type: None,
-                skill_ids: Default::default(),
-                conditions: Default::default(),
+                ..Default::default()
             }),
-            target: TriggerTarget::Source,
-            skill_range: SkillRange::Any,
-            skill_type,
-            skill_shape: SkillShape::Single,
-            modifiers: Vec::new(),
-            effects: vec![SkillEffect {
-                success_chance: Chance::new_sure(),
-                effect_type: SkillEffectType::Restore {
-                    restore_type,
-                    value: ChanceRange {
-                        min: value,
-                        max: value,
-                        lucky_chance: Default::default(),
+            TriggerEffect {
+                trigger_id: format!("restore_on_hit_{:?}_{:?}", restore_type, skill_type),
+                target: TriggerTarget::Source,
+                skill_range: SkillRange::Any,
+                skill_type,
+                skill_shape: SkillShape::Single,
+                modifiers: Vec::new(),
+                effects: vec![SkillEffect {
+                    success_chance: Chance::new_sure(),
+                    effect_type: SkillEffectType::Restore {
+                        restore_type,
+                        value: ChanceRange {
+                            min: value,
+                            max: value,
+                            lucky_chance: Default::default(),
+                        },
+                        modifier: RestoreModifier::Flat,
                     },
-                    modifier: RestoreModifier::Flat,
-                },
-                ignore_stat_effects: Default::default(),
-                conditional_modifiers: Default::default(),
-            }],
-            owner: Some(CharacterId::Player),
-            trigger_propagate: false,
-        });
+                    ignore_stat_effects: Default::default(),
+                    conditional_modifiers: Default::default(),
+                    independent_application: false,
+                }],
+                trigger_propagate: false,
+                inherit_source_effects: false,
+            },
+            Some(CharacterId::Player),
+        );
     }
 
     player_specs.character_specs.skills_specs = player_base_specs
@@ -271,6 +291,7 @@ fn compute_player_specs(
         .iter()
         .map(|(skill_id, player_base_skill)| {
             skills_updater::update_skill_specs(
+                statuses_store,
                 skill_id.to_string(),
                 &player_base_skill.base_skill_specs,
                 player_base_skill.upgrade_level,
@@ -280,6 +301,9 @@ fn compute_player_specs(
             )
         })
         .collect();
+
+    player_specs.computed_status_triggers =
+        compute_status_triggers(statuses_store, &player_specs, effects);
 
     player_specs
 }
@@ -357,6 +381,7 @@ fn modify_player_specs(
             | StatType::StatusPower { .. }
             | StatType::StatusEscalation { .. }
             | StatType::StatusFaster { .. }
+            | StatType::StatusStacks { .. }
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
@@ -378,4 +403,60 @@ fn modify_player_specs(
     }
 
     modifiable_player_specs
+}
+
+fn compute_status_triggers(
+    statuses_store: &StatusesStore,
+    player_specs: &PlayerSpecs,
+    effects: &mut [StatEffect],
+) -> HashMap<String, TriggerEffect> {
+    // skills_updater::update_skill_specs(
+    //     statuses_store,
+    //     skill_id.to_string(),
+    //     &skill_specs,
+    //     0,
+    //     effects,
+    //     &player_specs.character_specs.character_attrs,
+    //     Some(player_inventory),
+    // )
+
+    let mut result: HashMap<String, TriggerEffect> = Default::default();
+
+    for skill_effect in player_specs
+        .character_specs
+        .skills_specs
+        .iter()
+        .flat_map(|skill_specs| skill_specs.targets.iter())
+        .flat_map(|target| target.effects.iter())
+    {
+        let SkillEffectType::ApplyStatus { status_id, .. } = &skill_effect.effect_type else {
+            continue;
+        };
+
+        let Some(status_specs) = statuses_store.get(status_id) else {
+            continue;
+        };
+
+        for status_effect in status_specs.effects.iter() {
+            if let StatusEffectType::Trigger {
+                trigger_specs,
+                inherit_owner_effects: true,
+            } = &status_effect.status_effect_type
+            {
+                let mut trigger_effect = trigger_specs.trigger_effect.clone();
+                for skill_effect in trigger_effect.effects.iter_mut() {
+                    skills_updater::compute_skill_specs_effect(
+                        statuses_store,
+                        &trigger_effect.trigger_id,
+                        trigger_effect.skill_type,
+                        skill_effect,
+                        effects.iter(),
+                    )
+                }
+                result.insert(trigger_effect.trigger_id.clone(), trigger_effect);
+            }
+        }
+    }
+
+    result
 }

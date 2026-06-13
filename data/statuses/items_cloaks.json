@@ -1,0 +1,60 @@
+{
+    "drink_storm": {
+        "name": "Stormfeast",
+        "icon": "statuses/lightning_flame.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "backstab_cloak": {
+        "name": "Backstabbing",
+        "icon": "statuses/cowled.svg",
+        "debuff": false,
+        "duration": 10.0,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "CritChance": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 200,
+                "modifier": "Flat"
+            }
+        ]
+    }
+}

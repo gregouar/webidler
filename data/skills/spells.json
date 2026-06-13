@@ -1,0 +1,460 @@
+{
+  "magic_missile": {
+    "name": "Magic Missile",
+    "description": "A quick spell that fires a bolt of energy at a random enemy.",
+    "icon": "skills/magic_missile.svg",
+    "skill_type": "Spell",
+    "cooldown": 2,
+    "mana_cost": 2,
+    "upgrade_cost": 20,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0,
+                  12
+                ]
+              },
+              "crit_chance": 10,
+              "crit_damage": 100
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "chain_lightning": {
+    "name": "Chain Lightning",
+    "description": "A powerful spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "icon": "skills/chain_lightning.svg",
+    "skill_type": "Spell",
+    "cooldown": 4,
+    "mana_cost": 10,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "repeat": {
+          "value": 3,
+          "target": "Different"
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0,
+                  30
+                ]
+              },
+              "crit_chance": 5,
+              "crit_damage": 100
+            }
+          },
+          {
+            "success_chance": 30,
+            "ApplyStatus": {
+              "status_id": "stun",
+              "duration": [
+                1,
+                3
+              ],
+              "value": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "description": "Summon a mighty storm that repeatedly hit enemies and slow them.",
+    "icon": "skills/blizzard.svg",
+    "skill_type": "Spell",
+    "cooldown": 8,
+    "mana_cost": 20,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Square4",
+        "repeat": {
+          "value": 5,
+          "target": "Any",
+          "repeat_cooldown": 0.5
+        },
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0,
+                  5
+                ]
+              }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "status_id": "chill",
+              "value": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "fireball": {
+    "name": "Fireball",
+    "description": "Hurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
+    "icon": "skills/fireball.svg",
+    "skill_type": "Spell",
+    "cooldown": 4,
+    "mana_cost": 10,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Distance",
+        "shape": "Square4",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Fire": [
+                  5,
+                  15
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "burning_ray": {
+    "name": "Burning Ray",
+    "description": "Release a horizontal beam of fire that burns enemies over time.",
+    "icon": "skills/burning_ray.svg",
+    "skill_type": "Spell",
+    "cooldown": 3,
+    "mana_cost": 10,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Distance",
+        "shape": "Horizontal3",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_id": "burn",
+              "value": [
+                2,
+                5
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "righteous_fire": {
+    "name": "Righteous Fire",
+    "description": "Remove your pants and burn everything, including yourself.",
+    "icon": "skills/righteous_fire.svg",
+    "skill_type": "Spell",
+    "cooldown": 1,
+    "mana_cost": 4,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "righteous_fire"
+          }
+        },
+        "modifier": "More",
+        "value": 30
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "righteous_fire_self"
+          }
+        },
+        "modifier": "Increased",
+        "value": 20,
+        "bypass_ignore": true
+      }
+    ],
+    "ignore_stat_effects": [
+    ],
+    "targets": [
+      {
+        "range": "Melee",
+        "shape": "Vertical2",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_id": "righteous_fire",
+              "value": 1
+            }
+          }
+        ]
+      },
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_id": "righteous_fire_self",
+              "value": 2
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": { }
+              },
+              {
+                "StatusPower": {
+                  "damage_type": "Any"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": {
+              "Damage": { }
+            },
+            "bypass_ignore": true,
+            "modifier": "More",
+            "value": 10
+          }
+        ],
+        "source": {
+          "CharacterStats": "MaxLife"
+        },
+        "factor": 1
+      }
+    ]
+  },
+  "poison_cloud": {
+    "name": "Poison Cloud",
+    "description": "Summon a toxic cloud that poisons all enemies in its area, dealing damage over time.",
+    "icon": "skills/poison_cloud.svg",
+    "skill_type": "Spell",
+    "cooldown": 8,
+    "mana_cost": 20,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "repeat": {
+          "value": 4,
+          "target": "Any",
+          "repeat_cooldown": 1
+        },
+        "effects": [
+          {
+            "ApplyStatus": {
+              "status_id": "poison",
+              "value": [
+                4,
+                8
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "irradiate": {
+    "name": "Irradiate",
+    "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time.",
+    "icon": "skills/irradiate.svg",
+    "skill_type": "Spell",
+    "cooldown": 3,
+    "mana_cost": 8,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "Vertical2",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0,
+                  10
+                ]
+              }
+            }
+          },
+          {
+            "ApplyStatus": {
+              "status_id": "poison",
+              "value": [
+                3,
+                5
+              ]
+            }
+          },
+          {
+            "success_chance": 30,
+            "ApplyStatus": {
+              "duration": [
+                1,
+                3
+              ],
+              "status_id": "stun",
+              "value": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "voodoo_doll": {
+    "name": "Voodoo Doll",
+    "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
+    "icon": "skills/voodoo.svg",
+    "skill_type": "Spell",
+    "cooldown": 1.2,
+    "mana_cost": 2,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Distance",
+        "shape": "All",
+        "effects": [
+          {
+            "FlatDamage": {
+              "damage": {
+                "Physical": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heal": {
+    "name": "Heal",
+    "description": "Restore a portion of your life with this simple yet effective healing spell.",
+    "icon": "skills/heal.svg",
+    "skill_type": "Spell",
+    "cooldown": 15,
+    "mana_cost": 15,
+    "upgrade_cost": 50,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Restore": {
+            "restore_type": "Life"
+          }
+        },
+        "modifier": "Flat",
+        "value": 5
+      }
+    ],
+    "targets": [
+      {
+        "target_type": "Me",
+        "effects": [
+          {
+            "Restore": {
+              "restore_type": "Life",
+              "value": 25,
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    ],
+    "auto_use_conditions": [
+      "LowLife"
+    ]
+  }
+}

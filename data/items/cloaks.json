@@ -98,7 +98,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Fire",
                 "min_max": null,
                 "is_hit": null
@@ -118,7 +117,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -148,8 +146,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -164,8 +161,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -179,10 +175,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "drink_storm",
         "OnTakeHit": {
           "skill_type": null,
           "range": null,
@@ -194,10 +186,14 @@
           "skill_ids": null,
           "conditions": []
         },
+        "description": null,
+        "trigger_id": "drink_storm",
         "target": "SameTarget",
         "modifiers": [],
-        "skill_range": "Melee",
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -205,41 +201,19 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Fire",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 5.0
+              "status_id": "drink_storm",
+              "value": 100.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": []
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -275,7 +249,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": null,
               "is_hit": null
@@ -345,8 +318,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -377,24 +349,21 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "backstab_cloak",
         "OnReceiveStatus": {
           "skill_type": null,
-          "status_type": {
-            "DamageOverTime": {
-              "damage_type": null
-            }
-          },
+          "status_id": null,
+          "damage_type": "Any",
           "is_triggered": null,
           "is_evaded": true
         },
+        "description": null,
+        "trigger_id": "backstab_cloak",
         "target": "SameTarget",
         "modifiers": [],
-        "skill_range": "Melee",
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -402,61 +371,19 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "CritChance": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": null,
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 10.0
+              "status_id": "backstab_cloak",
+              "value": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": []
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -490,8 +417,7 @@
           "stat": {
             "Speed": {
               "skill_type": "Attack",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -572,14 +498,10 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
-              }
-            },
+            "status_id": "poison",
+            "damage_type": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -595,7 +517,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": null,
             "is_hit": null
@@ -628,23 +549,18 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
-                "damage_type": "Poison",
+                "damage_type": null,
                 "min_max": null,
                 "is_hit": null
               }
             },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
+                  "status_id": "poison",
+                  "damage_type": null,
                   "skill_type": null,
                   "not": false
                 }
@@ -693,8 +609,7 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
-              "damage_type": "Poison",
+              "damage_type": null,
               "min_max": null,
               "is_hit": null
             }
@@ -712,7 +627,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": "Poison",
                   "min_max": null,
                   "is_hit": null
@@ -720,15 +634,11 @@
               },
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
+                    "status_id": "poison",
+                    "damage_type": null,
                     "skill_type": null,
                     "not": false
                   }
@@ -820,7 +730,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": null,
             "is_hit": null
@@ -837,15 +746,10 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "Trigger": {
-                "trigger_id": "open_wound",
-                "trigger_description": "Open Wound"
-              }
-            },
+            "status_id": "open_wound",
+            "damage_type": null,
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "min_max": null
           }
         },
@@ -861,8 +765,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -886,26 +789,20 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "butcher_apron",
         "OnKill": {
           "conditions": [
             {
               "HasStatus": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wounded"
-                  }
-                },
+                "status_id": "open_wound",
+                "damage_type": null,
                 "skill_type": null,
                 "not": false
               }
             }
           ]
         },
+        "description": null,
+        "trigger_id": "butcher_apron",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -913,7 +810,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Physical",
                 "min_max": null,
                 "is_hit": null
@@ -923,19 +819,16 @@
             "factor": 0.5,
             "source": {
               "StatusValue": {
-                "status_type": {
-                  "Trigger": {
-                    "trigger_id": "open_wound",
-                    "trigger_description": "Open Wound"
-                  }
-                },
+                "status_id": "open_wound",
                 "skill_type": null
               }
             }
           }
         ],
-        "skill_range": "Melee",
+        "trigger_propagate": true,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Contact",
         "effects": [
           {
             "success_chance": {
@@ -956,7 +849,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
@@ -965,11 +857,7 @@
             ],
             "conditional_modifiers": []
           }
-        ],
-        "skill_shape": "Contact",
-        "owner": null,
-        "trigger_propagate": true,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -1002,7 +890,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": null,
               "is_hit": null
@@ -1018,8 +905,7 @@
           "stat": {
             "Speed": {
               "skill_type": "Attack",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -1182,8 +1068,8 @@
       {
         "stat": {
           "StatusResistance": {
-            "skill_type": "Curse",
-            "status_type": null
+            "status_id": null,
+            "skill_type": "Curse"
           }
         },
         "modifier": "Flat",
@@ -1194,10 +1080,10 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
+            "status_id": null,
+            "damage_type": null,
             "skill_type": "Curse",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -1212,7 +1098,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -1221,7 +1106,8 @@
             "conditions": [
               {
                 "HasStatus": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": "Blessing",
                   "not": false
                 }
@@ -1270,7 +1156,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
@@ -1279,7 +1164,8 @@
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_type": null,
+                    "status_id": null,
+                    "damage_type": null,
                     "skill_type": "Blessing",
                     "not": false
                   }

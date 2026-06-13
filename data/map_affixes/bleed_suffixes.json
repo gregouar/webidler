@@ -16,9 +16,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -58,9 +56,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -100,9 +96,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -142,9 +136,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -184,9 +176,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -226,9 +216,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -268,9 +256,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -310,9 +296,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true
@@ -352,9 +336,7 @@
             "source": { "DamageOverTime": { } },
             "stat": {
               "StatusPower": {
-                "status_type": {
-                  "DamageOverTime": { "damage_type": "Physical" }
-                }
+                "status_id": "bleed"
               }
             },
             "is_extra": true

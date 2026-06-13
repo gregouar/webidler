@@ -1,0 +1,78 @@
+{
+    "entrancing_song": {
+        "name": "Entrancing Song",
+        "icon": "skills/double_quaver.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": "Attack"
+                        }
+                    }
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "lamenting_cry": {
+        "name": "Lamenting Cry",
+        "icon": "skills/curse_frailty.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Poison"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "grieving_call": {
+        "name": "Neverending Cry",
+        "icon": "skills/broken_heart.svg",
+        "debuff": false,
+        "max_stacks": 2,
+        "duration": 1e200,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": { }
+                    }
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

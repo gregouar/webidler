@@ -13,7 +13,7 @@
   "stun_lockout": 3.0,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -29,17 +29,9 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 4,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "value": 7
-                  }
-                ]
+                "status_id": "poison",
+                "value": 7,
+                "escalation": 20
               }
             }
           ]

@@ -3,24 +3,20 @@ use strum::IntoEnumIterator;
 
 use shared::data::{
     chance::{Chance, ChanceRange},
-    character_status::StatusSpecs,
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
     skill::{
-        ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
-        SkillTargetsGroup, SkillType, TargetType,
+        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
+        SkillUpgradeEffect, TargetType,
     },
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
         compare_options,
     },
-    values::NonNegative,
 };
 
 use crate::{game::data::items_store::ItemsStore, rest::AppError};
-
-const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
 
 pub fn init_item_specs_from_store(
     items_store: &ItemsStore,
@@ -309,41 +305,36 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
             conditional_modifiers: Vec::new(),
+            independent_application: false,
         },
         SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
-                duration: ChanceRange {
-                    min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
-                    max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
-                    lucky_chance: Default::default(),
-                },
-                statuses: vec![ApplyStatusEffect {
-                    status_type: StatusSpecs::DamageOverTime {
-                        damage_type: DamageType::Poison,
-                    },
-                    value: weapon_specs
-                        .damage
-                        .get(&DamageType::Poison)
-                        .map(|v| ChanceRange {
-                            min: v.min.as_new_base(),
-                            max: v.max.as_new_base(),
-                            lucky_chance: v.lucky_chance.as_new_base(),
-                        })
-                        .unwrap_or_default(),
-                    cumulate: false,
-                    unavoidable: false,
-                    replace_on_value_only: false,
-                    escalation: Default::default(),
-                }],
+                status_id: "poison".into(),
+                value: weapon_specs
+                    .damage
+                    .get(&DamageType::Poison)
+                    .map(|v| ChanceRange {
+                        min: v.min.as_new_base(),
+                        max: v.max.as_new_base(),
+                        lucky_chance: v.lucky_chance.as_new_base(),
+                    })
+                    .unwrap_or_default(),
+                value_factor: 1.0,
+                duration: None,
+                escalation: None,
+                max_stacks: None,
+                damage_type: None,
+                avoidable: None,
+                replace_on_value_only: false,
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
             conditional_modifiers: Vec::new(),
+            independent_application: false,
         },
     ];
 
     BaseSkillSpecs {
-        // skill_id: "weapon_attack".to_string(),
         name: "Weapon Attack".to_string(),
         icon: "skills/attack.svg".to_string(),
         description: "A simple attack with your weapon.".to_string(),
@@ -351,16 +342,19 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         cooldown: *weapon_specs.cooldown,
         mana_cost: Default::default(),
         upgrade_cost: 10.0 + 0.5 * item_level as f64,
-        upgrade_effects: vec![StatEffect {
-            stat: StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
+        upgrade_effects: vec![SkillUpgradeEffect {
+            stat_effect: StatEffect {
+                stat: StatType::Damage {
+                    skill_filter: Default::default(),
+                    damage_type: None,
+                    min_max: None,
+                    is_hit: None,
+                },
+                modifier: Modifier::More,
+                value: 30.0,
+                bypass_ignore: true,
             },
-            modifier: Modifier::More,
-            value: 30.0,
-            bypass_ignore: true,
+            description: None,
         }],
         modifier_effects: Default::default(),
         targets: vec![SkillTargetsGroup {

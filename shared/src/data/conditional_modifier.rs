@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     skill::SkillType,
-    stat_effect::{StatEffect, StatStatusType},
+    stat_effect::{StatEffect, StatStatusFilter},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -18,19 +18,20 @@ pub struct ConditionalModifier {
 pub enum Condition {
     // HitCrit,
     HasStatus {
-        #[serde(default)]
-        status_type: Option<StatStatusType>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
         not: bool,
     },
     StatusStacks {
-        #[serde(default)]
-        status_type: Option<StatStatusType>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
+    Slowed,
     // StatusValue(Option<StatStatusType>),
     // StatusDuration(Option<StatStatusType>),
     MaximumLife,

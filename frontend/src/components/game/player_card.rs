@@ -1,10 +1,11 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use leptos::{html::*, prelude::*};
 
 use shared::{
     computations::{player_level_up_cost, skill_cost_increase},
     constants::MAX_SKILL_LEVEL,
+    data::trigger::TriggerEffect,
     messages::client::{
         LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
     },
@@ -248,6 +249,31 @@ pub fn PlayerCard() -> impl IntoView {
         skill_count < max_skills
     });
 
+    let computed_status_triggers = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .computed_status_triggers
+            .clone()
+    });
+
+    let character_triggers = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .triggers
+            .iter()
+            .flat_map(|(_, owned_triggers)| owned_triggers.iter())
+            .map(|owned_trigger| {
+                (
+                    owned_trigger.trigger_effect.trigger_id.clone(),
+                    owned_trigger.trigger_effect.clone(),
+                )
+            })
+            .collect()
+    });
+
     // Effect::new({
     //     let toaster = expect_context::<Toasts>();
     //     move || {
@@ -297,6 +323,7 @@ pub fn PlayerCard() -> impl IntoView {
                             just_evaded=just_evaded
                             is_dead=is_dead
                             statuses=statuses
+                            character_triggers
                         />
                     // enable_blink=false
                     </div>
@@ -358,7 +385,7 @@ pub fn PlayerCard() -> impl IntoView {
             <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
                 // style="contain: layout paint;"
                 <For each=move || { 0..visible_skill_count.get() } key=|i| *i let(i)>
-                    <PlayerSkill index=i is_dead />
+                    <PlayerSkill index=i is_dead computed_status_triggers />
                 </For>
                 <Show when=move || can_buy_skill.get()>
                     <BuySkillButton />
@@ -476,7 +503,11 @@ fn BuySkillButton() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
+fn PlayerSkill(
+    index: usize,
+    is_dead: Memo<bool>,
+    computed_status_triggers: Memo<HashMap<String, TriggerEffect>>,
+) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let rush_mode = Memo::new(move |_| game_context.area_state.read().rush_mode);
@@ -709,10 +740,18 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                     .get()
                     .map(|skill_specs| {
                         let player_base_skill = player_base_skill.get();
+                        let effects_map = game_context
+                            .player_specs
+                            .read()
+                            .character_specs
+                            .effects
+                            .clone();
                         view! {
                             <SkillTooltip
                                 skill_specs=skill_specs
                                 player_base_skill=player_base_skill
+                                effects_map=Some(effects_map)
+                                computed_status_triggers=Some(computed_status_triggers)
                             />
                         }
                     })}

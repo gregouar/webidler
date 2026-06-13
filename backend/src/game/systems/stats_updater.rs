@@ -1,10 +1,13 @@
 use shared::data::{
     area::AreaThreat,
     character::CharacterAttrs,
+    character_status::StatusEffectType,
     conditional_modifier::{Condition, ConditionalModifier},
     player::CharacterState,
-    stat_effect::{StatEffect, compare_options},
+    stat_effect::{StatEffect, StatType},
 };
+
+use crate::game::data::master_store::StatusesStore;
 
 // pub fn stats_map_to_vec(effects: &EffectsMap) -> Vec<StatEffect> {
 //     combine_effects(effects.into())
@@ -34,6 +37,7 @@ use shared::data::{
 // }
 
 pub fn compute_conditional_modifiers(
+    statuses_store: &StatusesStore,
     area_threat: &AreaThreat,
     character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
@@ -54,7 +58,13 @@ pub fn compute_conditional_modifiers(
                         monitored_condition.value
                     } else if conditional_modifier.conditions_duration == 0 {
                         // Last minute check, useful for skill modifiers that are not tracked
-                        check_condition(area_threat, character_attrs, character_state, condition)
+                        check_condition(
+                            statuses_store,
+                            area_threat,
+                            character_attrs,
+                            character_state,
+                            condition,
+                        )
                     } else {
                         0.0
                     }
@@ -81,6 +91,7 @@ pub fn compute_conditional_modifiers(
 }
 
 pub fn check_condition(
+    statuses_store: &StatusesStore,
     area_threat: &AreaThreat,
     character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
@@ -88,30 +99,64 @@ pub fn check_condition(
 ) -> f64 {
     match condition {
         Condition::HasStatus {
-            status_type,
+            status_filter,
             skill_type,
             not,
         } => {
             (character_state
                 .statuses
                 .iter()
-                .any(|(status_specs, status_state)| {
-                    compare_options(status_type, &Some(status_specs.into()))
-                        && compare_options(skill_type, &Some(status_state.skill_type))
+                .any(|(status_id, status_states)| {
+                    let Some(status_specs) = statuses_store.get(status_id) else {
+                        return false;
+                    };
+                    status_filter.is_match_with_status(status_id, status_specs.damage_type)
+                        && skill_type
+                            .map(|skill_type| {
+                                status_states
+                                    .iter()
+                                    .any(|status_state| status_state.skill_type == skill_type)
+                            })
+                            .unwrap_or(true)
                 })
                 != *not) as usize as f64
         }
         Condition::StatusStacks {
-            status_type,
+            status_filter,
             skill_type,
         } => character_state
             .statuses
             .iter()
-            .filter(|(status_specs, status_state)| {
-                compare_options(status_type, &Some(status_specs.into()))
-                    && compare_options(skill_type, &Some(status_state.skill_type))
+            .filter(|(status_id, status_states)| {
+                let Some(status_specs) = statuses_store.get(status_id) else {
+                    return false;
+                };
+                status_filter.is_match_with_status(status_id, status_specs.damage_type)
+                    && skill_type
+                        .map(|skill_type| {
+                            status_states
+                                .iter()
+                                .any(|status_state| status_state.skill_type == skill_type)
+                        })
+                        .unwrap_or(true)
             })
             .count() as f64,
+        Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
+            let Some(status_specs) = statuses_store.get(status_id) else {
+                return false;
+            };
+            status_specs.effects.iter().any(|effect| {
+                matches!(
+                    effect.status_effect_type,
+                    StatusEffectType::StatModifier {
+                        stat: StatType::Speed(_),
+                        modifier: _,
+                        debuff: true
+                    }
+                )
+            })
+        }) as usize as f64,
+
         Condition::MaximumLife => {
             (character_state.life.get() >= character_attrs.max_life.get() * 0.9999) as usize as f64
         }

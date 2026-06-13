@@ -16,7 +16,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -54,7 +53,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -92,7 +90,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -108,7 +105,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -136,8 +132,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -166,7 +161,7 @@
         },
         "target": "SameTarget",
         "modifiers": [ ],
-        "skill_range": "Melee",
+        "skill_range": "Any",
         "skill_type": "Curse",
         "effects": [
           {
@@ -175,82 +170,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": {
-                          "skill_type": null,
-                          "damage_type": "Physical"
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": {
-                          "skill_type": null,
-                          "damage_type": "Poison"
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": {
-                          "skill_type": null,
-                          "damage_type": "Storm"
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null
-                        }
-                      },
-                      "modifier": "Increased",
-                      "debuff": true
-                    }
-                  },
-                  "value": 50.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "cheese",
+              "value": 100
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -284,7 +205,6 @@
             "Damage": {
               "skill_type": "Spell",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -321,7 +241,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -359,7 +278,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -397,7 +315,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -413,7 +330,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
@@ -431,8 +347,7 @@
         "stat": {
           "CritChance": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -444,8 +359,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -461,7 +375,6 @@
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "magic_missile",
-            "skill_description": null,
             "range": null,
             "shape": null,
             "repeat": {
@@ -499,7 +412,6 @@
             "Damage": {
               "skill_type": "Spell",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -516,7 +428,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Storm",
               "min_max": null,
               "is_hit": null
@@ -532,8 +443,7 @@
           "stat": {
             "CritChance": {
               "skill_type": "Spell",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -559,7 +469,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -597,7 +506,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -613,7 +521,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -631,8 +538,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -706,7 +612,6 @@
             "Damage": {
               "skill_type": "Spell",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -735,7 +640,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -773,7 +677,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -789,7 +692,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -808,7 +710,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -827,7 +728,6 @@
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "burning_ray",
-            "skill_description": null,
             "range": null,
             "shape": null,
             "repeat": {
@@ -863,7 +763,6 @@
             "Damage": {
               "skill_type": "Spell",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -880,7 +779,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": null,
               "is_hit": null
@@ -909,7 +807,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -947,7 +844,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null

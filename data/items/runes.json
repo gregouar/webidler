@@ -106,10 +106,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "rune_berserker",
         "OnTakeHit": {
           "skill_type": null,
           "range": null,
@@ -117,12 +113,18 @@
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
         },
-        "target": "SameTarget",
+        "description": null,
+        "trigger_id": "rune_berserker",
+        "target": "Me",
         "modifiers": [],
-        "skill_range": "Melee",
-        "skill_type": "Attack",
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Any",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -130,40 +132,19 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": null,
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 25.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 5.0
+              "status_id": "berserker",
+              "value": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": []
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -201,7 +182,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Storm",
                 "min_max": "Min",
                 "is_hit": null
@@ -221,7 +201,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
@@ -261,20 +240,15 @@
     "affixes": [],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "rune_poison_fire",
         "OnApplyStatus": {
           "skill_type": null,
-          "status_type": {
-            "DamageOverTime": {
-              "damage_type": "Poison"
-            }
-          },
+          "status_id": null,
+          "damage_type": "Poison",
           "is_triggered": null,
           "is_evaded": false
         },
+        "description": null,
+        "trigger_id": "rune_poison_fire",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -282,7 +256,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -292,11 +265,8 @@
             "factor": 0.1,
             "source": {
               "StatusValue": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null
               }
             }
@@ -304,28 +274,27 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_type": null,
+                "status_id": null,
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
+                "skill_id": null
               }
             },
             "modifier": "Flat",
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null
               }
             }
           }
         ],
-        "skill_range": "Melee",
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Any",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -333,61 +302,46 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "value": 0.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": true,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 0.0
+              "status_id": "burn",
+              "value": 0.0,
+              "duration": 0.0,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
-              {
-                "StatusDuration": {
-                  "status_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
               {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": "Poison",
                   "min_max": null,
                   "is_hit": null
                 }
               },
               {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "StatusPower": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
+                  "status_id": null,
+                  "damage_type": "Poison",
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "min_max": null
                 }
               }
             ],
             "conditional_modifiers": []
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -420,7 +374,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -471,10 +424,6 @@
     "affixes": [],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "rune_storm_poison",
         "OnHit": {
           "skill_type": null,
           "range": null,
@@ -482,8 +431,12 @@
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "rune_storm_poison",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -491,21 +444,22 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
               }
             },
             "modifier": "Flat",
-            "factor": 0.1,
+            "factor": 0.25,
             "source": {
               "HitDamage": "Storm"
             }
           }
         ],
-        "skill_range": "Melee",
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -513,28 +467,20 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 0.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 2.0
+              "status_id": "poison",
+              "value": 0.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
               {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": "Storm",
                   "min_max": null,
                   "is_hit": null
@@ -543,10 +489,7 @@
             ],
             "conditional_modifiers": []
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -584,7 +527,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Fire",
                 "min_max": null,
                 "is_hit": null
@@ -607,7 +549,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Fire",
                 "min_max": null,
                 "is_hit": null

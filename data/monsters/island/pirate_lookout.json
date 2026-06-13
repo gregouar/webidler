@@ -28,7 +28,7 @@
     },
     {
       "name": "Lookout!",
-      "icon": "skills/blessing_crit.svg",
+      "icon": "skills/crow_nest.svg",
       "cooldown": 8.0,
       "skill_type": "Blessing",
       "targets": [
@@ -38,27 +38,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "CritChance": { "skill_type": "Attack" } },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 20
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "CritDamage": { "skill_type": "Attack" } },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 300
-                  }
-                ]
+                "status_id": "lookout",
+                "value": 200
               }
             }
           ]

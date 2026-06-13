@@ -27,7 +27,7 @@
                 "scope": "Local",
                 "stat": {
                     "StatusResistance": {
-                        "status_type": "Stun"
+                        "status_id": "stun"
                     }
                 },
                 "modifier": "Flat",
@@ -75,7 +75,7 @@
                 "scope": "Local",
                 "stat": {
                     "StatusResistance": {
-                        "status_type": "Stun"
+                        "status_id": "stun"
                     }
                 },
                 "modifier": "Flat",
@@ -113,7 +113,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 60
             },
@@ -149,7 +149,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 70
             },
@@ -185,7 +185,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 75
             },
@@ -221,7 +221,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 80
             },
@@ -257,7 +257,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 85
             },
@@ -293,7 +293,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 90
             },
@@ -329,7 +329,7 @@
             },
             {
                 "scope": "Local",
-                "stat": { "StatusResistance": { "status_type": "Stun" } },
+                "stat": { "StatusResistance": { "status_id": "stun" } },
                 "modifier": "Flat",
                 "value": 100
             },

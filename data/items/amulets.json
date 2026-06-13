@@ -84,7 +84,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -101,14 +100,10 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Fire"
-              }
-            },
+            "status_id": null,
+            "damage_type": "Fire",
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "min_max": null
           }
         },
@@ -123,14 +118,10 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Fire"
-              }
-            },
+            "status_id": "burn",
+            "damage_type": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -146,14 +137,9 @@
           "SuccessChance": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                }
+                "status_id": "burn"
               }
             }
           }
@@ -219,7 +205,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": null,
               "is_hit": null
@@ -234,14 +219,10 @@
         "stat_effect": {
           "stat": {
             "StatusPower": {
-              "status_type": {
-                "DamageOverTime": {
-                  "damage_type": "Fire"
-                }
-              },
+              "status_id": null,
+              "damage_type": "Fire",
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "min_max": null
             }
           },
@@ -305,8 +286,7 @@
         "stat": {
           "CritChance": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -321,8 +301,7 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -338,7 +317,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
@@ -396,7 +374,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Storm",
               "min_max": null,
               "is_hit": null
@@ -503,7 +480,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": true
@@ -519,7 +495,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": null,
             "is_hit": null
@@ -536,10 +511,10 @@
       {
         "stat": {
           "StatusEscalation": {
+            "status_id": "poison",
+            "damage_type": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null,
-            "damage_type": "Poison"
+            "skill_id": null
           }
         },
         "modifier": "More",
@@ -587,7 +562,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Poison",
               "min_max": null,
               "is_hit": null
@@ -603,43 +577,6 @@
           "stat": "Mana",
           "modifier": "Increased",
           "value": 2.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "SkillConditionalModifier": {
-              "stat": {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              "skill_type": null,
-              "skill_id": null,
-              "skill_description": null,
-              "conditions": [
-                {
-                  "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "skill_type": null,
-                    "not": false
-                  }
-                }
-              ]
-            }
-          },
-          "modifier": "More",
-          "value": 20.0
         }
       }
     ]
@@ -735,8 +672,7 @@
         "stat": {
           "ManaCost": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "More",
@@ -748,8 +684,7 @@
         "stat": {
           "SkillLevel": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -779,7 +714,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -837,7 +771,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null

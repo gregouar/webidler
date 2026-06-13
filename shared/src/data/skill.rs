@@ -3,19 +3,25 @@ use std::collections::HashSet;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::{Chance, ChanceRange},
-    character::CharacterId,
-    conditional_modifier::{Condition, ConditionalModifier},
-    item::ItemCategory,
-    modifier::ModifiableValue,
-    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType},
-    trigger::TriggerSpecs,
-    values::{Cooldown, NonNegative},
+use crate::{
+    data::{
+        chance::{Chance, ChanceRange},
+        character::CharacterId,
+        character_status::StatusId,
+        conditional_modifier::{Condition, ConditionalModifier},
+        item::ItemCategory,
+        modifier::ModifiableValue,
+        stat_effect::{
+            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType,
+        },
+        trigger::TriggerSpecs,
+        values::{Cooldown, NonNegative},
+    },
+    serde_utils::default_1f64,
 };
 
 pub use super::stat_effect::DamageType;
-use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
+use super::{item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseSkillSpecs {
@@ -34,7 +40,7 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub upgrade_cost: f64,
     #[serde(default)]
-    pub upgrade_effects: Vec<StatEffect>,
+    pub upgrade_effects: Vec<SkillUpgradeEffect>,
 
     #[serde(default)]
     pub modifier_effects: Vec<ModifierEffect>,
@@ -47,15 +53,20 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub auto_use_conditions: Vec<Condition>,
 
-    // #[serde(default)]
-    // pub skill_id: String,
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SkillUpgradeEffect {
+    #[serde(flatten)]
+    pub stat_effect: StatEffect,
+    #[serde(default)]
+    pub description: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillSpecs {
-    // pub base: BaseSkillSpecs,
     pub skill_id: String,
 
     pub name: String,
@@ -196,8 +207,12 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub conditional_modifiers: Vec<ConditionalModifier>,
+
+    #[serde(default)]
+    pub independent_application: bool,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
     FlatDamage {
@@ -210,8 +225,28 @@ pub enum SkillEffectType {
         unblockable: bool,
     },
     ApplyStatus {
-        statuses: Vec<ApplyStatusEffect>,
-        duration: ChanceRange<ModifiableValue<NonNegative>>,
+        status_id: StatusId,
+
+        value: ChanceRange<ModifiableValue<NonNegative>>,
+        #[serde(default = "default_1f64")]
+        value_factor: f64, // For tooltip purposes
+
+        // On skill definition, overwrite default status value when some
+        // On skill computed specs, get derived values
+        #[serde(default)]
+        duration: Option<ChanceRange<ModifiableValue<NonNegative>>>,
+        #[serde(default)]
+        escalation: Option<ModifiableValue<NonNegative>>,
+        #[serde(default)]
+        max_stacks: Option<ModifiableValue<u8>>,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+        #[serde(default)]
+        avoidable: Option<bool>,
+
+        #[serde(default)]
+        replace_on_value_only: bool,
+        // TODO? Computed status effects for inherit_trigger_owner?
     },
     Restore {
         restore_type: RestoreType,
@@ -233,21 +268,6 @@ pub enum RestoreModifier {
     Percent,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ApplyStatusEffect {
-    pub status_type: StatusSpecs,
-    #[serde(default)]
-    pub value: ChanceRange<ModifiableValue<NonNegative>>,
-    #[serde(default)]
-    pub cumulate: bool,
-    #[serde(default)]
-    pub replace_on_value_only: bool,
-    #[serde(default)]
-    pub unavoidable: bool,
-    #[serde(default)]
-    pub escalation: ModifiableValue<f64>,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
 pub enum TargetType {
     #[default]
@@ -264,6 +284,12 @@ pub enum SkillRange {
     Melee,
     Distance,
     Any,
+}
+
+impl Matchable for SkillRange {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
 }
 
 #[derive(

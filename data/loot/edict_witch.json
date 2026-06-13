@@ -2,7 +2,7 @@
   "entries": [
     {
       "item_id": "witch_ring",
-      "weight": 19999,
+      "weight": 9999,
       "min_area_level": 1,
       "boss_only": true
     }

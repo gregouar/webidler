@@ -6,6 +6,7 @@ pub mod character_status;
 pub mod conditional_modifier;
 pub mod forge;
 pub mod game_stats;
+pub mod indexed_key;
 pub mod item;
 pub mod item_affix;
 pub mod loot;

@@ -1,0 +1,100 @@
+{
+    "cheese": {
+        "name": "Melted Cheese",
+        "icon": "statuses/cheese.svg",
+        "debuff": true,
+        "duration": 5.0,
+        "max_stacks": 5,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100.0,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Poison"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100.0,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Storm"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100.0,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null
+                        }
+                    },
+                    "modifier": "Increased",
+                    "debuff": true
+                },
+                "value": 10.0,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "greed": {
+        "name": "Greed",
+        "icon": "statuses/snatch.svg",
+        "debuff": false,
+        "duration": 60,
+        "max_stacks": 20,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "GoldFind",
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 20.0,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "skill_type": null,
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 5.0,
+                "modifier": "Flat"
+            }
+        ]
+    }
+}

@@ -12,13 +12,14 @@ use shared::{
 };
 
 use crate::game::{
-    data::event::EventsQueue,
+    data::{event::EventsQueue, master_store::StatusesStore},
     systems::{stats_updater, statuses_controller},
 };
 
 use super::{characters_updater, skills_updater};
 
 pub fn update_monster_states(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     elapsed_time: Duration,
     monster_specs: &[MonsterSpecs],
@@ -32,6 +33,7 @@ pub fn update_monster_states(
         .filter(|(_, (s, _))| s.character_state.is_alive)
     {
         characters_updater::update_character_state(
+            statuses_store,
             events_queue,
             elapsed_time,
             CharacterId::Monster(monster_id),
@@ -49,12 +51,15 @@ pub fn reset_monsters(monster_states: &mut [MonsterState]) {
 }
 
 pub fn update_monster_specs(
+    statuses_store: &StatusesStore,
+    character_id: CharacterId,
     base_specs: &MonsterSpecs,
     monster_specs: &mut MonsterSpecs,
     monster_state: &MonsterState,
     area_threat: &AreaThreat,
 ) {
     let mut effects: Vec<_> = (&statuses_controller::generate_effects_map_from_statuses(
+        statuses_store,
         &monster_state.character_state.statuses,
     ))
         .into();
@@ -70,6 +75,7 @@ pub fn update_monster_specs(
         bypass_ignore: false,
     });
     effects.extend(stats_updater::compute_conditional_modifiers(
+        statuses_store,
         area_threat,
         &monster_specs.character_specs.character_attrs,
         &monster_state.character_state,
@@ -83,22 +89,26 @@ pub fn update_monster_specs(
     effects.extend(converted_effects);
 
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
     }
 
-    for trigger_specs in monster_specs.character_specs.triggers.iter_mut() {
-        for trigger_effect in trigger_specs.effects.iter_mut() {
+    for trigger_effect in monster_specs.character_specs.triggers.effects_iter_mut() {
+        for skill_effect in trigger_effect.effects.iter_mut() {
             skills_updater::compute_skill_specs_effect(
-                &trigger_specs.trigger_id,
-                trigger_specs.skill_type,
-                trigger_effect,
+                statuses_store,
+                &trigger_effect.trigger_id,
+                trigger_effect.skill_type,
+                skill_effect,
                 effects.iter(),
             );
         }
     }
 
     characters_updater::extend_triggers_from_skills_and_statuses(
+        statuses_store,
+        character_id,
         &mut monster_specs.character_specs,
         &monster_state.character_state,
+        &effects,
     );
 }

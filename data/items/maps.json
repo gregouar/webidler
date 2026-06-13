@@ -116,7 +116,7 @@
         },
         "target": "SameTarget",
         "modifiers": [ ],
-        "skill_range": "Melee",
+        "skill_range": "Any",
         "skill_type": "Curse",
         "effects": [
           {
@@ -125,27 +125,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "SuccessChance": {
-                          "skill_type": null,
-                          "effect_type": null
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 10.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "drunk",
+              "value": 1
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -164,7 +145,8 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "loot_tables": [ ],
-      "replace_area_id": "inn_basement_2.json"
+      "replace_area_id": "inn_basement_2.json",
+      "reward_loot_table": "edict_menu.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [ ],
@@ -231,7 +213,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": null,
             "min_max": null
           }
@@ -268,22 +249,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 30.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "pirate_curse",
+              "value": 30.0
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -300,11 +267,12 @@
     "map_specs": {
       "area_id": "island.json",
       "reward_picks": 1,
-      "reward_slots": 2,
+      "reward_slots": 1,
       "loot_tables": [
         "pirate_treasure.json"
       ],
-      "replace_area_id": null
+      "replace_area_id": null,
+      "reward_loot_table": "edict_treasure.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [ ],
@@ -382,24 +350,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": { }
-                      },
-                      "modifier": "More",
-                      "debuff": true
-                    }
-                  },
-                  "value": 33.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 5.0
+              "status_id": "enwebbed",
+              "value": 1
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -416,9 +368,10 @@
     "map_specs": {
       "area_id": "witch_lair.json",
       "reward_picks": 1,
-      "reward_slots": 2,
+      "reward_slots": 1,
       "loot_tables": [ ],
-      "replace_area_id": "witch_lair_2.json"
+      "replace_area_id": "witch_lair_2.json",
+      "reward_loot_table": "edict_witch.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [ ],

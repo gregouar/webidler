@@ -1,23 +1,117 @@
+use std::collections::HashSet;
+
 use shared::data::{
-    modifier::Modifier,
-    skill::ApplyStatusEffect,
-    stat_effect::{EffectsMap, Matchable, StatEffect, StatType},
+    character_status::StatusId,
+    modifier::{Modifier, compute_more_factor},
+    skill::{DamageType, SkillEffectType, SkillType},
+    stat_effect::{EffectsMap, Matchable, StatEffect, StatType, compare_options},
 };
+
+fn filter_effects(
+    effects_map: &EffectsMap,
+    ignore_stat_effects: &HashSet<StatType>,
+) -> impl Iterator<Item = StatEffect> {
+    effects_map.iter().filter(|stat_effect| {
+        !ignore_stat_effects
+            .iter()
+            .any(|ignored_stat_effect| ignored_stat_effect.is_match(&stat_effect.stat))
+    })
+}
 
 pub fn compute_stats_effects_status_value(
     effects_map: &EffectsMap,
-    status_effect: &ApplyStatusEffect,
+    ignore_stat_effects: &HashSet<StatType>,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
+    status_id: &StatusId,
+    status_damage_type: Option<DamageType>,
 ) -> f64 {
     let mut factor = Factor::new();
 
-    let status_power = StatType::StatusPower {
-        status_type: Some((&status_effect.status_type).into()),
-        skill_filter: Default::default(), // TODO
-        min_max: None,
-    };
+    let default_skill_id = "".to_string();
+    let skill_id = skill_id.unwrap_or(&default_skill_id);
+    let skill_type = skill_type.unwrap_or(SkillType::Other);
 
-    for effect in effects_map.iter() {
-        if effect.stat.is_match(&status_power) {
+    for effect in filter_effects(effects_map, ignore_stat_effects) {
+        if let StatType::StatusPower {
+            status_filter,
+            skill_filter,
+            min_max: _,
+        } = &effect.stat
+            && status_filter.is_match_with_status(status_id, status_damage_type)
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
+        {
+            factor.apply_effect(&effect);
+        }
+
+        if let StatType::Damage {
+            skill_filter,
+            damage_type,
+            min_max: _,
+            is_hit,
+        } = &effect.stat
+            && compare_options(is_hit, &Some(false))
+            && status_damage_type.is_some()
+            && compare_options(&status_damage_type, damage_type)
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
+        {
+            factor.apply_effect(&effect);
+        }
+    }
+
+    factor.evaluate()
+}
+
+pub fn compute_stats_effects_status_duration(
+    effects_map: &EffectsMap,
+    ignore_stat_effects: &HashSet<StatType>,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
+    status_id: &StatusId,
+    status_damage_type: Option<DamageType>,
+) -> f64 {
+    let mut factor = Factor::new();
+
+    let default_skill_id = "".to_string();
+    let skill_id = skill_id.unwrap_or(&default_skill_id);
+    let skill_type = skill_type.unwrap_or(SkillType::Other);
+
+    for effect in filter_effects(effects_map, ignore_stat_effects) {
+        if let StatType::StatusDuration {
+            status_filter,
+            skill_filter,
+        } = &effect.stat
+            && status_filter.is_match_with_status(status_id, status_damage_type)
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
+        {
+            factor.apply_effect(&effect);
+        }
+    }
+
+    factor.evaluate()
+}
+
+pub fn compute_stats_effects_success(
+    effects_map: &EffectsMap,
+    ignore_stat_effects: &HashSet<StatType>,
+    skill_id: Option<&String>,
+    skill_type: Option<SkillType>,
+    skill_effect_type: &SkillEffectType,
+) -> f64 {
+    let mut factor = Factor::new();
+
+    let default_skill_id = "".to_string();
+    let skill_id = skill_id.unwrap_or(&default_skill_id);
+    let skill_type = skill_type.unwrap_or(SkillType::Other);
+
+    for effect in filter_effects(effects_map, ignore_stat_effects) {
+        if let StatType::SuccessChance {
+            skill_filter,
+            effect_type,
+        } = &effect.stat
+            && skill_filter.is_match_with_skill(skill_type, skill_id)
+            && compare_options(effect_type, &(skill_effect_type).into())
+        {
             factor.apply_effect(&effect);
         }
     }
@@ -71,12 +165,17 @@ impl Factor {
                 if stat_effect.value >= 0.0 {
                     self.increased += stat_effect.value;
                 } else {
-                    self.decreased -= stat_effect.value;
+                    self.decreased += stat_effect.value;
                 }
             }
             Modifier::Flat => {}
             Modifier::More => {
-                self.more *= stat_effect.value;
+                let value = compute_more_factor(stat_effect.value);
+                if value == -100.0 || self.more == -100.0 {
+                    self.more = -100.0
+                } else {
+                    self.more = self.more + value + self.more * value * 0.01;
+                }
             }
         }
     }

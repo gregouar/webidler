@@ -4,12 +4,17 @@
   "rarity": "Boss",
   "max_life": 150,
   "power_factor": 8,
-  "initiative": [ 2.5, 3.5 ],
-  "armor": { "Poison": 100 },
-  "stun_lockout": 3.0,
+  "initiative": [
+    2.5,
+    3.5
+  ],
+  "armor": {
+    "Poison": 100
+  },
+  "stun_lockout": 3,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -17,24 +22,16 @@
     {
       "name": "Dangerous Incantation",
       "icon": "skills/poison_cloud.svg",
-      "cooldown": 5.0,
+      "cooldown": 5,
       "skill_type": "Spell",
       "targets": [
         {
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 10,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Poison"
-                      }
-                    },
-                    "value": 10
-                  }
-                ]
+                "status_id": "poison",
+                "value": 10,
+                "escalation": 50
               }
             }
           ]

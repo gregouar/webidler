@@ -1,0 +1,64 @@
+{
+    "vile_codex": {
+        "name": "Vile Incantation",
+        "icon": "statuses/evil_book.svg",
+        "debuff": false,
+        "duration": 10,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null,
+                            "damage_type": "Poison",
+                            "min_max": null,
+                            "is_hit": null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "treasure_idol": {
+        "name": "Venom of the Serpent Queen",
+        "icon": "statuses/snake_bite.svg",
+        "debuff": false,
+        "duration": 0,
+        "max_stacks": 20,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Poison"
+                },
+                "value": 20.0,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": null,
+                            "skill_id": null,
+                            "skill_description": null,
+                            "damage_type": "Poison",
+                            "min_max": null,
+                            "is_hit": null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+
+                },
+                "value": 50.0,
+                "modifier": "Flat"
+            }
+        ]
+    }
+}

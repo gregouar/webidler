@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use shared::data::{
     area::{AreaLevel, ThreatLevel},
     character::CharacterId,
+    character_status::StatusId,
     skill::{DamageType, SkillRange, SkillType},
-    stat_effect::StatStatusType,
     values::NonNegative,
 };
 
@@ -48,12 +48,13 @@ pub struct StatusEvent {
     pub trigger_depth: u8,
     pub skill_id: String,
 
+    pub status_id: StatusId,
+    pub damage_type: Option<DamageType>,
     pub skill_type: SkillType,
 
-    pub status_type: StatStatusType,
     pub is_evaded: bool,
     pub value: NonNegative,
-    pub duration: Option<NonNegative>,
+    pub duration: NonNegative,
 }
 
 #[derive(Debug, Default)]

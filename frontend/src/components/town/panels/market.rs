@@ -12,8 +12,8 @@ use shared::{
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
         stat_effect::{
-            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
-            StatType,
+            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
+            StatType, StatusDamageType,
         },
     },
     http::client::{
@@ -1529,7 +1529,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
+                status_filter: StatStatusFilter {
+                    status_id: None,
+                    damage_type: Some(StatusDamageType::Any),
+                },
                 skill_filter: Default::default(),
                 min_max: None,
             },
@@ -1537,7 +1540,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: None,
+                status_filter: Default::default(),
                 skill_filter: StatSkillFilter {
                     skill_type: Some(SkillType::Curse),
                     ..Default::default()
@@ -1548,7 +1551,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusDuration {
-                status_type: None,
+                status_filter: Default::default(),
                 skill_filter: Default::default(),
             },
             Modifier::Increased,
@@ -1556,7 +1559,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::SuccessChance {
                 skill_filter: Default::default(),
-                effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
+                effect_type: Some(StatSkillEffectType::ApplyStatus { status_id: None }),
             },
             Modifier::Increased,
         ),
