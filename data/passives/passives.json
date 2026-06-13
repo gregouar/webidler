@@ -89,7 +89,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -106,7 +106,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -271,8 +271,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -288,8 +288,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -371,7 +371,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -380,14 +380,14 @@
           {
             "stat": {
               "StatusDuration": {
-                "status_id": null,
-                "damage_type": "Poison",
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -504,7 +504,7 @@
         "socket": false
       },
       "0c4ea6ed-c18a-4a43-808b-8f02aa49bedb": {
-        "name": "Damage against Stunned Enemies",
+        "name": "Greater Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
         "x": -105.0,
         "y": 122.5,
@@ -640,8 +640,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -657,15 +657,15 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "0d8871b2-5eba-4bf5-8a71-e246fad4ffa8": {
-        "name": "Open Wound Effects",
+        "name": "Greater Open Wound Effects",
         "icon": "passives/large_wound.svg",
         "x": -115.0,
         "y": -102.5,
@@ -795,7 +795,7 @@
               "Armor": "Physical"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -806,7 +806,7 @@
               "Armor": "Physical"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -999,8 +999,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1032,8 +1032,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1086,7 +1086,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1103,7 +1103,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1169,8 +1169,8 @@
                 "is_hit": true
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           },
           {
             "stat": {
@@ -1182,8 +1182,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": -100.0
+            "modifier": "Increased",
+            "value": -300.0
           }
         ],
         "triggers": [],
@@ -1199,8 +1199,8 @@
                 "is_hit": true
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1380,8 +1380,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -1397,8 +1397,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1676,7 +1676,7 @@
         "socket": true
       },
       "23952325-ca42-4ec0-b4c5-d47694f3ae86": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -182.5,
         "y": 20.0,
@@ -1787,7 +1787,7 @@
         "socket": false
       },
       "25c4b2a6-e072-4cfd-bb75-402835c60a05": {
-        "name": "Poison Duration",
+        "name": "Greater Poison Duration",
         "icon": "passives/ouroboros.svg",
         "x": -32.5,
         "y": -45.0,
@@ -1805,7 +1805,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -1821,7 +1821,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1843,11 +1843,11 @@
         "socket": true
       },
       "26ea1d9f-140d-4407-a4cc-363405e510b9": {
-        "name": "Casting Speed",
+        "name": "Greater Casting Speed",
         "icon": "passives/spell_speed.svg",
         "x": 105.0,
         "y": -35.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Spell",
         "effects": [
@@ -1859,7 +1859,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -1873,7 +1873,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1900,7 +1900,7 @@
               "Armor": null
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -1918,7 +1918,7 @@
               "Armor": null
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2051,7 +2051,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2068,7 +2068,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2101,8 +2101,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2126,8 +2126,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2215,11 +2215,11 @@
         "socket": false
       },
       "2d2394cc-1605-40fe-923b-3e0fd4502fa3": {
-        "name": "Poison Damage",
+        "name": "Greater Poison Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -47.5,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Poison",
         "effects": [
@@ -2233,8 +2233,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2250,15 +2250,15 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "2d8c330c-e177-428e-8dae-f139ad3a7a66": {
-        "name": "Damage on Maximum Life",
+        "name": "Greater Damage on Maximum Life",
         "icon": "passives/muscle_up.svg",
         "x": -115.0,
         "y": 102.5,
@@ -2363,7 +2363,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2380,18 +2380,18 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "308dfbd3-bb2a-4e29-9ab5-afc6ca7d2344": {
-        "name": "Attack Speed",
+        "name": "Greater Attack Speed",
         "icon": "passives/attack_speed.svg",
         "x": -107.5,
         "y": -30.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Attack",
         "effects": [
@@ -2403,7 +2403,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 6.0
           }
         ],
         "triggers": [],
@@ -2417,7 +2417,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 2.0
+            "value": 4.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2465,7 +2465,7 @@
         "socket": false
       },
       "31456446-3c97-4fb0-9ee8-512a21076f5f": {
-        "name": "More Bleed Damage",
+        "name": "Greater Bleed Damage",
         "icon": "passives/bloody_sword.svg",
         "x": -55.0,
         "y": -42.5,
@@ -2534,8 +2534,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -2559,8 +2559,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 7.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2626,8 +2626,8 @@
                 "is_hit": true
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           },
           {
             "stat": {
@@ -2639,8 +2639,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": -100.0
+            "modifier": "Increased",
+            "value": -300.0
           }
         ],
         "triggers": [],
@@ -2656,8 +2656,8 @@
                 "is_hit": true
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2737,7 +2737,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -2754,7 +2754,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2941,7 +2941,7 @@
           }
         ],
         "triggers": [],
-        "locked": true,
+        "locked": false,
         "upgrade_effects": [
           {
             "stat": {
@@ -2954,7 +2954,7 @@
               }
             },
             "modifier": "More",
-            "value": 25.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3006,8 +3006,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -3023,8 +3023,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3065,8 +3065,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           },
           {
             "stat": {
@@ -3094,8 +3094,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": -20.0
+            "modifier": "Increased",
+            "value": -50.0
           }
         ],
         "triggers": [],
@@ -3127,8 +3127,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           },
           {
             "stat": {
@@ -3156,8 +3156,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": -10.0
+            "modifier": "Increased",
+            "value": -20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3182,8 +3182,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -3199,15 +3199,15 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "3de2ebe9-078d-47ba-9a60-22d35f8da8d2": {
-        "name": "More Physical Damage",
+        "name": "Greater Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -172.5,
         "y": 0.0,
@@ -3321,7 +3321,7 @@
         "socket": false
       },
       "4158fde3-fdf3-4590-9393-9f77db96a6d2": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -162.5,
         "y": 20.0,
@@ -3523,7 +3523,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -3540,7 +3540,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3642,7 +3642,7 @@
         "socket": false
       },
       "46fbba4d-c6fb-4d80-8d20-383b2f9e36b2": {
-        "name": "Burn Chance",
+        "name": "Greater Burn Chance",
         "icon": "passives/smoking_finger.svg",
         "x": 65.0,
         "y": 22.5,
@@ -3889,11 +3889,11 @@
         "socket": false
       },
       "49ad1637-c721-4666-a393-d454bc49bb30": {
-        "name": "Increased Physical Damage",
+        "name": "Greater Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -47.5,
         "y": 0.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Physical",
         "effects": [
@@ -3907,8 +3907,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -3924,8 +3924,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3951,7 +3951,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -3968,14 +3968,14 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "4c792411-d741-4a1f-817b-9ff41e45b0a4": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -72.5,
         "y": 0.0,
@@ -4065,7 +4065,7 @@
         "socket": false
       },
       "4efc73a8-7961-4004-b629-cdc02fb81157": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -157.5,
         "y": 0.0,
@@ -4149,7 +4149,7 @@
         "socket": false
       },
       "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4": {
-        "name": "Poison Escalation",
+        "name": "Greater Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 32.5,
         "y": -45.0,
@@ -4267,7 +4267,7 @@
         "socket": false
       },
       "545537ae-9f08-46c2-b3fa-6ac7d9eefa04": {
-        "name": "Threat Damage",
+        "name": "Greater Threat Damage",
         "icon": "passives/threat_damage.svg",
         "x": -105.0,
         "y": -130.0,
@@ -4353,7 +4353,7 @@
         "socket": false
       },
       "5513a3d8-87cd-4b81-b2b2-08d0275201e6": {
-        "name": "Open Wound Chance",
+        "name": "Open Wound Chance and Duration",
         "icon": "passives/sword_wound.svg",
         "x": -55.0,
         "y": 42.5,
@@ -4450,8 +4450,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -4475,8 +4475,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4547,7 +4547,7 @@
         "socket": false
       },
       "5779b8ad-61fd-4e50-911e-6e675d18d835": {
-        "name": "Defenses",
+        "name": "Greater Defenses",
         "icon": "passives/armor.svg",
         "x": -71.5,
         "y": -171.0,
@@ -4634,7 +4634,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4651,7 +4651,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4676,7 +4676,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -4692,7 +4692,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4736,7 +4736,7 @@
         "socket": false
       },
       "5bc44ef1-e5e3-4646-9c90-d68700397e9b": {
-        "name": "Impact Damage",
+        "name": "Greater Impact Damage",
         "icon": "passives/mine_explosion.svg",
         "x": -174.5,
         "y": 62.0,
@@ -4889,7 +4889,7 @@
         "socket": false
       },
       "5d2f12d2-62ac-433d-adfb-f314d4b58554": {
-        "name": "Damage against Cursed Enemies",
+        "name": "Greater Damage against Cursed Enemies",
         "icon": "passives/warlock_eye.svg",
         "x": 105.0,
         "y": -130.0,
@@ -5095,8 +5095,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -5120,8 +5120,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 7.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5155,8 +5155,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -5181,8 +5181,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5347,7 +5347,7 @@
         "socket": false
       },
       "60884ec3-8267-476e-ac1b-8af601649636": {
-        "name": "Increased Bleed Damage",
+        "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
         "x": -55.0,
         "y": -20.0,
@@ -5436,7 +5436,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -5453,7 +5453,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5487,7 +5487,7 @@
         "socket": false
       },
       "641ea2e9-be62-40ad-b81a-e2502dbee41d": {
-        "name": "Poison Escalation",
+        "name": "Greater Poison Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 0.0,
         "y": -127.5,
@@ -5586,7 +5586,7 @@
         "socket": false
       },
       "656cf6f9-32f1-488e-b188-e81cae806e70": {
-        "name": "Maximum Mana",
+        "name": "Greater Maximum Mana",
         "icon": "passives/mana.svg",
         "x": 72.5,
         "y": -182.5,
@@ -5677,7 +5677,7 @@
         "socket": false
       },
       "66b833a4-e75f-40ec-b393-ffc1f96e0c17": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -60.0,
         "y": -10.0,
@@ -5739,7 +5739,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -5756,14 +5756,14 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "696014a5-7dd4-45bf-b810-56eed1368bfc": {
-        "name": "Effects Duration",
+        "name": "Greater Effects Duration",
         "icon": "passives/duration.svg",
         "x": -57.5,
         "y": -110.0,
@@ -5838,8 +5838,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           },
           {
             "stat": {
@@ -5867,8 +5867,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": -20.0
+            "modifier": "Increased",
+            "value": -50.0
           }
         ],
         "triggers": [],
@@ -5900,8 +5900,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           },
           {
             "stat": {
@@ -5929,8 +5929,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": -10.0
+            "modifier": "Increased",
+            "value": -20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5993,7 +5993,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6010,7 +6010,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6035,8 +6035,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6052,8 +6052,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6118,11 +6118,11 @@
         "socket": false
       },
       "6bcf67ff-ff16-4082-bf14-72f74bd7b9f9": {
-        "name": "Storm Damage",
+        "name": "Greater Storm Damage",
         "icon": "passives/storm_damage.svg",
         "x": 0.0,
         "y": 47.5,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Storm",
         "effects": [
@@ -6136,8 +6136,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -6153,8 +6153,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6300,7 +6300,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6317,7 +6317,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6477,7 +6477,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6494,7 +6494,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6594,7 +6594,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6611,7 +6611,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6746,8 +6746,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6763,8 +6763,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6817,7 +6817,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6834,18 +6834,18 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "764be5b2-16e3-4e13-a32a-91c27db1f5b6": {
-        "name": "Spell Damage",
+        "name": "Greater Spell Damage",
         "icon": "passives/spell.svg",
         "x": 105.0,
         "y": 35.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Spell",
         "effects": [
@@ -6859,8 +6859,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -6876,8 +6876,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6966,8 +6966,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -6991,8 +6991,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7065,7 +7065,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7082,7 +7082,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7116,7 +7116,7 @@
         "socket": false
       },
       "77901266-b305-400b-9741-8e33f8093139": {
-        "name": "Damage on Maximum Mana",
+        "name": "Greater Damage on Maximum Mana",
         "icon": "passives/brainstorm.svg",
         "x": -70.0,
         "y": 169.5,
@@ -7212,7 +7212,7 @@
         "socket": false
       },
       "78708628-ec55-4977-809e-c97806ab760b": {
-        "name": "Threat Damage",
+        "name": "Greater Threat Damage",
         "icon": "passives/threat_damage.svg",
         "x": 140.0,
         "y": 95.0,
@@ -7289,7 +7289,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -7305,7 +7305,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7564,7 +7564,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7581,7 +7581,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7633,8 +7633,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7650,8 +7650,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7746,8 +7746,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7763,8 +7763,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7817,7 +7817,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7834,7 +7834,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7860,7 +7860,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7877,7 +7877,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7903,7 +7903,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -7920,7 +7920,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8001,8 +8001,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8018,8 +8018,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8063,7 +8063,7 @@
         "socket": false
       },
       "84896a91-0b06-4860-92be-b52a225a0b10": {
-        "name": "Maximum Life",
+        "name": "Greater Maximum Life",
         "icon": "passives/life.svg",
         "x": -57.5,
         "y": 165.0,
@@ -8144,7 +8144,7 @@
         "socket": false
       },
       "85ab0266-027e-4e48-9773-e36362b9fc7b": {
-        "name": "Fire Defense",
+        "name": "Fire Resistance",
         "icon": "passives/armor_fire.svg",
         "x": 90.0,
         "y": -15.0,
@@ -8157,7 +8157,7 @@
               "Armor": "Fire"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8168,7 +8168,7 @@
               "Armor": "Fire"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8325,8 +8325,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8342,8 +8342,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8384,8 +8384,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8418,7 +8418,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8502,7 +8502,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8519,7 +8519,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8553,11 +8553,11 @@
         "socket": false
       },
       "8b169efe-6a7a-4d34-86a6-7770118f4194": {
-        "name": "Attack Damage",
+        "name": "Greater Attack Damage",
         "icon": "passives/attack.svg",
         "x": -107.5,
         "y": 30.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Attack",
         "effects": [
@@ -8572,7 +8572,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8589,7 +8589,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8615,7 +8615,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8632,7 +8632,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8685,7 +8685,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8702,7 +8702,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8827,7 +8827,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8844,7 +8844,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8895,7 +8895,7 @@
         "socket": false
       },
       "92324580-1289-4322-8169-0c5548abf7cc": {
-        "name": "Critical Hit Damage",
+        "name": "Greater Critical Hit Damage",
         "icon": "passives/critical_damage.svg",
         "x": 152.5,
         "y": 65.0,
@@ -8911,7 +8911,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 25.0
+            "value": 30.0
           }
         ],
         "triggers": [],
@@ -8925,7 +8925,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8950,8 +8950,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8967,8 +8967,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8988,7 +8988,7 @@
               "Armor": "Storm"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8999,7 +8999,7 @@
               "Armor": "Storm"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9060,7 +9060,7 @@
               "Armor": "Poison"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9071,7 +9071,7 @@
               "Armor": "Poison"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9159,8 +9159,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -9192,8 +9192,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9219,7 +9219,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -9236,7 +9236,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9376,8 +9376,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -9402,8 +9402,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9518,7 +9518,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -9535,7 +9535,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9588,8 +9588,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -9605,8 +9605,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9631,8 +9631,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -9648,8 +9648,8 @@
                 "min_max": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9738,7 +9738,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -9754,7 +9754,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9765,7 +9765,7 @@
         "icon": "passives/wildfires.svg",
         "x": 212.5,
         "y": -67.5,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Fire",
         "effects": [
@@ -9779,17 +9779,30 @@
               }
             },
             "modifier": "Flat",
-            "value": 2.0
+            "value": 1.0
           }
         ],
         "triggers": [],
-        "locked": false,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "locked": true,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "burn",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "max_upgrade_level": 5,
         "socket": false
       },
       "a8c6e35c-bd30-4211-9e6d-65d59ad7e375": {
-        "name": "Damage against Stunned Enemies",
+        "name": "Greater Damage against Stunned Enemies",
         "icon": "passives/surprised_skull.svg",
         "x": 82.5,
         "y": 117.5,
@@ -9877,7 +9890,7 @@
               "Armor": "Poison"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9888,14 +9901,14 @@
               "Armor": "Poison"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "ab6ccb2e-de7c-4b20-84ac-529bcf35ae58": {
-        "name": "Damage over Time",
+        "name": "Greater Damage over Time",
         "icon": "passives/damage_over_time.svg",
         "x": 177.5,
         "y": -82.5,
@@ -9938,11 +9951,11 @@
         "socket": false
       },
       "abcc57bb-81b3-4156-aa97-3d023c66eb64": {
-        "name": "Fire Damage",
+        "name": "Greater Fire Damage",
         "icon": "passives/fire_damage.svg",
         "x": 177.5,
         "y": 22.5,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Fire",
         "effects": [
@@ -9956,8 +9969,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9973,8 +9986,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10094,8 +10107,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -10119,8 +10132,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10154,7 +10167,7 @@
         "socket": false
       },
       "ada9e80f-4b7b-4ae7-a2a1-d411345a272b": {
-        "name": "Spell Critical Hit Chance and Damage",
+        "name": "Greater Spell Critical Hit Damage",
         "icon": "passives/fireflake.svg",
         "x": -27.5,
         "y": 65.0,
@@ -10169,7 +10182,7 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": 25.0
           }
         ],
@@ -10183,7 +10196,7 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
+            "modifier": "More",
             "value": 15.0
           }
         ],
@@ -10272,7 +10285,7 @@
               "Armor": "Physical"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -10283,14 +10296,14 @@
               "Armor": "Physical"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "b2c78b24-f0ad-4f3f-84eb-6d6fb97c2d42": {
-        "name": "Explosive Damage",
+        "name": "Greater Explosive Damage",
         "icon": "passives/mine_explosion.svg",
         "x": 166.5,
         "y": -44.0,
@@ -10346,7 +10359,7 @@
         "socket": false
       },
       "b59ab706-e788-4501-8bc8-e55157d0edc5": {
-        "name": "Damage against Slowed Enemies",
+        "name": "Greater Damage against Slowed Enemies",
         "icon": "passives/slow_blob.svg",
         "x": -49.5,
         "y": -165.0,
@@ -10407,7 +10420,7 @@
         "socket": false
       },
       "b5fce054-f56b-47de-9e4f-d565c54f830c": {
-        "name": "Life Leech Power",
+        "name": "Greater Life Leech Power",
         "icon": "passives/lamprey_mouth.svg",
         "x": -57.5,
         "y": 110.0,
@@ -10463,7 +10476,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -10480,7 +10493,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10598,8 +10611,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -10623,8 +10636,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 7.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10672,7 +10685,7 @@
         "socket": false
       },
       "bdb1c3e6-472f-4e2f-a511-b0c91a62d071": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -182.5,
         "y": -20.0,
@@ -10809,7 +10822,7 @@
               "Armor": "Storm"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -10820,7 +10833,7 @@
               "Armor": "Storm"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10881,8 +10894,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -10907,8 +10920,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10954,7 +10967,7 @@
         "socket": false
       },
       "c28cd9d9-b681-4d72-9803-b3785c9e9dc5": {
-        "name": "Damage on Maximum Life",
+        "name": "Greater Damage on Maximum Life",
         "icon": "passives/muscle_up.svg",
         "x": 47.5,
         "y": -175.0,
@@ -11103,7 +11116,7 @@
       },
       "c351443b-35e6-4860-aa43-86eec4c92e51": {
         "name": "Bonfire",
-        "icon": "passives/bonfire.svg",
+        "icon": "passives/pyre.svg",
         "x": 127.5,
         "y": -27.5,
         "size": 2,
@@ -11162,7 +11175,7 @@
         "socket": false
       },
       "c3a9a7d3-942a-4e19-8619-1a52854cfede": {
-        "name": "Stun Duration",
+        "name": "Greater Stun Duration",
         "icon": "passives/knockout.svg",
         "x": 0.0,
         "y": 122.5,
@@ -11222,7 +11235,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -11239,7 +11252,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11426,8 +11439,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -11443,8 +11456,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11490,11 +11503,11 @@
         "socket": false
       },
       "c8aefeb5-4cc9-4332-8fba-0a2d2d6fd93f": {
-        "name": "Storm Damage",
+        "name": "Greater Storm Damage",
         "icon": "passives/storm_damage.svg",
         "x": 2.5,
         "y": 165.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Storm",
         "effects": [
@@ -11508,8 +11521,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -11525,8 +11538,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11574,7 +11587,7 @@
         "socket": false
       },
       "cb014939-4119-4b9c-bcd9-cb484c9fbdcc": {
-        "name": "Damage on Maximum Mana",
+        "name": "Greater Damage on Maximum Mana",
         "icon": "passives/brainstorm.svg",
         "x": 92.5,
         "y": -72.5,
@@ -11633,7 +11646,7 @@
         "socket": false
       },
       "cc2ee934-c6ab-462a-9dd2-74b00a3720af": {
-        "name": "Evade Chance",
+        "name": "Greater Evade Chance",
         "icon": "passives/curled_leaf.svg",
         "x": -172.0,
         "y": 53.0,
@@ -11677,7 +11690,7 @@
               "Armor": "Fire"
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -11688,7 +11701,7 @@
               "Armor": "Fire"
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11789,6 +11802,79 @@
             "stat": "GoldFind",
             "modifier": "Increased",
             "value": 15.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "cf14e084-a8ed-496a-b832-b3180ff93a51": {
+        "name": "Damage against Affected Enemies",
+        "icon": "passives/gooey_daemon.svg",
+        "x": 220.0,
+        "y": -37.5,
+        "size": 1,
+        "root_node": false,
+        "node_type": "Status",
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 4.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11900,7 +11986,7 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
+            "modifier": "Increased",
             "value": 10.0
           },
           {
@@ -12054,7 +12140,23 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12071,28 +12173,12 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -12310,14 +12396,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -12345,6 +12423,14 @@
                   },
                   {
                     "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12390,8 +12476,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -12415,8 +12501,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12474,16 +12560,6 @@
             "stat": "TakeFromLifeBeforeMana",
             "modifier": "Flat",
             "value": 50.0
-          },
-          {
-            "stat": {
-              "ManaCost": {
-                "skill_type": null,
-                "skill_id": null
-              }
-            },
-            "modifier": "More",
-            "value": 10.0
           }
         ],
         "triggers": [],
@@ -12502,7 +12578,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 2,
@@ -12567,7 +12643,7 @@
         "socket": false
       },
       "d5d610ee-8fa7-49d1-967f-3c0adc33d5a6": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -162.5,
         "y": -20.0,
@@ -12636,8 +12712,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -12661,8 +12737,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12736,7 +12812,7 @@
         "socket": false
       },
       "d77b0bd8-b567-4c32-b771-a200e1f0b30c": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -60.0,
         "y": 10.0,
@@ -12864,8 +12940,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -12890,15 +12966,15 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "d953476f-b3ff-4ccb-b344-15d57f437f68": {
-        "name": "Increased Bleed Damage",
+        "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
         "x": -60.0,
         "y": -30.0,
@@ -13013,7 +13089,7 @@
         "socket": false
       },
       "da2b4bd7-a844-4270-8c7c-67bc62673e61": {
-        "name": "Spell Mana Cost",
+        "name": "Greater Spell Mana Cost",
         "icon": "passives/potion_ball.svg",
         "x": 127.5,
         "y": -112.5,
@@ -13110,11 +13186,11 @@
         "socket": false
       },
       "db2e7410-cfce-423c-8564-f06b56f15af9": {
-        "name": "Fire Damage",
+        "name": "Greater Fire Damage",
         "icon": "passives/fire_damage.svg",
         "x": 47.5,
         "y": 0.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Fire",
         "effects": [
@@ -13128,8 +13204,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -13145,8 +13221,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13199,7 +13275,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -13216,7 +13292,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13284,8 +13360,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -13317,8 +13393,8 @@
                 ]
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13362,7 +13438,7 @@
         "socket": false
       },
       "de4fefa1-145a-4825-8de9-ad5c52140395": {
-        "name": "Spell Restoration",
+        "name": "Greater Spell Restoration",
         "icon": "passives/regeneration.svg",
         "x": 57.5,
         "y": 110.0,
@@ -13401,7 +13477,7 @@
         "socket": false
       },
       "df35bf92-e646-421c-a508-c77eb30f144e": {
-        "name": "Burn Damage and Duration",
+        "name": "Greater Burn Damage",
         "icon": "passives/flamed_leaf.svg",
         "x": 65.0,
         "y": -22.5,
@@ -13420,19 +13496,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_id": "burn",
-                "damage_type": null,
-                "skill_type": null,
-                "skill_id": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 15.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -13449,19 +13513,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
-          },
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_id": "burn",
-                "damage_type": null,
-                "skill_type": null,
-                "skill_id": null
-              }
-            },
-            "modifier": "Increased",
-            "value": 5.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13577,7 +13629,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -13593,7 +13645,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13660,7 +13712,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -13677,7 +13729,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13711,7 +13763,7 @@
         "socket": false
       },
       "e3db851e-32c3-4d37-a2c3-371dbff0fdf6": {
-        "name": "Faster Damage over Time",
+        "name": "Greater Faster Damage over Time",
         "icon": "passives/chemical_bolt.svg",
         "x": -90.0,
         "y": -130.0,
@@ -13729,7 +13781,7 @@
               }
             },
             "modifier": "More",
-            "value": 25.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -13745,7 +13797,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13771,7 +13823,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -13788,7 +13840,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13887,8 +13939,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -13904,8 +13956,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13967,8 +14019,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -13984,15 +14036,15 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "e910bdb3-617b-44ae-93eb-9128aaff8055": {
-        "name": "Increased Physical Damage",
+        "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
         "x": -187.5,
         "y": 0.0,
@@ -14035,11 +14087,11 @@
         "socket": false
       },
       "ea811764-421a-48f8-a3c7-aa838a77c478": {
-        "name": "Poison Damage",
+        "name": "Greater Poison Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -162.5,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Poison",
         "effects": [
@@ -14053,8 +14105,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -14070,8 +14122,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14104,8 +14156,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -14129,8 +14181,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14276,7 +14328,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -14292,14 +14344,14 @@
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "ec0d4c11-db32-4a0e-8967-0b6f833bb381": {
-        "name": "Damage against Affected Enemies",
+        "name": "Greater Damage against Affected Enemies",
         "icon": "passives/gooey_daemon.svg",
         "x": 152.5,
         "y": -65.0,
@@ -14613,7 +14665,7 @@
         "socket": false
       },
       "f288158b-81e2-4237-ac6e-34bd492e45f4": {
-        "name": "Damage against Slowed Enemies",
+        "name": "Greater Damage against Slowed Enemies",
         "icon": "passives/slow_blob.svg",
         "x": 132.5,
         "y": 107.5,
@@ -14815,8 +14867,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 20.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -14840,8 +14892,8 @@
                 "conditions_duration": 50
               }
             },
-            "modifier": "More",
-            "value": 10.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14867,7 +14919,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -14884,7 +14936,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14956,7 +15008,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -14972,7 +15024,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -15020,8 +15072,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -15045,8 +15097,8 @@
                 "conditions_duration": 0
               }
             },
-            "modifier": "More",
-            "value": 7.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -15154,7 +15206,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -15171,7 +15223,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,

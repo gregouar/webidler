@@ -1,7 +1,7 @@
 {
     "bonfire": {
         "name": "Bonfire",
-        "icon": "passives/bonfire.svg",
+        "icon": "passives/pyre.svg",
         "debuff": false,
         "duration": 5,
         "max_stacks": 1,
