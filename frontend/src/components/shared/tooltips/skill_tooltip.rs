@@ -730,14 +730,13 @@ pub fn format_skill_effect(
     //     .collect();
 
     if skip {
-        view! {}.into_any()
+        None
     } else {
-        view! {
+        Some(view! {
             {base_effects}
             {conditional_modifiers}
             {formatted_modifiers}
-        }
-        .into_any()
+        })
     }
 }
 
