@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    item::{ItemCategory, ItemSlot},
     skill::SkillType,
     stat_effect::{StatEffect, StatStatusFilter},
 };
@@ -39,4 +40,10 @@ pub enum Condition {
     LowLife,
     LowMana,
     ThreatLevel,
+    HasItem {
+        #[serde(default)]
+        item_slot: Option<ItemSlot>,
+        #[serde(default)]
+        item_category: Option<ItemCategory>,
+    },
 }

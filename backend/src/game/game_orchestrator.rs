@@ -150,6 +150,7 @@ async fn control_entities(
         &game_data.area_threat,
         game_data.player_base_specs.read(),
         game_data.player_specs.read(),
+        game_data.player_inventory.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,
         game_data.new_wave,
@@ -264,6 +265,7 @@ async fn update_entities(
         elapsed_time,
         game_data.player_specs.read(),
         &mut game_data.player_state,
+        game_data.player_inventory.read(),
         &game_data.area_threat,
     );
     monsters_updater::update_monster_states(

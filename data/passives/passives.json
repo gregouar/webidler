@@ -420,6 +420,75 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "0bd6d73c-0b10-4524-b280-ca71fdc054c9": {
+        "name": "Greater Ranged Weapon Damage",
+        "icon": "passives/high_shot.svg",
+        "x": -240.0,
+        "y": -42.5,
+        "size": 1,
+        "root_node": false,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "0bf01c1a-5a2e-4d84-919a-7e4d1ca16fc8": {
         "name": "Overwhelming Force",
         "icon": "passives/overwhelming_force.svg",
@@ -4064,6 +4133,75 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "4cd96890-14fd-4ef6-9c66-bf46782c9393": {
+        "name": "Ranged Weapon Damage",
+        "icon": "passives/high_shot.svg",
+        "x": -212.5,
+        "y": -40.0,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "4efc73a8-7961-4004-b629-cdc02fb81157": {
         "name": "Physical Damage",
         "icon": "passives/mace_head.svg",
@@ -5122,6 +5260,75 @@
             },
             "modifier": "Increased",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "5ed2cd84-db92-4147-85a8-6d262435e35d": {
+        "name": "Ranged Weapon Damage",
+        "icon": "passives/high_shot.svg",
+        "x": -227.5,
+        "y": -32.5,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Critical",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8025,6 +8232,75 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "84587682-6d87-4179-8c45-05ed5e640c38": {
+        "name": "Greater Two-Handed Melee Weapon Damage",
+        "icon": "passives/war_axe.svg",
+        "x": -222.5,
+        "y": -85.0,
+        "size": 1,
+        "root_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "MeleeWeapon2H"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 25.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "MeleeWeapon2H"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "84764c3f-3ec6-4c8a-821b-b56850cbc188": {
         "name": "Curses Mana Cost",
         "icon": "passives/death_note.svg",
@@ -9779,7 +10055,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "triggers": [],
@@ -9795,7 +10071,7 @@
               }
             },
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11463,6 +11739,75 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "c852b7dd-1d7a-4da2-b162-4ea390993ff2": {
+        "name": "Two-Handed Melee Weapon Damage",
+        "icon": "passives/war_axe.svg",
+        "x": -210.0,
+        "y": -80.0,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "MeleeWeapon2H"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "MeleeWeapon2H"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "c85b224f-526d-4a9f-a2e4-63fd36cba963": {
         "name": "Blessed Heart",
         "icon": "passives/heart_wings.svg",
@@ -12277,6 +12622,14 @@
                     }
                   },
                   {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -12286,7 +12639,7 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12295,14 +12648,6 @@
                   },
                   {
                     "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -12413,12 +12758,11 @@
                     }
                   },
                   {
-                    "StatusPower": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
+                      "skill_id": null
                     }
                   },
                   {
@@ -12430,11 +12774,12 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -13120,6 +13465,75 @@
             },
             "modifier": "More",
             "value": -10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "dacd4f08-c525-412d-bf17-3068ea10cbe5": {
+        "name": "Two-Handed Melee Weapon Damage",
+        "icon": "passives/war_axe.svg",
+        "x": -205.0,
+        "y": -67.5,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Attack",
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "MeleeWeapon2H"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "MeleeWeapon2H"
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -17104,6 +17518,30 @@
       {
         "from": "456da99e-36b2-4542-8904-2be314830ed7",
         "to": "a796f363-7d58-4ebd-b78d-8f4cf92614bd"
+      },
+      {
+        "from": "84587682-6d87-4179-8c45-05ed5e640c38",
+        "to": "c852b7dd-1d7a-4da2-b162-4ea390993ff2"
+      },
+      {
+        "from": "c852b7dd-1d7a-4da2-b162-4ea390993ff2",
+        "to": "dacd4f08-c525-412d-bf17-3068ea10cbe5"
+      },
+      {
+        "from": "dacd4f08-c525-412d-bf17-3068ea10cbe5",
+        "to": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af"
+      },
+      {
+        "from": "0bd6d73c-0b10-4524-b280-ca71fdc054c9",
+        "to": "5ed2cd84-db92-4147-85a8-6d262435e35d"
+      },
+      {
+        "from": "5ed2cd84-db92-4147-85a8-6d262435e35d",
+        "to": "4cd96890-14fd-4ef6-9c66-bf46782c9393"
+      },
+      {
+        "from": "4cd96890-14fd-4ef6-9c66-bf46782c9393",
+        "to": "870fb1bf-f4da-48aa-9f2c-a0e4390ae8af"
       }
     ]
   }

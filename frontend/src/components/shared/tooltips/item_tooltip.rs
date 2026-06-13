@@ -764,3 +764,17 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Rune => "Rune",
     }
 }
+
+pub fn item_slot_str(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Amulet => "Amulet",
+        ItemSlot::Body => "Body Armor",
+        ItemSlot::Boots => "Boots",
+        ItemSlot::Gloves => "Gloves",
+        ItemSlot::Helmet => "Helmet",
+        ItemSlot::Ring => "Ring",
+        ItemSlot::Shield => "Shield",
+        ItemSlot::Accessory => "Cloak",
+        ItemSlot::Weapon => "Weapon",
+    }
+}

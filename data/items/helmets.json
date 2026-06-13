@@ -674,12 +674,9 @@
             "skill_id": null
           }
         },
-        "modifier": "Flat",
+        "modifier": "Increased",
         "scope": "Global",
-        "value": [
-          1.0,
-          3.0
-        ],
+        "value": 30.0,
         "ignore_quality": true
       }
     ],

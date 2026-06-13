@@ -409,6 +409,7 @@ fn apply_conditional_modifiers(
             &Default::default(),
             &target.1.0.character_attrs,
             target.1.1,
+            None,
             &skill_effect.conditional_modifiers,
         )
         .iter(),

@@ -59,6 +59,7 @@ impl PlayerController {
         area_threat: &AreaThreat,
         player_base_specs: &'a PlayerBaseSpecs,
         player_specs: &'a PlayerSpecs,
+        player_inventory: &PlayerInventory,
         player_state: &'a mut PlayerState,
         monsters: &mut [Target<'a>],
         prevent_attack: bool,
@@ -81,6 +82,7 @@ impl PlayerController {
                             area_threat,
                             &player_specs.character_specs.character_attrs,
                             &player_state.character_state,
+                            Some(player_inventory),
                             condition,
                         ) == 0.0
                     })

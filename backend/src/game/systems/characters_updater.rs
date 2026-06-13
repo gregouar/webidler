@@ -8,7 +8,7 @@ use shared::{
         character::{CharacterAttrs, CharacterId, CharacterState},
         character_status::StatusEffectType,
         conditional_modifier::ConditionalModifier,
-        player::CharacterSpecs,
+        player::{CharacterSpecs, PlayerInventory},
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
         trigger::TriggerEffectModifierSource,
@@ -32,6 +32,7 @@ pub fn update_character_state(
     character_id: CharacterId,
     character_specs: &CharacterSpecs,
     character_state: &mut CharacterState,
+    character_inventory: Option<&PlayerInventory>,
     area_threat: &AreaThreat,
 ) {
     if !character_state.is_alive {
@@ -101,6 +102,7 @@ pub fn update_character_state(
                 area_threat,
                 &character_specs.character_attrs,
                 character_state,
+                character_inventory,
                 condition,
             );
 

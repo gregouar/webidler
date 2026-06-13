@@ -1,10 +1,11 @@
 use shared::data::{
     conditional_modifier::Condition,
+    item::{ItemCategory, ItemSlot},
     skill::SkillType,
     stat_effect::{StatSkillFilter, StatStatusFilter, StatusDamageType},
 };
 
-use crate::components::shared::tooltips::effects_tooltip;
+use crate::components::shared::tooltips::{effects_tooltip, item_tooltip};
 
 pub fn format_skill_modifier_conditions_pre(
     conditions: &[Condition],
@@ -31,6 +32,15 @@ pub fn format_skill_modifier_conditions_pre(
             Condition::LowLife => "".into(),
             Condition::LowMana => "".into(),
             Condition::ThreatLevel => "".into(),
+            Condition::HasItem {
+                item_slot,
+                item_category,
+            } => {
+                format!(
+                    " while equipped with {}",
+                    format_has_item_condition(*item_slot, *item_category)
+                )
+            }
         })
         .collect::<Vec<_>>()
         .join("")
@@ -52,6 +62,7 @@ pub fn format_skill_modifier_conditions_post(
             Condition::LowLife => Some(" on Low Life"),
             Condition::LowMana => Some(" on Low Mana"),
             Condition::ThreatLevel => None,
+            Condition::HasItem { .. } => None,
         })
         .collect::<Vec<_>>();
 
@@ -77,7 +88,8 @@ pub fn format_skill_modifier_conditions_post(
             | Condition::MaximumLife
             | Condition::MaximumMana
             | Condition::LowLife
-            | Condition::LowMana => None,
+            | Condition::LowMana
+            | Condition::HasItem { .. } => None,
             Condition::ThreatLevel => Some(" per Threat Level".into()),
         })
         .collect::<Vec<_>>();
@@ -93,6 +105,22 @@ pub fn format_skill_modifier_conditions_post(
             prefix,
             on_conditions_str.join(" and ")
         )
+    }
+}
+
+fn format_has_item_condition(
+    item_slot: Option<ItemSlot>,
+    item_category: Option<ItemCategory>,
+) -> String {
+    match (item_slot, item_category) {
+        (Some(item_slot), Some(item_category)) => format!(
+            "{} in {} slot",
+            item_tooltip::item_category_str(item_category),
+            item_tooltip::item_slot_str(item_slot),
+        ),
+        (Some(item_slot), None) => item_tooltip::item_slot_str(item_slot).into(),
+        (None, Some(item_category)) => item_tooltip::item_category_str(item_category).into(),
+        (None, None) => "Item".into(),
     }
 }
 

@@ -3,7 +3,7 @@ use shared::data::{
     character::CharacterAttrs,
     character_status::StatusEffectType,
     conditional_modifier::{Condition, ConditionalModifier},
-    player::CharacterState,
+    player::{CharacterState, PlayerInventory},
     stat_effect::{StatEffect, StatType},
 };
 
@@ -41,6 +41,7 @@ pub fn compute_conditional_modifiers(
     area_threat: &AreaThreat,
     character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
+    character_inventory: Option<&PlayerInventory>,
     conditional_modifiers: &[ConditionalModifier],
 ) -> Vec<StatEffect> {
     conditional_modifiers
@@ -63,6 +64,7 @@ pub fn compute_conditional_modifiers(
                             area_threat,
                             character_attrs,
                             character_state,
+                            character_inventory,
                             condition,
                         )
                     } else {
@@ -95,6 +97,7 @@ pub fn check_condition(
     area_threat: &AreaThreat,
     character_attrs: &CharacterAttrs,
     character_state: &CharacterState,
+    character_inventory: Option<&PlayerInventory>,
     condition: &Condition,
 ) -> f64 {
     match condition {
@@ -170,5 +173,27 @@ pub fn check_condition(
             (character_state.mana.get() <= character_attrs.max_mana.get() * 0.5) as usize as f64
         }
         Condition::ThreatLevel => area_threat.threat_level as f64,
+        Condition::HasItem {
+            item_slot,
+            item_category,
+        } => character_inventory
+            .map(|character_inventory| {
+                character_inventory
+                    .equipped_items()
+                    .any(|(equipped_slot, item_specs)| {
+                        item_slot
+                            .map(|item_slot| {
+                                equipped_slot == item_slot
+                                    || item_specs.base.extra_slots.contains(&item_slot)
+                            })
+                            .unwrap_or(true)
+                            && item_category
+                                .map(|item_category| {
+                                    item_specs.base.categories.contains(&item_category)
+                                })
+                                .unwrap_or(true)
+                    }) as usize as f64
+            })
+            .unwrap_or_default(),
     }
 }

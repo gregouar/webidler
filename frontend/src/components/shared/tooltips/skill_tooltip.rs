@@ -6,7 +6,7 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     chance::{Chance, ChanceRange},
     conditional_modifier::ConditionalModifier,
-    item::{ItemSlot, SkillRange, SkillShape},
+    item::{SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     player::PlayerBaseSkill,
     skill::{
@@ -858,17 +858,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                     None => "",
                 },
                 match slot {
-                    Some(slot) => match slot {
-                        ItemSlot::Amulet => "Amulet",
-                        ItemSlot::Body => "Body Armor",
-                        ItemSlot::Boots => "Boots",
-                        ItemSlot::Gloves => "Gloves",
-                        ItemSlot::Helmet => "Helmet",
-                        ItemSlot::Ring => "Ring",
-                        ItemSlot::Shield => "Shield",
-                        ItemSlot::Accessory => "Cloak",
-                        ItemSlot::Weapon => "Weapon",
-                    },
+                    Some(slot) => item_tooltip::item_slot_str(slot),
                     None => "Item",
                 }
             )

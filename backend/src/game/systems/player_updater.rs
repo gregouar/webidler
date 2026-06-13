@@ -75,6 +75,7 @@ pub fn update_player_state(
     elapsed_time: Duration,
     player_specs: &PlayerSpecs,
     player_state: &mut PlayerState,
+    player_inventory: &PlayerInventory,
     area_threat: &AreaThreat,
 ) {
     if !player_state.character_state.is_alive {
@@ -88,6 +89,7 @@ pub fn update_player_state(
         CharacterId::Player,
         &player_specs.character_specs,
         &mut player_state.character_state,
+        Some(player_inventory),
         area_threat,
     );
 }
@@ -133,6 +135,7 @@ pub fn update_player_specs(
                     area_threat,
                     &player_specs.character_specs.character_attrs,
                     &player_state.character_state,
+                    Some(player_inventory),
                     &player_specs.character_specs.conditional_modifiers,
                 )
                 .into(),

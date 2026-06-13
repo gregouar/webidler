@@ -145,6 +145,7 @@ fn handle_hit_event<'a>(
                         &game_data.area_threat,
                         &target_specs.character_attrs,
                         target_state,
+                        None,
                         condition,
                     ) <= 0.0
                 })
@@ -276,6 +277,7 @@ fn handle_kill_event(
                                     &game_data.area_threat,
                                     &monster_specs.character_specs.character_attrs,
                                     &monster_state.character_state,
+                                    None,
                                     condition,
                                 ) > 0.0
                             })

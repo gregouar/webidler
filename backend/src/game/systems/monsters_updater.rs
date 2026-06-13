@@ -39,6 +39,7 @@ pub fn update_monster_states(
             CharacterId::Monster(monster_id),
             &monster_specs.character_specs,
             &mut monster_state.character_state,
+            None,
             area_threat,
         );
     }
@@ -79,6 +80,7 @@ pub fn update_monster_specs(
         area_threat,
         &monster_specs.character_specs.character_attrs,
         &monster_state.character_state,
+        None,
         &monster_specs.character_specs.conditional_modifiers,
     ));
 
