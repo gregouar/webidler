@@ -27,7 +27,7 @@
   "bosses": [
     {
       "level": 30,
-      "interval": 1,
+      "interval": 10,
       "spawns": [
         {
           "monster": "witch_2.json",

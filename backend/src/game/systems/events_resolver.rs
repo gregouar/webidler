@@ -2,7 +2,7 @@ use std::iter;
 
 use itertools::all;
 use shared::{
-    constants::{MAX_AREA_LEVEL, WAVES_PER_AREA_LEVEL},
+    constants::{ITEM_REWARDS_BOSS_FACTOR, MAX_AREA_LEVEL, WAVES_PER_AREA_LEVEL},
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
@@ -389,7 +389,12 @@ fn handle_area_completed_event(
             false,
             false,
             None,
-            *game_data.area_specs.loot_rarity,
+            *game_data.area_specs.loot_rarity
+                * if area_state.is_boss {
+                    ITEM_REWARDS_BOSS_FACTOR
+                } else {
+                    1.0
+                },
             game_data.player_specs.read().gold_find.get(),
         ) {
             Some(item_specs) => {

@@ -77,7 +77,7 @@
             "is_triggered": null,
             "damage_type": null,
             "skill_ids": null,
-            "conditions": []
+            "conditions": [ ]
           },
           "target": "SameTarget",
           "modifiers": [
@@ -106,7 +106,7 @@
                 "lucky_chance": 0
               },
               "FlatDamage": {
-                "damage": {},
+                "damage": { },
                 "crit_chance": {
                   "value": 0,
                   "lucky_chance": 0
@@ -140,7 +140,7 @@
                   }
                 }
               ],
-              "conditional_modifiers": []
+              "conditional_modifiers": [ ]
             }
           ],
           "skill_shape": "Single",
@@ -225,12 +225,23 @@
       {
         "StatModifier": {
           "stat": {
-            "Damage": {}
+            "Damage": { }
           },
           "modifier": "More",
           "debuff": false
         },
         "value": 50,
+        "modifier": "Percent"
+      },
+      {
+        "StatModifier": {
+          "stat": {
+            "CritChance": { }
+          },
+          "modifier": "Increased",
+          "debuff": false
+        },
+        "value": 20,
         "modifier": "Percent"
       }
     ]
