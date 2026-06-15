@@ -298,8 +298,8 @@
       "06a109e6-0df5-42fa-a01e-9a5c56e17c20": {
         "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
-        "x": -152.5,
-        "y": -172.5,
+        "x": -142.5,
+        "y": -170.0,
         "size": 0,
         "root_node": false,
         "node_type": "Physical",
@@ -466,9 +466,9 @@
       "0bd6d73c-0b10-4524-b280-ca71fdc054c9": {
         "name": "Greater Ranged Weapon Damage",
         "icon": "passives/high_shot.svg",
-        "x": -172.5,
-        "y": 170.0,
-        "size": 1,
+        "x": -117.5,
+        "y": 177.5,
+        "size": 2,
         "root_node": false,
         "node_type": "Critical",
         "effects": [
@@ -1079,8 +1079,8 @@
       "14397f03-9776-44e8-bdab-a6fc4a83abd4": {
         "name": "Burn Duration",
         "icon": "passives/fire_zone.svg",
-        "x": 182.5,
-        "y": 147.5,
+        "x": 175.0,
+        "y": 155.0,
         "size": 0,
         "root_node": false,
         "node_type": "Fire",
@@ -1220,26 +1220,40 @@
         "socket": false
       },
       "1608616d-0e2e-4d5a-ba65-c6d889b9d931": {
-        "name": "Fire Damage",
-        "icon": "passives/fire_damage.svg",
+        "name": "Burn Chance and Stacks",
+        "icon": "passives/smoking_finger.svg",
         "x": 155.0,
         "y": -5.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Fire",
-                "min_max": null,
-                "is_hit": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "burn"
+                  }
+                }
               }
             },
             "modifier": "Increased",
-            "value": 50.0
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "burn",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
           }
         ],
         "triggers": [],
@@ -1247,16 +1261,30 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Fire",
-                "min_max": null,
-                "is_hit": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "burn"
+                  }
+                }
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 10.0
+          },
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "burn",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2015,7 +2043,7 @@
               }
             },
             "modifier": "More",
-            "value": 8.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2093,8 +2121,8 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -2111,8 +2139,8 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2226,26 +2254,25 @@
         "socket": false
       },
       "285d7497-315b-4795-9142-fb3dba24cfbb": {
-        "name": "Poison Damage",
-        "icon": "passives/scorpion_tail.svg",
+        "name": "Greater Poison Duration",
+        "icon": "passives/ouroboros.svg",
         "x": 5.0,
         "y": -170.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Poison",
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -2253,16 +2280,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3517,8 +3543,8 @@
       "4102c91f-9037-4b56-b695-e7c4448bd345": {
         "name": "Exsanguination",
         "icon": "passives/bleeding_heart.svg",
-        "x": -165.0,
-        "y": -175.0,
+        "x": -167.5,
+        "y": -180.0,
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
@@ -3934,6 +3960,101 @@
         "max_upgrade_level": 5,
         "socket": false
       },
+      "477874ae-45b5-45b0-addb-f9bdb778bb4c": {
+        "name": "Elemental Damage",
+        "icon": "passives/triorb.svg",
+        "x": 135.0,
+        "y": -172.5,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
       "47fae422-2a59-43d7-88bd-93f91ddcb01f": {
         "name": "Open Wound Effects",
         "icon": "passives/large_wound.svg",
@@ -4308,7 +4429,7 @@
         "name": "Ranged Weapon Damage",
         "icon": "passives/high_shot.svg",
         "x": -145.0,
-        "y": 172.5,
+        "y": 165.0,
         "size": 0,
         "root_node": false,
         "node_type": "Critical",
@@ -4374,26 +4495,26 @@
         "socket": false
       },
       "4efc73a8-7961-4004-b629-cdc02fb81157": {
-        "name": "Physical Damage",
-        "icon": "passives/mace_head.svg",
+        "name": "Greater Bleed Damage",
+        "icon": "passives/bloody_sword.svg",
         "x": -157.5,
         "y": 0.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusPower": {
+                "status_id": "bleed",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Physical",
-                "min_max": null,
-                "is_hit": null
+                "min_max": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -4401,16 +4522,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusPower": {
+                "status_id": "bleed",
+                "damage_type": null,
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Physical",
-                "min_max": null,
-                "is_hit": null
+                "min_max": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4501,8 +4622,8 @@
       "5124756b-5066-45d3-a219-3a581d7c8bb7": {
         "name": "Deepening Wound",
         "icon": "passives/ragged_wound.svg",
-        "x": -185.0,
-        "y": 155.0,
+        "x": -180.0,
+        "y": 120.0,
         "size": 2,
         "root_node": false,
         "node_type": "Physical",
@@ -4941,8 +5062,8 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4952,8 +5073,8 @@
             "stat": {
               "Armor": null
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5506,8 +5627,8 @@
       "5ed2cd84-db92-4147-85a8-6d262435e35d": {
         "name": "Ranged Weapon Damage",
         "icon": "passives/high_shot.svg",
-        "x": -160.0,
-        "y": 180.0,
+        "x": -132.5,
+        "y": 175.0,
         "size": 0,
         "root_node": false,
         "node_type": "Critical",
@@ -6001,7 +6122,7 @@
       },
       "65390d39-8d88-4b4e-b88b-afbfeab3d4e9": {
         "name": "Block",
-        "icon": "passives/block.svg",
+        "icon": "passives/life_regen.svg",
         "x": -90.0,
         "y": -75.0,
         "size": 0,
@@ -6009,9 +6130,7 @@
         "node_type": "Armor",
         "effects": [
           {
-            "stat": {
-              "Block": "Attack"
-            },
+            "stat": "LifeRegen",
             "modifier": "Increased",
             "value": 10.0
           }
@@ -6020,11 +6139,9 @@
         "locked": false,
         "upgrade_effects": [
           {
-            "stat": {
-              "Block": "Attack"
-            },
+            "stat": "LifeRegen",
             "modifier": "Increased",
-            "value": 5.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6191,11 +6308,11 @@
         "socket": false
       },
       "675b2ea2-980d-492d-80b3-337f62d37a3d": {
-        "name": "Storm Damage",
+        "name": "Greater Storm Damage",
         "icon": "passives/storm_damage.svg",
         "x": 17.5,
         "y": 165.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Storm",
         "effects": [
@@ -6209,8 +6326,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -6226,8 +6343,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7583,11 +7700,11 @@
         "socket": false
       },
       "76e306d9-46a5-4817-95d5-d143bc507436": {
-        "name": "Poison Damage",
+        "name": "Greater Poison Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": -5.0,
         "y": -170.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Poison",
         "effects": [
@@ -7601,8 +7718,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -7618,8 +7735,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8082,26 +8199,23 @@
         "socket": false
       },
       "7e9b531a-e784-4ea1-acd1-2bdcc53efcc4": {
-        "name": "Storm Damage",
-        "icon": "passives/storm_damage.svg",
+        "name": "Greater Spell Critical Hit Damage",
+        "icon": "passives/fireflake.svg",
         "x": -5.0,
         "y": 172.5,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Storm",
-                "min_max": null,
-                "is_hit": null
+              "CritDamage": {
+                "skill_type": "Spell",
+                "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -8109,16 +8223,13 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Storm",
-                "min_max": null,
-                "is_hit": null
+              "CritDamage": {
+                "skill_type": "Spell",
+                "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8197,8 +8308,8 @@
       "7fc83e8b-550b-47a9-952c-10b7ef15a0cd": {
         "name": "Elemental Conflux",
         "icon": "passives/triple_yin.svg",
-        "x": 155.0,
-        "y": -192.5,
+        "x": 127.5,
+        "y": -187.5,
         "size": 2,
         "root_node": false,
         "node_type": "Spell",
@@ -8709,9 +8820,9 @@
       "84587682-6d87-4179-8c45-05ed5e640c38": {
         "name": "Greater Two-Handed Melee Weapon Damage",
         "icon": "passives/war_axe.svg",
-        "x": -185.0,
-        "y": -157.5,
-        "size": 1,
+        "x": -180.0,
+        "y": -167.5,
+        "size": 2,
         "root_node": false,
         "node_type": "Attack",
         "effects": [
@@ -8953,8 +9064,8 @@
       "85b0975e-745c-47b9-8288-5914fa8b0de7": {
         "name": "Burn Duration",
         "icon": "passives/fire_zone.svg",
-        "x": 167.5,
-        "y": 145.0,
+        "x": 172.5,
+        "y": 142.5,
         "size": 0,
         "root_node": false,
         "node_type": "Fire",
@@ -9248,8 +9359,8 @@
         "socket": false
       },
       "8962f1e9-2a29-4c8e-8caa-8d6c97433380": {
-        "name": "Defenses",
-        "icon": "passives/armor.svg",
+        "name": "Block",
+        "icon": "passives/block.svg",
         "x": -90.0,
         "y": 75.0,
         "size": 0,
@@ -9258,7 +9369,7 @@
         "effects": [
           {
             "stat": {
-              "Armor": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 10.0
@@ -9269,7 +9380,7 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Armor": null
+              "Block": "Attack"
             },
             "modifier": "Increased",
             "value": 5.0
@@ -9306,26 +9417,26 @@
         "socket": false
       },
       "8a251c13-3549-4b8e-89c1-afc75f71ac40": {
-        "name": "Fire Damage",
-        "icon": "passives/fire_damage.svg",
+        "name": "Greater Burn Damage",
+        "icon": "passives/flamed_leaf.svg",
         "x": 200.0,
         "y": -5.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Fire",
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Fire",
-                "min_max": null,
-                "is_hit": null
+                "min_max": null
               }
             },
-            "modifier": "Increased",
-            "value": 50.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9333,16 +9444,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Fire",
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Fire",
-                "min_max": null,
-                "is_hit": null
+                "min_max": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9966,8 +10077,8 @@
       "9a29f5ca-b7f6-430f-80e1-9e58115ab009": {
         "name": "Open Wound Duration",
         "icon": "passives/scar_wound.svg",
-        "x": -172.5,
-        "y": 147.5,
+        "x": -175.0,
+        "y": 135.0,
         "size": 0,
         "root_node": false,
         "node_type": "Physical",
@@ -10643,8 +10754,8 @@
       "a796f363-7d58-4ebd-b78d-8f4cf92614bd": {
         "name": "Burn Stacks",
         "icon": "passives/wildfires.svg",
-        "x": 197.5,
-        "y": 137.5,
+        "x": 192.5,
+        "y": 150.0,
         "size": 2,
         "root_node": false,
         "node_type": "Fire",
@@ -11049,8 +11160,8 @@
       "ad85ce7b-2f6b-4949-af76-6b6cad6ed862": {
         "name": "Chaotic Mind",
         "icon": "passives/radial_balance.svg",
-        "x": 162.5,
-        "y": 185.0,
+        "x": 157.5,
+        "y": 192.5,
         "size": 2,
         "root_node": false,
         "node_type": "Storm",
@@ -11297,7 +11408,7 @@
       "b2dd8543-6813-4eef-9a18-75fa566a11b6": {
         "name": "Open Wound Duration",
         "icon": "passives/scar_wound.svg",
-        "x": -162.5,
+        "x": -165.0,
         "y": 145.0,
         "size": 0,
         "root_node": false,
@@ -11733,8 +11844,8 @@
       "be2eec47-a8f1-4f26-a311-e2d66e84c09d": {
         "name": "Damage over Time Duration",
         "icon": "passives/solar_time.svg",
-        "x": 180.0,
-        "y": -162.5,
+        "x": 175.0,
+        "y": -135.0,
         "size": 0,
         "root_node": false,
         "node_type": "Status",
@@ -12260,26 +12371,40 @@
         "socket": false
       },
       "c51d32b6-ff99-4589-aac7-cb9cb23f2b86": {
-        "name": "Storm Damage",
-        "icon": "passives/storm_damage.svg",
+        "name": "Stun Chance and Duration",
+        "icon": "passives/star_swirl.svg",
         "x": 12.5,
         "y": 142.5,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Storm",
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Storm",
-                "min_max": null,
-                "is_hit": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "stun"
+                  }
+                }
               }
             },
             "modifier": "Increased",
-            "value": 50.0
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "stun",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -12287,16 +12412,30 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Storm",
-                "min_max": null,
-                "is_hit": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "stun"
+                  }
+                }
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 5.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "stun",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12504,8 +12643,8 @@
       "c852b7dd-1d7a-4da2-b162-4ea390993ff2": {
         "name": "Two-Handed Melee Weapon Damage",
         "icon": "passives/war_axe.svg",
-        "x": -172.5,
-        "y": -152.5,
+        "x": -180.0,
+        "y": -150.0,
         "size": 0,
         "root_node": false,
         "node_type": "Attack",
@@ -12610,11 +12749,11 @@
         "socket": false
       },
       "c8aefeb5-4cc9-4332-8fba-0a2d2d6fd93f": {
-        "name": "Greater Storm Damage",
+        "name": "Storm Damage",
         "icon": "passives/storm_damage.svg",
         "x": 2.5,
         "y": 165.0,
-        "size": 1,
+        "size": 0,
         "root_node": false,
         "node_type": "Storm",
         "effects": [
@@ -12628,8 +12767,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 25.0
+            "modifier": "Increased",
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -12645,8 +12784,8 @@
                 "is_hit": null
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12687,7 +12826,7 @@
           {
             "stat": "LifeRegen",
             "modifier": "Increased",
-            "value": 5.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12977,8 +13116,8 @@
       "cf14e084-a8ed-496a-b832-b3180ff93a51": {
         "name": "Malicious Instinct",
         "icon": "passives/gooey_daemon.svg",
-        "x": 195.0,
-        "y": -152.5,
+        "x": 192.5,
+        "y": -132.5,
         "size": 2,
         "root_node": false,
         "node_type": "Status",
@@ -13315,6 +13454,14 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -13338,14 +13485,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -13435,12 +13574,11 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusEscalation": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -13453,23 +13591,24 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -13563,16 +13702,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -13580,7 +13710,7 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -13602,6 +13732,15 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14782,7 +14921,7 @@
       "dea2c3a2-8d85-4cc3-bedd-fecabb25b33d": {
         "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
-        "x": -157.5,
+        "x": -152.5,
         "y": -180.0,
         "size": 0,
         "root_node": false,
@@ -14992,6 +15131,101 @@
             },
             "modifier": "Increased",
             "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
+        "socket": false
+      },
+      "e207c380-e7b2-4a5d-a000-47f0d1e70bf5": {
+        "name": "Elemental Damage",
+        "icon": "passives/triorb.svg",
+        "x": 147.5,
+        "y": -167.5,
+        "size": 0,
+        "root_node": false,
+        "node_type": "Spell",
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "triggers": [],
+        "locked": false,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -15390,26 +15624,40 @@
         "socket": false
       },
       "e910bdb3-617b-44ae-93eb-9128aaff8055": {
-        "name": "Physical Damage",
-        "icon": "passives/mace_head.svg",
+        "name": "Open Wound Chance and Stacks",
+        "icon": "passives/sword_wound.svg",
         "x": -187.5,
         "y": 0.0,
-        "size": 0,
+        "size": 1,
         "root_node": false,
         "node_type": "Physical",
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Physical",
-                "min_max": null,
-                "is_hit": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "open_wound"
+                  }
+                }
               }
             },
             "modifier": "Increased",
-            "value": 50.0
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 2.0
           }
         ],
         "triggers": [],
@@ -15417,24 +15665,38 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Physical",
-                "min_max": null,
-                "is_hit": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "open_wound"
+                  }
+                }
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 5.0
+          },
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
           }
         ],
         "max_upgrade_level": 5,
         "socket": false
       },
       "ea811764-421a-48f8-a3c7-aa838a77c478": {
-        "name": "Greater Poison Damage",
-        "icon": "passives/scorpion_tail.svg",
+        "name": "Greater Poison Escalation",
+        "icon": "passives/snake_spiral.svg",
         "x": 0.0,
         "y": -162.5,
         "size": 1,
@@ -15443,16 +15705,15 @@
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusEscalation": {
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "modifier": "More",
-            "value": 25.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -15460,16 +15721,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusEscalation": {
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -18673,6 +18933,18 @@
       {
         "from": "9a29f5ca-b7f6-430f-80e1-9e58115ab009",
         "to": "5124756b-5066-45d3-a219-3a581d7c8bb7"
+      },
+      {
+        "from": "477874ae-45b5-45b0-addb-f9bdb778bb4c",
+        "to": "e207c380-e7b2-4a5d-a000-47f0d1e70bf5"
+      },
+      {
+        "from": "e207c380-e7b2-4a5d-a000-47f0d1e70bf5",
+        "to": "5505dc30-ed61-47be-8c38-2d34b86631be"
+      },
+      {
+        "from": "7fc83e8b-550b-47a9-952c-10b7ef15a0cd",
+        "to": "477874ae-45b5-45b0-addb-f9bdb778bb4c"
       }
     ]
   }
