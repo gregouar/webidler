@@ -760,12 +760,6 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
@@ -778,6 +772,12 @@
                   "damage_type": "Physical",
                   "min_max": null,
                   "is_hit": null
+                }
+              },
+              {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
@@ -1126,6 +1126,86 @@
         "Physical": [
           18.0,
           66.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "weapon_2h_9": {
+    "name": "Twinblade",
+    "icon": "items/weapons_2h/twinblade.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          20.0,
+          74.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "weapon_2h_10": {
+    "name": "Great Axe",
+    "icon": "items/weapons_2h/great_axe.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          22.0,
+          82.0
         ]
       },
       "crit_chance": {

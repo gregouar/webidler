@@ -18,7 +18,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 15.0,
+        "value": 25.0,
         "ignore_quality": false
       }
     ],
@@ -32,8 +32,8 @@
     "upgrade_effects": []
   },
   "hooded_wrap": {
-    "name": "Hooded Wrap",
-    "icon": "items/cloaks/hooded_wrap.webp",
+    "name": "Wool Cloak",
+    "icon": "items/cloaks/wool_cloak.webp",
     "description": null,
     "slot": "Accessory",
     "extra_slots": [],
@@ -41,7 +41,7 @@
       "Accessory",
       "Cloak"
     ],
-    "min_area_level": 40,
+    "min_area_level": 0,
     "rarity": "Normal",
     "affixes": [
       {
@@ -50,7 +50,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 30.0,
+        "value": 50.0,
         "ignore_quality": false
       }
     ],
@@ -264,8 +264,8 @@
     ]
   },
   "heavy_cloak": {
-    "name": "Heavy Cloak",
-    "icon": "items/cloaks/heavy_cloak.webp",
+    "name": "Wool Cloak",
+    "icon": "items/cloaks/wool_cloak.webp",
     "description": null,
     "slot": "Accessory",
     "extra_slots": [],
@@ -273,7 +273,7 @@
       "Accessory",
       "Cloak"
     ],
-    "min_area_level": 90,
+    "min_area_level": 0,
     "rarity": "Normal",
     "affixes": [
       {
@@ -282,7 +282,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 50.0,
+        "value": 75.0,
         "ignore_quality": false
       }
     ],
@@ -481,7 +481,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 75.0,
+        "value": 100.0,
         "ignore_quality": false
       }
     ],
@@ -691,8 +691,8 @@
     ]
   },
   "reinforced_cloak": {
-    "name": "Reinforced Cloak",
-    "icon": "items/cloaks/reinforced_cloak.webp",
+    "name": "Fur-lined Cloak",
+    "icon": "items/cloaks/fur_cloak.webp",
     "description": null,
     "slot": "Accessory",
     "extra_slots": [],
@@ -700,7 +700,7 @@
       "Accessory",
       "Cloak"
     ],
-    "min_area_level": 190,
+    "min_area_level": 140,
     "rarity": "Normal",
     "affixes": [
       {
@@ -709,7 +709,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 100.0,
+        "value": 125.0,
         "ignore_quality": false
       }
     ],
@@ -964,7 +964,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 125.0,
+        "value": 150.0,
         "ignore_quality": false
       }
     ],
@@ -1061,7 +1061,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 150.0,
+        "value": 175.0,
         "ignore_quality": false
       }
     ],
@@ -1230,7 +1230,71 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 175.0,
+        "value": 200.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "cloak_9": {
+    "name": "Arcane Robe",
+    "icon": "items/cloaks/arcane_cloak.webp",
+    "description": null,
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 225.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "cloak_10": {
+    "name": "Mithrilthread Drape",
+    "icon": "items/cloaks/mithrilthread_drape.webp",
+    "description": null,
+    "slot": "Accessory",
+    "extra_slots": [],
+    "categories": [
+      "Accessory",
+      "Cloak"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 250.0,
         "ignore_quality": false
       }
     ],

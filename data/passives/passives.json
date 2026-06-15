@@ -298,7 +298,7 @@
       "06a109e6-0df5-42fa-a01e-9a5c56e17c20": {
         "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
-        "x": -142.5,
+        "x": -140.0,
         "y": -170.0,
         "size": 0,
         "root_node": false,
@@ -3543,7 +3543,7 @@
       "4102c91f-9037-4b56-b695-e7c4448bd345": {
         "name": "Exsanguination",
         "icon": "passives/bleeding_heart.svg",
-        "x": -167.5,
+        "x": -165.0,
         "y": -180.0,
         "size": 2,
         "root_node": false,
@@ -14921,7 +14921,7 @@
       "dea2c3a2-8d85-4cc3-bedd-fecabb25b33d": {
         "name": "Bleed Damage",
         "icon": "passives/bloody_sword.svg",
-        "x": -152.5,
+        "x": -150.0,
         "y": -180.0,
         "size": 0,
         "root_node": false,

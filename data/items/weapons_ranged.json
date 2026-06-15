@@ -1291,5 +1291,83 @@
     "ignore_quality": false,
     "upgrade_levels": [ ],
     "upgrade_effects": [ ]
+  },
+  "weapon_ranged_9": {
+    "name": "TBD_weapon_ranged_9",
+    "icon": "items/weapons_ranged/TBD_weapon_ranged_9.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          35.0,
+          39.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
+  },
+  "weapon_ranged_10": {
+    "name": "TBD_weapon_ranged_10",
+    "icon": "items/weapons_ranged/TBD_weapon_ranged_10.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          39.0,
+          43.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

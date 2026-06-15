@@ -611,15 +611,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
                 "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
@@ -642,6 +633,15 @@
                   "damage_type": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
                 }
               }
             ],
@@ -880,7 +880,65 @@
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
+        "value": 90.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "focus_9": {
+    "name": "Alchemical Jewel",
+    "icon": "items/focuses/alchemical_jewel.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
         "value": 100.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "focus_10": {
+    "name": "Phylactery",
+    "icon": "items/focuses/phylactery.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 120.0,
         "ignore_quality": false
       }
     ],

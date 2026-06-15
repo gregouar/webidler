@@ -1276,5 +1276,81 @@
     "ignore_quality": false,
     "upgrade_levels": [ ],
     "upgrade_effects": [ ]
+  },
+  "weapon_1h_9": {
+    "name": "Pick",
+    "icon": "items/weapons_1h/warpick.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [ ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          18.0,
+          28.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
+  },
+  "weapon_1h_10": {
+    "name": "Warblade",
+    "icon": "items/weapons_1h/warblade.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [ ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [ ],
+    "triggers": [ ],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          20.0,
+          31.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

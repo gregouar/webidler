@@ -17,10 +17,11 @@
         "tier_5.json",
         "tier_6.json",
         "tier_7.json",
-        "tier_8.json"
+        "tier_8.json",
+        "tier_9.json",
+        "tier_10.json"
     ],
-    "bosses": [
-    ],
+    "bosses": [ ],
     "waves": [
         {
             "min_level": 1,
@@ -29,7 +30,10 @@
             "spawns": [
                 {
                     "monster": "possessed_ashigaru.json",
-                    "quantity": [ 1, 2 ]
+                    "quantity": [
+                        1,
+                        2
+                    ]
                 }
             ]
         }

@@ -916,7 +916,7 @@
     "upgrade_effects": [ ]
   },
   "ring_8": {
-    "name": "Regal Ring",
+    "name": "Noble Ring",
     "icon": "items/rings/regal_ring.webp",
     "description": null,
     "slot": "Ring",
@@ -1085,5 +1085,65 @@
         }
       }
     ]
+  },
+  "ring_9": {
+    "name": "Platinum Band",
+    "icon": "items/rings/platinum_ring.webp",
+    "description": null,
+    "slot": "Ring",
+    "extra_slots": [ ],
+    "categories": [
+      "Jewelry",
+      "Ring"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 180.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
+  },
+  "ring_10": {
+    "name": "King's Ring",
+    "icon": "items/rings/king_ring.webp",
+    "description": null,
+    "slot": "Ring",
+    "extra_slots": [ ],
+    "categories": [
+      "Jewelry",
+      "Ring"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 200.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

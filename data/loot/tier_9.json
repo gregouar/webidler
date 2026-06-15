@@ -1,6 +1,58 @@
 {
     "entries": [
         {
+            "item_id": "weapon_1h_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "helmet_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "body_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "gloves_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "boots_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "weapon_2h_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "weapon_ranged_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "weapon_spell_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "shield_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "focus_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "cloak_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "ring_9",
+            "weight": 256000
+        },
+        {
+            "item_id": "amulet_9",
+            "weight": 256000
+        },
+        {
             "item_id": "edict",
             "weight": 3200,
             "min_area_level": 490
@@ -20,4 +72,5 @@
             "weight": 2560,
             "min_area_level": 490
         }
-    ] }
+    ]
+}
