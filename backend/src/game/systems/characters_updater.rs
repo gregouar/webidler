@@ -25,6 +25,7 @@ use crate::game::{
 
 use super::statuses_controller;
 
+#[allow(clippy::too_many_arguments)]
 pub fn update_character_state(
     statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
