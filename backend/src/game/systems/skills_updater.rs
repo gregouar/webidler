@@ -843,11 +843,7 @@ pub fn apply_stat_effect_on_skill_effect(
                 && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
             {
-                tracing::warn!("{:?}", max_stacks);
-                tracing::warn!("{:?}", effect);
                 max_stacks.apply_effect(effect);
-                tracing::warn!("{:?}", max_stacks);
-                tracing::warn!("-------");
             }
 
             if skill_damage_type.is_some() {
