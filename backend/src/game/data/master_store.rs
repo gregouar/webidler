@@ -116,7 +116,7 @@ impl MasterStore {
 
         let gamble_tables_store: HashMap<String, GambleTableBlueprint> = gamble_tables_store?;
         let gamble_table_blueprint = gamble_tables_store
-            .get("gamble_table.json")
+            .get("0_gamble_table.json")
             .expect("missing 'gamble_table.json'");
         let gamble_table = GambleTable {
             loot_table: LootTable {

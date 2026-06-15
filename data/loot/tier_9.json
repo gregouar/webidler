@@ -1,0 +1,23 @@
+{
+    "entries": [
+        {
+            "item_id": "edict",
+            "weight": 3200,
+            "min_area_level": 490
+        },
+        {
+            "item_id": "edict_2",
+            "weight": 3200,
+            "min_area_level": 490
+        },
+        {
+            "item_id": "rune_power",
+            "weight": 25600,
+            "min_area_level": 490
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 2560,
+            "min_area_level": 490
+        }
+    ] }

@@ -34,9 +34,8 @@
             "min_area_level": 250
         },
         {
-            "item_id": "rune",
-            "weight": 6400,
-            "min_area_level": 320
+            "item_id": "rune_power",
+            "weight": 6400
         },
         {
             "item_id": "rune_root",
@@ -44,7 +43,7 @@
             "min_area_level": 320
         },
         {
-            "item_id": "rune",
+            "item_id": "rune_power",
             "weight": 12800,
             "min_area_level": 400
         },
@@ -52,6 +51,30 @@
             "item_id": "rune_root",
             "weight": 1280,
             "min_area_level": 400
+        },
+        {
+            "item_id": "rune_power",
+            "weight": 25600,
+            "min_area_level": 490
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 2560,
+            "min_area_level": 490
+        },
+        {
+            "item_id": "rune_power",
+            "weight": 51200,
+            "min_area_level": 590
+        },
+        {
+            "item_id": "rune_root",
+            "weight": 5120,
+            "min_area_level": 590
+        },
+        {
+            "item_id": "rune_divine",
+            "weight": 5120
         },
         {
             "item_id": "rune_gilded",

@@ -439,7 +439,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Mana => "Maximum Mana".to_string(),
         StatType::ManaRegen => "Mana Regeneration".to_string(),
         StatType::ManaCost { skill_filter } => {
-            format!("{}Mana cost", skill_filter_str(skill_filter, "", false))
+            format!("{}Mana Cost", skill_filter_str(skill_filter, "", false))
         }
         StatType::Armor(armor_type) => armor_type_str(armor_type).to_string(),
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),

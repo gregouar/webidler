@@ -1,6 +1,6 @@
 {
   "rune": {
-    "name": "Rune",
+    "name": "Simple Rune",
     "icon": "items/runes/rune.webp",
     "description": null,
     "slot": null,
@@ -39,6 +39,84 @@
     "armor_specs": null,
     "rune_specs": {
       "root_node": true
+    },
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_power": {
+    "name": "Power Rune",
+    "icon": "items/runes/rune_power.webp",
+    "description": null,
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune"
+    ],
+    "min_area_level": 330,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": {
+      "root_node": false
+    },
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_divine": {
+    "name": "Divine Rune",
+    "icon": "items/runes/rune_divine.webp",
+    "description": null,
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune"
+    ],
+    "min_area_level": 600,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": {
+      "root_node": false
     },
     "map_specs": null,
     "ignore_quality": true,
@@ -318,20 +396,20 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Poison",
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
