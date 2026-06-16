@@ -326,6 +326,7 @@ fn new_skill_specs() -> BaseSkillSpecs {
         triggers: Default::default(),
         auto_use_conditions: Default::default(),
         ignore_stat_effects: Default::default(),
+        required_item: Default::default(),
     }
 }
 

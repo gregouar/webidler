@@ -15,6 +15,7 @@ use shared::data::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
     },
+    values::NonNegative,
 };
 
 use crate::game::{data::master_store::StatusesStore, systems::characters_updater};
@@ -120,6 +121,22 @@ pub fn update_skill_specs(
         &mut skill_specs,
         local_effects.iter().chain(effects),
     );
+
+    if !base_skill_specs
+        .required_item
+        .map(|required_item| {
+            inventory
+                .map(|inventory| {
+                    inventory.equipped_items().any(|(item_slot, item_specs)| {
+                        required_item.is_match(item_slot, item_specs)
+                    })
+                })
+                .unwrap_or_default()
+        })
+        .unwrap_or(true)
+    {
+        skill_specs.cooldown = NonNegative::new(0.0).into();
+    }
 
     skill_specs
 }
@@ -234,30 +251,24 @@ fn compute_skill_modifier_effects<'a>(
         .iter()
         .filter_map(|modifier_effect| match &modifier_effect.source {
             ModifierEffectSource::ItemStats {
-                slot,
-                category,
+                required_item,
                 item_stats,
-            } => Some((modifier_effect, *slot, *category, item_stats)),
+            } => Some((modifier_effect, *required_item, item_stats)),
             _ => None,
         })
-        .flat_map(move |(modifier_effect, slot, category, item_stats)| {
+        .flat_map(move |(modifier_effect, required_item, item_stats)| {
             inventory
                 .into_iter()
                 .flat_map(|inv| inv.equipped_items())
                 .filter_map(move |(item_slot, item_specs)| {
                     let mut modifier_effect = modifier_effect.clone();
-                    let slot = slot.unwrap_or(item_slot);
-
-                    let base = if (slot == item_slot || item_specs.base.extra_slots.contains(&slot))
-                        && category
-                            .map(|category| item_specs.base.categories.contains(&category))
-                            .unwrap_or(true)
-                    {
+                    let base = if required_item.is_match(item_slot, item_specs) {
                         match (
                             item_stats,
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
+                            (ItemStatsSource::Equipped, _, _) => 1.0,
                             (ItemStatsSource::Armor, _, Some(armor_specs)) => *armor_specs.armor,
                             (ItemStatsSource::Block, _, Some(armor_specs)) => {
                                 armor_specs.block.get() as f64

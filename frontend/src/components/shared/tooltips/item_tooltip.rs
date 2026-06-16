@@ -773,7 +773,7 @@ pub fn item_slot_str(item_slot: ItemSlot) -> &'static str {
         ItemSlot::Gloves => "Gloves",
         ItemSlot::Helmet => "Helmet",
         ItemSlot::Ring => "Ring",
-        ItemSlot::Shield => "Shield",
+        ItemSlot::Shield => "Off Hand",
         ItemSlot::Accessory => "Cloak",
         ItemSlot::Weapon => "Weapon",
     }

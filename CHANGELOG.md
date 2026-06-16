@@ -1,5 +1,23 @@
 # Changelog
 
+## Major Game Update: «Skill Masteries»
+
+Features:
+
+- Skill persistently gain experience and level up. This reward with Skill Mastery points which can be used to buy various upgrades and modifiers for the Skills.
+- Rework of the Statuses system, so that various statuses can be multiplicative with each other.
+
+Content:
+
+- New Area: Eternal Sands
+- New Unique Items.
+- Tier 9 and 10 Base Items and new bases for Runes.
+
+Balance Changes:
+
+- Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
+- Almost all "More Critical Damage" have been transformed to "Increased Critical Damage".
+
 ## Major Game Update: «Awakening of the Spider Witch»
 
 Features:

@@ -754,7 +754,52 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [],
+    "affixes": [
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "focus",
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          250.0
+        ],
+        "ignore_quality": true
+      }
+    ],
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -777,6 +822,30 @@
           },
           "modifier": "Flat",
           "value": 15.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "LifeRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 25.0
         }
       }
     ]

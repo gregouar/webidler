@@ -245,6 +245,9 @@
         "value": 30
       }
     ],
+    "required_item": {
+      "category": "Shield"
+    },
     "modifier_effects": [
       {
         "effects": [
@@ -697,6 +700,9 @@
         "value": 30
       }
     ],
+    "required_item": {
+      "category": "MeleeWeapon2H"
+    },
     "targets": [
       {
         "range": "Melee",
@@ -1074,6 +1080,9 @@
         "value": 30
       }
     ],
+    "required_item": {
+      "category": "RangedWeapon"
+    },
     "targets": [
       {
         "range": "Any",

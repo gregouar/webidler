@@ -769,7 +769,7 @@
   "monk_vest": {
     "name": "Ascetic Vestments",
     "icon": "items/body_armors/monk_vest.webp",
-    "description": null,
+    "description": "What is renounced in the world is retained within the self.",
     "slot": "Body",
     "extra_slots": [],
     "categories": [
@@ -786,6 +786,20 @@
         "modifier": "More",
         "scope": "Local",
         "value": -100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusDuration": {
+            "status_id": "focus",
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 40.0,
         "ignore_quality": true
       },
       {
@@ -811,7 +825,35 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 5.0,
+        "value": 3.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": "LifeRegen",
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "focus",
+                  "damage_type": null,
+                  "skill_type": null
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": -100.0,
         "ignore_quality": true
       }
     ],
@@ -837,6 +879,21 @@
             "Armor": "Physical"
           },
           "modifier": "Flat",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusDuration": {
+              "status_id": "focus",
+              "damage_type": null,
+              "skill_type": null,
+              "skill_id": null
+            }
+          },
+          "modifier": "More",
           "value": 20.0
         }
       }

@@ -19,7 +19,8 @@
         "tier_7.json",
         "tier_8.json",
         "tier_9.json",
-        "tier_10.json"
+        "tier_10.json",
+        "area_desert.json"
     ],
     "bosses": [ ],
     "waves": [

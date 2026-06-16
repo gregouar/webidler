@@ -7700,8 +7700,8 @@
         "socket": false
       },
       "76e306d9-46a5-4817-95d5-d143bc507436": {
-        "name": "Greater Poison Damage",
-        "icon": "passives/scorpion_tail.svg",
+        "name": "Greater Poison Escalation",
+        "icon": "passives/snake_spiral.svg",
         "x": -5.0,
         "y": -170.0,
         "size": 1,
@@ -7710,16 +7710,15 @@
         "effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusEscalation": {
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "modifier": "More",
-            "value": 25.0
+            "modifier": "Increased",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -7727,16 +7726,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Damage": {
+              "StatusEscalation": {
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "modifier": "More",
-            "value": 15.0
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13446,14 +13444,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -13462,11 +13452,12 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "min_max": null
                     }
                   },
                   {
@@ -13479,12 +13470,19 @@
                     }
                   },
                   {
-                    "StatusPower": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -13574,14 +13572,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -13599,12 +13589,11 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusEscalation": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -13613,6 +13602,15 @@
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -13702,6 +13700,24 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -13723,24 +13739,6 @@
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -15695,8 +15693,8 @@
         "socket": false
       },
       "ea811764-421a-48f8-a3c7-aa838a77c478": {
-        "name": "Greater Poison Escalation",
-        "icon": "passives/snake_spiral.svg",
+        "name": "Greater Poison Damage",
+        "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -162.5,
         "size": 1,
@@ -15705,15 +15703,16 @@
         "effects": [
           {
             "stat": {
-              "StatusEscalation": {
-                "status_id": "poison",
-                "damage_type": null,
+              "Damage": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -15721,15 +15720,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusEscalation": {
-                "status_id": "poison",
-                "damage_type": null,
+              "Damage": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -18251,14 +18251,6 @@
         "to": "d5d610ee-8fa7-49d1-967f-3c0adc33d5a6"
       },
       {
-        "from": "4efc73a8-7961-4004-b629-cdc02fb81157",
-        "to": "3de2ebe9-078d-47ba-9a60-22d35f8da8d2"
-      },
-      {
-        "from": "3de2ebe9-078d-47ba-9a60-22d35f8da8d2",
-        "to": "e910bdb3-617b-44ae-93eb-9128aaff8055"
-      },
-      {
         "from": "39b2026c-9b8d-4133-8fd9-1342e2dcd513",
         "to": "1bd221d6-6b67-416c-8269-db62cdbbebab"
       },
@@ -18945,6 +18937,22 @@
       {
         "from": "7fc83e8b-550b-47a9-952c-10b7ef15a0cd",
         "to": "477874ae-45b5-45b0-addb-f9bdb778bb4c"
+      },
+      {
+        "from": "4158fde3-fdf3-4590-9393-9f77db96a6d2",
+        "to": "3de2ebe9-078d-47ba-9a60-22d35f8da8d2"
+      },
+      {
+        "from": "3de2ebe9-078d-47ba-9a60-22d35f8da8d2",
+        "to": "23952325-ca42-4ec0-b4c5-d47694f3ae86"
+      },
+      {
+        "from": "bdb1c3e6-472f-4e2f-a511-b0c91a62d071",
+        "to": "3de2ebe9-078d-47ba-9a60-22d35f8da8d2"
+      },
+      {
+        "from": "d5d610ee-8fa7-49d1-967f-3c0adc33d5a6",
+        "to": "3de2ebe9-078d-47ba-9a60-22d35f8da8d2"
       }
     ]
   }

@@ -9,7 +9,7 @@ use crate::{
         character::CharacterId,
         character_status::StatusId,
         conditional_modifier::{Condition, ConditionalModifier},
-        item::ItemCategory,
+        item::{ItemCategory, ItemSpecs},
         modifier::ModifiableValue,
         stat_effect::{
             Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType,
@@ -36,6 +36,8 @@ pub struct BaseSkillSpecs {
     pub cooldown: NonNegative,
     #[serde(default)]
     pub mana_cost: NonNegative,
+    #[serde(default)]
+    pub required_item: Option<SkillRequiredItem>,
 
     #[serde(default)]
     pub upgrade_cost: f64,
@@ -112,6 +114,26 @@ impl Matchable for SkillType {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+pub struct SkillRequiredItem {
+    #[serde(default)]
+    pub slot: Option<ItemSlot>,
+    #[serde(default)]
+    pub category: Option<ItemCategory>,
+}
+
+impl SkillRequiredItem {
+    pub fn is_match(&self, item_slot: ItemSlot, item_specs: &ItemSpecs) -> bool {
+        self.slot
+            .map(|slot| slot == item_slot || item_specs.base.extra_slots.contains(&slot))
+            .unwrap_or(true)
+            && self
+                .category
+                .map(|category| item_specs.base.categories.contains(&category))
+                .unwrap_or(true)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
@@ -124,10 +146,9 @@ pub struct ModifierEffect {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ModifierEffectSource {
     ItemStats {
-        slot: Option<ItemSlot>,
         item_stats: ItemStatsSource,
-        #[serde(default)]
-        category: Option<ItemCategory>,
+        #[serde(flatten)]
+        required_item: SkillRequiredItem,
     },
     CharacterStats(StatConverterSource),
 }
@@ -147,6 +168,7 @@ pub enum ItemStatsSource {
     },
     Range,
     Shape,
+    Equipped,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

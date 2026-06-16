@@ -251,6 +251,27 @@ pub fn SkillTooltip(
                         .filter(|&upgrade_effect| upgrade_effect.description.is_none())
                         .map(|upgrade_effect| upgrade_effect.stat_effect.clone())
                         .collect();
+                    let required_item = player_base_skill
+                        .base_skill_specs
+                        .required_item
+                        .map(|required_item| {
+                            let item_category_str = required_item
+                                .category
+                                .map(|category| item_tooltip::item_category_str(category))
+                                .unwrap_or("Item");
+                            let item_slot_str = required_item
+                                .slot
+                                .map(|item_slot| {
+                                    format!(" in {} slot", item_tooltip::item_slot_str(item_slot))
+                                });
+                            view! {
+                                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                                    <EffectLi class="italic">
+                                        "Require "{item_category_str}" equipped"{item_slot_str}
+                                    </EffectLi>
+                                </ul>
+                            }
+                        });
 
                     // let upgrade_effects = player_base_skill
                     // .base_skill_specs
@@ -258,6 +279,7 @@ pub fn SkillTooltip(
                     // .clone();
 
                     view! {
+                        {required_item}
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
@@ -829,8 +851,7 @@ pub fn EffectLi(
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
     let source_description = match skill_modifier.source {
         ModifierEffectSource::ItemStats {
-            slot,
-            category,
+            required_item,
             item_stats,
         } => {
             format!(
@@ -852,12 +873,13 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                     ),
                     ItemStatsSource::Range => " Range".into(),
                     ItemStatsSource::Shape => " Shape".into(),
+                    ItemStatsSource::Equipped => " Equipped".into(),
                 },
-                match category {
+                match required_item.category {
                     Some(category) => item_tooltip::item_category_str(category),
                     None => "",
                 },
-                match slot {
+                match required_item.slot {
                     Some(slot) => item_tooltip::item_slot_str(slot),
                     None => "Item",
                 }
