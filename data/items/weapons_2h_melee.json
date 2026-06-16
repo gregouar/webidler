@@ -766,18 +766,18 @@
                 }
               },
               {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
                   "damage_type": "Physical",
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],
@@ -1183,7 +1183,7 @@
   },
   "weapon_2h_10": {
     "name": "Great Axe",
-    "icon": "items/weapons_2h/great_axe.webp",
+    "icon": "items/weapons_2h/greataxe.webp",
     "description": null,
     "slot": "Weapon",
     "extra_slots": [

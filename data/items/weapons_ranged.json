@@ -13,8 +13,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -35,8 +35,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hunting_bow": {
     "name": "Hunting Bow",
@@ -52,8 +52,8 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -74,8 +74,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "hunting_bow_unique": {
     "name": "Bloodspiller",
@@ -149,7 +149,6 @@
               "Damage": {
                 "skill_type": "Attack",
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -161,6 +160,7 @@
               {
                 "HasStatus": {
                   "status_id": "bleed",
+                  "damage_type": null,
                   "skill_type": null,
                   "not": false
                 }
@@ -176,25 +176,27 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "bloodspiller",
         "OnKill": {
           "conditions": [
             {
               "HasStatus": {
                 "status_id": "bleed",
+                "damage_type": null,
                 "skill_type": null,
                 "not": false
               }
             }
           ]
         },
+        "description": null,
+        "trigger_id": "bloodspiller",
         "target": "Me",
-        "modifiers": [ ],
-        "skill_range": "Melee",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -209,14 +211,11 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": {
@@ -307,7 +306,6 @@
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
@@ -319,6 +317,7 @@
                 {
                   "HasStatus": {
                     "status_id": "bleed",
+                    "damage_type": null,
                     "skill_type": null,
                     "not": false
                   }
@@ -346,8 +345,8 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -368,8 +367,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "composite_bow": {
     "name": "Composite Bow",
@@ -385,8 +384,8 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -407,8 +406,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "composite_bow_unique": {
     "name": "Voltrach Bite",
@@ -506,10 +505,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "voltrach_bite",
         "OnHit": {
           "skill_type": null,
           "range": null,
@@ -518,8 +513,11 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": null,
-          "trigger_ids": null
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "voltrach_bite",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -527,7 +525,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -540,8 +537,11 @@
             }
           }
         ],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -550,27 +550,30 @@
             },
             "ApplyStatus": {
               "status_id": "poison",
-              "value": 0
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
               {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": "Storm",
                   "min_max": null,
                   "is_hit": null
                 }
               }
             ],
-            "conditional_modifiers": [ ]
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": {
@@ -663,8 +666,8 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -685,15 +688,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_gun": {
     "name": "Pistol of the Damned",
     "icon": "items/weapons_ranged/treasure_gun.webp",
     "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
     "slot": "Weapon",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "AttackWeapon",
       "RangedWeapon"
@@ -805,7 +808,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -930,8 +933,8 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -952,8 +955,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
@@ -1054,10 +1057,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "compound_bow_unique",
         "OnHit": {
           "skill_type": "Attack",
           "range": null,
@@ -1066,8 +1065,11 @@
           "is_hurt": null,
           "is_triggered": false,
           "damage_type": null,
-          "trigger_ids": null
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "compound_bow_unique",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -1075,7 +1077,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -1088,8 +1089,11 @@
             }
           }
         ],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Attack",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -1098,27 +1102,30 @@
             },
             "ApplyStatus": {
               "status_id": "burn",
-              "value": 0
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
               {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": "Fire",
                   "min_max": null,
                   "is_hit": null
                 }
               }
             ],
-            "conditional_modifiers": [ ]
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": {
@@ -1228,8 +1235,8 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1250,8 +1257,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "weapon_ranged_8": {
     "name": "Arbalest",
@@ -1267,8 +1274,8 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1289,12 +1296,12 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "weapon_ranged_9": {
-    "name": "TBD_weapon_ranged_9",
-    "icon": "items/weapons_ranged/TBD_weapon_ranged_9.webp",
+    "name": "Moonbow",
+    "icon": "items/weapons_ranged/moon_bow.webp",
     "description": null,
     "slot": "Weapon",
     "extra_slots": [
@@ -1306,8 +1313,8 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1328,12 +1335,12 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "weapon_ranged_10": {
-    "name": "TBD_weapon_ranged_10",
-    "icon": "items/weapons_ranged/TBD_weapon_ranged_10.webp",
+    "name": "Ballista",
+    "icon": "items/weapons_ranged/ballista.webp",
     "description": null,
     "slot": "Weapon",
     "extra_slots": [
@@ -1345,8 +1352,8 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1367,7 +1374,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

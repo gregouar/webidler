@@ -11,6 +11,7 @@ use shared::data::{
     item::{ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
     item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
     modifier::Modifier,
+    passive::PassiveNodeId,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
@@ -22,10 +23,12 @@ use shared::data::{
 use crate::{
     constants::DATA_VERSION,
     db::{
-        characters_data::{CharacterDataEntry, upsert_character_inventory_data},
+        characters_data::{
+            CharacterDataEntry, upsert_character_inventory_data, upsert_character_passives_data,
+        },
         pool::{Database, DbExecutor, DbPool},
     },
-    game::data::inventory_data::InventoryData,
+    game::data::{inventory_data::InventoryData, passives::PassivesTreeAscensionData},
 };
 
 pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
@@ -82,6 +85,18 @@ async fn migrate_character_data(
             rmp_serde::to_vec(&inventory_data)?,
         )
         .await?;
+
+        if let Some(passives_data) = character_data.passives_data {
+            let old_passives: OldPassivesTreeAscensionData = rmp_serde::from_slice(&passives_data)
+                .context(format!("passives of '{}'", character_data.character_id))?;
+            let passives_data: PassivesTreeAscensionData = old_passives.into();
+            upsert_character_passives_data(
+                &mut **executor,
+                &character_data.character_id,
+                rmp_serde::to_vec(&passives_data)?,
+            )
+            .await?;
+        }
     }
 
     Ok(())
@@ -170,6 +185,54 @@ pub struct OldItemModifiers {
 
 impl From<OldItemModifiers> for ItemModifiers {
     fn from(value: OldItemModifiers) -> Self {
+        if value.base_item_id == "rune"
+            || value.base_item_id == "rune_root"
+            || value.base_item_id == "rune_storm_average"
+        {
+            return Self {
+                base_item_id: value.base_item_id,
+                name: value.name,
+                rarity: value.rarity,
+                level: value.level,
+                affixes: value
+                    .affixes
+                    .into_iter()
+                    .map(|affix| ItemAffix {
+                        name: affix.name,
+                        family: affix.family,
+                        tags: affix.tags,
+                        affix_type: affix.affix_type,
+                        tier: affix.tier,
+                        effects: affix
+                            .effects
+                            .into_iter()
+                            .map(|effect| AffixEffect {
+                                scope: effect.scope,
+                                stat_effect: StatEffect {
+                                    modifier: {
+                                        if let OldStatType::Damage { .. }
+                                        | OldStatType::CritDamage { .. } =
+                                            effect.stat_effect.stat
+                                        {
+                                            Modifier::Increased
+                                        } else {
+                                            effect.stat_effect.modifier
+                                        }
+                                    },
+                                    stat: effect.stat_effect.stat.into(),
+                                    value: effect.stat_effect.value,
+                                    bypass_ignore: effect.stat_effect.bypass_ignore,
+                                },
+                            })
+                            .collect(),
+                        item_level: affix.item_level,
+                    })
+                    .collect(),
+                quality: value.quality,
+                upgrade_level: value.upgrade_level,
+            };
+        }
+
         Self {
             base_item_id: value.base_item_id,
             name: value.name,
@@ -761,6 +824,26 @@ impl From<OldStatSkillFilter> for StatSkillFilter {
         StatSkillFilter {
             skill_type: value.skill_type,
             skill_id: value.skill_id,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
+pub struct OldPassivesTreeAscensionData {
+    pub ascended_nodes: HashMap<PassiveNodeId, u8>,
+    #[serde(default)]
+    pub socketed_nodes: HashMap<PassiveNodeId, OldItemModifiers>,
+}
+
+impl From<OldPassivesTreeAscensionData> for PassivesTreeAscensionData {
+    fn from(value: OldPassivesTreeAscensionData) -> Self {
+        Self {
+            ascended_nodes: value.ascended_nodes,
+            socketed_nodes: value
+                .socketed_nodes
+                .into_iter()
+                .map(|(k, v)| (k, v.into()))
+                .collect(),
         }
     }
 }

@@ -766,6 +766,82 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "monk_vest": {
+    "name": "Ascetic Vestments",
+    "icon": "items/body_armors/monk_vest.webp",
+    "description": null,
+    "slot": "Body",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 330,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "More",
+        "scope": "Local",
+        "value": -100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "DamageResistance": {
+                "skill_type": null,
+                "damage_type": null
+              }
+            },
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "focus",
+                  "damage_type": null,
+                  "skill_type": null
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 140.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      }
+    ]
+  },
   "body_8": {
     "name": "Plate Armor",
     "icon": "items/body_armors/plate_armor.webp",
@@ -790,6 +866,45 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "solar_armor": {
+    "name": "Skin of the Sun God",
+    "icon": "items/body_armors/solar_armor.webp",
+    "description": null,
+    "slot": "Body",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Body"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 160.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "body_9": {
     "name": "Mithril Hauberk",

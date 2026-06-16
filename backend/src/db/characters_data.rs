@@ -90,7 +90,7 @@ pub async fn save_character_passives<'c>(
     .await?)
 }
 
-async fn upsert_character_passives_data<'c>(
+pub(in crate::db) async fn upsert_character_passives_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
     passives_data: Vec<u8>,
