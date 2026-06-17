@@ -9,6 +9,9 @@
       "curses.json",
       "spells.json"
     ],
+    "skill_masteries": [
+      "spells_mastery.json"
+    ],
     "statuses": [
       "attacks_statuses.json",
       "blessings_statuses.json",

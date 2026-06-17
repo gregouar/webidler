@@ -97,11 +97,11 @@ pub(in crate::db) async fn upsert_character_skill_masteries_data<'c>(
     skill_masteries_data: Vec<u8>,
 ) -> Result<(), sqlx::Error> {
     sqlx::query!(
-        "INSERT INTO characters_data (character_id, data_version, skill_masteries_data) VALUES ($1, $2, $3)
-         ON CONFLICT(character_id) DO UPDATE SET 
+        "UPDATE characters_data SET
             data_version = $2,
-            skill_masteries_data = EXCLUDED.skill_masteries_data, 
-            updated_at = CURRENT_TIMESTAMP",
+            skill_masteries_data = $3, 
+            updated_at = CURRENT_TIMESTAMP
+        WHERE character_id = $1",
         character_id,
         DATA_VERSION,
         skill_masteries_data
