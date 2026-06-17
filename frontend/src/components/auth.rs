@@ -13,6 +13,12 @@ pub struct AuthState {
     refreshing: RwSignal<bool>,
 }
 
+impl Default for AuthState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AuthState {
     pub fn new() -> Self {
         AuthState {

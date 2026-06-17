@@ -257,7 +257,7 @@ pub fn SkillTooltip(
                         .map(|required_item| {
                             let item_category_str = required_item
                                 .category
-                                .map(|category| item_tooltip::item_category_str(category))
+                                .map(item_tooltip::item_category_str)
                                 .unwrap_or("Item");
                             let item_slot_str = required_item
                                 .slot
