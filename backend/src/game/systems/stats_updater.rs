@@ -130,20 +130,26 @@ pub fn check_condition(
         } => character_state
             .statuses
             .iter()
-            .filter(|(status_id, status_states)| {
+            .map(|(status_id, status_states)| {
                 let Some(status_specs) = statuses_store.get(status_id) else {
-                    return false;
+                    return 0;
                 };
-                status_filter.is_match_with_status(status_id, status_specs.damage_type)
-                    && skill_type
+                if status_filter.is_match_with_status(status_id, status_specs.damage_type) {
+                    skill_type
                         .map(|skill_type| {
                             status_states
                                 .iter()
-                                .any(|status_state| status_state.skill_type == skill_type)
+                                .map(|status_state| {
+                                    (status_state.skill_type == skill_type) as usize
+                                })
+                                .sum()
                         })
-                        .unwrap_or(true)
+                        .unwrap_or(status_states.len())
+                } else {
+                    0
+                }
             })
-            .count() as f64,
+            .sum::<usize>() as f64,
         Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
             let Some(status_specs) = statuses_store.get(status_id) else {
                 return false;

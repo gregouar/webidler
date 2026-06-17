@@ -430,20 +430,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .player_specs
                                                 .read()
                                                 .character_specs
-                                                .effects
-                                                .0
-                                                .get(
-                                                    &(
-                                                        StatType::DamageResistance {
-                                                            skill_type: None,
-                                                            damage_type: Some(damage_type),
-                                                        },
-                                                        Modifier::Flat,
-                                                        false,
-                                                    ),
-                                                )
+                                                .character_attrs
+                                                .damage_resistance
+                                                .get(&(SkillType::Attack, damage_type))
                                                 .copied()
-                                                .unwrap_or_default();
+                                                .unwrap_or_default()
+                                                .get();
                                             (value != 0.0)
                                                 .then(|| {
                                                     view! {
@@ -707,7 +699,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 {make_opt_stat(
                                     StatType::CritDamage(Default::default()),
-                                    Modifier::More,
+                                    Modifier::Increased,
                                     0.0,
                                 )}
                             </StatCategory>

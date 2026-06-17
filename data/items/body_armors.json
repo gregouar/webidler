@@ -846,7 +846,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 10.0,
+        "value": 5.0,
         "ignore_quality": true
       },
       {
