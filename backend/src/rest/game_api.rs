@@ -121,7 +121,7 @@ pub async fn post_ascend_passives(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let (_, ascension_data, _) =
+    let (_, ascension_data, _, _) =
         db::characters_data::load_character_data(&db_pool, &payload.character_id)
             .await?
             .ok_or(AppError::NotFound)?;
@@ -148,7 +148,7 @@ pub async fn post_ascend_passives(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, ascension_data, _) = character_data?.unwrap_or_default();
+    let (_, ascension_data, _, _) = character_data?.unwrap_or_default();
 
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
@@ -174,7 +174,7 @@ pub async fn post_socket_passive(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, ascension_data, _) =
+    let (inventory_data, ascension_data, _, _) =
         db::characters_data::load_character_data(&db_pool, &payload.character_id)
             .await?
             .ok_or(AppError::NotFound)?;
@@ -270,7 +270,7 @@ pub async fn post_buy_benedictions(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, _, player_benedictions) = character_data?.unwrap_or_default();
+    let (_, _, player_benedictions, _) = character_data?.unwrap_or_default();
 
     Ok(Json(BuyBenedictionsResponse {
         character,

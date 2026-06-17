@@ -7,7 +7,7 @@ pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
 pub const PLAYER_LIFE_PER_LEVEL: f64 = 2.0;
 pub const DEFAULT_MAX_LEVEL: u8 = 70;
 pub const SKILL_BASE_COST: f64 = 100.0;
-pub const SKILL_COST_FACTOR: f64 = 1_000.0;
+pub const SKILL_BASE_COST_FACTOR: f64 = 1_000.0;
 pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;
 pub const CHAMPION_INC_CHANCE: f64 = 0.000005;
 pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
@@ -22,6 +22,9 @@ pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07765;
 pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.12;
 pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
 pub const XP_INCREASE_FACTOR: f64 = 0.39;
+
+pub const SKILL_MASTERY_BASE_COST: f64 = 1000.0;
+
 pub const ARMOR_FACTOR: f64 = 100.0;
 pub const MAX_BLOCK: f32 = 80.0;
 pub const MAX_EVADE: f32 = 80.0;

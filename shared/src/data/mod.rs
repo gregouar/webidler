@@ -18,6 +18,7 @@ pub mod player;
 pub mod quest;
 pub mod realms;
 pub mod skill;
+pub mod skill_mastery;
 pub mod stash;
 pub mod stat_effect;
 pub mod temple;

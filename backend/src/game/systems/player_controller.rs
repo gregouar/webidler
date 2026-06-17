@@ -3,7 +3,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use shared::{
     computations,
-    constants::{PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR},
+    constants::{PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_BASE_COST_FACTOR},
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
@@ -205,10 +205,31 @@ pub fn reward_player(
     } else {
         0.0
     };
+    let experience_reward = monster_specs.power_factor.round();
+
     player_resources.gold += gold_reward;
     player_resources.gold_total += gold_reward;
     player_resources.gems += gems_reward;
-    player_resources.experience += monster_specs.power_factor.round();
+    player_resources.experience += experience_reward;
+
+    for skill_id in player_specs
+        .character_specs
+        .skills_specs
+        .iter()
+        .take(4)
+        .map(|x| &x.skill_id)
+    {
+        if let Some(entry) = player_resources
+            .skill_masteries_experience
+            .get_mut(skill_id)
+        {
+            *entry += experience_reward;
+        } else {
+            player_resources
+                .skill_masteries_experience
+                .insert(skill_id.clone(), experience_reward);
+        }
+    }
 
     (gold_reward, gems_reward)
 }
@@ -522,9 +543,9 @@ pub fn buy_skill(
         );
         player_resources.gold -= player_base_specs.buy_skill_cost;
         player_base_specs.buy_skill_cost = (if player_base_specs.buy_skill_cost > 0.0 {
-            player_base_specs.buy_skill_cost * SKILL_COST_FACTOR
+            player_base_specs.buy_skill_cost * SKILL_BASE_COST_FACTOR
         } else {
-            SKILL_BASE_COST * SKILL_COST_FACTOR
+            SKILL_BASE_COST * SKILL_BASE_COST_FACTOR
         })
         .round();
         true

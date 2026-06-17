@@ -166,7 +166,8 @@ async fn read_character_details(
     );
 
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension_data, benedictions) = character_data?.unwrap_or_default();
+    let (inventory_data, ascension_data, benedictions, skill_masteries) =
+        character_data?.unwrap_or_default();
     let last_grind_data = last_grind_data?;
     let character_stash = character_stash?.map(|x| x.into());
     let user_stash = user_stash?.map(|x| x.into());
@@ -208,6 +209,7 @@ async fn read_character_details(
         character_stash,
         user_stash,
         market_stash,
+        skill_masteries,
     }))
 }
 

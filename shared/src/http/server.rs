@@ -13,6 +13,7 @@ use crate::data::{
     player::PlayerInventory,
     realms::Realm,
     skill::BaseSkillSpecs,
+    skill_mastery::PlayerSkillMasteries,
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
@@ -124,6 +125,7 @@ pub struct GetCharacterDetailsResponse {
     pub ascension: PassivesTreeAscension,
     pub passives_build: PurchasedNodes,
     pub benedictions: PlayerBenedictions,
+    pub skill_masteries: PlayerSkillMasteries,
 
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,

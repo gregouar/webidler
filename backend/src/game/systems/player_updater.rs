@@ -15,6 +15,7 @@ use shared::{
         skill::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
+        skill_mastery::PlayerSkillMasteries,
         stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
         values::{AtLeastOne, NonNegative},
@@ -45,6 +46,7 @@ pub fn init_player_base_specs(
     character_portrait: String,
     max_area_level: AreaLevel,
     effects: EffectsMap,
+    skill_masteries: PlayerSkillMasteries,
 ) -> PlayerBaseSpecs {
     PlayerBaseSpecs {
         max_area_level,
@@ -66,6 +68,7 @@ pub fn init_player_base_specs(
         gold_find: 100.0.into(),
         threat_gain: 100.0.into(),
         max_level: DEFAULT_MAX_LEVEL,
+        skill_masteries,
     }
 }
 

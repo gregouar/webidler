@@ -247,7 +247,7 @@ pub async fn post_take_stash_item(
 
     verify_stash_access_write(&character, &stash)?;
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies can't take items".into()))?;
@@ -300,7 +300,7 @@ pub async fn post_store_stash_item(
 
     verify_stash_access_write(&character, &stash)?;
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(anyhow!("inventory not found"))?;

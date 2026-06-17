@@ -5,6 +5,7 @@ use shared::data::{
     game_stats::GrindStats,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
+    skill_mastery::PlayerSkillMasteries,
     stash::{Stash, StashType},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{UserCharacter, UserGrindArea},
@@ -28,6 +29,8 @@ pub struct TownContext {
 
     pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
+
+    pub player_skill_masteries: RwSignal<PlayerSkillMasteries>,
 
     pub last_grind: RwSignal<Option<GrindStats>>,
 
@@ -68,6 +71,7 @@ impl Default for TownContext {
             passives_tree_build: Default::default(),
             benedictions_specs: Default::default(),
             player_benedictions: Default::default(),
+            player_skill_masteries: Default::default(),
             last_grind: Default::default(),
             selected_item_index: Default::default(),
             equip_filter: Default::default(),

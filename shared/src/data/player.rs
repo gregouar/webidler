@@ -8,6 +8,7 @@ use crate::data::{
     area::AreaLevel,
     character::{CharacterAttrs, CharacterStatic},
     skill::BaseSkillSpecs,
+    skill_mastery::PlayerSkillMasteries,
     stat_effect::EffectsMap,
     trigger::TriggerEffect,
     values::{AtLeastOne, NonNegative},
@@ -25,6 +26,7 @@ pub struct PlayerBaseSpecs {
     pub buy_skill_cost: f64,
     pub max_skills: u8,
     pub skills: IndexMap<String, PlayerBaseSkill>,
+    pub skill_masteries: PlayerSkillMasteries,
 
     pub level: u8,
     pub experience_needed: f64,
@@ -72,6 +74,8 @@ pub struct PlayerResources {
     pub shards: f64,
 
     pub gold_total: f64,
+
+    pub skill_masteries_experience: HashMap<String, f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
