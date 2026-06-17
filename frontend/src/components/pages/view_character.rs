@@ -7,7 +7,6 @@ use leptos_router::{
 use shared::http::server::GetCharacterDetailsResponse;
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     chat::{chat_context::ChatContext, chat_panel::ChatPanel},
     data_context::DataContext,
@@ -147,7 +146,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
 pub fn HeaderMenu() -> impl IntoView {
     let town_context: TownContext = expect_context();
     let chat_context: ChatContext = expect_context();
-    let auth: AuthContext = expect_context();
+    let backend = expect_context::<BackendClient>();
 
     let gems = Signal::derive(move || town_context.character.read().resource_gems);
     let shards = Signal::derive(move || town_context.character.read().resource_shards);
@@ -184,7 +183,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     on:click=move |_| {
                         chat_context.opened.set(!chat_context.opened.get_untracked())
                     }
-                    disabled=Signal::derive(move || !auth.is_authenticated())
+                    disabled=Signal::derive(move || !backend.is_authenticated())
                 >
                     "🗪"
                 </MenuButton>

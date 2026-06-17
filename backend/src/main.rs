@@ -86,7 +86,8 @@ async fn main() {
     let cors_layer = CorsLayer::new()
         .allow_origin(cors_origins)
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
-        .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
+        .allow_headers([CONTENT_TYPE, AUTHORIZATION])
+        .allow_credentials(true);
 
     let sessions_store = SessionsStore::new();
 

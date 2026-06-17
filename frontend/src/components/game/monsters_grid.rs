@@ -50,7 +50,10 @@ pub fn MonstersGrid() -> impl IntoView {
             set_timeout(
                 move || {
                     // Repeat in case the state would have change in-between
-                    if switch_all_monsters_dead.get_untracked() {
+                    if switch_all_monsters_dead
+                        .try_get_untracked()
+                        .unwrap_or_default()
+                    {
                         all_monsters_dead.set(true);
                     }
                 },

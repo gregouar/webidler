@@ -3,7 +3,9 @@ use std::sync::Arc;
 use axum::{
     Extension, Json, Router,
     extract::{Path, State},
+    http::{HeaderMap, header::SET_COOKIE},
     middleware,
+    response::IntoResponse,
     routing::{delete, get, post},
 };
 
@@ -54,6 +56,8 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/account/signup", post(post_sign_up))
         .route("/account/signin", post(post_sign_in))
+        .route("/account/refresh", post(post_refresh))
+        .route("/account/signout", post(post_sign_out))
         .route("/account/forgot-password", post(post_forgot_password))
         .route("/account/reset-password", post(post_reset_password))
         .merge(auth_routes)
@@ -112,18 +116,61 @@ async fn post_sign_in(
     State(app_settings): State<AppSettings>,
     State(db_pool): State<db::DbPool>,
     Json(payload): Json<SignInRequest>,
-) -> Result<Json<SignInResponse>, AppError> {
+) -> Result<impl IntoResponse, AppError> {
     auth::verify_captcha(&payload.captcha_token).await?;
 
+    let tokens = auth::sign_in(
+        &app_settings,
+        &db_pool,
+        &payload.username.into_inner(),
+        &payload.password.into_inner(),
+    )
+    .await?;
+
+    let mut response_headers = HeaderMap::new();
+    response_headers.insert(
+        SET_COOKIE,
+        auth::refresh_cookie(&tokens.refresh_token)
+            .parse()
+            .map_err(|_| anyhow::anyhow!("invalid auth cookie"))?,
+    );
+
+    Ok((
+        response_headers,
+        Json(SignInResponse {
+            jwt: tokens.access_token,
+        }),
+    ))
+}
+
+async fn post_refresh(
+    State(app_settings): State<AppSettings>,
+    headers: HeaderMap,
+) -> Result<Json<SignInResponse>, AppError> {
+    let refresh_token = auth::refresh_cookie_from_headers(&headers)
+        .ok_or_else(|| AppError::Unauthorized("missing refresh token".to_string()))?;
+
+    let user = auth::authorize_refresh_jwt(&app_settings, &refresh_token)
+        .ok_or_else(|| AppError::Unauthorized("invalid refresh token".to_string()))?;
+
     Ok(Json(SignInResponse {
-        jwt: auth::sign_in(
-            &app_settings,
-            &db_pool,
-            &payload.username.into_inner(),
-            &payload.password.into_inner(),
-        )
-        .await?,
+        jwt: auth::access_token(&app_settings, user)?,
     }))
+}
+
+async fn post_sign_out() -> Result<impl IntoResponse, AppError> {
+    let mut response_headers = HeaderMap::new();
+    response_headers.insert(
+        SET_COOKIE,
+        auth::expired_refresh_cookie()
+            .parse()
+            .map_err(|_| anyhow::anyhow!("invalid auth cookie"))?,
+    );
+
+    Ok((
+        response_headers,
+        Json(SignInResponse { jwt: String::new() }),
+    ))
 }
 
 async fn get_discord_invite(

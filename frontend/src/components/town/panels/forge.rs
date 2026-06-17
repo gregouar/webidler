@@ -17,7 +17,6 @@ use shared::{
 use std::sync::Arc;
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     shared::{
         inventory::{InventoryEquipFilter, loot_filter_category_to_str},
@@ -228,7 +227,6 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
 pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
-    let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
     let confirm_context: ConfirmContext = expect_context();
 
@@ -248,14 +246,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 spawn_local({
                     async move {
                         match backend
-                            .forge_affix(
-                                &auth_context.token(),
-                                &ForgeAffixRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                    operation,
-                                },
-                            )
+                            .forge_affix(&ForgeAffixRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                                operation,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -514,7 +509,6 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
-    let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
@@ -533,13 +527,10 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                 spawn_local({
                     async move {
                         match backend
-                            .forge_upgrade(
-                                &auth_context.token(),
-                                &ForgeUpgradeRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .forge_upgrade(&ForgeUpgradeRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -682,7 +673,6 @@ pub fn GambleDetails(
 ) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
-    let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
@@ -696,13 +686,10 @@ pub fn GambleDetails(
             spawn_local({
                 async move {
                     match backend
-                        .gamble_item(
-                            &auth_context.token(),
-                            &GambleItemRequest {
-                                character_id,
-                                item_category: gamble_category.get(),
-                            },
-                        )
+                        .gamble_item(&GambleItemRequest {
+                            character_id,
+                            item_category: gamble_category.get(),
+                        })
                         .await
                     {
                         Ok(response) => {
@@ -743,13 +730,10 @@ pub fn GambleDetails(
                 spawn_local({
                     async move {
                         match backend
-                            .inventory_delete(
-                                &auth_context.token(),
-                                &InventoryDeleteRequest {
-                                    character_id,
-                                    item_indexes: [selected_item.index as u8].into(),
-                                },
-                            )
+                            .inventory_delete(&InventoryDeleteRequest {
+                                character_id,
+                                item_indexes: [selected_item.index as u8].into(),
+                            })
                             .await
                         {
                             Ok(_) => do_gamble(),

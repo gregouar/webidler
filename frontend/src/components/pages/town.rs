@@ -9,7 +9,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     chat::chat_panel::ChatPanel,
     data_context::DataContext,
@@ -32,7 +31,6 @@ pub fn TownPage() -> impl IntoView {
 
     let data_context: DataContext = expect_context();
     let backend = expect_context::<BackendClient>();
-    let auth = expect_context::<AuthContext>();
 
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
@@ -68,7 +66,7 @@ pub fn TownPage() -> impl IntoView {
     let initial_load = LocalResource::new({
         move || async move {
             match backend
-                .get_character_details(&auth.token(), &get_character_id_storage.get())
+                .get_character_details(&get_character_id_storage.get())
                 .await
             {
                 Ok(GetCharacterDetailsResponse {

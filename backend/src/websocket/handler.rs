@@ -141,7 +141,7 @@ async fn handle_connect(
 ) -> Result<Session> {
     tracing::info!("connect: {}", msg.character_id);
 
-    let user = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
+    let user = auth::authorize_access_jwt(&app_state.app_settings, &msg.jwt)
         .ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
     let user_character = db::characters::read_character(&app_state.db_pool, &msg.character_id)
