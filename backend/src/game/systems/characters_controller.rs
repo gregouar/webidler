@@ -144,11 +144,12 @@ fn compute_damage(
     is_blocked: bool,
 ) -> NonNegative {
     let resistance_factor = (1.0
-        - *character_attrs
+        - character_attrs
             .damage_resistance
             .get(&(skill_type, damage_type))
             .cloned()
             .unwrap_or_default()
+            .get()
             * 0.01)
         .max(0.0);
 

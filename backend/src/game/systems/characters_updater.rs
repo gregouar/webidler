@@ -2,7 +2,7 @@ use std::time::Duration;
 use strum::IntoEnumIterator;
 
 use shared::{
-    constants::{MAX_BLOCK, MAX_EVADE},
+    constants::{MAX_BLOCK, MAX_DAMAGE_RESISTANCE, MAX_EVADE},
     data::{
         area::AreaThreat,
         character::{CharacterAttrs, CharacterId, CharacterState},
@@ -178,6 +178,18 @@ pub fn update_character_specs(
             .value
             .base_mut()
             .set_bounds(Some(0.0), Some(MAX_EVADE));
+    }
+
+    for skill_type in SkillType::iter() {
+        for damage_type in DamageType::iter() {
+            character_specs
+                .character_attrs
+                .damage_resistance
+                .entry((skill_type, damage_type))
+                .or_default()
+                .base_mut()
+                .set_bounds(None, Some(MAX_DAMAGE_RESISTANCE));
+        }
     }
 
     let converted_effects = compute_character_specs(&mut character_specs, effects);

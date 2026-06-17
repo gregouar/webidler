@@ -10,7 +10,7 @@ use crate::data::{
     skill::{DamageType, RepeatedSkillEffect, SkillType},
     stat_effect::EffectsMap,
     trigger::TriggersMap,
-    values::{AtLeastOne, NonNegative, Percent},
+    values::{AtLeastOne, BoundedValue, NonNegative, Percent},
 };
 
 use super::character_status::StatusMap;
@@ -117,7 +117,7 @@ pub struct CharacterAttrs {
     pub stun_lockout: ModifiableValue<NonNegative>,
 
     #[serde(default)]
-    pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
+    pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
