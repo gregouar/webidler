@@ -595,7 +595,6 @@ fn StatusIcon(
                                 None,
                                 stacks,
                                 None,
-                                None,
                                 character_triggers
                                     .map(|character_triggers| character_triggers.read())
                                     .as_deref(),

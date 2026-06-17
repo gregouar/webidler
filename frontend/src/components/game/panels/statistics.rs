@@ -840,12 +840,6 @@ fn TriggersStats() -> impl IntoView {
                 >
                     <div class="relative pb-2 list-none break-inside-avoid">
                         {move || {
-                            let stat_effects = game_context
-                                .player_specs
-                                .read()
-                                .character_specs
-                                .effects
-                                .clone();
                             trigger_tooltip::format_trigger(
                                 TriggerSpecs {
                                     trigger: trigger.clone(),
@@ -853,7 +847,6 @@ fn TriggersStats() -> impl IntoView {
                                     trigger_effect: trigger_effect.clone(),
                                 },
                                 true,
-                                Some(&stat_effects),
                                 None,
                                 None,
                             )

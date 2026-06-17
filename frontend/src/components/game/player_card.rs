@@ -740,17 +740,11 @@ fn PlayerSkill(
                     .get()
                     .map(|skill_specs| {
                         let player_base_skill = player_base_skill.get();
-                        let effects_map = game_context
-                            .player_specs
-                            .read()
-                            .character_specs
-                            .effects
-                            .clone();
                         view! {
                             <SkillTooltip
                                 skill_specs=skill_specs
                                 player_base_skill=player_base_skill
-                                effects_map=Some(effects_map)
+                                // effects_map=Some(effects_map)
                                 computed_status_triggers=Some(computed_status_triggers)
                             />
                         }

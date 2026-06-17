@@ -6,7 +6,7 @@ use shared::data::{
     item::{SkillRange, SkillShape},
     modifier::{ModifiableValue, Modifier},
     skill::{SkillType, TargetType},
-    stat_effect::{EffectsMap, StatEffect, StatSkillFilter, StatType},
+    stat_effect::{StatEffect, StatSkillFilter, StatType},
     trigger::{
         EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
         TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
@@ -28,7 +28,7 @@ use crate::components::{
 pub fn format_trigger(
     trigger: TriggerSpecs,
     show_details: bool,
-    effects_map: Option<&EffectsMap>,
+    // effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
@@ -41,7 +41,7 @@ pub fn format_trigger(
                 skill_effect,
                 trigger.trigger_effect.target == TriggerTarget::Me,
                 Some(&trigger.trigger_effect.modifiers),
-                effects_map,
+                // effects_map,
                 None,
                 trigger_status_name,
                 trigger_status_value,

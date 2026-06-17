@@ -6,7 +6,7 @@ use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
     modifier::ModifiableValue,
-    stat_effect::{EffectsMap, StatEffect, StatType},
+    stat_effect::{StatEffect, StatType},
     trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
@@ -23,7 +23,7 @@ pub fn format_status_effects(
     value_factor: Option<f64>,
     stacks: usize,
     modifiers: Option<&[TriggerEffectModifier]>,
-    effects_map: Option<&EffectsMap>,
+    // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
 ) -> Option<impl IntoView + use<>> {
     // let value_factor = effects_map.map(|effects_map| {
@@ -48,7 +48,7 @@ pub fn format_status_effects(
                 value,
                 value_factor,
                 modifiers,
-                effects_map,
+                // effects_map,
                 character_triggers,
                 stacks,
             )
@@ -89,7 +89,7 @@ fn format_status_effect_line(
     skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
     value_factor: Option<f64>,
     modifiers: Option<&[TriggerEffectModifier]>,
-    effects_map: Option<&EffectsMap>,
+    // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
     stacks: usize,
 ) -> Option<impl IntoView + use<>> {
@@ -187,7 +187,7 @@ fn format_status_effect_line(
                             ..*trigger_specs
                         },
                         false,
-                        effects_map,
+                        // effects_map,
                         Some(status_name),
                         Some(skill_value),
                     )
@@ -203,7 +203,7 @@ fn format_status_effect_line(
                 format_trigger(
                     *trigger_specs,
                     false,
-                    effects_map,
+                    // effects_map,
                     Some(status_name),
                     Some(skill_value),
                 )

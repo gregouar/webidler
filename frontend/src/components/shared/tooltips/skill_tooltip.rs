@@ -15,8 +15,7 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{
-        EffectsMap, Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
-        StatType,
+        Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
     },
     trigger::{TriggerEffect, TriggerEffectModifier},
     values::NonNegative,
@@ -106,7 +105,7 @@ pub fn restore_type_str(restore_type: Option<RestoreType>) -> &'static str {
 pub fn SkillTooltip(
     skill_specs: Arc<SkillSpecs>,
     #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
-    #[prop(default= None)] effects_map: Option<EffectsMap>,
+    // #[prop(default= None)] effects_map: Option<EffectsMap>,
     #[prop(default= None)] computed_status_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
     let palette = TooltipFramePalette {
@@ -122,7 +121,7 @@ pub fn SkillTooltip(
         .map(|target| {
             format_target(
                 target,
-                effects_map.as_ref(),
+                // effects_map.as_ref(),
                 computed_status_triggers
                     .map(|computed_status_triggers| computed_status_triggers.read_untracked())
                     .as_deref(),
@@ -134,7 +133,7 @@ pub fn SkillTooltip(
         .triggers
         .clone()
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false, None, None, None))
+        .map(|trigger| format_trigger(trigger, false, None, None))
         .collect::<Vec<_>>();
 
     let auto_use_conditions = player_base_skill
@@ -323,7 +322,7 @@ pub fn SkillTooltip(
 
 fn format_target(
     targets_group: SkillTargetsGroup,
-    effects_map: Option<&EffectsMap>,
+    // effects_map: Option<&EffectsMap>,
     computed_status_triggers: Option<&HashMap<String, TriggerEffect>>,
 ) -> impl IntoView + use<> {
     let shape = shape_str(targets_group.shape);
@@ -354,7 +353,7 @@ fn format_target(
                 skill_effect,
                 targets_group.target_type == TargetType::Me,
                 None,
-                effects_map,
+                // effects_map,
                 computed_status_triggers,
                 None,
                 None,
@@ -464,7 +463,7 @@ pub fn format_skill_effect(
     skill_effect: SkillEffect,
     self_target: bool,
     modifiers: Option<&[TriggerEffectModifier]>,
-    effects_map: Option<&EffectsMap>,
+    // effects_map: Option<&EffectsMap>,
     computed_status_triggers: Option<&HashMap<String, TriggerEffect>>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
@@ -625,7 +624,7 @@ pub fn format_skill_effect(
                                 Some(value_factor),
                                 1,
                                 modifiers,
-                                effects_map,
+                                // effects_map,
                                 computed_status_triggers,
                     );
 
