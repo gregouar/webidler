@@ -1,6 +1,5 @@
 use std::time::Duration;
 
-use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
@@ -56,7 +55,6 @@ pub struct InitGameMessage {
     pub player_base_specs: PlayerBaseSpecs,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
-    pub last_skills_bought: IndexSet<String>,
     pub auto_skills: Vec<bool>,
 }
 

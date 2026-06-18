@@ -1,4 +1,40 @@
 {
+  "weapon_skill": {
+    "name": "Weapon Attack",
+    "icon": "skills/attack.svg",
+    "description": "A simple attack with your weapon.",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "upgrade_cost": 10,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "hidden": true
+  },
+  "gloves_skill": {
+    "name": "Unarmed Strike",
+    "icon": "skills/punch.svg",
+    "description": "Nothing like punching your foes in the face.",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "upgrade_cost": 10,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "hidden": true
+  },
   "poison_coating": {
     "name": "Poison Coating",
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",

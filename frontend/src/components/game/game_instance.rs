@@ -133,7 +133,6 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         player_base_specs,
         player_specs,
         player_state,
-        last_skills_bought,
         auto_skills,
     } = init_message;
 
@@ -149,7 +148,6 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.player_auto_skills.set(auto_skills);
-    game_context.last_skills_bought.set(last_skills_bought);
 }
 
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {

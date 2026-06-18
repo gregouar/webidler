@@ -4,10 +4,12 @@ use indexmap::IndexSet;
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
+    data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
     shared::{
         item_card::ItemCard,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
+        skills::{SkillMasteryCard, SkillMasteryCardData},
     },
     ui::{
         buttons::MenuButton,
@@ -20,6 +22,7 @@ use crate::components::{
 use shared::{
     computations,
     constants::{self, ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL},
+    data::quest::SkillMasteryReward,
     messages::client::TerminateQuestMessage,
 };
 
@@ -109,7 +112,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     });
 
     view! {
-        <MenuCard class="max-w-2xl max-h-full mx-auto">
+        <MenuCard class="max-w-4xl max-h-full mx-auto">
             <CardHeader title="Grind Ended" on_close=move || open.set(false) />
 
             <CardInset>
@@ -140,6 +143,8 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                     </div>
                 </div>
 
+                <SkillMasteryRewards />
+
                 <ItemRewards item_rewards_picked class:mt-2 />
             </CardInset>
 
@@ -147,6 +152,80 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                 <MenuButton on:click=try_confirm_end>"Confirm Reward & Exit"</MenuButton>
             </div>
         </MenuCard>
+    }
+}
+
+#[component]
+fn SkillMasteryRewards() -> impl IntoView {
+    let game_context: GameContext = expect_context();
+
+    view! {
+        {move || {
+            game_context
+                .quest_rewards
+                .get()
+                .and_then(|quest_rewards| {
+                    (!quest_rewards.skill_mastery_rewards.is_empty())
+                        .then_some(quest_rewards.skill_mastery_rewards)
+                })
+                .map(|skill_mastery_rewards| {
+                    view! {
+                        <div class="w-full flex flex-col gap-2">
+                            // <div class="w-full flex justify-between px-4">
+                            // <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
+                            // "Skill Masteries"
+                            // </span>
+                            // </div>
+                            <div class="grid grid-cols-1 gap-2 grid-cols-4">
+                                {skill_mastery_rewards
+                                    .into_iter()
+                                    .take(4)
+                                    .map(|reward| {
+                                        view! { <SkillMasteryRewardRow reward /> }
+                                    })
+                                    .collect::<Vec<_>>()}
+                            </div>
+                        </div>
+                    }
+                })
+        }}
+    }
+}
+
+#[component]
+fn SkillMasteryRewardRow(reward: SkillMasteryReward) -> impl IntoView {
+    let data_context = expect_context::<DataContext>();
+
+    let skill_specs = data_context
+        .skill_specs
+        .read_untracked()
+        .get(&reward.skill_id)
+        .cloned();
+    let skill_name = skill_specs
+        .as_ref()
+        .map(|skill_specs| skill_specs.name.clone())
+        .unwrap_or_else(|| reward.skill_id.clone());
+    let skill_card = skill_specs
+        .as_ref()
+        .map(|skill_specs| SkillMasteryCardData::from_base(reward.skill_id.clone(), skill_specs));
+    let gained_levels = reward.current_level.saturating_sub(reward.previous_level);
+
+    view! {
+        {skill_card
+            .map(|skill_card| {
+                view! {
+                    <SkillMasteryCard
+                        skill=skill_card
+                        level=reward.current_level
+                        level_delta=gained_levels
+                        relative_experience=reward.current_relative_experience
+                        next_level_cost=reward.current_next_level_cost
+                        experience_gained=reward.experience_gained
+                        empty_label=skill_name.clone()
+                        compact=true
+                    />
+                }
+            })}
     }
 }
 
@@ -205,112 +284,112 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                 <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
                 <div class="relative z-10 flex w-full flex-row gap-4 items-center justify-center p-4">
 
-                {move || {
-                    game_context
-                        .quest_rewards
-                        .get()
-                        .map(|quest_rewards| {
-                            view! {
-                                {quest_rewards
-                                    .item_rewards
-                                    .is_empty()
-                                    .then(|| {
-                                        view! {
-                                            <div class="flex-1 text-zinc-400">
-                                                {format!(
-                                                    "Complete at least {} Areas to get an Item Reward, and at least {} to get a guaranteed Edict Item drop.",
-                                                    ITEM_REWARDS_MIN_LEVEL,
-                                                    ITEM_REWARDS_MAP_MIN_LEVEL,
-                                                )}
-                                            </div>
-                                        }
-                                    })}
-                                {quest_rewards
-                                    .item_rewards
-                                    .into_iter()
-                                    .enumerate()
-                                    .map(|(index, item_reward)| {
-                                        let is_selected = move || {
-                                            item_rewards_picked.read().contains(&index)
-                                        };
-                                        view! {
-                                            <div
-                                                class=move || {
-                                                    format!(
-                                                        "
+                    {move || {
+                        game_context
+                            .quest_rewards
+                            .get()
+                            .map(|quest_rewards| {
+                                view! {
+                                    {quest_rewards
+                                        .item_rewards
+                                        .is_empty()
+                                        .then(|| {
+                                            view! {
+                                                <div class="flex-1 text-zinc-400">
+                                                    {format!(
+                                                        "Complete at least {} Areas to get an Item Reward, and at least {} to get a guaranteed Edict Item drop.",
+                                                        ITEM_REWARDS_MIN_LEVEL,
+                                                        ITEM_REWARDS_MAP_MIN_LEVEL,
+                                                    )}
+                                                </div>
+                                            }
+                                        })}
+                                    {quest_rewards
+                                        .item_rewards
+                                        .into_iter()
+                                        .enumerate()
+                                        .map(|(index, item_reward)| {
+                                            let is_selected = move || {
+                                                item_rewards_picked.read().contains(&index)
+                                            };
+                                            view! {
+                                                <div
+                                                    class=move || {
+                                                        format!(
+                                                            "
                                                         perspective rounded-[8px]
                                                         transition-all duration-150
                                                         cursor-pointer
                                                         {}
                                                         ",
-                                                        if is_selected() {
-                                                            "brightness-110 -translate-y-[1px]"
-                                                        } else {
-                                                            "opacity-90 hover:opacity-100"
-                                                        },
-                                                    )
-                                                }
-                                                on:click=move |_| pick_reward(index)
-                                            >
-                                                <div
-                                                    class="
-                                                    relative w-full h-full max-w-48
-                                                    transform-style-3d
-                                                    reward-flip
-                                                    "
-                                                    style=move || {
-                                                        format!("animation-delay: {}ms", 500 + index * 350)
+                                                            if is_selected() {
+                                                                "brightness-110 -translate-y-[1px]"
+                                                            } else {
+                                                                "opacity-90 hover:opacity-100"
+                                                            },
+                                                        )
                                                     }
+                                                    on:click=move |_| pick_reward(index)
                                                 >
-                                                    <div class=move || {
-                                                        format!(
-                                                            "relative isolate overflow-clip rounded-[8px]
+                                                    <div
+                                                        class="
+                                                        relative w-full h-full max-w-48
+                                                        transform-style-3d
+                                                        reward-flip
+                                                        "
+                                                        style=move || {
+                                                            format!("animation-delay: {}ms", 500 + index * 350)
+                                                        }
+                                                    >
+                                                        <div class=move || {
+                                                            format!(
+                                                                "relative isolate overflow-clip rounded-[8px]
                                                                 border
                                                                 bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                                                                 shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
                                                                 backface-hidden
                                                                 {}",
-                                                            if is_selected() {
-                                                                "border-[#b28a4f] shadow-[0_8px_18px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(244,225,181,0.08),inset_0_0_0_1px_rgba(214,177,102,0.18)]"
-                                                            } else {
-                                                                "border-[#3b3428]"
-                                                            },
-                                                        )
-                                                    }>
-                                                        <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
-                                                        <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
-                                                        <ItemCard
-                                                            item_specs=Arc::new(item_reward.clone())
-                                                            class:backface-hidden
-                                                        />
-                                                    </div>
+                                                                if is_selected() {
+                                                                    "border-[#b28a4f] shadow-[0_8px_18px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(244,225,181,0.08),inset_0_0_0_1px_rgba(214,177,102,0.18)]"
+                                                                } else {
+                                                                    "border-[#3b3428]"
+                                                                },
+                                                            )
+                                                        }>
+                                                            <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-white/5"></div>
+                                                            <div class="pointer-events-none absolute inset-x-3 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
+                                                            <ItemCard
+                                                                item_specs=Arc::new(item_reward.clone())
+                                                                class:backface-hidden
+                                                            />
+                                                        </div>
 
-                                                    <div class="
-                                                    absolute inset-0
-                                                    backface-hidden
-                                                    isolate overflow-clip rounded-[8px]
-                                                    border border-[#6c5329]/85
-                                                    bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
-                                                    shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
-                                                    flex items-center justify-center
-                                                    text-amber-200 text-8xl font-display
-                                                    rotate-y-180
-                                                    ">
-                                                        <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-[#d5b16d]/18"></div>
-                                                        <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                                                        <div class="pointer-events-none absolute inset-[6px] rounded-[6px] border border-black/45 bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))] shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
-                                                        <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
-                                                            "?"
-                                                        </span>
+                                                        <div class="
+                                                        absolute inset-0
+                                                        backface-hidden
+                                                        isolate overflow-clip rounded-[8px]
+                                                        border border-[#6c5329]/85
+                                                        bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
+                                                        shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
+                                                        flex items-center justify-center
+                                                        text-amber-200 text-8xl font-display
+                                                        rotate-y-180
+                                                        ">
+                                                            <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-[#d5b16d]/18"></div>
+                                                            <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
+                                                            <div class="pointer-events-none absolute inset-[6px] rounded-[6px] border border-black/45 bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))] shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
+                                                            <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
+                                                                "?"
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    })
-                                    .collect::<Vec<_>>()}
-                            }
-                        })
-                }}
+                                            }
+                                        })
+                                        .collect::<Vec<_>>()}
+                                }
+                            })
+                    }}
                 </div>
             </div>
         </div>

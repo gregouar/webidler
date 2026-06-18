@@ -560,7 +560,7 @@ fn BenedictionRow(
                                 >
                                     "+"
                                 </MenuButton>
-                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-amber-100 font-number">
+                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-zinc-100 font-number">
                                     {move || upgrade_level.get()}
                                 </div>
                                 <MenuButton

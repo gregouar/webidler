@@ -18,6 +18,7 @@ use shared::{
 };
 
 use crate::{
+    app_state::MasterStore,
     game::{
         data::{
             event::EventsQueue,
@@ -266,7 +267,7 @@ pub fn level_up_no_cost(
 }
 
 pub fn equip_item_from_bag(
-    statuses_store: &StatusesStore,
+    master_store: &MasterStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
@@ -289,6 +290,7 @@ pub fn equip_item_from_bag(
         && let Some(slot) = new_item.base.slot
     {
         equip_weapon(
+            &master_store.skills_store,
             player_base_specs,
             player_state,
             player_controller,
@@ -298,7 +300,10 @@ pub fn equip_item_from_bag(
         );
     }
 
-    characters_controller::reset_buff_statuses(statuses_store, &mut player_state.character_state);
+    characters_controller::reset_buff_statuses(
+        &master_store.statuses_store,
+        &mut player_state.character_state,
+    );
 
     Ok(())
 }
@@ -327,6 +332,7 @@ pub fn unequip_item_to_bag(
 }
 
 pub fn toggle_sheathe_item(
+    skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
@@ -351,6 +357,7 @@ pub fn toggle_sheathe_item(
         )
     } else {
         equip_weapon(
+            skills_store,
             player_base_specs,
             player_state,
             player_controller,
@@ -380,6 +387,7 @@ pub fn sell_item(player_resources: &mut PlayerResources, item_specs: &ItemSpecs)
 }
 
 pub fn init_skills_from_inventory(
+    skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
@@ -390,6 +398,7 @@ pub fn init_skills_from_inventory(
             && !player_inventory.sheathed.contains(&item_slot)
         {
             equip_weapon(
+                skills_store,
                 player_base_specs,
                 player_state,
                 player_controller,
@@ -425,6 +434,7 @@ fn unequip_weapon(
 }
 
 fn equip_weapon(
+    skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
@@ -432,28 +442,18 @@ fn equip_weapon(
     item_level: u16,
     weapon_specs: &WeaponSpecs,
 ) {
-    equip_base_skill(
-        player_base_specs,
-        player_state,
-        player_controller,
-        item_slot_to_skill_id(item_slot),
-        items_controller::make_weapon_skill(item_level, weapon_specs),
-        true,
-        Some(item_slot),
-    );
-}
-
-fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {
-    match item_slot {
-        ItemSlot::Accessory => "accessory_skill",
-        ItemSlot::Helmet => "helmet_skill",
-        ItemSlot::Amulet => "amulet_skill",
-        ItemSlot::Weapon => "weapon_skill",
-        ItemSlot::Body => "body_skill",
-        ItemSlot::Shield => "shield_skill",
-        ItemSlot::Gloves => "gloves_skill",
-        ItemSlot::Boots => "boots_skill",
-        ItemSlot::Ring => "ring_skill",
+    if let Some((skill_id, base_skill_specs)) =
+        items_controller::make_weapon_skill(skills_store, item_slot, item_level, weapon_specs)
+    {
+        equip_base_skill(
+            player_base_specs,
+            player_state,
+            player_controller,
+            skill_id,
+            base_skill_specs,
+            true,
+            Some(item_slot),
+        );
     }
 }
 
@@ -461,7 +461,7 @@ pub fn equip_base_skill(
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
-    skill_id: &str,
+    skill_id: String,
     base_skill_specs: BaseSkillSpecs,
     auto_use: bool,
     item_slot: Option<ItemSlot>,
@@ -479,7 +479,7 @@ pub fn equip_base_skill(
 
     player_base_specs.skills.shift_insert(
         index,
-        skill_id.to_string(),
+        skill_id,
         PlayerBaseSkill {
             item_slot,
             upgrade_level: 1,
@@ -531,12 +531,14 @@ pub fn buy_skill(
         return false;
     }
 
-    if let Some(base_skill_specs) = skills_store.get(skill_id) {
+    if let Some(base_skill_specs) = skills_store.get(skill_id)
+        && !base_skill_specs.hidden
+    {
         equip_base_skill(
             player_base_specs,
             player_state,
             player_controller,
-            skill_id,
+            skill_id.to_string(),
             base_skill_specs.clone(),
             true,
             None,

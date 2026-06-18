@@ -16,9 +16,10 @@ use shared::{
             EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
             ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
             InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
-            ResetPasswordRequest, SavePassivesRequest, SellMarketItemRequest, SignInRequest,
-            SignUpRequest, SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
-            UpdateAccountRequest, UpdateCharacterRequest, UpgradeStashRequest,
+            ResetPasswordRequest, SavePassivesRequest, SaveSkillMasteriesRequest,
+            SellMarketItemRequest, SignInRequest, SignUpRequest, SocketPassiveRequest,
+            StoreStashItemRequest, TakeStashItemRequest, UpdateAccountRequest,
+            UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
@@ -31,9 +32,9 @@ use shared::{
             GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
             InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
             RejectMarketItemResponse, ResetPasswordResponse, SavePassivesResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
-            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
-            UpgradeStashResponse,
+            SaveSkillMasteriesResponse, SellMarketItemResponse, SignInResponse, SignUpResponse,
+            SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            UpdateAccountResponse, UpgradeStashResponse,
         },
     },
 };
@@ -161,6 +162,13 @@ impl BackendClient {
         request: &BuyBenedictionsRequest,
     ) -> Result<BuyBenedictionsResponse, BackendError> {
         self.post_auth("game/benedictions", request).await
+    }
+
+    pub async fn post_save_skill_masteries(
+        &self,
+        request: &SaveSkillMasteriesRequest,
+    ) -> Result<SaveSkillMasteriesResponse, BackendError> {
+        self.post_auth("game/skill-masteries", request).await
     }
 
     // Auth

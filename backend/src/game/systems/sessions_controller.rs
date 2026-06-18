@@ -277,6 +277,7 @@ async fn new_game_instance(
     }
 
     player_controller::init_skills_from_inventory(
+        &master_store.skills_store,
         game_data.player_base_specs.mutate(),
         game_data.player_inventory.mutate(),
         &mut game_data.player_state,

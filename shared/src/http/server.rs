@@ -7,13 +7,12 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
     character_status::{StatusId, StatusSpecs},
-    game_stats::GrindStats,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     realms::Realm,
     skill::BaseSkillSpecs,
-    skill_mastery::PlayerSkillMasteries,
+    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs},
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
@@ -130,8 +129,7 @@ pub struct GetCharacterDetailsResponse {
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
     pub market_stash: Option<Stash>,
-
-    pub last_grind: Option<GrindStats>,
+    // pub last_grind: Option<GrindStats>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -150,6 +148,7 @@ pub struct GetAreasResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetSkillsResponse {
     pub skills: HashMap<String, BaseSkillSpecs>,
+    pub skill_masteries: IndexMap<String, SkillMasterySpecs>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -186,6 +185,11 @@ pub struct SavePassivesResponse {}
 pub struct BuyBenedictionsResponse {
     pub character: UserCharacter,
     pub player_benedictions: PlayerBenedictions,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveSkillMasteriesResponse {
+    pub skill_masteries: PlayerSkillMasteries,
 }
 
 // Market

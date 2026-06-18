@@ -10,6 +10,7 @@
       "spells.json"
     ],
     "skill_masteries": [
+      "attacks_mastery.json",
       "spells_mastery.json"
     ],
     "statuses": [

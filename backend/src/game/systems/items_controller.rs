@@ -3,12 +3,12 @@ use strum::IntoEnumIterator;
 
 use shared::data::{
     chance::{Chance, ChanceRange},
-    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
+    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
     skill::{
         BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
-        SkillUpgradeEffect, TargetType,
+        TargetType,
     },
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
@@ -16,7 +16,10 @@ use shared::data::{
     },
 };
 
-use crate::{game::data::items_store::ItemsStore, rest::AppError};
+use crate::{
+    game::data::{items_store::ItemsStore, master_store::SkillsStore},
+    rest::AppError,
+};
 
 pub fn init_item_specs_from_store(
     items_store: &ItemsStore,
@@ -276,7 +279,17 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     Ok(create_item_specs(item.base.clone(), item_modifiers, 0.0))
 }
 
-pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {
+pub fn make_weapon_skill(
+    skills_store: &SkillsStore,
+    item_slot: ItemSlot,
+    item_level: u16,
+    weapon_specs: &WeaponSpecs,
+) -> Option<(String, BaseSkillSpecs)> {
+    let skill_id = item_slot_to_skill_id(item_slot);
+    let Some(base_skill_specs) = skills_store.get(skill_id).cloned() else {
+        return None;
+    };
+
     let effects = vec![
         SkillEffect {
             effect_type: SkillEffectType::FlatDamage {
@@ -334,40 +347,34 @@ pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSki
         },
     ];
 
-    BaseSkillSpecs {
-        name: "Weapon Attack".to_string(),
-        icon: "skills/attack.svg".to_string(),
-        description: "A simple attack with your weapon.".to_string(),
-        skill_type: SkillType::Attack,
-        cooldown: *weapon_specs.cooldown,
-        mana_cost: Default::default(),
-        upgrade_cost: 10.0 + 0.5 * item_level as f64,
-        upgrade_effects: vec![SkillUpgradeEffect {
-            stat_effect: StatEffect {
-                stat: StatType::Damage {
-                    skill_filter: Default::default(),
-                    damage_type: None,
-                    min_max: None,
-                    is_hit: None,
-                },
-                modifier: Modifier::More,
-                value: 30.0,
-                bypass_ignore: true,
-            },
-            description: None,
-        }],
-        modifier_effects: Default::default(),
-        targets: vec![SkillTargetsGroup {
-            range: weapon_specs.range,
-            target_type: TargetType::Enemy,
-            shape: weapon_specs.shape,
-            target_dead: false,
-            repeat: Default::default(),
-            effects,
-        }],
-        triggers: Default::default(),
-        auto_use_conditions: Default::default(),
-        ignore_stat_effects: Default::default(),
-        required_item: None,
+    Some((
+        skill_id.to_string(),
+        BaseSkillSpecs {
+            cooldown: *weapon_specs.cooldown,
+            upgrade_cost: 10.0 + 0.5 * item_level as f64,
+            targets: vec![SkillTargetsGroup {
+                range: weapon_specs.range,
+                target_type: TargetType::Enemy,
+                shape: weapon_specs.shape,
+                target_dead: false,
+                repeat: Default::default(),
+                effects,
+            }],
+            ..base_skill_specs
+        },
+    ))
+}
+
+fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Accessory => "accessory_skill",
+        ItemSlot::Helmet => "helmet_skill",
+        ItemSlot::Amulet => "amulet_skill",
+        ItemSlot::Weapon => "weapon_skill",
+        ItemSlot::Body => "body_skill",
+        ItemSlot::Shield => "shield_skill",
+        ItemSlot::Gloves => "gloves_skill",
+        ItemSlot::Boots => "boots_skill",
+        ItemSlot::Ring => "ring_skill",
     }
 }

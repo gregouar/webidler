@@ -1,6 +1,5 @@
 use anyhow::Result;
 
-use indexmap::IndexSet;
 use shared::{
     data::{passive::PurchasedNodes, user::UserCharacterId},
     messages::server::{InitGameMessage, SyncGameStateMessage},
@@ -15,7 +14,6 @@ pub async fn sync_init_game(
     character_id: &UserCharacterId,
     game_data: &mut GameInstanceData,
     passives_tree_build: PurchasedNodes,
-    last_skills_bought: IndexSet<String>,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
@@ -31,7 +29,6 @@ pub async fn sync_init_game(
                 player_base_specs: game_data.player_base_specs.read().clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
-                last_skills_bought,
                 auto_skills: game_data.player_controller.auto_skills.read().clone(),
             }
             .into(),

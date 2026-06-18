@@ -2,7 +2,7 @@ use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
     data::{
         item::{ItemCategory, ItemRarity},
-        quest::QuestRewards,
+        quest::{QuestRewards, SkillMasteryReward},
     },
 };
 
@@ -162,5 +162,40 @@ fn generate_end_quest_rewards(
         }))
         .collect();
 
-    QuestRewards { item_rewards }
+    let skill_mastery_rewards = game_data
+        .player_resources
+        .read()
+        .skill_masteries_experience
+        .iter()
+        .filter_map(|(skill_id, experience_gained)| {
+            if *experience_gained <= 0.0 {
+                return None;
+            }
+
+            let previous_mastery = game_data
+                .player_base_specs
+                .read()
+                .skill_masteries
+                .masteries
+                .get(skill_id)
+                .cloned()
+                .unwrap_or_default();
+            let mut current_mastery = previous_mastery.clone();
+            current_mastery.experience += experience_gained;
+
+            Some(SkillMasteryReward {
+                skill_id: skill_id.clone(),
+                previous_level: previous_mastery.level(),
+                current_level: current_mastery.level(),
+                experience_gained: *experience_gained,
+                current_relative_experience: current_mastery.relative_experience(),
+                current_next_level_cost: current_mastery.next_level_cost(),
+            })
+        })
+        .collect();
+
+    QuestRewards {
+        item_rewards,
+        skill_mastery_rewards,
+    }
 }

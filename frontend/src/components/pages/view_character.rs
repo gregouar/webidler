@@ -17,7 +17,12 @@ use crate::components::{
     },
     town::{
         TownContext,
-        panels::{inventory::TownInventoryPanel, passives::PassivesPanel, temple::TemplePanel},
+        panels::{
+            inventory::TownInventoryPanel,
+            passives::PassivesPanel,
+            skill_masteries::{SkillMasteriesPanel, SkillMasteryDetailsModal},
+            temple::TemplePanel,
+        },
         town_scene::TownScene,
     },
     ui::{
@@ -88,7 +93,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         inventory,
                         ascension,
                         benedictions,
-                        last_grind,
+                        // last_grind,
                         passives_build,
                         character_stash: _,
                         user_stash: _,
@@ -102,7 +107,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         town_context.passives_tree_build.set(passives_build);
                         town_context.player_benedictions.set(benedictions);
                         town_context.player_skill_masteries.set(skill_masteries);
-                        town_context.last_grind.set(last_grind);
+                        // town_context.last_grind.set(last_grind);
                     }
                     _ => {
                         use_navigate()("/", Default::default());
@@ -132,6 +137,11 @@ pub fn ViewCharacterPage() -> impl IntoView {
                             <TownScene view_only=true />
                             <ChatPanel />
                             <TemplePanel open=town_context.open_temple view_only=true />
+                            <SkillMasteriesPanel
+                                open=town_context.open_skill_masteries
+                                view_only=true
+                            />
+                            <SkillMasteryDetailsModal />
                             <PassivesPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
                             <SettingsModal open=town_context.open_settings />
@@ -203,6 +213,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_temple.set(!town_context.open_temple.get());
                         town_context.open_ascend.set(false);
                         town_context.open_inventory.set(false);
+                        town_context.open_skill_masteries.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -213,6 +224,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_inventory.set(!town_context.open_inventory.get());
                         town_context.open_ascend.set(false);
                         town_context.open_temple.set(false);
+                        town_context.open_skill_masteries.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -223,10 +235,24 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_ascend.set(!town_context.open_ascend.get());
                         town_context.open_inventory.set(false);
                         town_context.open_temple.set(false);
+                        town_context.open_skill_masteries.set(false);
                     }
                     disabled=disable_inventory
                 >
                     "Passives"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| {
+                        town_context
+                            .open_skill_masteries
+                            .set(!town_context.open_skill_masteries.get());
+                        town_context.open_inventory.set(false);
+                        town_context.open_temple.set(false);
+                        town_context.open_ascend.set(false);
+                    }
+                    disabled=disable_inventory
+                >
+                    "Skills"
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>

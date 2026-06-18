@@ -9,6 +9,7 @@ use crate::{
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
         realms::Realm,
+        skill_mastery::PlayerSkillMasteries,
         stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
@@ -80,6 +81,14 @@ pub struct UpdateCharacterRequest {
 pub struct BuyBenedictionsRequest {
     pub character_id: UserCharacterId,
     pub player_benedictions: PlayerBenedictions,
+}
+
+// Skill Masteries
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveSkillMasteriesRequest {
+    pub character_id: UserCharacterId,
+    pub skill_masteries: PlayerSkillMasteries,
 }
 
 // Ascend

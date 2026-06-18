@@ -12,12 +12,12 @@ use shared::{
     http::{
         client::{
             AscendPassivesRequest, BuyBenedictionsRequest, SavePassivesRequest,
-            SocketPassiveRequest,
+            SaveSkillMasteriesRequest, SocketPassiveRequest,
         },
         server::{
             AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
             GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, GetStatusesResponse,
-            SavePassivesResponse, SocketPassiveResponse,
+            SavePassivesResponse, SaveSkillMasteriesResponse, SocketPassiveResponse,
         },
     },
 };
@@ -31,7 +31,10 @@ use crate::{
             inventory_data::inventory_data_to_player_inventory,
             passives::ascension_data_to_passives_tree_ascension,
         },
-        systems::{benedictions_controller, inventory_controller, passives_controller},
+        systems::{
+            benedictions_controller, inventory_controller, passives_controller,
+            skill_masteries_controller,
+        },
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -44,6 +47,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/game/passives/socket", post(post_socket_passive))
         .route("/game/passives/build", post(post_save_passives_build))
         .route("/game/benedictions", post(post_buy_benedictions))
+        .route("/game/skill-masteries", post(post_save_skill_masteries))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -75,6 +79,7 @@ pub async fn get_skills(
 ) -> Result<Json<GetSkillsResponse>, AppError> {
     Ok(Json(GetSkillsResponse {
         skills: (*master_store.skills_store).clone(),
+        skill_masteries: master_store.skill_masteries_store.as_ref().clone(),
     }))
 }
 
@@ -276,4 +281,37 @@ pub async fn post_buy_benedictions(
         character,
         player_benedictions,
     }))
+}
+
+pub async fn post_save_skill_masteries(
+    State(master_store): State<MasterStore>,
+    State(db_pool): State<db::DbPool>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<SaveSkillMasteriesRequest>,
+) -> Result<Json<SaveSkillMasteriesResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    skill_masteries_controller::update_skill_masteries(
+        &mut tx,
+        &master_store,
+        &payload.character_id,
+        &payload.skill_masteries,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    let (_, _, _, skill_masteries) =
+        db::characters_data::load_character_data(&db_pool, &payload.character_id)
+            .await?
+            .unwrap_or_default();
+
+    Ok(Json(SaveSkillMasteriesResponse { skill_masteries }))
 }
