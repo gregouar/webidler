@@ -20,8 +20,7 @@ use crate::{
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
-            skills::{SkillProgressBar, skill_specs_from_base},
-            tooltips::SkillTooltip,
+            skills::{SkillMasteryCard, SkillMasteryCardData},
         },
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
@@ -30,9 +29,7 @@ use crate::{
             card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
             number::format_duration_in_days,
-            tooltip::{
-                DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
-            },
+            tooltip::{StaticTooltip, StaticTooltipPosition},
         },
     },
 };
@@ -132,10 +129,10 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <Card class="w-1/3">
+        <Card class="w-1/3 min-h-0">
             <PlayerName />
 
-            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+            <div class="min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
                         {move || {
@@ -156,23 +153,12 @@ fn PlayerCard() -> impl IntoView {
                 </div>
             </div>
 
+            // <div class="min-h-0 overflow-y-auto grid grid-cols-2 gap-1 xl:gap-2">
             <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
-                <For
-                    each=move || {
-                        0..town_context
-                            .last_grind
-                            .with(|last_grind| {
-                                last_grind
-                                    .as_ref()
-                                    .map(|last_grind| last_grind.skills.len().min(4))
-                                    .unwrap_or_default()
-                            })
-                    }
-                    key=|i| *i
-                    let(i)
-                >
-                    <PlayerSkill index=i />
-                </For>
+                <PlayerFavoriteSkillMastery index=0 />
+                <PlayerFavoriteSkillMastery index=1 />
+                <PlayerFavoriteSkillMastery index=2 />
+                <PlayerFavoriteSkillMastery index=3 />
             </div>
         </Card>
     }
@@ -204,92 +190,56 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(index: usize) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
 
-    let skill_entry = Signal::derive(move || {
-        town_context.last_grind.with(|last_grind| {
-            last_grind
-                .as_ref()
-                .and_then(|last_grind| last_grind.skills.get_index(index))
-                .map(|(skill_id, player_base_skill)| (skill_id.clone(), player_base_skill.clone()))
-        })
+    let favorite_mastery = Memo::new(move |_| {
+        let player_skill_masteries = town_context.player_skill_masteries.get();
+        let skill_id = player_skill_masteries.favorite_skills.get(index)?.clone();
+        let mastery = player_skill_masteries.masteries.get(&skill_id)?.clone();
+        let skill_specs = data_context.skill_specs.read().get(&skill_id)?.clone();
+
+        Some((skill_id, mastery, skill_specs))
     });
-
-    let skill_specs = Signal::derive(move || {
-        skill_entry.get().map(|(skill_id, player_base_skill)| {
-            skill_specs_from_base(skill_id, &player_base_skill.base_skill_specs)
-        })
-    });
-    let skill_progress = Memo::new(move |_| {
-        skill_specs
-            .read()
-            .as_ref()
-            .map(|skill_specs| (skill_specs.skill_type, skill_specs.icon.clone()))
-    });
-
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let tooltip_id = RwSignal::new(0);
-    let show_tooltip = move || {
-        if let Some((_, player_base_skill)) = skill_entry.get()
-            && let Some(skill_specs) = skill_specs.get()
-        {
-            let skill_specs = Arc::new(skill_specs);
-            let player_base_skill = Some(Arc::new(player_base_skill));
-            tooltip_id.set(tooltip_context.set_content(
-                move || {
-                    let skill_specs = skill_specs.clone();
-                    let player_base_skill = player_base_skill.clone();
-                    view! { <SkillTooltip skill_specs=skill_specs player_base_skill=player_base_skill /> }
-                    .into_any()
-                },
-                DynamicTooltipPosition::TopRight,
-            ));
-        }
-    };
-
-    let hide_tooltip = move || {
-        tooltip_context.hide(tooltip_id.get_untracked());
-    };
-    on_cleanup(hide_tooltip);
 
     view! {
-        <div class="flex flex-col">
-            <div
-                on:touchstart=move |_| show_tooltip()
-                on:contextmenu=move |ev| {
-                    ev.prevent_default();
-                }
-                on:mouseenter=move |_| show_tooltip()
-                on:mouseleave=move |_| hide_tooltip()
-                on:click=move |_| hide_tooltip()
-            >
-                // <button
-                // class="btn p-1 w-full h-full
-                // active:brightness-50 active:sepia"
-                // disabled=true
-                // >
-                <div class="p-1 w-full h-full">
-                    {move || {
-                        skill_progress
-                            .read()
-                            .as_ref()
-                            .map(|(skill_type, skill_icon)| {
-                                view! {
-                                    <SkillProgressBar
-                                        skill_type=*skill_type
-                                        skill_icon=skill_icon.clone()
-                                        value=Signal::derive(|| 0.0)
-                                        bar_width=4
-                                    />
-                                }
-                                    .into_any()
+        {move || {
+            favorite_mastery
+                .get()
+                .map(|(skill_id, mastery, skill_specs)| {
+                    let skill_id_for_click = skill_id.clone();
+                    view! {
+                        <SkillMasteryCard
+                            skill=SkillMasteryCardData::from_base(skill_id.clone(), &skill_specs)
+                            level=mastery.level()
+                            relative_experience=mastery.relative_experience()
+                            next_level_cost=mastery.next_level_cost()
+                            compact=true
+                            on_click=Callback::new(move |_| {
+                                town_context
+                                    .selected_skill_mastery
+                                    .set(Some(skill_id_for_click.clone()));
+                                town_context.open_skill_mastery_details.set(true);
                             })
-                    }}
-                </div>
-            // </button>
-            </div>
-        </div>
+                        />
+                    }
+                        .into_any()
+                })
+                .unwrap_or_else(|| {
+                    view! {
+                        <SkillMasteryCard
+                            empty_label=format!("Favorite {}", index + 1)
+                            compact=true
+                            on_click=Callback::new(move |_| {
+                                town_context.selected_skill_mastery.set(None);
+                                town_context.open_skill_masteries.set(true);
+                            })
+                        />
+                    }
+                        .into_any()
+                })
+        }}
     }
 }
 

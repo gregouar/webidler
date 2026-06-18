@@ -35,7 +35,7 @@ use crate::components::{
 pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <MenuCard class="w-6xl mx-auto">
+            <MenuCard class="max-w-6xl mx-auto">
                 <CardHeader title="Buy New Skill" on_close=move || open.set(false) />
                 // flex-1 overflow-auto max-h-[65vh]
                 <SkillShop open=open />
@@ -154,7 +154,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                                     )></div>
                                 </div>
 
-                                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 xl:gap-3">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 xl:gap-3">
                                     <For
                                         each=move || unbought_skills.clone().into_iter()
                                         key=|(skill_id, _)| skill_id.clone()
