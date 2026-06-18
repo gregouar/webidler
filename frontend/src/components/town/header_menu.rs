@@ -176,7 +176,8 @@ pub fn HeaderMenu() -> impl IntoView {
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
-                    "Inventory"
+                    <span class="inline xl:hidden">"Inv."</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
                 </MenuButton>
                 <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
                     "Stash"
@@ -200,7 +201,8 @@ pub fn HeaderMenu() -> impl IntoView {
                     "Forge"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                    "Passives"
+                    <span class="inline xl:hidden">"Pas"</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                 </MenuButton>
                 <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
                     "Temple"
