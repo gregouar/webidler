@@ -20,7 +20,7 @@ use crate::{
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
-            skills::{SkillMasteryCard, SkillMasteryCardData},
+            skills::{SkillMasteryCard, skill_specs_from_base},
         },
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
@@ -207,14 +207,12 @@ fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
         {move || {
             favorite_mastery
                 .get()
-                .map(|(skill_id, mastery, skill_specs)| {
+                .map(|(skill_id, skill_mastery_state, base_skill_specs)| {
                     let skill_id_for_click = skill_id.clone();
                     view! {
                         <SkillMasteryCard
-                            skill=SkillMasteryCardData::from_base(skill_id.clone(), &skill_specs)
-                            level=mastery.level()
-                            relative_experience=mastery.relative_experience()
-                            next_level_cost=mastery.next_level_cost()
+                            skill_specs=skill_specs_from_base(skill_id, &base_skill_specs)
+                            skill_mastery_state
                             compact=true
                             on_click=Callback::new(move |_| {
                                 town_context

@@ -4,12 +4,11 @@ use indexmap::IndexSet;
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
-    data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
     shared::{
         item_card::ItemCard,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
-        skills::{SkillMasteryCard, SkillMasteryCardData},
+        skills::SkillMasteryCard,
     },
     ui::{
         buttons::MenuButton,
@@ -22,7 +21,6 @@ use crate::components::{
 use shared::{
     computations,
     constants::{self, ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL},
-    data::quest::SkillMasteryReward,
     messages::client::TerminateQuestMessage,
 };
 
@@ -159,73 +157,75 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 fn SkillMasteryRewards() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
-    view! {
-        {move || {
-            game_context
-                .quest_rewards
-                .get()
-                .and_then(|quest_rewards| {
-                    (!quest_rewards.skill_mastery_rewards.is_empty())
-                        .then_some(quest_rewards.skill_mastery_rewards)
-                })
-                .map(|skill_mastery_rewards| {
-                    view! {
-                        <div class="w-full flex flex-col gap-2">
-                            // <div class="w-full flex justify-between px-4">
-                            // <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
-                            // "Skill Masteries"
-                            // </span>
-                            // </div>
-                            <div class="grid grid-cols-1 gap-2 grid-cols-4">
-                                {skill_mastery_rewards
-                                    .into_iter()
-                                    .take(4)
-                                    .map(|reward| {
-                                        view! { <SkillMasteryRewardRow reward /> }
-                                    })
-                                    .collect::<Vec<_>>()}
-                            </div>
-                        </div>
-                    }
-                })
-        }}
-    }
-}
-
-#[component]
-fn SkillMasteryRewardRow(reward: SkillMasteryReward) -> impl IntoView {
-    let data_context = expect_context::<DataContext>();
-
-    let skill_specs = data_context
-        .skill_specs
-        .read_untracked()
-        .get(&reward.skill_id)
-        .cloned();
-    let skill_name = skill_specs
-        .as_ref()
-        .map(|skill_specs| skill_specs.name.clone())
-        .unwrap_or_else(|| reward.skill_id.clone());
-    let skill_card = skill_specs
-        .as_ref()
-        .map(|skill_specs| SkillMasteryCardData::from_base(reward.skill_id.clone(), skill_specs));
-    let gained_levels = reward.current_level.saturating_sub(reward.previous_level);
-
-    view! {
-        {skill_card
-            .map(|skill_card| {
-                view! {
-                    <SkillMasteryCard
-                        skill=skill_card
-                        level=reward.current_level
-                        level_delta=gained_levels
-                        relative_experience=reward.current_relative_experience
-                        next_level_cost=reward.current_next_level_cost
-                        experience_gained=reward.experience_gained
-                        empty_label=skill_name.clone()
-                        compact=true
-                    />
+    let skill_mastery_rewards = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .skills_specs
+            .iter()
+            .filter_map(|skill_specs| {
+                let experience_gained = game_context
+                    .player_resources
+                    .read()
+                    .skill_masteries_experience
+                    .get(&skill_specs.skill_id)
+                    .copied()
+                    .unwrap_or_default();
+                if experience_gained <= 0.0 {
+                    return None;
                 }
-            })}
+
+                let previous_mastery = game_context
+                    .player_base_specs
+                    .read()
+                    .skill_masteries
+                    .masteries
+                    .get(&skill_specs.skill_id)
+                    .cloned()
+                    .unwrap_or_default();
+                let mut current_mastery = previous_mastery.clone();
+                current_mastery.experience += experience_gained;
+                let gained_levels = current_mastery
+                    .level()
+                    .saturating_sub(previous_mastery.level());
+
+                Some((
+                    skill_specs.clone(),
+                    current_mastery,
+                    gained_levels,
+                    experience_gained,
+                ))
+            })
+            .collect::<Vec<_>>()
+    });
+
+    view! {
+        <div class="w-full flex flex-col gap-2">
+            // <div class="w-full flex justify-between px-4">
+            // <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
+            // "Skill Masteries"
+            // </span>
+            // </div>
+            <div class="grid grid-cols-1 gap-2 grid-cols-4">
+                {skill_mastery_rewards
+                    .get()
+                    .into_iter()
+                    .take(4)
+                    .map(|(skill_specs, skill_mastery_state, gained_levels, delta_experience)| {
+                        view! {
+                            <SkillMasteryCard
+                                skill_specs
+                                skill_mastery_state
+                                level_delta=gained_levels
+                                experience_gained=delta_experience
+                                compact=true
+                            />
+                        }
+                    })
+                    .collect::<Vec<_>>()}
+            </div>
+        </div>
     }
 }
 
