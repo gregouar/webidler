@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 use leptos::{html::*, prelude::*};
 
@@ -53,22 +53,56 @@ pub fn SkillMasteryCard(
     let settings = expect_context::<SettingsContext>();
 
     let level = skill_mastery_state.as_ref().map(SkillMasteryState::level);
+    let has_progress = skill_mastery_state.is_some();
     let relative_experience = skill_mastery_state
         .as_ref()
         .map(SkillMasteryState::relative_experience);
     let next_level_cost = skill_mastery_state
         .as_ref()
         .map(SkillMasteryState::next_level_cost);
-    let progress =
+    let current_progress =
         relative_experience
             .zip(next_level_cost)
             .map(|(relative_experience, next_level_cost)| {
-                if next_level_cost > 0.0 {
-                    (relative_experience / next_level_cost * 100.0).clamp(0.0, 100.0) as f32
-                } else {
-                    0.0
-                }
+                mastery_progress(relative_experience, next_level_cost)
             });
+    let previous_progress = match (skill_mastery_state.as_ref(), experience_gained) {
+        (Some(skill_mastery_state), Some(experience_gained)) => {
+            let mut previous_skill_mastery_state = skill_mastery_state.clone();
+            previous_skill_mastery_state.experience =
+                (previous_skill_mastery_state.experience - experience_gained).max(0.0);
+            mastery_progress(
+                previous_skill_mastery_state.relative_experience(),
+                previous_skill_mastery_state.next_level_cost(),
+            )
+        }
+        (Some(_), None) => current_progress.unwrap_or_default(),
+        (None, _) => 0.0,
+    };
+    let progress_reset = RwSignal::new(false);
+    let progress = RwSignal::new(previous_progress);
+    if let (Some(current_progress), Some(_)) = (current_progress, experience_gained) {
+        if level_delta > 0 {
+            set_timeout(move || progress.set(100.0), Duration::from_millis(500));
+            set_timeout(
+                move || {
+                    progress.set(0.0);
+                    progress_reset.set(true);
+                },
+                Duration::from_millis(800),
+            );
+            set_timeout(
+                move || progress.set(current_progress),
+                Duration::from_millis(900),
+            );
+        } else {
+            set_timeout(
+                move || progress.set(current_progress),
+                Duration::from_millis(500),
+            );
+        }
+    }
+
     let skill_type = skill_specs
         .as_ref()
         .map(|skill| skill.skill_type)
@@ -174,22 +208,25 @@ pub fn SkillMasteryCard(
                 <div class="min-h-4 text-xs font-semibold text-violet-300">
                     {level
                         .map(|level| {
+                            let level_delta = level_delta.min(level);
                             view! {
                                 "Level "
-                                {level}
                                 {(level_delta > 0)
                                     .then(|| {
                                         view! {
-                                            <span class="ml-1 text-emerald-300">"+" {level_delta}</span>
+                                            <span class="ml-1 text-zinc-500">
+                                                {level - level_delta}" → "
+                                            </span>
                                         }
                                     })}
+                                {level}
                             }
                                 .into_any()
                         })}
                 </div>
                 <div class="min-h-3">
-                    {progress
-                        .map(|progress| {
+                    {has_progress
+                        .then(|| {
                             view! {
                                 <StaticTooltip
                                     tooltip=move || {
@@ -204,15 +241,23 @@ pub fn SkillMasteryCard(
                                     <HorizontalProgressBar
                                         class="h-3"
                                         bar_color="bg-gradient-to-b from-violet-200 to-violet-600"
-                                        value=Signal::derive(move || progress)
+                                        value=Signal::derive(move || progress.get())
+                                        reset=progress_reset
                                     />
                                 </StaticTooltip>
                             }
-                                .into_any()
                         })}
                 </div>
             </div>
         </div>
+    }
+}
+
+fn mastery_progress(relative_experience: f64, next_level_cost: f64) -> f32 {
+    if next_level_cost > 0.0 {
+        (relative_experience / next_level_cost * 100.0).clamp(0.0, 100.0) as f32
+    } else {
+        0.0
     }
 }
 
