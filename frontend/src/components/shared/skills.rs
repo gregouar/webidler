@@ -205,7 +205,7 @@ pub fn SkillMasteryCard(
                             }>{skill_name}</div>
                         }
                     })}
-                <div class="min-h-4 text-xs font-semibold text-violet-300">
+                <div class="min-h-4 text-xs xl:text-sm font-semibold text-violet-300">
                     {level
                         .map(|level| {
                             let level_delta = level_delta.min(level);
