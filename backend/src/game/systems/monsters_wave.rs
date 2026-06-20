@@ -4,7 +4,7 @@ use shared::{
     computations,
     constants::{
         CHAMPION_LEVEL_INC, MONSTER_LIFE_INCREASE_FACTOR, MONSTER_REWARD_INCREASE_FACTOR,
-        MONSTERS_DEFAULT_DAMAGE_INCREASE,
+        MONSTERS_DEFAULT_DAMAGE_INCREASE, SKILL_REWARD_INCREASE_FACTOR,
     },
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
@@ -221,21 +221,25 @@ fn generate_monster_specs(
         monster_level += CHAMPION_LEVEL_INC;
     };
 
-    let life_factor = computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR);
-    let power_factor = computations::exponential(
+    // Level power
+    monster_specs.experience_reward *= computations::exponential(
         area_state.area_level + *area_specs.power_level / 2,
         MONSTER_REWARD_INCREASE_FACTOR,
     );
-    let reward_factor =
+    monster_specs.gold_reward *=
         computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR);
-
-    monster_specs.power_factor *= power_factor;
-    monster_specs.reward_factor *= reward_factor;
+    monster_specs.skill_reward *= computations::exponential(
+        area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,
+        SKILL_REWARD_INCREASE_FACTOR,
+    );
     monster_specs
         .character_specs
         .character_attrs
         .max_life
-        .apply_modifier((life_factor - 1.0) * 100.0, Modifier::More);
+        .apply_modifier(
+            (computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR) - 1.0) * 100.0,
+            Modifier::More,
+        );
 
     // Apply upgrade effects
     let upgrade_effects = [StatEffect {

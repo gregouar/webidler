@@ -3,8 +3,6 @@
   "portrait": "monsters/castle/topiary_golem.webp",
   "max_life": 30,
   "size": "Huge",
-  "power_factor": 5,
-  "initiative": [ 3.0, 5.0 ],
   "skills": [
     {
       "name": "Shrub Slam",

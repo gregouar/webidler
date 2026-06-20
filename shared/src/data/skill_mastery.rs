@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     computations,
-    constants::{SKILL_MASTERY_BASE_COST, SKILL_MASTERY_SHIFT_COST, XP_INCREASE_FACTOR},
+    constants::{SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST},
     data::{
         modifier::Modifier,
         stat_effect::{StatEffect, StatType},
@@ -50,10 +50,7 @@ pub struct SkillMasteryState {
 impl SkillMasteryState {
     pub fn next_level_cost(&self) -> f64 {
         (SKILL_MASTERY_BASE_COST
-            * computations::exponential(
-                self.level() + SKILL_MASTERY_SHIFT_COST,
-                XP_INCREASE_FACTOR,
-            ))
+            * computations::exponential(self.level(), SKILL_MASTERY_INCREASE_COST))
         .round()
     }
 
@@ -65,10 +62,7 @@ impl SkillMasteryState {
         (0..self.level())
             .map(|level| {
                 SKILL_MASTERY_BASE_COST
-                    * computations::exponential(
-                        level + SKILL_MASTERY_SHIFT_COST,
-                        XP_INCREASE_FACTOR,
-                    )
+                    * computations::exponential(level, SKILL_MASTERY_INCREASE_COST)
             })
             .sum::<f64>()
             .round()
@@ -80,7 +74,7 @@ impl SkillMasteryState {
 
         loop {
             let next_level_cost = (SKILL_MASTERY_BASE_COST
-                * computations::exponential(level + SKILL_MASTERY_SHIFT_COST, XP_INCREASE_FACTOR))
+                * computations::exponential(level, SKILL_MASTERY_INCREASE_COST))
             .round();
             if remaining_experience < next_level_cost || level == u16::MAX {
                 return level;

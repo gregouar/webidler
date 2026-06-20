@@ -2,8 +2,6 @@
   "name": "Oathbound Bottle",
   "portrait": "monsters/inn/haunted_wine_bottle.webp",
   "max_life": 5,
-  "power_factor": 0,
-  "initiative": [ 0, 1 ],
   "skills": [
     {
       "name": "Sickening Sip",

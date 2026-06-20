@@ -3,7 +3,6 @@
   "portrait": "monsters/yokai/oni_warrior.webp",
   "max_life": 35,
   "size": "Huge",
-  "power_factor": 5,
   "armor": { "Physical": 50, "Fire": 50 },
   "skills": [
     {

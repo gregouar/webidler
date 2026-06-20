@@ -2,8 +2,6 @@
   "name": "Captain Hook",
   "portrait": "monsters/island/pirate_captain.webp",
   "max_life": 12,
-  "power_factor": 3,
-  "initiative": [ 1.0, 2.5 ],
   "armor": { "Fire": 50, "Physical": 50 },
   "skills": [
     {

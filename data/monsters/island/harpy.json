@@ -2,8 +2,6 @@
   "name": "Furious Siren",
   "portrait": "monsters/island/harpy.webp",
   "max_life": 12,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 1.0 ],
   "skills": [
     {
       "name": "Vicious Bite",

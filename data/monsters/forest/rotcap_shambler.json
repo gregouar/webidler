@@ -2,8 +2,6 @@
   "name": "Rotcap Shambler",
   "portrait": "monsters/forest/rotcap_shambler.webp",
   "max_life": 5,
-  "power_factor": 1.5,
-  "initiative": [ 1, 2.5 ],
   "armor": { "Poison": 100 },
   "skills": [
     {

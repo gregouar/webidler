@@ -189,7 +189,7 @@ pub fn reward_player(
     area_state: &mut AreaState,
 ) -> (f64, f64) {
     let gold_reward = if area_specs.can_reward_gold() {
-        (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round()
+        (monster_specs.gold_reward * player_specs.gold_find.get() * 0.01).round()
     } else {
         0.0
     };
@@ -206,13 +206,13 @@ pub fn reward_player(
     } else {
         0.0
     };
-    let experience_reward = monster_specs.power_factor.round();
 
     player_resources.gold += gold_reward;
     player_resources.gold_total += gold_reward;
     player_resources.gems += gems_reward;
-    player_resources.experience += experience_reward;
+    player_resources.experience += monster_specs.experience_reward.round();
 
+    let skill_reward = monster_specs.skill_reward.round();
     for skill_id in player_specs
         .character_specs
         .skills_specs
@@ -224,11 +224,11 @@ pub fn reward_player(
             .skill_masteries_experience
             .get_mut(skill_id)
         {
-            *entry += experience_reward;
+            *entry += skill_reward;
         } else {
             player_resources
                 .skill_masteries_experience
-                .insert(skill_id.clone(), experience_reward);
+                .insert(skill_id.clone(), skill_reward);
         }
     }
 

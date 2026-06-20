@@ -3,11 +3,6 @@
   "portrait": "monsters/island/treasure_gun.webp",
   "rarity": "Boss",
   "max_life": 150,
-  "power_factor": 8,
-  "initiative": [
-    1,
-    1.5
-  ],
   "armor": {
     "Physical": 100
   },

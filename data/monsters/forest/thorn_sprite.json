@@ -2,8 +2,6 @@
   "name": "Thorn Sprite",
   "portrait": "monsters/forest/thorn_sprite.webp",
   "max_life": 5,
-  "power_factor": 1.5,
-  "initiative": [ 0.0, 0.5 ],
   "armor": { "Poison": 50 },
   "skills": [
     {

@@ -2,7 +2,6 @@
     "name": "Totally Normal Waitress",
     "portrait": "monsters/inn/waitress.webp",
     "max_life": 15,
-    "power_factor": 2.5,
     "armor": { "Fire": 50 },
     "skills": [
         {

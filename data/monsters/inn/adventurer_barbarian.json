@@ -3,7 +3,6 @@
   "portrait": "monsters/inn/adventurer_barbarian.webp",
   "rarity": "Boss",
   "max_life": 200,
-  "power_factor": 8,
   "armor": { "Physical": 500, "Fire": 500, "Storm": 500, "Poison": 500 },
   "stun_lockout": 3.0,
   "status_resistances": [

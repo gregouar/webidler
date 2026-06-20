@@ -2,8 +2,6 @@
   "name": "Cloud Elemental",
   "portrait": "monsters/peaks/cloud.webp",
   "max_life": 5,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 0.5 ],
   "armor": { "Storm": 100 },
   "evade": {
     "Physical": 20,
