@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     computations,
-    constants::{SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST},
     data::{
         modifier::Modifier,
         stat_effect::{StatEffect, StatType},
@@ -49,9 +48,7 @@ pub struct SkillMasteryState {
 
 impl SkillMasteryState {
     pub fn next_level_cost(&self) -> f64 {
-        (SKILL_MASTERY_BASE_COST
-            * computations::exponential(self.level(), SKILL_MASTERY_INCREASE_COST))
-        .round()
+        computations::skill_mastery_next_level_cost(self.level())
     }
 
     pub fn relative_experience(&self) -> f64 {
@@ -59,30 +56,11 @@ impl SkillMasteryState {
     }
 
     pub fn level_cost(&self) -> f64 {
-        (0..self.level())
-            .map(|level| {
-                SKILL_MASTERY_BASE_COST
-                    * computations::exponential(level, SKILL_MASTERY_INCREASE_COST)
-            })
-            .sum::<f64>()
-            .round()
+        computations::skill_mastery_level_cost(self.level())
     }
 
     pub fn level(&self) -> u16 {
-        let mut level = 0u16;
-        let mut remaining_experience = self.experience;
-
-        loop {
-            let next_level_cost = (SKILL_MASTERY_BASE_COST
-                * computations::exponential(level, SKILL_MASTERY_INCREASE_COST))
-            .round();
-            if remaining_experience < next_level_cost || level == u16::MAX {
-                return level;
-            }
-
-            remaining_experience -= next_level_cost;
-            level = level.saturating_add(1);
-        }
+        computations::skill_mastery_level(self.experience)
     }
 }
 
