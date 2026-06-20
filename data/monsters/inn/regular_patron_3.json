@@ -2,7 +2,6 @@
     "name": "Regular Patron",
     "portrait": "monsters/inn/regular_patron_3.webp",
     "max_life": 8,
-    : 1.5,
     "armor": { "Storm": 50 },
     "skills": [
         {
