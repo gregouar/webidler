@@ -237,7 +237,7 @@ fn compute_player_specs(
             threat_gain: player_specs.threat_gain.into(),
             restore_on_hit: Default::default(),
         },
-        &effects,
+        effects,
     );
 
     player_specs.movement_cooldown = *movement_cooldown;
@@ -290,7 +290,7 @@ fn compute_player_specs(
                 skill_id.to_string(),
                 &player_base_skill.base_skill_specs,
                 player_base_skill.upgrade_level,
-                &effects,
+                effects,
                 &player_specs.character_specs.character_attrs,
                 Some(player_inventory),
             )
@@ -298,7 +298,7 @@ fn compute_player_specs(
         .collect();
 
     player_specs.computed_status_triggers =
-        compute_status_triggers(statuses_store, &player_specs, &effects);
+        compute_status_triggers(statuses_store, &player_specs, effects);
 
     player_specs
 }

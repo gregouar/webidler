@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{f64::consts::LOG10_2, time::Duration};
 
 use crate::data::{area::AreaLevel, item::ItemCategory, stash::StashPrice};
 
@@ -23,7 +23,7 @@ pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
 // pub const XP_INCREASE_FACTOR: f64 = 0.39;
 pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07;
 pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.10; // X10 every 10 levels
-pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.30103; // X2 every level
+pub const SKILL_COST_INCREASE_FACTOR: f64 = LOG10_2; // X2 every level
 pub const XP_INCREASE_FACTOR: f64 = 0.40;
 
 pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X5 every 100 levels

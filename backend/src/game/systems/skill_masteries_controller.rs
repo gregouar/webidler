@@ -32,7 +32,7 @@ pub async fn update_skill_masteries(
     db::characters_data::save_character_skill_masteries(
         &mut **tx,
         character_id,
-        &requested_skill_masteries,
+        requested_skill_masteries,
     )
     .await?;
 

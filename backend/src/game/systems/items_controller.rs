@@ -286,9 +286,7 @@ pub fn make_weapon_skill(
     weapon_specs: &WeaponSpecs,
 ) -> Option<(String, BaseSkillSpecs)> {
     let skill_id = item_slot_to_skill_id(item_slot);
-    let Some(base_skill_specs) = skills_store.get(skill_id).cloned() else {
-        return None;
-    };
+    let base_skill_specs = skills_store.get(skill_id).cloned()?;
 
     let effects = vec![
         SkillEffect {

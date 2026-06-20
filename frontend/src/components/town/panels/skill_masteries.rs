@@ -190,17 +190,16 @@ fn FavoriteSkillsPicker(
 
         (0..4)
             .map(|index| {
-                let favorite_skill =
-                    skill_masteries
+                
+
+                skill_masteries
                         .favorite_skills
                         .get(index)
                         .and_then(|skill_id| {
                             let mastery = skill_masteries.masteries.get(skill_id).cloned()?;
                             let skill_specs = skill_specs.get(skill_id)?.clone();
                             Some((skill_id.clone(), mastery, skill_specs))
-                        });
-
-                favorite_skill
+                        })
             })
             .collect::<Vec<_>>()
     });

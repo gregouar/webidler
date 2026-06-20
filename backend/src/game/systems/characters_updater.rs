@@ -206,7 +206,7 @@ pub fn update_character_specs(
         statuses_store,
         area_threat,
         &character_specs.character_attrs,
-        &character_state,
+        character_state,
         character_inventory,
         &conditional_modifiers,
     ));
