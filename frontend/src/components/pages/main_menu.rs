@@ -30,9 +30,8 @@ use crate::{
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
     let backend = expect_context::<BackendClient>();
-    let refresh_token = LocalResource::new(move || async move {
-        backend.get_access_token().await.is_ok()
-    });
+    let refresh_token =
+        LocalResource::new(move || async move { backend.get_access_token().await.is_ok() });
 
     view! {
         <Transition fallback=move || {

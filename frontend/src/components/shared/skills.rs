@@ -10,6 +10,7 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
+        data_context::DataContext,
         settings::{GraphicsQuality, SettingsContext},
         shared::tooltips::SkillTooltip,
         ui::{
@@ -51,8 +52,20 @@ pub fn SkillMasteryCard(
     #[prop(default = false)] compact: bool,
 ) -> impl IntoView {
     let settings = expect_context::<SettingsContext>();
+    let data_context = expect_context::<DataContext>();
 
+    let max_level = skill_specs.as_ref().and_then(|skill_specs| {
+        data_context
+            .skill_mastery_specs
+            .read()
+            .get(&skill_specs.skill_id)
+            .map(|specs| specs.max_level)
+    });
     let level = skill_mastery_state.as_ref().map(SkillMasteryState::level);
+    let is_max_level = level
+        .zip(max_level)
+        .map(|(level, max_level)| level >= max_level)
+        .unwrap_or(true);
     let has_progress = skill_mastery_state.is_some();
     let relative_experience = skill_mastery_state
         .as_ref()
@@ -66,23 +79,39 @@ pub fn SkillMasteryCard(
             .map(|(relative_experience, next_level_cost)| {
                 mastery_progress(relative_experience, next_level_cost)
             });
-    let previous_progress = match (skill_mastery_state.as_ref(), experience_gained) {
-        (Some(skill_mastery_state), Some(experience_gained)) => {
-            let mut previous_skill_mastery_state = skill_mastery_state.clone();
-            previous_skill_mastery_state.experience =
-                (previous_skill_mastery_state.experience - experience_gained).max(0.0);
-            mastery_progress(
-                previous_skill_mastery_state.relative_experience(),
-                previous_skill_mastery_state.next_level_cost(),
-            )
+    let current_progress = if is_max_level {
+        Some(100.0)
+    } else {
+        current_progress
+    };
+    let previous_progress = if is_max_level {
+        100.0
+    } else {
+        match (skill_mastery_state.as_ref(), experience_gained) {
+            (Some(skill_mastery_state), Some(experience_gained)) => {
+                let mut previous_skill_mastery_state = skill_mastery_state.clone();
+                previous_skill_mastery_state.experience =
+                    (previous_skill_mastery_state.experience - experience_gained).max(0.0);
+                if max_level
+                    .map(|max_level| previous_skill_mastery_state.level() >= max_level)
+                    .unwrap_or_default()
+                {
+                    100.0
+                } else {
+                    mastery_progress(
+                        previous_skill_mastery_state.relative_experience(),
+                        previous_skill_mastery_state.next_level_cost(),
+                    )
+                }
+            }
+            (Some(_), None) => current_progress.unwrap_or_default(),
+            (None, _) => 0.0,
         }
-        (Some(_), None) => current_progress.unwrap_or_default(),
-        (None, _) => 0.0,
     };
     let progress_reset = RwSignal::new(false);
     let progress = RwSignal::new(previous_progress);
     if let (Some(current_progress), Some(_)) = (current_progress, experience_gained) {
-        if level_delta > 0 {
+        if level_delta > 0 && !is_max_level {
             set_timeout(move || progress.set(100.0), Duration::from_millis(500));
             set_timeout(
                 move || {
@@ -233,6 +262,7 @@ pub fn SkillMasteryCard(
                                         mastery_card_xp_tooltip(
                                             relative_experience.unwrap_or_default(),
                                             next_level_cost.unwrap_or_default(),
+                                            is_max_level,
                                             experience_gained,
                                         )
                                     }
@@ -240,7 +270,11 @@ pub fn SkillMasteryCard(
                                 >
                                     <HorizontalProgressBar
                                         class="h-3"
-                                        bar_color="bg-gradient-to-b from-violet-200 to-violet-600"
+                                        bar_color=if is_max_level {
+                                            "bg-gradient-to-b from-zinc-400 to-zinc-600"
+                                        } else {
+                                            "bg-gradient-to-b from-violet-200 to-violet-600"
+                                        }
                                         value=Signal::derive(move || progress.get())
                                         reset=progress_reset
                                     />
@@ -448,13 +482,16 @@ fn skill_type_progress_tint(skill_type: SkillType) -> &'static str {
 fn mastery_card_xp_tooltip(
     relative_experience: f64,
     next_level_cost: f64,
+    is_max_level: bool,
     experience_gained: Option<f64>,
 ) -> AnyView {
     view! {
         "Experience: "
-        {format_number(relative_experience)}
-        "/"
-        {format_number(next_level_cost)}
+        {if is_max_level {
+            "Full".to_string()
+        } else {
+            format!("{}/{}", format_number(relative_experience), format_number(next_level_cost))
+        }}
         {experience_gained
             .map(|experience_gained| {
                 view! {
