@@ -141,6 +141,8 @@ pub struct CharacterState {
     pub monitored_conditions: HashMap<Condition, MonitoredCondition>,
     #[serde(default, skip_serializing, skip_deserializing)]
     pub repeated_skills: Vec<RepeatedSkillEffect>,
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub resurrected: bool,
 }
 
 // This shouldn't be here
