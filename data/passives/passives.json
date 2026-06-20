@@ -2,7 +2,7 @@
   "default": {
     "nodes": {
       "0088c436-0b23-4993-a966-b57d2444e996": {
-        "name": "Evade Chance",
+        "name": "Greater Evade Chance",
         "icon": "passives/curled_leaf.svg",
         "x": 90.0,
         "y": -130.0,
@@ -6121,13 +6121,13 @@
         "socket": false
       },
       "65390d39-8d88-4b4e-b88b-afbfeab3d4e9": {
-        "name": "Block",
+        "name": "Life Regenration",
         "icon": "passives/life_regen.svg",
         "x": -90.0,
         "y": -75.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Armor",
+        "node_type": "Life",
         "effects": [
           {
             "stat": "LifeRegen",
@@ -10752,7 +10752,7 @@
         "socket": false
       },
       "a796f363-7d58-4ebd-b78d-8f4cf92614bd": {
-        "name": "Burn Stacks",
+        "name": "Let It Burn",
         "icon": "passives/wildfires.svg",
         "x": 192.5,
         "y": 150.0,
@@ -11506,7 +11506,7 @@
         "socket": false
       },
       "b5fce054-f56b-47de-9e4f-d565c54f830c": {
-        "name": "Vampire",
+        "name": "Vampirism",
         "icon": "passives/fangs_circle.svg",
         "x": -57.5,
         "y": 110.0,
@@ -13245,7 +13245,7 @@
         "socket": false
       },
       "d103b2b7-0801-4c7d-ad6d-fc735f713026": {
-        "name": "Frenzy",
+        "name": "Warfare",
         "icon": "passives/frenzy.svg",
         "x": -120.0,
         "y": 0.0,
@@ -16238,7 +16238,7 @@
         "socket": false
       },
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
-        "name": "Assassin Strike",
+        "name": "Assassin",
         "icon": "passives/ninja_head.svg",
         "x": 85.0,
         "y": 145.0,
