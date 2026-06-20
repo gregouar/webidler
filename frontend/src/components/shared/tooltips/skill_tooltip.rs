@@ -640,7 +640,7 @@ pub fn format_skill_effect(
                                 {trigger_modifier_duration_str}{format_escalation(escalation)}
                                 {stacks_str}
                             </EffectLi>
-                            {status_effects}
+                            <EffectLi>{status_effects}</EffectLi>
                         }
                     })
                         .into_any()

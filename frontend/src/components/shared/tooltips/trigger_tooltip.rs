@@ -68,15 +68,21 @@ pub fn format_trigger(
 
     view! {
         <EffectLi>
-            <ul>
+            <ul class="list-none">
                 <EffectLi>
                     // {name_str}
                     {format_trigger_event(&trigger.trigger)} {shape_infos} {details_infos}":"
                 </EffectLi>
-                {trigger
-                    .description
-                    .map(|description| view! { <EffectLi>{description}</EffectLi> }.into_any())
-                    .unwrap_or(view! { {effects} }.into_any())}
+                <EffectLi>
+                    <ul class="list-none xl:space-y-1">
+                        {trigger
+                            .description
+                            .map(|description| {
+                                view! { <EffectLi>{description}</EffectLi> }.into_any()
+                            })
+                            .unwrap_or(view! { {effects} }.into_any())}
+                    </ul>
+                </EffectLi>
             </ul>
         </EffectLi>
     }
@@ -326,15 +332,22 @@ fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {
 }
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
-    skill_status_filter_str(
-        &StatSkillFilter {
-            skill_type: status_trigger.skill_type,
-            ..Default::default()
+    format!(
+        "{}{}",
+        if status_trigger.is_triggered == Some(false) {
+            "self-cast "
+        } else {
+            ""
         },
-        &status_trigger.status_filter,
-        false,
+        skill_status_filter_str(
+            &StatSkillFilter {
+                skill_type: status_trigger.skill_type,
+                ..Default::default()
+            },
+            &status_trigger.status_filter,
+            false,
+        )
     )
-    .to_string()
 }
 
 fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {
