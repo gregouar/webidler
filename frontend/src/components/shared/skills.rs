@@ -485,23 +485,23 @@ fn mastery_card_xp_tooltip(
     is_max_level: bool,
     experience_gained: Option<f64>,
 ) -> AnyView {
-    view! {
-        "Experience: "
-        {if is_max_level {
-            "Full".to_string()
-        } else {
-            format!("{}/{}", format_number(relative_experience), format_number(next_level_cost))
-        }}
-        {experience_gained
-            .map(|experience_gained| {
-                view! {
-                    " (+"
-                    {format_number(experience_gained)}
-                    ")"
-                }
-            })}
+    if is_max_level {
+        view! { "Max Level" }.into_any()
+    } else {
+        view! {
+            "Experience: "
+            {format!("{}/{}", format_number(relative_experience), format_number(next_level_cost))}
+            {experience_gained
+                .map(|experience_gained| {
+                    view! {
+                        " (+"
+                        {format_number(experience_gained)}
+                        ")"
+                    }
+                })}
+        }
+        .into_any()
     }
-    .into_any()
 }
 
 fn skill_type_frame_border(skill_type: SkillType) -> &'static str {
