@@ -3059,24 +3059,25 @@
         "socket": false
       },
       "39e8a993-9893-42f8-b75a-ff0df25bb6d0": {
-        "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "name": "Greater Damage over Time Duration",
+        "icon": "passives/solar_time.svg",
         "x": 57.5,
         "y": -110.0,
         "size": 1,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 12.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3084,14 +3085,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 6.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4729,25 +4731,24 @@
         "socket": false
       },
       "52f99688-5acc-486c-95e5-e595a61e0755": {
-        "name": "Greater Effects Duration",
-        "icon": "passives/duration.svg",
+        "name": "Greater Success Chance",
+        "icon": "passives/success.svg",
         "x": 95.0,
         "y": 65.0,
         "size": 1,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4755,15 +4756,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4797,7 +4797,7 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4822,7 +4822,7 @@
               }
             },
             "modifier": "More",
-            "value": 14.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6980,24 +6980,25 @@
         "socket": false
       },
       "725a5390-2c74-47b9-93ee-80ba57ad29b0": {
-        "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "name": "Damage over Time Duration",
+        "icon": "passives/solar_time.svg",
         "x": 82.5,
         "y": -100.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -7005,14 +7006,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7891,7 +7893,7 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -7916,7 +7918,7 @@
               }
             },
             "modifier": "More",
-            "value": 14.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11249,25 +11251,24 @@
         "socket": false
       },
       "ae845698-b47f-47ca-bd07-8504a5eecf16": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
         "x": 102.5,
         "y": 75.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 5.0
           }
         ],
         "triggers": [],
@@ -11275,15 +11276,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11756,25 +11756,24 @@
         "socket": false
       },
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
         "x": 95.0,
         "y": 85.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 5.0
           }
         ],
         "triggers": [],
@@ -11782,15 +11781,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11852,7 +11850,7 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -11868,7 +11866,7 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12081,24 +12079,25 @@
         "socket": false
       },
       "c25151c2-f5bd-4992-9626-555178681fd7": {
-        "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "name": "Damage over Time Duration",
+        "icon": "passives/solar_time.svg",
         "x": 70.0,
         "y": -105.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -12106,14 +12105,15 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13444,14 +13444,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -13479,6 +13471,14 @@
                   },
                   {
                     "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -13572,16 +13572,24 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
+                      "skill_id": null
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -13597,20 +13605,12 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
                       "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "min_max": null
                     }
                   }
                 ],
@@ -13700,21 +13700,20 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -13726,15 +13725,16 @@
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "min_max": null
                     }
                   },
                   {
-                    "StatusEscalation": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
@@ -14711,7 +14711,7 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14727,7 +14727,7 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
                 "skill_type": null,
                 "skill_id": null
               }
