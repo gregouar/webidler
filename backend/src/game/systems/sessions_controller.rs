@@ -211,7 +211,8 @@ async fn new_game_instance(
         benedictions_controller::generate_effects_map_from_benedictions(
             &master_store.benedictions_store,
             &player_benedictions,
-        ),
+        )
+        .into(),
         player_skill_masteries,
     );
 

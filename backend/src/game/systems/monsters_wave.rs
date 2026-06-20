@@ -283,12 +283,16 @@ fn generate_monster_specs(
         })
         .collect();
 
-    let mut effects: Vec<_> = (&area_specs.effects).into();
-    let (character_specs, converted_effects) =
-        characters_updater::update_character_specs(&monster_specs.character_specs, &effects);
-    monster_specs.character_specs = character_specs;
-    effects.extend(converted_effects);
-    // monster_specs.character_specs.effects = effects_map;
+    monster_specs.character_specs = characters_updater::update_character_specs(
+        statuses_store,
+        &Default::default(),
+        &monster_specs.character_specs,
+        &Default::default(),
+        None,
+        (&area_specs.effects).into(),
+    );
+
+    let effects = &monster_specs.character_specs.effects;
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
     }

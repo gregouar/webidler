@@ -1,4 +1,4 @@
-use std::{collections::HashMap, iter, time::Duration};
+use std::{collections::HashMap, time::Duration};
 
 use shared::{
     constants::{DEFAULT_MAX_LEVEL, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST},
@@ -16,17 +16,14 @@ use shared::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
         skill_mastery::PlayerSkillMasteries,
-        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
+        stat_effect::{StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
         values::{AtLeastOne, NonNegative},
     },
 };
 use strum::IntoEnumIterator;
 
-use crate::game::{
-    data::{DataInit, event::EventsQueue, master_store::StatusesStore},
-    systems::{stats_updater, statuses_controller},
-};
+use crate::game::data::{DataInit, event::EventsQueue, master_store::StatusesStore};
 
 use super::{characters_updater, skills_updater};
 
@@ -45,7 +42,7 @@ pub fn init_player_base_specs(
     character_name: String,
     character_portrait: String,
     max_area_level: AreaLevel,
-    effects: EffectsMap,
+    effects: Vec<StatEffect>,
     skill_masteries: PlayerSkillMasteries,
 ) -> PlayerBaseSpecs {
     PlayerBaseSpecs {
@@ -107,53 +104,40 @@ pub fn reset_player(player_state: &mut PlayerState) {
 pub fn update_player_specs(
     statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
-    player_specs: &PlayerSpecs,
+    // player_specs: &PlayerSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
     area_threat: &AreaThreat,
 ) -> PlayerSpecs {
-    let effects_map = EffectsMap::combine_all(
+    let effects: Vec<_> = [
+        player_base_specs.effects.clone(),
         player_inventory
             .equipped_items()
-            .map(|(_, i)| {
+            .flat_map(|(_, i)| {
                 i.modifiers
                     .aggregate_effects(AffixEffectScope::Global, false)
+                    .into_iter()
             })
-            .chain(iter::once(passive::generate_effects_map_from_passives(
-                passives_tree_specs,
-                &passives_tree_state.ascension,
-                &passives_tree_state.purchased_nodes,
-            )))
-            .chain(iter::once(
-                statuses_controller::generate_effects_map_from_statuses(
-                    statuses_store,
-                    &player_state.character_state.statuses,
-                ),
-            ))
-            .chain(iter::once(
-                stats_updater::compute_conditional_modifiers(
-                    statuses_store,
-                    area_threat,
-                    &player_specs.character_specs.character_attrs,
-                    &player_state.character_state,
-                    Some(player_inventory),
-                    &player_specs.character_specs.conditional_modifiers,
-                )
-                .into(),
-            ))
-            .chain(iter::once(player_base_specs.effects.clone())),
-    );
-
-    let mut effects: Vec<_> = (&effects_map).into();
+            .collect(),
+        passive::generate_effects_fom_passives(
+            passives_tree_specs,
+            &passives_tree_state.ascension,
+            &passives_tree_state.purchased_nodes,
+        ),
+    ]
+    .concat();
 
     let mut player_specs = compute_player_specs(
         statuses_store,
+        area_threat,
         player_base_specs,
+        player_state,
         player_inventory,
-        &mut effects,
+        effects,
     );
+    let effects = &player_specs.character_specs.effects;
 
     for trigger_specs in passives_tree_state
         .purchased_nodes
@@ -190,19 +174,18 @@ pub fn update_player_specs(
         CharacterId::Player,
         &mut player_specs.character_specs,
         &player_state.character_state,
-        &effects,
     );
-
-    player_specs.character_specs.effects = effects.into();
 
     player_specs
 }
 
 fn compute_player_specs(
     statuses_store: &StatusesStore,
+    area_threat: &AreaThreat,
     player_base_specs: &PlayerBaseSpecs,
+    player_state: &PlayerState,
     player_inventory: &PlayerInventory,
-    effects: &mut Vec<StatEffect>,
+    effects: Vec<StatEffect>,
 ) -> PlayerSpecs {
     let mut player_specs = PlayerSpecs::init(player_base_specs);
 
@@ -231,10 +214,16 @@ fn compute_player_specs(
         .value
         .apply_modifier(total_block as f64, Modifier::Flat);
 
-    let (character_specs, converted_effects) =
-        characters_updater::update_character_specs(&player_specs.character_specs, effects);
-    player_specs.character_specs = character_specs;
-    effects.extend(converted_effects);
+    player_specs.character_specs = characters_updater::update_character_specs(
+        statuses_store,
+        area_threat,
+        &player_specs.character_specs,
+        &player_state.character_state,
+        Some(player_inventory),
+        effects,
+    );
+
+    let effects = &player_specs.character_specs.effects;
 
     let ModifiablePlayerSpecs {
         movement_cooldown,
@@ -248,7 +237,7 @@ fn compute_player_specs(
             threat_gain: player_specs.threat_gain.into(),
             restore_on_hit: Default::default(),
         },
-        effects,
+        &effects,
     );
 
     player_specs.movement_cooldown = *movement_cooldown;
@@ -301,7 +290,7 @@ fn compute_player_specs(
                 skill_id.to_string(),
                 &player_base_skill.base_skill_specs,
                 player_base_skill.upgrade_level,
-                effects,
+                &effects,
                 &player_specs.character_specs.character_attrs,
                 Some(player_inventory),
             )
@@ -309,7 +298,7 @@ fn compute_player_specs(
         .collect();
 
     player_specs.computed_status_triggers =
-        compute_status_triggers(statuses_store, &player_specs, effects);
+        compute_status_triggers(statuses_store, &player_specs, &effects);
 
     player_specs
 }
@@ -414,7 +403,7 @@ fn modify_player_specs(
 fn compute_status_triggers(
     statuses_store: &StatusesStore,
     player_specs: &PlayerSpecs,
-    effects: &mut [StatEffect],
+    effects: &[StatEffect],
 ) -> HashMap<String, TriggerEffect> {
     // skills_updater::update_skill_specs(
     //     statuses_store,

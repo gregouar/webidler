@@ -5,7 +5,7 @@ use shared::data::{
     conditional_modifier::Condition,
     modifier::Modifier,
     skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusFilter, StatType, StatusDamageType},
+    stat_effect::{EffectsMap, StatSkillFilter, StatStatusFilter, StatType, StatusDamageType},
     trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
@@ -38,6 +38,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     //         .copied()
     //         .unwrap_or_default()
     // };
+
+    let effects_map = Memo::new(move |_| {
+        EffectsMap::from(
+            game_context
+                .player_specs
+                .read()
+                .character_specs
+                .effects
+                .clone(),
+        )
+    });
 
     view! {
         <MenuPanel open=open center=false>
@@ -470,6 +481,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 {make_stat(
+                                    effects_map,
                                     StatType::Restore {
                                         restore_type: None,
                                         skill_filter: Default::default(),
@@ -477,6 +489,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     Modifier::Increased,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Restore {
                                         restore_type: Some(RestoreType::Life),
                                         skill_filter: Default::default(),
@@ -485,6 +498,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Restore {
                                         restore_type: Some(RestoreType::Mana),
                                         skill_filter: Default::default(),
@@ -493,6 +507,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::StatusDuration {
                                         status_filter: Default::default(),
                                         skill_filter: Default::default(),
@@ -500,6 +515,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     Modifier::Increased,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::StatusPower {
                                         status_filter: Default::default(),
                                         skill_filter: Default::default(),
@@ -509,6 +525,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 )}
                                 // TODO: More for stun?
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::StatusPower {
                                         status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
@@ -521,6 +538,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::StatusDuration {
                                         status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
@@ -532,6 +550,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::StatusPower {
                                         status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
@@ -544,6 +563,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::StatusDuration {
                                         status_filter: Default::default(),
                                         skill_filter: StatSkillFilter {
@@ -555,6 +575,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::SuccessChance {
                                         skill_filter: Default::default(),
                                         effect_type: None,
@@ -566,10 +587,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
 
                             <StatCategory title="Combat">
                                 {make_stat(
+                                    effects_map,
                                     StatType::Speed(Default::default()),
                                     Modifier::Increased,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::Speed(StatSkillFilter {
                                         skill_type: Some(SkillType::Attack),
                                         ..Default::default()
@@ -577,6 +600,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     Modifier::Increased,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::Speed(StatSkillFilter {
                                         skill_type: Some(SkillType::Spell),
                                         ..Default::default()
@@ -584,10 +608,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     Modifier::Increased,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::CritChance(Default::default()),
                                     Modifier::Increased,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::CritChance(StatSkillFilter {
                                         skill_type: Some(SkillType::Spell),
                                         ..Default::default()
@@ -596,6 +622,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::StatConditionalModifier {
                                         stat: Box::new(StatType::Damage {
                                             skill_filter: Default::default(),
@@ -612,6 +639,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                             </StatCategory>
                             <StatCategory title="Damage">
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: Default::default(),
                                         damage_type: None,
@@ -622,6 +650,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Attack),
@@ -634,6 +663,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     Modifier::More,
                                 )}
                                 {make_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: StatSkillFilter {
                                             skill_type: Some(SkillType::Spell),
@@ -646,6 +676,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     Modifier::More,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: Default::default(),
                                         damage_type: Some(DamageType::Physical),
@@ -656,6 +687,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: Default::default(),
                                         damage_type: Some(DamageType::Fire),
@@ -666,6 +698,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: Default::default(),
                                         damage_type: Some(DamageType::Poison),
@@ -676,6 +709,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::Damage {
                                         skill_filter: Default::default(),
                                         damage_type: Some(DamageType::Storm),
@@ -686,6 +720,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )} // TODO: Elemental dot?
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::StatusPower {
                                         status_filter: StatStatusFilter {
                                             status_id: None,
@@ -698,6 +733,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     0.0,
                                 )}
                                 {make_opt_stat(
+                                    effects_map,
                                     StatType::CritDamage(Default::default()),
                                     Modifier::Increased,
                                     0.0,
@@ -727,28 +763,30 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     }
 }
 
-fn make_opt_stat(stat_type: StatType, modifier: Modifier, default: f64) -> impl IntoView + use<> {
-    let game_context = expect_context::<GameContext>();
-
+fn make_opt_stat(
+    effects_map: Memo<EffectsMap>,
+    stat_type: StatType,
+    modifier: Modifier,
+    default: f64,
+) -> impl IntoView + use<> {
     view! {
         {move || {
-            let value = game_context
-                .player_specs
+            let value = effects_map
                 .read()
-                .character_specs
-                .effects
                 .0
                 .get(&(stat_type.clone(), modifier, false))
                 .copied()
                 .unwrap_or_default();
-            (default != value).then(|| make_stat(stat_type.clone(), modifier))
+            (default != value).then(|| make_stat(effects_map, stat_type.clone(), modifier))
         }}
     }
 }
 
-fn make_stat(stat_type: StatType, modifier: Modifier) -> impl IntoView + use<> {
-    let game_context = expect_context::<GameContext>();
-
+fn make_stat(
+    effects_map: Memo<EffectsMap>,
+    stat_type: StatType,
+    modifier: Modifier,
+) -> impl IntoView + use<> {
     view! {
         <Stat
             label=format!(
@@ -757,11 +795,8 @@ fn make_stat(stat_type: StatType, modifier: Modifier) -> impl IntoView + use<> {
                 format_multiplier_stat_name(&stat_type),
             )
             value=move || format_effect_value(
-                game_context
-                    .player_specs
+                effects_map
                     .read()
-                    .character_specs
-                    .effects
                     .0
                     .get(&(stat_type.clone(), modifier, false))
                     .copied()

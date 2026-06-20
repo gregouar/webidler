@@ -8,7 +8,7 @@ use crate::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
     skill::{DamageType, RepeatedSkillEffect, SkillType},
-    stat_effect::EffectsMap,
+    stat_effect::StatEffect,
     trigger::TriggersMap,
     values::{AtLeastOne, BoundedValue, NonNegative, Percent},
 };
@@ -62,7 +62,7 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub triggers: TriggersMap,
     #[serde(default)]
-    pub effects: EffectsMap,
+    pub effects: Vec<StatEffect>,
 
     #[serde(default, skip_serializing, skip_deserializing)]
     pub conditional_modifiers: Vec<ConditionalModifier>,

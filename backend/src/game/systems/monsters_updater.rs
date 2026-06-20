@@ -11,10 +11,7 @@ use shared::{
     },
 };
 
-use crate::game::{
-    data::{event::EventsQueue, master_store::StatusesStore},
-    systems::{stats_updater, statuses_controller},
-};
+use crate::game::data::{event::EventsQueue, master_store::StatusesStore};
 
 use super::{characters_updater, skills_updater};
 
@@ -59,36 +56,27 @@ pub fn update_monster_specs(
     monster_state: &MonsterState,
     area_threat: &AreaThreat,
 ) {
-    let mut effects: Vec<_> = (&statuses_controller::generate_effects_map_from_statuses(
-        statuses_store,
-        &monster_state.character_state.statuses,
-    ))
-        .into();
-    effects.push(StatEffect {
-        stat: StatType::Damage {
-            skill_filter: Default::default(),
-            damage_type: None,
-            min_max: None,
-            is_hit: None,
-        },
-        modifier: Modifier::Increased,
-        value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
-        bypass_ignore: false,
-    });
-    effects.extend(stats_updater::compute_conditional_modifiers(
+    monster_specs.character_specs = characters_updater::update_character_specs(
         statuses_store,
         area_threat,
-        &monster_specs.character_specs.character_attrs,
+        &base_specs.character_specs,
         &monster_state.character_state,
         None,
-        &monster_specs.character_specs.conditional_modifiers,
-    ));
+        [StatEffect {
+            stat: StatType::Damage {
+                skill_filter: Default::default(),
+                damage_type: None,
+                min_max: None,
+                is_hit: None,
+            },
+            modifier: Modifier::Increased,
+            value: ((1.0 + THREAT_EFFECT).powf(area_threat.threat_level as f64) - 1.0) * 100.0,
+            bypass_ignore: false,
+        }]
+        .into(),
+    );
 
-    // Compute character specs & get converted stats resulting
-    let (character_specs, converted_effects) =
-        characters_updater::update_character_specs(&base_specs.character_specs, &effects);
-    monster_specs.character_specs = character_specs;
-    effects.extend(converted_effects);
+    let effects = &monster_specs.character_specs.effects;
 
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
@@ -111,6 +99,5 @@ pub fn update_monster_specs(
         character_id,
         &mut monster_specs.character_specs,
         &monster_state.character_state,
-        &effects,
     );
 }

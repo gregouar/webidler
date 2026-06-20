@@ -9,7 +9,7 @@ use crate::data::{
     character::{CharacterAttrs, CharacterStatic},
     skill::BaseSkillSpecs,
     skill_mastery::PlayerSkillMasteries,
-    stat_effect::EffectsMap,
+    stat_effect::StatEffect,
     trigger::TriggerEffect,
     values::{AtLeastOne, NonNegative},
 };
@@ -21,7 +21,7 @@ use super::item::{ItemSlot, ItemSpecs};
 pub struct PlayerBaseSpecs {
     pub character_static: CharacterStatic,
     pub character_attrs: CharacterAttrs,
-    pub effects: EffectsMap,
+    pub effects: Vec<StatEffect>,
 
     pub buy_skill_cost: f64,
     pub max_skills: u8,

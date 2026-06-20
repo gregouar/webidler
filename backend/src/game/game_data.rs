@@ -171,7 +171,7 @@ impl GameInstanceData {
         let player_specs = player_updater::update_player_specs(
             &master_store.statuses_store,
             &player_base_specs,
-            &player_specs,
+            // &player_specs,
             &player_state,
             &player_inventory,
             &passives_tree_specs,

@@ -190,13 +190,14 @@ pub fn apply_trigger_effects(
                     })
                     .collect();
 
-                let source_effects: Vec<_> = if trigger_effect.inherit_source_effects {
+                let empty_vec = Default::default();
+                let source_effects = if trigger_effect.inherit_source_effects {
                     game_data
                         .character_specs(trigger_context.source)
-                        .map(|character_specs| character_specs.effects.iter().collect())
-                        .unwrap_or_default()
+                        .map(|character_specs| &character_specs.effects)
+                        .unwrap_or(&empty_vec)
                 } else {
-                    Default::default()
+                    &empty_vec
                 };
 
                 trigger_effect

@@ -5,7 +5,7 @@ use shared::data::{
     character_status::{StatusEffectType, StatusMap, StatusSpecs, StatusState},
     player::CharacterState,
     skill::SkillType,
-    stat_effect::EffectsMap,
+    stat_effect::StatEffect,
     values::NonNegative,
 };
 
@@ -122,36 +122,66 @@ fn update_status(
 //     )
 // }
 
-pub fn generate_effects_map_from_statuses(
+pub fn generate_effects_from_statuses(
     statuses_store: &StatusesStore,
     statuses: &StatusMap,
-) -> EffectsMap {
-    let mut effects_map = HashMap::new();
+) -> Vec<StatEffect> {
+    statuses
+        .iter()
+        .filter_map(|(status_id, status_stacks)| {
+            statuses_store
+                .get(status_id)
+                .map(|status_specs| (status_specs, status_stacks))
+        })
+        .flat_map(|(status_specs, status_stacks)| {
+            status_specs.effects.iter().filter_map(|status_effect| {
+                if let StatusEffectType::StatModifier {
+                    stat,
+                    modifier,
+                    debuff,
+                } = &status_effect.status_effect_type
+                {
+                    Some(StatEffect {
+                        stat: stat.clone(),
+                        modifier: *modifier,
+                        value: status_stacks
+                            .iter()
+                            .map(|status_state| {
+                                status_effect.computed_value(status_state.value).get()
+                            })
+                            .sum::<f64>()
+                            * if *debuff { -1.0 } else { 1.0 },
+                        bypass_ignore: false,
+                    })
+                } else {
+                    None
+                }
+            })
+        })
+        .collect()
 
-    for (status_id, status_stacks) in statuses.iter() {
-        let Some(status_specs) = statuses_store.get(status_id) else {
-            continue;
-        };
+    // for (status_id, status_stacks) in statuses.iter() {
+    //     let Some(status_specs) = statuses_store.get(status_id) else {
+    //         continue;
+    //     };
 
-        for status_effect in status_specs.effects.iter() {
-            if let StatusEffectType::StatModifier {
-                stat,
-                modifier,
-                debuff,
-            } = &status_effect.status_effect_type
-            {
-                *effects_map
-                    .entry((stat.clone(), *modifier, false))
-                    .or_default() += status_stacks
-                    .iter()
-                    .map(|status_state| status_effect.computed_value(status_state.value).get())
-                    .sum::<f64>()
-                    * if *debuff { -1.0 } else { 1.0 };
-            }
-        }
-    }
-
-    EffectsMap(effects_map)
+    //     for status_effect in status_specs.effects.iter() {
+    //         if let StatusEffectType::StatModifier {
+    //             stat,
+    //             modifier,
+    //             debuff,
+    //         } = &status_effect.status_effect_type
+    //         {
+    //             *effects_map
+    //                 .entry((stat.clone(), *modifier, false))
+    //                 .or_default() += status_stacks
+    //                 .iter()
+    //                 .map(|status_state| status_effect.computed_value(status_state.value).get())
+    //                 .sum::<f64>()
+    //                 * if *debuff { -1.0 } else { 1.0 };
+    //         }
+    //     }
+    // }
 }
 
 pub fn initialize_status_state(
