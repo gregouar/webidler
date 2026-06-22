@@ -60,13 +60,9 @@ pub fn provide_events_context() {
         }
 
         pressed_keys.update(|pressed_keys| {
-            pressed_keys.insert(
-                keyboard_event_key(&ev)
-                    .as_deref()
-                    .map(Key::from)
-                    .unwrap_or(Key::Unknown),
-                true,
-            );
+            let event_key = keyboard_event_key_kind(&ev);
+            sync_modifier_keys(pressed_keys, &ev, event_key);
+            pressed_keys.insert(event_key, true);
         });
     });
 
@@ -86,13 +82,11 @@ pub fn provide_events_context() {
             ev.stop_propagation();
         }
 
-        pressed_keys.write().insert(
-            keyboard_event_key(&ev)
-                .as_deref()
-                .map(Key::from)
-                .unwrap_or(Key::Unknown),
-            false,
-        );
+        pressed_keys.update(|pressed_keys| {
+            let event_key = keyboard_event_key_kind(&ev);
+            sync_modifier_keys(pressed_keys, &ev, event_key);
+            pressed_keys.insert(event_key, false);
+        });
     });
 
     let _ = use_event_listener(use_document(), visibilitychange, move |_| {
@@ -124,7 +118,7 @@ impl From<&str> for Key {
         match code {
             "Alt" | "AltLeft" | "AltRight" => Key::Alt,
             "Control" | "ControlLeft" | "ControlRight" => Key::Ctrl,
-            "Shift" => Key::Shift,
+            "Shift" | "ShiftLeft" | "ShiftRight" => Key::Shift,
             "Space" => Key::Space,
             "Enter" => Key::Enter,
             "Escape" => Key::Escape,
@@ -133,10 +127,31 @@ impl From<&str> for Key {
             "ArrowLeft" => Key::ArrowLeft,
             "ArrowRight" => Key::ArrowRight,
             "Delete" => Key::Delete,
+            s if s.len() == 4 && s.starts_with("Key") => {
+                Key::Character(s.chars().nth(3).unwrap().to_ascii_lowercase())
+            }
             s if s.len() == 1 => Key::Character(s.chars().next().unwrap()),
             _ => Key::Unknown,
         }
     }
+}
+
+fn keyboard_event_key_kind(ev: &web_sys::KeyboardEvent) -> Key {
+    match keyboard_event_key(ev).map(|key| Key::from(key.as_str())) {
+        Some(Key::Unknown) | None => keyboard_event_code(ev).map(|code| Key::from(code.as_str())),
+        event_key => event_key,
+    }
+    .unwrap_or(Key::Unknown)
+}
+
+fn sync_modifier_keys(
+    pressed_keys: &mut HashMap<Key, bool>,
+    ev: &web_sys::KeyboardEvent,
+    event_key: Key,
+) {
+    pressed_keys.insert(Key::Alt, ev.alt_key() || event_key == Key::Alt);
+    pressed_keys.insert(Key::Ctrl, ev.ctrl_key() || event_key == Key::Ctrl);
+    pressed_keys.insert(Key::Shift, ev.shift_key() || event_key == Key::Shift);
 }
 
 fn is_text_input_target(ev: &web_sys::KeyboardEvent) -> bool {
