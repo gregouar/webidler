@@ -1,0 +1,22 @@
+{
+    "blessing_haste": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "blessing_crit": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "blessing_protection": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "blessing_heal": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "meditate": {
+        "max_level": 100,
+        "upgrades": { }
+    }
+}
