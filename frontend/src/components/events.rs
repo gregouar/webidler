@@ -122,8 +122,8 @@ pub enum Key {
 impl From<&str> for Key {
     fn from(code: &str) -> Self {
         match code {
-            "Alt" => Key::Alt,
-            "Control" => Key::Ctrl,
+            "Alt" | "AltLeft" | "AltRight" => Key::Alt,
+            "Control" | "ControlLeft" | "ControlRight" => Key::Ctrl,
             "Shift" => Key::Shift,
             "Space" => Key::Space,
             "Enter" => Key::Enter,
