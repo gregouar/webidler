@@ -169,6 +169,7 @@ impl GameInstanceData {
         let player_state = PlayerState::init(&player_specs);
         // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
+            &master_store.skill_masteries_store,
             &master_store.statuses_store,
             &player_base_specs,
             // &player_specs,

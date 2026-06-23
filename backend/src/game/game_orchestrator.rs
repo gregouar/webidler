@@ -61,6 +61,7 @@ pub async fn tick(
         game_data.player_state.character_state.dirty_specs = false;
 
         *game_data.player_specs.mutate() = player_updater::update_player_specs(
+            &master_store.skill_masteries_store,
             &master_store.statuses_store,
             game_data.player_base_specs.read(),
             // game_data.player_specs.read(),
@@ -284,6 +285,7 @@ fn respawn_player(game_data: &mut GameInstanceData, master_store: &MasterStore) 
     game_data.monster_states.clear();
 
     *game_data.player_specs.mutate() = player_updater::update_player_specs(
+        &master_store.skill_masteries_store,
         &master_store.statuses_store,
         game_data.player_base_specs.read(),
         // game_data.player_specs.read(),

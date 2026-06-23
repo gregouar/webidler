@@ -11,6 +11,7 @@ use shared::data::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
         SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
+    skill_mastery::{SkillMasterySpecs, SkillMasteryState},
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
@@ -71,6 +72,7 @@ pub fn update_skill_specs(
     effects: &[StatEffect],
     character_attrs: &CharacterAttrs,
     inventory: Option<&PlayerInventory>,
+    skill_mastery: Option<(&SkillMasterySpecs, &SkillMasteryState)>,
 ) -> SkillSpecs {
     let level_modifier = effects
         .iter()
@@ -102,6 +104,15 @@ pub fn update_skill_specs(
         triggers: base_skill_specs.triggers.clone(),
         level_modifier,
     };
+
+    if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery {
+        apply_skill_mastery(
+            statuses_store,
+            &mut skill_specs,
+            skill_mastery_specs,
+            skill_mastery_state,
+        );
+    }
 
     let local_effects: Vec<_> = (&EffectsMap::combine_all(
         std::iter::once(compute_skill_upgrade_effects(
@@ -914,4 +925,29 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     None
+}
+
+fn apply_skill_mastery(
+    statuses_store: &StatusesStore,
+    skill_specs: &mut SkillSpecs,
+    skill_mastery_specs: &SkillMasterySpecs,
+    skill_mastery_state: &SkillMasteryState,
+) {
+    let stat_effects: Vec<_> = skill_mastery_specs
+        .upgrades
+        .iter()
+        .filter_map(|(upgrade_id, upgrade_effect)| {
+            let upgrade_level = skill_mastery_state
+                .upgrades_bought
+                .get(upgrade_id)
+                .copied()
+                .unwrap_or_default();
+
+            (upgrade_level > 0)
+                .then(|| upgrade_effect.compute_stat_effect(upgrade_level))
+                .flatten()
+        })
+        .collect();
+
+    apply_effects_to_skill_specs(statuses_store, skill_specs, stat_effects.iter());
 }

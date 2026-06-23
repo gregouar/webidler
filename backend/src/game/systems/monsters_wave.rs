@@ -267,6 +267,7 @@ fn generate_monster_specs(
                     &upgrade_effects,
                     &monster_specs.character_specs.character_attrs,
                     None,
+                    None,
                 )
             } else {
                 let effects: Vec<_> = (&skills_updater::compute_skill_upgrade_effects(
@@ -281,6 +282,7 @@ fn generate_monster_specs(
                     1,
                     &effects,
                     &monster_specs.character_specs.character_attrs,
+                    None,
                     None,
                 )
             }

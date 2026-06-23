@@ -23,7 +23,11 @@ use shared::{
 };
 use strum::IntoEnumIterator;
 
-use crate::game::data::{DataInit, event::EventsQueue, master_store::StatusesStore};
+use crate::game::data::{
+    DataInit,
+    event::EventsQueue,
+    master_store::{SkillMasteriesStore, StatusesStore},
+};
 
 use super::{characters_updater, skills_updater};
 
@@ -102,6 +106,7 @@ pub fn reset_player(player_state: &mut PlayerState) {
 // to have it working with the dynamic statuses.
 #[allow(clippy::too_many_arguments)]
 pub fn update_player_specs(
+    skill_masteries_store: &SkillMasteriesStore,
     statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
     // player_specs: &PlayerSpecs,
@@ -130,6 +135,7 @@ pub fn update_player_specs(
     .concat();
 
     let mut player_specs = compute_player_specs(
+        skill_masteries_store,
         statuses_store,
         area_threat,
         player_base_specs,
@@ -180,6 +186,7 @@ pub fn update_player_specs(
 }
 
 fn compute_player_specs(
+    skill_masteries_store: &SkillMasteriesStore,
     statuses_store: &StatusesStore,
     area_threat: &AreaThreat,
     player_base_specs: &PlayerBaseSpecs,
@@ -293,6 +300,9 @@ fn compute_player_specs(
                 effects,
                 &player_specs.character_specs.character_attrs,
                 Some(player_inventory),
+                skill_masteries_store
+                    .get(skill_id)
+                    .zip(player_base_specs.skill_masteries.masteries.get(skill_id)),
             )
         })
         .collect();
