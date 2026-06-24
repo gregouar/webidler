@@ -1,8 +1,9 @@
-use std::{sync::Arc, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
+    player::PlayerBaseSkill,
     skill::{BaseSkillSpecs, SkillSpecs, SkillType},
     skill_mastery::SkillMasteryState,
 };
@@ -39,6 +40,17 @@ pub fn skill_specs_from_base(skill_id: String, base_skill_specs: &BaseSkillSpecs
         level_modifier: 0,
         ignore_stat_effects: base_skill_specs.ignore_stat_effects.clone(),
     }
+}
+
+pub fn skill_specs_with_mastery(
+    skill_id: String,
+    base_skill_specs: &BaseSkillSpecs,
+    skill_mastery_skill_specs: &HashMap<String, SkillSpecs>,
+) -> SkillSpecs {
+    skill_mastery_skill_specs
+        .get(&skill_id)
+        .cloned()
+        .unwrap_or_else(|| skill_specs_from_base(skill_id, base_skill_specs))
 }
 
 #[component]
@@ -141,7 +153,7 @@ pub fn SkillMasteryCard(
         .map(|skill| skill.name.clone())
         .unwrap_or_else(|| empty_label.unwrap_or_else(|| "Empty Slot".to_string()));
     let skill_icon = skill_specs.as_ref().map(|skill| skill.icon.clone());
-    let tooltip_specs = skill_specs.map(Arc::new);
+    let skill_specs = skill_specs.map(Arc::new);
     let is_empty = skill_icon.is_none();
     let cursor_class = if on_click.is_some() {
         "cursor-pointer"
@@ -216,7 +228,7 @@ pub fn SkillMasteryCard(
                 )></div>
             </Show>
 
-            <SkillBadge skill_type icon=skill_icon alt=skill_name.clone() tooltip_specs />
+            <SkillBadge skill_type icon=skill_icon alt=skill_name.clone() skill_specs />
 
             <div class=if compact {
                 "w-full min-w-0 text-center space-y-1"
@@ -301,21 +313,50 @@ pub fn SkillBadge(
     icon: Option<String>,
     alt: String,
     #[prop(into,default = Signal::derive(|| false))] selected: Signal<bool>,
-    #[prop(default = None)] tooltip_specs: Option<Arc<SkillSpecs>>,
+    #[prop(default = None)] skill_specs: Option<Arc<SkillSpecs>>,
+    #[prop(default = false)] display_skill_upgrades: bool,
 ) -> impl IntoView {
     let settings = expect_context::<SettingsContext>();
+    let data_context = expect_context::<DataContext>();
     let tooltip_context = use_context::<DynamicTooltipContext>();
     let empty = icon.is_none();
     let icon = icon.map(|icon| img_asset(&icon));
     let tooltip_id = RwSignal::new(0);
+
+    let player_base_skill = skill_specs.clone().and_then(|skill_specs| {
+        data_context
+            .skill_specs
+            .read()
+            .get(&skill_specs.skill_id)
+            .cloned()
+            .map(|base_skill_specs| {
+                Arc::new(PlayerBaseSkill {
+                    next_upgrade_cost: base_skill_specs.upgrade_cost,
+                    base_skill_specs,
+                    item_slot: None,
+                    upgrade_level: 0,
+                })
+            })
+    });
     let show_tooltip = {
-        let tooltip_specs = tooltip_specs.clone();
+        let skill_specs = skill_specs.clone();
+        let player_base_skill = player_base_skill.clone();
         move || {
-            if let (Some(tooltip_context), Some(tooltip_specs)) =
-                (tooltip_context, tooltip_specs.clone())
+            if let (Some(tooltip_context), Some(skill_specs)) =
+                (tooltip_context, skill_specs.clone())
             {
+                let player_base_skill = player_base_skill.clone();
                 tooltip_id.set(tooltip_context.set_content(
-                    move || view! { <SkillTooltip skill_specs=tooltip_specs.clone() /> }.into_any(),
+                    move || {
+                        view! {
+                            <SkillTooltip
+                                skill_specs=skill_specs.clone()
+                                player_base_skill=player_base_skill.clone()
+                                display_skill_upgrades
+                            />
+                        }
+                        .into_any()
+                    },
                     DynamicTooltipPosition::Auto,
                 ));
             }
@@ -375,7 +416,10 @@ pub fn SkillBadge(
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }
-            on:mouseenter=move |_| show_tooltip()
+            on:mouseenter={
+                let show_tooltip = show_tooltip.clone();
+                move |_| show_tooltip()
+            }
             on:mouseleave=move |_| hide_tooltip()
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>

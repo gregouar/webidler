@@ -20,7 +20,7 @@ use crate::{
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
-            skills::{SkillMasteryCard, skill_specs_from_base},
+            skills::{SkillMasteryCard, skill_specs_with_mastery},
         },
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
@@ -196,9 +196,15 @@ fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
 
     let favorite_mastery = Memo::new(move |_| {
         let player_skill_masteries = town_context.player_skill_masteries.get();
+        let skill_mastery_skill_specs = town_context.skill_mastery_skill_specs.get();
         let skill_id = player_skill_masteries.favorite_skills.get(index)?.clone();
         let mastery = player_skill_masteries.masteries.get(&skill_id)?.clone();
-        let skill_specs = data_context.skill_specs.read().get(&skill_id)?.clone();
+        let base_skill_specs = data_context.skill_specs.read().get(&skill_id)?.clone();
+        let skill_specs = skill_specs_with_mastery(
+            skill_id.clone(),
+            &base_skill_specs,
+            &skill_mastery_skill_specs,
+        );
 
         Some((skill_id, mastery, skill_specs))
     });
@@ -207,11 +213,11 @@ fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
         {move || {
             favorite_mastery
                 .get()
-                .map(|(skill_id, skill_mastery_state, base_skill_specs)| {
+                .map(|(skill_id, skill_mastery_state, skill_specs)| {
                     let skill_id_for_click = skill_id.clone();
                     view! {
                         <SkillMasteryCard
-                            skill_specs=skill_specs_from_base(skill_id, &base_skill_specs)
+                            skill_specs
                             skill_mastery_state
                             compact=true
                             on_click=Callback::new(move |_| {

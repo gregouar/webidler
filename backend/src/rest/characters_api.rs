@@ -33,6 +33,7 @@ use crate::{
         inventory_data::inventory_data_to_player_inventory,
         passives::ascension_data_to_passives_tree_ascension,
     },
+    game::systems::skills_updater,
     rest::utils::{
         MsgPack, verify_character_in_town, verify_character_not_deleted, verify_character_user,
     },
@@ -190,6 +191,12 @@ async fn read_character_details(
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
     let passives_build = passives_build?.unwrap_or_default();
+    let skill_mastery_skill_specs = skills_updater::compute_skill_mastery_skill_specs(
+        &master_store.statuses_store,
+        &master_store.skills_store,
+        &master_store.skill_masteries_store,
+        &skill_masteries,
+    );
 
     // let last_grind = last_grind_data.map(|last_grind_data| {
     //     let (_, skills) = last_grind_data;
@@ -210,7 +217,7 @@ async fn read_character_details(
         user_stash,
         market_stash,
         skill_masteries,
-        // TODO: Return computed SkillSpecs with skill masteries applied?
+        skill_mastery_skill_specs,
     }))
 }
 

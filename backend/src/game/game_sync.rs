@@ -27,6 +27,7 @@ pub async fn sync_init_game(
                 passives_tree_state: game_data.passives_tree_state.read().clone(),
                 passives_tree_build,
                 player_base_specs: game_data.player_base_specs.read().clone(),
+                skill_mastery_skill_specs: game_data.skill_mastery_skill_specs.clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
                 auto_skills: game_data.player_controller.auto_skills.read().clone(),

@@ -6,10 +6,7 @@ use std::{
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::{
-        player::PlayerBaseSkill,
-        skill::{BaseSkillSpecs, SkillType},
-    },
+    data::skill::{SkillSpecs, SkillType},
     messages::client::BuySkillMessage,
 };
 use strum::IntoEnumIterator;
@@ -20,14 +17,12 @@ use crate::components::{
     settings::{GraphicsQuality, SettingsContext},
     shared::{
         resources::GoldCounter,
-        skills::{SkillBadge, skill_specs_from_base},
-        tooltips::SkillTooltip,
+        skills::{SkillBadge, skill_specs_with_mastery},
     },
     ui::{
         buttons::FancyButton,
         card::{CardHeader, CardInset, MenuCard},
         menu_panel::MenuPanel,
-        tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
     },
 };
 
@@ -70,11 +65,20 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
     };
 
     let available_skills = Memo::new(move |_| {
+        let skill_mastery_skill_specs = game_context.skill_mastery_skill_specs.get();
         let mut skills = data_context
             .skill_specs
             .get()
             .into_iter()
             .filter(|(_, base_skill_specs)| !base_skill_specs.hidden)
+            .map(|(skill_id, base_skill_specs)| {
+                let skill_specs = skill_specs_with_mastery(
+                    skill_id.clone(),
+                    &base_skill_specs,
+                    &skill_mastery_skill_specs,
+                );
+                (skill_id, skill_specs)
+            })
             .fold(HashMap::<_, Vec<_>>::new(), |mut acc, skill| {
                 acc.entry(skill.1.skill_type).or_default().push(skill);
                 acc
@@ -162,7 +166,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                                     >
                                         <SkillCard
                                             skill_id=skill_id.clone()
-                                            base_skill_specs=skill_specs.clone()
+                                            skill_specs=skill_specs.clone()
                                             selected=selected_skill
                                         />
                                     </For>
@@ -196,15 +200,16 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn SkillCard(
     skill_id: String,
-    base_skill_specs: BaseSkillSpecs,
+    skill_specs: SkillSpecs,
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let settings = expect_context::<SettingsContext>();
 
-    let skill_type = base_skill_specs.skill_type;
-    let skill_name = base_skill_specs.name.clone();
-    let skill_icon = base_skill_specs.icon.clone();
+    let skill_type = skill_specs.skill_type;
+    let skill_name = skill_specs.name.clone();
+    let skill_icon = skill_specs.icon.clone();
+    let skill_specs = Some(Arc::new(skill_specs));
 
     let is_selected = Signal::derive({
         let skill_id = skill_id.clone();
@@ -222,39 +227,6 @@ fn SkillCard(
                 .contains(&skill_id)
         }
     });
-
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let tooltip_id = RwSignal::new(0);
-    let show_tooltip = {
-        let skill_specs = Arc::new(skill_specs_from_base(skill_id.clone(), &base_skill_specs));
-        let player_base_skill = Some(Arc::new(PlayerBaseSkill {
-            next_upgrade_cost: base_skill_specs.upgrade_cost,
-            base_skill_specs,
-            item_slot: None,
-            upgrade_level: 0,
-        }));
-        move || {
-            let skill_specs = skill_specs.clone();
-            let player_base_skill = player_base_skill.clone();
-            tooltip_id.set(tooltip_context.set_content(
-                move || {
-                    view! {
-                        <SkillTooltip
-                            skill_specs=skill_specs.clone()
-                            player_base_skill=player_base_skill.clone()
-                        />
-                    }
-                    .into_any()
-                },
-                DynamicTooltipPosition::Auto,
-            ));
-        }
-    };
-
-    let hide_tooltip = move || {
-        tooltip_context.hide(tooltip_id.get_untracked());
-    };
-    on_cleanup(hide_tooltip);
 
     view! {
         <div
@@ -336,19 +308,7 @@ fn SkillCard(
                     )
                 }
             }
-            on:click=move |_| {
-                hide_tooltip();
-                selected.set(Some(skill_id.clone()))
-            }
-            on:touchstart={
-                let show_tooltip = show_tooltip.clone();
-                move |_| show_tooltip()
-            }
-            on:contextmenu=move |ev| {
-                ev.prevent_default();
-            }
-            on:mouseenter=move |_| show_tooltip()
-            on:mouseleave=move |_| hide_tooltip()
+            on:click=move |_| { selected.set(Some(skill_id.clone())) }
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                 <div class="pointer-events-none absolute inset-[1px] rounded-[8px] border border-white/5"></div>
@@ -365,6 +325,7 @@ fn SkillCard(
                 icon=Some(skill_icon.clone())
                 alt=skill_name.clone()
                 selected=is_selected
+                skill_specs
             />
 
             <div class="text-center">

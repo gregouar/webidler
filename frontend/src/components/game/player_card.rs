@@ -746,6 +746,7 @@ fn PlayerSkill(
                                 player_base_skill=player_base_skill
                                 // effects_map=Some(effects_map)
                                 computed_status_triggers=Some(computed_status_triggers)
+                                display_skill_upgrades=true
                             />
                         }
                     })}

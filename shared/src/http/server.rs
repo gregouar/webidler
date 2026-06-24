@@ -11,7 +11,7 @@ use crate::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     realms::Realm,
-    skill::BaseSkillSpecs,
+    skill::{BaseSkillSpecs, SkillSpecs},
     skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs},
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
@@ -125,6 +125,7 @@ pub struct GetCharacterDetailsResponse {
     pub passives_build: PurchasedNodes,
     pub benedictions: PlayerBenedictions,
     pub skill_masteries: PlayerSkillMasteries,
+    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
 
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
@@ -190,6 +191,7 @@ pub struct BuyBenedictionsResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SaveSkillMasteriesResponse {
     pub skill_masteries: PlayerSkillMasteries,
+    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
 }
 
 // Market

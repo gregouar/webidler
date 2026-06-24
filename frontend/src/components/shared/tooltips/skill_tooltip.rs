@@ -107,6 +107,7 @@ pub fn SkillTooltip(
     #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
     // #[prop(default= None)] effects_map: Option<EffectsMap>,
     #[prop(default= None)] computed_status_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
+    #[prop(default = false)] display_skill_upgrades: bool,
 ) -> impl IntoView {
     let palette = TooltipFramePalette {
         border_class: "border-[#70508a]/92",
@@ -288,22 +289,29 @@ pub fn SkillTooltip(
                             {effects_tooltip::formatted_effects_list(auto_effects)}
                         </ul>
 
-                        <Separator />
-                        <p class="text-xs xl:text-sm text-stone-400 ">
-                            "Level: "
-                            {if skill_specs.level_modifier > 0 {
+                        {(display_skill_upgrades)
+                            .then(|| {
                                 view! {
-                                    <span class="text-blue-300">
-                                        {upgrade_level.saturating_add(skill_specs.level_modifier)}
-                                    </span>
+                                    <Separator />
+                                    <p class="text-xs xl:text-sm text-stone-400 ">
+                                        "Level: "
+                                        {if skill_specs.level_modifier > 0 {
+                                            view! {
+                                                <span class="text-blue-300">
+                                                    {upgrade_level.saturating_add(skill_specs.level_modifier)}
+                                                </span>
+                                            }
+                                        } else {
+                                            view! {
+                                                <span class="text-stone-100">{upgrade_level}</span>
+                                            }
+                                        }} " | Upgrade Cost: "
+                                        <span class="text-stone-100">
+                                            {format_number(next_upgrade_cost)}" Gold"
+                                        </span>
+                                    </p>
                                 }
-                            } else {
-                                view! { <span class="text-stone-100">{upgrade_level}</span> }
-                            }} " | Upgrade Cost: "
-                            <span class="text-stone-100">
-                                {format_number(next_upgrade_cost)}" Gold"
-                            </span>
-                        </p>
+                            })}
                     }
                 })}
 

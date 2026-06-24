@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
@@ -14,6 +14,7 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    skill::SkillSpecs,
     user::UserCharacterId,
 };
 
@@ -39,6 +40,7 @@ pub struct GameContext {
     pub passives_tree_build: Syncable<PurchasedNodes>,
 
     pub player_base_specs: Syncable<PlayerBaseSpecs>,
+    pub skill_mastery_skill_specs: RwSignal<HashMap<String, SkillSpecs>>,
     pub player_specs: Syncable<PlayerSpecs>,
     pub player_inventory: RwSignal<PlayerInventory>,
     pub player_state: RwSignal<PlayerState>,
@@ -90,6 +92,7 @@ impl GameContext {
             passives_tree_build: Default::default(),
 
             player_base_specs: Default::default(),
+            skill_mastery_skill_specs: RwSignal::new(Default::default()),
             player_specs: Default::default(),
             player_inventory: RwSignal::new(Default::default()),
             player_state: RwSignal::new(Default::default()),

@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 use strum::IntoEnumIterator;
 
 use shared::data::{
@@ -11,7 +11,7 @@ use shared::data::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
         SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
     },
-    skill_mastery::{SkillMasterySpecs, SkillMasteryState},
+    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
@@ -19,7 +19,10 @@ use shared::data::{
     values::NonNegative,
 };
 
-use crate::game::{data::master_store::StatusesStore, systems::characters_updater};
+use crate::game::{
+    data::master_store::{SkillMasteriesStore, SkillsStore, StatusesStore},
+    systems::characters_updater,
+};
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -150,6 +153,41 @@ pub fn update_skill_specs(
     }
 
     skill_specs
+}
+
+pub fn compute_skill_mastery_skill_specs(
+    statuses_store: &StatusesStore,
+    skills_store: &SkillsStore,
+    skill_masteries_store: &SkillMasteriesStore,
+    player_skill_masteries: &PlayerSkillMasteries,
+) -> HashMap<String, SkillSpecs> {
+    player_skill_masteries
+        .masteries
+        .iter()
+        .filter(|(_, skill_mastery_state)| {
+            skill_mastery_state
+                .upgrades_bought
+                .values()
+                .any(|upgrade_level| *upgrade_level > 0)
+        })
+        .filter_map(|(skill_id, skill_mastery_state)| {
+            let base_skill_specs = skills_store.get(skill_id)?;
+            let skill_mastery_specs = skill_masteries_store.get(skill_id)?;
+            Some((
+                skill_id.clone(),
+                update_skill_specs(
+                    statuses_store,
+                    skill_id.clone(),
+                    base_skill_specs,
+                    1,
+                    &[],
+                    &CharacterAttrs::default(),
+                    None,
+                    Some((skill_mastery_specs, skill_mastery_state)),
+                ),
+            ))
+        })
+        .collect()
 }
 
 pub fn apply_effects_to_skill_specs<'a>(

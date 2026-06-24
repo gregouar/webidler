@@ -1,9 +1,11 @@
 use indexmap::IndexMap;
 use leptos::prelude::*;
+use std::collections::HashMap;
 
 use shared::data::{
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
+    skill::SkillSpecs,
     skill_mastery::PlayerSkillMasteries,
     stash::{Stash, StashType},
     temple::{BenedictionsCategory, PlayerBenedictions},
@@ -30,6 +32,7 @@ pub struct TownContext {
     pub player_benedictions: RwSignal<PlayerBenedictions>,
 
     pub player_skill_masteries: RwSignal<PlayerSkillMasteries>,
+    pub skill_mastery_skill_specs: RwSignal<HashMap<String, SkillSpecs>>,
     pub selected_skill_mastery: RwSignal<Option<String>>,
 
     // pub last_grind: RwSignal<Option<GrindStats>>,
@@ -73,6 +76,7 @@ impl Default for TownContext {
             benedictions_specs: Default::default(),
             player_benedictions: Default::default(),
             player_skill_masteries: Default::default(),
+            skill_mastery_skill_specs: Default::default(),
             selected_skill_mastery: Default::default(),
             // last_grind: Default::default(),
             selected_item_index: Default::default(),

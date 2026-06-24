@@ -131,6 +131,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         passives_tree_state,
         passives_tree_build,
         player_base_specs,
+        skill_mastery_skill_specs,
         player_specs,
         player_state,
         auto_skills,
@@ -145,6 +146,9 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.passives_tree_build.set(passives_tree_build);
     game_context.player_base_specs.set(player_base_specs);
+    game_context
+        .skill_mastery_skill_specs
+        .set(skill_mastery_skill_specs);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.player_auto_skills.set(auto_skills);

@@ -99,6 +99,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         user_stash: _,
                         market_stash: _,
                         skill_masteries,
+                        skill_mastery_skill_specs,
                     }) => {
                         town_context.character.set(character);
                         town_context.areas.set(areas);
@@ -107,6 +108,9 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         town_context.passives_tree_build.set(passives_build);
                         town_context.player_benedictions.set(benedictions);
                         town_context.player_skill_masteries.set(skill_masteries);
+                        town_context
+                            .skill_mastery_skill_specs
+                            .set(skill_mastery_skill_specs);
                         // town_context.last_grind.set(last_grind);
                     }
                     _ => {

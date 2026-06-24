@@ -33,7 +33,7 @@ use crate::{
         },
         systems::{
             benedictions_controller, inventory_controller, passives_controller,
-            skill_masteries_controller,
+            skill_masteries_controller, skills_updater,
         },
     },
     rest::utils::{verify_character_in_town, verify_character_user},
@@ -313,5 +313,13 @@ pub async fn post_save_skill_masteries(
             .await?
             .unwrap_or_default();
 
-    Ok(Json(SaveSkillMasteriesResponse { skill_masteries }))
+    Ok(Json(SaveSkillMasteriesResponse {
+        skill_mastery_skill_specs: skills_updater::compute_skill_mastery_skill_specs(
+            &master_store.statuses_store,
+            &master_store.skills_store,
+            &master_store.skill_masteries_store,
+            &skill_masteries,
+        ),
+        skill_masteries,
+    }))
 }

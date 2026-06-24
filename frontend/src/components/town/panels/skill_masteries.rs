@@ -16,7 +16,7 @@ use crate::components::{
     data_context::DataContext,
     events::{EventsContext, Key},
     shared::{
-        skills::{SkillMasteryCard, skill_specs_from_base},
+        skills::{SkillMasteryCard, skill_specs_with_mastery},
         tooltips::effects_tooltip,
     },
     town::TownContext,
@@ -158,6 +158,9 @@ fn ConfirmButton(
                     town_context
                         .player_skill_masteries
                         .set(response.skill_masteries);
+                    town_context
+                        .skill_mastery_skill_specs
+                        .set(response.skill_mastery_skill_specs);
                     open.set(false);
                 }
                 Err(e) => show_toast(
@@ -186,6 +189,7 @@ fn FavoriteSkillsPicker(
 
     let favorite_skill_slots = Memo::new(move |_| {
         let skill_specs = data_context.skill_specs.get();
+        let skill_mastery_skill_specs = town_context.skill_mastery_skill_specs.get();
         let skill_masteries = skill_masteries.get();
 
         (0..4)
@@ -195,7 +199,12 @@ fn FavoriteSkillsPicker(
                     .get(index)
                     .and_then(|skill_id| {
                         let mastery = skill_masteries.masteries.get(skill_id).cloned()?;
-                        let skill_specs = skill_specs.get(skill_id)?.clone();
+                        let base_skill_specs = skill_specs.get(skill_id)?;
+                        let skill_specs = skill_specs_with_mastery(
+                            skill_id.clone(),
+                            base_skill_specs,
+                            &skill_mastery_skill_specs,
+                        );
                         Some((skill_id.clone(), mastery, skill_specs))
                     })
             })
@@ -218,12 +227,12 @@ fn FavoriteSkillsPicker(
                     let:(index)
                 >
                     {move || favorite_skill_slots.read().get(index).cloned().flatten()
-                        .map(|(skill_id, skill_mastery_state, base_skill_specs)| {
+                        .map(|(skill_id, skill_mastery_state, skill_specs)| {
                             let skill_id_for_click = skill_id.clone();
                             view! {
                                 <div class="flex min-w-0 flex-col gap-2">
                                     <SkillMasteryCard
-                                        skill_specs=skill_specs_from_base(skill_id.clone(), &base_skill_specs)
+                                        skill_specs
                                         skill_mastery_state
                                         on_click=Callback::new(move |_| {
                                             town_context
@@ -272,6 +281,7 @@ fn MasterySkillShop(
 
     let available_skills = Memo::new(move |_| {
         let skill_specs = data_context.skill_specs.get();
+        let skill_mastery_skill_specs = town_context.skill_mastery_skill_specs.get();
         let favorite_skills = skill_masteries.get().favorite_skills;
         let mut sections = skill_masteries
             .get()
@@ -282,7 +292,12 @@ fn MasterySkillShop(
                     return None;
                 }
 
-                let skill_specs = skill_specs.get(&skill_id)?.clone();
+                let base_skill_specs = skill_specs.get(&skill_id)?;
+                let skill_specs = skill_specs_with_mastery(
+                    skill_id.clone(),
+                    base_skill_specs,
+                    &skill_mastery_skill_specs,
+                );
                 Some((skill_id, mastery, skill_specs))
             })
             .fold(
@@ -344,13 +359,13 @@ fn MasterySkillShop(
                                         <For
                                             each=move || skills.clone().into_iter()
                                             key=|(skill_id, _, _)| skill_id.clone()
-                                            let:((skill_id, skill_mastery_state, base_skill_specs))
+                                            let:((skill_id, skill_mastery_state, skill_specs))
                                         >
                                             {let skill_id_for_click = skill_id.clone();
                                             view! {
                                                 <div class="flex min-w-0 flex-col gap-2">
                                                     <SkillMasteryCard
-                                                        skill_specs=skill_specs_from_base(skill_id.clone(), &base_skill_specs)
+                                                        skill_specs
                                                         skill_mastery_state
                                                         on_click=Callback::new(move |_| {
                                                             town_context
@@ -435,6 +450,7 @@ fn MasteryUpgradePanel(
     view_only: bool,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
+    let town_context = expect_context::<TownContext>();
 
     view! {
         <div class="min-w-0 min-h-0 overflow-y-auto">
@@ -460,7 +476,17 @@ fn MasteryUpgradePanel(
                         .into_any();
                 };
                 let skill_name = data_context.skill_name(&skill_id);
-                let base_skill_specs = data_context.skill_specs.read().get(&skill_id).cloned();
+                let skill_specs = data_context
+                    .skill_specs
+                    .read()
+                    .get(&skill_id)
+                    .map(|base_skill_specs| {
+                        skill_specs_with_mastery(
+                            skill_id.clone(),
+                            base_skill_specs,
+                            &town_context.skill_mastery_skill_specs.read(),
+                        )
+                    });
                 let skill_mastery_state = skill_masteries
                     .read()
                     .masteries
@@ -477,11 +503,11 @@ fn MasteryUpgradePanel(
                 view! {
                     <section class="w-full min-w-0 space-y-4">
                         <div class="mx-auto w-full max-w-xs">
-                            {base_skill_specs
-                                .map(|base_skill_specs| {
+                            {skill_specs
+                                .map(|skill_specs| {
                                     view! {
                                         <SkillMasteryCard
-                                            skill_specs=skill_specs_from_base(skill_id.clone(), &base_skill_specs)
+                                            skill_specs
                                             skill_mastery_state
                                         />
                                     }
