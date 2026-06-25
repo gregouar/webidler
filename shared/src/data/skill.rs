@@ -80,6 +80,7 @@ pub struct SkillSpecs {
     pub skill_type: SkillType,
 
     // Should we split in two here?
+    pub usable: bool,
     pub cooldown: ModifiableValue<NonNegative>,
     pub mana_cost: ModifiableValue<NonNegative>,
 

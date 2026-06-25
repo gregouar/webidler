@@ -99,7 +99,7 @@ pub struct PlayerInventory {
 impl PlayerInventory {
     pub fn get_equipped_item(&self, slot: ItemSlot) -> Option<&ItemSpecs> {
         match self.equipped.get(&slot) {
-            Some(EquippedSlot::MainSlot(x)) => Some(&x),
+            Some(EquippedSlot::MainSlot(x)) => Some(x),
             Some(EquippedSlot::ExtraSlot(slot)) => self.get_equipped_item(*slot),
             None => None,
         }

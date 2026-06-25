@@ -17,7 +17,6 @@ use shared::data::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
     },
-    values::NonNegative,
 };
 
 use crate::game::{
@@ -31,11 +30,11 @@ pub fn update_skills_states(
     skills_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skills_specs.iter().zip(skills_states.iter_mut()) {
-        if skill_specs.cooldown.get() > 0.0 {
+        if skill_specs.cooldown.get() > 0.0 && skill_specs.usable {
             skill_state.elapsed_cooldown +=
                 (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
+            skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
         }
-        skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
     }
 }
 
@@ -67,7 +66,7 @@ pub fn reset_skills(skills_states: &mut [SkillState]) {
         skill_state.just_triggered = false;
     }
 }
-
+#[allow(clippy::too_many_arguments)]
 pub fn update_skill_specs(
     statuses_store: &StatusesStore,
     skill_id: String,
@@ -107,6 +106,7 @@ pub fn update_skill_specs(
         targets: apply_weapon_effects(base_skill_specs.targets.clone(), inventory),
         triggers: base_skill_specs.triggers.clone(),
         level_modifier,
+        usable: true,
     };
 
     if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery {
@@ -150,7 +150,7 @@ pub fn update_skill_specs(
         })
         .unwrap_or(true)
     {
-        skill_specs.cooldown = NonNegative::new(0.0).into();
+        skill_specs.usable = false;
     }
 
     skill_specs

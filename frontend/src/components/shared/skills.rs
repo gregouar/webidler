@@ -39,6 +39,7 @@ pub fn skill_specs_from_base(skill_id: String, base_skill_specs: &BaseSkillSpecs
         triggers: base_skill_specs.triggers.clone(),
         level_modifier: 0,
         ignore_stat_effects: base_skill_specs.ignore_stat_effects.clone(),
+        usable: true,
     }
 }
 
