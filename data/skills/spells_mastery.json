@@ -13,7 +13,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -31,7 +31,7 @@
             "upgrade_value": 1,
             "StatEffect": {
               "stat": {
-                "CritChance": {}
+                "CritChance": { }
               },
               "modifier": "Flat"
             }
@@ -54,7 +54,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -77,7 +77,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -100,7 +100,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -123,7 +123,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -171,7 +171,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -194,9 +194,35 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
+            }
+          }
+        ]
+      },
+      "stun": {
+        "title": "Radiation Sickness",
+        "base_cost": 5,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 20,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "SuccessChance": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "effect_type": {
+                    "ApplyStatus": {
+                      "status_id": "stun"
+                    }
+                  }
+                }
+              },
+              "modifier": "Flat"
             }
           }
         ]
@@ -217,7 +243,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -228,6 +254,6 @@
   },
   "heal": {
     "max_level": 100,
-    "upgrades": {}
+    "upgrades": { }
   }
 }

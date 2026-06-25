@@ -373,7 +373,7 @@
             }
           },
           {
-            "success_chance": 30,
+            "success_chance": 0,
             "ApplyStatus": {
               "duration": [
                 1,

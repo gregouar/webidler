@@ -465,6 +465,10 @@ pub fn format_skill_effect(
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
+    if skill_effect.success_chance.value.get() <= 0.0 {
+        return None;
+    }
+
     let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
             <span class="font-semibold">{format_chance(&skill_effect.success_chance, false)}</span>
