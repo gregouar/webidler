@@ -29,7 +29,7 @@
               "ApplyStatus": {
                 "status_id": "chill",
                 "duration": 3,
-                "value": 50
+                "value": 10
               }
             }
           ]

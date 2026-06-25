@@ -1,15 +1,10 @@
-use std::vec;
 use strum::IntoEnumIterator;
 
 use shared::data::{
-    chance::{Chance, ChanceRange},
     item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSlot, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
     modifier::Modifier,
-    skill::{
-        BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType, SkillTargetsGroup, SkillType,
-        TargetType,
-    },
+    skill::{BaseSkillSpecs, DamageType, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
         compare_options,
@@ -283,81 +278,14 @@ pub fn make_weapon_skill(
     skills_store: &SkillsStore,
     item_slot: ItemSlot,
     item_level: u16,
-    weapon_specs: &WeaponSpecs,
 ) -> Option<(String, BaseSkillSpecs)> {
     let skill_id = item_slot_to_skill_id(item_slot);
     let base_skill_specs = skills_store.get(skill_id).cloned()?;
 
-    let effects = vec![
-        SkillEffect {
-            effect_type: SkillEffectType::FlatDamage {
-                damage: weapon_specs
-                    .damage
-                    .iter()
-                    .filter(|(k, _)| **k != DamageType::Poison)
-                    .map(|(&k, &v)| {
-                        (
-                            k,
-                            ChanceRange {
-                                min: v.min.as_new_base(),
-                                max: v.max.as_new_base(),
-                                lucky_chance: v.lucky_chance.as_new_base(),
-                            },
-                        )
-                    })
-                    .collect(),
-                crit_chance: Chance {
-                    value: weapon_specs.crit_chance.value.as_new_base(),
-                    lucky_chance: weapon_specs.crit_chance.lucky_chance.as_new_base(),
-                },
-                crit_damage: weapon_specs.crit_damage.as_new_base(),
-                unblockable: false,
-            },
-            success_chance: Chance::new_sure(),
-            ignore_stat_effects: Default::default(),
-            conditional_modifiers: Vec::new(),
-            independent_application: false,
-        },
-        SkillEffect {
-            effect_type: SkillEffectType::ApplyStatus {
-                status_id: "poison".into(),
-                value: weapon_specs
-                    .damage
-                    .get(&DamageType::Poison)
-                    .map(|v| ChanceRange {
-                        min: v.min.as_new_base(),
-                        max: v.max.as_new_base(),
-                        lucky_chance: v.lucky_chance.as_new_base(),
-                    })
-                    .unwrap_or_default(),
-                value_factor: 1.0,
-                duration: None,
-                escalation: None,
-                max_stacks: None,
-                damage_type: None,
-                avoidable: None,
-                replace_on_value_only: false,
-            },
-            success_chance: Chance::new_sure(),
-            ignore_stat_effects: Default::default(),
-            conditional_modifiers: Vec::new(),
-            independent_application: false,
-        },
-    ];
-
     Some((
         skill_id.to_string(),
         BaseSkillSpecs {
-            cooldown: *weapon_specs.cooldown,
             upgrade_cost: 10.0 + 0.5 * item_level as f64,
-            targets: vec![SkillTargetsGroup {
-                range: weapon_specs.range,
-                target_type: TargetType::Enemy,
-                shape: weapon_specs.shape,
-                target_dead: false,
-                repeat: Default::default(),
-                effects,
-            }],
             ..base_skill_specs
         },
     ))

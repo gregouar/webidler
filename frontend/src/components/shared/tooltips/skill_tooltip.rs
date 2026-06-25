@@ -209,7 +209,7 @@ pub fn SkillTooltip(
                     }
                         .into_any()
                 } else {
-                    view! { "Permanent" }.into_any()
+                    view! { "Cooldown: -" }.into_any()
                 }}
                 {(skill_specs.mana_cost.get() > 0.0)
                     .then(|| {
@@ -481,6 +481,18 @@ pub fn format_skill_effect(
     let mut skip = false;
 
     let base_effects = match skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { item_slot, factor } => {
+            let item_slot_str = item_tooltip::item_slot_str(item_slot);
+
+            view! {
+                <EffectLi>
+                    "Deal "
+                    <span class="font-semibold">{number::format_number(*factor * 100.0)}%</span>
+                    " of " {item_slot_str}" Damage"
+                </EffectLi>
+            }
+            .into_any()
+        }
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,
@@ -871,8 +883,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                         min_max_str(min_max),
                         damage_type_str(damage_type)
                     ),
-                    ItemStatsSource::Range => " Range".into(),
-                    ItemStatsSource::Shape => " Shape".into(),
+                    ItemStatsSource::Target => " Target".into(),
                     ItemStatsSource::Equipped => " Equipped".into(),
                 },
                 match required_item.category {
@@ -946,6 +957,9 @@ pub fn skill_effect_text(
     let _ = modifiers;
     let stat_skill_effect: Option<StatSkillEffectType> = (&effect.effect_type).into();
     match effect.effect_type {
+        SkillEffectType::WeaponEffect { item_slot, .. } => {
+            format!("Deal {} Damage", item_tooltip::item_slot_str(item_slot))
+        }
         SkillEffectType::FlatDamage { damage, .. } => {
             format!(
                 "Hit {}Damage",

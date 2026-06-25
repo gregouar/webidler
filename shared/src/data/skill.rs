@@ -169,8 +169,7 @@ pub enum ItemStatsSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    Range,
-    Shape,
+    Target,
     Equipped,
 }
 
@@ -240,6 +239,11 @@ pub struct SkillEffect {
 #[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
+    WeaponEffect {
+        item_slot: ItemSlot,
+        #[serde(default)]
+        factor: ModifiableValue<f64>,
+    },
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]

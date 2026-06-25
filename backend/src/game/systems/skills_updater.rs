@@ -2,14 +2,15 @@ use std::{collections::HashMap, time::Duration};
 use strum::IntoEnumIterator;
 
 use shared::data::{
-    chance::ChanceRange,
+    chance::{Chance, ChanceRange},
     character::CharacterAttrs,
     conditional_modifier::ConditionalModifier,
-    modifier::Modifier,
+    item::WeaponSpecs,
+    modifier::{BaseModifiableValue, Modifier},
     player::PlayerInventory,
     skill::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
-        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
+        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillTargetsGroup, SkillType,
     },
     skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stat_effect::{
@@ -103,7 +104,7 @@ pub fn update_skill_specs(
         ignore_stat_effects: base_skill_specs.ignore_stat_effects.clone(),
         cooldown: base_skill_specs.cooldown.into(),
         mana_cost: base_skill_specs.mana_cost.into(),
-        targets: base_skill_specs.targets.clone(),
+        targets: apply_weapon_effects(base_skill_specs.targets.clone(), inventory),
         triggers: base_skill_specs.triggers.clone(),
         level_modifier,
     };
@@ -153,6 +154,103 @@ pub fn update_skill_specs(
     }
 
     skill_specs
+}
+
+fn apply_weapon_effects(
+    target_groups: Vec<SkillTargetsGroup>,
+    inventory: Option<&PlayerInventory>,
+) -> Vec<SkillTargetsGroup> {
+    let Some(inventory) = inventory else {
+        return target_groups;
+    };
+
+    target_groups
+        .into_iter()
+        .map(|target| SkillTargetsGroup {
+            effects: target
+                .effects
+                .into_iter()
+                .flat_map(|skill_effect| match skill_effect.effect_type {
+                    SkillEffectType::WeaponEffect { item_slot, factor } => weapon_skill_effect(
+                        inventory
+                            .get_equipped_item(item_slot)
+                            .and_then(|item_specs| item_specs.weapon_specs.as_ref()),
+                        *factor,
+                    )
+                    .into_iter()
+                    .flatten(),
+                    _ => [Some(skill_effect), None].into_iter().flatten(),
+                })
+                .collect(),
+            ..target
+        })
+        .collect()
+}
+
+fn weapon_skill_effect(
+    weapon_specs: Option<&WeaponSpecs>,
+    factor: f64,
+) -> [Option<SkillEffect>; 2] {
+    let Some(weapon_specs) = weapon_specs else {
+        return [None, None];
+    };
+
+    [
+        Some(SkillEffect {
+            effect_type: SkillEffectType::FlatDamage {
+                damage: weapon_specs
+                    .damage
+                    .iter()
+                    .filter(|(k, _)| **k != DamageType::Poison)
+                    .map(|(&k, &v)| {
+                        (
+                            k,
+                            ChanceRange {
+                                min: v.min.multiply_value(factor).into(),
+                                max: v.max.multiply_value(factor).into(),
+                                lucky_chance: v.lucky_chance.as_new_base(),
+                            },
+                        )
+                    })
+                    .collect(),
+                crit_chance: Chance {
+                    value: weapon_specs.crit_chance.value.as_new_base(),
+                    lucky_chance: weapon_specs.crit_chance.lucky_chance.as_new_base(),
+                },
+                crit_damage: weapon_specs.crit_damage.as_new_base(),
+                unblockable: false,
+            },
+            success_chance: Chance::new_sure(),
+            ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
+            independent_application: false,
+        }),
+        Some(SkillEffect {
+            effect_type: SkillEffectType::ApplyStatus {
+                status_id: "poison".into(),
+                value: weapon_specs
+                    .damage
+                    .get(&DamageType::Poison)
+                    .map(|v| ChanceRange {
+                        min: v.min.multiply_value(factor).into(),
+                        max: v.max.multiply_value(factor).into(),
+                        lucky_chance: v.lucky_chance.as_new_base(),
+                    })
+                    .unwrap_or_default(),
+                value_factor: 1.0,
+                duration: None,
+                escalation: None,
+                max_stacks: None,
+                damage_type: None,
+                avoidable: None,
+                replace_on_value_only: false,
+            },
+            success_chance: Chance::new_sure(),
+            ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
+            independent_application: false,
+        }),
+    ]
 }
 
 pub fn compute_skill_mastery_skill_specs(
@@ -361,21 +459,12 @@ fn compute_skill_modifier_effects<'a>(
                                         .sum()
                                 }
                             }
-                            (ItemStatsSource::Range, Some(weapon_specs), _) => {
+                            (ItemStatsSource::Target, Some(weapon_specs), _) => {
                                 for effect in modifier_effect.effects.iter_mut() {
-                                    if let StatType::SkillTargetModifier { range, .. } =
+                                    if let StatType::SkillTargetModifier { range, shape, .. } =
                                         &mut effect.stat
                                     {
                                         *range = Some(weapon_specs.range);
-                                    }
-                                }
-                                1.0
-                            }
-                            (ItemStatsSource::Shape, Some(weapon_specs), _) => {
-                                for effect in modifier_effect.effects.iter_mut() {
-                                    if let StatType::SkillTargetModifier { shape, .. } =
-                                        &mut effect.stat
-                                    {
                                         *shape = Some(weapon_specs.shape);
                                     }
                                 }
@@ -760,6 +849,21 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     match &mut skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { factor, .. } => {
+            if let StatType::Damage {
+                skill_filter,
+                damage_type: stat_damage_type,
+                min_max,
+                is_hit,
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+                && min_max.is_none()
+                && stat_damage_type.is_none()
+                && compare_options(is_hit, &Some(true))
+            {
+                factor.apply_effect(effect);
+            }
+        }
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,

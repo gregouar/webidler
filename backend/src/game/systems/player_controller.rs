@@ -7,7 +7,7 @@ use shared::{
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
-        item::{ItemSlot, ItemSpecs, WeaponSpecs},
+        item::{ItemSlot, ItemSpecs},
         monster::{MonsterRarity, MonsterSpecs},
         player::{
             EquippedSlot, PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources,
@@ -286,7 +286,7 @@ pub fn equip_item_from_bag(
         unequip_weapon(player_base_specs, player_state, player_controller, slot);
     }
 
-    if let Some(ref weapon_specs) = new_item.weapon_specs
+    if new_item.weapon_specs.is_some()
         && let Some(slot) = new_item.base.slot
     {
         equip_weapon(
@@ -296,7 +296,6 @@ pub fn equip_item_from_bag(
             player_controller,
             slot,
             new_item.modifiers.level,
-            weapon_specs,
         );
     }
 
@@ -343,7 +342,7 @@ pub fn toggle_sheathe_item(
         return Err(AppError::NotFound);
     };
 
-    let Some(weapon_specs) = item_specs.weapon_specs.as_ref() else {
+    if item_specs.weapon_specs.is_none() {
         return Err(AppError::UserError("item is not a weapon".into()));
     };
 
@@ -363,7 +362,6 @@ pub fn toggle_sheathe_item(
             player_controller,
             item_slot,
             item_specs.modifiers.level,
-            weapon_specs,
         );
     }
 
@@ -394,9 +392,7 @@ pub fn init_skills_from_inventory(
     player_controller: &mut PlayerController,
 ) {
     for (item_slot, equipped_item) in player_inventory.equipped_items() {
-        if let Some(weapon_specs) = equipped_item.weapon_specs.as_ref()
-            && !player_inventory.sheathed.contains(&item_slot)
-        {
+        if equipped_item.weapon_specs.is_some() && !player_inventory.sheathed.contains(&item_slot) {
             equip_weapon(
                 skills_store,
                 player_base_specs,
@@ -404,7 +400,6 @@ pub fn init_skills_from_inventory(
                 player_controller,
                 item_slot,
                 equipped_item.modifiers.level,
-                weapon_specs,
             );
         }
     }
@@ -440,10 +435,9 @@ fn equip_weapon(
     player_controller: &mut PlayerController,
     item_slot: ItemSlot,
     item_level: u16,
-    weapon_specs: &WeaponSpecs,
 ) {
     if let Some((skill_id, base_skill_specs)) =
-        items_controller::make_weapon_skill(skills_store, item_slot, item_level, weapon_specs)
+        items_controller::make_weapon_skill(skills_store, item_slot, item_level)
     {
         equip_base_skill(
             player_base_specs,

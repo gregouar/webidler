@@ -132,8 +132,8 @@ pub fn format_trigger_modifier(
         let factor = modifier.factor * factor.unwrap_or(1.0);
         let factor_str = (factor != 1.0).then(|| {
             let factor_str = match modifier.modifier {
-                Modifier::Increased | Modifier::More => format!("{:0}", format_number(factor)),
-                Modifier::Flat => format!("{:0}", format_number(100.0 * factor)),
+                Modifier::Increased | Modifier::More => format_number(factor),
+                Modifier::Flat => format_number(100.0 * factor),
             };
             view! {
                 <span class="font-semibold">{factor_str}"%"</span>

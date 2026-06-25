@@ -262,6 +262,7 @@ fn status_damage_type_str(damage_type: StatusDamageType) -> &'static str {
 pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> String {
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
+            StatSkillEffectType::WeaponEffect => "Weapon Effect".into(),
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
             StatSkillEffectType::ApplyStatus { status_id } => {
                 let status_filter = StatStatusFilter {

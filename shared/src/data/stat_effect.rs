@@ -487,6 +487,7 @@ impl ArmorStatType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatSkillEffectType {
+    WeaponEffect,
     FlatDamage {
         // damage_type: Option<DamageType>,
     },
@@ -526,6 +527,7 @@ impl Matchable for StatSkillEffectType {
 impl From<&SkillEffectType> for Option<StatSkillEffectType> {
     fn from(value: &SkillEffectType) -> Self {
         match value {
+            SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
             SkillEffectType::ApplyStatus { status_id, .. } => {
                 Some(StatSkillEffectType::ApplyStatus {
