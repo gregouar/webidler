@@ -53,8 +53,8 @@ pub fn SkillMasteriesPanel(
     });
 
     view! {
-        <MenuPanel open=open w_full=true h_full=true class:items-center>
-            <MenuCard class="w-full h-full">
+        <MenuPanel open=open w_full=false h_full=true class:items-center>
+            <MenuCard class="max-w-6xl mx-auto h-full">
                 <CardHeader title="Skill Masteries" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {
@@ -104,8 +104,8 @@ pub fn SkillMasteryDetailsModal(#[prop(default = false)] view_only: bool) -> imp
     });
 
     view! {
-        <MenuPanel open=open w_full=false>
-            <MenuCard class="max-w-6xl mx-auto h-full">
+        <MenuPanel open=open w_full=true h_full=true>
+            <MenuCard class="w-full h-full">
                 <CardHeader title="Skill Mastery" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {

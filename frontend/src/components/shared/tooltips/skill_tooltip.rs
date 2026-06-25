@@ -161,6 +161,26 @@ pub fn SkillTooltip(
         })
         .unwrap_or_default();
 
+    let required_item = player_base_skill.as_ref().and_then(|player_base_skill| {
+        player_base_skill
+            .base_skill_specs
+            .required_item
+            .map(|required_item| {
+                let item_category_str = required_item
+                    .category
+                    .map(item_tooltip::item_category_str)
+                    .unwrap_or("Item");
+                let item_slot_str = required_item.slot.map(|item_slot| {
+                    format!(" in {} slot", item_tooltip::item_slot_str(item_slot))
+                });
+                view! {
+                    <EffectLi class="italic">
+                        "Require "{item_category_str}" equipped"{item_slot_str}
+                    </EffectLi>
+                }
+            })
+    });
+
     let ignore_stat_effects: Vec<_> = skill_specs
         .ignore_stat_effects
         .clone()
@@ -229,11 +249,15 @@ pub fn SkillTooltip(
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
 
-            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{ignore_stat_effects}</ul>
+            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                {ignore_stat_effects} {required_item}
+            </ul>
 
             {player_base_skill
                 .as_ref()
-                .filter(|player_base_skill| player_base_skill.next_upgrade_cost > 0.0)
+                .filter(|player_base_skill| {
+                    player_base_skill.next_upgrade_cost > 0.0 && display_skill_upgrades
+                })
                 .map(|player_base_skill| {
                     let upgrade_level = player_base_skill.upgrade_level;
                     let next_upgrade_cost = player_base_skill.next_upgrade_cost;
@@ -251,35 +275,8 @@ pub fn SkillTooltip(
                         .filter(|&upgrade_effect| upgrade_effect.description.is_none())
                         .map(|upgrade_effect| upgrade_effect.stat_effect.clone())
                         .collect();
-                    let required_item = player_base_skill
-                        .base_skill_specs
-                        .required_item
-                        .map(|required_item| {
-                            let item_category_str = required_item
-                                .category
-                                .map(item_tooltip::item_category_str)
-                                .unwrap_or("Item");
-                            let item_slot_str = required_item
-                                .slot
-                                .map(|item_slot| {
-                                    format!(" in {} slot", item_tooltip::item_slot_str(item_slot))
-                                });
-                            view! {
-                                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
-                                    <EffectLi class="italic">
-                                        "Require "{item_category_str}" equipped"{item_slot_str}
-                                    </EffectLi>
-                                </ul>
-                            }
-                        });
-
-                    // let upgrade_effects = player_base_skill
-                    // .base_skill_specs
-                    // .upgrade_effects
-                    // .clone();
 
                     view! {
-                        {required_item}
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
@@ -288,30 +285,22 @@ pub fn SkillTooltip(
                             {description_effects}
                             {effects_tooltip::formatted_effects_list(auto_effects)}
                         </ul>
-
-                        {(display_skill_upgrades)
-                            .then(|| {
+                        <Separator />
+                        <p class="text-xs xl:text-sm text-stone-400 ">
+                            "Level: "
+                            {if skill_specs.level_modifier > 0 {
                                 view! {
-                                    <Separator />
-                                    <p class="text-xs xl:text-sm text-stone-400 ">
-                                        "Level: "
-                                        {if skill_specs.level_modifier > 0 {
-                                            view! {
-                                                <span class="text-blue-300">
-                                                    {upgrade_level.saturating_add(skill_specs.level_modifier)}
-                                                </span>
-                                            }
-                                        } else {
-                                            view! {
-                                                <span class="text-stone-100">{upgrade_level}</span>
-                                            }
-                                        }} " | Upgrade Cost: "
-                                        <span class="text-stone-100">
-                                            {format_number(next_upgrade_cost)}" Gold"
-                                        </span>
-                                    </p>
+                                    <span class="text-blue-300">
+                                        {upgrade_level.saturating_add(skill_specs.level_modifier)}
+                                    </span>
                                 }
-                            })}
+                            } else {
+                                view! { <span class="text-stone-100">{upgrade_level}</span> }
+                            }} " | Upgrade Cost: "
+                            <span class="text-stone-100">
+                                {format_number(next_upgrade_cost)}" Gold"
+                            </span>
+                        </p>
                     }
                 })}
 
