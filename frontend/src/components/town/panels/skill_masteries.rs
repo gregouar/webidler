@@ -3,9 +3,9 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
-    data::skill::SkillType,
-    data::skill_mastery::{
-        PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade, SkillMasteryUpgradeEffect,
+    data::{
+        skill::SkillType,
+        skill_mastery::{PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade},
     },
     http::client::SaveSkillMasteriesRequest,
 };
@@ -53,8 +53,8 @@ pub fn SkillMasteriesPanel(
     });
 
     view! {
-        <MenuPanel open=open w_full=false h_full=true class:items-center>
-            <MenuCard class="max-w-6xl mx-auto h-full">
+        <MenuPanel open=open w_full=true h_full=true class:items-center>
+            <MenuCard class="w-full h-full">
                 <CardHeader title="Skill Masteries" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {
@@ -758,7 +758,7 @@ fn MasteryUpgradeRow(
                                 </span>
                             </div>
                             <div>
-                                "Level "
+                                "Mastery Level "
                                 <span class="font-bold text-zinc-100">
                                     {move || upgrade_level.get()}
                                 </span> <span class="text-zinc-600">" / "</span>
@@ -829,20 +829,18 @@ fn UpgradeEffectDescription(
     view! {
         <ul class="text-xs xl:text-sm text-amber-100 break-words">
             {move || {
-                match &upgrade_specs.effect {
-                    SkillMasteryUpgradeEffect::StatEffect { .. } => {
-                        upgrade_specs
-                            .compute_stat_effect(upgrade_level.get())
-                            .map(|stat_effect| {
-                                view! {
-                                    {effects_tooltip::formatted_effects_list(vec![stat_effect])}
-                                }
-                                    .into_any()
-                            })
-                            .unwrap_or_else(|| {
-                                view! { <li class="text-zinc-500">"No effect"</li> }.into_any()
-                            })
-                    }
+                let upgrade_level = upgrade_level.get();
+                let stat_effects: Vec<_> = upgrade_specs
+                    .effects
+                    .iter()
+                    .filter_map(|effect| effect.compute_stat_effect(upgrade_level))
+                    .collect();
+                if stat_effects.is_empty() {
+
+                    view! { <li class="text-zinc-500">"No effect"</li> }
+                        .into_any()
+                } else {
+                    view! { {effects_tooltip::formatted_effects_list(stat_effects)} }.into_any()
                 }
             }}
         </ul>

@@ -98,6 +98,14 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                 .cloned()
                 .collect::<HashSet<_>>()
         });
+        let favorite_skills = game_context.player_base_specs.with(|player_base_specs| {
+            player_base_specs
+                .skill_masteries
+                .favorite_skills
+                .iter()
+                .cloned()
+                .collect::<HashSet<_>>()
+        });
 
         available_skills.with(|available_skills| {
             SkillType::iter()
@@ -107,10 +115,36 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                         .cloned()
                         .unwrap_or_default()
                         .into_iter()
-                        .filter(|(skill_id, _)| !bought_skills.contains(skill_id))
+                        .filter(|(skill_id, _)| {
+                            !bought_skills.contains(skill_id) && !favorite_skills.contains(skill_id)
+                        })
                         .collect::<Vec<_>>();
 
                     (!unbought_skills.is_empty()).then_some((skill_type, unbought_skills))
+                })
+                .collect::<Vec<_>>()
+        })
+    });
+    let favorite_skills = Memo::new(move |_| {
+        let skill_mastery_skill_specs = game_context.skill_mastery_skill_specs.get();
+        let base_skill_specs = data_context.skill_specs.get();
+        game_context.player_base_specs.with(|player_base_specs| {
+            player_base_specs
+                .skill_masteries
+                .favorite_skills
+                .iter()
+                .filter(|skill_id| !player_base_specs.skills.contains_key(*skill_id))
+                .filter_map(|skill_id| {
+                    let base_skill_specs = base_skill_specs.get(skill_id)?;
+                    if base_skill_specs.hidden {
+                        return None;
+                    }
+                    let skill_specs = skill_specs_with_mastery(
+                        skill_id.clone(),
+                        base_skill_specs,
+                        &skill_mastery_skill_specs,
+                    );
+                    Some((skill_id.clone(), skill_specs))
                 })
                 .collect::<Vec<_>>()
         })
@@ -134,6 +168,37 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <CardInset>
+            {move || {
+                let skills = favorite_skills.get();
+                (!skills.is_empty())
+                    .then(|| {
+                        view! {
+                            <div class="space-y-3 xl:space-y-4">
+                                <div class="flex items-center justify-center gap-3 px-1">
+                                    <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
+                                    <h3 class="font-display text-sm xl:text-base tracking-[0.14em] uppercase text-amber-200">
+                                        "Favorites"
+                                    </h3>
+                                    <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
+                                </div>
+
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 xl:gap-3">
+                                    <For
+                                        each=move || skills.clone().into_iter()
+                                        key=|(skill_id, _)| skill_id.clone()
+                                        let:((skill_id, skill_specs))
+                                    >
+                                        <SkillCard
+                                            skill_id=skill_id.clone()
+                                            skill_specs=skill_specs.clone()
+                                            selected=selected_skill
+                                        />
+                                    </For>
+                                </div>
+                            </div>
+                        }
+                    })
+            }}
             {move || {
                 skill_sections
                     .get()
@@ -216,15 +281,16 @@ fn SkillCard(
         move || selected.get().map(|s| s == skill_id).unwrap_or(false)
     });
 
-    let is_favorite = Memo::new({
+    let mastery_level = Memo::new({
         let skill_id = skill_id.clone();
         move |_| {
-            game_context
-                .player_base_specs
-                .read()
-                .skill_masteries
-                .favorite_skills
-                .contains(&skill_id)
+            game_context.player_base_specs.with(|player_base_specs| {
+                player_base_specs
+                    .skill_masteries
+                    .masteries
+                    .get(&skill_id)
+                    .map(|mastery| mastery.level())
+            })
         }
     });
 
@@ -272,23 +338,6 @@ fn SkillCard(
                             GraphicsQuality::Low => "border-[#8a6d40]",
                         },
                     )
-                } else if is_favorite.get() {
-                    format!(
-                        "{} {} {}",
-                        base,
-                        quality_class,
-                        match quality {
-                            GraphicsQuality::High => {
-                                "border-fuchsia-700/70 hover:border-[#8c6a3b] hover:-translate-y-[1px] active:translate-y-[2px]"
-                            }
-                            GraphicsQuality::Medium => {
-                                "border-fuchsia-700/70 hover:border-[#83653b] hover:-translate-y-[1px] active:translate-y-[2px]"
-                            }
-                            GraphicsQuality::Low => {
-                                "border-fuchsia-700/70 hover:border-[#7b6039] active:translate-y-[1px]"
-                            }
-                        },
-                    )
                 } else {
                     format!(
                         "{} {} {}",
@@ -332,6 +381,17 @@ fn SkillCard(
                 <div class="text-sm xl:text-base font-bold text-white text-center font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
                     {skill_name}
                 </div>
+                {move || {
+                    mastery_level
+                        .get()
+                        .map(|level| {
+                            view! {
+                                <div class="min-h-4 text-xs xl:text-sm font-semibold text-violet-300">
+                                    "Mastery " {level}
+                                </div>
+                            }
+                        })
+                }}
             </div>
         </div>
     }

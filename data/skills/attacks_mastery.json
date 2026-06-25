@@ -1,161 +1,175 @@
 {
-    "weapon_skill": {
+  "weapon_skill": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
         "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
             }
-        }
-    },
-    "gloves_skill": {
-        "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
-            }
-        }
-    },
-    "poison_coating": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "pyroclastic_infusion": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "sharpen_weapon": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "retaliate": {
-        "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
-            }
-        }
-    },
-    "shield_bash": {
-        "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
-            }
-        }
-    },
-    "double_strike": {
-        "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
-            }
-        }
-    },
-    "whirlwind": {
-        "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
-            }
-        }
-    },
-    "rain_arrows": {
-        "max_level": 100,
-        "upgrades": {
-            "damage": {
-                "title": "Damage",
-                "base_cost": 1,
-                "upgrade_cost": 1,
-                "max_level": 100,
-                "value": 10,
-                "upgrade_value": 10,
-                "effect": {
-                    "StatEffect": {
-                        "stat": {
-                            "Damage": { }
-                        },
-                        "modifier": "More"
-                    }
-                }
-            }
-        }
+          }
+        ]
+      }
     }
+  },
+  "gloves_skill": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "poison_coating": {
+    "max_level": 100,
+    "upgrades": {}
+  },
+  "pyroclastic_infusion": {
+    "max_level": 100,
+    "upgrades": {}
+  },
+  "sharpen_weapon": {
+    "max_level": 100,
+    "upgrades": {}
+  },
+  "retaliate": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "shield_bash": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "double_strike": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "whirlwind": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rain_arrows": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": {}
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  }
 }

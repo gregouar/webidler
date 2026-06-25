@@ -251,7 +251,7 @@ pub fn SkillMasteryCard(
                         .map(|level| {
                             let level_delta = level_delta.min(level);
                             view! {
-                                "Level "
+                                "Mastery "
                                 {(level_delta > 0)
                                     .then(|| {
                                         view! {

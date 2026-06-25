@@ -974,16 +974,17 @@ fn apply_skill_mastery(
     let stat_effects: Vec<_> = skill_mastery_specs
         .upgrades
         .iter()
-        .filter_map(|(upgrade_id, upgrade_effect)| {
+        .flat_map(|(upgrade_id, mastery_upgrade)| {
             let upgrade_level = skill_mastery_state
                 .upgrades_bought
                 .get(upgrade_id)
                 .copied()
                 .unwrap_or_default();
 
-            (upgrade_level > 0)
-                .then(|| upgrade_effect.compute_stat_effect(upgrade_level))
-                .flatten()
+            mastery_upgrade
+                .effects
+                .iter()
+                .filter_map(move |effect| effect.compute_stat_effect(upgrade_level))
         })
         .collect();
 

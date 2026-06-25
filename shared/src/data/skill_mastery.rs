@@ -23,13 +23,19 @@ pub struct SkillMasteryUpgrade {
     pub base_cost: u16,
     pub upgrade_cost: u16,
     pub max_level: u16,
-    pub value: f64,
-    pub upgrade_value: f64,
-    pub effect: SkillMasteryUpgradeEffect,
+    pub effects: Vec<SkillMasteryUpgradeEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum SkillMasteryUpgradeEffect {
+pub struct SkillMasteryUpgradeEffect {
+    pub value: f64,
+    pub upgrade_value: f64,
+    #[serde(flatten)]
+    pub effect_type: SkillMasteryUpgradeEffectType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum SkillMasteryUpgradeEffectType {
     StatEffect { stat: StatType, modifier: Modifier },
 }
 
@@ -63,7 +69,6 @@ impl SkillMasteryState {
         computations::skill_mastery_level(self.experience)
     }
 }
-
 impl SkillMasteryUpgrade {
     pub fn compute_cost(&self, upgrade_level: u16) -> u16 {
         if upgrade_level == 0 {
@@ -76,7 +81,9 @@ impl SkillMasteryUpgrade {
                 .saturating_mul(self.upgrade_cost),
         )
     }
+}
 
+impl SkillMasteryUpgradeEffect {
     pub fn compute_value(&self, upgrade_level: u16) -> Option<f64> {
         if upgrade_level == 0 {
             return None;
@@ -86,11 +93,11 @@ impl SkillMasteryUpgrade {
     }
 
     pub fn compute_stat_effect(&self, upgrade_level: u16) -> Option<StatEffect> {
-        match self.effect.clone() {
-            SkillMasteryUpgradeEffect::StatEffect { stat, modifier } => {
+        match &self.effect_type {
+            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier } => {
                 self.compute_value(upgrade_level).map(|value| StatEffect {
-                    stat,
-                    modifier,
+                    stat: stat.clone(),
+                    modifier: *modifier,
                     value,
                     bypass_ignore: false,
                 })
