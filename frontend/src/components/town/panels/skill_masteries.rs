@@ -551,10 +551,10 @@ fn MasteryUpgradePanel(
 
 
                                 <div class="flex gap-1">
-                                    <span class="font-bold text-zinc-100">{spent_points}</span>
+                                    <span class="font-bold text-zinc-100">{mastery_level.saturating_sub(spent_points)}</span>
                                     <span class="text-zinc-600">"/"</span>
                                     <span class="font-bold text-zinc-500">{mastery_level}</span>
-                                    <span class="font-semibold text-zinc-500">" Spent"</span>
+                                    <span class="font-semibold text-zinc-500">" Remaining Points"</span>
                                 </div>
 
                             </div>
@@ -751,12 +751,17 @@ fn MasteryUpgradeRow(
                             {title}
                         </span>
                         <div class="flex shrink-0 items-center gap-3 text-xs xl:text-sm text-zinc-400">
-                            <div>
-                                "Cost "
-                                <span class="font-bold text-zinc-100">
-                                    {move || next_cost.get()}
-                                </span>
-                            </div>
+                            {(next_cost.get() > 0 && upgrade_level.get() < upgrade_specs.max_level)
+                                .then(|| {
+                                    view! {
+                                        <div>
+                                            "Cost "
+                                            <span class="font-bold text-zinc-100">
+                                                {move || next_cost.get()}
+                                            </span>
+                                        </div>
+                                    }
+                                })}
                             <div>
                                 "Mastery Level "
                                 <span class="font-bold text-zinc-100">
@@ -780,15 +785,14 @@ fn MasteryUpgradeRow(
 
                         <div class="min-w-0 rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
                             <div class="text-xs text-zinc-400 mb-1">"Next"</div>
+
                             <UpgradeEffectDescription
                                 upgrade_specs=upgrade_specs.clone()
                                 upgrade_level=Signal::derive(move || {
-                                    upgrade_level
-                                        .get()
-                                        .saturating_add(1)
-                                        .min(upgrade_specs.max_level)
+                                    upgrade_level.get().saturating_add(1)
                                 })
                             />
+
                         </div>
                     </div>
                 </div>
@@ -835,7 +839,9 @@ fn UpgradeEffectDescription(
                     .iter()
                     .filter_map(|effect| effect.compute_stat_effect(upgrade_level))
                     .collect();
-                if stat_effects.is_empty() {
+                if upgrade_level > upgrade_specs.max_level {
+                    view! { <li class="text-zinc-500">"Max Level"</li> }.into_any()
+                } else if stat_effects.is_empty() {
 
                     view! { <li class="text-zinc-500">"No effect"</li> }
                         .into_any()

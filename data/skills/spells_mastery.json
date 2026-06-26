@@ -201,6 +201,47 @@
           }
         ]
       },
+      "duration": {
+        "title": "Poison Duration",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 20,
+        "effects": [
+          {
+            "value": 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect": {
+              "stat": {
+                "StatusDuration": {
+                  "status_id": "poison"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "storm_flat_damage": {
+        "title": "Ionization",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 2,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                  "damage_type": "Storm",
+                  "min_max": "Max"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
       "stun": {
         "title": "Radiation Sickness",
         "base_cost": 5,
@@ -241,6 +282,38 @@
                 "SkillEffectModifier": {
                   "skill_id": "irradiate",
                   "unblockable": true
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "no_storm": {
+        "title": "Toxic Fallout",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": -1e200,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                  "damage_type": "Storm"
+                }
+              },
+              "modifier": "More"
+            }
+          },
+          {
+            "value": 50,
+            "upgrade_value": 5,
+            "StatEffect": {
+              "stat": {
+                "StatusEscalation": {
+                  "status_id": "poison"
                 }
               },
               "modifier": "Flat"
