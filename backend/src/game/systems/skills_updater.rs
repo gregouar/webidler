@@ -868,7 +868,7 @@ pub fn apply_stat_effect_on_skill_effect(
             damage,
             crit_chance,
             crit_damage,
-            ..
+            unblockable,
         } => {
             for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
                 let value = damage.entry(damage_type).or_default();
@@ -926,6 +926,18 @@ pub fn apply_stat_effect_on_skill_effect(
             {
                 crit_damage.apply_effect(effect);
             }
+
+            if let StatType::SkillEffectModifier {
+                skill_filter,
+                unblockable: stat_unblockable,
+                ..
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                if let Some(stat_unblockable) = stat_unblockable {
+                    *unblockable = *stat_unblockable;
+                }
+            }
         }
         SkillEffectType::ApplyStatus {
             status_id: skill_status_id,
@@ -935,7 +947,7 @@ pub fn apply_stat_effect_on_skill_effect(
             escalation,
             max_stacks,
             damage_type: skill_damage_type,
-            avoidable: _,
+            avoidable,
             replace_on_value_only: _,
         } => {
             if let (
@@ -1037,6 +1049,18 @@ pub fn apply_stat_effect_on_skill_effect(
                     && compare_options(damage_type, skill_damage_type)
                 {
                     value.lucky_chance.apply_effect(effect);
+                }
+            }
+
+            if let StatType::SkillEffectModifier {
+                skill_filter,
+                avoidable: stat_avoidable,
+                ..
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                if let Some(stat_avoidable) = stat_avoidable {
+                    *avoidable = Some(*stat_avoidable);
                 }
             }
 

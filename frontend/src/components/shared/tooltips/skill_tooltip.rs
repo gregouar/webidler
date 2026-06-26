@@ -497,7 +497,7 @@ pub fn format_skill_effect(
             damage,
             crit_chance,
             crit_damage,
-            ..
+            unblockable,
         } => view! {
             {
                 let mut damage_lines = Vec::new();
@@ -521,6 +521,7 @@ pub fn format_skill_effect(
                         trigger_status_name,
                         trigger_status_value,
                     );
+                    let unblockable_str = unblockable.then(|| "Unblockable ");
                     if value.min.get() > 0.0 || value.max.get() > 0.0
                         || trigger_modifier_str.is_some()
                     {
@@ -532,7 +533,8 @@ pub fn format_skill_effect(
                                         <span class=format!(
                                             "font-semibold {damage_color}",
                                         )>{format_min_max(value)}</span> {trigger_modifier_str}" "
-                                        {damage_type_str(Some(damage_type))} "Damage"
+                                        {unblockable_str} {damage_type_str(Some(damage_type))}
+                                        "Damage"
                                     </EffectLi>
                                 },
                             );

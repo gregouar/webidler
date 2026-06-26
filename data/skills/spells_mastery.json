@@ -226,6 +226,27 @@
             }
           }
         ]
+      },
+      "unblockable": {
+        "title": "Gamma Ray",
+        "base_cost": 5,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillEffectModifier": {
+                  "skill_id": "irradiate",
+                  "unblockable": true
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
       }
     }
   },

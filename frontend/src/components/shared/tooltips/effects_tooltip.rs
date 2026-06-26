@@ -626,6 +626,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
         ),
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
+        StatType::SkillEffectModifier { .. } => "TODO?".into(),
         StatType::StatConditionalModifier {
             stat,
             conditions,
@@ -1029,6 +1030,32 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             let result_str = vec![range_str, shape_str.as_str(), repeat_str.as_str()]
                 .into_iter()
                 .filter(|s| !s.is_empty())
+                .collect::<Vec<_>>()
+                .join(", ");
+
+            format!(
+                "{} becomes {result_str}",
+                skill_filter_str(skill_filter, "", false),
+            )
+        }
+        StatType::SkillEffectModifier {
+            skill_filter,
+            unblockable,
+            avoidable,
+        } => {
+            let unblockable_str = unblockable.map(|unblockable| match unblockable {
+                true => "Unblockable",
+                false => "Blockable",
+            });
+
+            let avoidable_str = avoidable.map(|avoidable| match avoidable {
+                true => "Avoidable",
+                false => "Unavoidable",
+            });
+
+            let result_str = vec![unblockable_str, avoidable_str]
+                .into_iter()
+                .filter_map(|s| s)
                 .collect::<Vec<_>>()
                 .join(", ");
 

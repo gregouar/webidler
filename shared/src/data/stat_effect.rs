@@ -280,7 +280,6 @@ pub enum StatType {
     },
     StatConverter(StatConverterSpecs),
     SkillTargetModifier {
-        // TODO: More control and options?
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
@@ -289,6 +288,14 @@ pub enum StatType {
         shape: Option<SkillShape>,
         #[serde(default)]
         repeat: Option<StatSkillRepeat>,
+    },
+    SkillEffectModifier {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+        #[serde(default)]
+        unblockable: Option<bool>,
+        #[serde(default)]
+        avoidable: Option<bool>,
     },
     GoldFind,
     PowerLevel,
