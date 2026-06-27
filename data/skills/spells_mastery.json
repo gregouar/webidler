@@ -249,7 +249,18 @@
         "max_level": 10,
         "effects": [
           {
-            "value": 20,
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillEffect": {
+              "success_chance": 20,
+              "ApplyStatus": {
+                "status_id": "stun",
+                "value": 1
+              }
+            }
+          },
+          {
+            "value": 0,
             "upgrade_value": 2,
             "StatEffect": {
               "stat": {

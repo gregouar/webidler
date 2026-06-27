@@ -9,6 +9,7 @@ use crate::{
         modifier::Modifier,
         skill::SkillEffect,
         stat_effect::{StatEffect, StatType},
+        trigger::TriggerSpecs,
     },
 };
 
@@ -47,6 +48,7 @@ pub enum SkillMasteryUpgradeEffectType {
         #[serde(default)]
         target_index: usize,
     },
+    Trigger(TriggerSpecs),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]

@@ -13,9 +13,49 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
+            }
+          }
+        ]
+      },
+      "life_on_hit": {
+        "title": "Life on Hit",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 5,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "Trigger": {
+              "trigger_id": "weapon_skill_life_on_hit",
+              "skill_type": "Other",
+              "OnHit": {
+                "skill_ids": [ "weapon_skill" ],
+                "is_hurt": true
+              },
+              "target": "Source",
+              "effects": [
+                { "Restore": {
+                    "restore_type": "Life",
+                    "value": 1,
+                    "modifier": "Flat"
+                  } }
+              ]
+            }
+          },
+          {
+            "value": 0,
+            "upgrade_value": 1,
+            "StatEffect": {
+              "stat": {
+                "Restore": {
+                  "restore_type": "Life"
+                }
+              },
+              "modifier": "Flat"
             }
           }
         ]
@@ -36,9 +76,46 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
+            }
+          }
+        ]
+      },
+      "stun": {
+        "title": "Way of the Open Hand",
+        "base_cost": 5,
+        "upgrade_cost": 1,
+        "max_level": 5,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillEffect": {
+              "success_chance": 20,
+              "ApplyStatus": {
+                "status_id": "stun",
+                "value": 1
+              }
+            }
+          },
+          {
+            "value": 0,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "SuccessChance": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "effect_type": {
+                    "ApplyStatus": {
+                      "status_id": "stun"
+                    }
+                  }
+                }
+              },
+              "modifier": "Flat"
             }
           }
         ]
@@ -47,15 +124,15 @@
   },
   "poison_coating": {
     "max_level": 100,
-    "upgrades": {}
+    "upgrades": { }
   },
   "pyroclastic_infusion": {
     "max_level": 100,
-    "upgrades": {}
+    "upgrades": { }
   },
   "sharpen_weapon": {
     "max_level": 100,
-    "upgrades": {}
+    "upgrades": { }
   },
   "retaliate": {
     "max_level": 100,
@@ -71,7 +148,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -94,7 +171,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -117,7 +194,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -140,7 +217,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }
@@ -163,7 +240,7 @@
             "upgrade_value": 10,
             "StatEffect": {
               "stat": {
-                "Damage": {}
+                "Damage": { }
               },
               "modifier": "More"
             }

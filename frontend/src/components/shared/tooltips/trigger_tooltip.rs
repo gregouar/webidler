@@ -15,6 +15,7 @@ use shared::data::{
 };
 
 use crate::components::{
+    data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
@@ -254,7 +255,7 @@ pub fn trigger_modifier_source_str(
 fn format_trigger_event(event_trigger: &EventTrigger) -> String {
     match event_trigger {
         EventTrigger::OnHit(hit_trigger) => format!(
-            "On {}Hit{}",
+            "On {}{}",
             format_hit_trigger(hit_trigger),
             format_hit_trigger_conditions(hit_trigger, " against ", " Enemies")
         ),
@@ -262,7 +263,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             Some(true) => format!("On {}Block", format_blocked_hit_trigger(hit_trigger)),
             _ => {
                 format!(
-                    "On {}Hit Taken{}",
+                    "On {} Taken{}",
                     format_hit_trigger(hit_trigger),
                     format_hit_trigger_conditions(hit_trigger, " when ", "")
                 )
@@ -292,14 +293,28 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
 }
 
 fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
+    let data_context: DataContext = expect_context();
+
+    let skills_str = hit_trigger.skill_ids.as_ref().and_then(|skill_ids| {
+        if skill_ids.len() == 1 {
+            skill_ids
+                .iter()
+                .next()
+                .map(|skill_id| format!(" with {} ", data_context.skill_name(skill_id)))
+        } else {
+            None
+        }
+    });
+
     format!(
-        "{}{}{}{}{}{}",
+        "{}{}{}{}{}{}Hit{}",
         hurt_str(hit_trigger.is_hurt),
         blocked_str(hit_trigger.is_blocked),
         critical_str(hit_trigger.is_crit),
         range_str(hit_trigger.range),
         skill_type_str(hit_trigger.skill_type),
         damage_type_str(hit_trigger.damage_type),
+        skills_str.unwrap_or_default(),
     )
 }
 

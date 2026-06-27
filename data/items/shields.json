@@ -128,10 +128,6 @@
               "status_id": "stun",
               "value": 1.0,
               "value_factor": 1.0,
-              "duration": [
-                1.0,
-                3.0
-              ],
               "escalation": null,
               "max_stacks": null,
               "damage_type": null,

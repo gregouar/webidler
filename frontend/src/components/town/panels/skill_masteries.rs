@@ -20,7 +20,7 @@ use crate::components::{
     events::{EventsContext, Key},
     shared::{
         skills::{SkillMasteryCard, skill_specs_with_mastery},
-        tooltips::{effects_tooltip, skill_tooltip},
+        tooltips::{effects_tooltip, skill_tooltip, trigger_tooltip},
     },
     town::TownContext,
     ui::{
@@ -874,14 +874,13 @@ fn format_mastery_upgrade_effect(
         SkillMasteryUpgradeEffectType::SkillEffect {
             skill_effect,
             target_index: _,
-        } => Some(skill_tooltip::format_skill_effect(
-            skill_effect.clone(),
-            false,
-            None,
-            None,
-            None,
-            None,
-        )),
+        } => Some(
+            skill_tooltip::format_skill_effect(skill_effect.clone(), false, None, None, None, None)
+                .into_any(),
+        ),
+        SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => Some(
+            trigger_tooltip::format_trigger(trigger_specs.clone(), false, None, None).into_any(),
+        ),
     }
 }
 
