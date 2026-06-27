@@ -5,7 +5,10 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use shared::{
     data::{
         skill::SkillType,
-        skill_mastery::{PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade},
+        skill_mastery::{
+            PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade,
+            SkillMasteryUpgradeEffect, SkillMasteryUpgradeEffectType,
+        },
     },
     http::client::SaveSkillMasteriesRequest,
 };
@@ -17,7 +20,7 @@ use crate::components::{
     events::{EventsContext, Key},
     shared::{
         skills::{SkillMasteryCard, skill_specs_with_mastery},
-        tooltips::effects_tooltip,
+        tooltips::{effects_tooltip, skill_tooltip},
     },
     town::TownContext,
     ui::{
@@ -834,22 +837,51 @@ fn UpgradeEffectDescription(
         <ul class="text-xs xl:text-sm text-amber-100 break-words">
             {move || {
                 let upgrade_level = upgrade_level.get();
-                let stat_effects: Vec<_> = upgrade_specs
-                    .effects
-                    .iter()
-                    .filter_map(|effect| effect.compute_stat_effect(upgrade_level))
-                    .collect();
                 if upgrade_level > upgrade_specs.max_level {
                     view! { <li class="text-zinc-500">"Max Level"</li> }.into_any()
-                } else if stat_effects.is_empty() {
-
-                    view! { <li class="text-zinc-500">"No effect"</li> }
-                        .into_any()
+                } else if upgrade_level == 0 {
+                    view! { <li class="text-zinc-500">"No effect"</li> }.into_any()
                 } else {
-                    view! { {effects_tooltip::formatted_effects_list(stat_effects)} }.into_any()
+                    let stat_effects: Vec<_> = upgrade_specs
+                        .effects
+                        .iter()
+                        .filter_map(|effect| effect.compute_stat_effect(upgrade_level))
+                        .collect();
+                    view! {
+                        {effects_tooltip::formatted_effects_list(stat_effects)}
+                        {upgrade_specs
+                            .effects
+                            .iter()
+                            .filter_map(|upgrade_effect| format_mastery_upgrade_effect(
+                                upgrade_effect,
+                                upgrade_level,
+                            ))
+                            .collect::<Vec<_>>()}
+                    }
+                        .into_any()
                 }
             }}
         </ul>
+    }
+}
+
+fn format_mastery_upgrade_effect(
+    upgrade_effect: &SkillMasteryUpgradeEffect,
+    _upgrade_level: u16,
+) -> Option<impl IntoView> {
+    match &upgrade_effect.effect_type {
+        SkillMasteryUpgradeEffectType::StatEffect { .. } => None,
+        SkillMasteryUpgradeEffectType::SkillEffect {
+            skill_effect,
+            target_index: _,
+        } => Some(skill_tooltip::format_skill_effect(
+            skill_effect.clone(),
+            false,
+            None,
+            None,
+            None,
+            None,
+        )),
     }
 }
 

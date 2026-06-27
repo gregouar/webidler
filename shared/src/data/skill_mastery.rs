@@ -7,6 +7,7 @@ use crate::{
     computations,
     data::{
         modifier::Modifier,
+        skill::SkillEffect,
         stat_effect::{StatEffect, StatType},
     },
 };
@@ -36,7 +37,16 @@ pub struct SkillMasteryUpgradeEffect {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillMasteryUpgradeEffectType {
-    StatEffect { stat: StatType, modifier: Modifier },
+    StatEffect {
+        stat: StatType,
+        modifier: Modifier,
+    },
+    SkillEffect {
+        #[serde(flatten)]
+        skill_effect: SkillEffect,
+        #[serde(default)]
+        target_index: usize,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
@@ -93,15 +103,17 @@ impl SkillMasteryUpgradeEffect {
     }
 
     pub fn compute_stat_effect(&self, upgrade_level: u16) -> Option<StatEffect> {
+        let Some(upgrade_value) = self.compute_value(upgrade_level) else {
+            return None;
+        };
         match &self.effect_type {
-            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier } => {
-                self.compute_value(upgrade_level).map(|value| StatEffect {
-                    stat: stat.clone(),
-                    modifier: *modifier,
-                    value,
-                    bypass_ignore: false,
-                })
-            }
+            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier } => Some(StatEffect {
+                stat: stat.clone(),
+                modifier: *modifier,
+                value: upgrade_value,
+                bypass_ignore: false,
+            }),
+            _ => None,
         }
     }
 }

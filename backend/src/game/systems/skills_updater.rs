@@ -12,7 +12,9 @@ use shared::data::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
         SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillTargetsGroup, SkillType,
     },
-    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
+    skill_mastery::{
+        PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState, SkillMasteryUpgradeEffectType,
+    },
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
@@ -1099,21 +1101,45 @@ fn apply_skill_mastery(
     skill_mastery_specs: &SkillMasterySpecs,
     skill_mastery_state: &SkillMasteryState,
 ) {
-    let stat_effects: Vec<_> = skill_mastery_specs
+    let upgrade_effects = skill_mastery_specs
         .upgrades
         .iter()
-        .flat_map(|(upgrade_id, mastery_upgrade)| {
+        .filter_map(|(upgrade_id, mastery_upgrade)| {
             let upgrade_level = skill_mastery_state
                 .upgrades_bought
                 .get(upgrade_id)
                 .copied()
                 .unwrap_or_default();
 
-            mastery_upgrade
-                .effects
-                .iter()
-                .filter_map(move |effect| effect.compute_stat_effect(upgrade_level))
+            if upgrade_level > 0 {
+                Some((mastery_upgrade, upgrade_level))
+            } else {
+                None
+            }
         })
+        .flat_map(|(mastery_upgrade, upgrade_level)| {
+            itertools::iproduct!(
+                mastery_upgrade.effects.iter(),
+                std::iter::once(upgrade_level)
+            )
+        });
+
+    for (upgrade_effect, _) in upgrade_effects.clone() {
+        match &upgrade_effect.effect_type {
+            SkillMasteryUpgradeEffectType::StatEffect { .. } => {}
+            SkillMasteryUpgradeEffectType::SkillEffect {
+                skill_effect,
+                target_index,
+            } => {
+                if let Some(target_group) = skill_specs.targets.get_mut(*target_index) {
+                    target_group.effects.push(skill_effect.clone());
+                }
+            }
+        }
+    }
+
+    let stat_effects: Vec<_> = upgrade_effects
+        .filter_map(|(effect, upgrade_level)| effect.compute_stat_effect(upgrade_level))
         .collect();
 
     apply_effects_to_skill_specs(statuses_store, skill_specs, stat_effects.iter());
