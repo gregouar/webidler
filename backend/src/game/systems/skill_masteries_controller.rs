@@ -72,7 +72,7 @@ pub fn validate_skill_masteries(
             return Err(anyhow::anyhow!("invalid skill mastery"));
         }
 
-        let mastery_level = prev_mastery.level().min(mastery_specs.max_level);
+        let mastery_level = prev_mastery.level(mastery_specs.max_level);
         let mut spent_points = 0u16;
 
         for (upgrade_id, upgrade_level) in requested_mastery.upgrades_bought.iter() {

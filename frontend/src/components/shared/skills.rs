@@ -67,31 +67,29 @@ pub fn SkillMasteryCard(
     let settings = expect_context::<SettingsContext>();
     let data_context = expect_context::<DataContext>();
 
-    let max_level = skill_specs.as_ref().and_then(|skill_specs| {
-        data_context
-            .skill_mastery_specs
-            .read()
-            .get(&skill_specs.skill_id)
-            .map(|specs| specs.max_level)
-    });
-    let level = skill_mastery_state.as_ref().map(SkillMasteryState::level);
-    let is_max_level = level
-        .zip(max_level)
-        .map(|(level, max_level)| level >= max_level)
-        .unwrap_or(true);
+    let max_level = skill_specs
+        .as_ref()
+        .and_then(|skill_specs| {
+            data_context
+                .skill_mastery_specs
+                .read()
+                .get(&skill_specs.skill_id)
+                .map(|specs| specs.max_level)
+        })
+        .unwrap_or_default();
+    let level = skill_mastery_state
+        .as_ref()
+        .map(|skill_mastery_state| skill_mastery_state.level(max_level));
+    let is_max_level = level.map(|level| level >= max_level).unwrap_or(true);
     let has_progress = skill_mastery_state.is_some();
     let relative_experience = skill_mastery_state
         .as_ref()
-        .map(SkillMasteryState::relative_experience);
+        .map(|skill_mastery_state| skill_mastery_state.relative_experience(max_level));
     let next_level_cost = skill_mastery_state
         .as_ref()
-        .map(SkillMasteryState::next_level_cost);
-    let current_progress =
-        relative_experience
-            .zip(next_level_cost)
-            .map(|(relative_experience, next_level_cost)| {
-                mastery_progress(relative_experience, next_level_cost)
-            });
+        .and_then(|skill_mastery_state| skill_mastery_state.next_level_cost(max_level));
+    let current_progress = relative_experience
+        .map(|relative_experience| mastery_progress(relative_experience, next_level_cost));
     let current_progress = if is_max_level {
         Some(100.0)
     } else {
@@ -105,17 +103,11 @@ pub fn SkillMasteryCard(
                 let mut previous_skill_mastery_state = skill_mastery_state.clone();
                 previous_skill_mastery_state.experience =
                     (previous_skill_mastery_state.experience - experience_gained).max(0.0);
-                if max_level
-                    .map(|max_level| previous_skill_mastery_state.level() >= max_level)
-                    .unwrap_or_default()
-                {
-                    100.0
-                } else {
-                    mastery_progress(
-                        previous_skill_mastery_state.relative_experience(),
-                        previous_skill_mastery_state.next_level_cost(),
-                    )
-                }
+
+                mastery_progress(
+                    previous_skill_mastery_state.relative_experience(max_level),
+                    previous_skill_mastery_state.next_level_cost(max_level),
+                )
             }
             (Some(_), None) => current_progress.unwrap_or_default(),
             (None, _) => 0.0,
@@ -300,11 +292,16 @@ pub fn SkillMasteryCard(
     }
 }
 
-fn mastery_progress(relative_experience: f64, next_level_cost: f64) -> f32 {
-    if next_level_cost > 0.0 {
-        (relative_experience / next_level_cost * 100.0).clamp(0.0, 100.0) as f32
-    } else {
-        0.0
+fn mastery_progress(relative_experience: f64, next_level_cost: Option<f64>) -> f32 {
+    match next_level_cost {
+        Some(next_level_cost) => {
+            if next_level_cost > 0.0 {
+                (relative_experience / next_level_cost * 100.0).clamp(0.0, 100.0) as f32
+            } else {
+                0.0
+            }
+        }
+        None => 100.0,
     }
 }
 

@@ -269,6 +269,7 @@ fn SkillCard(
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let data_context = expect_context::<DataContext>();
     let settings = expect_context::<SettingsContext>();
 
     let skill_type = skill_specs.skill_type;
@@ -283,13 +284,19 @@ fn SkillCard(
 
     let mastery_level = Memo::new({
         let skill_id = skill_id.clone();
+        let max_level = data_context
+            .skill_mastery_specs
+            .read()
+            .get(&skill_id)
+            .map(|mastery_specs| mastery_specs.max_level)
+            .unwrap_or_default();
         move |_| {
             game_context.player_base_specs.with(|player_base_specs| {
                 player_base_specs
                     .skill_masteries
                     .masteries
                     .get(&skill_id)
-                    .map(|mastery| mastery.level())
+                    .map(|mastery| mastery.level(max_level))
             })
         }
     });

@@ -496,7 +496,7 @@ fn MasteryUpgradePanel(
                     .get(&skill_id)
                     .cloned()
                     .unwrap_or_default();
-                let mastery_level = skill_mastery_state.level().min(mastery_specs.max_level);
+                let mastery_level = skill_mastery_state.level(mastery_specs.max_level);
                 let spent_points = spent_mastery_points(
                     &skill_mastery_state,
                     &mastery_specs.upgrades,
@@ -633,8 +633,7 @@ fn MasteryUpgradeRow(
                     return 0;
                 };
                 mastery
-                    .level()
-                    .min(mastery_specs.max_level)
+                    .level(mastery_specs.max_level)
                     .saturating_sub(spent_mastery_points(mastery, &mastery_specs.upgrades))
             })
         }
@@ -694,8 +693,7 @@ fn MasteryUpgradeRow(
 
                     let spent_points = spent_mastery_points(mastery, &mastery_specs.upgrades);
                     let available_points = mastery
-                        .level()
-                        .min(mastery_specs.max_level)
+                        .level(mastery_specs.max_level)
                         .saturating_sub(spent_points);
                     let cost = upgrade_specs
                         .compute_cost(current_level.saturating_add(1))

@@ -31,7 +31,9 @@
             "upgrade_value": 2,
             "StatEffect": {
               "stat": {
-                "Speed": { "skill_type": "Attack" }
+                "Speed": {
+                  "skill_type": "Attack"
+                }
               },
               "modifier": "Increased"
             }
@@ -87,16 +89,20 @@
               "trigger_id": "weapon_skill_life_on_hit",
               "skill_type": "Attack",
               "OnHit": {
-                "skill_ids": [ "weapon_skill" ],
+                "skill_ids": [
+                  "weapon_skill"
+                ],
                 "is_hurt": true
               },
               "target": "Source",
               "effects": [
-                { "Restore": {
+                {
+                  "Restore": {
                     "restore_type": "Life",
                     "value": 1,
                     "modifier": "Flat"
-                  } }
+                  }
+                }
               ]
             }
           },
@@ -127,16 +133,20 @@
               "trigger_id": "weapon_skill_mana_on_hit",
               "skill_type": "Attack",
               "OnHit": {
-                "skill_ids": [ "weapon_skill" ],
+                "skill_ids": [
+                  "weapon_skill"
+                ],
                 "is_hurt": true
               },
               "target": "Source",
               "effects": [
-                { "Restore": {
+                {
+                  "Restore": {
                     "restore_type": "Mana",
                     "value": 1,
                     "modifier": "Flat"
-                  } }
+                  }
+                }
               ]
             }
           },
@@ -179,18 +189,38 @@
       },
       "two_hands": {
         "title": "Flurry of Blows",
-        "base_cost": 5,
+        "base_cost": 10,
         "upgrade_cost": 0,
         "max_level": 1,
         "effects": [
           {
-            "value": 2,
-            "upgrade_value": 2,
+            "value": 1,
+            "upgrade_value": 0,
             "StatEffect": {
               "stat": {
-                "Speed": { "skill_type": "Attack" }
+                "StatConditionalModifier": {
+                  "stat": {
+                    "SkillTargetModifier": {
+                      "skill_id": "gloves_skill",
+                      "repeat": {
+                        "min_value": 3,
+                        "max_value": 3,
+                        "target": "Any"
+                      }
+                    }
+                  },
+                  "conditions": [
+                    {
+                      "HasItem": {
+                        "item_slot": "Shield",
+                        "not": true
+                      }
+                    }
+                  ]
+                }
               },
-              "modifier": "Increased"
+              "modifier": "Flat",
+              "scope": "Global"
             }
           }
         ]
@@ -242,7 +272,9 @@
             "upgrade_value": 1,
             "StatEffect": {
               "stat": {
-                "StatusStacks": { "status_id": "fangbreaker" }
+                "StatusStacks": {
+                  "status_id": "fangbreaker"
+                }
               },
               "modifier": "Flat",
               "scope": "Global"
@@ -250,7 +282,6 @@
           }
         ]
       },
-
       "stun": {
         "title": "Way of the Open Hand",
         "base_cost": 5,

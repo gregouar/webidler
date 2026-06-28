@@ -72,20 +72,25 @@ pub struct SkillMasteryState {
 }
 
 impl SkillMasteryState {
-    pub fn next_level_cost(&self) -> f64 {
-        computations::skill_mastery_next_level_cost(self.level())
+    pub fn next_level_cost(&self, max_level: u16) -> Option<f64> {
+        let level = self.level(max_level);
+        if level == max_level {
+            None
+        } else {
+            Some(computations::skill_mastery_next_level_cost(level))
+        }
     }
 
-    pub fn relative_experience(&self) -> f64 {
-        self.experience - self.level_cost()
+    pub fn relative_experience(&self, max_level: u16) -> f64 {
+        self.experience - self.level_cost(max_level)
     }
 
-    pub fn level_cost(&self) -> f64 {
-        computations::skill_mastery_level_cost(self.level())
+    pub fn level_cost(&self, max_level: u16) -> f64 {
+        computations::skill_mastery_level_cost(self.level(max_level))
     }
 
-    pub fn level(&self) -> u16 {
-        computations::skill_mastery_level(self.experience)
+    pub fn level(&self, max_level: u16) -> u16 {
+        computations::skill_mastery_level(self.experience).clamp(0, max_level)
     }
 }
 impl SkillMasteryUpgrade {

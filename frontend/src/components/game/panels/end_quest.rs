@@ -4,6 +4,7 @@ use indexmap::IndexSet;
 use leptos::{html::*, prelude::*};
 
 use crate::components::{
+    data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
     shared::{
         item_card::ItemCard,
@@ -156,6 +157,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn SkillMasteryRewards() -> impl IntoView {
     let game_context: GameContext = expect_context();
+    let data_context: DataContext = expect_context();
 
     let skill_mastery_rewards = Memo::new(move |_| {
         game_context
@@ -176,6 +178,13 @@ fn SkillMasteryRewards() -> impl IntoView {
                     return None;
                 }
 
+                let max_level = data_context
+                    .skill_mastery_specs
+                    .read()
+                    .get(&skill_specs.skill_id)
+                    .map(|mastery_specs| mastery_specs.max_level)
+                    .unwrap_or_default();
+
                 let previous_mastery = game_context
                     .player_base_specs
                     .read()
@@ -187,8 +196,8 @@ fn SkillMasteryRewards() -> impl IntoView {
                 let mut current_mastery = previous_mastery.clone();
                 current_mastery.experience += experience_gained;
                 let gained_levels = current_mastery
-                    .level()
-                    .saturating_sub(previous_mastery.level());
+                    .level(max_level)
+                    .saturating_sub(previous_mastery.level(max_level));
 
                 Some((
                     skill_specs.clone(),
