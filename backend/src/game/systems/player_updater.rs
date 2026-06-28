@@ -23,10 +23,13 @@ use shared::{
 };
 use strum::IntoEnumIterator;
 
-use crate::game::data::{
-    DataInit,
-    event::EventsQueue,
-    master_store::{SkillMasteriesStore, StatusesStore},
+use crate::game::{
+    data::{
+        DataInit,
+        event::EventsQueue,
+        master_store::{SkillMasteriesStore, StatusesStore},
+    },
+    systems::skill_masteries_controller,
 };
 
 use super::{characters_updater, skills_updater};
@@ -130,6 +133,10 @@ pub fn update_player_specs(
             passives_tree_specs,
             &passives_tree_state.ascension,
             &passives_tree_state.purchased_nodes,
+        ),
+        skill_masteries_controller::generate_player_stat_effects(
+            skill_masteries_store,
+            player_base_specs,
         ),
     ]
     .concat();

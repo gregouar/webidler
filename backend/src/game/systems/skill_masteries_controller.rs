@@ -1,10 +1,22 @@
-use shared::data::{skill_mastery::PlayerSkillMasteries, user::UserCharacterId};
+use shared::data::{
+    item_affix::AffixEffectScope,
+    player::PlayerBaseSpecs,
+    skill::SkillSpecs,
+    skill_mastery::{
+        PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState, SkillMasteryUpgradeEffectType,
+    },
+    stat_effect::StatEffect,
+    user::UserCharacterId,
+};
 use sqlx::Transaction;
 
 use crate::{
     app_state::MasterStore,
     db::{self, pool::Database},
-    game::data::master_store::SkillMasteriesStore,
+    game::{
+        data::master_store::{SkillMasteriesStore, StatusesStore},
+        systems::skills_updater,
+    },
     rest::AppError,
 };
 
@@ -81,4 +93,110 @@ pub fn validate_skill_masteries(
     }
 
     Ok(())
+}
+
+pub fn apply_skill_mastery(
+    statuses_store: &StatusesStore,
+    skill_specs: &mut SkillSpecs,
+    skill_mastery_specs: &SkillMasterySpecs,
+    skill_mastery_state: &SkillMasteryState,
+) {
+    let upgrade_effects = skill_mastery_specs
+        .upgrades
+        .iter()
+        .filter_map(|(upgrade_id, mastery_upgrade)| {
+            let upgrade_level = skill_mastery_state
+                .upgrades_bought
+                .get(upgrade_id)
+                .copied()
+                .unwrap_or_default();
+
+            if upgrade_level > 0 {
+                Some((mastery_upgrade, upgrade_level))
+            } else {
+                None
+            }
+        })
+        .flat_map(|(mastery_upgrade, upgrade_level)| {
+            itertools::iproduct!(
+                mastery_upgrade.effects.iter(),
+                std::iter::once(upgrade_level)
+            )
+        });
+
+    for (upgrade_effect, _) in upgrade_effects.clone() {
+        match &upgrade_effect.effect_type {
+            SkillMasteryUpgradeEffectType::StatEffect { .. }
+            // | SkillMasteryUpgradeEffectType::PlayerStatEffect { .. } 
+            => {}
+            SkillMasteryUpgradeEffectType::SkillEffect {
+                skill_effect,
+                target_index,
+            } => {
+                if let Some(target_group) = skill_specs.targets.get_mut(*target_index) {
+                    target_group.effects.push(skill_effect.clone());
+                }
+            }
+            SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => {
+                skill_specs.triggers.push(trigger_specs.clone());
+            }
+        }
+    }
+
+    let stat_effects: Vec<_> = upgrade_effects
+        .filter(|(effect, _)| {
+            matches!(
+                effect.effect_type,
+                SkillMasteryUpgradeEffectType::StatEffect {
+                    scope: AffixEffectScope::Local,
+                    ..
+                }
+            )
+        })
+        .filter_map(|(effect, upgrade_level)| effect.compute_stat_effect(upgrade_level))
+        .collect();
+
+    skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, stat_effects.iter());
+}
+
+pub fn generate_player_stat_effects(
+    skill_masteries_store: &SkillMasteriesStore,
+    player_base_specs: &PlayerBaseSpecs,
+) -> Vec<StatEffect> {
+    player_base_specs
+        .skills
+        .keys()
+        .take(player_base_specs.max_skills as usize)
+        .filter_map(|skill_id| {
+            skill_masteries_store
+                .get(skill_id)
+                .zip(player_base_specs.skill_masteries.masteries.get(skill_id))
+        })
+        .flat_map(|(mastery_specs, mastery_state)| {
+            mastery_specs
+                .upgrades
+                .iter()
+                .flat_map(|(upgrade_id, mastery_upgrade)| {
+                    let upgrade_level = mastery_state
+                        .upgrades_bought
+                        .get(upgrade_id)
+                        .copied()
+                        .unwrap_or_default();
+
+                    mastery_upgrade
+                        .effects
+                        .iter()
+                        .filter(|effect| {
+                            matches!(
+                                effect.effect_type,
+                                SkillMasteryUpgradeEffectType::StatEffect {
+                                    scope: AffixEffectScope::Global,
+                                    ..
+                                }
+                            )
+                        })
+                        .filter_map(move |effect| effect.compute_stat_effect(upgrade_level))
+                })
+        })
+        .collect()
 }

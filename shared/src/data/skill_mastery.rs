@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     computations,
     data::{
+        item_affix::AffixEffectScope,
         modifier::Modifier,
         skill::SkillEffect,
         stat_effect::{StatEffect, StatType},
@@ -41,7 +42,13 @@ pub enum SkillMasteryUpgradeEffectType {
     StatEffect {
         stat: StatType,
         modifier: Modifier,
+        #[serde(default)]
+        scope: AffixEffectScope,
     },
+    // PlayerStatEffect {
+    //     stat: StatType,
+    //     modifier: Modifier,
+    // },
     SkillEffect {
         #[serde(flatten)]
         skill_effect: SkillEffect,
@@ -109,12 +116,16 @@ impl SkillMasteryUpgradeEffect {
             return None;
         };
         match &self.effect_type {
-            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier } => Some(StatEffect {
-                stat: stat.clone(),
-                modifier: *modifier,
-                value: upgrade_value,
-                bypass_ignore: false,
-            }),
+            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier, scope: _ }
+            // | SkillMasteryUpgradeEffectType::PlayerStatEffect { stat, modifier } 
+            => {
+                Some(StatEffect {
+                    stat: stat.clone(),
+                    modifier: *modifier,
+                    value: upgrade_value,
+                    bypass_ignore: false,
+                })
+            }
             _ => None,
         }
     }

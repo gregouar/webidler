@@ -758,7 +758,7 @@ fn MasteryUpgradeRow(
                                 .then(|| {
                                     view! {
                                         <div>
-                                            "Cost "
+                                            "Cost: "
                                             <span class="font-bold text-zinc-100">
                                                 {move || next_cost.get()}
                                             </span>
@@ -870,7 +870,9 @@ fn format_mastery_upgrade_effect(
     _upgrade_level: u16,
 ) -> Option<impl IntoView> {
     match &upgrade_effect.effect_type {
-        SkillMasteryUpgradeEffectType::StatEffect { .. } => None,
+        SkillMasteryUpgradeEffectType::StatEffect { .. }
+        // | SkillMasteryUpgradeEffectType::PlayerStatEffect { .. } 
+        => None,
         SkillMasteryUpgradeEffectType::SkillEffect {
             skill_effect,
             target_index: _,

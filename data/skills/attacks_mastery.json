@@ -177,6 +177,80 @@
           }
         ]
       },
+      "two_hands": {
+        "title": "Flurry of Blows",
+        "base_cost": 5,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 2,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "Speed": { "skill_type": "Attack" }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_chance": {
+        "title": "Critical Hit Chance",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritChance": { }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title": "Critical Hit Damage",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritDamage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "fangbreaker_stacks": {
+        "title": "Fangbreaker",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 20,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 1,
+            "StatEffect": {
+              "stat": {
+                "StatusStacks": { "status_id": "fangbreaker" }
+              },
+              "modifier": "Flat",
+              "scope": "Global"
+            }
+          }
+        ]
+      },
+
       "stun": {
         "title": "Way of the Open Hand",
         "base_cost": 5,

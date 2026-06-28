@@ -12,9 +12,7 @@ use shared::data::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
         SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillTargetsGroup, SkillType,
     },
-    skill_mastery::{
-        PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState, SkillMasteryUpgradeEffectType,
-    },
+    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
@@ -23,7 +21,7 @@ use shared::data::{
 
 use crate::game::{
     data::master_store::{SkillMasteriesStore, SkillsStore, StatusesStore},
-    systems::characters_updater,
+    systems::{characters_updater, skill_masteries_controller},
 };
 
 pub fn update_skills_states(
@@ -112,7 +110,7 @@ pub fn update_skill_specs(
     };
 
     if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery {
-        apply_skill_mastery(
+        skill_masteries_controller::apply_skill_mastery(
             statuses_store,
             &mut skill_specs,
             skill_mastery_specs,
@@ -1093,57 +1091,4 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     None
-}
-
-fn apply_skill_mastery(
-    statuses_store: &StatusesStore,
-    skill_specs: &mut SkillSpecs,
-    skill_mastery_specs: &SkillMasterySpecs,
-    skill_mastery_state: &SkillMasteryState,
-) {
-    let upgrade_effects = skill_mastery_specs
-        .upgrades
-        .iter()
-        .filter_map(|(upgrade_id, mastery_upgrade)| {
-            let upgrade_level = skill_mastery_state
-                .upgrades_bought
-                .get(upgrade_id)
-                .copied()
-                .unwrap_or_default();
-
-            if upgrade_level > 0 {
-                Some((mastery_upgrade, upgrade_level))
-            } else {
-                None
-            }
-        })
-        .flat_map(|(mastery_upgrade, upgrade_level)| {
-            itertools::iproduct!(
-                mastery_upgrade.effects.iter(),
-                std::iter::once(upgrade_level)
-            )
-        });
-
-    for (upgrade_effect, _) in upgrade_effects.clone() {
-        match &upgrade_effect.effect_type {
-            SkillMasteryUpgradeEffectType::StatEffect { .. } => {}
-            SkillMasteryUpgradeEffectType::SkillEffect {
-                skill_effect,
-                target_index,
-            } => {
-                if let Some(target_group) = skill_specs.targets.get_mut(*target_index) {
-                    target_group.effects.push(skill_effect.clone());
-                }
-            }
-            SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => {
-                skill_specs.triggers.push(trigger_specs.clone());
-            }
-        }
-    }
-
-    let stat_effects: Vec<_> = upgrade_effects
-        .filter_map(|(effect, upgrade_level)| effect.compute_stat_effect(upgrade_level))
-        .collect();
-
-    apply_effects_to_skill_specs(statuses_store, skill_specs, stat_effects.iter());
 }
