@@ -20,6 +20,60 @@
           }
         ]
       },
+      "speed": {
+        "title": "Attack Speed",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 2,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "Speed": { "skill_type": "Attack" }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_chance": {
+        "title": "Critical Hit Chance",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritChance": { }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title": "Critical Hit Damage",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritDamage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
       "life_on_hit": {
         "title": "Life on Hit",
         "base_cost": 2,
@@ -31,7 +85,7 @@
             "upgrade_value": 0,
             "Trigger": {
               "trigger_id": "weapon_skill_life_on_hit",
-              "skill_type": "Other",
+              "skill_type": "Attack",
               "OnHit": {
                 "skill_ids": [ "weapon_skill" ],
                 "is_hurt": true
@@ -53,6 +107,46 @@
               "stat": {
                 "Restore": {
                   "restore_type": "Life"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "mana_on_hit": {
+        "title": "Mana on Hit",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 5,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "Trigger": {
+              "trigger_id": "weapon_skill_mana_on_hit",
+              "skill_type": "Attack",
+              "OnHit": {
+                "skill_ids": [ "weapon_skill" ],
+                "is_hurt": true
+              },
+              "target": "Source",
+              "effects": [
+                { "Restore": {
+                    "restore_type": "Mana",
+                    "value": 1,
+                    "modifier": "Flat"
+                  } }
+              ]
+            }
+          },
+          {
+            "value": 0,
+            "upgrade_value": 1,
+            "StatEffect": {
+              "stat": {
+                "Restore": {
+                  "restore_type": "Mana"
                 }
               },
               "modifier": "Flat"

@@ -555,9 +555,9 @@ fn MasteryUpgradePanel(
 
                                 <div class="flex gap-1">
                                     <span class="font-bold text-zinc-100">{mastery_level.saturating_sub(spent_points)}</span>
-                                    <span class="text-zinc-600">"/"</span>
-                                    <span class="font-bold text-zinc-500">{mastery_level}</span>
-                                    <span class="font-semibold text-zinc-500">" Remaining Points"</span>
+                                    <span class="text-zinc-400">"/"</span>
+                                    <span class="font-bold text-zinc-400">{mastery_level}</span>
+                                    <span class="text-zinc-400">" Remaining Points"</span>
                                 </div>
 
                             </div>
@@ -766,14 +766,20 @@ fn MasteryUpgradeRow(
                                     }
                                 })}
                             <div>
-                                "Mastery Level "
-                                <span class="font-bold text-zinc-100">
-                                    {move || upgrade_level.get()}
-                                </span> <span class="text-zinc-600">" / "</span>
+                                "Max Level: "
                                 <span class="font-bold text-zinc-500">
                                     {upgrade_specs.max_level}
                                 </span>
                             </div>
+                        // <div>
+                        // "Level "
+                        // <span class="font-bold text-zinc-100">
+                        // {move || upgrade_level.get()}
+                        // </span> <span class="text-zinc-400">" / "</span>
+                        // <span class="font-bold text-zinc-400">
+                        // {upgrade_specs.max_level}
+                        // </span>
+                        // </div>
                         </div>
                     </div>
 
