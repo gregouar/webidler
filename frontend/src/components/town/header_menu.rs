@@ -40,6 +40,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.equip_filter.set(InventoryEquipFilter::Slot);
     };
 
@@ -58,6 +59,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_forge.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
     };
 
@@ -75,6 +77,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_forge.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
     };
@@ -93,6 +96,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
     };
@@ -111,6 +115,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_forge.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
     };
@@ -131,6 +136,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
         town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
     };
 
     Effect::new(move || {
@@ -147,6 +153,7 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_market.set(false);
         town_context.open_forge.set(false);
         town_context.open_inventory.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_stash.set(false);
         town_context.open_temple.set(false);
     };

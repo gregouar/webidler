@@ -242,7 +242,7 @@ pub fn SkillMasteryCard(
                             <div class=move || {
                                 format!(
                                     "text-sm xl:text-base font-bold text-center font-display text-shadow-lg/100 shadow-gray-950 leading-tight {}",
-                                    if is_empty { "text-zinc-500" } else { "text-zinc-100" },
+                                    if is_empty { "text-zinc-400" } else { "text-zinc-100" },
                                 )
                             }>{skill_name}</div>
                         }
@@ -256,7 +256,7 @@ pub fn SkillMasteryCard(
                                 {(level_delta > 0)
                                     .then(|| {
                                         view! {
-                                            <span class="ml-1 text-zinc-500">
+                                            <span class="ml-1 text-zinc-400">
                                                 {level - level_delta}" → "
                                             </span>
                                         }

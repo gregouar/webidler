@@ -460,7 +460,7 @@ fn MasteryUpgradePanel(
             {move || {
                 let Some(skill_id) = selected_skill.get() else {
                     return view! {
-                        <div class="flex h-full items-center justify-center text-sm text-zinc-500">
+                        <div class="flex h-full items-center justify-center text-sm text-zinc-400">
                             "Select a skill."
                         </div>
                     }
@@ -472,7 +472,7 @@ fn MasteryUpgradePanel(
                     .get(&skill_id)
                     .cloned() else {
                     return view! {
-                        <div class="flex h-full items-center justify-center text-sm text-zinc-500">
+                        <div class="flex h-full items-center justify-center text-sm text-zinc-400">
                             "No mastery upgrades available."
                         </div>
                     }
@@ -764,13 +764,7 @@ fn MasteryUpgradeRow(
                                             </span>
                                         </div>
                                     }
-                                })}
-                            <div>
-                                "Max Level: "
-                                <span class="font-bold text-zinc-500">
-                                    {upgrade_specs.max_level}
-                                </span>
-                            </div>
+                                })} <div>"Max Level: " {upgrade_specs.max_level}</div>
                         // <div>
                         // "Level "
                         // <span class="font-bold text-zinc-100">
@@ -844,9 +838,9 @@ fn UpgradeEffectDescription(
             {move || {
                 let upgrade_level = upgrade_level.get();
                 if upgrade_level > upgrade_specs.max_level {
-                    view! { <li class="text-zinc-500">"Max Level"</li> }.into_any()
+                    view! { <li class="text-zinc-400">"Max Level"</li> }.into_any()
                 } else if upgrade_level == 0 {
-                    view! { <li class="text-zinc-500">"No effect"</li> }.into_any()
+                    view! { <li class="text-zinc-400">"No effect"</li> }.into_any()
                 } else {
                     let stat_effects: Vec<_> = upgrade_specs
                         .effects

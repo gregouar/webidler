@@ -358,7 +358,7 @@ where
                 }>
                     <input
                         node_ref=search_ref
-                        class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
+                        class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-400 focus:outline-none"
                         placeholder="Search..."
                         prop:value=move || search.get()
                         on:input=move |ev| search.set(event_target_value(&ev))
@@ -400,7 +400,7 @@ where
                             .is_empty()
                             .then(|| {
                                 view! {
-                                    <li class="px-4 py-2 text-zinc-500">"No elements found."</li>
+                                    <li class="px-4 py-2 text-zinc-400">"No elements found."</li>
                                 }
                             })
                     }}
