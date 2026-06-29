@@ -174,7 +174,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -362,7 +362,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -551,7 +551,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -708,20 +708,20 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
@@ -760,7 +760,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -841,6 +841,90 @@
     "ignore_quality": false,
     "upgrade_levels": [ ],
     "upgrade_effects": [ ]
+  },
+  "energy_shield": {
+    "name": "Aegis of the First Dawn",
+    "icon": "items/shields/energy_shield.webp",
+    "description": "The disc gathered daylight for centuries before releasing it in an instant.",
+    "slot": "Shield",
+    "extra_slots": [ ],
+    "categories": [
+      "Shield"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "More",
+        "scope": "Local",
+        "value": -1e200,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": null
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": null
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "shield_bash",
+            "damage_type": "Storm",
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 300.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [ ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 200.0,
+      "block": 29.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Block": null
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      }
+    ]
   },
   "shield_9": {
     "name": "Mithril Protector",
