@@ -26,7 +26,7 @@ pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.10; // X10 every 10 levels
 pub const SKILL_COST_INCREASE_FACTOR: f64 = LOG10_2; // X2 every level
 pub const XP_INCREASE_FACTOR: f64 = 0.40;
 
-pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X5 every 100 levels
+pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X10 every 200 levels
 pub const SKILL_MASTERY_BASE_COST: f64 = 10_000.0;
 pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
 
