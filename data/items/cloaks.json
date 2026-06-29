@@ -32,8 +32,8 @@
     "upgrade_effects": [ ]
   },
   "hooded_wrap": {
-    "name": "Wool Cloak",
-    "icon": "items/cloaks/wool_cloak.webp",
+    "name": "Hooded Wrap",
+    "icon": "items/cloaks/hooded_wrap.webp",
     "description": null,
     "slot": "Accessory",
     "extra_slots": [ ],
@@ -41,7 +41,7 @@
       "Accessory",
       "Cloak"
     ],
-    "min_area_level": 0,
+    "min_area_level": 40,
     "rarity": "Normal",
     "affixes": [
       {
@@ -264,8 +264,8 @@
     ]
   },
   "heavy_cloak": {
-    "name": "Wool Cloak",
-    "icon": "items/cloaks/wool_cloak.webp",
+    "name": "Heavy Cloak",
+    "icon": "items/cloaks/heavy_cloak.webp",
     "description": null,
     "slot": "Accessory",
     "extra_slots": [ ],
@@ -273,7 +273,7 @@
       "Accessory",
       "Cloak"
     ],
-    "min_area_level": 0,
+    "min_area_level": 90,
     "rarity": "Normal",
     "affixes": [
       {
