@@ -166,16 +166,34 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 
                 <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
 
-                <div class="flex flex-col gap-1 px-6 text-sm xl:text-base">
-                    <div class="flex justify-between">
-                        <span class="text-zinc-400">"Total Time"</span>
-                        <span class="text-amber-100 font-medium font-number">
-                            {move || format_duration(stats().elapsed_time, true)}
-                        </span>
+                <div class="grid grid-cols-2 gap-x-8 gap-y-1 px-6 text-sm xl:text-base">
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between gap-4">
+                            <span class="text-zinc-400">"Total Time"</span>
+                            <span class="text-amber-100 font-medium font-number">
+                                {move || format_duration(stats().elapsed_time, true)}
+                            </span>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <span class="text-zinc-400">"Area Completed"</span>
+                            <span class="text-amber-100 font-medium font-number">
+                                {area_completed}
+                            </span>
+                        </div>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-zinc-400">"Area Completed"</span>
-                        <span class="text-amber-100 font-medium font-number">{area_completed}</span>
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between gap-4">
+                            <span class="text-zinc-400">"Monster Killed"</span>
+                            <span class="text-amber-100 font-medium font-number">
+                                {move || stats().monsters_killed}
+                            </span>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <span class="text-zinc-400">"Player Deaths"</span>
+                            <span class="text-amber-100 font-medium font-number">
+                                {move || stats().player_deaths}
+                            </span>
+                        </div>
                     </div>
                 </div>
 

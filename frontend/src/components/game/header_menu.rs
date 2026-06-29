@@ -157,7 +157,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     }}
                 </MenuButton>
                 <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
-                <MenuButtonRed on:click=stop_grind>"Stop"</MenuButtonRed>
+                <MenuButtonRed on:click=stop_grind>"End"</MenuButtonRed>
                 <MenuButton on:click=quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>
