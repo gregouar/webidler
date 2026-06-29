@@ -1055,7 +1055,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
 
             let result_str = vec![unblockable_str, avoidable_str]
                 .into_iter()
-                .filter_map(|s| s)
+                .flatten()
                 .collect::<Vec<_>>()
                 .join(", ");
 

@@ -933,11 +933,9 @@ pub fn apply_stat_effect_on_skill_effect(
                 ..
             } = &effect.stat
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
-            {
-                if let Some(stat_unblockable) = stat_unblockable {
+                && let Some(stat_unblockable) = stat_unblockable {
                     *unblockable = *stat_unblockable;
                 }
-            }
         }
         SkillEffectType::ApplyStatus {
             status_id: skill_status_id,
@@ -1058,11 +1056,9 @@ pub fn apply_stat_effect_on_skill_effect(
                 ..
             } = &effect.stat
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
-            {
-                if let Some(stat_avoidable) = stat_avoidable {
+                && let Some(stat_avoidable) = stat_avoidable {
                     *avoidable = Some(*stat_avoidable);
                 }
-            }
 
             *value_factor = value.max.factor();
         }

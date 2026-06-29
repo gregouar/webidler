@@ -521,7 +521,7 @@ pub fn format_skill_effect(
                         trigger_status_name,
                         trigger_status_value,
                     );
-                    let unblockable_str = unblockable.then(|| "Unblockable ");
+                    let unblockable_str = unblockable.then_some("Unblockable ");
                     if value.min.get() > 0.0 || value.max.get() > 0.0
                         || trigger_modifier_str.is_some()
                     {

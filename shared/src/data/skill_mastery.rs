@@ -51,7 +51,7 @@ pub enum SkillMasteryUpgradeEffectType {
     // },
     SkillEffect {
         #[serde(flatten)]
-        skill_effect: SkillEffect,
+        skill_effect: Box<SkillEffect>,
         #[serde(default)]
         target_index: usize,
     },
@@ -117,9 +117,7 @@ impl SkillMasteryUpgradeEffect {
     }
 
     pub fn compute_stat_effect(&self, upgrade_level: u16) -> Option<StatEffect> {
-        let Some(upgrade_value) = self.compute_value(upgrade_level) else {
-            return None;
-        };
+        let upgrade_value = self.compute_value(upgrade_level)?;
         match &self.effect_type {
             SkillMasteryUpgradeEffectType::StatEffect { stat, modifier, scope: _ }
             // | SkillMasteryUpgradeEffectType::PlayerStatEffect { stat, modifier } 
