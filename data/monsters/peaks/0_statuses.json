@@ -1,0 +1,130 @@
+{
+    "dragon_eye": {
+        "name": "Evil Eye",
+        "icon": "skills/beast_eye.svg",
+        "debuff": true,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "CritChance": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 25,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "CritDamage": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Lucky": {
+                            "roll_type": {
+                                "Damage": { }
+                            }
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "dragon_rage": {
+        "name": "Abal's Fury",
+        "icon": "skills/dragon_head.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": { }
+                    },
+                    "modifier": "More"
+                },
+                "value": 50,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": { }
+                    },
+                    "modifier": "More"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": { }
+                    },
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 30,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "stinky": {
+        "name": "Stinky",
+        "icon": "skills/turd.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Storm"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

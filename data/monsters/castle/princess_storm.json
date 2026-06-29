@@ -10,7 +10,7 @@
   "stun_lockout": 3.0,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -49,20 +49,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 300,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "Damage": { }
-                        }
-                      }
-                    },
-                    "cumulate": true,
-                    "value": 100
-                  }
-                ]
+                "status_id": "grieving_call",
+                "value": 100
               }
             }
           ]

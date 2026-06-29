@@ -18,12 +18,14 @@
     "tier_6.json",
     "tier_7.json",
     "tier_8.json",
+    "tier_9.json",
+    "tier_10.json",
     "area_wyrm.json"
   ],
   "bosses": [
     {
       "level": 30,
-      "interval": 2,
+      "interval": 20,
       "spawns": [
         {
           "monster": "dragon_black.json",
@@ -32,8 +34,8 @@
       ]
     },
     {
-      "level": 31,
-      "interval": 2,
+      "level": 40,
+      "interval": 20,
       "spawns": [
         {
           "monster": "dragon_red.json",

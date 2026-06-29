@@ -1,0 +1,99 @@
+{
+    "mermaid_song": {
+        "name": "Appeasing Song",
+        "icon": "skills/double_quaver.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "ManaRegen",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": { }
+                    },
+                    "debuff": true
+                },
+                "value": 50,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "lookout": {
+        "name": "Lookout!",
+        "icon": "skills/crow_nest.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "CritChance": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 20,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "CritDamage": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "chest_protection": {
+        "name": "Protective Hull",
+        "icon": "skills/chest.svg",
+        "debuff": false,
+        "duration": 10,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": { "DamageResistance": { } }
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "pirate_curse": {
+        "name": "Pirates Curse",
+        "icon": "skills/pirate_grave.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": "LifeRegen",
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

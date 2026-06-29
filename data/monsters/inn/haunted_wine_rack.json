@@ -10,7 +10,7 @@
   "stun_lockout": 3.0,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -33,14 +33,8 @@
             {
               "ApplyStatus": {
                 "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Physical" }
-                    },
-                    "value": [ 1, 2 ]
-                  }
-                ]
+                "status_id": "bleed",
+                "value": [ 1, 2 ]
               }
             }
           ]
@@ -59,14 +53,8 @@
             {
               "ApplyStatus": {
                 "duration": 2,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Fire" }
-                    },
-                    "value": [ 2, 4 ]
-                  }
-                ]
+                "status_id": "burn",
+                "value": [ 2, 4 ]
               }
             },
             {

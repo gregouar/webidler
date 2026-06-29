@@ -100,7 +100,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": null,
             "is_hit": null
@@ -116,7 +115,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Min",
             "is_hit": null
@@ -132,7 +130,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Max",
             "is_hit": null
@@ -148,7 +145,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -167,14 +163,9 @@
           "SuccessChance": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
-                }
+                "status_id": "burn"
               }
             }
           }
@@ -227,7 +218,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Min",
               "is_hit": null
@@ -244,7 +234,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Max",
               "is_hit": null
@@ -261,7 +250,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -374,7 +362,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -393,7 +380,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": "Min",
             "is_hit": null
@@ -409,7 +395,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": "Max",
             "is_hit": null
@@ -438,10 +423,10 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
+            "status_id": null,
+            "damage_type": null,
             "skill_type": "Curse",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -459,7 +444,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -467,11 +451,11 @@
             },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "conditions": [
               {
                 "StatusStacks": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": "Curse"
                 }
               }
@@ -521,7 +505,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -538,7 +521,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -555,7 +537,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -574,7 +555,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
@@ -582,11 +562,11 @@
               },
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "conditions": [
                 {
                   "StatusStacks": {
-                    "status_type": null,
+                    "status_id": null,
+                    "damage_type": null,
                     "skill_type": "Curse"
                   }
                 }
@@ -659,13 +639,12 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
         "scope": "Local",
-        "value": 800.0,
+        "value": 300.0,
         "ignore_quality": true
       },
       {
@@ -673,7 +652,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -692,7 +670,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": "Min",
             "is_hit": null
@@ -711,7 +688,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": "Max",
             "is_hit": null
@@ -728,10 +704,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "tidesbreaker_anchor",
         "OnHit": {
           "skill_type": "Attack",
           "range": null,
@@ -743,6 +715,8 @@
           "skill_ids": null,
           "conditions": []
         },
+        "description": null,
+        "trigger_id": "tidesbreaker_anchor",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -750,7 +724,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Storm",
                 "min_max": null,
                 "is_hit": null
@@ -763,8 +736,11 @@
             }
           }
         ],
-        "skill_range": "Any",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Attack",
+        "skill_range": "Any",
+        "skill_shape": "All",
         "effects": [
           {
             "success_chance": {
@@ -784,37 +760,31 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": {
+                "CritDamage": {
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
+                  "skill_id": null
                 }
               },
               {
-                "CritDamage": {
+                "CritChance": {
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
+                  "skill_id": null
                 }
               },
               {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": "Physical",
                   "min_max": null,
                   "is_hit": null
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "All",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": {
@@ -852,7 +822,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -869,7 +838,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -886,7 +854,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -959,7 +926,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -977,8 +943,7 @@
         "stat": {
           "CritChance": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -990,8 +955,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -1004,7 +968,6 @@
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "whirlwind",
-            "skill_description": null,
             "range": null,
             "shape": null,
             "repeat": {
@@ -1055,7 +1018,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -1072,7 +1034,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -1089,7 +1050,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -1166,6 +1126,86 @@
         "Physical": [
           18.0,
           66.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "weapon_2h_9": {
+    "name": "Twinblade",
+    "icon": "items/weapons_2h/twinblade.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          20.0,
+          74.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "weapon_2h_10": {
+    "name": "Great Axe",
+    "icon": "items/weapons_2h/greataxe.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          22.0,
+          82.0
         ]
       },
       "crit_chance": {

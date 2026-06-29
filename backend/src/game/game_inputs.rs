@@ -114,6 +114,7 @@ fn handle_client_message(
         }
         ClientMessage::EquipItem(m) => {
             if let Err(err) = player_controller::equip_item_from_bag(
+                &master_store.statuses_store,
                 game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
@@ -129,6 +130,7 @@ fn handle_client_message(
         }
         ClientMessage::UnequipItem(m) => {
             if let Err(err) = player_controller::unequip_item_to_bag(
+                &master_store.statuses_store,
                 game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,

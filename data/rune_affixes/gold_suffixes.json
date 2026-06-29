@@ -13,7 +13,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 10, 20 ]
+        "value": [ 5, 10 ]
       }
     ]
   },
@@ -31,7 +31,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 30, 40 ]
+        "value": [ 15, 20 ]
       }
     ]
   },
@@ -49,7 +49,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 50, 60 ]
+        "value": [ 25, 30 ]
       }
     ]
   },
@@ -67,7 +67,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 70, 80 ]
+        "value": [ 35, 40 ]
       }
     ]
   },
@@ -85,7 +85,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 90, 100 ]
+        "value": [ 45, 50 ]
       }
     ]
   },
@@ -103,7 +103,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 110, 120 ]
+        "value": [ 55, 60 ]
       }
     ]
   },
@@ -121,7 +121,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 130, 140 ]
+        "value": [ 65, 70 ]
       }
     ]
   },
@@ -139,7 +139,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 150, 160 ]
+        "value": [ 75, 80 ]
       }
     ]
   },
@@ -157,7 +157,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 170, 180 ]
+        "value": [ 85, 90 ]
       }
     ]
   },
@@ -175,7 +175,7 @@
         "scope": "Global",
         "stat": "GoldFind",
         "modifier": "More",
-        "value": [ 190, 200 ]
+        "value": [ 95, 100 ]
       }
     ]
   }

@@ -3,11 +3,11 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use shared::data::{
+    character_status::StatusId,
     modifier::Modifier,
     monster::{MonsterRarity, MonsterSpecs},
     player::CharacterSpecs,
     skill::{BaseSkillSpecs, SkillType},
-    stat_effect::StatStatusType,
 };
 use strum::IntoEnumIterator;
 
@@ -18,7 +18,7 @@ use super::DataInit;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatusResistanceBlueprint {
     skill_type: Option<SkillType>,
-    status_type: Option<StatStatusType>,
+    status_id: Option<StatusId>,
     value: f64,
 }
 
@@ -60,7 +60,7 @@ impl DataInit<&BaseMonsterSpecs> for MonsterSpecs {
                 .iter()
                 .fold(HashMap::new(), |mut acc, status_resistance| {
                     let mut apply = |skill_type| {
-                        acc.entry((skill_type, status_resistance.status_type.clone()))
+                        acc.entry((skill_type, status_resistance.status_id.clone()))
                             .or_default()
                             .apply_modifier(status_resistance.value, Modifier::Flat);
                     };

@@ -61,6 +61,7 @@ pub async fn tick(
         game_data.player_state.character_state.dirty_specs = false;
 
         *game_data.player_specs.mutate() = player_updater::update_player_specs(
+            &master_store.statuses_store,
             game_data.player_base_specs.read(),
             game_data.player_specs.read(),
             &game_data.player_state,
@@ -76,16 +77,19 @@ pub async fn tick(
         .iter()
         .any(|m| m.character_state.dirty_specs)
     {
-        for ((base_specs, monster_specs), monster_state) in game_data
+        for (i, ((base_specs, monster_specs), monster_state)) in game_data
             .monster_base_specs
             .read()
             .iter()
             .zip(game_data.monster_specs.iter_mut())
             .zip(game_data.monster_states.iter_mut())
+            .enumerate()
         {
             if monster_state.character_state.dirty_specs {
                 monster_state.character_state.dirty_specs = false;
                 monsters_updater::update_monster_specs(
+                    &master_store.statuses_store,
+                    CharacterId::Monster(i),
                     base_specs,
                     monster_specs,
                     monster_state,
@@ -101,7 +105,7 @@ pub async fn tick(
     if !events_queue.is_empty() {
         events_resolver::resolve_events(events_queue, game_data, master_store).await;
     }
-    update_entities(events_queue, game_data, elapsed_time).await;
+    update_entities(events_queue, game_data, master_store, elapsed_time).await;
 
     game_data.game_stats.elapsed_time += elapsed_time;
     Ok(())
@@ -118,7 +122,7 @@ async fn control_entities(
             Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
 
         if game_data.player_respawn_delay.is_zero() {
-            respawn_player(game_data);
+            respawn_player(game_data, master_store);
         }
         return Ok(());
     }
@@ -141,10 +145,12 @@ async fn control_entities(
         .collect();
 
     game_data.player_controller.control_player(
+        &master_store.statuses_store,
         events_queue,
         &game_data.area_threat,
         game_data.player_base_specs.read(),
         game_data.player_specs.read(),
+        game_data.player_inventory.read(),
         &mut game_data.player_state,
         &mut monsters_still_alive,
         game_data.new_wave,
@@ -175,6 +181,7 @@ async fn control_entities(
 
             let (monster_specs, monster_states) = monsters_wave::generate_monsters_wave(
                 &master_store.monster_specs_store,
+                &master_store.statuses_store,
                 &game_data.area_blueprint.waves,
                 &game_data.area_blueprint.bosses,
                 &game_data.area_specs,
@@ -202,6 +209,7 @@ async fn control_entities(
         game_data.monster_wave_delay =
             Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
         monsters_controller::control_monsters(
+            &master_store.statuses_store,
             events_queue,
             &game_data.monster_specs,
             &mut game_data.monster_states,
@@ -239,6 +247,7 @@ pub fn update_threat(
 async fn update_entities(
     events_queue: &mut EventsQueue,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
     elapsed_time: Duration,
 ) {
     game_data.player_respawn_delay = game_data.player_respawn_delay.saturating_sub(elapsed_time);
@@ -251,13 +260,16 @@ async fn update_entities(
     }
 
     player_updater::update_player_state(
+        &master_store.statuses_store,
         events_queue,
         elapsed_time,
         game_data.player_specs.read(),
         &mut game_data.player_state,
+        game_data.player_inventory.read(),
         &game_data.area_threat,
     );
     monsters_updater::update_monster_states(
+        &master_store.statuses_store,
         events_queue,
         elapsed_time,
         &game_data.monster_specs,
@@ -266,12 +278,13 @@ async fn update_entities(
     );
 }
 
-fn respawn_player(game_data: &mut GameInstanceData) {
+fn respawn_player(game_data: &mut GameInstanceData, master_store: &MasterStore) {
     game_data.monster_base_specs.mutate().clear();
     game_data.monster_specs.clear();
     game_data.monster_states.clear();
 
     *game_data.player_specs.mutate() = player_updater::update_player_specs(
+        &master_store.statuses_store,
         game_data.player_base_specs.read(),
         game_data.player_specs.read(),
         &game_data.player_state,

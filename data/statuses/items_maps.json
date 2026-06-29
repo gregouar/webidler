@@ -1,0 +1,58 @@
+{
+    "drunk": {
+        "name": "Drunk",
+        "icon": "skills/beer_stein.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 5,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "SuccessChance": {
+                            "skill_type": null,
+                            "effect_type": null
+                        }
+                    },
+                    "modifier": "Increased",
+                    "debuff": true
+                },
+                "value": 5,
+                "modifier": "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 10,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "enwebbed": {
+        "name": "Enwebbed",
+        "icon": "statuses/spider_web.svg",
+        "debuff": true,
+        "duration": 5.0,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Speed": { }
+                    },
+                    "modifier": "More",
+                    "debuff": true
+                },
+                "value": 33.0,
+                "modifier": "Flat"
+            }
+        ]
+    }
+}

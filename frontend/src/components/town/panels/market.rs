@@ -12,8 +12,8 @@ use shared::{
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
         stat_effect::{
-            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
-            StatType,
+            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
+            StatType, StatusDamageType,
         },
     },
     http::client::{
@@ -24,7 +24,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
     shared::{
@@ -277,7 +276,6 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let value = Signal::derive(move || stash.read().resource_gems);
@@ -292,7 +290,6 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
                 async move {
                     match backend
                         .exchange_gems_stash(
-                            &auth_context.token(),
                             &ExchangeGemsStashRequest {
                                 character_id,
                                 amount,
@@ -372,7 +369,6 @@ fn MarketBrowser(
     Effect::new({
         let backend: BackendClient = expect_context();
         let town_context: TownContext = expect_context();
-        let auth_context: AuthContext = expect_context();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
@@ -384,18 +380,15 @@ fn MarketBrowser(
 
                 spawn_local(async move {
                     let response = backend
-                        .browse_market_items(
-                            &auth_context.token(),
-                            &BrowseMarketItemsRequest {
-                                user_id,
-                                realm,
-                                skip,
-                                limit: items_per_page,
-                                filters,
-                                own_listings,
-                                is_deleted,
-                            },
-                        )
+                        .browse_market_items(&BrowseMarketItemsRequest {
+                            user_id,
+                            realm,
+                            skip,
+                            limit: items_per_page,
+                            filters,
+                            own_listings,
+                            is_deleted,
+                        })
                         .await
                         .unwrap_or_default();
 
@@ -486,7 +479,6 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let chat_context: ChatContext = expect_context();
     let toaster = expect_context::<Toasts>();
 
@@ -556,13 +548,10 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .buy_market_item(
-                                &auth_context.token(),
-                                &BuyMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .buy_market_item(&BuyMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -589,12 +578,9 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .reject_market_item(
-                                &auth_context.token(),
-                                &RejectMarketItemRequest {
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .reject_market_item(&RejectMarketItemRequest {
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(_) => {
@@ -702,7 +688,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let price = RwSignal::new(None::<ItemPrice>);
@@ -721,15 +706,12 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .sell_market_item(
-                                &auth_context.token(),
-                                &SellMarketItemRequest {
-                                    character_id,
-                                    recipient_name,
-                                    item_index: item.index,
-                                    price,
-                                },
-                            )
+                            .sell_market_item(&SellMarketItemRequest {
+                                character_id,
+                                recipient_name,
+                                item_index: item.index,
+                                price,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -798,7 +780,6 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let disabled = Signal::derive(move || selected_item.read().is_empty());
@@ -856,14 +837,11 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .edit_market_item(
-                                &auth_context.token(),
-                                &EditMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                    price,
-                                },
-                            )
+                            .edit_market_item(&EditMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                                price,
+                            })
                             .await
                         {
                             Ok(_) => {
@@ -889,13 +867,10 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .buy_market_item(
-                                &auth_context.token(),
-                                &BuyMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .buy_market_item(&BuyMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -1529,7 +1504,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
+                status_filter: StatStatusFilter {
+                    status_id: None,
+                    damage_type: Some(StatusDamageType::Any),
+                },
                 skill_filter: Default::default(),
                 min_max: None,
             },
@@ -1537,7 +1515,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: None,
+                status_filter: Default::default(),
                 skill_filter: StatSkillFilter {
                     skill_type: Some(SkillType::Curse),
                     ..Default::default()
@@ -1548,7 +1526,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusDuration {
-                status_type: None,
+                status_filter: Default::default(),
                 skill_filter: Default::default(),
             },
             Modifier::Increased,
@@ -1556,7 +1534,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::SuccessChance {
                 skill_filter: Default::default(),
-                effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
+                effect_type: Some(StatSkillEffectType::ApplyStatus { status_id: None }),
             },
             Modifier::Increased,
         ),

@@ -12,7 +12,7 @@
   "skills": [
     {
       "name": "Haunting",
-      "icon": "skills/curse_frailty.svg",
+      "icon": "skills/curse_conductivity.svg",
       "skill_type": "Spell",
       "cooldown": 3.0,
       "targets": [
@@ -27,23 +27,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Storm"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "vulnerability_storm",
+                "value": 50
               }
             }
           ]

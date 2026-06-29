@@ -8,7 +8,6 @@ use leptos_use::storage;
 use shared::{data::user::UserId, http::client::UpdateAccountRequest, types::Username};
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     ui::{
         buttons::{MenuButton, MenuButtonRed},
@@ -23,7 +22,6 @@ use crate::components::{
 pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>) -> impl IntoView {
     let toaster = expect_context::<Toasts>();
     let backend = expect_context::<BackendClient>();
-    let auth_context = expect_context::<AuthContext>();
 
     let (get_username_storage, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
@@ -57,13 +55,10 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
             spawn_local({
                 async move {
                     match backend
-                        .post_update_account(
-                            &auth_context.token(),
-                            &UpdateAccountRequest {
-                                username: username.get_untracked().unwrap(),
-                                ..Default::default()
-                            },
-                        )
+                        .post_update_account(&UpdateAccountRequest {
+                            username: username.get_untracked().unwrap(),
+                            ..Default::default()
+                        })
                         .await
                     {
                         Ok(_) => {
@@ -104,13 +99,10 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
             spawn_local({
                 async move {
                     match backend
-                        .post_update_account(
-                            &auth_context.token(),
-                            &UpdateAccountRequest {
-                                email: Some(email.get_untracked().unwrap()),
-                                ..Default::default()
-                            },
-                        )
+                        .post_update_account(&UpdateAccountRequest {
+                            email: Some(email.get_untracked().unwrap()),
+                            ..Default::default()
+                        })
                         .await
                     {
                         Ok(_) => {
@@ -146,14 +138,11 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
             spawn_local({
                 async move {
                     match backend
-                        .post_update_account(
-                            &auth_context.token(),
-                            &UpdateAccountRequest {
-                                old_password: Some(old_password.get().unwrap()),
-                                password: Some(password.get().unwrap()),
-                                ..Default::default()
-                            },
-                        )
+                        .post_update_account(&UpdateAccountRequest {
+                            old_password: Some(old_password.get().unwrap()),
+                            password: Some(password.get().unwrap()),
+                            ..Default::default()
+                        })
                         .await
                     {
                         Ok(_) => {
@@ -189,13 +178,7 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
     let show_delete_modal = RwSignal::new(false);
 
     let user_data = LocalResource::new({
-        move || async move {
-            backend
-                .get_me(&auth_context.token())
-                .await
-                .map(|r| r.user_details)
-                .ok()
-        }
+        move || async move { backend.get_me().await.map(|r| r.user_details).ok() }
     });
 
     Effect::new(move || {
@@ -319,7 +302,6 @@ pub fn ConfirmAccountDeletionModal(
     let do_delete = {
         let toaster = expect_context::<Toasts>();
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         let navigate = use_navigate();
 
         move |_| {
@@ -327,10 +309,7 @@ pub fn ConfirmAccountDeletionModal(
             spawn_local({
                 let navigate = navigate.clone();
                 async move {
-                    match backend
-                        .delete_account(&auth_context.token(), &user_id)
-                        .await
-                    {
+                    match backend.delete_account(&user_id).await {
                         Ok(_) => {
                             if get_username_storage.get_untracked()
                                 == get_guest_username_storage.get_untracked()

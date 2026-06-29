@@ -12,6 +12,8 @@ use shared::data::passive::{
 use strum::IntoEnumIterator;
 
 use frontend::components::{
+    backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, NodeTooltipContent, PurchaseStatus, node_text,
@@ -74,6 +76,15 @@ impl SelectedNode {
 #[component]
 pub fn PassivesPage() -> impl IntoView {
     let events_context: EventsContext = expect_context();
+
+    let backend: BackendClient = expect_context();
+    let data_context: DataContext = expect_context();
+
+    let _data_load = LocalResource::new({
+        move || async move {
+            let _ = data_context.load_data(backend).await;
+        }
+    });
 
     let (loaded_file, _, on_skills_file) = use_json_loader::<HashMap<String, PassivesTreeSpecs>>();
     let passives_tree_specs = RwSignal::new(Default::default());
@@ -689,19 +700,44 @@ fn EditNodeMenu(
                             .cloned()
                             .unwrap_or_default(),
                     );
+                    let pending_history = RwSignal::new(false);
+                    Effect::new(move || {
+                        if let Some(latest_node_specs) =
+                            passives_tree_specs.read().nodes.get(&node_id).cloned()
+                            && node_specs.get_untracked() != latest_node_specs
+                        {
+                            node_specs.set(latest_node_specs);
+                        }
+                    });
+                    Effect::new(move || {
+                        let value = node_specs.get();
+
+                        if let SelectedNode::Single(node_id) = selected_node.get_untracked()
+                            && passives_tree_specs
+                                .read_untracked()
+                                .nodes
+                                .get(&node_id)
+                                .map(|node_specs| *node_specs != value)
+                                .unwrap_or_default()
+                        {
+                            passives_tree_specs.write().nodes.insert(node_id, value);
+                            pending_history.set(true);
+                        }
+                    });
                     let _ = watch_debounced_with_options(
                         move || node_specs.get(),
                         move |value, _, _| {
                             if let SelectedNode::Single(node_id) = selected_node.get_untracked()
+                                && pending_history.get_untracked()
                                 && passives_tree_specs
                                     .read_untracked()
                                     .nodes
                                     .get(&node_id)
-                                    .map(|node_specs| *node_specs != *value)
+                                    .map(|node_specs| *node_specs == *value)
                                     .unwrap_or_default()
                             {
-                                passives_tree_specs.write().nodes.insert(node_id, value.clone());
                                 record_history(passives_history_tracker, passives_tree_specs);
+                                pending_history.set(false);
                             }
                         },
                         250.0,

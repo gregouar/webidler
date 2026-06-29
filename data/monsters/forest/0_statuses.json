@@ -1,0 +1,88 @@
+{
+    "wolf_howl": {
+        "name": "Call of the Pack",
+        "icon": "skills/wolf_howl.svg",
+        "debuff": false,
+        "duration": [
+            5,
+            10
+        ],
+        "max_stacks": 3,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "skill_type": "Attack"
+                        }
+                    }
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "hag_flammability": {
+        "name": "Burned Witch Revenge",
+        "icon": "skills/curse_flammability.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "hunter_vengeance": {
+        "name": "Lost of a Friend",
+        "icon": "skills/hunting_horn.svg",
+        "debuff": false,
+        "duration": 1e+200,
+        "max_stacks": 2,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": { }
+                    },
+                    "modifier": "More"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "moth_cry": {
+        "name": "Lamenting Embrace",
+        "icon": "skills/curse_frailty.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageResistance": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "Flat",
+                    "debuff": true
+                },
+                "value": 50,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

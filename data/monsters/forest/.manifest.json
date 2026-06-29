@@ -20,6 +20,9 @@
       "thorn_sprite_2.json",
       "thorn_wall.json",
       "thunder_stag.json"
+    ],
+    "statuses": [
+      "0_statuses.json"
     ]
   }
 }

@@ -8,7 +8,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     events::{EventsContext, Key},
     settings::SettingsContext,
@@ -93,7 +92,6 @@ fn ConfirmButton(
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
 
     let do_buy = Arc::new({
         let toaster = expect_context::<Toasts>();
@@ -103,13 +101,10 @@ fn ConfirmButton(
             spawn_local({
                 async move {
                     match backend
-                        .post_buy_benedictions(
-                            &auth_context.token(),
-                            &BuyBenedictionsRequest {
-                                character_id,
-                                player_benedictions: player_benedictions.get_untracked(),
-                            },
-                        )
+                        .post_buy_benedictions(&BuyBenedictionsRequest {
+                            character_id,
+                            player_benedictions: player_benedictions.get_untracked(),
+                        })
                         .await
                     {
                         Ok(response) => {

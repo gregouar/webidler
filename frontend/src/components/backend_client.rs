@@ -1,4 +1,5 @@
 use codee::{Decoder, binary::MsgpackSerdeCodec};
+use leptos::prelude::*;
 use reqwest::StatusCode;
 use std::time::Duration;
 
@@ -26,15 +27,18 @@ use shared::{
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
             ForgotPasswordResponse, GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
             GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
-            GetSkillsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
-            InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse,
-            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
-            ResetPasswordResponse, SavePassivesResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpdateAccountResponse, UpgradeStashResponse,
+            GetSkillsResponse, GetStatusesResponse, GetUserCharactersResponse,
+            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
+            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
+            RejectMarketItemResponse, ResetPasswordResponse, SavePassivesResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
+            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
+            UpgradeStashResponse,
         },
     },
 };
+
+use crate::components::auth::AuthState;
 
 #[derive(Clone)]
 pub enum BackendError {
@@ -65,6 +69,7 @@ impl std::fmt::Display for BackendError {
 pub struct BackendClient {
     http_url: &'static str,
     ws_url: &'static str,
+    auth: AuthState,
 }
 
 impl BackendClient {
@@ -72,7 +77,23 @@ impl BackendClient {
         BackendClient {
             http_url: http_url.trim_end_matches('/'),
             ws_url: ws_url.trim_end_matches('/'),
+            auth: AuthState::new(),
         }
+    }
+
+    pub fn sign_out(&self) {
+        self.auth.sign_out();
+    }
+
+    pub fn is_authenticated(&self) -> bool {
+        self.auth.is_authenticated()
+    }
+    pub fn track_authenticated(&self) -> bool {
+        self.auth.track_authenticated()
+    }
+
+    pub async fn get_access_token(&self) -> Result<String, BackendError> {
+        self.auth.get_access_token(*self).await
     }
 
     // Game
@@ -102,32 +123,33 @@ impl BackendClient {
         self.get("game/skills").await
     }
 
+    pub async fn get_statuses(&self) -> Result<GetStatusesResponse, BackendError> {
+        self.get("game/statuses").await
+    }
+
     pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {
         self.get("game/passives").await
     }
 
     pub async fn post_ascend_passives(
         &self,
-        token: &str,
         request: &AscendPassivesRequest,
     ) -> Result<AscendPassivesResponse, BackendError> {
-        self.post_auth("game/passives", token, request).await
+        self.post_auth("game/passives", request).await
     }
 
     pub async fn post_socket_passive(
         &self,
-        token: &str,
         request: &SocketPassiveRequest,
     ) -> Result<SocketPassiveResponse, BackendError> {
-        self.post_auth("game/passives/socket", token, request).await
+        self.post_auth("game/passives/socket", request).await
     }
 
     pub async fn post_save_passives(
         &self,
-        token: &str,
         request: &SavePassivesRequest,
     ) -> Result<SavePassivesResponse, BackendError> {
-        self.post_auth("game/passives/build", token, request).await
+        self.post_auth("game/passives/build", request).await
     }
 
     pub async fn get_benedictions(&self) -> Result<GetBenedictionsResponse, BackendError> {
@@ -136,23 +158,32 @@ impl BackendClient {
 
     pub async fn post_buy_benedictions(
         &self,
-        token: &str,
         request: &BuyBenedictionsRequest,
     ) -> Result<BuyBenedictionsResponse, BackendError> {
-        self.post_auth("game/benedictions", token, request).await
+        self.post_auth("game/benedictions", request).await
     }
 
     // Auth
 
-    pub async fn get_me(&self, token: &str) -> Result<GetUserDetailsResponse, BackendError> {
-        self.get_auth("account/me", token).await
+    pub async fn get_me(&self) -> Result<GetUserDetailsResponse, BackendError> {
+        self.get_auth("account/me").await
     }
 
     pub async fn post_signin(
         &self,
         request: &SignInRequest,
     ) -> Result<SignInResponse, BackendError> {
-        self.post("account/signin", request).await
+        let response: SignInResponse = self.post("account/signin", request).await?;
+        self.auth.set_access_token(response.jwt.clone());
+        Ok(response)
+    }
+
+    pub async fn post_refresh(&self) -> Result<SignInResponse, BackendError> {
+        self.post("account/refresh", &()).await
+    }
+
+    pub async fn post_signout(&self) -> Result<SignInResponse, BackendError> {
+        self.post("account/signout", &()).await
     }
 
     pub async fn post_signup(
@@ -180,45 +211,36 @@ impl BackendClient {
 
     pub async fn post_update_account(
         &self,
-        token: &str,
         request: &UpdateAccountRequest,
     ) -> Result<UpdateAccountResponse, BackendError> {
-        self.post_auth("account/update", token, request).await
+        self.post_auth("account/update", request).await
     }
 
     pub async fn delete_account(
         &self,
-        token: &str,
         user_id: &UserId,
     ) -> Result<DeleteAccountResponse, BackendError> {
-        self.del_auth(&format!("account/{user_id}"), token).await
+        self.del_auth(&format!("account/{user_id}")).await
     }
 
-    pub async fn get_discord_invite(
-        &self,
-        token: &str,
-    ) -> Result<GetDiscordInviteResponse, BackendError> {
-        self.get_auth("discord", token).await
+    pub async fn get_discord_invite(&self) -> Result<GetDiscordInviteResponse, BackendError> {
+        self.get_auth("discord").await
     }
 
     // Characters
 
     pub async fn get_user_characters(
         &self,
-        token: &str,
         user_id: &UserId,
     ) -> Result<GetUserCharactersResponse, BackendError> {
-        self.get_auth(&format!("users/{user_id}/characters"), token)
-            .await
+        self.get_auth(&format!("users/{user_id}/characters")).await
     }
 
     pub async fn get_character_details(
         &self,
-        token: &str,
         character_id: &UserCharacterId,
     ) -> Result<GetCharacterDetailsResponse, BackendError> {
-        self.get_auth(&format!("characters/{character_id}"), token)
-            .await
+        self.get_auth(&format!("characters/{character_id}")).await
     }
 
     pub async fn get_character_by_name(
@@ -230,122 +252,108 @@ impl BackendClient {
 
     pub async fn post_create_character(
         &self,
-        token: &str,
         user_id: &UserId,
         request: &CreateCharacterRequest,
     ) -> Result<CreateCharacterResponse, BackendError> {
-        self.post_auth(&format!("users/{user_id}/characters"), token, request)
+        self.post_auth(&format!("users/{user_id}/characters"), request)
             .await
     }
 
     pub async fn post_update_character(
         &self,
-        token: &str,
         character_id: &UserCharacterId,
         request: &UpdateCharacterRequest,
     ) -> Result<UpdateAccountResponse, BackendError> {
-        self.post_auth(&format!("characters/{character_id}"), token, request)
+        self.post_auth(&format!("characters/{character_id}"), request)
             .await
     }
 
     pub async fn delete_character(
         &self,
-        token: &str,
         character_id: &UserCharacterId,
     ) -> Result<DeleteCharacterResponse, BackendError> {
-        self.del_auth(&format!("characters/{character_id}"), token)
-            .await
+        self.del_auth(&format!("characters/{character_id}")).await
     }
 
     // Market
 
     pub async fn browse_market_items(
         &self,
-        token: &str,
         request: &BrowseMarketItemsRequest,
     ) -> Result<BrowseMarketItemsResponse, BackendError> {
-        self.post_auth("market", token, request).await
+        self.post_auth("market", request).await
     }
 
     pub async fn buy_market_item(
         &self,
-        token: &str,
         request: &BuyMarketItemRequest,
     ) -> Result<BuyMarketItemResponse, BackendError> {
-        self.post_auth("market/buy", token, request).await
+        self.post_auth("market/buy", request).await
     }
 
     pub async fn reject_market_item(
         &self,
-        token: &str,
         request: &RejectMarketItemRequest,
     ) -> Result<RejectMarketItemResponse, BackendError> {
-        self.post_auth("market/reject", token, request).await
+        self.post_auth("market/reject", request).await
     }
 
     pub async fn sell_market_item(
         &self,
-        token: &str,
         request: &SellMarketItemRequest,
     ) -> Result<SellMarketItemResponse, BackendError> {
-        self.post_auth("market/sell", token, request).await
+        self.post_auth("market/sell", request).await
     }
 
     pub async fn edit_market_item(
         &self,
-        token: &str,
         request: &EditMarketItemRequest,
     ) -> Result<EditMarketItemResponse, BackendError> {
-        self.post_auth("market/edit", token, request).await
+        self.post_auth("market/edit", request).await
     }
 
     // Stash
 
     pub async fn upgrade_stash(
         &self,
-        token: &str,
         request: &UpgradeStashRequest,
     ) -> Result<UpgradeStashResponse, BackendError> {
-        self.post_auth("stashes/upgrade", token, request).await
+        self.post_auth("stashes/upgrade", request).await
     }
 
     pub async fn exchange_gems_stash(
         &self,
-        token: &str,
         request: &ExchangeGemsStashRequest,
         stash_id: &StashId,
     ) -> Result<ExchangeGemsStashResponse, BackendError> {
-        self.post_auth(&format!("stashes/{stash_id}/gems"), token, request)
+        self.post_auth(&format!("stashes/{stash_id}/gems"), request)
             .await
     }
 
     pub async fn browse_stash_items(
         &self,
-        token: &str,
         request: &BrowseStashItemsRequest,
         stash_id: &StashId,
     ) -> Result<BrowseStashItemsResponse, BackendError> {
-        self.post_auth(&format!("stashes/{stash_id}"), token, request)
+        self.post_auth(&format!("stashes/{stash_id}"), request)
             .await
     }
 
     pub async fn take_stash_item(
         &self,
-        token: &str,
         request: &TakeStashItemRequest,
         stash_id: &StashId,
     ) -> Result<TakeStashItemResponse, BackendError> {
-        self.post_auth(&format!("stashes/{stash_id}/take"), token, request)
+        self.post_auth(&format!("stashes/{stash_id}/take"), request)
             .await
     }
 
     pub async fn store_stash_item(
         &self,
-        token: &str,
         request: &StoreStashItemRequest,
         stash_id: &StashId,
     ) -> Result<StoreStashItemResponse, BackendError> {
-        self.post_auth(&format!("stashes/{stash_id}/store"), token, request)
+        self.post_auth(&format!("stashes/{stash_id}/store"), request)
             .await
     }
 
@@ -353,52 +361,46 @@ impl BackendClient {
 
     pub async fn forge_affix(
         &self,
-        token: &str,
         request: &ForgeAffixRequest,
     ) -> Result<ForgeAffixResponse, BackendError> {
-        self.post_auth("forge/affix", token, request).await
+        self.post_auth("forge/affix", request).await
     }
 
     pub async fn forge_upgrade(
         &self,
-        token: &str,
         request: &ForgeUpgradeRequest,
     ) -> Result<ForgeUpgradeResponse, BackendError> {
-        self.post_auth("forge/upgrade", token, request).await
+        self.post_auth("forge/upgrade", request).await
     }
 
     pub async fn gamble_item(
         &self,
-        token: &str,
         request: &GambleItemRequest,
     ) -> Result<GambleItemResponse, BackendError> {
-        self.post_auth("forge/gamble", token, request).await
+        self.post_auth("forge/gamble", request).await
     }
 
     // Inventory
 
     pub async fn inventory_equip(
         &self,
-        token: &str,
         request: &InventoryEquipRequest,
     ) -> Result<InventoryEquipResponse, BackendError> {
-        self.post_auth("inventory/equip", token, request).await
+        self.post_auth("inventory/equip", request).await
     }
 
     pub async fn inventory_unequip(
         &self,
-        token: &str,
         request: &InventoryUnequipRequest,
     ) -> Result<InventoryUnequipResponse, BackendError> {
-        self.post_auth("inventory/unequip", token, request).await
+        self.post_auth("inventory/unequip", request).await
     }
 
     pub async fn inventory_delete(
         &self,
-        token: &str,
         request: &InventoryDeleteRequest,
     ) -> Result<InventoryDeleteResponse, BackendError> {
-        self.post_auth("inventory/delete", token, request).await
+        self.post_auth("inventory/delete", request).await
     }
 
     // Protected
@@ -410,18 +412,16 @@ impl BackendClient {
         deserialize_response(reqwest::get(format!("{}/{}", self.http_url, endpoint)).await).await
     }
 
-    async fn get_auth<T>(&self, endpoint: &str, token: &str) -> Result<T, BackendError>
+    async fn get_auth<T>(&self, endpoint: &str) -> Result<T, BackendError>
     where
         T: serde::de::DeserializeOwned,
     {
-        if token.is_empty() {
-            return Err(BackendError::Unauthorized("missing token".to_string()));
-        }
+        let token = self.get_access_token().await?;
         deserialize_response(
             reqwest::Client::new()
                 .get(format!("{}/{}", self.http_url, endpoint))
                 .timeout(Duration::from_secs(60))
-                .bearer_auth(token)
+                .bearer_auth(&token)
                 .send()
                 .await,
         )
@@ -438,29 +438,23 @@ impl BackendClient {
                 .post(format!("{}/{}", self.http_url, endpoint))
                 .timeout(Duration::from_secs(60))
                 .json(payload)
+                .with_credentials()
                 .send()
                 .await,
         )
         .await
     }
 
-    async fn post_auth<T, P>(
-        &self,
-        endpoint: &str,
-        token: &str,
-        payload: &P,
-    ) -> Result<T, BackendError>
+    async fn post_auth<T, P>(&self, endpoint: &str, payload: &P) -> Result<T, BackendError>
     where
         T: serde::de::DeserializeOwned,
         P: serde::ser::Serialize,
     {
-        if token.is_empty() {
-            return Err(BackendError::Unauthorized("missing token".to_string()));
-        }
+        let token = self.get_access_token().await?;
         deserialize_response(
             reqwest::Client::new()
                 .post(format!("{}/{}", self.http_url, endpoint))
-                .bearer_auth(token)
+                .bearer_auth(&token)
                 .timeout(Duration::from_secs(60))
                 .json(payload)
                 .send()
@@ -469,22 +463,36 @@ impl BackendClient {
         .await
     }
 
-    async fn del_auth<T>(&self, endpoint: &str, token: &str) -> Result<T, BackendError>
+    async fn del_auth<T>(&self, endpoint: &str) -> Result<T, BackendError>
     where
         T: serde::de::DeserializeOwned,
     {
-        if token.is_empty() {
-            return Err(BackendError::Unauthorized("missing token".to_string()));
-        }
+        let token = self.get_access_token().await?;
         deserialize_response(
             reqwest::Client::new()
                 .delete(format!("{}/{}", self.http_url, endpoint))
                 .timeout(Duration::from_secs(60))
-                .bearer_auth(token)
+                .bearer_auth(&token)
                 .send()
                 .await,
         )
         .await
+    }
+}
+
+trait RequestBuilderCredentialsExt {
+    fn with_credentials(self) -> Self;
+}
+
+impl RequestBuilderCredentialsExt for reqwest::RequestBuilder {
+    #[cfg(target_arch = "wasm32")]
+    fn with_credentials(self) -> Self {
+        self.fetch_credentials_include()
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn with_credentials(self) -> Self {
+        self
     }
 }
 

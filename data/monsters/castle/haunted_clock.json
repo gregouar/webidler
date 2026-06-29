@@ -19,17 +19,9 @@
           "effects": [
             {
               "ApplyStatus": {
+                "status_id": "blessing_haste",
                 "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Speed": { } }
-                      }
-                    },
-                    "value": 100
-                  }
-                ]
+                "value": 100
               }
             }
           ]

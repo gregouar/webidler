@@ -28,7 +28,7 @@
     },
     {
       "name": "Awful Breath",
-      "icon": "skills/curse_frailty.svg",
+      "icon": "skills/turd.svg",
       "skill_type": "Curse",
       "cooldown": 10.0,
       "targets": [
@@ -36,37 +36,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Physical"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Storm"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "stinky",
+                "value": 50
               }
             }
           ]

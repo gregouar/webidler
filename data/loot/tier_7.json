@@ -17,6 +17,10 @@
       "weight": 64000
     },
     {
+      "item_id": "monk_vest",
+      "weight": 4999
+    },
+    {
       "item_id": "gloves_7",
       "weight": 64000
     },
@@ -79,9 +83,8 @@
       "min_area_level": 320
     },
     {
-      "item_id": "rune",
-      "weight": 6400,
-      "min_area_level": 320
+      "item_id": "rune_power",
+      "weight": 6400
     },
     {
       "item_id": "rune_root",

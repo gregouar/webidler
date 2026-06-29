@@ -86,7 +86,8 @@ async fn main() {
     let cors_layer = CorsLayer::new()
         .allow_origin(cors_origins)
         .allow_methods([Method::GET, Method::POST, Method::DELETE])
-        .allow_headers([CONTENT_TYPE, AUTHORIZATION]);
+        .allow_headers([CONTENT_TYPE, AUTHORIZATION])
+        .allow_credentials(true);
 
     let sessions_store = SessionsStore::new();
 
@@ -145,9 +146,8 @@ async fn main() {
 }
 
 async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
-    db::migrations::migration_0_1_7_to_0_1_8::migrate(db_pool).await?;
-    db::migrations::migration_0_1_8_to_0_1_9::migrate(db_pool, master_store).await?;
-    db::migrations::migration_0_1_9_to_0_1_10::migrate(db_pool, master_store).await?;
+    let _ = master_store;
+    db::migrations::migration_0_2_00_to_0_2_01::migrate(db_pool).await?;
     Ok(())
 }
 

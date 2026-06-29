@@ -116,7 +116,7 @@
         },
         "target": "SameTarget",
         "modifiers": [ ],
-        "skill_range": "Melee",
+        "skill_range": "Any",
         "skill_type": "Curse",
         "effects": [
           {
@@ -125,27 +125,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "SuccessChance": {
-                          "skill_type": null,
-                          "effect_type": null
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 10.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "drunk",
+              "value": 1
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -232,7 +213,6 @@
       {
         "stat": {
           "StatusPower": {
-            "status_type": null,
             "skill_type": null,
             "min_max": null
           }
@@ -269,22 +249,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 30.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "pirate_curse",
+              "value": 30.0
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]
@@ -384,24 +350,8 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": { }
-                      },
-                      "modifier": "More",
-                      "debuff": true
-                    }
-                  },
-                  "value": 33.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 5.0
+              "status_id": "enwebbed",
+              "value": 1
             },
             "ignore_stat_effects": [ ],
             "conditional_modifiers": [ ]

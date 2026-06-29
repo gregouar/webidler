@@ -23,15 +23,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Physical" }
-                    },
-                    "value": 20
-                  }
-                ]
+                "status_id": "bleed",
+                "value": 20
               }
             }
           ]
@@ -40,7 +33,7 @@
     },
     {
       "name": "Distracting Pose",
-      "icon": "skills/curse_weakness.svg",
+      "icon": "skills/lips.svg",
       "skill_type": "Curse",
       "cooldown": 10.0,
       "targets": [
@@ -48,18 +41,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "SuccessChance": { } },
-                        "debuff": true
-                      }
-                    },
-                    "value": 17
-                  }
-                ]
+                "status_id": "distracted",
+                "value": 17
               }
             }
           ]

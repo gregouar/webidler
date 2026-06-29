@@ -9,12 +9,16 @@ use std::{
 };
 
 use shared::data::{
-    monster::MonsterSpecs, passive::PassivesTreeSpecs, skill::BaseSkillSpecs,
+    character_status::{StatusEffectType, StatusSpecs},
+    monster::MonsterSpecs,
+    passive::PassivesTreeSpecs,
+    skill::{BaseSkillSpecs, SkillEffectType},
     temple::BenedictionsCategory,
 };
 
 use super::{
     area::AreaBlueprint,
+    indexed_store::IndexedStore,
     items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
     loot_table::LootTable,
     manifest,
@@ -34,6 +38,7 @@ use crate::game::{
 pub type PassivesStore = HashMap<String, PassivesTreeSpecs>;
 pub type BenedictionsStore = IndexMap<String, BenedictionsCategory>;
 pub type SkillsStore = HashMap<String, BaseSkillSpecs>;
+pub type StatusesStore = IndexedStore<String, StatusSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
 pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
@@ -43,6 +48,7 @@ pub struct MasterStore {
     pub passives_store: Arc<PassivesStore>,
     pub benedictions_store: Arc<BenedictionsStore>,
     pub skills_store: Arc<SkillsStore>,
+    pub statuses_store: Arc<StatusesStore>,
     pub items_store: Arc<ItemsStore>,
     pub item_affixes_table: Arc<ItemAffixesTable>,
     pub item_adjectives_table: Arc<ItemAdjectivesTable>,
@@ -55,6 +61,7 @@ pub struct MasterStore {
 
 impl LoadJsonFromFile for MonsterSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
+impl LoadJsonFromFile for StatusSpecs {}
 impl LoadJsonFromFile for PassivesTreeSpecs {}
 impl LoadJsonFromFile for BenedictionsCategory {}
 
@@ -69,6 +76,7 @@ impl MasterStore {
             passives_store,
             benedictions_store,
             skills_store,
+            statuses_store,
             items_store_content,
             item_affixes_table,
             item_adjectives_table,
@@ -80,6 +88,9 @@ impl MasterStore {
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Passives)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Benedictions)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Skills)),
+            join_load_and_merge_tables::<StatusesStore>(
+                manifest.get_resources(ManifestCategory::Statuses),
+            ),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Items)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAffixes)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAdjectives)),
@@ -105,7 +116,7 @@ impl MasterStore {
 
         let gamble_tables_store: HashMap<String, GambleTableBlueprint> = gamble_tables_store?;
         let gamble_table_blueprint = gamble_tables_store
-            .get("gamble_table.json")
+            .get("0_gamble_table.json")
             .expect("missing 'gamble_table.json'");
         let gamble_table = GambleTable {
             loot_table: LootTable {
@@ -124,10 +135,13 @@ impl MasterStore {
             item_rarity: gamble_table_blueprint.item_rarity,
         };
 
+        // TODO: Pre attack indexed keys?
+
         let master_store = MasterStore {
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),
             skills_store: Arc::new(skills_store?),
+            statuses_store: Arc::new(statuses_store?.into_indexed_keys()),
             items_store: Arc::new(ItemsStore {
                 content: items_store_content?,
                 signature_key: item_signature_key,
@@ -206,6 +220,88 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
             .is_none()
         {
             errors.push(anyhow!("Missing monster '{}' from store", spawn.monster));
+        }
+    }
+
+    for skill_effect in master_store
+        .skills_store
+        .values()
+        .flat_map(|skill_specs| {
+            skill_specs
+                .targets
+                .iter()
+                .flat_map(|target| target.effects.iter())
+                .chain(
+                    skill_specs
+                        .triggers
+                        .iter()
+                        .flat_map(|trigger| trigger.trigger_effect.effects.iter()),
+                )
+        })
+        .chain(
+            master_store
+                .monster_specs_store
+                .iter()
+                .flat_map(|(_, monster)| {
+                    monster.skills.iter().flat_map(|skill_specs| {
+                        skill_specs
+                            .targets
+                            .iter()
+                            .flat_map(|target| target.effects.iter())
+                            .chain(
+                                skill_specs
+                                    .triggers
+                                    .iter()
+                                    .flat_map(|trigger| trigger.trigger_effect.effects.iter()),
+                            )
+                    })
+                }),
+        )
+        .chain(
+            master_store
+                .passives_store
+                .get("default")
+                .unwrap()
+                .nodes
+                .iter()
+                .flat_map(|(_, passive)| {
+                    passive
+                        .triggers
+                        .iter()
+                        .flat_map(|trigger| trigger.trigger_effect.effects.iter())
+                }),
+        )
+        .chain(
+            master_store
+                .items_store
+                .content
+                .iter()
+                .flat_map(|(_, item)| {
+                    item.triggers
+                        .iter()
+                        .flat_map(|trigger| trigger.trigger_effect.effects.iter())
+                }),
+        )
+        .chain(
+            master_store
+                .statuses_store
+                .iter()
+                .flat_map(|(_, status_specs)| {
+                    status_specs.effects.iter().flat_map(|status_effect| {
+                        match &status_effect.status_effect_type {
+                            StatusEffectType::Trigger { trigger_specs, .. } => {
+                                trigger_specs.trigger_effect.effects.iter()
+                            }
+                            _ => [].iter(),
+                        }
+                    })
+                }),
+        )
+    {
+        if let SkillEffectType::ApplyStatus { status_id, .. } = &skill_effect.effect_type
+            && master_store.statuses_store.get(status_id).is_none()
+        {
+            errors.push(anyhow!("Missing status '{}' from store", status_id));
         }
     }
 

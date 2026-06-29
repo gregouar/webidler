@@ -15,6 +15,10 @@
         {
             "item_id": "amulet_7_unique",
             "weight": 9999
+        },
+        {
+            "item_id": "monk_vest",
+            "weight": 9999
         }
     ]
 }

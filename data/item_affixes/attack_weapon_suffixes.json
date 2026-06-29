@@ -700,7 +700,7 @@
         "scope": "Local",
         "stat": { "CritDamage": { } },
         "modifier": "Increased",
-        "value": [ 230, 245 ]
+        "value": [ 230, 250 ]
       }
     ]
   },
@@ -718,7 +718,7 @@
         "scope": "Local",
         "stat": { "CritDamage": { } },
         "modifier": "Increased",
-        "value": [ 255, 270 ]
+        "value": [ 260, 300 ]
       }
     ]
   },

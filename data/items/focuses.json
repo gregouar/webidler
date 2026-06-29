@@ -4,7 +4,7 @@
     "icon": "items/focuses/grigri.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -19,21 +19,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "spellbook": {
     "name": "Spellbook",
     "icon": "items/focuses/spellbook.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -48,21 +48,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "spellbook_unique": {
     "name": "Vile Codex",
     "icon": "items/focuses/vile_codex.webp",
     "description": "Each cursed name written in its pages rots faster than flesh should.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -81,7 +81,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": null,
             "is_hit": null
@@ -120,25 +119,27 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "vile_codex",
         "OnKill": {
           "conditions": [
             {
               "HasStatus": {
-                "status_type": null,
+                "status_id": null,
+                "damage_type": null,
                 "skill_type": "Curse",
                 "not": false
               }
             }
           ]
         },
+        "description": null,
+        "trigger_id": "vile_codex",
         "target": "Me",
-        "modifiers": [ ],
-        "skill_range": "Melee",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -146,41 +147,21 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Poison",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 10.0
+              "status_id": "vile_codex",
+              "value": 200.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -222,7 +203,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Poison",
               "min_max": null,
               "is_hit": null
@@ -239,7 +219,7 @@
     "icon": "items/focuses/focus_stone.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -254,21 +234,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "sandal": {
     "name": "Eternal Flame Slipper",
     "icon": "items/focuses/sandal.webp",
     "description": "The otter swore it was a masterpiece of wizardry.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -287,7 +267,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
@@ -305,8 +284,7 @@
         "stat": {
           "CritChance": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -321,11 +299,10 @@
         "stat": {
           "CritDamage": {
             "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
         "value": [
           50.0,
@@ -350,7 +327,6 @@
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "fireball",
-            "skill_description": null,
             "range": null,
             "shape": "All",
             "repeat": null
@@ -362,7 +338,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -402,8 +378,7 @@
           "stat": {
             "CritChance": {
               "skill_type": "Spell",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
           "modifier": "Increased",
@@ -416,11 +391,10 @@
           "stat": {
             "CritDamage": {
               "skill_type": "Spell",
-              "skill_id": null,
-              "skill_description": null
+              "skill_id": null
             }
           },
-          "modifier": "More",
+          "modifier": "Increased",
           "value": 20.0
         }
       },
@@ -431,7 +405,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": null,
               "is_hit": null
@@ -448,7 +421,7 @@
     "icon": "items/focuses/engraved_tablet.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -463,21 +436,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "seer_lens": {
     "name": "Seer's Lens",
     "icon": "items/focuses/seer_lens.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -492,21 +465,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_idol": {
     "name": "Idol of the Serpent Queen",
     "icon": "items/focuses/treasure_idol.webp",
     "description": "Her children drank the poison willingly. The wise died quickly.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -543,14 +516,10 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
-              }
-            },
+            "status_id": "poison",
+            "damage_type": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -568,7 +537,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Poison",
                 "min_max": null,
                 "is_hit": null
@@ -588,64 +556,42 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
+        "OnApplyStatus": {
+          "skill_type": null,
+          "status_id": "poison",
+          "damage_type": null,
+          "is_triggered": null,
+          "is_evaded": null
+        },
         "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for the same Duration. You gain 50% More Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
-        "OnHit": {
-          "skill_type": null,
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": null,
-          "is_triggered": null,
-          "damage_type": null,
-          "skill_ids": null,
-          "conditions": [
-            {
-              "HasStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
-                "skill_type": null,
-                "not": false
-              }
-            }
-          ]
-        },
         "target": "Me",
         "modifiers": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": null,
+                "damage_type": null,
                 "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
+                "skill_id": null
               }
             },
             "modifier": "Flat",
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Poison"
-                  }
-                },
+                "status_id": "poison",
+                "damage_type": null,
                 "skill_type": null
               }
             }
           }
         ],
-        "skill_range": "Any",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Any",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -653,89 +599,56 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Poison"
-                    }
-                  },
-                  "value": 20.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Poison",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 50.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false,
-                  "escalation": 0.0
-                }
-              ],
-              "duration": 0.0
+              "status_id": "treasure_idol",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
               {
                 "StatusDuration": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
-              {
-                "StatusEscalation": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null,
-                  "damage_type": null
+                  "skill_id": null
                 }
               },
               {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
                 }
               },
               {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "StatusPower": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "min_max": null
                 }
               }
             ],
-            "conditional_modifiers": [ ]
+            "conditional_modifiers": [],
+            "independent_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -774,7 +687,7 @@
     "icon": "items/focuses/ritual_orb.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -789,21 +702,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "ritual_orb_unique": {
     "name": "Zael's Eye",
     "icon": "items/focuses/dragon_eye.webp",
     "description": "Zael's gaze weighed the sky and found it wanting.",
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -822,7 +735,6 @@
           "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -839,9 +751,8 @@
       {
         "stat": {
           "CritChance": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "skill_description": null
+            "skill_type": null,
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -856,14 +767,13 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
         "value": [
-          150.0,
+          100.0,
           200.0
         ],
         "ignore_quality": true
@@ -873,7 +783,6 @@
           "Lucky": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "roll_type": {
               "Damage": {
                 "damage_type": null
@@ -887,7 +796,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -915,7 +824,6 @@
             "Damage": {
               "skill_type": "Spell",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -932,7 +840,7 @@
     "icon": "items/focuses/grimoire.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -947,21 +855,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "focus_8": {
     "name": "Astrolabe",
     "icon": "items/focuses/astrolabe.webp",
     "description": null,
     "slot": "Shield",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Focus"
     ],
@@ -972,17 +880,75 @@
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
-        "value": 100.0,
+        "value": 90.0,
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "focus_9": {
+    "name": "Alchemical Jewel",
+    "icon": "items/focuses/alchemical_jewel.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "focus_10": {
+    "name": "Phylactery",
+    "icon": "items/focuses/phylactery.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 120.0,
+        "ignore_quality": false
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

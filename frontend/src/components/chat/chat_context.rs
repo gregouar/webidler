@@ -1,5 +1,5 @@
 use codee::{Encoder, binary::MsgpackSerdeCodec, string::JsonSerdeCodec};
-use leptos::prelude::*;
+use leptos::{prelude::*, task::spawn_local};
 use leptos_use::{
     ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
     core::ConnectionReadyState, storage, use_websocket_with_options,
@@ -21,7 +21,9 @@ use shared_chat::{
     types::{ChatChannel, ChatContent, ChatMessage, LinkedItemBytes, UserId},
 };
 
-use crate::components::{accessibility::AccessibilityContext, auth::AuthContext, ui::toast::*};
+use crate::components::{
+    accessibility::AccessibilityContext, backend_client::BackendClient, ui::toast::*,
+};
 
 const HEARTBEAT_PERIOD: u64 = 10_000;
 const CHAT_HISTORY_CAPACITY: usize = 100;
@@ -100,11 +102,11 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
             .heartbeat::<ClientChatMessage, MsgpackSerdeCodec>(HEARTBEAT_PERIOD),
     );
 
-    let auth: AuthContext = expect_context();
+    let backend = expect_context::<BackendClient>();
     Effect::new({
         let close = close.clone();
         move || {
-            let is_auth = auth.is_authenticated();
+            let is_auth = backend.track_authenticated();
             let state = ready_state.get_untracked();
 
             if is_auth
@@ -124,8 +126,13 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     Effect::new({
         let send = send.clone();
         move || {
-            if auth.is_authenticated() && ready_state.get() == ConnectionReadyState::Open {
-                send(&ClientConnectMessage { jwt: auth.token() }.into())
+            if backend.track_authenticated() && ready_state.get() == ConnectionReadyState::Open {
+                let send = send.clone();
+                spawn_local(async move {
+                    if let Ok(jwt) = backend.get_access_token().await {
+                        send(&ClientConnectMessage { jwt }.into())
+                    }
+                });
             }
         }
     });

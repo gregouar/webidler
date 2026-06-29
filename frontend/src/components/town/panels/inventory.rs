@@ -6,7 +6,6 @@ use shared::http::client::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     shared::{
         inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
@@ -21,7 +20,6 @@ pub fn TownInventoryPanel(
     open: RwSignal<bool>,
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
-    let auth_context = expect_context::<AuthContext>();
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
     let town_context = expect_context::<TownContext>();
@@ -36,13 +34,10 @@ pub fn TownInventoryPanel(
                 InventoryEquipFilter::Slot => spawn_local({
                     async move {
                         match backend
-                            .inventory_equip(
-                                &auth_context.token(),
-                                &InventoryEquipRequest {
-                                    character_id,
-                                    item_index,
-                                },
-                            )
+                            .inventory_equip(&InventoryEquipRequest {
+                                character_id,
+                                item_index,
+                            })
                             .await
                         {
                             Ok(response) => town_context.inventory.set(response.inventory),
@@ -79,13 +74,10 @@ pub fn TownInventoryPanel(
                 InventoryEquipFilter::Slot => spawn_local({
                     async move {
                         match backend
-                            .inventory_unequip(
-                                &auth_context.token(),
-                                &InventoryUnequipRequest {
-                                    character_id,
-                                    item_slot,
-                                },
-                            )
+                            .inventory_unequip(&InventoryUnequipRequest {
+                                character_id,
+                                item_slot,
+                            })
                             .await
                         {
                             Ok(response) => town_context.inventory.set(response.inventory),
@@ -114,13 +106,10 @@ pub fn TownInventoryPanel(
         spawn_local({
             async move {
                 match backend
-                    .inventory_delete(
-                        &auth_context.token(),
-                        &InventoryDeleteRequest {
-                            character_id,
-                            item_indexes: item_indexes.clone(),
-                        },
-                    )
+                    .inventory_delete(&InventoryDeleteRequest {
+                        character_id,
+                        item_indexes: item_indexes.clone(),
+                    })
                     .await
                 {
                     Ok(response) => {

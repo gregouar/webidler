@@ -2,21 +2,22 @@ use leptos::{html::*, prelude::*};
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
+    chance::ChanceRange,
     character_status::{StatusId, StatusMap, StatusSpecs},
+    modifier::ModifiableValue,
     monster::MonsterRarity,
-    skill::{DamageType, SkillType},
-    stat_effect::{MinMax, StatEffect, StatSkillEffectType, StatStatusType, StatType},
+    skill::DamageType,
+    trigger::TriggerEffect,
+    values::NonNegative,
 };
 
 use crate::{
     assets::img_asset,
     components::{
+        data_context::DataContext,
         settings::{GraphicsQuality, SettingsContext},
-        shared::tooltips::{conditions_tooltip, effects_tooltip, trigger_tooltip},
-        ui::{
-            number::format_number,
-            tooltip::{StaticTooltip, StaticTooltipPosition},
-        },
+        shared::tooltips::status_tooltip::format_status_effects,
+        ui::tooltip::{StaticTooltip, StaticTooltipPosition},
     },
 };
 
@@ -31,7 +32,7 @@ pub fn CharacterPortrait(
     #[prop(into)] just_evaded: Signal<bool>,
     #[prop(into)] is_dead: Signal<bool>,
     #[prop(into)] statuses: Signal<StatusMap>,
-    // enable_blink: bool,
+    #[prop(optional)] character_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let heavy_effects = move || settings.uses_heavy_effects();
@@ -76,62 +77,34 @@ pub fn CharacterPortrait(
         }
     });
 
-    let statuses_map = Memo::new({
-        move |_| {
-            statuses.read().iter().fold(
-                HashMap::<StatusId, (usize, f64, Option<StatusSpecs>)>::new(),
-                |mut acc, (status_specs, status_state)| {
-                    let entry = acc
-                        .entry(status_specs.into_status_id(SkillType::Other))
-                        .or_default();
-                    entry.0 += 1;
-                    entry.1 += status_state.value.get();
-                    entry.2 = Some(status_specs.clone());
-                    acc
-                },
-            )
-        }
+    let data_context: DataContext = expect_context();
+
+    let statuses_map = Memo::new(move |_| {
+        statuses.read().iter().fold(
+            HashMap::<StatusId, (usize, f64)>::new(),
+            |mut acc, (status_id, status_states)| {
+                let entry = acc.entry(status_id.clone()).or_default();
+                entry.0 += status_states.len();
+                entry.1 += status_states
+                    .iter()
+                    .map(|status_state| status_state.value.get())
+                    .sum::<f64>();
+                acc
+            },
+        )
     });
 
-    // let active_statuses = Memo::new(move |_| {
-    //     let mut active_statuses: Vec<_> = statuses_map.read().keys().cloned().collect();
-    //     active_statuses.sort();
-    //     active_statuses
-    // });
-
-    let active_debuffs = Memo::new(move |_| {
+    let active_status_ids = Memo::new(move |_| {
+        let statuses_specs = data_context.statuses_specs.read();
         let mut active_statuses: Vec<_> = statuses_map
             .read()
-            .iter()
-            .filter_map(|(k, v)| is_debuff(v.2.as_ref()).then_some(k))
-            .cloned()
+            .keys()
+            .map(|status_id| (status_id.clone(), statuses_specs.get(status_id).cloned()))
             .collect();
-        active_statuses.sort();
+        active_statuses
+            .sort_by(|(status_id, _), (other_status_id, _)| status_id.cmp(other_status_id));
         active_statuses
     });
-
-    let active_buffs = Memo::new(move |_| {
-        let mut active_statuses: Vec<_> = statuses_map
-            .read()
-            .iter()
-            .filter_map(|(k, v)| (!is_debuff(v.2.as_ref())).then_some(k))
-            .cloned()
-            .collect();
-        active_statuses.sort();
-        active_statuses
-    });
-
-    // let (border_class, shimmer_effect) = match rarity {
-    //     MonsterRarity::Normal => ("border-6 xl:border-8 border-double border-stone-500", ""),
-    //     MonsterRarity::Champion => (
-    //         "border-6 xl:border-8 border-double border-indigo-700",
-    //         "champion-shimmer",
-    //     ),
-    //     MonsterRarity::Boss => (
-    //         "border-8 xl:border-12 border-double border-red-700",
-    //         "boss-shimmer",
-    //     ),
-    // };
 
     let (accent_class, shimmer_effect, fixture_class) = match rarity {
         MonsterRarity::Normal => (
@@ -211,27 +184,9 @@ pub fn CharacterPortrait(
         }
     };
 
-    // let (hit_signal, set_hit_signal) = signal(false);
-
-    // Effect::new(move || {
-    //     if just_hurt.get() && enable_blink {
-    //         set_hit_signal.set(true);
-
-    //         set_timeout(
-    //             move || {
-    //                 set_hit_signal.set(false);
-    //             },
-    //             Duration::from_millis(300),
-    //         );
-    //     }
-    // });
-
     let activate_bleeding = RwSignal::new(false);
-    let is_bleeding = Memo::new(move |_| {
-        active_debuffs.read().contains(&StatusId::DamageOverTime {
-            damage_type: DamageType::Physical,
-        })
-    });
+    let is_bleeding =
+        Memo::new(move |_| has_damage_status(&active_status_ids.read(), DamageType::Physical));
     Effect::new(move || {
         if is_bleeding.get() {
             activate_bleeding.set(true)
@@ -239,11 +194,8 @@ pub fn CharacterPortrait(
     });
 
     let activate_burning = RwSignal::new(false);
-    let is_burning = Memo::new(move |_| {
-        active_debuffs.read().contains(&StatusId::DamageOverTime {
-            damage_type: DamageType::Fire,
-        })
-    });
+    let is_burning =
+        Memo::new(move |_| has_damage_status(&active_status_ids.read(), DamageType::Fire));
     Effect::new(move || {
         if is_burning.get() {
             activate_burning.set(true)
@@ -251,11 +203,8 @@ pub fn CharacterPortrait(
     });
 
     let activate_poisoned = RwSignal::new(false);
-    let is_poisoned = Memo::new(move |_| {
-        active_debuffs.read().contains(&StatusId::DamageOverTime {
-            damage_type: DamageType::Poison,
-        })
-    });
+    let is_poisoned =
+        Memo::new(move |_| has_damage_status(&active_status_ids.read(), DamageType::Poison));
     Effect::new(move || {
         if is_poisoned.get() {
             activate_poisoned.set(true)
@@ -310,10 +259,6 @@ pub fn CharacterPortrait(
             style="contain: layout paint style;"
         >
             <div class=portrait_frame_class style=crit_animation_style>
-                // <Show when=move || settings.uses_heavy_effects()>
-                // <div class="pointer-events-none absolute inset-x-6 top-[1px] z-1 h-px bg-gradient-to-r from-transparent via-[#f0d79f]/28 to-transparent"></div>
-                // // <div class="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.12),transparent_12%,transparent_88%,rgba(0,0,0,0.15))]"></div>
-                // </Show>
                 <div
                     class=move || {
                         format!(
@@ -375,18 +320,31 @@ pub fn CharacterPortrait(
                         style="contain: paint;"
                     >
                         <For
-                            each=move || { active_debuffs.get().into_iter() }
-                            key=|k| k.clone()
-                            let(k)
+                            each=move || {
+                                active_status_ids
+                                    .get()
+                                    .into_iter()
+                                    .filter(|(_, status_specs)| is_debuff(status_specs.as_ref()))
+                                    .collect::<Vec<_>>()
+                            }
+                            key=|(status_id, _)| status_id.clone()
+                            let(status)
                         >
                             <StatusIcon
-                                status_id=k.clone()
+                                status_id=status.0.clone()
+                                status_specs=status.1
                                 stack=Signal::derive({
+                                    let status_id = status.0.clone();
                                     move || {
-                                        statuses_map.read().get(&k).cloned().unwrap_or_default()
+                                        statuses_map
+                                            .read()
+                                            .get(&status_id)
+                                            .cloned()
+                                            .unwrap_or_default()
                                     }
                                 })
                                 tooltip_position=StaticTooltipPosition::Bottom
+                                character_triggers
                             />
                         </For>
                     </div>
@@ -396,18 +354,31 @@ pub fn CharacterPortrait(
                         style="contain: paint;"
                     >
                         <For
-                            each=move || { active_buffs.get().into_iter() }
-                            key=|k| k.clone()
-                            let(k)
+                            each=move || {
+                                active_status_ids
+                                    .get()
+                                    .into_iter()
+                                    .filter(|(_, status_specs)| !is_debuff(status_specs.as_ref()))
+                                    .collect::<Vec<_>>()
+                            }
+                            key=|(status_id, _)| status_id.clone()
+                            let(status)
                         >
                             <StatusIcon
-                                status_id=k.clone()
+                                status_id=status.0.clone()
+                                status_specs=status.1
                                 stack=Signal::derive({
+                                    let status_id = status.0.clone();
                                     move || {
-                                        statuses_map.read().get(&k).cloned().unwrap_or_default()
+                                        statuses_map
+                                            .read()
+                                            .get(&status_id)
+                                            .cloned()
+                                            .unwrap_or_default()
                                     }
                                 })
                                 tooltip_position=StaticTooltipPosition::Top
+                                character_triggers
                             />
                         </For>
                     </div>
@@ -562,151 +533,79 @@ pub fn CharacterPortrait(
 }
 
 fn is_debuff(status_specs: Option<&StatusSpecs>) -> bool {
-    match status_specs {
-        Some(status_specs) => match status_specs {
-            StatusSpecs::Stun => true,
-            StatusSpecs::DamageOverTime { .. } => true,
-            StatusSpecs::StatModifier { debuff, stat, .. } => {
-                if matches!(
-                    stat,
-                    StatType::BlockDamageTaken | StatType::EvadeDamageTaken
-                ) {
-                    !*debuff
-                } else {
-                    *debuff
-                }
-            }
-            StatusSpecs::Trigger(trigger_specs) => {
-                trigger_specs.is_debuff
-                    || matches!(trigger_specs.triggered_effect.skill_type, SkillType::Curse)
-            }
-        },
-        None => false,
-    }
+    status_specs
+        .map(|status_specs| status_specs.debuff)
+        .unwrap_or_default()
+}
+
+fn has_damage_status(
+    active_statuses: &[(StatusId, Option<StatusSpecs>)],
+    damage_type: DamageType,
+) -> bool {
+    active_statuses.iter().any(|(_, status_specs)| {
+        status_specs
+            .as_ref()
+            .and_then(|status_specs| status_specs.damage_type)
+            == Some(damage_type)
+    })
 }
 
 #[component]
 fn StatusIcon(
     status_id: StatusId,
-    stack: Signal<(usize, f64, Option<StatusSpecs>)>,
+    status_specs: Option<StatusSpecs>,
+    stack: Signal<(usize, f64)>,
     tooltip_position: StaticTooltipPosition,
+    character_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
-    let icon_uri = {
+    let status_name = {
         let status_id = status_id.clone();
+        let status_specs = status_specs.clone();
         move || {
-            match &status_id {
-                StatusId::Stun => "statuses/stunned.svg".to_string(),
-                StatusId::DamageOverTime { damage_type, .. } => match damage_type {
-                    DamageType::Physical => "statuses/bleed.svg".to_string(),
-                    DamageType::Fire => "statuses/burning.svg".to_string(),
-                    DamageType::Poison => "statuses/poison.svg".to_string(),
-                    DamageType::Storm => "statuses/storm.svg".to_string(),
-                },
-                // TODO: More buff types
-                StatusId::StatModifier {
-                    stat,
-                    debuff: false,
-                    ..
-                } => match stat {
-                    StatType::LifeRegen => "passives/life_regen.svg".into(),
-                    StatType::Damage {
-                        skill_filter,
-                        damage_type,
-                        min_max,
-                        is_hit: _,
-                    } => {
-                        if let Some(damage_type) = damage_type {
-                            match damage_type {
-                                DamageType::Physical => "passives/mace_head.svg".into(),
-                                DamageType::Fire => "passives/fire_damage.svg".into(),
-                                DamageType::Poison => "passives/scorpion_tail.svg".into(),
-                                DamageType::Storm => "passives/storm_damage.svg".into(),
-                            }
-                        } else if let Some(skill_type) = skill_filter.skill_type {
-                            match skill_type {
-                                SkillType::Attack => "passives/attack.svg".into(),
-                                SkillType::Spell => "passives/spell.svg".into(),
-                                _ => "statuses/buff.svg".into(),
-                            }
-                        } else if let Some(min_max) = min_max {
-                            match min_max {
-                                MinMax::Min => "statuses/buff.svg".into(),
-                                MinMax::Max => "passives/thrust.svg".into(),
-                            }
-                        } else {
-                            "statuses/buff.svg".into()
-                        }
-                    }
-                    StatType::CritChance(_) => "passives/critical_chance.svg".into(),
-                    StatType::CritDamage(_) => "passives/critical_damage.svg".into(),
-                    StatType::Speed(_) => "passives/sprint.svg".into(),
-                    StatType::StatusDuration {
-                        status_type:
-                            Some(StatStatusType::DamageOverTime {
-                                damage_type: Some(DamageType::Poison),
-                            }),
-                        ..
-                    } => "passives/ouroboros.svg".into(),
-                    StatType::StatusResistance {
-                        status_type: Some(StatStatusType::Stun),
-                        ..
-                    } => "statuses/stun_immune.svg".into(),
-                    StatType::SuccessChance {
-                        skill_filter,
-                        effect_type,
-                    } => match (skill_filter.skill_type, effect_type) {
-                        (
-                            _,
-                            Some(StatSkillEffectType::ApplyStatus {
-                                status_type:
-                                    Some(StatStatusType::DamageOverTime {
-                                        damage_type: Some(DamageType::Fire),
-                                    }),
-                            }),
-                        ) => "passives/smoking_finger.svg".into(),
-                        _ => "passives/success.svg".into(),
-                    },
-                    StatType::BlockDamageTaken => "statuses/shield_impact.svg".to_string(),
-                    StatType::EvadeDamageTaken => "statuses/falling.svg".to_string(),
-                    StatType::GoldFind => "passives/gold.svg".to_string(),
-                    StatType::Lucky { .. } => "passives/loaded_dice.svg".to_string(),
-                    _ => "statuses/buff.svg".to_string(),
-                },
-                // TODO: More debuff types
-                StatusId::StatModifier {
-                    stat, debuff: true, ..
-                } => match stat {
-                    StatType::Armor(_) | StatType::DamageResistance { .. } => {
-                        "statuses/debuff_armor.svg".to_string()
-                    }
-                    StatType::Damage { .. } => "skills/curse_weakness.svg".to_string(),
-                    StatType::Speed(_) => "statuses/slow.svg".to_string(),
-                    StatType::Block(_) => "statuses/shield_impact.svg".to_string(),
-                    StatType::Evade(_) => "statuses/falling.svg".to_string(),
-                    StatType::GoldFind => "statuses/gold_negative.svg".to_string(),
-                    _ => "statuses/debuff.svg".to_string(),
-                },
-                StatusId::Trigger(_) => stack
-                    .read()
-                    .2
-                    .as_ref()
-                    .and_then(|status_specs| {
-                        if let StatusSpecs::Trigger(trigger_specs) = status_specs {
-                            trigger_specs.icon.clone()
-                        } else {
-                            None
-                        }
-                    })
-                    .unwrap_or("statuses/debuff.svg".into()),
-            }
+            status_specs
+                .as_ref()
+                .map(|status_specs| status_specs.name.clone())
+                .unwrap_or_else(|| status_id.to_string())
         }
     };
 
-    let description = move || status_description(&status_id, stack.read().1, &stack.read().2);
+    let icon_uri = {
+        let status_specs = status_specs.clone();
+        move || {
+            status_specs
+                .as_ref()
+                .map(|status_specs| status_specs.icon.clone())
+                .unwrap_or("statuses/buff.svg".into())
+        }
+    };
 
     let tooltip = {
-        let description = description.clone();
-        move || view! { <span class="max-w-xl">{description.clone()}</span> }
+        let status_id = status_id.clone();
+        let status_specs = status_specs.clone();
+        move || {
+            let (stacks, value) = stack.get();
+            match status_specs.clone() {
+                Some(status_specs) => {
+                    let value = status_value_range(value);
+                    view! {
+                        <div class="max-w-xl text-center list-none">
+                            {format_status_effects(
+                                status_specs,
+                                &value,
+                                None,
+                                stacks,
+                                None,
+                                character_triggers
+                                    .map(|character_triggers| character_triggers.read())
+                                    .as_deref(),
+                            )}
+                        </div>
+                    }
+                    .into_any()
+                }
+                None => view! { <span class="max-w-xl">{status_id.to_string()}</span> }.into_any(),
+            }
+        }
     };
 
     view! {
@@ -715,7 +614,7 @@ fn StatusIcon(
                 <img
                     draggable="false"
                     src=move || img_asset(&icon_uri())
-                    alt=description
+                    alt=status_name
                     class="w-full h-full xl:drop-shadow-sm/80 invert"
                 />
                 <Show when=move || { stack.read().0 > 1 }>
@@ -728,42 +627,11 @@ fn StatusIcon(
     }
 }
 
-pub fn status_description(
-    status_id: &StatusId,
-    value: f64,
-    status_specs: &Option<StatusSpecs>,
-) -> String {
-    match status_id {
-        StatusId::Stun => conditions_tooltip::stunned_str(Some(true)).into(),
-        StatusId::DamageOverTime { damage_type } => {
-            format!(
-                "{} for {} Damage per Second",
-                conditions_tooltip::damaged_over_time_str(Some(*damage_type)),
-                format_number(value)
-            )
-        }
-        StatusId::StatModifier {
-            skill_type: _,
-            stat,
-            modifier,
-            debuff,
-        } => effects_tooltip::format_stat(&StatEffect {
-            stat: stat.clone(),
-            modifier: *modifier,
-            value: if *debuff { -value } else { value },
-            bypass_ignore: false,
-        }),
-        StatusId::Trigger(_) => {
-            if let Some(StatusSpecs::Trigger(trigger_specs)) = status_specs {
-                trigger_specs.name.clone().unwrap_or(
-                    trigger_specs
-                        .description
-                        .clone()
-                        .unwrap_or(trigger_tooltip::trigger_text(*trigger_specs.clone())),
-                )
-            } else {
-                "Special Effect".into()
-            }
-        }
+fn status_value_range(value: f64) -> ChanceRange<ModifiableValue<NonNegative>> {
+    let value: ModifiableValue<NonNegative> = NonNegative::new(value).into();
+    ChanceRange {
+        min: value,
+        max: value,
+        lucky_chance: Default::default(),
     }
 }

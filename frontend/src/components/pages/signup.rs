@@ -72,8 +72,6 @@ pub fn SignUpPage() -> impl IntoView {
                         .await
                     {
                         Ok(_) => {
-                            // Or directly signin and go to user dashboard?
-                            // set_jwt_storage.set(response.jwt);
                             set_username_storage.set(username.get());
                             navigate("/", Default::default());
                         }

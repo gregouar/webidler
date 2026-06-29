@@ -9,7 +9,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     events::{EventsContext, Key},
     game::{game_context::GameContext, websocket::WebsocketContext},
@@ -166,7 +165,6 @@ fn ExportButton() -> impl IntoView {
 
     let do_export = Arc::new({
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
 
         let character_id = game_context.character_id.get_untracked();
@@ -174,17 +172,14 @@ fn ExportButton() -> impl IntoView {
             spawn_local({
                 async move {
                     match backend
-                        .post_save_passives(
-                            &auth_context.token(),
-                            &SavePassivesRequest {
-                                character_id,
-                                purchased_nodes: game_context
-                                    .passives_tree_state
-                                    .read()
-                                    .purchased_nodes
-                                    .clone(),
-                            },
-                        )
+                        .post_save_passives(&SavePassivesRequest {
+                            character_id,
+                            purchased_nodes: game_context
+                                .passives_tree_state
+                                .read()
+                                .purchased_nodes
+                                .clone(),
+                        })
                         .await
                     {
                         Ok(_) => show_toast(toaster, "Export Succeeded!", ToastVariant::Success),

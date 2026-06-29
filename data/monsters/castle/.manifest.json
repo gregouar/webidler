@@ -22,6 +22,9 @@
       "teapot_wraith.json",
       "time_spirit.json",
       "topiary_golem.json"
+    ],
+    "statuses": [
+      "0_statuses.json"
     ]
   }
 }

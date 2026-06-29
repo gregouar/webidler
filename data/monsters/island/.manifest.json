@@ -28,6 +28,9 @@
       "treasure_cutlass.json",
       "treasure_gun.json",
       "treasure_idol.json"
+    ],
+    "statuses": [
+      "0_statuses.json"
     ]
   }
 }

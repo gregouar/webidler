@@ -12,7 +12,7 @@
   },
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -51,18 +51,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": "LifeRegen",
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "life_regen",
+                "value": 50
               }
             }
           ]

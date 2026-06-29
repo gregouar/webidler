@@ -45,13 +45,13 @@ pub fn init_area_specs(
                 .cloned();
         }
 
-        area_specs.triggers.extend(
-            map_item
-                .base
-                .triggers
-                .iter()
-                .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-        );
+        for trigger_specs in map_item.base.triggers.iter() {
+            area_specs.triggers.push(
+                trigger_specs.trigger.clone(),
+                trigger_specs.trigger_effect.clone(),
+                None,
+            );
+        }
 
         EffectsMap::combine_all(
             std::iter::once(

@@ -4,12 +4,16 @@ use std::time::Duration;
 
 use shared::data::{
     area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
+    character::CharacterId,
     game_stats::GameStats,
     item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
-    player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{
+        CharacterSpecs, CharacterState, PlayerBaseSpecs, PlayerInventory, PlayerResources,
+        PlayerSpecs, PlayerState,
+    },
     quest::QuestRewards,
     realms::RealmId,
 };
@@ -165,6 +169,7 @@ impl GameInstanceData {
         let player_state = PlayerState::init(&player_specs);
         // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
+            &master_store.statuses_store,
             &player_base_specs,
             &player_specs,
             &player_state,
@@ -301,5 +306,25 @@ impl GameInstanceData {
         self.monster_base_specs.mutate();
         self.queued_loot.mutate();
         self.quest_rewards.mutate();
+    }
+
+    pub fn character_state(&self, character_id: CharacterId) -> Option<&CharacterState> {
+        match character_id {
+            CharacterId::Player => Some(&self.player_state.character_state),
+            CharacterId::Monster(index) => self
+                .monster_states
+                .get(index)
+                .map(|monster_state| &monster_state.character_state),
+        }
+    }
+
+    pub fn character_specs(&self, character_id: CharacterId) -> Option<&CharacterSpecs> {
+        match character_id {
+            CharacterId::Player => Some(&self.player_specs.read().character_specs),
+            CharacterId::Monster(index) => self
+                .monster_specs
+                .get(index)
+                .map(|monster_specs| &monster_specs.character_specs),
+        }
     }
 }

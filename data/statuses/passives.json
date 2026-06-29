@@ -1,0 +1,249 @@
+{
+  "bonfire": {
+    "name": "Bonfire",
+    "icon": "passives/pyre.svg",
+    "debuff": false,
+    "duration": 5,
+    "max_stacks": 1,
+    "effects": [
+      {
+        "StatModifier": {
+          "stat": {
+            "SuccessChance": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "effect_type": {
+                "ApplyStatus": {
+                  "status_id": "burn"
+                }
+              }
+            }
+          },
+          "modifier": "More",
+          "debuff": false
+        },
+        "value": 100,
+        "modifier": "Flat"
+      }
+    ]
+  },
+  "legionnaire_stance": {
+    "name": "Legionnaire Stance",
+    "icon": "passives/legionnaire_stance2.svg",
+    "debuff": false,
+    "duration": 5,
+    "max_stacks": 20,
+    "effects": [
+      {
+        "StatModifier": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "debuff": false
+        },
+        "value": 100,
+        "modifier": "Percent"
+      }
+    ]
+  },
+  "open_wound": {
+    "name": "Open Wound",
+    "icon": "passives/open_wound.svg",
+    "debuff": true,
+    "duration": 5,
+    "max_stacks": 20,
+    "effects": [
+      {
+        "Trigger": {
+          "name": "Open Wound",
+          "icon": "passives/open_wound.svg",
+          "description": null,
+          "trigger_id": "open_wound",
+          "OnTakeHit": {
+            "skill_type": null,
+            "range": null,
+            "is_crit": null,
+            "is_blocked": null,
+            "is_hurt": null,
+            "is_triggered": null,
+            "damage_type": null,
+            "skill_ids": null,
+            "conditions": [ ]
+          },
+          "target": "SameTarget",
+          "modifiers": [
+            {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "skill_description": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "modifier": "Flat",
+              "factor": 1,
+              "source": "TriggerStatusValue"
+            }
+          ],
+          "skill_range": "Melee",
+          "skill_type": "Other",
+          "effects": [
+            {
+              "success_chance": {
+                "value": 100,
+                "lucky_chance": 0
+              },
+              "FlatDamage": {
+                "damage": { },
+                "crit_chance": {
+                  "value": 0,
+                  "lucky_chance": 0
+                },
+                "crit_damage": 0,
+                "unblockable": true
+              },
+              "ignore_stat_effects": [
+                {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                {
+                  "CritDamage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null
+                  }
+                },
+                {
+                  "CritChance": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "skill_description": null
+                  }
+                }
+              ],
+              "conditional_modifiers": [ ]
+            }
+          ],
+          "skill_shape": "Single",
+          "owner": null,
+          "trigger_propagate": false,
+          "is_debuff": true
+        },
+        "value": 100,
+        "modifier": "Percent"
+      }
+    ]
+  },
+  "pyromaniac": {
+    "name": "Pyromaniac",
+    "icon": "passives/pyromaniac.svg",
+    "debuff": false,
+    "duration": 3,
+    "max_stacks": 40,
+    "effects": [
+      {
+        "StatModifier": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null,
+              "damage_type": "Fire",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "debuff": false
+        },
+        "value": 100,
+        "modifier": "Percent"
+      }
+    ]
+  },
+  "sickening_concoction": {
+    "name": "Sickening Concoction",
+    "icon": "passives/cauldron.svg",
+    "duration": 0,
+    "max_stacks": 1,
+    "debuff": true,
+    "effects": [
+      {
+        "StatModifier": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Increased",
+          "debuff": true
+        },
+        "value": 100,
+        "modifier": "Flat"
+      },
+      {
+        "StatModifier": {
+          "stat": {
+            "Speed": {
+              "skill_type": null,
+              "skill_id": null,
+              "skill_description": null
+            }
+          },
+          "modifier": "Increased",
+          "debuff": true
+        },
+        "value": 33,
+        "modifier": "Flat"
+      }
+    ]
+  },
+  "focus": {
+    "name": "Focus",
+    "icon": "passives/yin_yang.svg",
+    "debuff": false,
+    "duration": 10,
+    "max_stacks": 5,
+    "effects": [
+      {
+        "StatModifier": {
+          "stat": {
+            "Damage": { }
+          },
+          "modifier": "More",
+          "debuff": false
+        },
+        "value": 50,
+        "modifier": "Percent"
+      },
+      {
+        "StatModifier": {
+          "stat": {
+            "CritChance": { }
+          },
+          "modifier": "Increased",
+          "debuff": false
+        },
+        "value": 20,
+        "modifier": "Percent"
+      }
+    ]
+  }
+}

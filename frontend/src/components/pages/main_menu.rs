@@ -12,7 +12,6 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
-        auth::AuthContext,
         backend_client::BackendClient,
         captcha::*,
         events::keyboard_event_key,
@@ -30,8 +29,8 @@ use crate::{
 
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
-    let auth_context = expect_context::<AuthContext>();
-    if !auth_context.token().is_empty() {
+    let backend = expect_context::<BackendClient>();
+    if backend.is_authenticated() {
         view! { <Redirect path="/user-dashboard" /> }.into_any()
     } else {
         view! { <MainMenu /> }.into_any()
@@ -65,7 +64,6 @@ fn MainMenu() -> impl IntoView {
     let do_signin = {
         let toaster = expect_context::<Toasts>();
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         let navigate = use_navigate();
 
         move |username, password| {
@@ -81,8 +79,7 @@ fn MainMenu() -> impl IntoView {
                         })
                         .await
                     {
-                        Ok(response) => {
-                            auth_context.sign_in(response.jwt);
+                        Ok(_) => {
                             navigate("/user-dashboard", Default::default());
                         }
                         Err(e) => {
@@ -205,7 +202,6 @@ fn MainMenu() -> impl IntoView {
                 <ForgotPasswordModal open=show_forgot_password_modal />
                 <GuestModal open=show_guest_modal captcha_token />
             </div>
-
 
             <MenuListRow class="mt-2 px-4 py-3 text-left">
                 <div class="space-y-3">
@@ -540,7 +536,6 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
 pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
-    let auth_context = expect_context::<AuthContext>();
 
     let (_, set_username_storage, _) =
         storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
@@ -621,9 +616,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
                         })
                         .await
                     {
-                        Ok(response) => {
-                            auth_context.sign_in(response.jwt);
-
+                        Ok(_) => {
                             navigate("/user-dashboard", Default::default());
                         }
                         Err(e) => {

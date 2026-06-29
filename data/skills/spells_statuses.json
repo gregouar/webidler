@@ -1,0 +1,37 @@
+{
+    "righteous_fire": {
+        "name": "Righteous Fire",
+        "icon": "skills/righteous_fire.svg",
+        "debuff": true,
+        "damage_type": "Fire",
+        "avoidable": true,
+        "duration": 2,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Fire"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "righteous_fire_self": {
+        "name": "Self-Righteous Fire",
+        "icon": "skills/righteous_fire.svg",
+        "debuff": true,
+        "damage_type": "Fire",
+        "duration": 2,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Fire"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    }
+}

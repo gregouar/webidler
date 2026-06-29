@@ -136,7 +136,7 @@ pub fn ItemTooltipContent(
             .triggers
             .clone()
             .into_iter()
-            .map(|trigger| format_trigger(trigger, show_affixes, None))
+            .map(|trigger| format_trigger(trigger, show_affixes, None, None))
             .collect::<Vec<_>>();
 
         (
@@ -762,5 +762,19 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Ring => "Ring",
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
+    }
+}
+
+pub fn item_slot_str(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Amulet => "Amulet",
+        ItemSlot::Body => "Body Armor",
+        ItemSlot::Boots => "Boots",
+        ItemSlot::Gloves => "Gloves",
+        ItemSlot::Helmet => "Helmet",
+        ItemSlot::Ring => "Ring",
+        ItemSlot::Shield => "Off Hand",
+        ItemSlot::Accessory => "Cloak",
+        ItemSlot::Weapon => "Weapon",
     }
 }

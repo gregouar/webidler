@@ -2,21 +2,23 @@ use std::collections::HashMap;
 
 use shared::{
     computations,
-    constants::{self, ARMOR_FACTOR},
+    constants::ARMOR_FACTOR,
     data::{
         character::{CharacterAttrs, CharacterId, CharacterState},
-        character_status::{StatusId, StatusSpecs},
+        character_status::{StatusEffectType, StatusId},
         item::SkillRange,
-        modifier::Modifier,
         player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
-        stat_effect::{StatSkillFilter, StatStatusType, StatType, compare_options},
+        stat_effect::{StatSkillFilter, compare_options},
         values::{Cooldown, NonNegative},
     },
 };
 
 use crate::game::{
-    data::event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
+    data::{
+        event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
+        master_store::StatusesStore,
+    },
     systems::statuses_controller,
     utils::rng::Rollable,
 };
@@ -142,11 +144,12 @@ fn compute_damage(
     is_blocked: bool,
 ) -> NonNegative {
     let resistance_factor = (1.0
-        - *character_attrs
+        - character_attrs
             .damage_resistance
             .get(&(skill_type, damage_type))
             .cloned()
             .unwrap_or_default()
+            .get()
             * 0.01)
         .max(0.0);
 
@@ -221,14 +224,16 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     target_state.is_alive = true;
     target_state.life = target_specs.character_attrs.max_life.get().into();
 
-    target_state
-        .statuses
-        .unique_statuses
-        .retain(|_, (_, status_state)| status_state.duration.is_none());
-    target_state
-        .statuses
-        .cumulative_statuses
-        .retain(|(_, status_state)| status_state.duration.is_none());
+    // TODO: Check if we needed that?
+    // target_state
+    //     .statuses
+    //     .unique_statuses
+    //     .retain(|_, (_, status_state)| status_state.duration.is_none());
+    // target_state
+    //     .statuses
+    //     .cumulative_statuses
+    //     .retain(|(_, status_state)| status_state.duration.is_none());
+    target_state.statuses.clear();
 
     true
 }
@@ -264,106 +269,99 @@ pub fn refresh_skills_cooldown(
 #[allow(clippy::too_many_arguments)]
 pub fn should_apply_status(
     target: &Target,
-    status_specs: &StatusSpecs,
-    skill_type: SkillType,
+    // status_specs: &StatusSpecs,
+    status_id: &StatusId,
+    // skill_type: SkillType,
     value: NonNegative,
-    duration: Option<NonNegative>,
-    escalation: f64,
-    cumulate: bool,
+    duration: NonNegative,
+    escalation: NonNegative,
+    max_stacks: u8,
     replace_on_value_only: bool,
 ) -> bool {
     let (_, (_, target_state)) = target;
 
-    if duration.map(|d| d.get() <= 0.1).unwrap_or_default() || !target_state.is_alive {
+    if duration.get() <= 0.1 || !target_state.is_alive {
         return false;
     }
 
-    match status_specs {
-        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => {
-            if value.get() <= 0.0 {
-                return false;
-            }
-        }
-        StatusSpecs::Trigger(_) | StatusSpecs::Stun => {}
+    if value.get() <= 0.0 {
+        return false;
     }
 
-    if cumulate {
+    // TODO: Smarter later?
+    if max_stacks > 1 {
         return true;
     }
 
-    if let Some((_, cur_status_state)) = target_state
+    target_state
         .statuses
-        .unique_statuses
-        .get(&status_specs.into_status_id(skill_type))
-    {
-        return compute_effect_weight(value, duration, escalation, replace_on_value_only)
-            > compute_effect_weight(
-                cur_status_state.base_value,
-                cur_status_state.duration,
-                cur_status_state.escalation,
-                replace_on_value_only,
-            );
-    }
-
-    true
+        .get(status_id)
+        .map(|cur_status_states| {
+            cur_status_states.iter().any(|cur_status_state| {
+                compute_effect_weight(value, duration, escalation, replace_on_value_only)
+                    > compute_effect_weight(
+                        cur_status_state.base_value,
+                        cur_status_state.duration,
+                        cur_status_state.escalation,
+                        replace_on_value_only,
+                    )
+            })
+        })
+        .unwrap_or(true)
 }
 
 #[allow(clippy::too_many_arguments)]
 pub fn apply_status(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     target: &mut Target,
     attacker: CharacterId,
-    status_specs: &StatusSpecs,
+    status_id: &StatusId,
     skill_type: SkillType,
     value: NonNegative,
-    duration: Option<NonNegative>,
-    escalation: f64,
-    cumulate: bool,
-    unavoidable: bool,
+    duration: NonNegative,
+    escalation: NonNegative,
+    max_stacks: u8,
+    avoidable: Option<DamageType>,
     skill_id: &str,
     trigger_depth: u8,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
+    let status_id = statuses_store.id_with_key(status_id.clone());
+    let Some(status_specs) = statuses_store.get(&status_id) else {
+        return false;
+    };
+
+    let is_stun = status_id == "stun";
 
     let status_resistance: f64 = target_specs
         .character_attrs
         .status_resistances
         .iter()
-        .filter_map(|((res_skill_type, res_status_type), resistance)| {
+        .filter_map(|((res_skill_type, res_status_id), resistance)| {
             ((*res_skill_type == skill_type)
-                && compare_options(res_status_type, &Some(status_specs.into())))
+                && compare_options(&res_status_id.as_ref(), &Some(&status_id)))
             .then_some(**resistance)
         })
         .sum();
 
-    let (duration, value) = if status_resistance > 0.0 {
-        let factor = (1.0 - status_resistance * 0.01).clamp(0.0, 1.0);
-        if let Some(duration) = duration
-            && duration.get() < 1e10
-        {
-            (Some(duration * factor), value)
-        } else {
-            (None, value * factor)
-        }
-    } else {
-        (duration, value)
-    };
+    let factor = (1.0 - status_resistance * 0.01).clamp(0.0, 1.0);
+    let duration = duration * factor;
 
-    if duration.map(|d| d.get() <= 0.1).unwrap_or_default() || !target_state.is_alive {
+    if duration.get() <= 0.1 || !target_state.is_alive {
         return false;
     }
 
-    let is_evaded =
-        if !unavoidable && let StatusSpecs::DamageOverTime { damage_type, .. } = status_specs {
-            target_specs
-                .character_attrs
-                .evade
-                .get(damage_type)
-                .map(|evade| evade.roll())
-                .unwrap_or_default()
-        } else {
-            false
-        };
+    let is_evaded = if let Some(damage_type) = avoidable {
+        target_specs
+            .character_attrs
+            .evade
+            .get(&damage_type)
+            .map(|evade| evade.roll())
+            .unwrap_or_default()
+    } else {
+        false
+    };
 
     if is_evaded {
         target_state.just_evaded = true;
@@ -377,79 +375,37 @@ pub fn apply_status(
 
     let value = value * evade_factor;
 
-    let try_apply = match status_specs {
-        StatusSpecs::DamageOverTime { .. } | StatusSpecs::StatModifier { .. } => value.get() > 0.0,
-        StatusSpecs::Trigger(_) | StatusSpecs::Stun => true,
-    };
-
-    // Long duration are considered as forever
-    let duration = match duration {
-        Some(duration) if duration.get() > 9999.0f64 => None,
-        _ => duration,
-    };
-
-    let mut new_status_specs = status_specs.clone();
-    if let StatusSpecs::Trigger(ref mut trigger_specs) = new_status_specs {
-        trigger_specs.triggered_effect.owner = Some(attacker);
-    }
-
+    let try_apply = value.get() > 0.0;
     let mut applied = try_apply;
 
     if try_apply {
-        if cumulate {
-            target_state.statuses.cumulative_statuses.push((
-                new_status_specs,
-                statuses_controller::initialize_status_state(
-                    skill_type, value, duration, escalation, cumulate,
-                ),
+        let status_stacks = target_state
+            .statuses
+            .entry(status_id.clone())
+            .or_insert(Vec::with_capacity(max_stacks as usize));
+
+        if status_stacks.len() < max_stacks as usize {
+            status_stacks.push(statuses_controller::initialize_status_state(
+                attacker, skill_type, value, duration, escalation,
             ));
-
-            if target_state.statuses.cumulative_statuses.len() > constants::MAX_STATUS_STACKS {
-                let status_id: StatusId = status_specs.into_status_id(skill_type);
-
-                if let Some(i) = target_state
-                    .statuses
-                    .cumulative_statuses
-                    .iter()
-                    .enumerate()
-                    .rev()
-                    .filter(|(_, (specs, _))| specs.into_status_id(skill_type) == status_id)
-                    .nth(constants::MAX_STATUS_STACKS)
-                    .map(|(i, _)| i)
-                {
-                    target_state.statuses.cumulative_statuses.remove(i);
-                }
-            }
+        } else if let Some(cur_status_state) = status_stacks.iter_mut().find(|cur_status_state| {
+            compute_effect_weight(value, duration, escalation, false)
+                > compute_effect_weight(
+                    cur_status_state.base_value,
+                    cur_status_state.duration,
+                    cur_status_state.escalation,
+                    false,
+                )
+        }) {
+            cur_status_state.owner = attacker;
+            cur_status_state.base_value = value;
+            cur_status_state.value = value;
+            cur_status_state.duration = duration;
+            cur_status_state.escalation = escalation;
+            cur_status_state.max_escalation = duration;
+            cur_status_state.skill_type = skill_type;
         } else {
-            target_state
-                .statuses
-                .unique_statuses
-                .entry(status_specs.into_status_id(skill_type))
-                .and_modify(|(cur_status_specs, cur_status_state)| {
-                    if compute_effect_weight(value, duration, escalation, false)
-                        > compute_effect_weight(
-                            cur_status_state.base_value,
-                            cur_status_state.duration,
-                            cur_status_state.escalation,
-                            false,
-                        )
-                    {
-                        cur_status_state.base_value = value;
-                        cur_status_state.value = value;
-                        cur_status_state.duration = duration;
-                        cur_status_state.escalation = escalation;
-                        cur_status_state.max_escalation = duration;
-                        *cur_status_specs = new_status_specs.clone();
-                    } else {
-                        applied = false;
-                    }
-                })
-                .or_insert((
-                    new_status_specs,
-                    statuses_controller::initialize_status_state(
-                        skill_type, value, duration, escalation, cumulate,
-                    ),
-                ));
+            applied = false;
         }
     }
 
@@ -457,11 +413,21 @@ pub fn apply_status(
         return false;
     }
 
+    if status_specs.effects.iter().any(|status_effect| {
+        matches!(
+            status_effect.status_effect_type,
+            StatusEffectType::StatModifier { .. } | StatusEffectType::Trigger { .. }
+        )
+    }) {
+        target_state.dirty_specs = true;
+    }
+
     events_queue.register_event(GameEvent::StatusApplied(StatusEvent {
         source: attacker,
         target: *target_id,
         skill_type,
-        status_type: status_specs.into(),
+        status_id,
+        damage_type: status_specs.damage_type,
         value,
         duration,
         is_evaded,
@@ -469,32 +435,20 @@ pub fn apply_status(
         trigger_depth,
     }));
 
-    if let StatusSpecs::StatModifier { .. } | StatusSpecs::Trigger { .. } = status_specs {
-        target_state.dirty_specs = true;
-    }
-
     let stun_lockout = *target_specs.character_attrs.stun_lockout;
-    if let StatusSpecs::Stun = status_specs
-        && stun_lockout.get() > 0.0
-    {
+    if is_stun && stun_lockout.get() > 0.0 {
         apply_status(
+            statuses_store,
             events_queue,
             target,
             attacker,
-            &StatusSpecs::StatModifier {
-                stat: StatType::StatusResistance {
-                    skill_type: Default::default(),
-                    status_type: Some(StatStatusType::Stun),
-                },
-                modifier: Modifier::Flat,
-                debuff: false,
-            },
+            &"stun_lockout".into(), //This feels moronic
             SkillType::Other,
             100.0.into(),
-            duration.map(|d| d + stun_lockout),
-            0.0,
-            false,
-            true,
+            duration + stun_lockout,
+            0.0.into(),
+            1,
+            None,
             "stun_lockout",
             0,
         );
@@ -505,19 +459,19 @@ pub fn apply_status(
 
 fn compute_effect_weight(
     value: NonNegative,
-    duration: Option<NonNegative>,
-    escalation: f64,
+    duration: NonNegative,
+    escalation: NonNegative,
     value_only: bool,
 ) -> f64 {
-    let value = value.get() * (1.0 + escalation * 0.01) + 1.0;
+    let value = value.get() * (1.0 + escalation.get() * 0.01) + 1.0;
     if value_only {
-        if duration.map(|x| x.get()).unwrap_or(1.0) < 0.2 {
+        if duration.get() < 0.2 {
             value * 0.1
         } else {
             value
         }
     } else {
-        value * duration.map(|x| x.get()).unwrap_or(999.0)
+        value * duration.get().min(99999.0)
     }
 }
 
@@ -546,10 +500,11 @@ pub fn spend_mana(
     character_state.mana -= take_from_mana.into();
 }
 
-pub fn reset_buff_statuses(character_state: &mut CharacterState) {
-    for (status_specs, status_state) in character_state.statuses.iter_mut() {
-        if !status_specs.is_debuff() {
-            status_state.duration = Some(0.0.into());
-        }
-    }
+pub fn reset_buff_statuses(statuses_store: &StatusesStore, character_state: &mut CharacterState) {
+    character_state.statuses.retain(|status_id, _| {
+        statuses_store
+            .get(status_id)
+            .map(|status_specs| status_specs.debuff)
+            .unwrap_or_default()
+    });
 }

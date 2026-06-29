@@ -29,18 +29,9 @@
             },
             {
               "ApplyStatus": {
+                "status_id": "chill",
                 "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Speed": { } },
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "value": 50
               }
             }
           ]

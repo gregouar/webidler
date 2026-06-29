@@ -18,7 +18,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     events::{EventsContext, Key},
     shared::{
@@ -457,7 +456,6 @@ fn ConfirmAscendButton(
     let do_ascend = Arc::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
 
         let character_id = town_context.character.read_untracked().character_id;
@@ -465,16 +463,13 @@ fn ConfirmAscendButton(
             spawn_local({
                 async move {
                     match backend
-                        .post_ascend_passives(
-                            &auth_context.token(),
-                            &AscendPassivesRequest {
-                                character_id,
-                                ascended_nodes: passives_tree_ascension
-                                    .read_untracked()
-                                    .ascended_nodes
-                                    .clone(),
-                            },
-                        )
+                        .post_ascend_passives(&AscendPassivesRequest {
+                            character_id,
+                            ascended_nodes: passives_tree_ascension
+                                .read_untracked()
+                                .ascended_nodes
+                                .clone(),
+                        })
                         .await
                     {
                         Ok(response) => {
@@ -521,20 +516,16 @@ fn RefundAscendButton(
     let do_reset = Arc::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
         let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({
                 async move {
                     match backend
-                        .post_ascend_passives(
-                            &auth_context.token(),
-                            &AscendPassivesRequest {
-                                character_id,
-                                ascended_nodes: Default::default(),
-                            },
-                        )
+                        .post_ascend_passives(&AscendPassivesRequest {
+                            character_id,
+                            ascended_nodes: Default::default(),
+                        })
                         .await
                     {
                         Ok(response) => {
@@ -650,7 +641,6 @@ fn ConfirmBuildButton(
     let do_save = Arc::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
 
         let character_id = town_context.character.read_untracked().character_id;
@@ -658,13 +648,10 @@ fn ConfirmBuildButton(
             spawn_local({
                 async move {
                     match backend
-                        .post_save_passives(
-                            &auth_context.token(),
-                            &SavePassivesRequest {
-                                character_id,
-                                purchased_nodes: passives_tree_build.get(),
-                            },
-                        )
+                        .post_save_passives(&SavePassivesRequest {
+                            character_id,
+                            purchased_nodes: passives_tree_build.get(),
+                        })
                         .await
                     {
                         Ok(_) => {
@@ -756,7 +743,6 @@ fn PassiveSkillTree(
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
     let backend = expect_context::<BackendClient>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let character_id = town_context.character.read_untracked().character_id;
@@ -780,14 +766,11 @@ fn PassiveSkillTree(
             spawn_local({
                 async move {
                     match backend
-                        .post_socket_passive(
-                            &auth_context.token(),
-                            &SocketPassiveRequest {
-                                character_id,
-                                passive_node_id,
-                                item_index: Some(item_index),
-                            },
-                        )
+                        .post_socket_passive(&SocketPassiveRequest {
+                            character_id,
+                            passive_node_id,
+                            item_index: Some(item_index),
+                        })
                         .await
                     {
                         Ok(response) => {
@@ -883,7 +866,6 @@ fn AscendNode(
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
     let backend = expect_context::<BackendClient>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let socket = Memo::new(move |_| match active_tab.get() {
@@ -1085,14 +1067,11 @@ fn AscendNode(
                 spawn_local({
                     async move {
                         match backend
-                            .post_socket_passive(
-                                &auth_context.token(),
-                                &SocketPassiveRequest {
-                                    character_id,
-                                    passive_node_id: node_id,
-                                    item_index: None,
-                                },
-                            )
+                            .post_socket_passive(&SocketPassiveRequest {
+                                character_id,
+                                passive_node_id: node_id,
+                                item_index: None,
+                            })
                             .await
                         {
                             Ok(response) => {

@@ -22,7 +22,6 @@ use crate::{
     assets::img_asset,
     components::{
         accessibility::AccessibilityContext,
-        auth::AuthContext,
         backend_client::BackendClient,
         chat::{chat_context::ChatContext, chat_panel::ChatPanel},
         settings::SettingsContext,
@@ -54,7 +53,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let async_data = LocalResource::new({
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         move || async move {
             let _ = refresh_trigger.read();
 
@@ -64,16 +62,12 @@ pub fn UserDashboardPage() -> impl IntoView {
                 .map(|r| r.areas)
                 .unwrap_or_default();
 
-            let user_details = backend
-                .get_me(&auth_context.token())
-                .await
-                .map(|r| r.user_details)
-                .ok();
+            let user_details = backend.get_me().await.map(|r| r.user_details).ok();
 
             match user_details {
                 Some(user_details) => {
                     let characters = backend
-                        .get_user_characters(&auth_context.token(), &user_details.user.user_id)
+                        .get_user_characters(&user_details.user.user_id)
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
@@ -95,10 +89,13 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let sign_out = {
         let navigate = use_navigate();
-        let auth_context = expect_context::<AuthContext>();
+        let backend = expect_context::<BackendClient>();
         move || {
             exit_fullscreen();
-            auth_context.sign_out();
+            backend.sign_out();
+            spawn_local(async move {
+                let _ = backend.post_signout().await;
+            });
             navigate("/", Default::default());
         }
     };
@@ -300,16 +297,12 @@ fn CharacterSlot(
     let is_ssf = character.is_ssf || matches!(character.realm, Realm::StandardSSF);
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
         let character_id = character.character_id;
 
         move || {
             spawn_local(async move {
-                match backend
-                    .delete_character(&auth_context.token(), &character_id)
-                    .await
-                {
+                match backend.delete_character(&character_id).await {
                     Ok(_) => {
                         refresh_trigger.update(|n| *n += 1);
                         show_toast(
@@ -627,7 +620,6 @@ pub fn CreateCharacterPanel(
     });
 
     let on_submit = {
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
         let backend = expect_context::<BackendClient>();
 
@@ -642,7 +634,6 @@ pub fn CreateCharacterPanel(
                     match selected_character_id.get_untracked() {
                         Some(character_id) => match backend
                             .post_update_character(
-                                &auth_context.token(),
                                 &character_id,
                                 &UpdateCharacterRequest {
                                     name: selected_character_name.get_untracked().unwrap(),
@@ -667,7 +658,6 @@ pub fn CreateCharacterPanel(
                         },
                         None => match backend
                             .post_create_character(
-                                &auth_context.token(),
                                 &user_id,
                                 &CreateCharacterRequest {
                                     name: selected_character_name.get_untracked().unwrap(),
@@ -844,7 +834,6 @@ pub fn CreateCharacterPanel(
 #[component]
 fn DiscordInviteBanner() -> impl IntoView {
     let backend = expect_context::<BackendClient>();
-    let auth = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let invite_url = RwSignal::new(None::<String>);
@@ -854,7 +843,7 @@ fn DiscordInviteBanner() -> impl IntoView {
         loading.set(true);
 
         spawn_local(async move {
-            match backend.get_discord_invite(&auth.token()).await {
+            match backend.get_discord_invite().await {
                 Ok(resp) => invite_url.set(Some(format!("https://discord.gg/{}", resp.code))),
                 Err(e) => {
                     show_toast(

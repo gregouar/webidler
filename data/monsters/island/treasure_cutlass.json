@@ -9,7 +9,7 @@
   "stun_lockout": 3.0,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -31,17 +31,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Physical"
-                      }
-                    },
-                    "value": [ 2, 5 ]
-                  }
-                ]
+                "status_id": "bleed",
+                "value": 5
               }
             }
           ]

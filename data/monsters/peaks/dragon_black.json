@@ -10,7 +10,7 @@
   "stun_lockout": 3.0,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
@@ -53,15 +53,9 @@
             },
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
-                    },
-                    "value": 25
-                  }
-                ]
+                "status_id": "poison",
+                "value": 20,
+                "escalation": 20
               }
             }
           ]
@@ -70,7 +64,7 @@
     },
     {
       "name": "Evil Eye",
-      "icon": "skills/blessing_crit.svg",
+      "icon": "skills/beast_eye.svg",
       "cooldown": 15.0,
       "skill_type": "Blessing",
       "targets": [
@@ -79,42 +73,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "CritChance": { "skill_type": "Attack" } },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 25
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "CritDamage": { "skill_type": "Attack" } },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 200
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "Lucky": {
-                            "roll_type": {
-                              "Damage": { }
-                            }
-                          }
-                        },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 100
-                  }
-                ]
+                "status_id": "dragon_eye",
+                "value": 200
               }
             }
           ]

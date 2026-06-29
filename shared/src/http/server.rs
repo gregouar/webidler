@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
+    character_status::{StatusId, StatusSpecs},
     game_stats::GrindStats,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
@@ -147,6 +148,11 @@ pub struct GetAreasResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetSkillsResponse {
     pub skills: HashMap<String, BaseSkillSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetStatusesResponse {
+    pub statuses: HashMap<StatusId, StatusSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

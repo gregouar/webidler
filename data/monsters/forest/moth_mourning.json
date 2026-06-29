@@ -6,7 +6,7 @@
   "initiative": [ 0.0, 0.5 ],
   "skills": [
     {
-      "name": "Lamenting Cry",
+      "name": "Lamenting Embrace",
       "icon": "skills/curse_frailty.svg",
       "skill_type": "Spell",
       "cooldown": 3.0,
@@ -22,23 +22,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Physical"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "moth_cry",
+                "value": 50
               }
             }
           ]
