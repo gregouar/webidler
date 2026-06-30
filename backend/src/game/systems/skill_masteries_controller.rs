@@ -1,7 +1,7 @@
 use shared::data::{
     item_affix::AffixEffectScope,
     player::PlayerBaseSpecs,
-    skill::SkillSpecs,
+    skill::{SkillEffectType, SkillSpecs},
     skill_mastery::{
         PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState, SkillMasteryUpgradeEffectType,
     },
@@ -63,6 +63,10 @@ pub fn validate_skill_masteries(
             .cloned()
             .unwrap_or_default();
 
+        if prev_mastery == *requested_mastery {
+            continue;
+        }
+
         let mastery_specs = skill_masteries_store
             .get(skill_id)
             .cloned()
@@ -77,7 +81,7 @@ pub fn validate_skill_masteries(
 
         for (upgrade_id, upgrade_level) in requested_mastery.upgrades_bought.iter() {
             let Some(upgrade_specs) = mastery_specs.upgrades.get(upgrade_id) else {
-                return Err(anyhow::anyhow!("invalid skill mastery"));
+                continue;
             };
 
             if *upgrade_level > upgrade_specs.max_level {
@@ -139,6 +143,16 @@ pub fn apply_skill_mastery(
             }
             SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => {
                 skill_specs.triggers.push(trigger_specs.clone());
+            }
+            SkillMasteryUpgradeEffectType::ReplaceStatusId {
+                old_status_id,
+                new_status_id,
+            } => {
+                for skill_effect in skill_specs.targets.iter_mut().flat_map(|target| target.effects.iter_mut()) {
+                    if let SkillEffectType::ApplyStatus{status_id, .. } = &mut skill_effect.effect_type && *status_id == *old_status_id {
+                        *status_id = statuses_store.id_with_key(new_status_id.clone()) ;
+                    }
+                }
             }
         }
     }

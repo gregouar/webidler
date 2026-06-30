@@ -451,7 +451,7 @@ fn compute_character_specs(
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
-            | StatType::SkillTargetModifier { .. } 
+            | StatType::SkillTargetModifier { .. }
             | StatType::SkillEffectModifier { .. } => {}
             // Other
             StatType::ItemRarity

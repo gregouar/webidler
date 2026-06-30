@@ -27,7 +27,7 @@ pub const SKILL_COST_INCREASE_FACTOR: f64 = LOG10_2; // X2 every level
 pub const XP_INCREASE_FACTOR: f64 = 0.40;
 
 pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X10 every 200 levels
-pub const SKILL_MASTERY_BASE_COST: f64 = 10_000.0;
+pub const SKILL_MASTERY_BASE_COST: f64 = 10_0.0;
 pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
 
 pub const ARMOR_FACTOR: f64 = 100.0;

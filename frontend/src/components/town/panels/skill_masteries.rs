@@ -4,13 +4,11 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
     data::{
-        skill::SkillType,
-        skill_mastery::{
+         modifier::ModifiableValue, skill::SkillType, skill_mastery::{
             PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade,
             SkillMasteryUpgradeEffect, SkillMasteryUpgradeEffectType,
-        },
-    },
-    http::client::SaveSkillMasteriesRequest,
+        }, values::NonNegative,
+    }, http::client::SaveSkillMasteriesRequest,
 };
 use strum::IntoEnumIterator;
 
@@ -20,7 +18,11 @@ use crate::components::{
     events::{EventsContext, Key},
     shared::{
         skills::{SkillMasteryCard, skill_specs_with_mastery},
-        tooltips::{effects_tooltip, skill_tooltip, trigger_tooltip},
+        tooltips::{
+            effects_tooltip,
+            skill_tooltip::{self, EffectLi},
+            status_tooltip, trigger_tooltip,
+        },
     },
     town::TownContext,
     ui::{
@@ -70,7 +72,7 @@ pub fn SkillMasteriesPanel(
                                     >
                                         "Cancel"
                                     </MenuButton>
-                                    <ConfirmButton skill_masteries open dirty />
+                                    <ConfirmButton skill_masteries dirty />
                                 </div>
                             }
                         })}
@@ -118,13 +120,12 @@ pub fn SkillMasteryDetailsModal(#[prop(default = false)] view_only: bool) -> imp
                                     <MenuButton
                                         on:click=move |_| {
                                             reset();
-                                            open.set(false);
                                         }
                                         disabled=Signal::derive(move || !dirty.get())
                                     >
                                         "Cancel"
                                     </MenuButton>
-                                    <ConfirmButton skill_masteries open dirty />
+                                    <ConfirmButton skill_masteries dirty />
                                 </div>
                             }
                         })}
@@ -140,7 +141,7 @@ pub fn SkillMasteryDetailsModal(#[prop(default = false)] view_only: bool) -> imp
 #[component]
 fn ConfirmButton(
     skill_masteries: RwSignal<PlayerSkillMasteries>,
-    open: RwSignal<bool>,
+    // open: RwSignal<bool>,
     dirty: Signal<bool>,
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
@@ -164,7 +165,7 @@ fn ConfirmButton(
                     town_context
                         .skill_mastery_skill_specs
                         .set(response.skill_mastery_skill_specs);
-                    open.set(false);
+                    // open.set(false);
                 }
                 Err(e) => show_toast(
                     toaster,
@@ -867,6 +868,7 @@ fn format_mastery_upgrade_effect(
     upgrade_effect: &SkillMasteryUpgradeEffect,
     _upgrade_level: u16,
 ) -> Option<impl IntoView> {
+    let data_context: DataContext = expect_context();
     match &upgrade_effect.effect_type {
         SkillMasteryUpgradeEffectType::StatEffect { .. }
         // | SkillMasteryUpgradeEffectType::PlayerStatEffect { .. } 
@@ -874,13 +876,33 @@ fn format_mastery_upgrade_effect(
         SkillMasteryUpgradeEffectType::SkillEffect {
             skill_effect,
             target_index: _,
-        } => Some(
-            skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None, None)
-                .into_any(),
-        ),
+        } => {
+            Some(
+                skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None, None)
+                    .into_any(),
+            )
+        },
         SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => Some(
             trigger_tooltip::format_trigger(trigger_specs.clone(), false, None, None).into_any(),
         ),
+        SkillMasteryUpgradeEffectType::ReplaceStatusId { old_status_id, new_status_id } => {
+            let old_status_str = data_context.status_name(old_status_id);
+            let new_status_str = data_context.status_name(new_status_id);
+            let status_specs = data_context.statuses_specs.read().get(new_status_id).cloned()?;
+            let value: ModifiableValue<_> = NonNegative::new(100.0).into();
+            Some(view! {
+                <EffectLi>"Apply "{new_status_str}" instead of "{old_status_str}</EffectLi>
+                {status_tooltip::format_status_effects(
+                    status_specs,
+                    &(value.into()),
+                    None,
+                    1,
+                    None,
+                    None,
+                )}
+            }.into_any())
+           
+        },
     }
 }
 

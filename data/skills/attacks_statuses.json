@@ -114,6 +114,93 @@
             }
         ]
     },
+    "pyroclastic_infusion_fire": {
+        "name": "Magmatic Infusion",
+        "icon": "skills/pyroclastic_infusion.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Fire",
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More"
+                },
+                "value": 30,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "StatConverter": {
+                            "source": {
+                                "Damage": {
+                                    "damage_type": "Physical"
+                                }
+                            },
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Fire"
+                                }
+                            }
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "pyroclastic_infusion_storm": {
+        "name": "Galvanic Infusion",
+        "icon": "skills/pyroclastic_infusion.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Storm",
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More"
+                },
+                "value": 30,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "StatConverter": {
+                            "source": {
+                                "Damage": {
+                                    "damage_type": "Physical"
+                                }
+                            },
+                            "stat": {
+                                "Damage": {
+                                    "damage_type": "Storm",
+                                    "min_max": "Max"
+                                }
+                            }
+                        }
+                    },
+                    "modifier": "Flat"
+                },
+                "value": 100,
+                "modifier": "Flat"
+            }
+        ]
+    },
     "sharpen_weapon": {
         "name": "Sharpen Weapon",
         "icon": "skills/sharpen_weapon.svg",

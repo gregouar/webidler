@@ -200,8 +200,8 @@
         "stat": {
           "StatusPower": { }
         },
-        "modifier": "Flat",
-        "value": 3,
+        "modifier": "Increased",
+        "value": 10,
         "description": "+3% More Fire and Storm Attack Damage"
       }
     ],

@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     computations,
     data::{
+        character_status::StatusId,
         item_affix::AffixEffectScope,
         modifier::Modifier,
         skill::SkillEffect,
@@ -54,6 +55,11 @@ pub enum SkillMasteryUpgradeEffectType {
         skill_effect: Box<SkillEffect>,
         #[serde(default)]
         target_index: usize,
+    },
+    ReplaceStatusId {
+        // TODO: Turn into StatEffect instead?
+        old_status_id: StatusId,
+        new_status_id: StatusId,
     },
     Trigger(TriggerSpecs),
 }

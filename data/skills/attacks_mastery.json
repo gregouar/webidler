@@ -324,15 +324,15 @@
   "poison_coating": {
     "max_level": 100,
     "upgrades": {
-      "damage": {
-        "title": "Damage",
+      "power": {
+        "title": "Effects",
         "base_cost": 1,
         "upgrade_cost": 1,
         "max_level": 100,
         "effects": [
           {
-            "value": 10,
-            "upgrade_value": 10,
+            "value": 5,
+            "upgrade_value": 5,
             "StatEffect": {
               "stat": {
                 "StatusPower": {
@@ -360,26 +360,62 @@
                   "skill_type": "Attack"
                 }
               },
-              "modifier": "Flat"
+              "modifier": "Flat",
+              "scope": "Global"
             }
           }
         ]
       },
       "mana_cost": {
         "title": "Herbalist",
-        "base_cost": 20,
+        "base_cost": 10,
         "upgrade_cost": 0,
         "max_level": 1,
         "effects": [
           {
-            "value": -1e200,
+            "value": -1e+200,
             "upgrade_value": 0,
             "StatEffect": {
               "stat": {
-                "ManaCost": {
-                }
+                "ManaCost": { }
               },
               "modifier": "More"
+            }
+          }
+        ]
+      },
+      "faster_poison": {
+        "title": "Virulence",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "StatusFaster": {
+                  "status_id": "poison",
+                  "skill_type": "Attack"
+                }
+              },
+              "modifier": "More",
+              "scope": "Global"
+            }
+          },
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "StatusEscalation": {
+                  "status_id": "poison",
+                  "skill_type": "Attack"
+                }
+              },
+              "modifier": "More",
+              "scope": "Global"
             }
           }
         ]
@@ -388,7 +424,144 @@
   },
   "pyroclastic_infusion": {
     "max_level": 100,
-    "upgrades": { }
+    "upgrades": {
+      "power": {
+        "title": "Effects",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "StatusPower": { }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "duration": {
+        "title": "Effects",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 1,
+            "StatEffect": {
+              "stat": {
+                "StatusDuration": { }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "damage_against_burning": {
+        "title": "Thermal Updraft",
+        "base_cost": 5,
+        "upgrade_cost": 5,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "SkillConditionalModifier": {
+                  "stat": {
+                    "Damage": {
+                      "damage_type": "Storm"
+                    }
+                  },
+                  "skill_type": null,
+                  "skill_id": null,
+                  "conditions": [
+                    {
+                      "HasStatus": {
+                        "status_id": "burn"
+                      }
+                    }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope": "Global"
+            }
+          }
+        ]
+      },
+      "damage_against_stunned": {
+        "title": "Flashover",
+        "base_cost": 5,
+        "upgrade_cost": 5,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "SkillConditionalModifier": {
+                  "stat": {
+                    "Damage": {
+                      "damage_type": "Fire"
+                    }
+                  },
+                  "skill_type": null,
+                  "skill_id": null,
+                  "conditions": [
+                    {
+                      "HasStatus": {
+                        "status_id": "stun"
+                      }
+                    }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope": "Global"
+            }
+          }
+        ]
+      },
+      "pure_fire": {
+        "title": "Magmatic Infusion",
+        "base_cost": 10,
+        "upgrade_cost": 10,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "ReplaceStatusId": {
+              "old_status_id": "pyroclastic_infusion",
+              "new_status_id": "pyroclastic_infusion_fire"
+            }
+          }
+        ]
+      },
+      "pure_storm": {
+        "title": "Galvanic Infusion",
+        "base_cost": 10,
+        "upgrade_cost": 10,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "ReplaceStatusId": {
+              "old_status_id": "pyroclastic_infusion",
+              "new_status_id": "pyroclastic_infusion_storm"
+            }
+          }
+        ]
+      }
+    }
   },
   "sharpen_weapon": {
     "max_level": 100,
