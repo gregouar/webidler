@@ -323,7 +323,68 @@
   },
   "poison_coating": {
     "max_level": 100,
-    "upgrades": { }
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "StatusPower": {
+                  "status_id": "poison_coating"
+                }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "duration": {
+        "title": "Poison Duration",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 20,
+        "effects": [
+          {
+            "value": 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect": {
+              "stat": {
+                "StatusDuration": {
+                  "status_id": "poison",
+                  "skill_type": "Attack"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "mana_cost": {
+        "title": "Herbalist",
+        "base_cost": 20,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": -1e200,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "ManaCost": {
+                }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
   },
   "pyroclastic_infusion": {
     "max_level": 100,

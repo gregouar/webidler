@@ -33,19 +33,6 @@
                 },
                 "value": 4,
                 "modifier": "Percent"
-            },
-            {
-                "StatModifier": {
-                    "stat": {
-                        "StatusDuration": {
-                            "status_id": "poison",
-                            "skill_type": "Attack"
-                        }
-                    },
-                    "modifier": "Increased"
-                },
-                "value": 10,
-                "modifier": "Percent"
             }
         ]
     },

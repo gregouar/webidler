@@ -445,7 +445,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                                     >
                                                         <div
                                                             class="
-                                                            relative w-full h-full max-w-48
+                                                            relative w-40 xl:w-48
                                                             transform-style-3d
                                                             reward-flip
                                                             "
@@ -481,18 +481,20 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                                             backface-hidden
                                                             isolate overflow-clip rounded-[8px]
                                                             border border-[#6c5329]/85
-                                                            bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
-                                                            shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
-                                                            flex items-center justify-center
-                                                            text-amber-200 text-8xl font-display
+                                                            bg-zinc-900
                                                             rotate-y-180
                                                             ">
-                                                                <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-[#d5b16d]/18"></div>
-                                                                <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                                                                <div class="pointer-events-none absolute inset-[6px] rounded-[6px] border border-black/45 bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))] shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
-                                                                <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
-                                                                    "?"
-                                                                </span>
+                                                                <div class="
+                                                                absolute inset-0
+                                                                bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
+                                                                shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
+                                                                flex items-center justify-center
+                                                                text-amber-200 text-8xl font-display
+                                                                ">
+                                                                    <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
+                                                                        "?"
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -547,25 +549,27 @@ fn HiddenItemRewards() -> impl IntoView {
                                 view! {
                                     <div class="perspective rounded-[8px] opacity-90">
                                         <div class="
-                                        relative w-full h-full max-w-48
+                                        relative w-40 xl:w-48
                                         transform-style-3d
                                         ">
                                             <div class="
-                                            relative min-h-64 min-w-40
+                                            relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-clip
                                             backface-hidden
                                             isolate overflow-clip rounded-[8px]
                                             border border-[#6c5329]/85
-                                            bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
-                                            shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
-                                            flex items-center justify-center
-                                            text-amber-200 text-8xl font-display
+                                            bg-zinc-900
                                             ">
-                                                <div class="pointer-events-none absolute inset-[1px] rounded-[7px] border border-[#d5b16d]/18"></div>
-                                                <div class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></div>
-                                                <div class="pointer-events-none absolute inset-[6px] rounded-[6px] border border-black/45 bg-[linear-gradient(180deg,rgba(10,10,12,0.78),rgba(28,26,32,0.92))] shadow-[inset_0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)]"></div>
-                                                <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
-                                                    "?"
-                                                </span>
+                                                <div class="
+                                                absolute inset-0
+                                                bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
+                                                shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
+                                                flex items-center justify-center
+                                                text-amber-200 text-8xl font-display
+                                                ">
+                                                    <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
+                                                        "?"
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

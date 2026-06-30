@@ -514,7 +514,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "{} Escalation {}",
+                "{} Escalation{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -524,7 +524,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "Maximum {} Stacks {}",
+                "Maximum {} Stacks{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -534,7 +534,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "{}{} Compression",
+                "{} Compression{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
