@@ -608,8 +608,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             effect_type,
         } => format!(
             "Chance to {}{}",
-            skill_filter_str(skill_filter, "", false),
-            stat_skill_effect_type_str(effect_type.as_ref())
+            stat_skill_effect_type_str(effect_type.as_ref()),
+            skill_filter_str(skill_filter, " with ", true),
         ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
@@ -962,21 +962,21 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if unwrap_value >= 100.0 {
                 format!(
                     "Guaranteed to {}{}",
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             } else if unwrap_value <= -100.0 {
                 format!(
                     "Impossible to {}{}",
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             } else {
                 format!(
                     "{} Chance to {}{}",
                     format_adds_removes(value, false, "%"),
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             }
         }

@@ -476,6 +476,33 @@
             }
           }
         ]
+      },
+      "sickening_chance": {
+        "title": "Sickening Touch",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 5,
+        "effects": [
+          {
+            "value": 14,
+            "upgrade_value": 13,
+            "StatEffect": {
+              "stat": {
+                "SuccessChance": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "effect_type": {
+                    "ApplyStatus": {
+                      "status_id": "sickening_concoction"
+                    }
+                  }
+                }
+              },
+              "modifier": "Flat",
+              "scope": "Global"
+            }
+          }
+        ]
       }
     }
   },
@@ -532,7 +559,8 @@
                 "SkillConditionalModifier": {
                   "stat": {
                     "Damage": {
-                      "damage_type": "Storm"
+                      "damage_type": "Storm",
+                      "skill_type": "Attack"
                     }
                   },
                   "skill_type": null,
@@ -566,7 +594,8 @@
                 "SkillConditionalModifier": {
                   "stat": {
                     "Damage": {
-                      "damage_type": "Fire"
+                      "damage_type": "Fire",
+                      "skill_type": "Attack"
                     }
                   },
                   "skill_type": null,
