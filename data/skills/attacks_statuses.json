@@ -219,7 +219,7 @@
                     },
                     "modifier": "More"
                 },
-                "value": 1000,
+                "value": 10,
                 "modifier": "Percent"
             },
             {
@@ -259,21 +259,71 @@
                             "source": {
                                 "HitDamage": "Physical"
                             }
-                        },
+                        }
+                    ]
+                },
+                "value": 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "sharpen_weapon_crit": {
+        "name": "Butcher Technique",
+        "icon": "skills/sharpen_weapon.svg",
+        "debuff": false,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Damage": {
+                            "damage_type": "Physical",
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More"
+                },
+                "value": 10,
+                "modifier": "Percent"
+            },
+            {
+                "Trigger": {
+                    "inherit_owner_effects": true,
+                    "trigger_id": "sharpen_weapon",
+                    "target": "SameTarget",
+                    "skill_type": "Attack",
+                    "OnHit": {
+                        "skill_type": "Attack",
+                        "is_crit": true,
+                        "is_hurt": true
+                    },
+                    "effects": [
                         {
-                            "stat": {
-                                "SuccessChance": {
-                                    "effect_type": {
-                                        "ApplyStatus": {
-                                            "status_id": "bleed"
-                                        }
+                            "success_chance": 100,
+                            "ApplyStatus": {
+                                "status_id": "bleed",
+                                "value": 0
+                            },
+                            "ignore_stat_effects": [
+                                {
+                                    "Damage": {
+                                        "skill_type": "Attack",
+                                        "damage_type": "Physical"
                                     }
                                 }
+                            ]
+                        }
+                    ],
+                    "modifiers": [
+                        {
+                            "stat": {
+                                "Damage": { }
                             },
                             "modifier": "Flat",
-                            "factor": 100,
+                            "factor": 0.5,
                             "source": {
-                                "HitCrit": null
+                                "HitDamage": "Physical"
                             }
                         }
                     ]

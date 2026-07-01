@@ -405,7 +405,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                 .quest_rewards
                                 .read()
                                 .as_ref()
-                                .map(|quest_rewards| quest_rewards.item_rewards.len() > 0)
+                                .map(|quest_rewards| !quest_rewards.item_rewards.is_empty())
                                 .unwrap_or_default()
                         }
                         fallback=move || view! { <HiddenItemRewards /> }
@@ -506,7 +506,7 @@ fn ItemRewardBackface(#[prop(default = false)] rotate: bool) -> impl IntoView {
                 shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
                 {}
                 ",
-                rotate.then_some("rotate-y-180").unwrap_or_default(),
+                if rotate { "rotate-y-180" } else { Default::default() },
             )
         }>
             <div class="
