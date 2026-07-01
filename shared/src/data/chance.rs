@@ -40,6 +40,19 @@ impl Chance {
     }
 }
 
+impl<T> From<T> for ChanceRange<T>
+where
+    T: Clone,
+{
+    fn from(value: T) -> Self {
+        Self {
+            min: value.clone(),
+            max: value,
+            lucky_chance: Default::default(),
+        }
+    }
+}
+
 impl BoundedChance {
     pub fn luck_estimate(&self) -> Option<f32> {
         (self.lucky_chance.get() != 0.0).then_some(

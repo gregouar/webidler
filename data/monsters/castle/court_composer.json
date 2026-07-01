@@ -2,9 +2,7 @@
   "name": "Court Composer",
   "portrait": "monsters/castle/court_composer.webp",
   "max_life": 15,
-  "power_factor": 4,
   "size": "Tall",
-  "initiative": [ 1, 2 ],
   "armor": { "Storm": 50 },
   "skills": [
     {

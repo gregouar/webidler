@@ -39,6 +39,8 @@ pub fn HeaderMenu() -> impl IntoView {
             .set(!town_context.open_inventory.get_untracked());
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.equip_filter.set(InventoryEquipFilter::Slot);
     };
 
@@ -56,6 +58,8 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_market.set(false);
         town_context.open_forge.set(false);
         town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
     };
 
@@ -72,6 +76,8 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_ascend.set(false);
         town_context.open_forge.set(false);
         town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
     };
@@ -89,6 +95,8 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_market.set(false);
         town_context.open_ascend.set(false);
         town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
     };
@@ -106,6 +114,8 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_market.set(false);
         town_context.open_forge.set(false);
         town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
     };
@@ -125,6 +135,8 @@ pub fn HeaderMenu() -> impl IntoView {
         town_context.open_forge.set(false);
         town_context.open_inventory.set(false);
         town_context.open_stash.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
     };
 
     Effect::new(move || {
@@ -132,6 +144,19 @@ pub fn HeaderMenu() -> impl IntoView {
             open_temple()
         }
     });
+
+    let open_skill_masteries = move || {
+        town_context
+            .open_skill_masteries
+            .set(!town_context.open_skill_masteries.get_untracked());
+        town_context.open_ascend.set(false);
+        town_context.open_market.set(false);
+        town_context.open_forge.set(false);
+        town_context.open_inventory.set(false);
+        town_context.open_skill_mastery_details.set(false);
+        town_context.open_stash.set(false);
+        town_context.open_temple.set(false);
+    };
 
     view! {
         <BaseHeaderMenu>
@@ -158,7 +183,8 @@ pub fn HeaderMenu() -> impl IntoView {
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
                 <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
-                    "Inventory"
+                    <span class="inline xl:hidden">"Inv."</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
                 </MenuButton>
                 <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
                     "Stash"
@@ -182,10 +208,20 @@ pub fn HeaderMenu() -> impl IntoView {
                     "Forge"
                 </MenuButton>
                 <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                    "Passives"
+                    <span class="inline xl:hidden">"Pas"</span>
+                    <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                 </MenuButton>
                 <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
                     "Temple"
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| open_skill_masteries()
+                    disabled=move || {
+                        disable_panels.get()
+                            || town_context.player_skill_masteries.read().masteries.is_empty()
+                    }
+                >
+                    "Skills"
                 </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>

@@ -3,8 +3,6 @@
   "portrait": "monsters/yokai/nure_onna.webp",
   "max_life": 20,
   "size": "Tall",
-  "power_factor": 3.0,
-  "initiative": [ 1, 2 ],
   "skills": [
     {
       "name": "Forbidden Kiss",

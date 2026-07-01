@@ -1,0 +1,30 @@
+{
+    "curse_frailty": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "curse_conductivity": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "curse_putridity": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "curse_flammability": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "curse_weakness": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "curse_clumsy": {
+        "max_level": 100,
+        "upgrades": { }
+    },
+    "curse_vampirism": {
+        "max_level": 100,
+        "upgrades": { }
+    }
+}

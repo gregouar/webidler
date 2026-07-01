@@ -2,8 +2,6 @@
   "name": "Kappa",
   "portrait": "monsters/yokai/kappa.webp",
   "max_life": 10,
-  "power_factor": 1.5,
-  "initiative": [ 1, 2.5 ],
   "armor": { "Poison": 50, "Physical": 50 },
   "block": { "Attack": 20, "Spell": 20 },
   "skills": [

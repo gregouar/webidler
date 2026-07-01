@@ -1,6 +1,5 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
-use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
@@ -12,6 +11,7 @@ use crate::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    skill::SkillSpecs,
     user::UserCharacterId,
 };
 
@@ -54,9 +54,9 @@ pub struct InitGameMessage {
     pub passives_tree_state: PassivesTreeState,
     pub passives_tree_build: PurchasedNodes,
     pub player_base_specs: PlayerBaseSpecs,
+    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
-    pub last_skills_bought: IndexSet<String>,
     pub auto_skills: Vec<bool>,
 }
 

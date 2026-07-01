@@ -4,8 +4,6 @@
   "rarity": "Boss",
   "max_life": 75,
   "size": "Large",
-  "power_factor": 10,
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 50, "Fire": 100 },
   "stun_lockout": 3.0,
   "status_resistances": [

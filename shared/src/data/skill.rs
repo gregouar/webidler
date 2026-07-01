@@ -57,6 +57,9 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -77,6 +80,7 @@ pub struct SkillSpecs {
     pub skill_type: SkillType,
 
     // Should we split in two here?
+    pub usable: bool,
     pub cooldown: ModifiableValue<NonNegative>,
     pub mana_cost: ModifiableValue<NonNegative>,
 
@@ -166,8 +170,7 @@ pub enum ItemStatsSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    Range,
-    Shape,
+    Target,
     Equipped,
 }
 
@@ -237,6 +240,11 @@ pub struct SkillEffect {
 #[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
+    WeaponEffect {
+        item_slot: ItemSlot,
+        #[serde(default)]
+        factor: ModifiableValue<f64>,
+    },
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]

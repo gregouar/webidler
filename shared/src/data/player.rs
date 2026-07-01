@@ -8,7 +8,8 @@ use crate::data::{
     area::AreaLevel,
     character::{CharacterAttrs, CharacterStatic},
     skill::BaseSkillSpecs,
-    stat_effect::EffectsMap,
+    skill_mastery::PlayerSkillMasteries,
+    stat_effect::StatEffect,
     trigger::TriggerEffect,
     values::{AtLeastOne, NonNegative},
 };
@@ -20,11 +21,12 @@ use super::item::{ItemSlot, ItemSpecs};
 pub struct PlayerBaseSpecs {
     pub character_static: CharacterStatic,
     pub character_attrs: CharacterAttrs,
-    pub effects: EffectsMap,
+    pub effects: Vec<StatEffect>,
 
     pub buy_skill_cost: f64,
     pub max_skills: u8,
     pub skills: IndexMap<String, PlayerBaseSkill>,
+    pub skill_masteries: PlayerSkillMasteries,
 
     pub level: u8,
     pub experience_needed: f64,
@@ -72,6 +74,8 @@ pub struct PlayerResources {
     pub shards: f64,
 
     pub gold_total: f64,
+
+    pub skill_masteries_experience: HashMap<String, f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -93,6 +97,14 @@ pub struct PlayerInventory {
 }
 
 impl PlayerInventory {
+    pub fn get_equipped_item(&self, slot: ItemSlot) -> Option<&ItemSpecs> {
+        match self.equipped.get(&slot) {
+            Some(EquippedSlot::MainSlot(x)) => Some(x),
+            Some(EquippedSlot::ExtraSlot(slot)) => self.get_equipped_item(*slot),
+            None => None,
+        }
+    }
+
     // Get equipped items, preserving slot order
     pub fn equipped_items(&self) -> impl Iterator<Item = (ItemSlot, &Box<ItemSpecs>)> + Clone {
         ItemSlot::iter().filter_map(|slot| match self.equipped.get(&slot) {

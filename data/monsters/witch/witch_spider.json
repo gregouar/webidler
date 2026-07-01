@@ -2,8 +2,6 @@
   "name": "Amelia's Baby",
   "portrait": "monsters/witch/witch_spider.webp",
   "max_life": 10,
-  "power_factor": 1.0,
-  "initiative": 0.5,
   "skills": [
     {
       "name": "Baby Bite",

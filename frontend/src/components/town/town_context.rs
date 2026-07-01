@@ -1,10 +1,12 @@
 use indexmap::IndexMap;
 use leptos::prelude::*;
+use std::collections::HashMap;
 
 use shared::data::{
-    game_stats::GrindStats,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
+    skill::SkillSpecs,
+    skill_mastery::PlayerSkillMasteries,
     stash::{Stash, StashType},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{UserCharacter, UserGrindArea},
@@ -29,8 +31,11 @@ pub struct TownContext {
     pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
 
-    pub last_grind: RwSignal<Option<GrindStats>>,
+    pub player_skill_masteries: RwSignal<PlayerSkillMasteries>,
+    pub skill_mastery_skill_specs: RwSignal<HashMap<String, SkillSpecs>>,
+    pub selected_skill_mastery: RwSignal<Option<String>>,
 
+    // pub last_grind: RwSignal<Option<GrindStats>>,
     pub selected_item_index: RwSignal<Option<u8>>,
     pub equip_filter: RwSignal<InventoryEquipFilter>,
 
@@ -42,6 +47,8 @@ pub struct TownContext {
     pub open_market: RwSignal<bool>,
     pub open_forge: RwSignal<bool>,
     pub open_temple: RwSignal<bool>,
+    pub open_skill_masteries: RwSignal<bool>,
+    pub open_skill_mastery_details: RwSignal<bool>,
     pub open_settings: RwSignal<bool>,
 }
 
@@ -68,7 +75,10 @@ impl Default for TownContext {
             passives_tree_build: Default::default(),
             benedictions_specs: Default::default(),
             player_benedictions: Default::default(),
-            last_grind: Default::default(),
+            player_skill_masteries: Default::default(),
+            skill_mastery_skill_specs: Default::default(),
+            selected_skill_mastery: Default::default(),
+            // last_grind: Default::default(),
             selected_item_index: Default::default(),
             equip_filter: Default::default(),
             open_inventory: Default::default(),
@@ -77,27 +87,9 @@ impl Default for TownContext {
             open_market: Default::default(),
             open_forge: Default::default(),
             open_temple: Default::default(),
+            open_skill_masteries: Default::default(),
+            open_skill_mastery_details: Default::default(),
             open_settings: Default::default(),
         }
     }
 }
-
-// impl Default for TownContext {
-//     fn default() -> Self {
-//         Self::new()
-//     }
-// }
-
-// impl TownContext {
-//     pub fn new() -> Self {
-//         TownContext {
-//             character: RwSignal::new(Default::default()),
-//             areas: RwSignal::new(Vec::new()),
-//             inventory: RwSignal::new(Default::default()),
-//             passives_tree_specs: RwSignal::new(Default::default()),
-//             passives_tree_ascension: RwSignal::new(Default::default()),
-//             open_ascend: RwSignal::new(false),
-//             open_market: RwSignal::new(false),
-//         }
-//     }
-// }

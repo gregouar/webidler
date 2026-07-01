@@ -1,8 +1,4 @@
-use std::sync::Arc;
-
 use leptos::{html::*, prelude::*};
-
-use shared::messages::client::{ClientMessage, TerminateQuestMessage};
 
 use crate::components::{
     chat::chat_context::ChatContext,
@@ -11,12 +7,12 @@ use crate::components::{
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
-        confirm::ConfirmContext,
         fullscreen::FullscreenButton,
         header::BaseHeaderMenu,
         wiki::WikiButton,
     },
 };
+use shared::messages::client::{ClientMessage, TerminateQuestMessage};
 
 use super::GameContext;
 
@@ -26,21 +22,11 @@ pub fn HeaderMenu() -> impl IntoView {
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
-    let do_abandon_quest = Arc::new({
-        let conn: WebsocketContext = expect_context();
-        move || {
-            conn.send(&ClientMessage::EndQuest);
-        }
-    });
-
-    let try_abandon_quest = {
-        let confirm_context: ConfirmContext = expect_context();
+    let stop_grind = {
         let conn: WebsocketContext = expect_context();
         move |_| {
-            if game_context.quest_rewards.read_untracked().is_some() {
-                game_context.open_end_quest.set(true);
-            } else if game_context.area_specs.read_untracked().training {
-                do_abandon_quest();
+            if game_context.area_specs.read_untracked().training {
+                conn.send(&ClientMessage::EndQuest);
                 conn.send(
                     &TerminateQuestMessage {
                         reward_picks: Default::default(),
@@ -48,10 +34,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     .into(),
                 );
             } else {
-                (confirm_context.confirm)(
-                "Abandoning the Grind will reset the progression, keeping only Items, Gems and Power Shards collected. Are you sure?".into(),
-                do_abandon_quest.clone(),
-            );
+                game_context.open_end_quest.set(true);
             }
         }
     };
@@ -174,7 +157,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     }}
                 </MenuButton>
                 <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
-                <MenuButtonRed on:click=try_abandon_quest>"Stop"</MenuButtonRed>
+                <MenuButtonRed on:click=stop_grind>"End"</MenuButtonRed>
                 <MenuButton on:click=quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>

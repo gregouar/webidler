@@ -6,27 +6,23 @@ use std::{
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    data::{
-        player::PlayerBaseSkill,
-        skill::{BaseSkillSpecs, SkillType},
-    },
+    data::skill::{SkillSpecs, SkillType},
     messages::client::BuySkillMessage,
 };
 use strum::IntoEnumIterator;
 
-use crate::{
-    assets::img_asset,
-    components::{
-        data_context::DataContext,
-        game::{game_context::GameContext, websocket::WebsocketContext},
-        settings::{GraphicsQuality, SettingsContext},
-        shared::{resources::GoldCounter, skills::skill_specs_from_base, tooltips::SkillTooltip},
-        ui::{
-            buttons::FancyButton,
-            card::{CardHeader, CardInset, MenuCard},
-            menu_panel::MenuPanel,
-            tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
-        },
+use crate::components::{
+    data_context::DataContext,
+    game::{game_context::GameContext, websocket::WebsocketContext},
+    settings::{GraphicsQuality, SettingsContext},
+    shared::{
+        resources::GoldCounter,
+        skills::{SkillBadge, skill_specs_with_mastery},
+    },
+    ui::{
+        buttons::FancyButton,
+        card::{CardHeader, CardInset, MenuCard},
+        menu_panel::MenuPanel,
     },
 };
 
@@ -69,13 +65,24 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
     };
 
     let available_skills = Memo::new(move |_| {
-        let mut skills = data_context.skill_specs.get().into_iter().fold(
-            HashMap::<_, Vec<_>>::new(),
-            |mut acc, skill| {
+        let skill_mastery_skill_specs = game_context.skill_mastery_skill_specs.get();
+        let mut skills = data_context
+            .skill_specs
+            .get()
+            .into_iter()
+            .filter(|(_, base_skill_specs)| !base_skill_specs.hidden)
+            .map(|(skill_id, base_skill_specs)| {
+                let skill_specs = skill_specs_with_mastery(
+                    skill_id.clone(),
+                    &base_skill_specs,
+                    &skill_mastery_skill_specs,
+                );
+                (skill_id, skill_specs)
+            })
+            .fold(HashMap::<_, Vec<_>>::new(), |mut acc, skill| {
                 acc.entry(skill.1.skill_type).or_default().push(skill);
                 acc
-            },
-        );
+            });
 
         for section in skills.values_mut() {
             section.sort_by_key(|(_, skill_specs)| skill_specs.name.clone());
@@ -91,6 +98,14 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                 .cloned()
                 .collect::<HashSet<_>>()
         });
+        let favorite_skills = game_context.player_base_specs.with(|player_base_specs| {
+            player_base_specs
+                .skill_masteries
+                .favorite_skills
+                .iter()
+                .cloned()
+                .collect::<HashSet<_>>()
+        });
 
         available_skills.with(|available_skills| {
             SkillType::iter()
@@ -100,7 +115,9 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                         .cloned()
                         .unwrap_or_default()
                         .into_iter()
-                        .filter(|(skill_id, _)| !bought_skills.contains(skill_id))
+                        .filter(|(skill_id, _)| {
+                            !bought_skills.contains(skill_id) && !favorite_skills.contains(skill_id)
+                        })
                         .collect::<Vec<_>>();
 
                     (!unbought_skills.is_empty()).then_some((skill_type, unbought_skills))
@@ -108,9 +125,80 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                 .collect::<Vec<_>>()
         })
     });
+    let favorite_skills = Memo::new(move |_| {
+        let skill_mastery_skill_specs = game_context.skill_mastery_skill_specs.get();
+        let base_skill_specs = data_context.skill_specs.get();
+        game_context.player_base_specs.with(|player_base_specs| {
+            player_base_specs
+                .skill_masteries
+                .favorite_skills
+                .iter()
+                .filter(|skill_id| !player_base_specs.skills.contains_key(*skill_id))
+                .filter_map(|skill_id| {
+                    let base_skill_specs = base_skill_specs.get(skill_id)?;
+                    if base_skill_specs.hidden {
+                        return None;
+                    }
+                    let skill_specs = skill_specs_with_mastery(
+                        skill_id.clone(),
+                        base_skill_specs,
+                        &skill_mastery_skill_specs,
+                    );
+                    Some((skill_id.clone(), skill_specs))
+                })
+                .collect::<Vec<_>>()
+        })
+    });
+    let next_favorite_skill = Memo::new(move |_| {
+        game_context.player_base_specs.with(|player_base_specs| {
+            player_base_specs
+                .skill_masteries
+                .favorite_skills
+                .iter()
+                .find(|skill_id| !player_base_specs.skills.contains_key(*skill_id))
+                .cloned()
+        })
+    });
+
+    Effect::new(move || {
+        if open.get() {
+            selected_skill.set(next_favorite_skill.get());
+        }
+    });
 
     view! {
         <CardInset>
+            {move || {
+                let skills = favorite_skills.get();
+                (!skills.is_empty())
+                    .then(|| {
+                        view! {
+                            <div class="space-y-3 xl:space-y-4">
+                                <div class="flex items-center justify-center gap-3 px-1">
+                                    <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
+                                    <h3 class="font-display text-sm xl:text-base tracking-[0.14em] uppercase text-amber-200">
+                                        "Favorites"
+                                    </h3>
+                                    <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
+                                </div>
+
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 xl:gap-3">
+                                    <For
+                                        each=move || skills.clone().into_iter()
+                                        key=|(skill_id, _)| skill_id.clone()
+                                        let:((skill_id, skill_specs))
+                                    >
+                                        <SkillCard
+                                            skill_id=skill_id.clone()
+                                            skill_specs=skill_specs.clone()
+                                            selected=selected_skill
+                                        />
+                                    </For>
+                                </div>
+                            </div>
+                        }
+                    })
+            }}
             {move || {
                 skill_sections
                     .get()
@@ -135,7 +223,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                                     )></div>
                                 </div>
 
-                                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 xl:gap-3">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 xl:gap-3">
                                     <For
                                         each=move || unbought_skills.clone().into_iter()
                                         key=|(skill_id, _)| skill_id.clone()
@@ -143,7 +231,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
                                     >
                                         <SkillCard
                                             skill_id=skill_id.clone()
-                                            base_skill_specs=skill_specs.clone()
+                                            skill_specs=skill_specs.clone()
                                             selected=selected_skill
                                         />
                                     </For>
@@ -177,58 +265,41 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
 #[component]
 fn SkillCard(
     skill_id: String,
-    base_skill_specs: BaseSkillSpecs,
+    skill_specs: SkillSpecs,
     selected: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let data_context = expect_context::<DataContext>();
     let settings = expect_context::<SettingsContext>();
 
-    let skill_type = base_skill_specs.skill_type;
-    let skill_name = base_skill_specs.name.clone();
-    let skill_icon = img_asset(&base_skill_specs.icon);
+    let skill_type = skill_specs.skill_type;
+    let skill_name = skill_specs.name.clone();
+    let skill_icon = skill_specs.icon.clone();
+    let skill_specs = Some(Arc::new(skill_specs));
 
     let is_selected = Signal::derive({
         let skill_id = skill_id.clone();
         move || selected.get().map(|s| s == skill_id).unwrap_or(false)
     });
 
-    let was_last_bought = Memo::new({
+    let mastery_level = Memo::new({
         let skill_id = skill_id.clone();
-        move |_| game_context.last_skills_bought.read().contains(&skill_id)
-    });
-
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let tooltip_id = RwSignal::new(0);
-    let show_tooltip = {
-        let skill_specs = Arc::new(skill_specs_from_base(skill_id.clone(), &base_skill_specs));
-        let player_base_skill = Some(Arc::new(PlayerBaseSkill {
-            next_upgrade_cost: base_skill_specs.upgrade_cost,
-            base_skill_specs,
-            item_slot: None,
-            upgrade_level: 0,
-        }));
-        move || {
-            let skill_specs = skill_specs.clone();
-            let player_base_skill = player_base_skill.clone();
-            tooltip_id.set(tooltip_context.set_content(
-                move || {
-                    view! {
-                        <SkillTooltip
-                            skill_specs=skill_specs.clone()
-                            player_base_skill=player_base_skill.clone()
-                        />
-                    }
-                    .into_any()
-                },
-                DynamicTooltipPosition::Auto,
-            ));
+        let max_level = data_context
+            .skill_mastery_specs
+            .read()
+            .get(&skill_id)
+            .map(|mastery_specs| mastery_specs.max_level)
+            .unwrap_or_default();
+        move |_| {
+            game_context.player_base_specs.with(|player_base_specs| {
+                player_base_specs
+                    .skill_masteries
+                    .masteries
+                    .get(&skill_id)
+                    .map(|mastery| mastery.level(max_level))
+            })
         }
-    };
-
-    let hide_tooltip = move || {
-        tooltip_context.hide(tooltip_id.get_untracked());
-    };
-    on_cleanup(hide_tooltip);
+    });
 
     view! {
         <div
@@ -274,23 +345,6 @@ fn SkillCard(
                             GraphicsQuality::Low => "border-[#8a6d40]",
                         },
                     )
-                } else if was_last_bought.get() {
-                    format!(
-                        "{} {} {}",
-                        base,
-                        quality_class,
-                        match quality {
-                            GraphicsQuality::High => {
-                                "border-fuchsia-700/70 hover:border-[#8c6a3b] hover:-translate-y-[1px] active:translate-y-[2px]"
-                            }
-                            GraphicsQuality::Medium => {
-                                "border-fuchsia-700/70 hover:border-[#83653b] hover:-translate-y-[1px] active:translate-y-[2px]"
-                            }
-                            GraphicsQuality::Low => {
-                                "border-fuchsia-700/70 hover:border-[#7b6039] active:translate-y-[1px]"
-                            }
-                        },
-                    )
                 } else {
                     format!(
                         "{} {} {}",
@@ -310,19 +364,7 @@ fn SkillCard(
                     )
                 }
             }
-            on:click=move |_| {
-                hide_tooltip();
-                selected.set(Some(skill_id.clone()))
-            }
-            on:touchstart={
-                let show_tooltip = show_tooltip.clone();
-                move |_| show_tooltip()
-            }
-            on:contextmenu=move |ev| {
-                ev.prevent_default();
-            }
-            on:mouseenter=move |_| show_tooltip()
-            on:mouseleave=move |_| hide_tooltip()
+            on:click=move |_| { selected.set(Some(skill_id.clone())) }
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
                 <div class="pointer-events-none absolute inset-[1px] rounded-[8px] border border-white/5"></div>
@@ -334,90 +376,29 @@ fn SkillCard(
                 )></div>
             </Show>
 
-            <div class=move || {
-                let quality = settings.graphics_quality();
-                let frame_background = match quality {
-                    GraphicsQuality::High => {
-                        "bg-[linear-gradient(180deg,rgba(214,177,102,0.1),rgba(0,0,0,0.2)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]"
-                    }
-                    GraphicsQuality::Medium => {
-                        "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(41,38,44,0.96),rgba(21,20,24,1))]"
-                    }
-                    GraphicsQuality::Low => {
-                        "bg-[linear-gradient(180deg,rgba(39,37,42,0.98),rgba(20,19,23,1))]"
-                    }
-                };
-                let frame_shadow = if is_selected.get() {
-                    match quality {
-                        GraphicsQuality::High => skill_type_selected_frame_glow(skill_type),
-                        GraphicsQuality::Medium => skill_type_selected_frame_glow(skill_type),
-                        GraphicsQuality::Low => skill_type_selected_frame_glow_low(skill_type),
-                    }
-                } else {
-                    match quality {
-                        GraphicsQuality::High => "shadow-[0_4px_12px_rgba(0,0,0,0.58)]",
-                        GraphicsQuality::Medium => "shadow-[0_3px_10px_rgba(0,0,0,0.48)]",
-                        GraphicsQuality::Low => "",
-                    }
-                };
-                format!(
-                    "relative flex h-20 w-20 xl:h-24 xl:w-24 items-center justify-center rounded-full
-                        overflow-clip border {} {} {}",
-                    skill_type_frame_border(skill_type),
-                    frame_background,
-                    frame_shadow,
-                )
-            }>
-                <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
-                    <div class="pointer-events-none absolute inset-[1px] rounded-full border border-[#d5b16d]/16"></div>
-                </Show>
-                <div class=move || {
-                    let selected = is_selected.get();
-                    format!(
-                        "pointer-events-none absolute inset-[3px] rounded-full border {} {}",
-                        match settings.graphics_quality() {
-                            GraphicsQuality::High => "border-[#6d532e]/70",
-                            GraphicsQuality::Medium => "border-[#6b5430]/55",
-                            GraphicsQuality::Low => "border-[#5a4628]/55",
-                        },
-                        if selected {
-                            "bg-[radial-gradient(circle_at_50%_38%,rgba(142,132,118,0.9),rgba(56,47,41,0.88)_48%,rgba(20,18,24,0.98)_78%)]"
-                        } else {
-                            "bg-[radial-gradient(circle_at_50%_40%,rgba(92,88,98,0.72),rgba(20,18,24,0.98)_72%)]"
-                        },
-                    )
-                }></div>
-                <div class=move || {
-                    format!(
-                        "pointer-events-none absolute inset-[6px] rounded-full bg-radial {} to-transparent",
-                        if is_selected.get() {
-                            skill_type_selected_inner_glow(skill_type)
-                        } else {
-                            skill_type_inner_glow(skill_type)
-                        },
-                    )
-                }></div>
-                <img
-                    draggable="false"
-                    src=skill_icon
-                    alt=skill_name.clone()
-                    class=move || {
-                        format!(
-                            "relative z-10 h-11 w-11 xl:h-14 xl:w-14 flex-no-shrink fill-current invert {}",
-                            if settings.uses_surface_effects() {
-                                "drop-shadow-[0_2px_2px_rgba(0,0,0,0.72)]"
-                            } else {
-                                ""
-                            },
-                        )
-                    }
-                />
-            </div>
+            <SkillBadge
+                skill_type
+                icon=Some(skill_icon.clone())
+                alt=skill_name.clone()
+                selected=is_selected
+                skill_specs
+            />
 
             <div class="text-center">
                 <div class="text-sm xl:text-base font-bold text-white text-center font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
                     {skill_name}
                 </div>
+                {move || {
+                    mastery_level
+                        .get()
+                        .map(|level| {
+                            view! {
+                                <div class="min-h-4 text-xs xl:text-sm font-semibold text-violet-300">
+                                    "Mastery " {level}
+                                </div>
+                            }
+                        })
+                }}
             </div>
         </div>
     }
@@ -450,58 +431,6 @@ fn skill_type_glow(skill_type: SkillType) -> &'static str {
         SkillType::Curse => "via-purple-400/70",
         SkillType::Blessing => "via-amber-300/75",
         SkillType::Other => "via-slate-300/60",
-    }
-}
-
-fn skill_type_frame_border(skill_type: SkillType) -> &'static str {
-    match skill_type {
-        SkillType::Attack => "border-[#8d5644]",
-        SkillType::Spell => "border-[#536f95]",
-        SkillType::Curse => "border-[#6f5697]",
-        SkillType::Blessing => "border-[#8a6d33]",
-        SkillType::Other => "border-[#5e6470]",
-    }
-}
-
-fn skill_type_selected_frame_glow(skill_type: SkillType) -> &'static str {
-    match skill_type {
-        SkillType::Attack => "shadow-[0_0_18px_rgba(248,113,113,0.5),0_4px_14px_rgba(0,0,0,0.58)]",
-        SkillType::Spell => "shadow-[0_0_18px_rgba(56,189,248,0.5),0_4px_14px_rgba(0,0,0,0.58)]",
-        SkillType::Curse => "shadow-[0_0_18px_rgba(192,132,252,0.5),0_4px_14px_rgba(0,0,0,0.58)]",
-        SkillType::Blessing => {
-            "shadow-[0_0_18px_rgba(252,211,77,0.52),0_4px_14px_rgba(0,0,0,0.58)]"
-        }
-        SkillType::Other => "shadow-[0_0_18px_rgba(203,213,225,0.42),0_4px_14px_rgba(0,0,0,0.58)]",
-    }
-}
-
-fn skill_type_selected_frame_glow_low(skill_type: SkillType) -> &'static str {
-    match skill_type {
-        SkillType::Attack => "shadow-[0_0_12px_rgba(248,113,113,0.38)]",
-        SkillType::Spell => "shadow-[0_0_12px_rgba(56,189,248,0.38)]",
-        SkillType::Curse => "shadow-[0_0_12px_rgba(192,132,252,0.38)]",
-        SkillType::Blessing => "shadow-[0_0_12px_rgba(252,211,77,0.4)]",
-        SkillType::Other => "shadow-[0_0_12px_rgba(203,213,225,0.32)]",
-    }
-}
-
-fn skill_type_inner_glow(skill_type: SkillType) -> &'static str {
-    match skill_type {
-        SkillType::Attack => "from-red-400/18",
-        SkillType::Spell => "from-sky-400/18",
-        SkillType::Curse => "from-purple-400/18",
-        SkillType::Blessing => "from-amber-300/18",
-        SkillType::Other => "from-slate-300/14",
-    }
-}
-
-fn skill_type_selected_inner_glow(skill_type: SkillType) -> &'static str {
-    match skill_type {
-        SkillType::Attack => "from-red-300/42",
-        SkillType::Spell => "from-sky-300/42",
-        SkillType::Curse => "from-purple-300/42",
-        SkillType::Blessing => "from-amber-200/44",
-        SkillType::Other => "from-slate-200/34",
     }
 }
 

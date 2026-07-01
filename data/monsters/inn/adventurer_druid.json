@@ -3,7 +3,6 @@
   "portrait": "monsters/inn/adventurer_druid.webp",
   "rarity": "Boss",
   "max_life": 150,
-  "power_factor": 8,
   "stun_lockout": 5,
   "armor": {
     "Storm": 200,

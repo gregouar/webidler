@@ -1,0 +1,364 @@
+{
+  "magic_missile": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "crit_chance": {
+        "title": "Critical Hit Chance",
+        "base_cost": 3,
+        "upgrade_cost": 3,
+        "max_level": 5,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 1,
+            "StatEffect": {
+              "stat": {
+                "CritChance": { }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "chain_lightning": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "blizzard": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "fireball": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "burning_ray": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "righteous_fire": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "StatusPower": {
+                  "status_id": "righteous_fire"
+                }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "poison_cloud": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "irradiate": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "duration": {
+        "title": "Poison Duration",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 20,
+        "effects": [
+          {
+            "value": 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect": {
+              "stat": {
+                "StatusDuration": {
+                  "status_id": "poison"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "storm_flat_damage": {
+        "title": "Ionization",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 2,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                  "damage_type": "Storm",
+                  "min_max": "Max"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "stun": {
+        "title": "Radiation Sickness",
+        "base_cost": 5,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillEffect": {
+              "success_chance": 20,
+              "ApplyStatus": {
+                "status_id": "stun",
+                "value": 1
+              }
+            }
+          },
+          {
+            "value": 0,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "SuccessChance": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "effect_type": {
+                    "ApplyStatus": {
+                      "status_id": "stun"
+                    }
+                  }
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "unblockable": {
+        "title": "Gamma Ray",
+        "base_cost": 5,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillEffectModifier": {
+                  "skill_id": "irradiate",
+                  "unblockable": true
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "no_storm": {
+        "title": "Toxic Fallout",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": -1e200,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                  "damage_type": "Storm"
+                }
+              },
+              "modifier": "More"
+            }
+          },
+          {
+            "value": 50,
+            "upgrade_value": 5,
+            "StatEffect": {
+              "stat": {
+                "StatusEscalation": {
+                  "status_id": "poison"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "voodoo_doll": {
+    "max_level": 100,
+    "upgrades": {
+      "damage": {
+        "title": "Damage",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 100,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "heal": {
+    "max_level": 100,
+    "upgrades": { }
+  }
+}

@@ -135,7 +135,7 @@ pub async fn post_buy_market_item(
 
     db::stashes::update_stash_gems(&mut *tx, &item_bought.stash_id, price).await?;
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(anyhow!("inventory not found"))?;
@@ -201,7 +201,7 @@ pub async fn post_sell_market_item(
             .await?
             .ok_or(AppError::NotFound)?;
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(anyhow!("inventory not found"))?;

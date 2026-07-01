@@ -1,24 +1,28 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 use strum::IntoEnumIterator;
 
 use shared::data::{
-    chance::ChanceRange,
+    chance::{Chance, ChanceRange},
     character::CharacterAttrs,
     conditional_modifier::ConditionalModifier,
-    modifier::Modifier,
+    item::WeaponSpecs,
+    modifier::{BaseModifiableValue, Modifier},
     player::PlayerInventory,
     skill::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
-        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillType,
+        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillTargetsGroup, SkillType,
     },
+    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
         StatEffect, StatType, compare_options,
     },
-    values::NonNegative,
 };
 
-use crate::game::{data::master_store::StatusesStore, systems::characters_updater};
+use crate::game::{
+    data::master_store::{SkillMasteriesStore, SkillsStore, StatusesStore},
+    systems::{characters_updater, skill_masteries_controller},
+};
 
 pub fn update_skills_states(
     elapsed_time: Duration,
@@ -26,11 +30,11 @@ pub fn update_skills_states(
     skills_states: &mut [SkillState],
 ) {
     for (skill_specs, skill_state) in skills_specs.iter().zip(skills_states.iter_mut()) {
-        if skill_specs.cooldown.get() > 0.0 {
+        if skill_specs.cooldown.get() > 0.0 && skill_specs.usable {
             skill_state.elapsed_cooldown +=
                 (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
+            skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
         }
-        skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
     }
 }
 
@@ -62,7 +66,7 @@ pub fn reset_skills(skills_states: &mut [SkillState]) {
         skill_state.just_triggered = false;
     }
 }
-
+#[allow(clippy::too_many_arguments)]
 pub fn update_skill_specs(
     statuses_store: &StatusesStore,
     skill_id: String,
@@ -71,6 +75,7 @@ pub fn update_skill_specs(
     effects: &[StatEffect],
     character_attrs: &CharacterAttrs,
     inventory: Option<&PlayerInventory>,
+    skill_mastery: Option<(&SkillMasterySpecs, &SkillMasteryState)>,
 ) -> SkillSpecs {
     let level_modifier = effects
         .iter()
@@ -98,10 +103,20 @@ pub fn update_skill_specs(
         ignore_stat_effects: base_skill_specs.ignore_stat_effects.clone(),
         cooldown: base_skill_specs.cooldown.into(),
         mana_cost: base_skill_specs.mana_cost.into(),
-        targets: base_skill_specs.targets.clone(),
+        targets: apply_weapon_effects(base_skill_specs.targets.clone(), inventory),
         triggers: base_skill_specs.triggers.clone(),
         level_modifier,
+        usable: true,
     };
+
+    if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery {
+        skill_masteries_controller::apply_skill_mastery(
+            statuses_store,
+            &mut skill_specs,
+            skill_mastery_specs,
+            skill_mastery_state,
+        );
+    }
 
     let local_effects: Vec<_> = (&EffectsMap::combine_all(
         std::iter::once(compute_skill_upgrade_effects(
@@ -135,10 +150,142 @@ pub fn update_skill_specs(
         })
         .unwrap_or(true)
     {
-        skill_specs.cooldown = NonNegative::new(0.0).into();
+        skill_specs.usable = false;
     }
 
     skill_specs
+}
+
+fn apply_weapon_effects(
+    target_groups: Vec<SkillTargetsGroup>,
+    inventory: Option<&PlayerInventory>,
+) -> Vec<SkillTargetsGroup> {
+    let Some(inventory) = inventory else {
+        return target_groups;
+    };
+
+    target_groups
+        .into_iter()
+        .map(|target| SkillTargetsGroup {
+            effects: target
+                .effects
+                .into_iter()
+                .flat_map(|skill_effect| match skill_effect.effect_type {
+                    SkillEffectType::WeaponEffect { item_slot, factor } => weapon_skill_effect(
+                        inventory
+                            .get_equipped_item(item_slot)
+                            .and_then(|item_specs| item_specs.weapon_specs.as_ref()),
+                        *factor,
+                    )
+                    .into_iter()
+                    .flatten(),
+                    _ => [Some(skill_effect), None].into_iter().flatten(),
+                })
+                .collect(),
+            ..target
+        })
+        .collect()
+}
+
+fn weapon_skill_effect(
+    weapon_specs: Option<&WeaponSpecs>,
+    factor: f64,
+) -> [Option<SkillEffect>; 2] {
+    let Some(weapon_specs) = weapon_specs else {
+        return [None, None];
+    };
+
+    [
+        Some(SkillEffect {
+            effect_type: SkillEffectType::FlatDamage {
+                damage: weapon_specs
+                    .damage
+                    .iter()
+                    .filter(|(k, _)| **k != DamageType::Poison)
+                    .map(|(&k, &v)| {
+                        (
+                            k,
+                            ChanceRange {
+                                min: v.min.multiply_value(factor).into(),
+                                max: v.max.multiply_value(factor).into(),
+                                lucky_chance: v.lucky_chance.as_new_base(),
+                            },
+                        )
+                    })
+                    .collect(),
+                crit_chance: Chance {
+                    value: weapon_specs.crit_chance.value.as_new_base(),
+                    lucky_chance: weapon_specs.crit_chance.lucky_chance.as_new_base(),
+                },
+                crit_damage: weapon_specs.crit_damage.as_new_base(),
+                unblockable: false,
+            },
+            success_chance: Chance::new_sure(),
+            ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
+            independent_application: false,
+        }),
+        Some(SkillEffect {
+            effect_type: SkillEffectType::ApplyStatus {
+                status_id: "poison".into(),
+                value: weapon_specs
+                    .damage
+                    .get(&DamageType::Poison)
+                    .map(|v| ChanceRange {
+                        min: v.min.multiply_value(factor).into(),
+                        max: v.max.multiply_value(factor).into(),
+                        lucky_chance: v.lucky_chance.as_new_base(),
+                    })
+                    .unwrap_or_default(),
+                value_factor: 1.0,
+                duration: None,
+                escalation: None,
+                max_stacks: None,
+                damage_type: None,
+                avoidable: None,
+                replace_on_value_only: false,
+            },
+            success_chance: Chance::new_sure(),
+            ignore_stat_effects: Default::default(),
+            conditional_modifiers: Vec::new(),
+            independent_application: false,
+        }),
+    ]
+}
+
+pub fn compute_skill_mastery_skill_specs(
+    statuses_store: &StatusesStore,
+    skills_store: &SkillsStore,
+    skill_masteries_store: &SkillMasteriesStore,
+    player_skill_masteries: &PlayerSkillMasteries,
+) -> HashMap<String, SkillSpecs> {
+    player_skill_masteries
+        .masteries
+        .iter()
+        .filter(|(_, skill_mastery_state)| {
+            skill_mastery_state
+                .upgrades_bought
+                .values()
+                .any(|upgrade_level| *upgrade_level > 0)
+        })
+        .filter_map(|(skill_id, skill_mastery_state)| {
+            let base_skill_specs = skills_store.get(skill_id)?;
+            let skill_mastery_specs = skill_masteries_store.get(skill_id)?;
+            Some((
+                skill_id.clone(),
+                update_skill_specs(
+                    statuses_store,
+                    skill_id.clone(),
+                    base_skill_specs,
+                    1,
+                    &[],
+                    &CharacterAttrs::default(),
+                    None,
+                    Some((skill_mastery_specs, skill_mastery_state)),
+                ),
+            ))
+        })
+        .collect()
 }
 
 pub fn apply_effects_to_skill_specs<'a>(
@@ -196,6 +343,7 @@ pub fn apply_effects_to_skill_specs<'a>(
         }
     }
 
+    let mut stats_converted = Vec::new();
     for skill_effect in skill_specs
         .targets
         .iter_mut()
@@ -207,13 +355,14 @@ pub fn apply_effects_to_skill_specs<'a>(
                 .flat_map(|trigger| trigger.trigger_effect.effects.iter_mut()),
         )
     {
-        compute_skill_specs_effect(
+        stats_converted.extend(compute_skill_specs_effect_with_extra(
             statuses_store,
             &skill_specs.skill_id,
             skill_specs.skill_type,
             skill_effect,
             effects.clone(),
-        )
+            stats_converted.iter(),
+        ));
     }
 }
 
@@ -312,21 +461,12 @@ fn compute_skill_modifier_effects<'a>(
                                         .sum()
                                 }
                             }
-                            (ItemStatsSource::Range, Some(weapon_specs), _) => {
+                            (ItemStatsSource::Target, Some(weapon_specs), _) => {
                                 for effect in modifier_effect.effects.iter_mut() {
-                                    if let StatType::SkillTargetModifier { range, .. } =
+                                    if let StatType::SkillTargetModifier { range, shape, .. } =
                                         &mut effect.stat
                                     {
                                         *range = Some(weapon_specs.range);
-                                    }
-                                }
-                                1.0
-                            }
-                            (ItemStatsSource::Shape, Some(weapon_specs), _) => {
-                                for effect in modifier_effect.effects.iter_mut() {
-                                    if let StatType::SkillTargetModifier { shape, .. } =
-                                        &mut effect.stat
-                                    {
                                         *shape = Some(weapon_specs.shape);
                                     }
                                 }
@@ -384,7 +524,25 @@ pub fn compute_skill_specs_effect<'a>(
     skill_type: SkillType,
     skill_effect: &mut SkillEffect,
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
-) {
+) -> Vec<StatEffect> {
+    compute_skill_specs_effect_with_extra(
+        statuses_store,
+        skill_id,
+        skill_type,
+        skill_effect,
+        effects,
+        std::iter::empty(),
+    )
+}
+
+fn compute_skill_specs_effect_with_extra<'a, 'b>(
+    statuses_store: &StatusesStore,
+    skill_id: &String,
+    skill_type: SkillType,
+    skill_effect: &mut SkillEffect,
+    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    extra_effects: impl Iterator<Item = &'b StatEffect> + Clone,
+) -> Vec<StatEffect> {
     if let SkillEffectType::ApplyStatus {
         status_id,
         value,
@@ -400,7 +558,7 @@ pub fn compute_skill_specs_effect<'a>(
         statuses_store.attach_key(status_id);
         let Some(status_specs) = statuses_store.get(status_id) else {
             tracing::error!("missing status: {}", skill_id);
-            return;
+            return Default::default();
         };
 
         if duration.is_none() {
@@ -453,7 +611,11 @@ pub fn compute_skill_specs_effect<'a>(
             apply_stat_effect_on_skill_effect(skill_id, skill_type, skill_effect, effect)
         })
         .collect();
+    stats_converters.extend(extra_effects.clone().filter_map(|effect| {
+        apply_stat_effect_on_skill_effect(skill_id, skill_type, skill_effect, effect)
+    }));
 
+    let mut stats_converted = Vec::with_capacity(stats_converters.len());
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
             (
@@ -462,8 +624,6 @@ pub fn compute_skill_specs_effect<'a>(
                 *modifier,
             )
         });
-
-        let mut stats_converted = Vec::with_capacity(stats_converters.len());
 
         for (specs, modifier, factor) in stats_converters {
             if let Some(stat) = match (specs.source, &mut skill_effect.effect_type) {
@@ -626,6 +786,7 @@ pub fn compute_skill_specs_effect<'a>(
             stats_converted.iter(),
         );
     }
+    stats_converted
 }
 
 pub fn apply_stat_effect_on_skill_effect(
@@ -711,11 +872,26 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     match &mut skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { factor, .. } => {
+            if let StatType::Damage {
+                skill_filter,
+                damage_type: stat_damage_type,
+                min_max,
+                is_hit,
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+                && min_max.is_none()
+                && stat_damage_type.is_none()
+                && compare_options(is_hit, &Some(true))
+            {
+                factor.apply_effect(effect);
+            }
+        }
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,
             crit_damage,
-            ..
+            unblockable,
         } => {
             for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
                 let value = damage.entry(damage_type).or_default();
@@ -773,6 +949,17 @@ pub fn apply_stat_effect_on_skill_effect(
             {
                 crit_damage.apply_effect(effect);
             }
+
+            if let StatType::SkillEffectModifier {
+                skill_filter,
+                unblockable: stat_unblockable,
+                ..
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+                && let Some(stat_unblockable) = stat_unblockable
+            {
+                *unblockable = *stat_unblockable;
+            }
         }
         SkillEffectType::ApplyStatus {
             status_id: skill_status_id,
@@ -782,7 +969,7 @@ pub fn apply_stat_effect_on_skill_effect(
             escalation,
             max_stacks,
             damage_type: skill_damage_type,
-            avoidable: _,
+            avoidable,
             replace_on_value_only: _,
         } => {
             if let (
@@ -885,6 +1072,17 @@ pub fn apply_stat_effect_on_skill_effect(
                 {
                     value.lucky_chance.apply_effect(effect);
                 }
+            }
+
+            if let StatType::SkillEffectModifier {
+                skill_filter,
+                avoidable: stat_avoidable,
+                ..
+            } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+                && let Some(stat_avoidable) = stat_avoidable
+            {
+                *avoidable = Some(*stat_avoidable);
             }
 
             *value_factor = value.max.factor();

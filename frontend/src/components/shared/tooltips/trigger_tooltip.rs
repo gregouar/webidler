@@ -15,6 +15,7 @@ use shared::data::{
 };
 
 use crate::components::{
+    data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
@@ -68,15 +69,21 @@ pub fn format_trigger(
 
     view! {
         <EffectLi>
-            <ul>
+            <ul class="list-none">
                 <EffectLi>
                     // {name_str}
                     {format_trigger_event(&trigger.trigger)} {shape_infos} {details_infos}":"
                 </EffectLi>
-                {trigger
-                    .description
-                    .map(|description| view! { <EffectLi>{description}</EffectLi> }.into_any())
-                    .unwrap_or(view! { {effects} }.into_any())}
+                <EffectLi>
+                    <ul class="list-none xl:space-y-1">
+                        {trigger
+                            .description
+                            .map(|description| {
+                                view! { <EffectLi>{description}</EffectLi> }.into_any()
+                            })
+                            .unwrap_or(view! { {effects} }.into_any())}
+                    </ul>
+                </EffectLi>
             </ul>
         </EffectLi>
     }
@@ -126,8 +133,8 @@ pub fn format_trigger_modifier(
         let factor = modifier.factor * factor.unwrap_or(1.0);
         let factor_str = (factor != 1.0).then(|| {
             let factor_str = match modifier.modifier {
-                Modifier::Increased | Modifier::More => format!("{:0}", format_number(factor)),
-                Modifier::Flat => format!("{:0}", format_number(100.0 * factor)),
+                Modifier::Increased | Modifier::More => format_number(factor),
+                Modifier::Flat => format_number(100.0 * factor),
             };
             view! {
                 <span class="font-semibold">{factor_str}"%"</span>
@@ -248,7 +255,7 @@ pub fn trigger_modifier_source_str(
 fn format_trigger_event(event_trigger: &EventTrigger) -> String {
     match event_trigger {
         EventTrigger::OnHit(hit_trigger) => format!(
-            "On {}Hit{}",
+            "On {}{}",
             format_hit_trigger(hit_trigger),
             format_hit_trigger_conditions(hit_trigger, " against ", " Enemies")
         ),
@@ -256,7 +263,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             Some(true) => format!("On {}Block", format_blocked_hit_trigger(hit_trigger)),
             _ => {
                 format!(
-                    "On {}Hit Taken{}",
+                    "On {} Taken{}",
                     format_hit_trigger(hit_trigger),
                     format_hit_trigger_conditions(hit_trigger, " when ", "")
                 )
@@ -286,14 +293,28 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
 }
 
 fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
+    let data_context: DataContext = expect_context();
+
+    let skills_str = hit_trigger.skill_ids.as_ref().and_then(|skill_ids| {
+        if skill_ids.len() == 1 {
+            skill_ids
+                .iter()
+                .next()
+                .map(|skill_id| format!(" with {} ", data_context.skill_name(skill_id)))
+        } else {
+            None
+        }
+    });
+
     format!(
-        "{}{}{}{}{}{}",
+        "{}{}{}{}{}{}Hit{}",
         hurt_str(hit_trigger.is_hurt),
         blocked_str(hit_trigger.is_blocked),
         critical_str(hit_trigger.is_crit),
         range_str(hit_trigger.range),
         skill_type_str(hit_trigger.skill_type),
         damage_type_str(hit_trigger.damage_type),
+        skills_str.unwrap_or_default(),
     )
 }
 
@@ -326,15 +347,22 @@ fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {
 }
 
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
-    skill_status_filter_str(
-        &StatSkillFilter {
-            skill_type: status_trigger.skill_type,
-            ..Default::default()
+    format!(
+        "{}{}",
+        if status_trigger.is_triggered == Some(false) {
+            "self-cast "
+        } else {
+            ""
         },
-        &status_trigger.status_filter,
-        false,
+        skill_status_filter_str(
+            &StatSkillFilter {
+                skill_type: status_trigger.skill_type,
+                ..Default::default()
+            },
+            &status_trigger.status_filter,
+            false,
+        )
     )
-    .to_string()
 }
 
 fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {

@@ -30,10 +30,21 @@ use crate::{
 #[component]
 pub fn MainMenuPage() -> impl IntoView {
     let backend = expect_context::<BackendClient>();
-    if backend.is_authenticated() {
-        view! { <Redirect path="/user-dashboard" /> }.into_any()
-    } else {
-        view! { <MainMenu /> }.into_any()
+    let refresh_token =
+        LocalResource::new(move || async move { backend.get_access_token().await.is_ok() });
+
+    view! {
+        <Transition fallback=move || {
+            view! { <p class="text-zinc-400">"Loading..."</p> }
+        }>
+            {move || Suspend::new(async move {
+                if refresh_token.await {
+                    view! { <Redirect path="/user-dashboard" /> }.into_any()
+                } else {
+                    view! { <MainMenu /> }.into_any()
+                }
+            })}
+        </Transition>
     }
 }
 

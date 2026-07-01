@@ -2,7 +2,6 @@
   "name": "Oni Pyromaniac",
   "portrait": "monsters/yokai/oni_pyro.webp",
   "max_life": 7,
-  "power_factor": 2.0,
   "armor": { "Fire": 100 },
   "skills": [
     {

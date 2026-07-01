@@ -51,6 +51,7 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             dirty_specs: true,
             monitored_conditions: Default::default(),
             repeated_skills: Default::default(),
+            resurrected: false,
         }
     }
 }

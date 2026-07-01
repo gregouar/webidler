@@ -15,6 +15,7 @@ pub mod player_controller;
 pub mod player_updater;
 pub mod quests_controller;
 pub mod sessions_controller;
+pub mod skill_masteries_controller;
 pub mod skills_controller;
 pub mod skills_updater;
 pub mod stashes_controller;

@@ -3,11 +3,6 @@
   "portrait": "monsters/island/treasure_idol.webp",
   "rarity": "Boss",
   "max_life": 150,
-  "power_factor": 8,
-  "initiative": [
-    2.5,
-    3.5
-  ],
   "armor": {
     "Poison": 100
   },

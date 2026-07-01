@@ -2,8 +2,6 @@
   "name": "Time Spirit",
   "portrait": "monsters/castle/time_spirit.webp",
   "max_life": 5,
-  "power_factor": 1,
-  "initiative": [ 2, 3 ],
   "evade": {
     "Physical": 20,
     "Fire": 20,
@@ -30,7 +28,7 @@
               "ApplyStatus": {
                 "duration": 3,
                 "status_id": "chill",
-                "value": 50
+                "value": 15
               }
             }
           ]

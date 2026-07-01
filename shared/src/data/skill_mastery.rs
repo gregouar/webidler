@@ -1,0 +1,141 @@
+use std::collections::HashMap;
+
+use indexmap::IndexMap;
+use serde::{Deserialize, Serialize};
+
+use crate::{
+    computations,
+    data::{
+        character_status::StatusId,
+        item_affix::AffixEffectScope,
+        modifier::Modifier,
+        skill::SkillEffect,
+        stat_effect::{StatEffect, StatType},
+        trigger::TriggerSpecs,
+    },
+};
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
+pub struct SkillMasterySpecs {
+    pub max_level: u16,
+    pub upgrades: IndexMap<String, SkillMasteryUpgrade>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SkillMasteryUpgrade {
+    pub title: String,
+    pub base_cost: u16,
+    pub upgrade_cost: u16,
+    pub max_level: u16,
+    pub effects: Vec<SkillMasteryUpgradeEffect>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SkillMasteryUpgradeEffect {
+    pub value: f64,
+    pub upgrade_value: f64,
+    #[serde(flatten)]
+    pub effect_type: SkillMasteryUpgradeEffectType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum SkillMasteryUpgradeEffectType {
+    StatEffect {
+        stat: StatType,
+        modifier: Modifier,
+        #[serde(default)]
+        scope: AffixEffectScope,
+    },
+    // PlayerStatEffect {
+    //     stat: StatType,
+    //     modifier: Modifier,
+    // },
+    SkillEffect {
+        #[serde(flatten)]
+        skill_effect: Box<SkillEffect>,
+        #[serde(default)]
+        target_index: usize,
+    },
+    ReplaceStatusId {
+        // TODO: Turn into StatEffect instead?
+        old_status_id: StatusId,
+        new_status_id: StatusId,
+    },
+    Trigger(TriggerSpecs),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
+pub struct PlayerSkillMasteries {
+    pub masteries: IndexMap<String, SkillMasteryState>,
+    #[serde(default)]
+    pub favorite_skills: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
+pub struct SkillMasteryState {
+    pub experience: f64,
+    pub upgrades_bought: HashMap<String, u16>,
+}
+
+impl SkillMasteryState {
+    pub fn next_level_cost(&self, max_level: u16) -> Option<f64> {
+        let level = self.level(max_level);
+        if level == max_level {
+            None
+        } else {
+            Some(computations::skill_mastery_next_level_cost(level))
+        }
+    }
+
+    pub fn relative_experience(&self, max_level: u16) -> f64 {
+        self.experience - self.level_cost(max_level)
+    }
+
+    pub fn level_cost(&self, max_level: u16) -> f64 {
+        computations::skill_mastery_level_cost(self.level(max_level))
+    }
+
+    pub fn level(&self, max_level: u16) -> u16 {
+        computations::skill_mastery_level(self.experience).clamp(0, max_level)
+    }
+}
+impl SkillMasteryUpgrade {
+    pub fn compute_cost(&self, upgrade_level: u16) -> u16 {
+        if upgrade_level == 0 {
+            return 0;
+        }
+
+        self.base_cost.saturating_add(
+            upgrade_level
+                .saturating_sub(1)
+                .saturating_mul(self.upgrade_cost),
+        )
+    }
+}
+
+impl SkillMasteryUpgradeEffect {
+    pub fn compute_value(&self, upgrade_level: u16) -> Option<f64> {
+        if upgrade_level == 0 {
+            return None;
+        }
+
+        Some(self.value + upgrade_level.saturating_sub(1) as f64 * self.upgrade_value)
+    }
+
+    pub fn compute_stat_effect(&self, upgrade_level: u16) -> Option<StatEffect> {
+        let upgrade_value = self.compute_value(upgrade_level)?;
+        match &self.effect_type {
+            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier, scope: _ }
+            // | SkillMasteryUpgradeEffectType::PlayerStatEffect { stat, modifier } 
+            => {
+                Some(StatEffect {
+                    stat: stat.clone(),
+                    modifier: *modifier,
+                    value: upgrade_value,
+                    bypass_ignore: false,
+                })
+            }
+            _ => None,
+        }
+    }
+}

@@ -1,4 +1,152 @@
 {
+  "weapon_skill": {
+    "name": "Weapon Attack",
+    "icon": "skills/attack.svg",
+    "description": "A simple attack with your weapon.",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "upgrade_cost": 10,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "WeaponEffect": {
+              "item_slot": "Weapon",
+              "factor": 1
+            }
+          }
+        ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": { }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Target"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Weapon",
+            "item_stats": "Cooldown"
+          }
+        },
+        "factor": -1.0
+      }
+    ],
+    "hidden": true
+  },
+  "gloves_skill": {
+    "name": "Unarmed Strike",
+    "icon": "skills/punch.svg",
+    "description": "Nothing like punching your foes in the face.",
+    "skill_type": "Attack",
+    "cooldown": 0,
+    "upgrade_cost": 10,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": { }
+        },
+        "modifier": "More",
+        "value": 30
+      }
+    ],
+    "targets": [
+      {
+        "range": "Any",
+        "shape": "All",
+        "effects": [
+          {
+            "WeaponEffect": {
+              "item_slot": "Gloves",
+              "factor": 1
+            }
+          }
+        ]
+      }
+    ],
+    "modifier_effects": [
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": { }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Gloves",
+            "item_stats": "Target"
+          }
+        },
+        "factor": 1
+      },
+      {
+        "hidden": true,
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "value": 1
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "slot": "Gloves",
+            "item_stats": "Cooldown"
+          }
+        },
+        "factor": -1.0
+      }
+    ],
+    "hidden": true
+  },
   "poison_coating": {
     "name": "Poison Coating",
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
@@ -52,8 +200,8 @@
         "stat": {
           "StatusPower": { }
         },
-        "modifier": "Flat",
-        "value": 3,
+        "modifier": "Increased",
+        "value": 10,
         "description": "+3% More Fire and Storm Attack Damage"
       }
     ],
@@ -88,7 +236,9 @@
     "upgrade_effects": [
       {
         "stat": {
-          "StatusPower": { "status_id": "sharpen_weapon" }
+          "StatusPower": {
+            "status_id": "sharpen_weapon"
+          }
         },
         "modifier": "Increased",
         "value": 10,
@@ -108,7 +258,7 @@
             "ApplyStatus": {
               "replace_on_value_only": true,
               "status_id": "sharpen_weapon",
-              "value": 1
+              "value": 100
             }
           }
         ]
@@ -350,14 +500,9 @@
         "shape": "All",
         "effects": [
           {
-            "FlatDamage": {
-              "damage": { }
-            }
-          },
-          {
-            "ApplyStatus": {
-              "status_id": "poison",
-              "value": 0
+            "WeaponEffect": {
+              "item_slot": "Weapon",
+              "factor": 1
             }
           }
         ]
@@ -378,26 +523,7 @@
         "source": {
           "ItemStats": {
             "slot": "Weapon",
-            "item_stats": "Range"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "SkillTargetModifier": { }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": "Shape"
+            "item_stats": "Target"
           }
         },
         "factor": 1
@@ -422,264 +548,6 @@
           }
         },
         "factor": -1.17
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "CritChance": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": "CritChance"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "CritDamage": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": "CritDamage"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 1
       }
     ]
   },
@@ -717,60 +585,15 @@
         },
         "effects": [
           {
-            "FlatDamage": {
-              "damage": { }
-            }
-          },
-          {
-            "ApplyStatus": {
-              "status_id": "poison",
-              "value": 0
+            "WeaponEffect": {
+              "item_slot": "Weapon",
+              "factor": 0.7
             }
           }
         ]
       }
     ],
     "modifier_effects": [
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "SkillTargetModifier": { }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": "Range"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "SkillTargetModifier": { }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": "Shape"
-          }
-        },
-        "factor": 1
-      },
       {
         "hidden": true,
         "effects": [
@@ -792,274 +615,6 @@
           }
         },
         "factor": -2
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "CritChance": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": "CritChance"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "CritDamage": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": "CritDamage"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.7
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "MeleeWeapon2H",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.7
       }
     ]
   },
@@ -1097,13 +652,9 @@
         },
         "effects": [
           {
-            "FlatDamage": {
-              "damage": { }
-            }
-          },
-          {
-            "ApplyStatus": {
-              "status_id": "poison", "value": 0
+            "WeaponEffect": {
+              "item_slot": "Weapon",
+              "factor": 0.4
             }
           }
         ]
@@ -1131,274 +682,6 @@
           }
         },
         "factor": -2
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "CritChance": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": "CritChance"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "CritDamage": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": "CritDamage"
-          }
-        },
-        "factor": 1
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Fire",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "min_max": "Min"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Min"
-              }
-            }
-          }
-        },
-        "factor": 0.4
-      },
-      {
-        "hidden": true,
-        "effects": [
-          {
-            "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "min_max": "Max"
-              }
-            },
-            "modifier": "Flat",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Weapon",
-            "category": "RangedWeapon",
-            "item_stats": {
-              "Damage": {
-                "damage_type": "Poison",
-                "min_max": "Max"
-              }
-            }
-          }
-        },
-        "factor": 0.4
       }
     ]
   }

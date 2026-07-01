@@ -66,6 +66,7 @@ async fn migrate_character_data(
             inventory_data,
             passives_data,
             benedictions_data,
+            skill_masteries_data,
             created_at,
             updated_at
          FROM characters_data

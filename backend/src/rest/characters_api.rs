@@ -10,7 +10,7 @@ use backend_shared::profanities_checker::ProfanitiesChecker;
 use shared::{
     data::{
         area::AreaLevel,
-        game_stats::GrindStats,
+        // game_stats::GrindStats,
         realms::Realm,
         stash::StashType,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
@@ -33,6 +33,7 @@ use crate::{
         inventory_data::inventory_data_to_player_inventory,
         passives::ascension_data_to_passives_tree_ascension,
     },
+    game::systems::skills_updater,
     rest::utils::{
         MsgPack, verify_character_in_town, verify_character_not_deleted, verify_character_user,
     },
@@ -151,7 +152,7 @@ async fn read_character_details(
         areas_completed,
         character_data,
         passives_build,
-        last_grind_data,
+        // last_grind_data,
         character_stash,
         user_stash,
         market_stash,
@@ -159,15 +160,16 @@ async fn read_character_details(
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
         db::characters_builds::load_character_build(&db_pool, &character_id),
-        db::game_stats::load_last_game_stats(&db_pool, &character_id),
+        // db::game_stats::load_last_game_stats(&db_pool, &character_id),
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Character),
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::User),
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Market),
     );
 
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension_data, benedictions) = character_data?.unwrap_or_default();
-    let last_grind_data = last_grind_data?;
+    let (inventory_data, ascension_data, benedictions, skill_masteries) =
+        character_data?.unwrap_or_default();
+    // let last_grind_data = last_grind_data?;
     let character_stash = character_stash?.map(|x| x.into());
     let user_stash = user_stash?.map(|x| x.into());
     let market_stash = market_stash?.map(|x| x.into());
@@ -189,13 +191,19 @@ async fn read_character_details(
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
     let passives_build = passives_build?.unwrap_or_default();
+    let skill_mastery_skill_specs = skills_updater::compute_skill_mastery_skill_specs(
+        &master_store.statuses_store,
+        &master_store.skills_store,
+        &master_store.skill_masteries_store,
+        &skill_masteries,
+    );
 
-    let last_grind = last_grind_data.map(|last_grind_data| {
-        let (_, skills) = last_grind_data;
-        GrindStats {
-            skills: skills.unwrap_or_default(),
-        }
-    });
+    // let last_grind = last_grind_data.map(|last_grind_data| {
+    //     let (_, skills) = last_grind_data;
+    //     GrindStats {
+    //         skills: skills.unwrap_or_default(),
+    //     }
+    // });
 
     Ok(MsgPack(GetCharacterDetailsResponse {
         character: character.into(),
@@ -204,10 +212,12 @@ async fn read_character_details(
         ascension,
         passives_build,
         benedictions,
-        last_grind,
+        // last_grind,
         character_stash,
         user_stash,
         market_stash,
+        skill_masteries,
+        skill_mastery_skill_specs,
     }))
 }
 

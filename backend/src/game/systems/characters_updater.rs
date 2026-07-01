@@ -10,7 +10,7 @@ use shared::{
         conditional_modifier::ConditionalModifier,
         player::{CharacterSpecs, PlayerInventory},
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
-        stat_effect::{LuckyRollType, StatConverterSource, StatEffect, StatType},
+        stat_effect::{EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType},
         trigger::TriggerEffectModifierSource,
     },
 };
@@ -153,9 +153,13 @@ pub fn reset_character(character_state: &mut CharacterState) {
 
 /// Return converted stats for propagation
 pub fn update_character_specs(
+    statuses_store: &StatusesStore,
+    area_threat: &AreaThreat,
     base_specs: &CharacterSpecs,
-    effects: &[StatEffect],
-) -> (CharacterSpecs, Vec<StatEffect>) {
+    character_state: &CharacterState,
+    character_inventory: Option<&PlayerInventory>,
+    mut effects: Vec<StatEffect>,
+) -> CharacterSpecs {
     let mut character_specs = base_specs.clone();
 
     for skill_type in SkillType::iter() {
@@ -192,8 +196,52 @@ pub fn update_character_specs(
         }
     }
 
-    let converted_effects = compute_character_specs(&mut character_specs, effects);
-    (character_specs, converted_effects)
+    effects.extend(statuses_controller::generate_effects_from_statuses(
+        statuses_store,
+        &character_state.statuses,
+    ));
+
+    let conditional_modifiers = gather_condition_modifiers(&effects);
+    effects.extend(stats_updater::compute_conditional_modifiers(
+        statuses_store,
+        area_threat,
+        &character_specs.character_attrs,
+        character_state,
+        character_inventory,
+        &conditional_modifiers,
+    ));
+    character_specs.conditional_modifiers = conditional_modifiers;
+
+    effects.extend(compute_character_specs(&mut character_specs, &effects));
+
+    // Aggregate effects
+    character_specs.effects = EffectsMap::from(effects).into();
+
+    character_specs
+}
+
+fn gather_condition_modifiers(effects: &[StatEffect]) -> Vec<ConditionalModifier> {
+    effects
+        .iter()
+        .filter_map(|effect| match &effect.stat {
+            StatType::StatConditionalModifier {
+                stat,
+                conditions,
+                conditions_duration,
+            } => Some(ConditionalModifier {
+                conditions: conditions.clone(),
+                conditions_duration: *conditions_duration,
+                effects: [StatEffect {
+                    stat: *(*stat).clone(),
+                    modifier: effect.modifier,
+                    value: effect.value,
+                    bypass_ignore: effect.bypass_ignore,
+                }]
+                .into(),
+            }),
+            _ => None,
+        })
+        .collect()
 }
 
 fn compute_character_specs(
@@ -362,25 +410,26 @@ fn compute_character_specs(
             StatType::StatConverter(specs) => {
                 stats_converters.push((specs.clone(), effect.modifier, effect.value));
             }
-            StatType::StatConditionalModifier {
-                stat,
-                conditions,
-                conditions_duration,
-            } => {
-                character_specs
-                    .conditional_modifiers
-                    .push(ConditionalModifier {
-                        conditions: conditions.clone(),
-                        conditions_duration: *conditions_duration,
-                        effects: [StatEffect {
-                            stat: *(*stat).clone(),
-                            modifier: effect.modifier,
-                            value: effect.value,
-                            bypass_ignore: effect.bypass_ignore,
-                        }]
-                        .into(),
-                    });
-            }
+            StatType::StatConditionalModifier {..
+                // stat,
+                // conditions,
+                // conditions_duration,
+            } => {}
+            // {
+            //     character_specs
+            //         .conditional_modifiers
+            //         .push(ConditionalModifier {
+            //             conditions: conditions.clone(),
+            //             conditions_duration: *conditions_duration,
+            //             effects: [StatEffect {
+            //                 stat: *(*stat).clone(),
+            //                 modifier: effect.modifier,
+            //                 value: effect.value,
+            //                 bypass_ignore: effect.bypass_ignore,
+            //             }]
+            //             .into(),
+            //         });
+            // }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
             StatType::RestoreOnHit { .. } => {}
@@ -402,7 +451,8 @@ fn compute_character_specs(
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
-            | StatType::SkillTargetModifier { .. } => {}
+            | StatType::SkillTargetModifier { .. }
+            | StatType::SkillEffectModifier { .. } => {}
             // Other
             StatType::ItemRarity
             | StatType::ItemLevel
@@ -506,8 +556,9 @@ pub fn extend_triggers_from_skills_and_statuses(
     character_id: CharacterId,
     character_specs: &mut CharacterSpecs,
     character_state: &CharacterState,
-    effects: &[StatEffect],
 ) {
+    let effects = &character_specs.effects;
+
     for (status_id, status_stacks) in character_state.statuses.iter() {
         let Some(status_specs) = statuses_store.get(status_id) else {
             tracing::warn!("missing status: {status_id}");

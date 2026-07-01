@@ -420,6 +420,10 @@ fn apply_conditional_modifiers(
 
 fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Target) -> bool {
     match &skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { .. } => {
+            // Should already have been converted
+            false
+        }
         SkillEffectType::FlatDamage { .. } => target.1.1.is_alive,
         SkillEffectType::ApplyStatus {
             status_id,
@@ -482,6 +486,10 @@ fn apply_skill_effect_on_target(
     }
 
     match &skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { .. } => {
+            // Should already have been converted
+            false
+        }
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,

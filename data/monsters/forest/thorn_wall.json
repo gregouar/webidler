@@ -2,9 +2,7 @@
   "name": "Wall of Thorns",
   "portrait": "monsters/forest/thorn_wall.webp",
   "max_life": 20,
-  "power_factor": 2,
   "size": "Tall",
-  "initiative": [ 1, 2 ],
   "armor": { "Poison": 50, "Physical": 50 },
   "skills": [
     {

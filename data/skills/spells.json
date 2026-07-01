@@ -77,10 +77,6 @@
             "success_chance": 30,
             "ApplyStatus": {
               "status_id": "stun",
-              "duration": [
-                1,
-                3
-              ],
               "value": 1
             }
           }
@@ -370,17 +366,6 @@
                 3,
                 5
               ]
-            }
-          },
-          {
-            "success_chance": 30,
-            "ApplyStatus": {
-              "duration": [
-                1,
-                3
-              ],
-              "status_id": "stun",
-              "value": 1
             }
           }
         ]

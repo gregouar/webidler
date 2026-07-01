@@ -3,8 +3,6 @@
   "portrait": "monsters/inn/centipede.webp",
   "max_life": 10,
   "size": "Large",
-  "power_factor": 3.0,
-  "initiative": [ 1.0, 2.0 ],
   "armor": { "Physical": 20, "Storm": 20 },
   "skills": [
     {

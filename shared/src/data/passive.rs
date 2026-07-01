@@ -167,3 +167,25 @@ pub fn generate_effects_map_from_passives<'a>(
         })
     }))
 }
+
+pub fn generate_effects_fom_passives<'a>(
+    passives_tree_specs: &'a PassivesTreeSpecs,
+    passives_tree_ascension: &'a PassivesTreeAscension,
+    purchased_nodes: &'a PurchasedNodes,
+) -> Vec<StatEffect> {
+    purchased_nodes
+        .iter()
+        .filter_map(|node_id| {
+            passives_tree_specs.nodes.get(node_id).map(|node| {
+                node.aggregate_effects(
+                    passives_tree_ascension
+                        .ascended_nodes
+                        .get(node_id)
+                        .cloned()
+                        .unwrap_or_default(),
+                )
+            })
+        })
+        .flat_map(|effects_map| effects_map.into_iter())
+        .collect()
+}

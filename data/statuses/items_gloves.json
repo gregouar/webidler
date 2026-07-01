@@ -4,7 +4,7 @@
         "icon": "statuses/punch_blast.svg",
         "debuff": false,
         "duration": 5.0,
-        "max_stacks": 40,
+        "max_stacks": 10,
         "effects": [
             {
 

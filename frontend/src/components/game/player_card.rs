@@ -523,6 +523,15 @@ fn PlayerSkill(
         })
     });
 
+    let is_disabled = Memo::new(move |_| {
+        is_dead.get()
+            || !skill_specs
+                .read()
+                .as_ref()
+                .map(|skill_specs| skill_specs.usable)
+                .unwrap_or_default()
+    });
+
     let skill_cooldown = Signal::derive(move || {
         let elapsed_cooldown = game_context.player_state.with(|player_state| {
             player_state
@@ -539,7 +548,7 @@ fn PlayerSkill(
                 .unwrap_or_default()
         });
 
-        if is_dead.get() {
+        if is_disabled.get() {
             0.0
         } else {
             (1.0 - elapsed_cooldown) * cooldown
@@ -564,7 +573,7 @@ fn PlayerSkill(
                 .get(index)
                 .map(|x| x.just_triggered)
                 .unwrap_or_default()
-            && !is_dead.get()
+            && !is_disabled.get()
     });
 
     let is_ready = Memo::new(move |_| {
@@ -746,6 +755,7 @@ fn PlayerSkill(
                                 player_base_skill=player_base_skill
                                 // effects_map=Some(effects_map)
                                 computed_status_triggers=Some(computed_status_triggers)
+                                display_skill_upgrades=true
                             />
                         }
                     })}
@@ -758,7 +768,7 @@ fn PlayerSkill(
     let progress_value = predictive_cooldown(
         skill_cooldown,
         reset_progress,
-        Signal::derive(move || is_dead.get() || rush_mode.get() || disabled_auto.get()),
+        Signal::derive(move || is_disabled.get() || rush_mode.get() || disabled_auto.get()),
         if disabled_auto.get_untracked() {
             0.0
         } else {
@@ -796,7 +806,7 @@ fn PlayerSkill(
                                                 skill_icon=skill_icon.clone()
                                                 value=progress_value
                                                 reset=just_triggered
-                                                disabled=is_dead
+                                                disabled=is_disabled
                                                 bar_width=4
                                             />
                                         }

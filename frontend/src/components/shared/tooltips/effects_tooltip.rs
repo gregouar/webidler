@@ -262,6 +262,7 @@ fn status_damage_type_str(damage_type: StatusDamageType) -> &'static str {
 pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> String {
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
+            StatSkillEffectType::WeaponEffect => "Weapon Effect".into(),
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
             StatSkillEffectType::ApplyStatus { status_id } => {
                 let status_filter = StatStatusFilter {
@@ -513,7 +514,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "{} Escalation {}",
+                "{} Escalation{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -523,7 +524,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "Maximum {} Stacks {}",
+                "Maximum {} Stacks{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -533,7 +534,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "{}{} Compression",
+                "{} Compression{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -607,8 +608,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             effect_type,
         } => format!(
             "Chance to {}{}",
-            skill_filter_str(skill_filter, "", false),
-            stat_skill_effect_type_str(effect_type.as_ref())
+            stat_skill_effect_type_str(effect_type.as_ref()),
+            skill_filter_str(skill_filter, " with ", true),
         ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
@@ -625,6 +626,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
         ),
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
+        StatType::SkillEffectModifier { .. } => "TODO?".into(),
         StatType::StatConditionalModifier {
             stat,
             conditions,
@@ -960,21 +962,21 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if unwrap_value >= 100.0 {
                 format!(
                     "Guaranteed to {}{}",
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             } else if unwrap_value <= -100.0 {
                 format!(
                     "Impossible to {}{}",
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             } else {
                 format!(
                     "{} Chance to {}{}",
                     format_adds_removes(value, false, "%"),
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             }
         }
@@ -1028,6 +1030,32 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             let result_str = vec![range_str, shape_str.as_str(), repeat_str.as_str()]
                 .into_iter()
                 .filter(|s| !s.is_empty())
+                .collect::<Vec<_>>()
+                .join(", ");
+
+            format!(
+                "{} becomes {result_str}",
+                skill_filter_str(skill_filter, "", false),
+            )
+        }
+        StatType::SkillEffectModifier {
+            skill_filter,
+            unblockable,
+            avoidable,
+        } => {
+            let unblockable_str = unblockable.map(|unblockable| match unblockable {
+                true => "Unblockable",
+                false => "Blockable",
+            });
+
+            let avoidable_str = avoidable.map(|avoidable| match avoidable {
+                true => "Avoidable",
+                false => "Unavoidable",
+            });
+
+            let result_str = vec![unblockable_str, avoidable_str]
+                .into_iter()
+                .flatten()
                 .collect::<Vec<_>>()
                 .join(", ");
 

@@ -341,9 +341,9 @@ fn BenedictionCategorySection(
                         })}
                     <div class="flex gap-1">
                         <span class="font-bold text-zinc-100">{move || allocated_points.get()}</span>
-                        <span class="text-zinc-600">"/"</span>
-                        <span class="font-bold text-zinc-500">{move || bought_points.get()}</span>
-                        <span class="font-semibold text-zinc-500">" Spent"</span>
+                        <span class="text-zinc-400">"/"</span>
+                        <span class="font-bold text-zinc-400">{move || bought_points.get()}</span>
+                        <span class="font-semibold text-zinc-400">" Spent"</span>
                     </div>
 
                 </div>
@@ -355,10 +355,10 @@ fn BenedictionCategorySection(
                 <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-end">
 
                     <div class="flex gap-1">
-                        <span class="font-semibold text-zinc-500">"Prayed"</span>
+                        <span class="font-semibold text-zinc-400">"Prayed"</span>
                         <span class="font-bold text-zinc-100">{move || bought_points.get()}</span>
-                        <span class="text-zinc-500">"/"</span>
-                        <span class="font-bold text-zinc-500">{max_level_text}</span>
+                        <span class="text-zinc-400">"/"</span>
+                        <span class="font-bold text-zinc-400">{max_level_text}</span>
                     </div>
 
                     {(!view_only)
@@ -560,7 +560,7 @@ fn BenedictionRow(
                                 >
                                     "+"
                                 </MenuButton>
-                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-amber-100 font-number">
+                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-zinc-100 font-number">
                                     {move || upgrade_level.get()}
                                 </div>
                                 <MenuButton
@@ -631,7 +631,7 @@ pub fn EffectDescription(
                         }
                     })
                     .unwrap_or_else(|| {
-                        view! { <li class="text-zinc-500">"No effect"</li> }.into_any()
+                        view! { <li class="text-zinc-400">"No effect"</li> }.into_any()
                     })
             }}
         </ul>

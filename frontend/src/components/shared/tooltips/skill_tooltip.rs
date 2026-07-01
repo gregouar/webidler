@@ -107,6 +107,7 @@ pub fn SkillTooltip(
     #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
     // #[prop(default= None)] effects_map: Option<EffectsMap>,
     #[prop(default= None)] computed_status_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
+    #[prop(default = false)] display_skill_upgrades: bool,
 ) -> impl IntoView {
     let palette = TooltipFramePalette {
         border_class: "border-[#70508a]/92",
@@ -160,6 +161,26 @@ pub fn SkillTooltip(
         })
         .unwrap_or_default();
 
+    let required_item = player_base_skill.as_ref().and_then(|player_base_skill| {
+        player_base_skill
+            .base_skill_specs
+            .required_item
+            .map(|required_item| {
+                let item_category_str = required_item
+                    .category
+                    .map(item_tooltip::item_category_str)
+                    .unwrap_or("Item");
+                let item_slot_str = required_item.slot.map(|item_slot| {
+                    format!(" in {} slot", item_tooltip::item_slot_str(item_slot))
+                });
+                view! {
+                    <EffectLi class="italic">
+                        "Require "{item_category_str}" equipped"{item_slot_str}
+                    </EffectLi>
+                }
+            })
+    });
+
     let ignore_stat_effects: Vec<_> = skill_specs
         .ignore_stat_effects
         .clone()
@@ -188,7 +209,7 @@ pub fn SkillTooltip(
                     }
                         .into_any()
                 } else {
-                    view! { "Permanent" }.into_any()
+                    view! { "Cooldown: -" }.into_any()
                 }}
                 {(skill_specs.mana_cost.get() > 0.0)
                     .then(|| {
@@ -228,11 +249,15 @@ pub fn SkillTooltip(
                 {(!modifier_lines.is_empty()).then(|| view! { <Separator /> })} {modifier_lines}
             </ul>
 
-            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">{ignore_stat_effects}</ul>
+            <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
+                {ignore_stat_effects} {required_item}
+            </ul>
 
             {player_base_skill
                 .as_ref()
-                .filter(|player_base_skill| player_base_skill.next_upgrade_cost > 0.0)
+                .filter(|player_base_skill| {
+                    player_base_skill.next_upgrade_cost > 0.0 && display_skill_upgrades
+                })
                 .map(|player_base_skill| {
                     let upgrade_level = player_base_skill.upgrade_level;
                     let next_upgrade_cost = player_base_skill.next_upgrade_cost;
@@ -250,35 +275,8 @@ pub fn SkillTooltip(
                         .filter(|&upgrade_effect| upgrade_effect.description.is_none())
                         .map(|upgrade_effect| upgrade_effect.stat_effect.clone())
                         .collect();
-                    let required_item = player_base_skill
-                        .base_skill_specs
-                        .required_item
-                        .map(|required_item| {
-                            let item_category_str = required_item
-                                .category
-                                .map(item_tooltip::item_category_str)
-                                .unwrap_or("Item");
-                            let item_slot_str = required_item
-                                .slot
-                                .map(|item_slot| {
-                                    format!(" in {} slot", item_tooltip::item_slot_str(item_slot))
-                                });
-                            view! {
-                                <ul class="list-none xl:space-y-1 text-xs xl:text-sm">
-                                    <EffectLi class="italic">
-                                        "Require "{item_category_str}" equipped"{item_slot_str}
-                                    </EffectLi>
-                                </ul>
-                            }
-                        });
-
-                    // let upgrade_effects = player_base_skill
-                    // .base_skill_specs
-                    // .upgrade_effects
-                    // .clone();
 
                     view! {
-                        {required_item}
                         <Separator />
                         <ul class="text-xs xl:text-sm ">
                             <li>
@@ -287,7 +285,6 @@ pub fn SkillTooltip(
                             {description_effects}
                             {effects_tooltip::formatted_effects_list(auto_effects)}
                         </ul>
-
                         <Separator />
                         <p class="text-xs xl:text-sm text-stone-400 ">
                             "Level: "
@@ -468,6 +465,10 @@ pub fn format_skill_effect(
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
+    if skill_effect.success_chance.value.get() <= 0.0 {
+        return None;
+    }
+
     let success_chance = if skill_effect.success_chance.value.get() < 100.0 {
         Some(view! {
             <span class="font-semibold">{format_chance(&skill_effect.success_chance, false)}</span>
@@ -480,11 +481,23 @@ pub fn format_skill_effect(
     let mut skip = false;
 
     let base_effects = match skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { item_slot, factor } => {
+            let item_slot_str = item_tooltip::item_slot_str(item_slot);
+
+            view! {
+                <EffectLi>
+                    "Deal "
+                    <span class="font-semibold">{number::format_number(*factor * 100.0)}%</span>
+                    " of " {item_slot_str}" Damage"
+                </EffectLi>
+            }
+            .into_any()
+        }
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,
             crit_damage,
-            ..
+            unblockable,
         } => view! {
             {
                 let mut damage_lines = Vec::new();
@@ -508,6 +521,7 @@ pub fn format_skill_effect(
                         trigger_status_name,
                         trigger_status_value,
                     );
+                    let unblockable_str = unblockable.then_some("Unblockable ");
                     if value.min.get() > 0.0 || value.max.get() > 0.0
                         || trigger_modifier_str.is_some()
                     {
@@ -519,7 +533,8 @@ pub fn format_skill_effect(
                                         <span class=format!(
                                             "font-semibold {damage_color}",
                                         )>{format_min_max(value)}</span> {trigger_modifier_str}" "
-                                        {damage_type_str(Some(damage_type))} "Damage"
+                                        {unblockable_str} {damage_type_str(Some(damage_type))}
+                                        "Damage"
                                     </EffectLi>
                                 },
                             );
@@ -640,7 +655,7 @@ pub fn format_skill_effect(
                                 {trigger_modifier_duration_str}{format_escalation(escalation)}
                                 {stacks_str}
                             </EffectLi>
-                            {status_effects}
+                            <EffectLi>{status_effects}</EffectLi>
                         }
                     })
                         .into_any()
@@ -870,8 +885,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                         min_max_str(min_max),
                         damage_type_str(damage_type)
                     ),
-                    ItemStatsSource::Range => " Range".into(),
-                    ItemStatsSource::Shape => " Shape".into(),
+                    ItemStatsSource::Target => " Target".into(),
                     ItemStatsSource::Equipped => " Equipped".into(),
                 },
                 match required_item.category {
@@ -945,6 +959,9 @@ pub fn skill_effect_text(
     let _ = modifiers;
     let stat_skill_effect: Option<StatSkillEffectType> = (&effect.effect_type).into();
     match effect.effect_type {
+        SkillEffectType::WeaponEffect { item_slot, .. } => {
+            format!("Deal {} Damage", item_tooltip::item_slot_str(item_slot))
+        }
         SkillEffectType::FlatDamage { damage, .. } => {
             format!(
                 "Hit {}Damage",

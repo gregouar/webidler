@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, hash_map};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
@@ -280,7 +280,6 @@ pub enum StatType {
     },
     StatConverter(StatConverterSpecs),
     SkillTargetModifier {
-        // TODO: More control and options?
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
@@ -289,6 +288,14 @@ pub enum StatType {
         shape: Option<SkillShape>,
         #[serde(default)]
         repeat: Option<StatSkillRepeat>,
+    },
+    SkillEffectModifier {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+        #[serde(default)]
+        unblockable: Option<bool>,
+        #[serde(default)]
+        avoidable: Option<bool>,
     },
     GoldFind,
     PowerLevel,
@@ -487,6 +494,7 @@ impl ArmorStatType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatSkillEffectType {
+    WeaponEffect,
     FlatDamage {
         // damage_type: Option<DamageType>,
     },
@@ -526,6 +534,7 @@ impl Matchable for StatSkillEffectType {
 impl From<&SkillEffectType> for Option<StatSkillEffectType> {
     fn from(value: &SkillEffectType) -> Self {
         match value {
+            SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
             SkillEffectType::ApplyStatus { status_id, .. } => {
                 Some(StatSkillEffectType::ApplyStatus {
@@ -634,15 +643,12 @@ pub struct EffectsMap(pub HashMap<(StatType, Modifier, bool), f64>);
 
 impl From<&EffectsMap> for Vec<StatEffect> {
     fn from(val: &EffectsMap) -> Self {
-        val.0
-            .iter()
-            .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {
-                stat: stat.clone(),
-                modifier: *effect_type,
-                value: *value,
-                bypass_ignore: *bypass_ignore,
-            })
-            .collect()
+        val.iter().collect()
+    }
+}
+impl From<EffectsMap> for Vec<StatEffect> {
+    fn from(val: EffectsMap) -> Self {
+        val.into_iter().collect()
     }
 }
 
@@ -664,6 +670,25 @@ impl From<Vec<&StatEffect>> for EffectsMap {
             .fold(EffectsMap::default(), |mut effects_map, stat_effect| {
                 effects_map.add_effect((*stat_effect).clone());
                 effects_map
+            })
+    }
+}
+
+impl IntoIterator for EffectsMap {
+    type Item = StatEffect;
+    type IntoIter = std::iter::Map<
+        hash_map::IntoIter<(StatType, Modifier, bool), f64>,
+        fn(((StatType, Modifier, bool), f64)) -> StatEffect,
+    >;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0
+            .into_iter()
+            .map(|((stat, modifier, bypass_ignore), value)| StatEffect {
+                stat,
+                modifier,
+                value,
+                bypass_ignore,
             })
     }
 }
@@ -719,13 +744,24 @@ impl EffectsMap {
     pub fn iter(&self) -> impl Iterator<Item = StatEffect> + Clone {
         self.0
             .iter()
-            .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {
+            .map(|((stat, modifier, bypass_ignore), value)| StatEffect {
                 stat: stat.clone(),
-                modifier: *effect_type,
+                modifier: *modifier,
                 value: *value,
                 bypass_ignore: *bypass_ignore,
             })
     }
+
+    // pub fn into_iter(self) -> impl IntoIterator<Item = StatEffect> + Clone {
+    //     self.0
+    //         .into_iter()
+    //         .map(|((stat, modifier, bypass_ignore), value)| StatEffect {
+    //             stat: stat.clone(),
+    //             modifier,
+    //             value,
+    //             bypass_ignore,
+    //         })
+    // }
 }
 
 pub trait Matchable {
@@ -760,5 +796,38 @@ pub fn compare_options<T: Matchable>(first: &Option<T>, second: &Option<T>) -> b
     match (first, second) {
         (None, _) | (_, None) => true,
         (Some(a), Some(b)) => a.is_match(b),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_more_multipliers() {
+        let stats_effects: Vec<_> = [
+            StatEffect {
+                stat: StatType::GoldFind,
+                modifier: Modifier::More,
+                value: 170.0,
+                bypass_ignore: false,
+            },
+            StatEffect {
+                stat: StatType::GoldFind,
+                modifier: Modifier::More,
+                value: 180.0,
+                bypass_ignore: false,
+            },
+        ]
+        .into();
+        let effects_map: EffectsMap = stats_effects.into();
+        assert_eq!(
+            effects_map
+                .0
+                .get(&(StatType::GoldFind, Modifier::More, false))
+                .copied()
+                .map(f64::round),
+            Some(((1.0f64 * (1.0 + 1.7) * (1.0 + 1.8) - 1.0) * 100.0).round())
+        );
     }
 }

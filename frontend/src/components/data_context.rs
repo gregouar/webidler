@@ -1,3 +1,4 @@
+use indexmap::IndexMap;
 use leptos::prelude::*;
 use std::collections::HashMap;
 
@@ -5,6 +6,7 @@ use shared::data::{
     area::AreaSpecs,
     character_status::{StatusId, StatusSpecs},
     skill::BaseSkillSpecs,
+    skill_mastery::SkillMasterySpecs,
 };
 
 use crate::components::backend_client::{BackendClient, BackendError};
@@ -13,6 +15,7 @@ use crate::components::backend_client::{BackendClient, BackendError};
 pub struct DataContext {
     pub areas_specs: RwSignal<HashMap<String, AreaSpecs>>,
     pub skill_specs: RwSignal<HashMap<String, BaseSkillSpecs>>,
+    pub skill_mastery_specs: RwSignal<IndexMap<String, SkillMasterySpecs>>,
     pub statuses_specs: RwSignal<HashMap<StatusId, StatusSpecs>>,
     pub loaded: RwSignal<bool>,
 }
@@ -21,6 +24,7 @@ pub fn provide_data_context() {
     provide_context(DataContext {
         areas_specs: RwSignal::new(Default::default()),
         skill_specs: RwSignal::new(Default::default()),
+        skill_mastery_specs: RwSignal::new(Default::default()),
         statuses_specs: RwSignal::new(Default::default()),
         loaded: RwSignal::new(false),
     });
@@ -39,7 +43,9 @@ impl DataContext {
         );
 
         self.areas_specs.set(areas?.areas);
-        self.skill_specs.set(skills?.skills);
+        let skills = skills?;
+        self.skill_specs.set(skills.skills);
+        self.skill_mastery_specs.set(skills.skill_masteries);
         self.statuses_specs.set(statuses?.statuses);
 
         self.loaded.set(true);

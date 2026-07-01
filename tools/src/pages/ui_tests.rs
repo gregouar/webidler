@@ -909,7 +909,7 @@ pub fn MenuButton(
             active:text-white
             active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
             w-auto
-            disabled:text-zinc-500
+            disabled:text-zinc-400
             disabled:border-[#4b4030]
             disabled:opacity-60 disabled:shadow-none
             disabled:before:hidden"
@@ -965,7 +965,7 @@ pub fn MenuButtonRed(
             active:before:opacity-0 active:brightness-90
             active:text-[#d7aca2]
             active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
-            disabled:text-zinc-500
+            disabled:text-zinc-400
             disabled:border-[#4f312d]
             disabled:opacity-60 disabled:shadow-none
             disabled:before:hidden"
@@ -1011,7 +1011,7 @@ pub fn FancyButton(
             active:before:opacity-0 active:brightness-90
             active:text-white
             active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
-            disabled:text-zinc-500
+            disabled:text-zinc-400
             disabled:border-[#4b4030]
             disabled:opacity-60 disabled:shadow-none
             disabled:before:hidden"
@@ -1082,7 +1082,7 @@ pub fn Toggle(
                     hover:border-[#a27f46]
                     hover:text-[#f1e4c4]
                     active:text-white
-                    disabled:text-zinc-500
+                    disabled:text-zinc-400
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
                     disabled:before:hidden
@@ -1131,7 +1131,7 @@ pub fn TabButton(
             hover:text-[#f1e4c4]
             hover:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.2),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45),inset_0_-1px_0_rgba(0,0,0,0.18)]
-            disabled:text-zinc-500
+            disabled:text-zinc-400
             disabled:border-[#4b4030]
             disabled:opacity-60
             "

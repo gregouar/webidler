@@ -3,11 +3,11 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use shared::{
     computations,
-    constants::{PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_COST_FACTOR},
+    constants::{PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_BASE_COST_FACTOR},
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
-        item::{ItemSlot, ItemSpecs, WeaponSpecs},
+        item::{ItemSlot, ItemSpecs},
         monster::{MonsterRarity, MonsterSpecs},
         player::{
             EquippedSlot, PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources,
@@ -18,6 +18,7 @@ use shared::{
 };
 
 use crate::{
+    app_state::MasterStore,
     game::{
         data::{
             event::EventsQueue,
@@ -188,7 +189,7 @@ pub fn reward_player(
     area_state: &mut AreaState,
 ) -> (f64, f64) {
     let gold_reward = if area_specs.can_reward_gold() {
-        (monster_specs.reward_factor * player_specs.gold_find.get() * 0.01).round()
+        (monster_specs.gold_reward * player_specs.gold_find.get() * 0.01).round()
     } else {
         0.0
     };
@@ -205,10 +206,31 @@ pub fn reward_player(
     } else {
         0.0
     };
+
     player_resources.gold += gold_reward;
     player_resources.gold_total += gold_reward;
     player_resources.gems += gems_reward;
-    player_resources.experience += monster_specs.power_factor.round();
+    player_resources.experience += monster_specs.experience_reward.round();
+
+    let skill_reward = monster_specs.skill_reward.round();
+    for skill_id in player_specs
+        .character_specs
+        .skills_specs
+        .iter()
+        .take(4)
+        .map(|x| &x.skill_id)
+    {
+        if let Some(entry) = player_resources
+            .skill_masteries_experience
+            .get_mut(skill_id)
+        {
+            *entry += skill_reward;
+        } else {
+            player_resources
+                .skill_masteries_experience
+                .insert(skill_id.clone(), skill_reward);
+        }
+    }
 
     (gold_reward, gems_reward)
 }
@@ -245,7 +267,7 @@ pub fn level_up_no_cost(
 }
 
 pub fn equip_item_from_bag(
-    statuses_store: &StatusesStore,
+    master_store: &MasterStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
@@ -264,20 +286,23 @@ pub fn equip_item_from_bag(
         unequip_weapon(player_base_specs, player_state, player_controller, slot);
     }
 
-    if let Some(ref weapon_specs) = new_item.weapon_specs
+    if new_item.weapon_specs.is_some()
         && let Some(slot) = new_item.base.slot
     {
         equip_weapon(
+            &master_store.skills_store,
             player_base_specs,
             player_state,
             player_controller,
             slot,
             new_item.modifiers.level,
-            weapon_specs,
         );
     }
 
-    characters_controller::reset_buff_statuses(statuses_store, &mut player_state.character_state);
+    characters_controller::reset_buff_statuses(
+        &master_store.statuses_store,
+        &mut player_state.character_state,
+    );
 
     Ok(())
 }
@@ -306,6 +331,7 @@ pub fn unequip_item_to_bag(
 }
 
 pub fn toggle_sheathe_item(
+    skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
@@ -316,7 +342,7 @@ pub fn toggle_sheathe_item(
         return Err(AppError::NotFound);
     };
 
-    let Some(weapon_specs) = item_specs.weapon_specs.as_ref() else {
+    if item_specs.weapon_specs.is_none() {
         return Err(AppError::UserError("item is not a weapon".into()));
     };
 
@@ -330,12 +356,12 @@ pub fn toggle_sheathe_item(
         )
     } else {
         equip_weapon(
+            skills_store,
             player_base_specs,
             player_state,
             player_controller,
             item_slot,
             item_specs.modifiers.level,
-            weapon_specs,
         );
     }
 
@@ -359,22 +385,21 @@ pub fn sell_item(player_resources: &mut PlayerResources, item_specs: &ItemSpecs)
 }
 
 pub fn init_skills_from_inventory(
+    skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
 ) {
     for (item_slot, equipped_item) in player_inventory.equipped_items() {
-        if let Some(weapon_specs) = equipped_item.weapon_specs.as_ref()
-            && !player_inventory.sheathed.contains(&item_slot)
-        {
+        if equipped_item.weapon_specs.is_some() && !player_inventory.sheathed.contains(&item_slot) {
             equip_weapon(
+                skills_store,
                 player_base_specs,
                 player_state,
                 player_controller,
                 item_slot,
                 equipped_item.modifiers.level,
-                weapon_specs,
             );
         }
     }
@@ -404,35 +429,25 @@ fn unequip_weapon(
 }
 
 fn equip_weapon(
+    skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
     item_slot: ItemSlot,
     item_level: u16,
-    weapon_specs: &WeaponSpecs,
 ) {
-    equip_base_skill(
-        player_base_specs,
-        player_state,
-        player_controller,
-        item_slot_to_skill_id(item_slot),
-        items_controller::make_weapon_skill(item_level, weapon_specs),
-        true,
-        Some(item_slot),
-    );
-}
-
-fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {
-    match item_slot {
-        ItemSlot::Accessory => "accessory_skill",
-        ItemSlot::Helmet => "helmet_skill",
-        ItemSlot::Amulet => "amulet_skill",
-        ItemSlot::Weapon => "weapon_skill",
-        ItemSlot::Body => "body_skill",
-        ItemSlot::Shield => "shield_skill",
-        ItemSlot::Gloves => "gloves_skill",
-        ItemSlot::Boots => "boots_skill",
-        ItemSlot::Ring => "ring_skill",
+    if let Some((skill_id, base_skill_specs)) =
+        items_controller::make_weapon_skill(skills_store, item_slot, item_level)
+    {
+        equip_base_skill(
+            player_base_specs,
+            player_state,
+            player_controller,
+            skill_id,
+            base_skill_specs,
+            true,
+            Some(item_slot),
+        );
     }
 }
 
@@ -440,7 +455,7 @@ pub fn equip_base_skill(
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
-    skill_id: &str,
+    skill_id: String,
     base_skill_specs: BaseSkillSpecs,
     auto_use: bool,
     item_slot: Option<ItemSlot>,
@@ -458,7 +473,7 @@ pub fn equip_base_skill(
 
     player_base_specs.skills.shift_insert(
         index,
-        skill_id.to_string(),
+        skill_id,
         PlayerBaseSkill {
             item_slot,
             upgrade_level: 1,
@@ -510,21 +525,23 @@ pub fn buy_skill(
         return false;
     }
 
-    if let Some(base_skill_specs) = skills_store.get(skill_id) {
+    if let Some(base_skill_specs) = skills_store.get(skill_id)
+        && !base_skill_specs.hidden
+    {
         equip_base_skill(
             player_base_specs,
             player_state,
             player_controller,
-            skill_id,
+            skill_id.to_string(),
             base_skill_specs.clone(),
             true,
             None,
         );
         player_resources.gold -= player_base_specs.buy_skill_cost;
         player_base_specs.buy_skill_cost = (if player_base_specs.buy_skill_cost > 0.0 {
-            player_base_specs.buy_skill_cost * SKILL_COST_FACTOR
+            player_base_specs.buy_skill_cost * SKILL_BASE_COST_FACTOR
         } else {
-            SKILL_BASE_COST * SKILL_COST_FACTOR
+            SKILL_BASE_COST * SKILL_BASE_COST_FACTOR
         })
         .round();
         true
