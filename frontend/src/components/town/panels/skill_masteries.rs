@@ -4,11 +4,15 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
     data::{
-         modifier::ModifiableValue, skill::SkillType, skill_mastery::{
+        modifier::ModifiableValue,
+        skill::SkillType,
+        skill_mastery::{
             PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade,
             SkillMasteryUpgradeEffect, SkillMasteryUpgradeEffectType,
-        }, values::NonNegative,
-    }, http::client::SaveSkillMasteriesRequest,
+        },
+        values::NonNegative,
+    },
+    http::client::SaveSkillMasteriesRequest,
 };
 use strum::IntoEnumIterator;
 

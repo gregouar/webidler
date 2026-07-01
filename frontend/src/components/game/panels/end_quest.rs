@@ -476,26 +476,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                                                 />
                                                             </div>
 
-                                                            <div class="
-                                                            absolute inset-0
-                                                            backface-hidden
-                                                            isolate overflow-clip rounded-[8px]
-                                                            border border-[#6c5329]/85
-                                                            bg-zinc-900
-                                                            rotate-y-180
-                                                            ">
-                                                                <div class="
-                                                                absolute inset-0
-                                                                bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
-                                                                shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
-                                                                flex items-center justify-center
-                                                                text-amber-200 text-8xl font-display
-                                                                ">
-                                                                    <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
-                                                                        "?"
-                                                                    </span>
-                                                                </div>
-                                                            </div>
+                                                            <ItemRewardBackface rotate=true />
                                                         </div>
                                                     </div>
                                                 }
@@ -506,6 +487,36 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                         }}
                     </Show>
                 </div>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn ItemRewardBackface(#[prop(default = false)] rotate: bool) -> impl IntoView {
+    view! {
+        <div class=move || {
+            format!(
+                "
+                absolute inset-0
+                backface-hidden
+                isolate overflow-clip rounded-[8px]
+                border border-[#6c5329]/85
+                bg-zinc-900
+                shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
+                {}
+                ",
+                rotate.then_some("rotate-y-180").unwrap_or_default(),
+            )
+        }>
+            <div class="
+            absolute inset-0
+            bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
+            shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
+            flex items-center justify-center
+            text-amber-200 text-8xl font-display
+            ">
+                <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">"?"</span>
             </div>
         </div>
     }
@@ -552,25 +563,10 @@ fn HiddenItemRewards() -> impl IntoView {
                                         relative w-40 xl:w-48
                                         transform-style-3d
                                         ">
-                                            <div class="
-                                            relative group flex items-center justify-center w-full aspect-[2/3] cursor-pointer overflow-clip
-                                            backface-hidden
-                                            isolate overflow-clip rounded-[8px]
-                                            border border-[#6c5329]/85
-                                            bg-zinc-900
-                                            ">
-                                                <div class="
-                                                absolute inset-0
-                                                bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
-                                                shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
-                                                flex items-center justify-center
-                                                text-amber-200 text-8xl font-display
-                                                ">
-                                                    <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">
-                                                        "?"
-                                                    </span>
-                                                </div>
+                                            <div class="invisible relative rounded-[8px] border border-transparent">
+                                                <div class="w-full aspect-[2/3]"></div>
                                             </div>
+                                            <ItemRewardBackface />
                                         </div>
                                     </div>
                                 }
