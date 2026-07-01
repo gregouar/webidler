@@ -1,6 +1,7 @@
 {
     "poison_coating": {
         "name": "Poison Coating",
+        "adjective": "Poison Coating",
         "icon": "skills/poison_coating.svg",
         "debuff": false,
         "duration": 5,

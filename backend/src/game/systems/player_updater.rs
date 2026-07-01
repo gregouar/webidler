@@ -464,7 +464,7 @@ fn compute_status_triggers(
                         trigger_effect.skill_type,
                         skill_effect,
                         effects.iter(),
-                    )
+                    );
                 }
                 result.insert(trigger_effect.trigger_id.clone(), trigger_effect);
             }

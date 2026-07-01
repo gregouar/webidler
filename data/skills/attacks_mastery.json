@@ -419,6 +419,63 @@
             }
           }
         ]
+      },
+      "convert_physical": {
+        "title": "Venom Doctrine",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 20,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "StatConditionalModifier": {
+                  "stat": {
+                    "StatConverter": {
+                      "source": {
+                        "Damage": {
+                          "damage_type": "Physical"
+                        }
+                      },
+                      "stat": {
+                        "Damage": {
+                          "damage_type": "Poison",
+                          "skill_type": "Attack"
+                        }
+                      },
+                      "skill_type": "Attack"
+                    }
+                  },
+                  "conditions": [
+                    {
+                      "HasStatus": {
+                        "status_id": "poison_coating"
+                      }
+                    }
+                  ]
+                }
+              },
+              "modifier": "Flat",
+              "scope": "Global"
+            }
+          },
+          {
+            "value": -1e200,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "is_hit": true
+                }
+              },
+              "modifier": "More",
+              "scope": "Global"
+            }
+          }
+        ]
       }
     }
   },

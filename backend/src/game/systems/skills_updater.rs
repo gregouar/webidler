@@ -343,6 +343,7 @@ pub fn apply_effects_to_skill_specs<'a>(
         }
     }
 
+    let mut stats_converted = Vec::new();
     for skill_effect in skill_specs
         .targets
         .iter_mut()
@@ -354,13 +355,14 @@ pub fn apply_effects_to_skill_specs<'a>(
                 .flat_map(|trigger| trigger.trigger_effect.effects.iter_mut()),
         )
     {
-        compute_skill_specs_effect(
+        stats_converted.extend(compute_skill_specs_effect_with_extra(
             statuses_store,
             &skill_specs.skill_id,
             skill_specs.skill_type,
             skill_effect,
             effects.clone(),
-        )
+            stats_converted.iter(),
+        ));
     }
 }
 
@@ -522,7 +524,25 @@ pub fn compute_skill_specs_effect<'a>(
     skill_type: SkillType,
     skill_effect: &mut SkillEffect,
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
-) {
+) -> Vec<StatEffect> {
+    compute_skill_specs_effect_with_extra(
+        statuses_store,
+        skill_id,
+        skill_type,
+        skill_effect,
+        effects,
+        std::iter::empty(),
+    )
+}
+
+fn compute_skill_specs_effect_with_extra<'a, 'b>(
+    statuses_store: &StatusesStore,
+    skill_id: &String,
+    skill_type: SkillType,
+    skill_effect: &mut SkillEffect,
+    effects: impl Iterator<Item = &'a StatEffect> + Clone,
+    extra_effects: impl Iterator<Item = &'b StatEffect> + Clone,
+) -> Vec<StatEffect> {
     if let SkillEffectType::ApplyStatus {
         status_id,
         value,
@@ -538,7 +558,7 @@ pub fn compute_skill_specs_effect<'a>(
         statuses_store.attach_key(status_id);
         let Some(status_specs) = statuses_store.get(status_id) else {
             tracing::error!("missing status: {}", skill_id);
-            return;
+            return Default::default();
         };
 
         if duration.is_none() {
@@ -591,7 +611,11 @@ pub fn compute_skill_specs_effect<'a>(
             apply_stat_effect_on_skill_effect(skill_id, skill_type, skill_effect, effect)
         })
         .collect();
+    stats_converters.extend(extra_effects.clone().filter_map(|effect| {
+        apply_stat_effect_on_skill_effect(skill_id, skill_type, skill_effect, effect)
+    }));
 
+    let mut stats_converted = Vec::with_capacity(stats_converters.len());
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
             (
@@ -600,8 +624,6 @@ pub fn compute_skill_specs_effect<'a>(
                 *modifier,
             )
         });
-
-        let mut stats_converted = Vec::with_capacity(stats_converters.len());
 
         for (specs, modifier, factor) in stats_converters {
             if let Some(stat) = match (specs.source, &mut skill_effect.effect_type) {
@@ -764,6 +786,7 @@ pub fn compute_skill_specs_effect<'a>(
             stats_converted.iter(),
         );
     }
+    stats_converted
 }
 
 pub fn apply_stat_effect_on_skill_effect(
