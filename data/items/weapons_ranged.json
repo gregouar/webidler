@@ -13,8 +13,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -35,8 +35,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hunting_bow": {
     "name": "Hunting Bow",
@@ -52,8 +52,8 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -74,8 +74,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "hunting_bow_unique": {
     "name": "Bloodspiller",
@@ -191,7 +191,7 @@
         "description": null,
         "trigger_id": "bloodspiller",
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
@@ -211,8 +211,8 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ],
             "independent_application": false
           }
         ]
@@ -345,8 +345,8 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -367,8 +367,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "composite_bow": {
     "name": "Composite Bow",
@@ -384,8 +384,8 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -406,8 +406,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "composite_bow_unique": {
     "name": "Voltrach Bite",
@@ -514,7 +514,7 @@
           "is_triggered": null,
           "damage_type": null,
           "skill_ids": null,
-          "conditions": []
+          "conditions": [ ]
         },
         "description": null,
         "trigger_id": "voltrach_bite",
@@ -570,7 +570,7 @@
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers": [ ],
             "independent_application": false
           }
         ]
@@ -666,8 +666,8 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -688,15 +688,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "treasure_gun": {
     "name": "Pistol of the Damned",
     "icon": "items/weapons_ranged/treasure_gun.webp",
     "description": "It needs no powder. It remembers the spark. And it never forgets a debt.",
     "slot": "Weapon",
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "AttackWeapon",
       "RangedWeapon"
@@ -808,7 +808,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -933,8 +933,8 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -955,8 +955,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "compound_bow_unique": {
     "name": "Wyrmshot Engine",
@@ -1066,7 +1066,7 @@
           "is_triggered": false,
           "damage_type": null,
           "skill_ids": null,
-          "conditions": []
+          "conditions": [ ]
         },
         "description": null,
         "trigger_id": "compound_bow_unique",
@@ -1122,7 +1122,7 @@
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers": [ ],
             "independent_application": false
           }
         ]
@@ -1235,8 +1235,8 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1257,8 +1257,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "weapon_ranged_8": {
     "name": "Arbalest",
@@ -1274,8 +1274,8 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1296,12 +1296,12 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "scorpion_crossbow": {
     "name": "Deathstinger",
-    "icon": "items/weapons_ranged/scorpion_crossbow_2.webp",
+    "icon": "items/weapons_ranged/scorpion_crossbow.webp",
     "description": "The desert teaches that the smallest wound may carry the longest death.",
     "slot": "Weapon",
     "extra_slots": [
@@ -1401,7 +1401,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1491,8 +1491,8 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1513,8 +1513,8 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "weapon_ranged_10": {
     "name": "Ballista",
@@ -1530,8 +1530,8 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",
@@ -1552,7 +1552,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }
