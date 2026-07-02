@@ -325,7 +325,7 @@
     "max_level": 100,
     "upgrades": {
       "power": {
-        "title": "Effects",
+        "title": "Status Effects",
         "base_cost": 1,
         "upgrade_cost": 1,
         "max_level": 100,
@@ -346,9 +346,9 @@
       },
       "duration": {
         "title": "Poison Duration",
-        "base_cost": 1,
-        "upgrade_cost": 1,
-        "max_level": 20,
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
         "effects": [
           {
             "value": 0.1,
@@ -510,7 +510,7 @@
     "max_level": 100,
     "upgrades": {
       "power": {
-        "title": "Effects",
+        "title": "Status Effects",
         "base_cost": 1,
         "upgrade_cost": 1,
         "max_level": 100,
@@ -653,7 +653,7 @@
     "max_level": 100,
     "upgrades": {
       "power": {
-        "title": "Effects",
+        "title": "Status Effects",
         "base_cost": 1,
         "upgrade_cost": 1,
         "max_level": 100,
@@ -666,6 +666,38 @@
                 "StatusPower": { }
               },
               "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "aggravating_bleed": {
+        "title": "Hemorrhagic Cascade",
+        "base_cost": 3,
+        "upgrade_cost": 3,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 5,
+            "upgrade_value": 5,
+            "StatEffect": {
+              "stat": {
+                "SkillConditionalModifier": {
+                  "stat": {
+                    "StatusPower": {
+                      "status_id": "bleed"
+                    }
+                  },
+                  "conditions": [
+                    {
+                      "StatusStacks": {
+                        "status_id": "bleed"
+                      }
+                    }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope": "Global"
             }
           }
         ]
@@ -689,6 +721,29 @@
                       "status_id": "bleed"
                     }
                   }
+                }
+              },
+              "modifier": "Flat",
+              "scope": "Global"
+            }
+          }
+        ]
+      },
+      "bleed_duration": {
+        "title": "Bleed Duration",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 0.2,
+            "upgrade_value": 0.2,
+            "StatEffect": {
+              "stat": {
+                "StatusDuration": {
+                  "status_id": "bleed",
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               "modifier": "Flat",
@@ -724,6 +779,29 @@
                 }
               },
               "modifier": "Flat",
+              "scope": "Global"
+            }
+          }
+        ]
+      },
+      "bleed_faster": {
+        "title": "Hemophilia",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 20,
+        "effects": [
+          {
+            "value": 5,
+            "upgrade_value": 5,
+            "StatEffect": {
+              "stat": {
+                "StatusFaster": {
+                  "status_id": "bleed",
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              "modifier": "More",
               "scope": "Global"
             }
           }

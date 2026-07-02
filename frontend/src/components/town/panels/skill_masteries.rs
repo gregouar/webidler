@@ -461,7 +461,7 @@ fn MasteryUpgradePanel(
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <div class="min-w-0 min-h-0 overflow-y-auto">
+        <div class="w-full h-full mb-4">
             {move || {
                 let Some(skill_id) = selected_skill.get() else {
                     return view! {
