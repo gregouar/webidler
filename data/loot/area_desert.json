@@ -3,6 +3,14 @@
         {
             "item_id": "scarab_circlet",
             "weight": 9999
+        },
+        {
+            "item_id": "scorpion_crossbow",
+            "weight": 9999
+        },
+        {
+            "item_id": "energy_shield",
+            "weight": 9999
         }
     ]
 }
