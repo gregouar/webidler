@@ -10,7 +10,6 @@ use crate::data::{
     skill::BaseSkillSpecs,
     skill_mastery::PlayerSkillMasteries,
     stat_effect::StatEffect,
-    trigger::TriggerEffect,
     values::{AtLeastOne, NonNegative},
 };
 
@@ -46,8 +45,6 @@ pub struct PlayerSpecs {
     pub movement_cooldown: AtLeastOne,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,
-
-    pub computed_status_triggers: HashMap<String, TriggerEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -43,7 +43,6 @@ pub fn format_trigger(
                 trigger.trigger_effect.target == TriggerTarget::Me,
                 Some(&trigger.trigger_effect.modifiers),
                 // effects_map,
-                None,
                 trigger_status_name,
                 trigger_status_value,
             )

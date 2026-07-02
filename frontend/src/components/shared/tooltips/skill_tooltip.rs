@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 
 use itertools::Itertools;
 use leptos::{html::*, prelude::*};
@@ -17,7 +17,7 @@ use shared::data::{
     stat_effect::{
         Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
     },
-    trigger::{TriggerEffect, TriggerEffectModifier},
+    trigger::TriggerEffectModifier,
     values::NonNegative,
 };
 use strum::IntoEnumIterator;
@@ -106,7 +106,6 @@ pub fn SkillTooltip(
     skill_specs: Arc<SkillSpecs>,
     #[prop(default = None)] player_base_skill: Option<Arc<PlayerBaseSkill>>,
     // #[prop(default= None)] effects_map: Option<EffectsMap>,
-    #[prop(default= None)] computed_status_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
     #[prop(default = false)] display_skill_upgrades: bool,
 ) -> impl IntoView {
     let palette = TooltipFramePalette {
@@ -114,7 +113,6 @@ pub fn SkillTooltip(
         inner_border_class: "border-fuchsia-200/10",
         shine_color: "rgba(228,183,255,0.42)",
     };
-
     let targets_lines = skill_specs
         .targets
         .clone()
@@ -123,9 +121,6 @@ pub fn SkillTooltip(
             format_target(
                 target,
                 // effects_map.as_ref(),
-                computed_status_triggers
-                    .map(|computed_status_triggers| computed_status_triggers.read_untracked())
-                    .as_deref(),
             )
         })
         .collect::<Vec<_>>();
@@ -320,7 +315,6 @@ pub fn SkillTooltip(
 fn format_target(
     targets_group: SkillTargetsGroup,
     // effects_map: Option<&EffectsMap>,
-    computed_status_triggers: Option<&HashMap<String, TriggerEffect>>,
 ) -> impl IntoView + use<> {
     let shape = shape_str(targets_group.shape);
 
@@ -351,7 +345,6 @@ fn format_target(
                 targets_group.target_type == TargetType::Me,
                 None,
                 // effects_map,
-                computed_status_triggers,
                 None,
                 None,
             )
@@ -461,7 +454,6 @@ pub fn format_skill_effect(
     self_target: bool,
     modifiers: Option<&[TriggerEffectModifier]>,
     // effects_map: Option<&EffectsMap>,
-    computed_status_triggers: Option<&HashMap<String, TriggerEffect>>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
@@ -572,6 +564,7 @@ pub fn format_skill_effect(
             max_stacks,
             avoidable: _,
             replace_on_value_only: _,
+            computed_status_triggers,
         } => {
             let data_context: DataContext = expect_context();
             let status_specs = data_context
@@ -640,7 +633,7 @@ pub fn format_skill_effect(
                                 1,
                                 modifiers,
                                 // effects_map,
-                                computed_status_triggers,
+                                computed_status_triggers.as_ref(),
                     );
 
                     if status_effects_str.is_none() {

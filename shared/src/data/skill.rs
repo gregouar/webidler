@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
@@ -14,7 +14,7 @@ use crate::{
         stat_effect::{
             Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType,
         },
-        trigger::TriggerSpecs,
+        trigger::{TriggerEffect, TriggerSpecs},
         values::{Cooldown, NonNegative},
     },
     serde_utils::default_1f64,
@@ -276,7 +276,9 @@ pub enum SkillEffectType {
 
         #[serde(default)]
         replace_on_value_only: bool,
-        // TODO? Computed status effects for inherit_trigger_owner?
+
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        computed_status_triggers: Option<HashMap<String, TriggerEffect>>,
     },
     Restore {
         restore_type: RestoreType,

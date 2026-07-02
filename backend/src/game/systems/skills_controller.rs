@@ -435,6 +435,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
             avoidable: _,
             damage_type: _,
             replace_on_value_only,
+            computed_status_triggers: _,
         } => {
             let value = *value.max;
             let duration = *duration.unwrap_or_default().max;
@@ -536,6 +537,7 @@ fn apply_skill_effect_on_target(
             avoidable,
             damage_type,
             replace_on_value_only: _,
+            computed_status_triggers: _,
         } => {
             let value = value.roll_with_seed(seed);
             let duration = duration.unwrap_or_default().roll_with_seed(seed);
