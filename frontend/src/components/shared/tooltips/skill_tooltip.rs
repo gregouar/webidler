@@ -678,7 +678,7 @@ pub fn format_skill_effect(
                         return (None, Some(format_min_max(trigger_modifier_value)));
                     }
                     (
-                        Some(format_trigger_modifier_per(trigger_modifier)),
+                        Some(format_trigger_modifier_per(&trigger_modifier.source)),
                         Some(format!("{:.0}", trigger_modifier.factor)),
                     )
                 })

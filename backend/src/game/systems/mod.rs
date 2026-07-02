@@ -22,3 +22,4 @@ pub mod stashes_controller;
 pub mod stats_updater;
 pub mod statuses_controller;
 pub mod triggers_controller;
+pub mod triggers_updater;

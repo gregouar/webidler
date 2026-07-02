@@ -149,14 +149,11 @@ pub fn format_trigger_modifier(
     })
 }
 
-pub fn format_trigger_modifier_per(modifier: &TriggerEffectModifier) -> String {
-    if let TriggerEffectModifierSource::HitCrit = modifier.source {
+pub fn format_trigger_modifier_per(source: &TriggerEffectModifierSource) -> String {
+    if let TriggerEffectModifierSource::HitCrit = source {
         " on Critical Hit".to_string()
     } else {
-        format!(
-            " per {}",
-            trigger_modifier_source_str(&modifier.source, None)
-        )
+        format!(" per {}", trigger_modifier_source_str(&source, None))
     }
 }
 
@@ -179,7 +176,7 @@ pub fn format_extra_trigger_modifiers(
                 value: modifier.factor,
                 bypass_ignore: false,
             };
-            view! { <li>{format_stat(&stat_effect)} {format_trigger_modifier_per(modifier)}</li> }
+            view! { <li>{format_stat(&stat_effect)} {format_trigger_modifier_per(&modifier.source)}</li> }
                 .into_any()
         })
         .collect();

@@ -28,7 +28,7 @@ use crate::game::{
         event::EventsQueue,
         master_store::{SkillMasteriesStore, StatusesStore},
     },
-    systems::skill_masteries_controller,
+    systems::{skill_masteries_controller, triggers_updater},
 };
 
 use super::{characters_updater, skills_updater};
@@ -170,15 +170,11 @@ pub fn update_player_specs(
     }
 
     for trigger_effect in player_specs.character_specs.triggers.effects_iter_mut() {
-        for skill_effect in trigger_effect.effects.iter_mut() {
-            skills_updater::compute_skill_specs_effect(
-                statuses_store,
-                &trigger_effect.trigger_id,
-                trigger_effect.skill_type,
-                skill_effect,
-                effects.iter(),
-            );
-        }
+        triggers_updater::compute_trigger_specs_effects(
+            statuses_store,
+            trigger_effect,
+            effects.iter(),
+        );
     }
 
     characters_updater::extend_triggers_from_skills_and_statuses(
@@ -400,7 +396,8 @@ fn modify_player_specs(
             | StatType::SkillLevel(_)
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillEffectModifier { .. }
-            | StatType::SkillConditionalModifier { .. } => {}
+            | StatType::SkillConditionalModifier { .. }
+            | StatType::TriggerEffectModifier { .. } => {}
             // Other
             StatType::ItemRarity
             | StatType::ItemLevel

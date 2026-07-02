@@ -18,6 +18,7 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         skill_tooltip::{self, restore_type_str, skill_filter_str, skill_type_str},
+        trigger_tooltip,
     },
     ui::number::format_number,
 };
@@ -627,6 +628,16 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         ),
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::SkillEffectModifier { .. } => "TODO?".into(),
+        StatType::TriggerEffectModifier {
+            stat,
+            source,
+            skill_filter,
+        } => format!(
+            "{}{}{}",
+            format_multiplier_stat_name(&stat),
+            trigger_tooltip::format_trigger_modifier_per(source),
+            skill_filter_str(skill_filter, " with ", true)
+        ),
         StatType::StatConditionalModifier {
             stat,
             conditions,
@@ -1064,6 +1075,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_filter_str(skill_filter, "", false),
             )
         }
+        StatType::TriggerEffectModifier {
+            stat,
+            source,
+            skill_filter,
+        } => format!(
+            "{}{}{}",
+            format_flat_stat(&stat, value),
+            trigger_tooltip::format_trigger_modifier_per(source),
+            skill_filter_str(skill_filter, " with ", true)
+        ),
         StatType::SkillConditionalModifier {
             stat,
             skill_filter,

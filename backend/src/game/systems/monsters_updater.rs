@@ -11,7 +11,10 @@ use shared::{
     },
 };
 
-use crate::game::data::{event::EventsQueue, master_store::StatusesStore};
+use crate::game::{
+    data::{event::EventsQueue, master_store::StatusesStore},
+    systems::triggers_updater,
+};
 
 use super::{characters_updater, skills_updater};
 
@@ -83,15 +86,11 @@ pub fn update_monster_specs(
     }
 
     for trigger_effect in monster_specs.character_specs.triggers.effects_iter_mut() {
-        for skill_effect in trigger_effect.effects.iter_mut() {
-            skills_updater::compute_skill_specs_effect(
-                statuses_store,
-                &trigger_effect.trigger_id,
-                trigger_effect.skill_type,
-                skill_effect,
-                effects.iter(),
-            );
-        }
+        triggers_updater::compute_trigger_specs_effects(
+            statuses_store,
+            trigger_effect,
+            effects.iter(),
+        );
     }
 
     characters_updater::extend_triggers_from_skills_and_statuses(

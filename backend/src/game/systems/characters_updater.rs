@@ -20,7 +20,9 @@ use crate::game::{
         event::{EventsQueue, GameEvent},
         master_store::StatusesStore,
     },
-    systems::{characters_controller::restore_character, skills_updater, stats_updater},
+    systems::{
+        characters_controller::restore_character, skills_updater, stats_updater, triggers_updater,
+    },
 };
 
 use super::statuses_controller;
@@ -452,7 +454,8 @@ fn compute_character_specs(
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. }
-            | StatType::SkillEffectModifier { .. } => {}
+            | StatType::SkillEffectModifier { .. }
+            | StatType::TriggerEffectModifier { .. } => {}
             // Other
             StatType::ItemRarity
             | StatType::ItemLevel
@@ -606,15 +609,11 @@ pub fn extend_triggers_from_skills_and_statuses(
 
                     // Mandatory to compute skill effects even if modifier_effects is empty to
                     // initialize trigger status with base values
-                    for skill_effect in trigger_effect.effects.iter_mut() {
-                        skills_updater::compute_skill_specs_effect(
-                            statuses_store,
-                            &trigger_effect.trigger_id,
-                            trigger_effect.skill_type,
-                            skill_effect,
-                            combined_effects.clone(),
-                        );
-                    }
+                    triggers_updater::compute_trigger_specs_effects(
+                        statuses_store,
+                        &mut trigger_effect,
+                        combined_effects.clone(),
+                    );
 
                     character_specs.triggers.push(
                         trigger_specs.trigger.clone(),

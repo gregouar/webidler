@@ -26,7 +26,7 @@ use shared::data::{
 
 use crate::game::{
     data::master_store::{SkillMasteriesStore, SkillsStore, StatusesStore},
-    systems::{characters_updater, skill_masteries_controller},
+    systems::{characters_updater, skill_masteries_controller, triggers_updater},
 };
 
 pub fn update_skills_states(
@@ -558,7 +558,7 @@ fn compute_skill_modifier_effects<'a>(
         })
 }
 
-pub fn compute_skill_specs_effect<'a>(
+pub fn compute_skill_specs_effects<'a>(
     statuses_store: &StatusesStore,
     skill_id: &String,
     skill_type: SkillType,
@@ -575,7 +575,7 @@ pub fn compute_skill_specs_effect<'a>(
     )
 }
 
-fn compute_skill_specs_effect_with_extra<'a, 'b>(
+pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     statuses_store: &StatusesStore,
     skill_id: &String,
     skill_type: SkillType,
@@ -802,7 +802,7 @@ fn compute_skill_specs_effect_with_extra<'a, 'b>(
             }
         }
 
-        compute_skill_specs_effect(
+        compute_skill_specs_effects(
             statuses_store,
             skill_id,
             skill_type,
@@ -849,16 +849,12 @@ fn compute_status_triggers_for_skill_effect<'a, 'b>(
         } = &status_effect.status_effect_type
         {
             let mut trigger_effect = trigger_specs.trigger_effect.clone();
-            for skill_effect in trigger_effect.effects.iter_mut() {
-                compute_skill_specs_effect_with_extra(
-                    statuses_store,
-                    &trigger_effect.trigger_id,
-                    trigger_effect.skill_type,
-                    skill_effect,
-                    effects.clone(),
-                    extra_effects.clone(),
-                );
-            }
+            triggers_updater::compute_trigger_specs_effects_with_extra(
+                statuses_store,
+                &mut trigger_effect,
+                effects.clone(),
+                extra_effects.clone(),
+            );
             result.insert(trigger_effect.trigger_id.clone(), trigger_effect);
         }
     }

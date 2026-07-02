@@ -164,7 +164,7 @@ pub struct TriggerEffectModifier {
     pub source: TriggerEffectModifierSource,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
@@ -188,7 +188,6 @@ pub enum TriggerEffectModifierSource {
     },
     TriggerStatusDuration,
     TriggerStatusValue,
-    // TODO: Move to conditional modifiers?
     HitCrit,
 }
 

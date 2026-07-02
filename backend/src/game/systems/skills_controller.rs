@@ -399,7 +399,7 @@ fn apply_conditional_modifiers(
 ) -> SkillEffect {
     let mut new_skill_effect = skill_effect.clone();
 
-    skills_updater::compute_skill_specs_effect(
+    skills_updater::compute_skill_specs_effects(
         statuses_store,
         skill_id,
         skill_type,

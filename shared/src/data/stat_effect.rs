@@ -11,6 +11,7 @@ use crate::{
         item::{SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
         skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
+        trigger::TriggerEffectModifierSource,
         values::NonNegative,
     },
     serde_utils::is_false,
@@ -296,6 +297,12 @@ pub enum StatType {
         unblockable: Option<bool>,
         #[serde(default)]
         avoidable: Option<bool>,
+    },
+    TriggerEffectModifier {
+        stat: Box<StatType>,
+        source: TriggerEffectModifierSource,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
     },
     GoldFind,
     PowerLevel,

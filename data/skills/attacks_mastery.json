@@ -704,11 +704,27 @@
         "max_level": 1,
         "effects": [
           {
-            "value": 1,
+            "value": 10000,
             "upgrade_value": 0,
-            "ReplaceStatusId": {
-              "old_status_id": "sharpen_weapon",
-              "new_status_id": "sharpen_weapon_crit"
+            "StatEffect": {
+              "stat": {
+                "TriggerEffectModifier": {
+                  "stat": {
+                    "SuccessChance": {
+                      "effect_type": {
+                        "ApplyStatus": {
+                          "status_id": "bleed"
+                        }
+                      }
+                    }
+                  },
+                  "source": {
+                    "HitCrit": null
+                  }
+                }
+              },
+              "modifier": "Flat",
+              "scope": "Global"
             }
           }
         ]
