@@ -55,7 +55,7 @@ fn apply_trigger_effect_modifiers<'a>(
             trigger_effect.modifiers.push(TriggerEffectModifier {
                 stat: *stat.clone(),
                 modifier: effect.modifier,
-                factor: effect.value * 0.01,
+                factor: effect.value,
                 source: source.clone(),
             });
         }

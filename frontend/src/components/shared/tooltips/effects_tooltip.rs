@@ -634,7 +634,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => format!(
             "{}{}{}",
-            format_multiplier_stat_name(&stat),
+            format_multiplier_stat_name(stat),
             trigger_tooltip::format_trigger_modifier_per(source),
             skill_filter_str(skill_filter, " with ", true)
         ),
@@ -1081,7 +1081,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter,
         } => format!(
             "{}{}{}",
-            format_flat_stat(&stat, value),
+            format_flat_stat(stat, value),
             trigger_tooltip::format_trigger_modifier_per(source),
             skill_filter_str(skill_filter, " with ", true)
         ),

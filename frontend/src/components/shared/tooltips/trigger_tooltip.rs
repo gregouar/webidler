@@ -153,7 +153,7 @@ pub fn format_trigger_modifier_per(source: &TriggerEffectModifierSource) -> Stri
     if let TriggerEffectModifierSource::HitCrit = source {
         " on Critical Hit".to_string()
     } else {
-        format!(" per {}", trigger_modifier_source_str(&source, None))
+        format!(" per {}", trigger_modifier_source_str(source, None))
     }
 }
 

@@ -698,13 +698,13 @@
         ]
       },
       "bleed_crit_chance": {
-        "title": "Butcher Technique",
+        "title": "Butcher's Technique",
         "base_cost": 5,
         "upgrade_cost": 0,
         "max_level": 1,
         "effects": [
           {
-            "value": 10000,
+            "value": 100,
             "upgrade_value": 0,
             "StatEffect": {
               "stat": {
