@@ -2,7 +2,7 @@ use std::time::Duration;
 use strum::IntoEnumIterator;
 
 use shared::{
-    constants::{MAX_BLOCK, MAX_DAMAGE_RESISTANCE, MAX_EVADE},
+    constants::{MAX_BLOCK, MAX_EVADE},
     data::{
         area::AreaThreat,
         character::{CharacterAttrs, CharacterId, CharacterState},
@@ -186,17 +186,17 @@ pub fn update_character_specs(
             .set_bounds(Some(0.0), Some(MAX_EVADE));
     }
 
-    for skill_type in SkillType::iter() {
-        for damage_type in DamageType::iter() {
-            character_specs
-                .character_attrs
-                .damage_resistance
-                .entry((skill_type, damage_type))
-                .or_default()
-                .base_mut()
-                .set_bounds(None, Some(MAX_DAMAGE_RESISTANCE));
-        }
-    }
+    // for skill_type in SkillType::iter() {
+    //     for damage_type in DamageType::iter() {
+    //         character_specs
+    //             .character_attrs
+    //             .da
+    //             .entry((skill_type, damage_type))
+    //             .or_default()
+    //             .base_mut()
+    //             .set_bounds(None, Some(MAX_DAMAGE_RESISTANCE));
+    //     }
+    // }
 
     effects.extend(statuses_controller::generate_effects_from_statuses(
         statuses_store,
@@ -325,7 +325,7 @@ fn compute_character_specs(
                 }
             },
             StatType::EvadeDamageTaken => character_attrs.evade_damage.apply_effect(effect),
-            StatType::DamageResistance {
+            StatType::DamageTaken {
                 skill_type,
                 damage_type,
             } => {
@@ -342,9 +342,9 @@ fn compute_character_specs(
                 for &skill in &skill_types {
                     for &damage in &damage_types {
                         character_attrs
-                            .damage_resistance
+                            .damage_taken
                             .entry((skill, damage))
-                            .or_default()
+                            .or_insert(100.0.into())
                             .apply_effect(effect);
                     }
                 }

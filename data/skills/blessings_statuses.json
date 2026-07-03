@@ -78,11 +78,12 @@
                 "replace_on_value_only": true,
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": { }
+                        "DamageTaken": { }
                     },
-                    "modifier": "Flat"
+                    "modifier": "More",
+                    "debuff": true
                 },
-                "value": 15,
+                "value": 17.6,
                 "modifier": "Flat"
             },
             {

@@ -17,12 +17,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "damage_type": "Fire"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 50,
                 "modifier": "Percent"

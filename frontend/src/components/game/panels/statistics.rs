@@ -437,17 +437,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 {move || {
                                     DamageType::iter()
                                         .filter_map(|damage_type| {
-                                            let value = -game_context
+                                            let value = game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
                                                 .character_attrs
-                                                .damage_resistance
+                                                .damage_taken
                                                 .get(&(SkillType::Attack, damage_type))
-                                                .copied()
-                                                .unwrap_or_default()
-                                                .get();
-                                            (value != 0.0)
+                                                .map(|x| **x)
+                                                .unwrap_or(100.0);
+                                            (value != 100.0)
                                                 .then(|| {
                                                     view! {
                                                         <Stat
@@ -455,13 +454,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                                 "{}Damage Taken",
                                                                 effects_tooltip::damage_type_str(Some(damage_type)),
                                                             )
-                                                            value=move || {
-                                                                format!(
-                                                                    "{}{}%",
-                                                                    if value >= 0.0 { "+" } else { "-" },
-                                                                    format_number(value.abs()),
-                                                                )
-                                                            }
+                                                            value=move || { format!("{}%", format_number(value.abs())) }
                                                         />
                                                     }
                                                 })

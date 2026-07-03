@@ -587,11 +587,11 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 skill_type_str(*skill_type)
             )
         }
-        StatType::DamageResistance {
+        StatType::DamageTaken {
             skill_type,
             damage_type,
         } => format!(
-            "{}{}Damage Resistance",
+            "{}{}Damage Taken",
             damage_type_str(*damage_type),
             skill_type_str(*skill_type)
         ),
@@ -916,25 +916,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             restore_type_str(Some(*restore_type)),
             skill_type_str(*skill_type)
         ),
-        StatType::DamageResistance {
+        StatType::DamageTaken {
             skill_type,
             damage_type,
         } => {
-            if value.unwrap_or_default() >= 0.0 {
-                format!(
-                    "Take {}% Less {}{}Damage",
-                    format_flat_number(value, false),
-                    damage_type_str(*damage_type),
-                    skill_type_str(*skill_type)
-                )
-            } else {
-                format!(
-                    "Take {}% Increased {}{}Damage",
-                    format_flat_number(value.map(|v| -v), false),
-                    damage_type_str(*damage_type),
-                    skill_type_str(*skill_type)
-                )
-            }
+            format!(
+                "{} extra {}{}Damage Taken",
+                format_flat_number(value, false),
+                damage_type_str(*damage_type),
+                skill_type_str(*skill_type)
+            )
         }
         StatType::Lucky {
             skill_filter,

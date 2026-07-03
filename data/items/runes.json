@@ -4,14 +4,14 @@
     "icon": "items/runes/rune.webp",
     "description": null,
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
     "min_area_level": 50,
     "rarity": "Magic",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -19,22 +19,22 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_root": {
     "name": "Anchor Rune",
     "icon": "items/runes/rune_root.webp",
     "description": null,
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
     "min_area_level": 150,
     "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
+    "affixes": [ ],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -42,15 +42,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_power": {
     "name": "Power Rune",
     "icon": "items/runes/rune_power.webp",
     "description": null,
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -73,7 +73,7 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -81,15 +81,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_divine": {
     "name": "Divine Rune",
     "icon": "items/runes/rune_divine.webp",
     "description": null,
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -112,7 +112,7 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -120,15 +120,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_gilded": {
     "name": "Gilded Covenant",
     "icon": "items/runes/rune_gilded.webp",
     "description": "Gold answers every prayer... eventually.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -146,7 +146,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -154,15 +154,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_berserker": {
     "name": "Mark of the Berserker",
     "icon": "items/runes/rune_berserker.webp",
     "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -171,14 +171,14 @@
     "affixes": [
       {
         "stat": {
-          "DamageResistance": {
+          "DamageTaken": {
             "skill_type": null,
             "damage_type": null
           }
         },
-        "modifier": "Flat",
+        "modifier": "More",
         "scope": "Global",
-        "value": -25.0,
+        "value": 33.3,
         "ignore_quality": true
       }
     ],
@@ -193,12 +193,12 @@
           "is_triggered": null,
           "damage_type": null,
           "skill_ids": null,
-          "conditions": []
+          "conditions": [ ]
         },
         "description": null,
         "trigger_id": "rune_berserker",
         "target": "Me",
-        "modifiers": [],
+        "modifiers": [ ],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -221,8 +221,8 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects": [ ],
+            "conditional_modifiers": [ ],
             "independent_application": false
           }
         ]
@@ -235,15 +235,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_storm_average": {
     "name": "Flux Stabilizer",
     "icon": "items/runes/rune_flux_stabilizer.webp",
     "description": "Tames the wildest storms, binding chaos into order.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -296,7 +296,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -304,21 +304,21 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_poison_fire": {
     "name": "Caustic Convergence",
     "icon": "items/runes/rune_poison_fire.webp",
     "description": "The alchemists learned that decay has a temperature.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [],
+    "affixes": [ ],
     "triggers": [
       {
         "OnApplyStatus": {
@@ -422,7 +422,7 @@
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers": [ ],
             "independent_application": false
           }
         ]
@@ -435,15 +435,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_mana_damage": {
     "name": "Mnemonic Singularity",
     "icon": "items/runes/rune_mana_damage.webp",
     "description": "A mind dense enough bends reality.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -483,7 +483,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -491,21 +491,21 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_storm_poison": {
     "name": "Voltrach Contraption",
     "icon": "items/runes/rune_storm_poison.webp",
     "description": "Few survived Voltrach's experiments. Fewer understood them.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [],
+    "affixes": [ ],
     "triggers": [
       {
         "OnHit": {
@@ -517,7 +517,7 @@
           "is_triggered": null,
           "damage_type": null,
           "skill_ids": null,
-          "conditions": []
+          "conditions": [ ]
         },
         "description": null,
         "trigger_id": "rune_storm_poison",
@@ -573,7 +573,7 @@
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers": [ ],
             "independent_application": false
           }
         ]
@@ -586,15 +586,15 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   },
   "rune_phys_fire": {
     "name": "Heart of the Pyre",
     "icon": "items/runes/rune_phys_fire.webp",
     "description": "The heart is weighed not for truth, but for fuel.",
     "slot": null,
-    "extra_slots": [],
+    "extra_slots": [ ],
     "categories": [
       "Rune"
     ],
@@ -661,7 +661,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [ ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -669,7 +669,7 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [ ],
+    "upgrade_effects": [ ]
   }
 }

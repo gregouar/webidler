@@ -9,13 +9,13 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Physical"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100.0,
                 "modifier": "Percent"
@@ -23,13 +23,13 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Poison"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100.0,
                 "modifier": "Percent"
@@ -37,13 +37,13 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Storm"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100.0,
                 "modifier": "Percent"
@@ -60,7 +60,7 @@
                     "modifier": "Increased",
                     "debuff": true
                 },
-                "value": 10.0,
+                "value": 11.0,
                 "modifier": "Flat"
             }
         ]
@@ -84,13 +84,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
-                            "skill_type": null,
-                            "damage_type": "Physical"
+                        "DamageTaken": {
+                            "skill_type": null
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 5.0,
                 "modifier": "Flat"

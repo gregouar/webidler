@@ -363,7 +363,7 @@ fn modify_player_specs(
             | StatType::BlockDamageTaken
             | StatType::Evade(_)
             | StatType::EvadeDamageTaken
-            | StatType::DamageResistance { .. }
+            | StatType::DamageTaken { .. }
             | StatType::StatusResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:

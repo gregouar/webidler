@@ -33,7 +33,7 @@ pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
 pub const ARMOR_FACTOR: f64 = 100.0;
 pub const MAX_BLOCK: f32 = 80.0;
 pub const MAX_EVADE: f32 = 80.0;
-pub const MAX_DAMAGE_RESISTANCE: f64 = 90.0;
+// pub const MAX_DAMAGE_RESISTANCE: f64 = 90.0;
 pub const MAX_SKILL_LEVEL: u16 = 500;
 pub const MAX_AREA_LEVEL: u16 = 9999;
 

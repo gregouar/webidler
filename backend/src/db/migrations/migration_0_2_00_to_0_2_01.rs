@@ -312,6 +312,23 @@ impl From<OldStatEffect> for StatEffect {
             };
         }
 
+        if let OldStatType::DamageResistance {
+            skill_type,
+            damage_type,
+        } = value.stat
+            && value.modifier == Modifier::More
+        {
+            return Self {
+                stat: StatType::DamageTaken {
+                    skill_type,
+                    damage_type,
+                },
+                modifier: Modifier::More,
+                value: -value.value,
+                bypass_ignore: value.bypass_ignore,
+            };
+        }
+
         Self {
             stat: value.stat.into(),
             modifier: value.modifier,
@@ -460,13 +477,7 @@ impl From<OldStatType> for StatType {
                 skill_filter: skill_filter.into(),
             },
             OldStatType::Armor(damage_type) => Armor(damage_type),
-            OldStatType::DamageResistance {
-                skill_type,
-                damage_type,
-            } => DamageResistance {
-                skill_type,
-                damage_type,
-            },
+            OldStatType::DamageResistance { .. } => todo!(),
             OldStatType::TakeFromManaBeforeLife => TakeFromManaBeforeLife,
             OldStatType::Block(skill_type) => Block(skill_type),
             OldStatType::BlockDamageTaken => BlockDamageTaken,

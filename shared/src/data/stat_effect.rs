@@ -171,7 +171,7 @@ pub enum StatType {
     ItemLevel,
     SkillLevel(#[serde(default)] StatSkillFilter),
     Armor(Option<ArmorStatType>),
-    DamageResistance {
+    DamageTaken {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
@@ -333,11 +333,11 @@ impl Matchable for StatType {
                     && compare_options(is_hit, is_hit_2)
             }
             (
-                DamageResistance {
+                DamageTaken {
                     skill_type,
                     damage_type,
                 },
-                DamageResistance {
+                DamageTaken {
                     skill_type: skill_type_2,
                     damage_type: damage_type_2,
                 },

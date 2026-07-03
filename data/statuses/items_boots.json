@@ -129,13 +129,13 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": null
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 1000,
                 "modifier": "Flat"

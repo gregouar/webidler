@@ -71,7 +71,10 @@
         "effects": [
             {
                 "StatModifier": {
-                    "stat": { "DamageResistance": { } }
+                    "stat": {
+                        "DamageTaken": { }
+                    },
+                    "debuff": true
                 },
                 "value": 100,
                 "modifier": "Percent"

@@ -116,8 +116,10 @@ pub struct CharacterAttrs {
     #[serde(default)]
     pub stun_lockout: ModifiableValue<NonNegative>,
 
+    // #[serde(default)]
+    // pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
     #[serde(default)]
-    pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
+    pub damage_taken: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -58,12 +58,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": { }
+                        "DamageTaken": { }
                     },
-                    "modifier": "Flat",
-                    "debuff": false
+                    "modifier": "More",
+                    "debuff": true
                 },
-                "value": 50,
+                "value": 100,
                 "modifier": "Flat"
             }
         ]

@@ -10,13 +10,13 @@
                 "replace_on_value_only": true,
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Storm"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"
@@ -137,13 +137,13 @@
                 "replace_on_value_only": true,
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Fire"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"
@@ -233,13 +233,13 @@
                 "replace_on_value_only": true,
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Physical"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"
@@ -304,13 +304,13 @@
                 "replace_on_value_only": true,
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "skill_type": null,
                             "damage_type": "Poison"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"

@@ -143,15 +143,12 @@ fn compute_damage(
     skill_type: SkillType,
     is_blocked: bool,
 ) -> NonNegative {
-    let resistance_factor = (1.0
-        - character_attrs
-            .damage_resistance
-            .get(&(skill_type, damage_type))
-            .cloned()
-            .unwrap_or_default()
-            .get()
-            * 0.01)
-        .max(0.0);
+    let damage_taken = character_attrs
+        .damage_taken
+        .get(&(skill_type, damage_type))
+        .map(|x| **x)
+        .unwrap_or(100.0)
+        * 0.01;
 
     let armor_factor = (1.0
         - computations::diminishing(
@@ -170,7 +167,7 @@ fn compute_damage(
         1.0
     };
 
-    (resistance_factor * armor_factor * block_factor * amount.get()).into()
+    (damage_taken * armor_factor * block_factor * amount.get()).into()
 }
 
 pub fn restore_character(

@@ -23,12 +23,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "damage_type": "Physical"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 10,
                 "modifier": "Flat"

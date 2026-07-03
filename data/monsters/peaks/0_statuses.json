@@ -82,12 +82,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": { }
+                        "DamageTaken": { }
                     },
-                    "modifier": "Flat",
-                    "debuff": false
+                    "modifier": "More",
+                    "debuff": true
                 },
-                "value": 30,
+                "value": 42.8,
                 "modifier": "Flat"
             }
         ]
@@ -102,12 +102,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "damage_type": "Physical"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"
@@ -115,12 +115,12 @@
             {
                 "StatModifier": {
                     "stat": {
-                        "DamageResistance": {
+                        "DamageTaken": {
                             "damage_type": "Storm"
                         }
                     },
-                    "modifier": "Flat",
-                    "debuff": true
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"
