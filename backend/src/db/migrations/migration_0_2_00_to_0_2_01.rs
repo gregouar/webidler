@@ -316,15 +316,20 @@ impl From<OldStatEffect> for StatEffect {
             skill_type,
             damage_type,
         } = value.stat
-            && value.modifier == Modifier::More
+            && value.modifier == Modifier::Flat
         {
+            let value_value = if value.value < 0.0 {
+                -value.value
+            } else {
+                100.0 / (1.0 - value.value * 0.01) - 100.0
+            };
             return Self {
                 stat: StatType::DamageTaken {
                     skill_type,
                     damage_type,
                 },
                 modifier: Modifier::More,
-                value: -value.value,
+                value: -value_value,
                 bypass_ignore: value.bypass_ignore,
             };
         }

@@ -420,7 +420,7 @@
     "upgrade_effects": [ ]
   },
   "brigandine_unique": {
-    "name": "Crustback Bulwark",
+    "name": "Crustback",
     "icon": "items/body_armors/crab_armor.webp",
     "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
     "slot": "Body",
