@@ -55,6 +55,8 @@ pub enum SkillMasteryUpgradeEffectType {
         skill_effect: Box<SkillEffect>,
         #[serde(default)]
         target_index: usize,
+        #[serde(default)]
+        affect_triggers: bool,
     },
     ReplaceStatusId {
         // TODO: Turn into StatEffect instead?

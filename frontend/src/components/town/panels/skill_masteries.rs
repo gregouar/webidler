@@ -880,6 +880,7 @@ fn format_mastery_upgrade_effect(
         SkillMasteryUpgradeEffectType::SkillEffect {
             skill_effect,
             target_index: _,
+            affect_triggers:_,
         } => {
             Some(
                 skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None)

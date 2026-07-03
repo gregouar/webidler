@@ -344,37 +344,6 @@
             }
           }
         ]
-      },
-      {
-        "trigger_id": "retaliate_evade",
-        "skill_type": "Attack",
-        "trigger_propagate": true,
-        "OnReceiveStatus": {
-          "skill_type": null,
-          "is_triggered": null,
-          "is_evaded": true
-        },
-        "target": "Source",
-        "effects": [
-          {
-            "FlatDamage": {
-              "damage": {
-                "Physical": [
-                  5,
-                  10
-                ]
-              },
-              "crit_chance": 5,
-              "crit_damage": 100
-            }
-          },
-          {
-            "ApplyStatus": {
-              "status_id": "poison",
-              "value": 0
-            }
-          }
-        ]
       }
     ]
   },

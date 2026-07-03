@@ -829,6 +829,90 @@
             }
           }
         ]
+      },
+      "evade": {
+        "title": "Distracting Move",
+        "base_cost": 5,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "Trigger": {
+              "trigger_id": "retaliate_evade",
+              "skill_type": "Attack",
+              "trigger_propagate": true,
+              "OnReceiveStatus": {
+                "skill_type": null,
+                "is_triggered": null,
+                "is_evaded": true
+              },
+              "target": "Source",
+              "effects": [
+                {
+                  "FlatDamage": {
+                    "damage": {
+                      "Physical": [
+                        5,
+                        10
+                      ]
+                    },
+                    "crit_chance": 5,
+                    "crit_damage": 100
+                  }
+                },
+                {
+                  "ApplyStatus": {
+                    "status_id": "poison",
+                    "value": 0
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "unblockable": {
+        "title": "Implacable Justice",
+        "base_cost": 5,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillEffectModifier": {
+                  "skill_id": "retaliate",
+                  "unblockable": true
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "vulnerability": {
+        "title": "Resentment",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillEffect": {
+              "ApplyStatus": {
+                "status_id": "vulnerability_damage",
+                "value": 100
+              },
+              "independent_application": true,
+              "affect_triggers": true
+            }
+          }
+        ]
       }
     }
   },
@@ -852,6 +936,27 @@
             }
           }
         ]
+      },
+      "shockwave": {
+        "title": "Shockwave",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillTargetModifier": {
+                  "skill_id": "shield_bash",
+                  "shape": "Horizontal2"
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
       }
     }
   },
@@ -872,6 +977,31 @@
                 "Damage": { }
               },
               "modifier": "More"
+            }
+          }
+        ]
+      },
+      "repeat": {
+        "title": "Third Time is a Charm",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillTargetModifier": {
+                  "skill_id": "double_strike",
+                  "repeat": {
+                    "min_value": 2,
+                    "max_value": 2,
+                    "target": "Same"
+                  }
+                }
+              },
+              "modifier": "Flat"
             }
           }
         ]

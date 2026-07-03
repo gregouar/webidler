@@ -136,9 +136,16 @@ pub fn apply_skill_mastery(
             SkillMasteryUpgradeEffectType::SkillEffect {
                 skill_effect,
                 target_index,
+                affect_triggers,
             } => {
-                if let Some(target_group) = skill_specs.targets.get_mut(*target_index) {
-                    target_group.effects.push((**skill_effect).clone());
+                if *affect_triggers {
+                    for trigger in skill_specs.triggers.iter_mut() {
+                        trigger.trigger_effect.effects.push((**skill_effect).clone());
+                    }
+                } else {
+                    if let Some(target_group) = skill_specs.targets.get_mut(*target_index) {
+                        target_group.effects.push((**skill_effect).clone());
+                    }
                 }
             }
             SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => {

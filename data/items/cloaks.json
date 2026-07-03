@@ -1244,7 +1244,7 @@
     "upgrade_effects": []
   },
   "desert_quiver": {
-    "name": "Whispers",
+    "name": "Sandwhispers",
     "icon": "items/cloaks/desert_quiver.webp",
     "description": null,
     "slot": "Accessory",
