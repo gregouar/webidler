@@ -142,19 +142,28 @@ pub fn SkillTooltip(
         })
         .unwrap_or_default();
 
-    let modifier_lines: Vec<_> = player_base_skill
+    let mut modifier_lines: Vec<_> = player_base_skill
         .as_ref()
         .map(|player_base_skill| {
             player_base_skill
                 .base_skill_specs
                 .modifier_effects
-                .clone()
-                .into_iter()
+                .iter()
                 .filter(|skill_modifier| !skill_modifier.hidden)
+                .cloned()
                 .map(format_skill_modifier)
-                .collect()
+                .collect::<Vec<_>>()
         })
         .unwrap_or_default();
+
+    modifier_lines.extend(
+        skill_specs
+            .extra_modifier_effects
+            .iter()
+            .filter(|skill_modifier| !skill_modifier.hidden)
+            .cloned()
+            .map(format_skill_modifier),
+    );
 
     let required_item = player_base_skill.as_ref().and_then(|player_base_skill| {
         player_base_skill
@@ -379,6 +388,7 @@ pub fn shape_str(shape: SkillShape) -> &'static str {
         SkillShape::Square4 => "Area 2x2",
         SkillShape::All => "All",
         SkillShape::Contact => "Contact",
+        SkillShape::ContactInclusive => "Area Contact",
     }
 }
 

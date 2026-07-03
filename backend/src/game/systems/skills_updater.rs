@@ -11,8 +11,9 @@ use shared::data::{
     modifier::{BaseModifiableValue, Modifier},
     player::PlayerInventory,
     skill::{
-        BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffectSource, RepeatedSkillEffect,
-        SkillEffect, SkillEffectType, SkillSpecs, SkillState, SkillTargetsGroup, SkillType,
+        BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource,
+        RepeatedSkillEffect, SkillEffect, SkillEffectType, SkillSpecs, SkillState,
+        SkillTargetsGroup, SkillType,
     },
     skill_mastery::{
         PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState, SkillMasteryUpgradeEffectType,
@@ -112,6 +113,7 @@ pub fn update_skill_specs(
         triggers: base_skill_specs.triggers.clone(),
         level_modifier,
         usable: true,
+        extra_modifier_effects: Default::default(),
     };
 
     if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery {
@@ -129,7 +131,12 @@ pub fn update_skill_specs(
             upgrade_level.saturating_add(skill_specs.level_modifier),
         ))
         .chain(std::iter::once(compute_skill_modifier_effects(
-            base_skill_specs,
+            &base_skill_specs.modifier_effects,
+            character_attrs,
+            inventory,
+        )))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &skill_specs.extra_modifier_effects,
             character_attrs,
             inventory,
         ))),
@@ -431,12 +438,11 @@ pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u
 }
 
 fn compute_skill_modifier_effects<'a>(
-    base_skill_specs: &'a BaseSkillSpecs,
+    modifier_effects: &[ModifierEffect],
     character_attrs: &CharacterAttrs,
     inventory: Option<&'a PlayerInventory>,
 ) -> EffectsMap {
-    let item_sources: Vec<_> = base_skill_specs
-        .modifier_effects
+    let item_sources: Vec<_> = modifier_effects
         .iter()
         .filter_map(|modifier_effect| match &modifier_effect.source {
             ModifierEffectSource::ItemStats {
@@ -528,8 +534,7 @@ fn compute_skill_modifier_effects<'a>(
         })
         .collect();
 
-    let non_item_sources: Vec<_> = base_skill_specs
-        .modifier_effects
+    let non_item_sources: Vec<_> = modifier_effects
         .iter()
         .filter_map(|me| match &me.source {
             ModifierEffectSource::ItemStats { .. } => None,

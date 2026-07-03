@@ -151,6 +151,9 @@ pub fn apply_skill_mastery(
             SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => {
                 skill_specs.triggers.push(trigger_specs.clone());
             }
+            SkillMasteryUpgradeEffectType::SkillModifierEffect { modifier_effect } => {
+                skill_specs.extra_modifier_effects.push(modifier_effect.clone());
+            }
             SkillMasteryUpgradeEffectType::ReplaceStatusId {
                 old_status_id,
                 new_status_id,

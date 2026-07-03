@@ -887,6 +887,7 @@ fn format_mastery_upgrade_effect(
                     .into_any(),
             )
         },
+        SkillMasteryUpgradeEffectType::SkillModifierEffect { modifier_effect } => Some(skill_tooltip::format_skill_modifier(modifier_effect.clone()).into_any()),
         SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => Some(
             trigger_tooltip::format_trigger(trigger_specs.clone(), false, None, None).into_any(),
         ),

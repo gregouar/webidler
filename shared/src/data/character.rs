@@ -10,7 +10,7 @@ use crate::data::{
     skill::{DamageType, RepeatedSkillEffect, SkillType},
     stat_effect::StatEffect,
     trigger::TriggersMap,
-    values::{AtLeastOne, BoundedValue, NonNegative, Percent},
+    values::{AtLeastOne, NonNegative, Percent},
 };
 
 use super::character_status::StatusMap;

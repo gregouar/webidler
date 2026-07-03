@@ -89,8 +89,8 @@ pub struct SkillSpecs {
 
     pub level_modifier: u16,
 
-    #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+    pub extra_modifier_effects: Vec<ModifierEffect>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -336,6 +336,7 @@ pub enum SkillShape {
     Square4,
     All,
     Contact,
+    ContactInclusive,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

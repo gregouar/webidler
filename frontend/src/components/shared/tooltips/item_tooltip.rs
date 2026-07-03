@@ -470,6 +470,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 SkillShape::Square4 => ", 2x2 area",
                 SkillShape::All => ", all",
                 SkillShape::Contact => ", contact",
+                SkillShape::ContactInclusive => ", contact area",
             };
 
             let range = match specs.range {

@@ -939,7 +939,7 @@
       },
       "shockwave": {
         "title": "Shockwave",
-        "base_cost": 10,
+        "base_cost": 5,
         "upgrade_cost": 0,
         "max_level": 1,
         "effects": [
@@ -954,6 +954,37 @@
                 }
               },
               "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "weapon_crit": {
+        "title": "Perfect Technique",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillModifierEffect": {
+              "effects": [
+                {
+                  "stat": {
+                    "CritChance": {
+                    }
+                  },
+                  "modifier": "Flat",
+                  "value": 1
+                }
+              ],
+              "source": {
+                "ItemStats": {
+                  "slot": "Weapon",
+                  "item_stats": "CritChance"
+                }
+              },
+              "factor": 0.5
             }
           }
         ]
