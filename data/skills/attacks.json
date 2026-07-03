@@ -398,26 +398,6 @@
           }
         },
         "factor": 0.1
-      },
-      {
-        "effects": [
-          {
-            "stat": {
-              "Speed": {
-                "skill_type": "Attack"
-              }
-            },
-            "modifier": "More",
-            "value": 1
-          }
-        ],
-        "source": {
-          "ItemStats": {
-            "slot": "Shield",
-            "item_stats": "Block"
-          }
-        },
-        "factor": 1
       }
     ],
     "targets": [

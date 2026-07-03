@@ -388,7 +388,7 @@ pub fn shape_str(shape: SkillShape) -> &'static str {
         SkillShape::Square4 => "Area 2x2",
         SkillShape::All => "All",
         SkillShape::Contact => "Contact",
-        SkillShape::ContactInclusive => "Area Contact",
+        SkillShape::ContactInclusive => "Contact Area",
     }
 }
 
@@ -872,7 +872,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
             item_stats,
         } => {
             format!(
-                "Per {}{} on equipped {}{}:",
+                "Per {}{} on equipped {}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
                     ItemStatsSource::Armor => " Armor".to_string(),
@@ -891,13 +891,15 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                     ItemStatsSource::Target => " Target".into(),
                     ItemStatsSource::Equipped => " Equipped".into(),
                 },
-                match required_item.category {
-                    Some(category) => item_tooltip::item_category_str(category),
-                    None => "",
-                },
-                match required_item.slot {
-                    Some(slot) => item_tooltip::item_slot_str(slot),
-                    None => "Item",
+                match (required_item.category, required_item.slot) {
+                    (Some(category), Some(slot)) => format!(
+                        "{} in {}",
+                        item_tooltip::item_category_str(category),
+                        item_tooltip::item_slot_str(slot)
+                    ),
+                    (Some(category), None) => item_tooltip::item_category_str(category).into(),
+                    (None, Some(slot)) => item_tooltip::item_slot_str(slot).into(),
+                    (None, None) => "Item".into(),
                 }
             )
         }
