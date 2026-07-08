@@ -1051,6 +1051,24 @@
           }
         ]
       },
+      "crit_damage": {
+        "title": "Critical Hit Damage",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritDamage": { }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
       "block_speed": {
         "title": "Quick Reflexes",
         "base_cost": 5,
@@ -1079,6 +1097,26 @@
                 }
               },
               "factor": 1
+            }
+          }
+        ]
+      },
+      "legionnaire": {
+        "title": "Legionnaire",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 20,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 1,
+            "StatEffect": {
+              "stat": {
+                "StatusStacks": {
+                  "status_id": "legionnaire_stance"
+                }
+              },
+              "modifier": "Flat"
             }
           }
         ]
