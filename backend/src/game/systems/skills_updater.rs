@@ -89,9 +89,6 @@ pub fn update_skill_specs(
             if let StatType::SkillLevel(skill_filter) = &e.stat
                 && skill_filter.is_match_with_skill(base_skill_specs.skill_type, &skill_id)
                 && e.modifier == Modifier::Flat
-            // if e.modifier == Modifier::Flat
-            //     && e.stat
-            //         .is_match(&StatType::SkillLevel(Some(skill_specs.base.skill_type)))
             {
                 e.value as u16
             } else {

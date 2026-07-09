@@ -12,7 +12,7 @@
                 "DamageOverTime": {
                     "damage_type": "Fire"
                 },
-                "value": 100,
+                "value": 5,
                 "modifier": "Percent"
             }
         ]
@@ -29,7 +29,42 @@
                 "DamageOverTime": {
                     "damage_type": "Fire"
                 },
-                "value": 100,
+                "value": 20,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "unrighteous_fire": {
+        "name": "Blasphemous Poison",
+        "icon": "skills/righteous_fire.svg",
+        "debuff": true,
+        "damage_type": "Poison",
+        "avoidable": true,
+        "duration": 2,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Poison"
+                },
+                "value": 5,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "unrighteous_fire_self": {
+        "name": "Self-Loathing Poison",
+        "icon": "skills/righteous_fire.svg",
+        "debuff": true,
+        "damage_type": "Poison",
+        "duration": 2,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Poison"
+                },
+                "value": 20,
                 "modifier": "Percent"
             }
         ]

@@ -68,6 +68,8 @@ pub struct SkillUpgradeEffect {
     pub stat_effect: StatEffect,
     #[serde(default)]
     pub description: Option<String>,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

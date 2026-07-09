@@ -223,12 +223,33 @@
       {
         "stat": {
           "StatusPower": {
+            "status_id": "unrighteous_fire"
+          }
+        },
+        "modifier": "More",
+        "value": 30,
+        "hidden": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
             "status_id": "righteous_fire_self"
           }
         },
         "modifier": "Increased",
         "value": 20,
         "bypass_ignore": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "unrighteous_fire_self"
+          }
+        },
+        "modifier": "Increased",
+        "value": 20,
+        "bypass_ignore": true,
+        "hidden": true
       }
     ],
     "ignore_stat_effects": [
@@ -241,7 +262,7 @@
           {
             "ApplyStatus": {
               "status_id": "righteous_fire",
-              "value": 1
+              "value": 100
             }
           }
         ]
@@ -252,7 +273,7 @@
           {
             "ApplyStatus": {
               "status_id": "righteous_fire_self",
-              "value": 2
+              "value": 100
             },
             "ignore_stat_effects": [
               {
@@ -273,11 +294,11 @@
         "effects": [
           {
             "stat": {
-              "Damage": { }
+              "Damage": { "damage_type": "Fire" }
             },
             "bypass_ignore": true,
             "modifier": "More",
-            "value": 10
+            "value": 1
           }
         ],
         "source": {

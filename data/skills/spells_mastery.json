@@ -154,6 +154,50 @@
             }
           }
         ]
+      },
+      "unrighteous_fire": {
+        "title": "Unrighteous Fire",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "ReplaceStatusId": {
+              "old_status_id": "righteous_fire",
+              "new_status_id": "unrighteous_fire"
+            }
+          },
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "ReplaceStatusId": {
+              "old_status_id": "righteous_fire_self",
+              "new_status_id": "unrighteous_fire_self"
+            }
+          },
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillModifierEffect": {
+              "effects": [
+                {
+                  "stat": {
+                    "Damage": { "damage_type": "Poison" }
+                  },
+                  "bypass_ignore": true,
+                  "modifier": "More",
+                  "value": 2
+                }
+              ],
+              "source": {
+                "CharacterStats": "MaxMana"
+              },
+              "factor": 1
+            }
+          }
+        ]
       }
     }
   },
@@ -307,7 +351,7 @@
         "max_level": 1,
         "effects": [
           {
-            "value": -1e200,
+            "value": -1e+200,
             "upgrade_value": 0,
             "StatEffect": {
               "stat": {

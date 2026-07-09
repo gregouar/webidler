@@ -117,7 +117,7 @@ impl GameInstanceData {
         mut player_resources: PlayerResources,
         player_base_specs: PlayerBaseSpecs,
         player_inventory: PlayerInventory,
-        player_stamina: Duration,
+        mut player_stamina: Duration,
         player_controller: PlayerController,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
@@ -146,6 +146,7 @@ impl GameInstanceData {
         if area_specs.training {
             player_resources.experience = 1e70;
             player_resources.gold = 1e160;
+            player_stamina = Duration::from_hours(24);
         }
 
         let mut area_state = AreaState::init(&area_specs);

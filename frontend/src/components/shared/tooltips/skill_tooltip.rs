@@ -276,7 +276,9 @@ pub fn SkillTooltip(
                         .base_skill_specs
                         .upgrade_effects
                         .iter()
-                        .filter(|&upgrade_effect| upgrade_effect.description.is_none())
+                        .filter(|&upgrade_effect| {
+                            upgrade_effect.description.is_none() && !upgrade_effect.hidden
+                        })
                         .map(|upgrade_effect| upgrade_effect.stat_effect.clone())
                         .collect();
 
