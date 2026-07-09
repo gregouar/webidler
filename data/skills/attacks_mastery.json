@@ -1410,12 +1410,12 @@
       "big_arrows": {
         "title": "Meteor Shower",
         "base_cost": 10,
-        "upgrade_cost": 0,
-        "max_level": 1,
+        "upgrade_cost": 1,
+        "max_level": 11,
         "effects": [
           {
-            "value": 50,
-            "upgrade_value": 0,
+            "value": 100,
+            "upgrade_value": 10,
             "StatEffect": {
               "stat": {
                 "Damage": { }
