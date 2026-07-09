@@ -1411,11 +1411,11 @@
         "title": "Meteor Shower",
         "base_cost": 10,
         "upgrade_cost": 1,
-        "max_level": 11,
+        "max_level": 10,
         "effects": [
           {
-            "value": 100,
-            "upgrade_value": 10,
+            "value": 65,
+            "upgrade_value": 15,
             "StatEffect": {
               "stat": {
                 "Damage": { }
