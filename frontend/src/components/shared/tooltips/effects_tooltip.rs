@@ -1002,9 +1002,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             let range_str = match range {
                 Some(range) => match range {
-                    shared::data::item::SkillRange::Melee => "Melee",
-                    shared::data::item::SkillRange::Distance => "Distance",
-                    shared::data::item::SkillRange::Any => "Any",
+                    shared::data::item::SkillRange::Melee => "Melee range",
+                    shared::data::item::SkillRange::Distance => "Distance range",
+                    shared::data::item::SkillRange::Any => "Any range",
                 },
                 None => "",
             };

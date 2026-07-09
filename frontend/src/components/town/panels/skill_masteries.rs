@@ -57,30 +57,10 @@ pub fn SkillMasteriesPanel(
         }
     });
 
-    let dirty = Signal::derive(move || {
-        *town_context.player_skill_masteries.read() != *skill_masteries.read()
-    });
-
     view! {
         <MenuPanel open=open w_full=false h_full=true class:items-center>
             <MenuCard class="max-w-6xl mx-auto h-full">
-                <CardHeader title="Skill Masteries" on_close=move || open.set(false)>
-                    {(!view_only)
-                        .then(|| {
-                            view! {
-                                <div class="flex-1" />
-                                <div class="flex h-full items-center gap-2">
-                                    <MenuButton
-                                        on:click=move |_| reset()
-                                        disabled=Signal::derive(move || !dirty.get())
-                                    >
-                                        "Cancel"
-                                    </MenuButton>
-                                    <ConfirmButton skill_masteries dirty />
-                                </div>
-                            }
-                        })}
-                </CardHeader>
+                <CardHeader title="Skill Masteries" on_close=move || open.set(false) />
                 <CardInset>
                     <FavoriteSkillsPicker skill_masteries view_only />
                     <MasterySkillShop skill_masteries view_only />
@@ -124,12 +104,13 @@ pub fn SkillMasteryDetailsModal(#[prop(default = false)] view_only: bool) -> imp
                                     <MenuButton
                                         on:click=move |_| {
                                             reset();
+                                            open.set(false);
                                         }
                                         disabled=Signal::derive(move || !dirty.get())
                                     >
                                         "Cancel"
                                     </MenuButton>
-                                    <ConfirmButton skill_masteries dirty />
+                                    <ConfirmButton skill_masteries dirty open />
                                 </div>
                             }
                         })}
@@ -145,7 +126,7 @@ pub fn SkillMasteryDetailsModal(#[prop(default = false)] view_only: bool) -> imp
 #[component]
 fn ConfirmButton(
     skill_masteries: RwSignal<PlayerSkillMasteries>,
-    // open: RwSignal<bool>,
+    open: RwSignal<bool>,
     dirty: Signal<bool>,
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
@@ -163,13 +144,14 @@ fn ConfirmButton(
                 .await
             {
                 Ok(response) => {
+                    skill_masteries.set(response.skill_masteries.clone());
                     town_context
                         .player_skill_masteries
                         .set(response.skill_masteries);
                     town_context
                         .skill_mastery_skill_specs
                         .set(response.skill_mastery_skill_specs);
-                    // open.set(false);
+                    open.set(false);
                 }
                 Err(e) => show_toast(
                     toaster,
@@ -402,6 +384,10 @@ fn FavoriteSkillButton(
     skill_masteries: RwSignal<PlayerSkillMasteries>,
     view_only: bool,
 ) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let toaster = expect_context::<Toasts>();
+    let character_id = town_context.character.read_untracked().character_id;
     let is_favorite = Signal::derive({
         let skill_id = skill_id.clone();
         move || {
@@ -438,6 +424,34 @@ fn FavoriteSkillButton(
                                             .push(skill_id_for_toggle.clone());
                                     }
                                 });
+                            spawn_local(async move {
+                                match backend
+                                    .post_save_skill_masteries(
+                                        &SaveSkillMasteriesRequest {
+                                            character_id,
+                                            skill_masteries: skill_masteries.get_untracked(),
+                                        },
+                                    )
+                                    .await
+                                {
+                                    Ok(response) => {
+                                        town_context
+                                            .player_skill_masteries
+                                            .update(|player_skill_masteries| {
+                                                player_skill_masteries.favorite_skills = response
+                                                    .skill_masteries
+                                                    .favorite_skills;
+                                            });
+                                    }
+                                    Err(e) => {
+                                        show_toast(
+                                            toaster,
+                                            format!("Failed to save skill masteries: {e}"),
+                                            ToastVariant::Error,
+                                        )
+                                    }
+                                }
+                            });
                         }
                         disabled=Signal::derive(move || !can_mark_favorite.get())
                         class="w-full"

@@ -504,7 +504,7 @@
   },
   "whirlwind": {
     "name": "Whirlwind",
-    "description": "Spin with your two-handed melee weapon, repeatedly striking nearby enemies for 70% of your base weapon damage each hit.",
+    "description": "Spin with your two-handed melee weapon, repeatedly striking enemies.",
     "icon": "skills/whirlwind.svg",
     "skill_type": "Attack",
     "cooldown": 0,
@@ -571,7 +571,7 @@
   },
   "rain_arrows": {
     "name": "Rain of Arrows",
-    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies for 40% of your base weapon damage each hit.",
+    "description": "Fire multiple times your ranged weapon toward the sky, repeatedly striking enemies.",
     "icon": "skills/rain_arrows.svg",
     "skill_type": "Attack",
     "cooldown": 0,
