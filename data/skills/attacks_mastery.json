@@ -1159,6 +1159,62 @@
           }
         ]
       },
+      "speed": {
+        "title": "Attack Speed",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 2,
+            "upgrade_value": 2,
+            "StatEffect": {
+              "stat": {
+                "Speed": {
+                  "skill_type": "Attack"
+                }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_chance": {
+        "title": "Critical Hit Chance",
+        "base_cost": 1,
+        "upgrade_cost": 1,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritChance": { }
+              },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title": "Critical Hit Damage",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritDamage": { }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
       "repeat": {
         "title": "Third Time is a Charm",
         "base_cost": 10,

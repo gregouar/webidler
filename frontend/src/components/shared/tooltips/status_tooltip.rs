@@ -56,9 +56,9 @@ pub fn format_status_effects(
         .collect::<Vec<_>>();
 
     let grant_str = if status_specs.debuff {
-        "inflict"
+        "causes"
     } else {
-        "grant"
+        "grants"
     };
 
     if effect_lines.is_empty() {
