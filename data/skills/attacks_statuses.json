@@ -266,5 +266,28 @@
                 "modifier": "Flat"
             }
         ]
+    },
+    "double_strike_feint": {
+        "name": "Distracted",
+        "icon": "statuses/distraction.svg",
+        "debuff": true,
+        "duration": 3,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageTaken": {
+                            "skill_type": "Attack"
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+
     }
 }

@@ -341,7 +341,8 @@
             "ApplyStatus": {
               "status_id": "poison",
               "value": 0
-            }
+            },
+            "optional_application": true
           }
         ]
       }
@@ -420,7 +421,8 @@
             "ApplyStatus": {
               "status_id": "poison",
               "value": 0
-            }
+            },
+            "optional_application": true
           }
         ]
       }

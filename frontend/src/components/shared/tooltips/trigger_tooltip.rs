@@ -296,7 +296,7 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
             skill_ids
                 .iter()
                 .next()
-                .map(|skill_id| format!(" with {} ", data_context.skill_name(skill_id)))
+                .map(|skill_id| format!(" with {}", data_context.skill_name(skill_id)))
         } else {
             None
         }

@@ -235,6 +235,8 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub independent_application: bool,
+    #[serde(default)]
+    pub optional_application: bool,
 }
 
 #[allow(clippy::large_enum_variant)]

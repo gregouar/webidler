@@ -388,7 +388,7 @@ pub fn apply_skill_effects(
                 skill_id,
                 trigger_depth,
                 &mut seed,
-            )
+            ) || skill_effect.optional_application
         }
     }
 

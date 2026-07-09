@@ -831,7 +831,7 @@
         ]
       },
       "evade": {
-        "title": "Distracting Move",
+        "title": "Strategic Reposition",
         "base_cost": 5,
         "upgrade_cost": 0,
         "max_level": 1,
@@ -866,7 +866,8 @@
                   "ApplyStatus": {
                     "status_id": "poison",
                     "value": 0
-                  }
+                  },
+                  "optional_application": true
                 }
               ]
             }
@@ -1119,6 +1120,19 @@
               "modifier": "Flat",
               "scope": "Global"
             }
+          },
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "StatusDuration": {
+                  "status_id": "legionnaire_stance"
+                }
+              },
+              "modifier": "Increased",
+              "scope": "Global"
+            }
           }
         ]
       }
@@ -1166,6 +1180,48 @@
                 }
               },
               "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "feint": {
+        "title": "Feint",
+        "base_cost": 10,
+        "upgrade_cost": 2,
+        "max_level": 5,
+        "effects": [
+          {
+            "value": -400,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                }
+              },
+              "modifier": "More"
+            }
+          },
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "SkillEffect": {
+              "ApplyStatus": {
+                "status_id": "double_strike_feint",
+                "value": 100,
+                "independent_application": true
+              }
+            }
+          },
+          {
+            "value": 0,
+            "upgrade_value": 25,
+            "StatEffect": {
+              "stat": {
+                "StatusPower": {
+                  "status_id": "double_strike_feint"
+                }
+              },
+              "modifier": "Increased"
             }
           }
         ]
