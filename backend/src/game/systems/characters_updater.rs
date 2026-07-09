@@ -454,6 +454,7 @@ fn compute_character_specs(
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. }
+            | StatType::SkillRepeat { .. }
             | StatType::SkillEffectModifier { .. }
             | StatType::TriggerEffectModifier { .. } => {}
             // Other

@@ -8,7 +8,7 @@ use shared::data::{
     conditional_modifier::ConditionalModifier,
     item::WeaponSpecs,
     item_affix::AffixEffectScope,
-    modifier::{BaseModifiableValue, Modifier},
+    modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     player::PlayerInventory,
     skill::{
         BaseSkillSpecs, DamageType, ItemStatsSource, ModifierEffect, ModifierEffectSource,
@@ -347,6 +347,7 @@ pub fn apply_effects_to_skill_specs<'a>(
                 .all(|ignore| !effect.stat.is_match(ignore))
     });
 
+    let mut repeat_modifier: ModifiableValue<f64> = 1.0.into();
     for effect in effects.clone() {
         if let StatType::Speed(skill_filter) = &effect.stat
             && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
@@ -384,8 +385,24 @@ pub fn apply_effects_to_skill_specs<'a>(
                     };
                 }
             }
+        }
 
-            // TODO: Triggers
+        if let StatType::SkillRepeat { skill_filter } = &effect.stat
+            && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
+        {
+            repeat_modifier.apply_effect(effect);
+        }
+    }
+
+    if *repeat_modifier != 1.0 {
+        for target in skill_specs.targets.iter_mut() {
+            target.repeat.value.min += *repeat_modifier.base() as u8;
+            target.repeat.value.max += *repeat_modifier.base() as u8;
+
+            target.repeat.value.min =
+                (target.repeat.value.min as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
+            target.repeat.value.max =
+                (target.repeat.value.max as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
         }
     }
 

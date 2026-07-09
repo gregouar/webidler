@@ -290,6 +290,10 @@ pub enum StatType {
         #[serde(default)]
         repeat: Option<StatSkillRepeat>,
     },
+    SkillRepeat {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
     SkillEffectModifier {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,

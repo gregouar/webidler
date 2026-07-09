@@ -155,6 +155,10 @@ where
         self.evaluated.into()
     }
 
+    pub fn base(&mut self) -> &T {
+        &self.base
+    }
+
     pub fn base_mut(&mut self) -> &mut T {
         &mut self.base
     }

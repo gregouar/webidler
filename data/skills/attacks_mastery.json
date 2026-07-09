@@ -27,8 +27,8 @@
         "max_level": 10,
         "effects": [
           {
-            "value": 2,
-            "upgrade_value": 2,
+            "value": 3,
+            "upgrade_value": 3,
             "StatEffect": {
               "stat": {
                 "Speed": {
@@ -959,7 +959,7 @@
               "stat": {
                 "SkillTargetModifier": {
                   "skill_id": "retaliate",
-                  "shape": "ContactInclusive"
+                  "shape": "Cross"
                 }
               },
               "modifier": "Flat"
@@ -1166,8 +1166,8 @@
         "max_level": 10,
         "effects": [
           {
-            "value": 2,
-            "upgrade_value": 2,
+            "value": 3,
+            "upgrade_value": 3,
             "StatEffect": {
               "stat": {
                 "Speed": {
@@ -1312,8 +1312,8 @@
         "max_level": 10,
         "effects": [
           {
-            "value": 2,
-            "upgrade_value": 2,
+            "value": 3,
+            "upgrade_value": 3,
             "StatEffect": {
               "stat": {
                 "Speed": {
@@ -1355,8 +1355,8 @@
         "max_level": 10,
         "effects": [
           {
-            "value": 2,
-            "upgrade_value": 2,
+            "value": 3,
+            "upgrade_value": 3,
             "StatEffect": {
               "stat": {
                 "Speed": {
@@ -1364,6 +1364,24 @@
                 }
               },
               "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title": "Critical Hit Damage",
+        "base_cost": 2,
+        "upgrade_cost": 2,
+        "max_level": 10,
+        "effects": [
+          {
+            "value": 10,
+            "upgrade_value": 10,
+            "StatEffect": {
+              "stat": {
+                "CritDamage": { }
+              },
+              "modifier": "More"
             }
           }
         ]
@@ -1385,6 +1403,85 @@
                 }
               },
               "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "big_arrows": {
+        "title": "Meteor Shower",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 50,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "Damage": { }
+              },
+              "modifier": "More"
+            }
+          },
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillTargetModifier": {
+                  "skill_id": "rain_arrows",
+                  "shape": "Cross"
+                }
+              },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value": -100,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillRepeat": {
+                  "skill_id": "rain_arrows"
+                }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "more_arrows": {
+        "title": "Endless Rain",
+        "base_cost": 10,
+        "upgrade_cost": 0,
+        "max_level": 1,
+        "effects": [
+          {
+            "value": 1,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "SkillTargetModifier": {
+                  "skill_id": "rain_arrows",
+                  "repeat": {
+                    "min_value": 9,
+                    "max_value": 12,
+                    "target": "Any"
+                  }
+                }
+              },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value": -33,
+            "upgrade_value": 0,
+            "StatEffect": {
+              "stat": {
+                "Damage": {
+                }
+              },
+              "modifier": "More"
             }
           }
         ]

@@ -1298,7 +1298,7 @@
   },
   "scorpion_crossbow": {
     "name": "Deathstinger",
-    "icon": "items/weapons_ranged/scorpion_crossbow.webp",
+    "icon": "items/weapons_ranged/scorpion_crossbow_2.webp",
     "description": "The desert teaches that the smallest wound may carry the longest death.",
     "slot": "Weapon",
     "extra_slots": [

@@ -305,7 +305,7 @@ pub fn find_sub_targets<'a, 'b>(
 
                 x_dis + y_dis == 1
             }
-            SkillShape::ContactInclusive => {
+            SkillShape::Cross => {
                 let x_dis = (pos.0 - skill_position.0)
                     .abs()
                     .min((pos.0 - skill_position.0 - skill_size.0 as i32 + 1).abs());

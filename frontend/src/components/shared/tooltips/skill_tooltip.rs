@@ -384,13 +384,13 @@ pub fn repeat_str(skill_repeat: &SkillRepeat) -> String {
 pub fn shape_str(shape: SkillShape) -> &'static str {
     match shape {
         SkillShape::Single => "Single",
-        SkillShape::Vertical2 => "Area 2x1",
-        SkillShape::Horizontal2 => "Area 1x2",
-        SkillShape::Horizontal3 => "Area 1x3",
-        SkillShape::Square4 => "Area 2x2",
+        SkillShape::Vertical2 => "Column 2",
+        SkillShape::Horizontal2 => "Row 2",
+        SkillShape::Horizontal3 => "Row 3",
+        SkillShape::Square4 => "Square",
         SkillShape::All => "All",
-        SkillShape::Contact => "Contact",
-        SkillShape::ContactInclusive => "Contact Area",
+        SkillShape::Contact => "Adjacent",
+        SkillShape::Cross => "Cross Area",
     }
 }
 

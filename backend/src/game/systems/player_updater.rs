@@ -396,6 +396,7 @@ fn modify_player_specs(
             | StatType::SuccessChance { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillTargetModifier { .. }
+            | StatType::SkillRepeat { .. }
             | StatType::SkillEffectModifier { .. }
             | StatType::SkillConditionalModifier { .. }
             | StatType::TriggerEffectModifier { .. } => {}
