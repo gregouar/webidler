@@ -436,10 +436,10 @@ pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u
     )
 }
 
-fn compute_skill_modifier_effects<'a>(
+fn compute_skill_modifier_effects(
     modifier_effects: &[ModifierEffect],
     character_attrs: &CharacterAttrs,
-    inventory: Option<&'a PlayerInventory>,
+    inventory: Option<&PlayerInventory>,
 ) -> EffectsMap {
     let item_sources: Vec<_> = modifier_effects
         .iter()
