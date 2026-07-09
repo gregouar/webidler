@@ -49,7 +49,15 @@ pub async fn sync_update_game(
         return Ok(false);
     }
 
-    let message = SyncGameStateMessage {
+    let message = build_sync_update_message(game_data);
+
+    client_conn.start_background_send(&message.into())?;
+
+    Ok(true)
+}
+
+pub fn build_sync_update_message(game_data: &mut GameInstanceData) -> SyncGameStateMessage {
+    SyncGameStateMessage {
         area_state: game_data.area_state.sync(),
         area_threat: game_data.area_threat.clone(),
         passives_tree_state: game_data.passives_tree_state.sync(),
@@ -65,9 +73,5 @@ pub async fn sync_update_game(
         queued_loot: game_data.queued_loot.sync(),
         game_stats: game_data.game_stats.clone(),
         quest_rewards: game_data.quest_rewards.sync(),
-    };
-
-    client_conn.start_background_send(&message.into())?;
-
-    Ok(true)
+    }
 }

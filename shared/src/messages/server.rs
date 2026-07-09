@@ -29,7 +29,9 @@ impl_into_message! {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ConnectMessage {}
+pub struct ConnectMessage {
+    pub compression_dictionary: Vec<u8>,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorMessage {
