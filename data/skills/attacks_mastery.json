@@ -1110,7 +1110,7 @@
               "repeat"     : { "value": [3, 5], "target": "Any", "repeat_cooldown": 0.3 },
               "effects"    : [
                 {
-                  "ApplyStatus"        : {"status_id": "whirlwind_guard", "value": 10},
+                  "ApplyStatus"        : {"status_id": "whirlwind_guard", "value": 15},
                   "ignore_stat_effects": [ {"StatusDuration": {}} ]
                 }
               ]
@@ -1118,13 +1118,11 @@
           },
           {
             "value"        : 0,
-            "upgrade_value": 1,
-            "StatEffect"   : { "stat": {"Block": "Attack"}, "modifier": "Flat" }
-          },
-          {
-            "value"        : 0,
-            "upgrade_value": 1,
-            "StatEffect"   : { "stat": {"Evade": null}, "modifier": "Flat" }
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "whirlwind_guard"} },
+              "modifier": "Flat"
+            }
           }
         ]
       },
