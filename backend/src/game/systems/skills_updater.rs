@@ -1103,7 +1103,7 @@ pub fn apply_stat_effect_on_skill_effect(
                     status_filter,
                     skill_filter,
                 },
-            ) = (escalation, &effect.stat)
+            ) = (escalation.as_mut(), &effect.stat)
                 && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
             {
@@ -1112,11 +1112,12 @@ pub fn apply_stat_effect_on_skill_effect(
 
             if let (
                 Some(duration),
+                Some(escalation),
                 StatType::StatusFaster {
                     status_filter,
                     skill_filter,
                 },
-            ) = (duration.as_mut(), &effect.stat)
+            ) = (duration.as_mut(), escalation.as_mut(), &effect.stat)
                 && status_filter.is_match_with_status(skill_status_id, *skill_damage_type)
                 && skill_filter.is_match_with_skill(skill_type, skill_id)
             {
@@ -1124,6 +1125,7 @@ pub fn apply_stat_effect_on_skill_effect(
                 value.max.apply_effect(effect);
                 duration.min.apply_negative_effect(effect);
                 duration.max.apply_negative_effect(effect);
+                escalation.apply_negative_effect(effect);
             }
 
             if let (
