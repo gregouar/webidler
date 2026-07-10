@@ -48,7 +48,11 @@ pub fn use_skill<'a>(
     }
 
     let mut applied = false;
+
+    // Same seed for same amount of repeats
+    let seed = rng::roll_seed();
     for targets_group in skill_specs.targets.iter() {
+        let mut seed = seed.clone();
         applied |= apply_skill_on_targets(
             statuses_store,
             events_queue,
@@ -58,6 +62,7 @@ pub fn use_skill<'a>(
             me,
             friends,
             enemies,
+            &mut seed,
         );
     }
 
@@ -83,8 +88,9 @@ fn apply_skill_on_targets<'a>(
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
+    seed: &mut RngSeed,
 ) -> bool {
-    let max_repeat = targets_group.repeat.value.roll();
+    let max_repeat = targets_group.repeat.value.roll_with_seed(seed);
 
     if max_repeat == 0 {
         return false;

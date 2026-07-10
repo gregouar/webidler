@@ -9,7 +9,7 @@ use crate::{
         character_status::StatusId,
         item_affix::AffixEffectScope,
         modifier::Modifier,
-        skill::{ModifierEffect, SkillEffect},
+        skill::{ModifierEffect, SkillEffect, SkillTargetsGroup},
         stat_effect::{StatEffect, StatType},
         trigger::TriggerSpecs,
     },
@@ -58,6 +58,7 @@ pub enum SkillMasteryUpgradeEffectType {
         #[serde(default)]
         affect_triggers: bool,
     },
+    SkillTarget(SkillTargetsGroup),
     SkillModifierEffect {
         #[serde(flatten)]
         modifier_effect: ModifierEffect,

@@ -146,6 +146,9 @@ pub fn apply_skill_mastery(
                     target_group.effects.push((**skill_effect).clone());
                 }
             }
+            SkillMasteryUpgradeEffectType::SkillTarget(skill_target) => {
+                skill_specs.targets.push(skill_target.clone());
+            }
             SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => {
                 skill_specs.triggers.push(trigger_specs.clone());
             }

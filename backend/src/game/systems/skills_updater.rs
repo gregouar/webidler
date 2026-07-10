@@ -396,8 +396,8 @@ pub fn apply_effects_to_skill_specs<'a>(
 
     if *repeat_modifier != 1.0 {
         for target in skill_specs.targets.iter_mut() {
-            target.repeat.value.min += *repeat_modifier.base() as u8;
-            target.repeat.value.max += *repeat_modifier.base() as u8;
+            target.repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
+            target.repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
 
             target.repeat.value.min =
                 (target.repeat.value.min as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;

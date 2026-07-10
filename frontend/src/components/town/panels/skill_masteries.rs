@@ -30,6 +30,7 @@ use crate::components::{
     },
     town::TownContext,
     ui::{
+        Separator,
         buttons::MenuButton,
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         list_row::MenuListRow,
@@ -805,7 +806,6 @@ fn MasteryUpgradeRow(
 
                         <div class="min-w-0 rounded-[7px] border border-black/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent),linear-gradient(180deg,rgba(15,15,19,1),rgba(9,9,12,1))] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.45)]">
                             <div class="text-xs text-zinc-400 mb-1">"Next"</div>
-
                             <UpgradeEffectDescription
                                 upgrade_specs=upgrade_specs.clone()
                                 upgrade_level=Signal::derive(move || {
@@ -864,16 +864,19 @@ fn UpgradeEffectDescription(
                         .iter()
                         .filter_map(|effect| effect.compute_stat_effect(upgrade_level))
                         .collect();
+                    let upgrade_effects: Vec<_> = upgrade_specs
+                        .effects
+                        .iter()
+                        .filter_map(|upgrade_effect| format_mastery_upgrade_effect(
+                            upgrade_effect,
+                            upgrade_level,
+                        ))
+                        .collect();
                     view! {
                         {effects_tooltip::formatted_effects_list(stat_effects)}
-                        {upgrade_specs
-                            .effects
-                            .iter()
-                            .filter_map(|upgrade_effect| format_mastery_upgrade_effect(
-                                upgrade_effect,
-                                upgrade_level,
-                            ))
-                            .collect::<Vec<_>>()}
+                        {(!stat_effects.is_empty() && !upgrade_effects.is_empty())
+                            .then(|| view! { <Separator /> })}
+                        {upgrade_effects}
                     }
                         .into_any()
                 }
@@ -901,6 +904,9 @@ fn format_mastery_upgrade_effect(
                     .into_any(),
             )
         },
+        SkillMasteryUpgradeEffectType::SkillTarget(targets_group) => {
+            Some(skill_tooltip::format_target(targets_group.clone()).into_any())
+        }
         SkillMasteryUpgradeEffectType::SkillModifierEffect { modifier_effect } => Some(skill_tooltip::format_skill_modifier(modifier_effect.clone()).into_any()),
         SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => Some(
             trigger_tooltip::format_trigger(trigger_specs.clone(), false, None, None).into_any(),

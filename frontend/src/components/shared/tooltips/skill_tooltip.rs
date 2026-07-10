@@ -118,10 +118,10 @@ pub fn SkillTooltip(
         .clone()
         .into_iter()
         .map(|target| {
-            format_target(
-                target,
-                // effects_map.as_ref(),
-            )
+            view! {
+                <Separator />
+                {format_target(target)}
+            }
         })
         .collect::<Vec<_>>();
 
@@ -323,7 +323,7 @@ pub fn SkillTooltip(
     }
 }
 
-fn format_target(
+pub fn format_target(
     targets_group: SkillTargetsGroup,
     // effects_map: Option<&EffectsMap>,
 ) -> impl IntoView + use<> {
@@ -363,7 +363,6 @@ fn format_target(
         .collect::<Vec<_>>();
 
     view! {
-        <Separator />
         <EffectLi>{range}", "{shape}{repeat}</EffectLi>
         {effects}
     }

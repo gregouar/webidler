@@ -708,7 +708,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Block(skill_type) => format!(
-            "{} {}Block Chance",
+            "{} Chance to Block {}",
             format_adds_removes(value, false, "%"),
             skill_type_str(*skill_type)
         ),

@@ -288,6 +288,36 @@
                 "modifier": "Percent"
             }
         ]
-
+    },
+    "whirlwind_guard": {
+        "name": "Deflecting Spin",
+        "icon": "skills/whirlwind.svg",
+        "debuff": false,
+        "duration": 0.5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Block": "Attack"
+                    },
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat": {
+                        "Evade": null
+                    },
+                    "modifier": "Flat",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
     }
 }
