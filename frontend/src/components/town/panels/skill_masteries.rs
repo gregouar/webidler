@@ -872,10 +872,10 @@ fn UpgradeEffectDescription(
                             upgrade_level,
                         ))
                         .collect();
+                    let add_separator = !stat_effects.is_empty() && !upgrade_effects.is_empty();
                     view! {
                         {effects_tooltip::formatted_effects_list(stat_effects)}
-                        {(!stat_effects.is_empty() && !upgrade_effects.is_empty())
-                            .then(|| view! { <Separator /> })}
+                        {(add_separator).then(|| view! { <Separator /> })}
                         {upgrade_effects}
                     }
                         .into_any()
