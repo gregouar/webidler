@@ -145,7 +145,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                                 open=town_context.open_skill_masteries
                                 view_only=true
                             />
-                            <SkillMasteryDetailsModal />
+                            <SkillMasteryDetailsModal view_only=true />
                             <PassivesPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
                             <SettingsModal open=town_context.open_settings />
@@ -218,6 +218,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_ascend.set(false);
                         town_context.open_inventory.set(false);
                         town_context.open_skill_masteries.set(false);
+                        town_context.open_skill_mastery_details.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -229,6 +230,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_ascend.set(false);
                         town_context.open_temple.set(false);
                         town_context.open_skill_masteries.set(false);
+                        town_context.open_skill_mastery_details.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -240,6 +242,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_inventory.set(false);
                         town_context.open_temple.set(false);
                         town_context.open_skill_masteries.set(false);
+                        town_context.open_skill_mastery_details.set(false);
                     }
                     disabled=disable_inventory
                 >
@@ -253,6 +256,7 @@ pub fn HeaderMenu() -> impl IntoView {
                         town_context.open_inventory.set(false);
                         town_context.open_temple.set(false);
                         town_context.open_ascend.set(false);
+                        town_context.open_skill_mastery_details.set(false);
                     }
                     disabled=disable_inventory
                 >

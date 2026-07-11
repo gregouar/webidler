@@ -627,7 +627,7 @@
         ]
       },
       "evade"        : {
-        "title"       : "Strategic Reposition",
+        "title"       : "Strategic Repositioning",
         "base_cost"   : 5,
         "upgrade_cost": 0,
         "max_level"   : 1,

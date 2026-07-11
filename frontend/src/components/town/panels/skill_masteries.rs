@@ -772,17 +772,39 @@ fn MasteryUpgradeRow(
                             {title}
                         </span>
                         <div class="flex shrink-0 items-center gap-3 text-xs xl:text-sm text-zinc-400">
-                            {(next_cost.get() > 0 && upgrade_level.get() < upgrade_specs.max_level)
-                                .then(|| {
-                                    view! {
-                                        <div>
-                                            "Cost: "
-                                            <span class="font-bold text-zinc-100">
-                                                {move || next_cost.get()}
-                                            </span>
-                                        </div>
-                                    }
-                                })} <div>"Max Level: " {upgrade_specs.max_level}</div>
+
+                            {if view_only {
+                                let bold = upgrade_level.get() > 0;
+                                view! {
+                                    <div>
+                                        "Level "
+                                        <span class=if bold {
+                                            "font-bold text-zinc-100"
+                                        } else {
+                                            ""
+                                        }>{move || upgrade_level.get()}</span> " / "
+                                        {upgrade_specs.max_level}
+                                    </div>
+                                }
+                                    .into_any()
+                            } else {
+                                view! {
+                                    {(next_cost.get() > 0
+                                        && upgrade_level.get() < upgrade_specs.max_level)
+                                        .then(|| {
+                                            view! {
+                                                <div>
+                                                    "Cost: "
+                                                    <span class="font-bold text-zinc-100">
+                                                        {move || next_cost.get()}
+                                                    </span>
+                                                </div>
+                                            }
+                                        })}
+                                    <div>"Max Level: " {upgrade_specs.max_level}</div>
+                                }
+                                    .into_any()
+                            }}
                         // <div>
                         // "Level "
                         // <span class="font-bold text-zinc-100">
@@ -819,7 +841,7 @@ fn MasteryUpgradeRow(
                 {(!view_only)
                     .then(|| {
                         view! {
-                            <div class="flex w-9 flex-col items-center justify-center gap-1 ml-2">
+                            <div class="flex w-9 flex-col items-center gap-1 ml-2">
                                 <MenuButton
                                     on:click=add_point
                                     disabled=Signal::derive(move || !can_add.get())
