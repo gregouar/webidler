@@ -340,10 +340,10 @@ fn BenedictionCategorySection(
                             }
                         })}
                     <div class="flex gap-1">
-                        <span class="font-bold text-zinc-100">{move || allocated_points.get()}</span>
+                        <span class="font-bold text-zinc-100">{move || bought_points.get().saturating_sub(allocated_points.get())}</span>
                         <span class="text-zinc-400">"/"</span>
                         <span class="font-bold text-zinc-400">{move || bought_points.get()}</span>
-                        <span class="font-semibold text-zinc-400">" Spent"</span>
+                        <span class="font-semibold text-zinc-400">" Remaining Points"</span>
                     </div>
 
                 </div>
@@ -551,6 +551,7 @@ fn BenedictionRow(
                 </div>
                 {(!view_only)
                     .then(|| {
+                        let bold = move || upgrade_level.get() > 0;
                         view! {
                             <div class="flex w-9 flex-col items-center justify-center gap-1 ml-2">
                                 <MenuButton
@@ -560,8 +561,14 @@ fn BenedictionRow(
                                 >
                                     "+"
                                 </MenuButton>
-                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-zinc-100 font-number">
-                                    {move || upgrade_level.get()}
+                                <div class="min-w-9 text-center text-sm xl:text-base font-number">
+                                    <span class=move || {
+                                        if bold() {
+                                            "font-bold text-zinc-100"
+                                        } else {
+                                            "text-zinc-400"
+                                        }
+                                    }>{move || upgrade_level.get()}</span>
                                 </div>
                                 <MenuButton
                                     on:click=remove_point

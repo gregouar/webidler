@@ -840,6 +840,7 @@ fn MasteryUpgradeRow(
                 </div>
                 {(!view_only)
                     .then(|| {
+                        let bold = move || upgrade_level.get() > 0;
                         view! {
                             <div class="flex w-9 flex-col items-center gap-1 ml-2">
                                 <MenuButton
@@ -849,8 +850,14 @@ fn MasteryUpgradeRow(
                                 >
                                     "+"
                                 </MenuButton>
-                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-zinc-100 font-number">
-                                    {move || upgrade_level.get()}
+                                <div class="min-w-9 text-center text-sm xl:text-base font-number">
+                                    <span class=move || {
+                                        if bold() {
+                                            "font-bold text-zinc-100"
+                                        } else {
+                                            "text-zinc-400"
+                                        }
+                                    }>{move || upgrade_level.get()}</span>
                                 </div>
                                 <MenuButton
                                     on:click=remove_point
