@@ -390,7 +390,7 @@
         ]
       },
       "duration": {
-        "title"       : "Duration",
+        "title"       : "Status Duration",
         "base_cost"   : 1,
         "upgrade_cost": 1,
         "max_level"   : 10,
@@ -494,7 +494,10 @@
           {
             "value"        : 10,
             "upgrade_value": 10,
-            "StatEffect"   : { "stat": {"StatusPower": {}}, "modifier": "Increased" }
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "sharpen_weapon"} },
+              "modifier": "Flat"
+            }
           }
         ]
       },

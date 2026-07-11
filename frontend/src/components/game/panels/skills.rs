@@ -382,6 +382,7 @@ fn SkillCard(
                 alt=skill_name.clone()
                 selected=is_selected
                 skill_specs
+                display_skill_upgrades=true
             />
 
             <div class="text-center">

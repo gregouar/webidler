@@ -56,11 +56,11 @@ pub fn skill_type_str(skill_type: Option<SkillType>) -> &'static str {
 
 pub fn skills_type_str(skill_type: Option<SkillType>) -> &'static str {
     match skill_type {
-        Some(SkillType::Attack) => "Attacks ",
-        Some(SkillType::Spell) => "Spells ",
-        Some(SkillType::Curse) => "Curses ",
-        Some(SkillType::Blessing) => "Blessings ",
-        Some(SkillType::Other) => "Others ",
+        Some(SkillType::Attack) => "Attacks",
+        Some(SkillType::Spell) => "Spells",
+        Some(SkillType::Curse) => "Curses",
+        Some(SkillType::Blessing) => "Blessings",
+        Some(SkillType::Other) => "Others",
         None => "",
     }
 }
@@ -876,7 +876,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
                 "Per {}{} on equipped {}:",
                 format_number(1.0 / skill_modifier.factor),
                 match item_stats {
-                    ItemStatsSource::Armor => " Armor".to_string(),
+                    ItemStatsSource::Armor => " Physical Defense".to_string(),
                     ItemStatsSource::Block => "% Block".to_string(),
                     ItemStatsSource::Cooldown => "s Cooldown".to_string(),
                     ItemStatsSource::CritChance => "% Critical Hit Chance".to_string(),

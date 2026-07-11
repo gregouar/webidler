@@ -1,30 +1,29 @@
 {
-    "curse_frailty": {
+    "curse_frailty"     : {
         "max_level": 100,
-        "upgrades": { }
+        "upgrades" : {
+            "power": {
+                "title"       : "Status Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_frailty"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            }
+        }
     },
-    "curse_conductivity": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "curse_putridity": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "curse_flammability": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "curse_weakness": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "curse_clumsy": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "curse_vampirism": {
-        "max_level": 100,
-        "upgrades": { }
-    }
+    "curse_conductivity": {"max_level": 100, "upgrades": {}},
+    "curse_putridity"   : {"max_level": 100, "upgrades": {}},
+    "curse_flammability": {"max_level": 100, "upgrades": {}},
+    "curse_weakness"    : {"max_level": 100, "upgrades": {}},
+    "curse_clumsy"      : {"max_level": 100, "upgrades": {}},
+    "curse_vampirism"   : {"max_level": 100, "upgrades": {}}
 }
