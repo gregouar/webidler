@@ -132,7 +132,7 @@ impl SkillMasteryUpgradeEffect {
     pub fn compute_stat_effect(&self, upgrade_level: u16) -> Option<StatEffect> {
         let upgrade_value = self.compute_value(upgrade_level)?;
         match &self.effect_type {
-            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier, scope: _ }
+            SkillMasteryUpgradeEffectType::StatEffect { stat, modifier, scope: _ } if upgrade_value != 0.0
             // | SkillMasteryUpgradeEffectType::PlayerStatEffect { stat, modifier } 
             => {
                 Some(StatEffect {

@@ -1067,7 +1067,7 @@
   "whirlwind"           : {
     "max_level": 100,
     "upgrades" : {
-      "damage"    : {
+      "damage"     : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -1080,7 +1080,7 @@
           }
         ]
       },
-      "speed"     : {
+      "speed"      : {
         "title"       : "Attack Speed",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -1096,7 +1096,54 @@
           }
         ]
       },
-      "guard"     : {
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "more_spins" : {
+        "title"       : "Dervish Training",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 3,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "SkillRepeat": {"skill_id": "whirlwind"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -33,
+            "upgrade_value": -33,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "wind"       : {
+        "title"       : "Strong Winds",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "success_chance": 100, "ApplyStatus": {"status_id": "chill", "value": 11} }
+          }
+        ]
+      },
+      "guard"      : {
         "title"       : "Deflecting Spin",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -1123,27 +1170,6 @@
               "stat"    : { "StatusPower": {"status_id": "whirlwind_guard"} },
               "modifier": "Flat"
             }
-          }
-        ]
-      },
-      "more_spins": {
-        "title"       : "Dervish Training",
-        "base_cost"   : 3,
-        "upgrade_cost": 3,
-        "max_level"   : 3,
-        "effects"     : [
-          {
-            "value"        : 1,
-            "upgrade_value": 1,
-            "StatEffect"   : {
-              "stat"    : { "SkillRepeat": {"skill_id": "whirlwind"} },
-              "modifier": "Flat"
-            }
-          },
-          {
-            "value"        : -33,
-            "upgrade_value": -33,
-            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
       }
