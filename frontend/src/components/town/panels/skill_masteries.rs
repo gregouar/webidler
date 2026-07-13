@@ -891,11 +891,13 @@ fn UpgradeEffectDescription(
                     let stat_effects: Vec<_> = upgrade_specs
                         .effects
                         .iter()
+                        .filter(|effect| !effect.hidden)
                         .filter_map(|effect| effect.compute_stat_effect(upgrade_level))
                         .collect();
                     let upgrade_effects: Vec<_> = upgrade_specs
                         .effects
                         .iter()
+                        .filter(|effect| !effect.hidden)
                         .filter_map(|upgrade_effect| format_mastery_upgrade_effect(
                             upgrade_effect,
                             upgrade_level,

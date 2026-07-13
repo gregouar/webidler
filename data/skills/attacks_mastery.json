@@ -385,7 +385,28 @@
           {
             "value"        : 10,
             "upgrade_value": 10,
-            "StatEffect"   : { "stat": {"StatusPower": {}}, "modifier": "Increased" }
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_fire"} },
+              "modifier": "Flat"
+            },
+            "hidden"       : true
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_storm"} },
+              "modifier": "Flat"
+            },
+            "hidden"       : true
           }
         ]
       },

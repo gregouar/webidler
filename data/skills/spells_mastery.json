@@ -15,6 +15,30 @@
           }
         ]
       },
+      "double"     : {
+        "title"       : "Twin Missiles",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_type": null,
+                  "skill_id"  : "magic_missile",
+                  "range"     : null,
+                  "shape"     : null,
+                  "repeat"    : {"min_value": 2, "max_value": 2, "target": "Any"}
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
       "crit_chance": {
         "title"       : "Critical Hit Chance",
         "base_cost"   : 2,
@@ -25,6 +49,32 @@
             "value"        : 1,
             "upgrade_value": 1,
             "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Flat" }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "Flat" }
+          }
+        ]
+      },
+      "mana_cost"  : {
+        "title"       : "Cantrip",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : -1e200,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
           }
         ]
       }

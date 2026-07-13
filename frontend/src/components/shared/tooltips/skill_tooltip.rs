@@ -338,7 +338,7 @@ pub fn format_target(
             }
         }
         SkillRange::Distance => "Distance",
-        SkillRange::Any => "Any",
+        SkillRange::Any => "Any Target",
     };
 
     let repeat = if targets_group.repeat.value.max > 1 {
@@ -372,7 +372,7 @@ pub fn repeat_str(skill_repeat: &SkillRepeat) -> String {
     format!(
         "{} {}",
         match skill_repeat.target {
-            SkillRepeatTarget::Any => "Multi-Hit",
+            SkillRepeatTarget::Any => "Multi",
             SkillRepeatTarget::Same => "Repeat",
             SkillRepeatTarget::Different => "Chain",
         },

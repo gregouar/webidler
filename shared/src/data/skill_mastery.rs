@@ -36,6 +36,8 @@ pub struct SkillMasteryUpgradeEffect {
     pub upgrade_value: f64,
     #[serde(flatten)]
     pub effect_type: SkillMasteryUpgradeEffectType,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

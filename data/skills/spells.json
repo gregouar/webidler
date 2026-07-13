@@ -13,6 +13,7 @@
     "targets"        : [
       {
         "range"  : "Any",
+        "repeat" : {"value": 1, "target": "Any"},
         "effects": [
           {
             "FlatDamage": {
@@ -212,7 +213,7 @@
     ],
     "targets"        : [
       {
-        "range"  : "Any",
+        "range"  : "Distance",
         "shape"  : "All",
         "repeat" : {"value": 4, "target": "Any", "repeat_cooldown": 1},
         "effects": [
