@@ -220,7 +220,7 @@
   "blizzard"       : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage"       : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -229,6 +229,69 @@
           {
             "value"        : 10,
             "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"        : {
+        "title"       : "Spell Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "chill"        : {
+        "title"       : "Chilling Cold",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "chill", "value": 5} }
+          }
+        ]
+      },
+      "repeat"       : {
+        "title"       : "Enduring Winter",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "SkillRepeat": {"skill_id": "blizzard"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "vulnerability": {
+        "title"       : "Chilblains",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "blizzard_vulnerability", "value": 20} }
+          },
+          {
+            "value"        : -50,
+            "upgrade_value": 0,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]

@@ -578,7 +578,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!(
                 "{}Speed",
                 if skill_str.is_empty() {
-                    "Skills "
+                    "Action "
                 } else {
                     &skill_str
                 }

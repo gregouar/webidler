@@ -55,7 +55,7 @@
   },
   "blizzard"       : {
     "name"           : "Blizzard",
-    "description"    : "Summon a mighty storm that repeatedly hit enemies and slow them.",
+    "description"    : "Summon a mighty storm that repeatedly hit enemies.",
     "icon"           : "skills/blizzard.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 8,
@@ -74,8 +74,7 @@
             "FlatDamage": {
               "damage": { "Storm": [0, 5] }
             }
-          },
-          { "ApplyStatus": {"status_id": "chill", "value": 5} }
+          }
         ]
       }
     ]
