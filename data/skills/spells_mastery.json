@@ -36,6 +36,11 @@
               },
               "modifier": "Flat"
             }
+          },
+          {
+            "value"        : 100,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
           }
         ]
       },
@@ -77,6 +82,37 @@
             "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
           }
         ]
+      },
+      "physical"   : {
+        "title"       : "Kinetic Bolt",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Damage": {"damage_type": "Storm", "min_max": null} },
+                  "stat"      : {
+                    "Damage": {
+                      "skill_type" : null,
+                      "skill_id"   : null,
+                      "damage_type": "Physical",
+                      "min_max"    : null,
+                      "is_hit"     : null
+                    }
+                  },
+                  "is_extra"  : false,
+                  "skill_type": null
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
       }
     }
   },
@@ -93,6 +129,19 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "stun"  : {
+        "title"       : "Aftershock",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "success_chance": 30, "ApplyStatus": {"status_id": "stun", "value": 1} }
           }
         ]
       }

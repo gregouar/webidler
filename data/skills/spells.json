@@ -28,7 +28,7 @@
   },
   "chain_lightning": {
     "name"           : "Chain Lightning",
-    "description"    : "A powerful spell that hit randomly multiple enemies, with a possibility to stun them.",
+    "description"    : "A powerful spell that hit randomly multiple enemies.",
     "icon"           : "skills/chain_lightning.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 4,
@@ -48,8 +48,7 @@
               "crit_chance": 5,
               "crit_damage": 100
             }
-          },
-          { "success_chance": 30, "ApplyStatus": {"status_id": "stun", "value": 1} }
+          }
         ]
       }
     ]
