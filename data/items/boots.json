@@ -4,15 +4,15 @@
     "icon": "items/boots/cloth_shoes.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 10.0,
@@ -21,23 +21,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_boots": {
     "name": "Leather Boots",
     "icon": "items/boots/leather_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 20.0,
@@ -46,15 +46,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "leather_boots_unique": {
     "name": "Pathwalker's Remains",
     "icon": "items/boots/pathwalker_remains.webp",
     "description": "Their journey never ended, maybe yours won't either.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -108,7 +108,7 @@
         "description": null,
         "trigger_id": "pathwalker_remains",
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -128,9 +128,10 @@
               ],
               "modifier": "Percent"
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": false
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
@@ -197,15 +198,15 @@
     "icon": "items/boots/reinforced_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 30.0,
@@ -214,23 +215,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "mail_boots": {
     "name": "Mail Boots",
     "icon": "items/boots/mail_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -239,23 +240,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "iron_shod_boots": {
     "name": "Iron-Shod Boots",
     "icon": "items/boots/iron_shod_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 50.0,
@@ -264,15 +265,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "treasure_compass": {
     "name": "Compass of Ruin",
     "icon": "items/boots/treasure_compass.webp",
     "description": "You stopped asking how it fits in your boots. You should have kept asking where it points though.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -291,12 +292,12 @@
     "triggers": [
       {
         "OnKill": {
-          "conditions": [ ]
+          "conditions": []
         },
         "description": null,
         "trigger_id": "treasure_compass_blessing",
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -319,9 +320,10 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": true
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           },
           {
             "success_chance": {
@@ -339,9 +341,10 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": true
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           },
           {
             "success_chance": {
@@ -359,20 +362,21 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": true
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           }
         ]
       },
       {
         "OnKill": {
-          "conditions": [ ]
+          "conditions": []
         },
         "description": null,
         "trigger_id": "treasure_compass_curse",
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
@@ -395,9 +399,10 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": true
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           },
           {
             "success_chance": {
@@ -415,9 +420,10 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": true
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           }
         ]
       }
@@ -455,15 +461,15 @@
     "icon": "items/boots/sabatons.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 60.0,
@@ -472,15 +478,180 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "yeti_boots": {
+    "name": "Abominable Steps",
+    "icon": "items/boots/yeti_boots.webp",
+    "description": "The fur is warm. The smell is unforgettable.",
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 260,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "Life",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          60.0,
+          80.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          60.0,
+          80.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "blizzard_vulnerability",
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "chill",
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnWaveCompleted": null,
+        "description": null,
+        "trigger_id": "yeti_boots_stinky",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "stinky",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 60.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
     "icon": "items/boots/dragon_boots.webp",
     "description": "The Father Drake never fled, the storm simply carried him elsewhere.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -549,7 +720,7 @@
         "description": null,
         "trigger_id": "sabatons_unique",
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -572,9 +743,10 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": false
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
@@ -639,15 +811,15 @@
     "icon": "items/boots/plated_boots.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 70.0,
@@ -656,15 +828,15 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "yokai_sandals": {
     "name": "Kaidan Geta",
     "icon": "items/boots/yokai_sandals.webp",
     "description": "Each tale ends the same: footsteps fading into nothing.",
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
@@ -710,12 +882,12 @@
     "triggers": [
       {
         "OnKill": {
-          "conditions": [ ]
+          "conditions": []
         },
         "description": null,
         "trigger_id": "spirit_walker",
         "target": "Me",
-        "modifiers": [ ],
+        "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -738,9 +910,10 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ],
-            "independent_application": false
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
@@ -796,15 +969,15 @@
     "icon": "items/boots/runic_greaves.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 80.0,
@@ -813,23 +986,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "boots_9": {
     "name": "Mithril Sollerets",
     "icon": "items/boots/mithril_sollerets.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 90.0,
@@ -838,23 +1011,23 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "boots_10": {
     "name": "Adamantium Greaves",
     "icon": "items/boots/adamentium_greaves.webp",
     "description": null,
     "slot": "Boots",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Armor",
       "Boots"
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [ ],
-    "triggers": [ ],
+    "affixes": [],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 100.0,
@@ -863,7 +1036,7 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

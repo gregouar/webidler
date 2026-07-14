@@ -287,12 +287,28 @@
           {
             "value"        : 1,
             "upgrade_value": 0,
-            "SkillEffect"  : { "ApplyStatus": {"status_id": "blizzard_vulnerability", "value": 20} }
-          },
+            "Trigger"      : {
+              "trigger_id": "blizzard_vulnerability",
+              "skill_type": "Spell",
+              "OnHit"     : { "skill_ids": ["blizzard"], "is_hurt": true, "is_crit": true },
+              "target"    : "SameTarget",
+              "effects"   : [
+                { "ApplyStatus": {"status_id": "blizzard_vulnerability", "value": 100} }
+              ]
+            }
+          }
+        ]
+      },
+      "crit_chance"  : {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
+        "effects"     : [
           {
-            "value"        : -50,
-            "upgrade_value": 0,
-            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Flat" }
           }
         ]
       }
