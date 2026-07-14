@@ -1,111 +1,161 @@
 {
   "wooden_rod": {
-    "name"           : "Wooden Rod",
-    "icon"           : "items/weapons_spell/wooden_rod.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 0,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Wooden Rod",
+    "icon": "items/weapons_spell/wooden_rod.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 0,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 20.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 20.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "wand": {
-    "name"           : "Magic Wand",
-    "icon"           : "items/weapons_spell/wand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 40,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Magic Wand",
+    "icon": "items/weapons_spell/wand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 40,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 40.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 40.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "wand_unique": {
-    "name"           : "Baguette du Fromage",
-    "icon"           : "items/weapons_spell/baguette_fromage.webp",
-    "description"    : "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 50,
-    "rarity"         : "Unique",
-    "affixes"        : [
+    "name": "Baguette du Fromage",
+    "icon": "items/weapons_spell/baguette_fromage.webp",
+    "description": "An artisan's folly turned arcane marvel; its aroma is divine, its sting utterly vile.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 50,
+    "rarity": "Unique",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 40.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 40.0,
         "ignore_quality": false
       },
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
         "ignore_quality": true
       },
-      { "stat": "Mana", "modifier": "Increased", "scope": "Global", "value": [5.0, 10.0], "ignore_quality": true },
       {
-        "stat"          : { "Speed": {"skill_type": "Spell", "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [8.0, 12.0],
+        "stat": "Mana",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          5.0,
+          10.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          8.0,
+          12.0
+        ],
         "ignore_quality": true
       }
     ],
-    "triggers"       : [
+    "triggers": [
       {
         "OnHit": {
-          "skill_type"  : "Spell",
-          "range"       : null,
-          "is_crit"     : null,
-          "is_blocked"  : null,
-          "is_hurt"     : null,
+          "skill_type": "Spell",
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
           "is_triggered": null,
-          "damage_type" : "Fire",
-          "skill_ids"   : null,
-          "conditions"  : []
+          "damage_type": "Fire",
+          "skill_ids": null,
+          "conditions": []
         },
         "description": null,
         "trigger_id": "baguette_fromage",
@@ -118,218 +168,361 @@
         "skill_shape": "Single",
         "effects": [
           {
-            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "cheese",
-              "value"                : 100.0,
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "damage_type"          : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "cheese",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
-            "independent_application": false
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
     ],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [100, 150, 200, 260, 330, 410, 500, 600],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      100,
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
     "upgrade_effects": [
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : {
-            "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
           },
           "modifier": "More",
-          "value"   : 25.0
+          "value": 25.0
         }
       },
-      { "scope": "Global", "stat_effect": {"stat": "Mana", "modifier": "Increased", "value": 3.0} }
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Increased",
+          "value": 3.0
+        }
+      }
     ]
   },
   "bone_wand": {
-    "name"           : "Bone Wand",
-    "icon"           : "items/weapons_spell/bone_wand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 90,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Bone Wand",
+    "icon": "items/weapons_spell/bone_wand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 90,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 60.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 60.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "iron_wand": {
-    "name"           : "Iron Wand",
-    "icon"           : "items/weapons_spell/iron_wand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 140,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Iron Wand",
+    "icon": "items/weapons_spell/iron_wand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 140,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 80.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 80.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "iron_wand_unique": {
-    "name"           : "Starlit Baton",
-    "icon"           : "items/weapons_spell/princess_wand.webp",
-    "description"    : "A flick of the wrist, and the stars learn to travel in pairs.",
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 150,
-    "rarity"         : "Unique",
-    "affixes"        : [
+    "name": "Starlit Baton",
+    "icon": "items/weapons_spell/princess_wand.webp",
+    "description": "A flick of the wrist, and the stars learn to travel in pairs.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 80.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 80.0,
         "ignore_quality": false
       },
       {
-        "stat"          : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Storm", "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [80.0, 120.0],
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
         "ignore_quality": true
       },
       {
-        "stat"          : { "CritChance": {"skill_type": "Spell", "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : 50.0,
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Storm",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
         "ignore_quality": true
       },
       {
-        "stat"          : { "Speed": {"skill_type": "Spell", "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [12.0, 16.0],
+        "stat": {
+          "CritChance": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 50.0,
         "ignore_quality": true
       },
       {
-        "stat"          : { "SkillRepeat": {"skill_id": "magic_missile"} },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 100,
+        "stat": {
+          "Speed": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          12.0,
+          16.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillRepeat": {
+            "skill_type": null,
+            "skill_id": "magic_missile"
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [200, 260, 330, 410, 500, 600],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
     "upgrade_effects": [
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : {
-            "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
           },
           "modifier": "More",
-          "value"   : 20.0
+          "value": 20.0
         }
       },
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : {
-            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Storm", "min_max": null, "is_hit": null}
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": null,
+              "is_hit": null
+            }
           },
           "modifier": "More",
-          "value"   : 25.0
+          "value": 25.0
         }
       },
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : { "CritChance": {"skill_type": "Spell", "skill_id": null} },
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Storm",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "CritChance": {
+              "skill_type": "Spell",
+              "skill_id": null
+            }
+          },
           "modifier": "Increased",
-          "value"   : 10.0
+          "value": 10.0
         }
       }
     ]
   },
   "decorated_wand": {
-    "name"           : "Decorated Wand",
-    "icon"           : "items/weapons_spell/carved_wand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 190,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Decorated Wand",
+    "icon": "items/weapons_spell/carved_wand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 190,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 100.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "decorated_wand_unique": {
@@ -338,52 +531,100 @@
     "description": "Wizards say this horn was carved to pour mana, not keep it, and it has never stopped spilling since.",
     "slot": "Weapon",
     "extra_slots": [],
-    "categories": ["SpellWeapon"],
+    "categories": [
+      "SpellWeapon"
+    ],
     "min_area_level": 200,
     "rarity": "Unique",
     "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 100.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": false
       },
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [100.0, 150.0],
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
         "ignore_quality": true
       },
       {
-        "stat"          : { "Speed": {"skill_type": "Spell", "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [20.0, 25.0],
+        "stat": {
+          "Speed": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          20.0,
+          25.0
+        ],
         "ignore_quality": true
       },
-      { "stat": "ManaRegen", "modifier": "Flat", "scope": "Global", "value": [100.0, 150.0], "ignore_quality": true },
       {
-        "stat"          : {
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "StatConditionalModifier": {
-            "stat"               : {
-              "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
             },
-            "conditions"         : ["MaximumMana"],
+            "conditions": [
+              "MaximumMana"
+            ],
             "conditions_duration": 0
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : -300.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": -300.0,
         "ignore_quality": true
       },
-      {"stat": "Mana", "modifier": "More", "scope": "Global", "value": -300.0, "ignore_quality": true}
+      {
+        "stat": "Mana",
+        "modifier": "More",
+        "scope": "Global",
+        "value": -300.0,
+        "ignore_quality": true
+      }
     ],
     "triggers": [],
     "weapon_specs": null,
@@ -391,246 +632,345 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [260, 330, 410, 500, 600],
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
     "upgrade_effects": [
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : {
-            "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
           },
           "modifier": "More",
-          "value"   : 40.0
+          "value": 40.0
         }
       }
     ]
   },
   "crystal_wand": {
-    "name"           : "Crystal Wand",
-    "icon"           : "items/weapons_spell/crystal_wand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 250,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Crystal Wand",
+    "icon": "items/weapons_spell/crystal_wand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 250,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 120.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 120.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "wand_prism": {
-    "name"           : "The Refracting Rod",
-    "icon"           : "items/weapons_spell/prism.webp",
-    "description"    : "A single line, broken into obedience.",
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 260,
-    "rarity"         : "Unique",
-    "affixes"        : [
+    "name": "The Refracting Rod",
+    "icon": "items/weapons_spell/prism.webp",
+    "description": "A single line, broken into obedience.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 260,
+    "rarity": "Unique",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 120.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 120.0,
         "ignore_quality": false
       },
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
-        },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [100.0, 160.0],
-        "ignore_quality": true
-      },
-      {
-        "stat"          : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
-        },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [150.0, 200.0],
-        "ignore_quality": true
-      },
-      {
-        "stat"          : {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id"  : "burning_ray",
-            "range"     : null,
-            "shape"     : null,
-            "repeat"    : {"min_value": 3, "max_value": 3, "target": "Any"}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 1.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          160.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Fire",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillTargetModifier": {
+            "skill_type": null,
+            "skill_id": "burning_ray",
+            "range": null,
+            "shape": null,
+            "repeat": {
+              "min_value": 3,
+              "max_value": 3,
+              "target": "Any"
+            }
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
         "ignore_quality": true
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [330, 410, 500, 600],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
     "upgrade_effects": [
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : {
-            "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
           },
           "modifier": "More",
-          "value"   : 45.0
+          "value": 45.0
         }
       },
       {
-        "scope"      : "Global",
+        "scope": "Global",
         "stat_effect": {
-          "stat"    : {
-            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Fire",
+              "min_max": null,
+              "is_hit": null
+            }
           },
           "modifier": "More",
-          "value"   : 25.0
+          "value": 25.0
         }
       }
     ]
   },
   "weapon_spell_7": {
-    "name"           : "Mage Wand",
-    "icon"           : "items/weapons_spell/mage_wand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 320,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Mage Wand",
+    "icon": "items/weapons_spell/mage_wand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 320,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 140.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 140.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "weapon_spell_8": {
-    "name"           : "Mystical Rod",
-    "icon"           : "items/weapons_spell/mystical_rod.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 400,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Mystical Rod",
+    "icon": "items/weapons_spell/mystical_rod.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 160.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 160.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "weapon_spell_9": {
-    "name"           : "Scepter",
-    "icon"           : "items/weapons_spell/scepter.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 490,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Scepter",
+    "icon": "items/weapons_spell/scepter.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 180.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 180.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   },
   "weapon_spell_10": {
-    "name"           : "Archmage Hand",
-    "icon"           : "items/weapons_spell/archmage_hand.webp",
-    "description"    : null,
-    "slot"           : "Weapon",
-    "extra_slots"    : [],
-    "categories"     : ["SpellWeapon"],
-    "min_area_level" : 590,
-    "rarity"         : "Normal",
-    "affixes"        : [
+    "name": "Archmage Hand",
+    "icon": "items/weapons_spell/archmage_hand.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [
       {
-        "stat"          : {
-          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 200.0,
+        "modifier": "More",
+        "scope": "Global",
+        "value": 200.0,
         "ignore_quality": false
       }
     ],
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : false,
-    "upgrade_levels" : [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
     "upgrade_effects": []
   }
 }

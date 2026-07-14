@@ -40,7 +40,7 @@
     "targets"        : [
       {
         "range"  : "Any",
-        "repeat" : {"value": 3, "target": "Different"},
+        "repeat" : {"value": 3, "target": "Different", "repeat_cooldown": 0.5},
         "effects": [
           {
             "FlatDamage": {

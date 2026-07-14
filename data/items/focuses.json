@@ -583,7 +583,17 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Spell",
+                  "skill_id": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false
@@ -822,11 +832,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusEscalation": {
+                "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "min_max": null
                 }
               },
               {
@@ -839,7 +850,7 @@
                 }
               },
               {
-                "StatusDuration": {
+                "StatusEscalation": {
                   "status_id": null,
                   "damage_type": null,
                   "skill_type": null,
@@ -847,12 +858,11 @@
                 }
               },
               {
-                "StatusPower": {
+                "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
+                  "skill_id": null
                 }
               }
             ],
