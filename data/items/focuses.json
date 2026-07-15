@@ -329,8 +329,12 @@
             "skill_type": null,
             "skill_id": "fireball",
             "range": null,
-            "shape": "All",
-            "repeat": null
+            "shape": null,
+            "repeat": {
+              "min_value": 2,
+              "max_value": 2,
+              "target": "Any"
+            }
           }
         },
         "modifier": "Flat",

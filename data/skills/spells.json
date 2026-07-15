@@ -81,7 +81,7 @@
   },
   "fireball"       : {
     "name"           : "Fireball",
-    "description"    : "Hurl a blazing fireball that explodes on impact, scorching multiple enemies within its area.",
+    "description"    : "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",
     "icon"           : "skills/fireball.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 4,
@@ -94,6 +94,7 @@
       {
         "range"  : "Distance",
         "shape"  : "Square4",
+        "repeat" : {"value": 1, "target": "Any", "repeat_cooldown": 0.5},
         "effects": [
           {
             "FlatDamage": {

@@ -528,6 +528,18 @@
       },
       {
         "stat": {
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": "blizzard"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "StatusStacks": {
             "status_id": "blizzard_vulnerability",
             "damage_type": null,
@@ -538,21 +550,6 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 5.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "chill",
-            "damage_type": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 50.0,
         "ignore_quality": true
       }
     ],

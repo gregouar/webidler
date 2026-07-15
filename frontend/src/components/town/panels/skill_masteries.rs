@@ -795,9 +795,13 @@ fn MasteryUpgradeRow(
                                             view! {
                                                 <div>
                                                     "Cost: "
-                                                    <span class="font-bold text-zinc-100">
-                                                        {move || next_cost.get()}
-                                                    </span>
+                                                    <span class=move || {
+                                                        if available_points.get() < next_cost.get() {
+                                                            "font-bold text-red-400"
+                                                        } else {
+                                                            "font-bold text-zinc-100"
+                                                        }
+                                                    }>{move || next_cost.get()}</span>
                                                 </div>
                                             }
                                         })}

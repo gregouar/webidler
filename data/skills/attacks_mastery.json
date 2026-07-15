@@ -425,8 +425,8 @@
       },
       "damage_against_burning": {
         "title"       : "Thermal Updraft",
-        "base_cost"   : 5,
-        "upgrade_cost": 5,
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
         "max_level"   : 10,
         "effects"     : [
           {
@@ -451,8 +451,8 @@
       },
       "damage_against_stunned": {
         "title"       : "Flashover",
-        "base_cost"   : 5,
-        "upgrade_cost": 5,
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
         "max_level"   : 10,
         "effects"     : [
           {

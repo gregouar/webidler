@@ -168,8 +168,8 @@
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 2,
-            "upgrade_value": 2,
+            "value"        : 3,
+            "upgrade_value": 3,
             "StatEffect"   : {
               "stat"    : { "Damage": {"min_max": "Max", "damage_type": "Storm"} },
               "modifier": "Flat"
@@ -249,16 +249,16 @@
           }
         ]
       },
-      "chill"        : {
-        "title"       : "Chilling Cold",
-        "base_cost"   : 5,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+      "crit_chance"  : {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
         "effects"     : [
           {
             "value"        : 1,
-            "upgrade_value": 0,
-            "SkillEffect"  : { "ApplyStatus": {"status_id": "chill", "value": 5} }
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Flat" }
           }
         ]
       },
@@ -275,6 +275,19 @@
               "stat"    : { "SkillRepeat": {"skill_id": "blizzard"} },
               "modifier": "Flat"
             }
+          }
+        ]
+      },
+      "chill"        : {
+        "title"       : "Chilling Cold",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "chill", "value": 5} }
           }
         ]
       },
@@ -298,26 +311,13 @@
             }
           }
         ]
-      },
-      "crit_chance"  : {
-        "title"       : "Critical Hit Chance",
-        "base_cost"   : 2,
-        "upgrade_cost": 2,
-        "max_level"   : 5,
-        "effects"     : [
-          {
-            "value"        : 1,
-            "upgrade_value": 1,
-            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Flat" }
-          }
-        ]
       }
     }
   },
   "fireball"       : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage"        : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -327,6 +327,101 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"         : {
+        "title"       : "Spell Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "damage_burning": {
+        "title"       : "Fuel to the Fire",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 20,
+            "upgrade_value": 20,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : {"Damage": {}},
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "conditions": [
+                    { "HasStatus": {"status_id": "burn"} }
+                  ]
+                }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "combustion"    : {
+        "title"       : "Total Combustion",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : {"Damage": {}},
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "burn"} }
+                  ]
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "area"          : {
+        "title"       : "Paxtul's Sacrifice",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_type": null,
+                  "skill_id"  : "fireball",
+                  "range"     : null,
+                  "shape"     : "All",
+                  "repeat"    : null
+                }
+              },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -1,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
           }
         ]
       }

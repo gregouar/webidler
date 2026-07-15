@@ -49,7 +49,7 @@
         "name"      : "Chilblains",
         "icon"      : "statuses/brain_freeze.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 10,
         "max_stacks": 5,
         "effects"   : [
             {
