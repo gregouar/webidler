@@ -47,10 +47,24 @@
     },
     "blizzard_vulnerability": {
         "name"      : "Chilblains",
-        "icon"      : "statuses/brain_freeze.svg",
+        "icon"      : "statuses/hand_bandage.svg",
         "debuff"    : true,
         "duration"  : 10,
         "max_stacks": 5,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "burning_ray_scorching" : {
+        "name"      : "Scorched",
+        "icon"      : "passives/flaming_claw.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
         "effects"   : [
             {
                 "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },

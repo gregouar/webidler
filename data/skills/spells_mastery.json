@@ -346,6 +346,19 @@
           }
         ]
       },
+      "crit_chance"   : {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
       "damage_burning": {
         "title"       : "Fuel to the Fire",
         "base_cost"   : 2,
@@ -367,31 +380,6 @@
                 }
               },
               "modifier": "More"
-            }
-          }
-        ]
-      },
-      "combustion"    : {
-        "title"       : "Total Combustion",
-        "base_cost"   : 10,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
-        "effects"     : [
-          {
-            "value"        : 1,
-            "upgrade_value": 0,
-            "StatEffect"   : {
-              "stat"    : {
-                "SkillConditionalModifier": {
-                  "stat"      : {"Damage": {}},
-                  "skill_type": null,
-                  "skill_id"  : null,
-                  "conditions": [
-                    { "StatusStacks": {"status_id": "burn"} }
-                  ]
-                }
-              },
-              "modifier": "Flat"
             }
           }
         ]
@@ -424,13 +412,38 @@
             "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
           }
         ]
+      },
+      "combustion"    : {
+        "title"       : "Total Combustion",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : {"Damage": {}},
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "burn"} }
+                  ]
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
       }
     }
   },
   "burning_ray"    : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage"       : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -440,6 +453,102 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"        : {
+        "title"       : "Spell Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "burn_duration": {
+        "title"       : "Burn Duration",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "burn"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "scorching"    : {
+        "title"       : "Scorching Ray",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "burning_ray_scorching", "value": 100} }
+          }
+        ]
+      },
+      "double"       : {
+        "title"       : "Backdraft",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "success_chance": 25,
+              "ApplyStatus"   : { "status_id": "burn", "value": [2, 5] }
+            }
+          }
+        ]
+      },
+      "slow_start"   : {
+        "title"       : "Creeping Inferno",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 20,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : {"Damage": {}},
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "burn"} }
+                  ]
+                }
+              },
+              "modifier": "More"
+            }
           }
         ]
       }
