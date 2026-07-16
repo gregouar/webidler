@@ -570,11 +570,61 @@
               "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
               "modifier": "More"
             }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "modifier": "More"
+            },
+            "hidden"       : true
+          }
+        ]
+      },
+      "speed"           : {
+        "title"       : "Spell Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "damage_self"     : {
+        "title"       : "Carefulness",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : -10,
+            "upgrade_value": -10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "righteous_fire_self"} },
+              "modifier": "More"
+            }
+          },
+          {
+            "value"        : -10,
+            "upgrade_value": -10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire_self"} },
+              "modifier": "More"
+            },
+            "hidden"       : true
           }
         ]
       },
       "unrighteous_fire": {
-        "title"       : "Unrighteous Fire",
+        "title"       : "Blasphemous Poison",
         "base_cost"   : 10,
         "upgrade_cost": 0,
         "max_level"   : 1,

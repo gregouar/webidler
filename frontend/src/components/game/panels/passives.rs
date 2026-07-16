@@ -34,6 +34,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let search_node = RwSignal::new(None);
+    let highlighted_node = RwSignal::new(None);
     let search_node_ref = NodeRef::<leptos::html::Input>::new();
 
     Effect::new({
@@ -85,12 +86,12 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
                         <div class="flex-1" />
 
                         <div class="flex items-center gap-2 mx-2">
-                            <AutoButton />
+                            <AutoButton highlighted_node />
                         </div>
 
                     </CardHeader>
                     <CardInset pad=false class="relative">
-                        <PassiveSkillTree search_node />
+                        <PassiveSkillTree search_node highlighted_node />
                     </CardInset>
                 </MenuCard>
             </div>
@@ -99,7 +100,7 @@ pub fn PassivesPanel(open: RwSignal<bool>) -> impl IntoView {
 }
 
 #[component]
-fn AutoButton() -> impl IntoView {
+fn AutoButton(highlighted_node: RwSignal<Option<PassiveNodeId>>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let points_available =
@@ -119,6 +120,12 @@ fn AutoButton() -> impl IntoView {
     });
 
     let disabled = Signal::derive(move || !points_available.get() || next_node.read().is_none());
+    let hovered = RwSignal::new(false);
+
+    Effect::new(move |_| {
+        highlighted_node.set(hovered.get().then(|| next_node.get()).flatten());
+    });
+    on_cleanup(move || highlighted_node.set(None));
 
     let tooltip = move || {
         view! {
@@ -151,11 +158,16 @@ fn AutoButton() -> impl IntoView {
     };
 
     view! {
-        <StaticTooltip tooltip position=StaticTooltipPosition::Bottom>
-            <MenuButton on:click=auto_assign disabled>
-                "Auto Assign"
-            </MenuButton>
-        </StaticTooltip>
+        <div
+            on:mouseenter=move |_| hovered.set(true)
+            on:mouseleave=move |_| hovered.set(false)
+        >
+            <StaticTooltip tooltip position=StaticTooltipPosition::Bottom>
+                <MenuButton on:click=auto_assign disabled>
+                    "Auto Assign"
+                </MenuButton>
+            </StaticTooltip>
+        </div>
     }
 }
 
@@ -220,7 +232,10 @@ fn ExportButton() -> impl IntoView {
 }
 
 #[component]
-fn PassiveSkillTree(search_node: RwSignal<Option<String>>) -> impl IntoView {
+fn PassiveSkillTree(
+    search_node: RwSignal<Option<String>>,
+    highlighted_node: RwSignal<Option<PassiveNodeId>>,
+) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
 
     let points_available =
@@ -256,6 +271,7 @@ fn PassiveSkillTree(search_node: RwSignal<Option<String>>) -> impl IntoView {
                     node_specs=node
                     points_available=points_available
                     search_node
+                    highlighted_node
                 />
             </For>
         </Pannable>
@@ -268,6 +284,7 @@ fn InGameNode(
     node_specs: PassiveNodeSpecs,
     points_available: Memo<bool>,
     search_node: RwSignal<Option<String>>,
+    highlighted_node: RwSignal<Option<PassiveNodeId>>,
 ) -> impl IntoView {
     let game_context: GameContext = expect_context();
     let node_level = Memo::new(move |_| {
@@ -347,6 +364,11 @@ fn InGameNode(
             on_right_click=|| {}
             show_upgrade=false
             search_node
+            highlight_override=Signal::derive(move || {
+                highlighted_node
+                    .get()
+                    .map(|highlighted_node_id| highlighted_node_id == node_id)
+            })
         />
     }
 }

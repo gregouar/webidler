@@ -68,19 +68,39 @@ pub fn SkillMasteryCard(
     let settings = expect_context::<SettingsContext>();
     let data_context = expect_context::<DataContext>();
 
-    let max_level = skill_specs
+    let mastery_specs = skill_specs.as_ref().and_then(|skill_specs| {
+        data_context
+            .skill_mastery_specs
+            .read()
+            .get(&skill_specs.skill_id)
+            .cloned()
+    });
+    let max_level = mastery_specs
         .as_ref()
-        .and_then(|skill_specs| {
-            data_context
-                .skill_mastery_specs
-                .read()
-                .get(&skill_specs.skill_id)
-                .map(|specs| specs.max_level)
-        })
+        .map(|mastery_specs| mastery_specs.max_level)
         .unwrap_or_default();
     let level = skill_mastery_state
         .as_ref()
         .map(|skill_mastery_state| skill_mastery_state.level(max_level));
+    let remaining_points = skill_mastery_state
+        .as_ref()
+        .zip(mastery_specs.as_ref())
+        .map(|(skill_mastery_state, mastery_specs)| {
+            let spent_points = skill_mastery_state
+                .upgrades_bought
+                .iter()
+                .filter_map(|(upgrade_id, upgrade_level)| {
+                    mastery_specs
+                        .upgrades
+                        .get(upgrade_id)
+                        .map(|upgrade| upgrade.compute_cost(*upgrade_level))
+                })
+                .fold(0u16, u16::saturating_add);
+
+            skill_mastery_state
+                .level(max_level)
+                .saturating_sub(spent_points)
+        });
     let is_max_level = level.map(|level| level >= max_level).unwrap_or(true);
     let has_progress = skill_mastery_state.is_some();
     let relative_experience = skill_mastery_state
@@ -255,6 +275,9 @@ pub fn SkillMasteryCard(
                                         }
                                     })}
                                 {level}
+                                {remaining_points
+                                    .filter(|remaining_points| *remaining_points > 0)
+                                    .map(|remaining_points| format!(" (+{remaining_points})"))}
                             }
                                 .into_any()
                         })}
