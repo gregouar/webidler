@@ -133,7 +133,7 @@
     "description"        : "Remove your pants and burn everything, including yourself.",
     "icon"               : "skills/righteous_fire.svg",
     "skill_type"         : "Spell",
-    "cooldown"           : 1,
+    "cooldown"           : 1.5,
     "mana_cost"          : 4,
     "upgrade_cost"       : 50,
     "upgrade_effects"    : [
@@ -200,21 +200,21 @@
     ]
   },
   "poison_cloud"   : {
-    "name"           : "Poison Cloud",
-    "description"    : "Summon a toxic cloud that poisons all enemies in its area, dealing damage over time.",
-    "icon"           : "skills/poison_cloud.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 8,
-    "mana_cost"      : 20,
-    "upgrade_cost"   : 50,
+    "name": "Poison Cloud",
+    "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
+    "icon": "skills/poison_cloud.svg",
+    "skill_type": "Spell",
+    "cooldown": 8,
+    "mana_cost": 20,
+    "upgrade_cost": 50,
     "upgrade_effects": [
       { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
     ],
-    "targets"        : [
+    "targets": [
       {
         "range"  : "Distance",
         "shape"  : "All",
-        "repeat" : {"value": 4, "target": "Any", "repeat_cooldown": 1},
+        "repeat" : {"value": 2, "target": "Any", "repeat_cooldown": 1},
         "effects": [
           {
             "ApplyStatus": { "status_id": "poison", "value": [4, 8] }

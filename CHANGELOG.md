@@ -16,7 +16,8 @@ Content:
 Balance Changes:
 
 - Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
-- Almost all "More Critical Damage" have been transformed to "Increased Critical Damage".
+- Almost all "More Critical Damage" have been transformed to "Increased Critical Damage" (this is a nerf).
+- Damage Taken modifier can now be More and become multiplicative with each others.
 
 ## Major Game Update: «Awakening of the Spider Witch»
 

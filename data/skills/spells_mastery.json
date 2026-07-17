@@ -599,7 +599,7 @@
         ]
       },
       "damage_self"     : {
-        "title"       : "Carefulness",
+        "title"       : "Controlled Burn",
         "base_cost"   : 2,
         "upgrade_cost": 2,
         "max_level"   : 10,
@@ -623,9 +623,95 @@
           }
         ]
       },
-      "unrighteous_fire": {
-        "title"       : "Blasphemous Poison",
+      "self_damage"     : {
+        "title"       : "Fanaticism",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
+              "modifier": "More"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"         : { "StatusPower": {"status_id": "righteous_fire_self"} },
+              "modifier"     : "More",
+              "bypass_ignore": true
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "modifier": "More"
+            },
+            "hidden"       : true
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"         : { "StatusPower": {"status_id": "unrighteous_fire_self"} },
+              "modifier"     : "More",
+              "bypass_ignore": true
+            },
+            "hidden"       : true
+          }
+        ]
+      },
+      "area"            : {
+        "title"       : "Conflagration",
         "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : -185,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
+              "modifier": "More"
+            }
+          },
+          {
+            "value"        : -185,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "modifier": "More"
+            },
+            "hidden"       : true
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillTargetModifier": {"shape": "Square4", "skill_id": "righteous_fire"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillTargetModifier": {"shape": "Square4", "skill_id": "unrighteous_fire"} },
+              "modifier": "Flat"
+            },
+            "hidden"       : true
+          }
+        ]
+      },
+      "unrighteous_fire": {
+        "title"       : "Apostasy",
+        "base_cost"   : 5,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -672,6 +758,46 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed" : {
+        "title"       : "Spell Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "multi" : {
+        "title"       : "Thick Cloud",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_type": null,
+                  "skill_id"  : "poison_cloud",
+                  "range"     : null,
+                  "shape"     : null,
+                  "repeat"    : {"min_value": 4, "max_value": 4, "target": "Any"}
+                }
+              },
+              "modifier": "Increased"
+            }
           }
         ]
       }
