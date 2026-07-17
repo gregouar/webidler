@@ -522,30 +522,6 @@
           }
         ]
       },
-      "aggravating_bleed": {
-        "title"       : "Hemorrhagic Cascade",
-        "base_cost"   : 3,
-        "upgrade_cost": 3,
-        "max_level"   : 10,
-        "effects"     : [
-          {
-            "value"        : 5,
-            "upgrade_value": 5,
-            "StatEffect"   : {
-              "stat"    : {
-                "SkillConditionalModifier": {
-                  "stat"      : { "StatusPower": {"status_id": "bleed"} },
-                  "conditions": [
-                    { "StatusStacks": {"status_id": "bleed"} }
-                  ]
-                }
-              },
-              "modifier": "More",
-              "scope"   : "Global"
-            }
-          }
-        ]
-      },
       "bleed_chance"     : {
         "title"       : "Bleed Chance",
         "base_cost"   : 1,
@@ -607,6 +583,30 @@
                 }
               },
               "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "aggravating_bleed": {
+        "title"       : "Hemorrhagic Cascade",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 5,
+            "upgrade_value": 5,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "StatusPower": {"status_id": "bleed"} },
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "bleed"} }
+                  ]
+                }
+              },
+              "modifier": "More",
               "scope"   : "Global"
             }
           }

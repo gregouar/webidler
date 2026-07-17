@@ -748,7 +748,7 @@
   "poison_cloud"   : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage"       : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -761,7 +761,7 @@
           }
         ]
       },
-      "speed" : {
+      "speed"        : {
         "title"       : "Spell Speed",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -777,9 +777,41 @@
           }
         ]
       },
-      "multi" : {
-        "title"       : "Thick Cloud",
-        "base_cost"   : 5,
+      "duration"     : {
+        "title"       : "Poison Duration",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 20,
+        "effects"     : [
+          {
+            "value"        : 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "poison"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "escalation"   : {
+        "title"       : "Intoxicating Fumes",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 20,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusEscalation": {"status_id": "poison"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "multi"        : {
+        "title"       : "Lingering Cloud",
+        "base_cost"   : 10,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -796,7 +828,28 @@
                   "repeat"    : {"min_value": 4, "max_value": 4, "target": "Any"}
                 }
               },
-              "modifier": "Increased"
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "vulnerability": {
+        "title"       : "Flesh Rot",
+        "base_cost"   : 5,
+        "upgrade_cost": 1,
+        "max_level"   : 11,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "poison_cloud_vulnerability", "value": 100} }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "poison_cloud_vulnerability"} },
+              "modifier": "Flat"
             }
           }
         ]
@@ -909,7 +962,7 @@
             }
           },
           {
-            "value"        : 50,
+            "value"        : 30,
             "upgrade_value": 5,
             "StatEffect"   : {
               "stat"    : { "StatusEscalation": {"status_id": "poison"} },
@@ -938,5 +991,25 @@
       }
     }
   },
-  "heal"           : {"max_level": 100, "upgrades": {}}
+  "heal"           : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage": {
+        "title"       : "Life Restored",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 5,
+            "upgrade_value": 5,
+            "StatEffect"   : {
+              "stat"    : { "Restore": {"restore_type": "Life"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  }
 }
