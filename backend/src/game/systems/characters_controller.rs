@@ -236,6 +236,14 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     true
 }
 
+pub fn kill_character(target: &mut Target) -> bool {
+    let (_, (_, target_state)) = target;
+    target_state.life = 0.0.into();
+    target_state.mana = 0.0.into();
+
+    true
+}
+
 pub fn refresh_skills_cooldown(
     target: &mut Target,
     skill_filter: &StatSkillFilter,

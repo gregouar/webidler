@@ -469,6 +469,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
                 }
         }
         SkillEffectType::Resurrect => !target.1.1.is_alive,
+        SkillEffectType::Kill => target.1.1.is_alive,
         SkillEffectType::RefreshCooldown { .. } => {
             target.1.1.is_alive // TODO: Actually verify skills
         }
@@ -580,6 +581,7 @@ fn apply_skill_effect_on_target(
             *modifier,
         ),
         SkillEffectType::Resurrect => characters_controller::resuscitate_character(target),
+        SkillEffectType::Kill => characters_controller::kill_character(target),
         SkillEffectType::RefreshCooldown {
             skill_filter,
             value,

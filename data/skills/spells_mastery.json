@@ -674,7 +674,7 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : -185,
+            "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
@@ -682,7 +682,7 @@
             }
           },
           {
-            "value"        : -185,
+            "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
@@ -976,7 +976,7 @@
   "voodoo_doll"    : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage" : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -986,6 +986,27 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "culling": {
+        "title"       : "Heart Pin",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "SuccessChance": {"effect_type": "Kill"} },
+                  "conditions": ["LowLife"]
+                }
+              },
+              "modifier": "Flat"
+            }
           }
         ]
       }

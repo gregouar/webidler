@@ -61,20 +61,6 @@ pub fn update_character_state(
     //         + (elapsed_time_f64 * character_specs.mana_regen * character_specs.max_mana * 0.001),
     // );
 
-    restore_character(
-        &mut (character_id, (character_specs, character_state)),
-        RestoreType::Life,
-        elapsed_time_f64 * *character_specs.character_attrs.life_regen * 0.1,
-        RestoreModifier::Percent,
-    );
-
-    restore_character(
-        &mut (character_id, (character_specs, character_state)),
-        RestoreType::Mana,
-        elapsed_time_f64 * *character_specs.character_attrs.mana_regen * 0.1,
-        RestoreModifier::Percent,
-    );
-
     character_state.life = character_state
         .life
         .get()
@@ -93,6 +79,20 @@ pub fn update_character_state(
             target: character_id,
         });
     }
+
+    restore_character(
+        &mut (character_id, (character_specs, character_state)),
+        RestoreType::Life,
+        elapsed_time_f64 * *character_specs.character_attrs.life_regen * 0.1,
+        RestoreModifier::Percent,
+    );
+
+    restore_character(
+        &mut (character_id, (character_specs, character_state)),
+        RestoreType::Mana,
+        elapsed_time_f64 * *character_specs.character_attrs.mana_regen * 0.1,
+        RestoreModifier::Percent,
+    );
 
     for monitored_condition in character_state.monitored_conditions.values_mut() {
         monitored_condition.duration += elapsed_time_f64;

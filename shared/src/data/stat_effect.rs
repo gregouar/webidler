@@ -518,6 +518,7 @@ pub enum StatSkillEffectType {
         restore_type: Option<RestoreType>,
     },
     Resurrect,
+    Kill,
     RefreshCooldown,
 }
 
@@ -556,6 +557,7 @@ impl From<&SkillEffectType> for Option<StatSkillEffectType> {
                 restore_type: Some(*restore_type),
             }),
             SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
+            SkillEffectType::Kill => Some(StatSkillEffectType::Kill),
             SkillEffectType::RefreshCooldown { .. } => Some(StatSkillEffectType::RefreshCooldown),
         }
     }

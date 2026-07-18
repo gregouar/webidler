@@ -276,7 +276,9 @@ pub fn SkillMasteryCard(
                                     })}
                                 {level}
                                 {remaining_points
-                                    .filter(|remaining_points| *remaining_points > 0)
+                                    .filter(|remaining_points| {
+                                        *remaining_points > 0 && level_delta == 0
+                                    })
                                     .map(|remaining_points| format!(" (+{remaining_points})"))}
                             }
                                 .into_any()

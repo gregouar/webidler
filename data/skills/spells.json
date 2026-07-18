@@ -269,7 +269,8 @@
         "effects": [
           {
             "FlatDamage": { "damage": {"Physical": 1} }
-          }
+          },
+          {"Kill": null, "success_chance": 0}
         ]
       }
     ]

@@ -713,6 +713,7 @@ pub fn format_skill_effect(
         SkillEffectType::Resurrect => {
             view! { <EffectLi>{success_chance}"Resurrect"</EffectLi> }.into_any()
         }
+        SkillEffectType::Kill => view! { <EffectLi>{success_chance}"Kill"</EffectLi> }.into_any(),
         SkillEffectType::RefreshCooldown {
             skill_filter,
             value,
@@ -991,6 +992,7 @@ pub fn skill_effect_text(
             format!("Apply {status_name}")
         }
         SkillEffectType::Resurrect
+        | SkillEffectType::Kill
         | SkillEffectType::Restore { .. }
         | SkillEffectType::RefreshCooldown { .. } => {
             stat_skill_effect_type_str(stat_skill_effect.as_ref())

@@ -1201,6 +1201,7 @@ pub fn apply_stat_effect_on_skill_effect(
             };
         }
         SkillEffectType::Resurrect => {}
+        SkillEffectType::Kill => {}
         SkillEffectType::RefreshCooldown {
             skill_filter: _,
             value: _,

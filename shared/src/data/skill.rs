@@ -290,6 +290,7 @@ pub enum SkillEffectType {
         modifier: RestoreModifier,
     },
     Resurrect,
+    Kill,
     RefreshCooldown {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
