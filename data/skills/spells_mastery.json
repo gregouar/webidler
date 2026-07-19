@@ -1135,7 +1135,7 @@
   "heal"           : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage"      : {
         "title"       : "Life Restored",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -1148,6 +1148,35 @@
               "stat"    : { "Restore": {"restore_type": "Life"} },
               "modifier": "Flat"
             }
+          }
+        ]
+      },
+      "speed"       : {
+        "title"       : "Spell Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "low_life_use": {
+        "title"       : "Survival Instinct",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillAutoUse" : { "auto_use_conditions": ["LowLife"] }
           }
         ]
       }

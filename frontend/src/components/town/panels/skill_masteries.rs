@@ -23,7 +23,7 @@ use crate::components::{
     shared::{
         skills::{SkillMasteryCard, skill_specs_with_mastery},
         tooltips::{
-            effects_tooltip,
+            conditions_tooltip, effects_tooltip,
             skill_tooltip::{self, EffectLi},
             status_tooltip, trigger_tooltip,
         },
@@ -963,6 +963,21 @@ fn format_mastery_upgrade_effect(
                 )}
             }.into_any())
         },
+        SkillMasteryUpgradeEffectType::SkillAutoUse { auto_use_conditions, append_only: _ } => {
+            let auto_use_conditions=auto_use_conditions.clone();
+            Some(view! {
+                <EffectLi>
+                    "Auto-use only when "
+                    {conditions_tooltip::format_skill_modifier_conditions_pre(
+                        &auto_use_conditions,
+                        "",
+                    )}
+                    {conditions_tooltip::format_skill_modifier_conditions_post(
+                        &auto_use_conditions,
+                        "",
+                    )}
+                </EffectLi>
+            }.into_any())},
     }
 }
 

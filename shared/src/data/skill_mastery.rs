@@ -7,6 +7,7 @@ use crate::{
     computations,
     data::{
         character_status::StatusId,
+        conditional_modifier::Condition,
         item_affix::AffixEffectScope,
         modifier::Modifier,
         skill::{ModifierEffect, SkillEffect, SkillTargetsGroup},
@@ -64,6 +65,11 @@ pub enum SkillMasteryUpgradeEffectType {
     SkillModifierEffect {
         #[serde(flatten)]
         modifier_effect: ModifierEffect,
+    },
+    SkillAutoUse {
+        auto_use_conditions: Vec<Condition>,
+        #[serde(default)]
+        append_only: bool,
     },
     ReplaceStatusId {
         // TODO: Turn into StatEffect instead?

@@ -165,6 +165,9 @@ pub fn apply_skill_mastery(
                     }
                 }
             }
+            SkillMasteryUpgradeEffectType::SkillAutoUse { auto_use_conditions, append_only } => {
+                if *append_only {skill_specs.auto_use_conditions.extend(auto_use_conditions.iter().cloned())} else {skill_specs.auto_use_conditions = auto_use_conditions.clone();}
+            },
         }
     }
 

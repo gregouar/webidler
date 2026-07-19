@@ -93,6 +93,7 @@ pub struct SkillSpecs {
 
     pub ignore_stat_effects: HashSet<StatType>,
     pub extra_modifier_effects: Vec<ModifierEffect>,
+    pub auto_use_conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

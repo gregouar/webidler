@@ -111,6 +111,7 @@ pub fn update_skill_specs(
         level_modifier,
         usable: true,
         extra_modifier_effects: Default::default(),
+        auto_use_conditions: base_skill_specs.auto_use_conditions.clone(),
     };
 
     if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery {

@@ -132,15 +132,15 @@ pub fn SkillTooltip(
         .map(|trigger| format_trigger(trigger, false, None, None))
         .collect::<Vec<_>>();
 
-    let auto_use_conditions = player_base_skill
-        .as_ref()
-        .map(|player_base_skill| {
-            player_base_skill
-                .base_skill_specs
-                .auto_use_conditions
-                .clone()
-        })
-        .unwrap_or_default();
+    // let auto_use_conditions = player_base_skill
+    //     .as_ref()
+    //     .map(|player_base_skill| {
+    //         player_base_skill
+    //             .base_skill_specs
+    //             .auto_use_conditions
+    //             .clone()
+    //     })
+    //     .unwrap_or_default();
 
     let mut modifier_lines: Vec<_> = player_base_skill
         .as_ref()
@@ -226,7 +226,7 @@ pub fn SkillTooltip(
                     })}
             </p>
 
-            {(!auto_use_conditions.is_empty())
+            {(!skill_specs.auto_use_conditions.is_empty())
                 .then(|| {
                     view! {
                         <Separator />
@@ -235,11 +235,11 @@ pub fn SkillTooltip(
                                 <span class="text-stone-400 ">
                                     "Auto-use only when "
                                     {conditions_tooltip::format_skill_modifier_conditions_pre(
-                                        &auto_use_conditions,
+                                        &skill_specs.auto_use_conditions,
                                         "",
                                     )}
                                     {conditions_tooltip::format_skill_modifier_conditions_post(
-                                        &auto_use_conditions,
+                                        &skill_specs.auto_use_conditions,
                                         "",
                                     )}
                                 </span>

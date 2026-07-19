@@ -41,6 +41,7 @@ pub fn skill_specs_from_base(skill_id: String, base_skill_specs: &BaseSkillSpecs
         ignore_stat_effects: base_skill_specs.ignore_stat_effects.clone(),
         extra_modifier_effects: Default::default(),
         usable: true,
+        auto_use_conditions: base_skill_specs.auto_use_conditions.clone(),
     }
 }
 

@@ -69,29 +69,22 @@ impl PlayerController {
             return;
         }
 
-        let no_auto_use: Vec<_> = player_base_specs
-            .skills
-            .values()
-            .map(|player_base_skill| {
-                player_base_skill
-                    .base_skill_specs
-                    .auto_use_conditions
-                    .iter()
-                    .any(|condition| {
-                        stats_updater::check_condition(
-                            statuses_store,
-                            area_threat,
-                            &player_specs.character_specs.character_attrs,
-                            &player_state.character_state,
-                            Some(player_inventory),
-                            condition,
-                        ) == 0.0
-                    })
-                    || (prevent_attack
-                        && matches!(
-                            player_base_skill.base_skill_specs.skill_type,
-                            SkillType::Attack | SkillType::Spell
-                        ))
+        let no_auto_use: Vec<_> = player_specs
+            .character_specs
+            .skills_specs
+            .iter()
+            .map(|skill_specs| {
+                skill_specs.auto_use_conditions.iter().any(|condition| {
+                    stats_updater::check_condition(
+                        statuses_store,
+                        area_threat,
+                        &player_specs.character_specs.character_attrs,
+                        &player_state.character_state,
+                        Some(player_inventory),
+                        condition,
+                    ) == 0.0
+                }) || (prevent_attack
+                    && matches!(skill_specs.skill_type, SkillType::Attack | SkillType::Spell))
             })
             .collect();
 

@@ -276,28 +276,27 @@
     ]
   },
   "heal"           : {
-    "name"               : "Heal",
-    "description"        : "Restore a portion of your life with this simple yet effective healing spell.",
-    "icon"               : "skills/heal.svg",
-    "skill_type"         : "Spell",
-    "cooldown"           : 15,
-    "mana_cost"          : 15,
-    "upgrade_cost"       : 50,
-    "upgrade_effects"    : [
+    "name"           : "Heal",
+    "description"    : "Restore a portion of your life with this simple yet effective healing spell.",
+    "icon"           : "skills/heal.svg",
+    "skill_type"     : "Spell",
+    "cooldown"       : 15,
+    "mana_cost"      : 15,
+    "upgrade_cost"   : 50,
+    "upgrade_effects": [
       {
         "stat"    : { "Restore": {"restore_type": "Life"} },
         "modifier": "Flat",
         "value"   : 5
       }
     ],
-    "targets"            : [
+    "targets"        : [
       {
         "target_type": "Me",
         "effects"    : [
           { "Restore": {"restore_type": "Life", "value": 25, "modifier": "Flat"} }
         ]
       }
-    ],
-    "auto_use_conditions": ["LowLife"]
+    ]
   }
 }
