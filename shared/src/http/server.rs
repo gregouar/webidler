@@ -12,7 +12,7 @@ use crate::data::{
     player::PlayerInventory,
     realms::Realm,
     skill::{BaseSkillSpecs, SkillSpecs},
-    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs},
+    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
@@ -189,9 +189,14 @@ pub struct BuyBenedictionsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct SaveSkillMasteriesResponse {
-    pub skill_masteries: PlayerSkillMasteries,
-    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
+pub struct SaveFavoriteSkillsResponse {
+    pub favorite_skills: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SaveSkillMasteryUpgradesResponse {
+    pub skill_mastery: SkillMasteryState,
+    pub skill_specs: SkillSpecs,
 }
 
 // Market

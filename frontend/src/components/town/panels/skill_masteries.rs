@@ -12,7 +12,7 @@ use shared::{
         },
         values::NonNegative,
     },
-    http::client::SaveSkillMasteriesRequest,
+    http::client::{SaveFavoriteSkillsRequest, SaveSkillMasteryUpgradesRequest},
 };
 use strum::IntoEnumIterator;
 
@@ -136,22 +136,45 @@ fn ConfirmButton(
     let character_id = town_context.character.read_untracked().character_id;
 
     let save = move |_| {
+        let Some(skill_id) = town_context.selected_skill_mastery.get_untracked() else {
+            return;
+        };
+        let Some(upgrades_bought) = skill_masteries
+            .read_untracked()
+            .masteries
+            .get(&skill_id)
+            .map(|mastery| mastery.upgrades_bought.clone())
+        else {
+            return;
+        };
+
         spawn_local(async move {
             match backend
-                .post_save_skill_masteries(&SaveSkillMasteriesRequest {
+                .post_save_skill_mastery_upgrades(&SaveSkillMasteryUpgradesRequest {
                     character_id,
-                    skill_masteries: skill_masteries.get_untracked(),
+                    skill_id: skill_id.clone(),
+                    upgrades_bought,
                 })
                 .await
             {
                 Ok(response) => {
-                    skill_masteries.set(response.skill_masteries.clone());
+                    skill_masteries.update(|skill_masteries| {
+                        if let Some(mastery) = skill_masteries.masteries.get_mut(&skill_id) {
+                            *mastery = response.skill_mastery.clone();
+                        }
+                    });
                     town_context
                         .player_skill_masteries
-                        .set(response.skill_masteries);
+                        .update(|skill_masteries| {
+                            if let Some(mastery) = skill_masteries.masteries.get_mut(&skill_id) {
+                                *mastery = response.skill_mastery;
+                            }
+                        });
                     town_context
                         .skill_mastery_skill_specs
-                        .set(response.skill_mastery_skill_specs);
+                        .update(|skill_specs| {
+                            skill_specs.insert(skill_id, response.skill_specs);
+                        });
                     open.set(false);
                 }
                 Err(e) => show_toast(
@@ -427,21 +450,21 @@ fn FavoriteSkillButton(
                                 });
                             spawn_local(async move {
                                 match backend
-                                    .post_save_skill_masteries(
-                                        &SaveSkillMasteriesRequest {
-                                            character_id,
-                                            skill_masteries: skill_masteries.get_untracked(),
-                                        },
-                                    )
+                                    .post_save_favorite_skills(&SaveFavoriteSkillsRequest {
+                                        character_id,
+                                        favorite_skills: skill_masteries
+                                            .read_untracked()
+                                            .favorite_skills
+                                            .clone(),
+                                    })
                                     .await
                                 {
                                     Ok(response) => {
                                         town_context
                                             .player_skill_masteries
                                             .update(|player_skill_masteries| {
-                                                player_skill_masteries.favorite_skills = response
-                                                    .skill_masteries
-                                                    .favorite_skills;
+                                                player_skill_masteries.favorite_skills =
+                                                    response.favorite_skills;
                                             });
                                     }
                                     Err(e) => {

@@ -11,13 +11,14 @@ use shared::{
     data::area::AreaLevel,
     http::{
         client::{
-            AscendPassivesRequest, BuyBenedictionsRequest, SavePassivesRequest,
-            SaveSkillMasteriesRequest, SocketPassiveRequest,
+            AscendPassivesRequest, BuyBenedictionsRequest, SaveFavoriteSkillsRequest,
+            SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SocketPassiveRequest,
         },
         server::{
             AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
             GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, GetStatusesResponse,
-            SavePassivesResponse, SaveSkillMasteriesResponse, SocketPassiveResponse,
+            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
+            SocketPassiveResponse,
         },
     },
 };
@@ -47,7 +48,14 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/game/passives/socket", post(post_socket_passive))
         .route("/game/passives/build", post(post_save_passives_build))
         .route("/game/benedictions", post(post_buy_benedictions))
-        .route("/game/skill-masteries", post(post_save_skill_masteries))
+        .route(
+            "/game/skill-masteries/favorites",
+            post(post_save_favorite_skills),
+        )
+        .route(
+            "/game/skill-masteries/upgrades",
+            post(post_save_skill_mastery_upgrades),
+        )
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -283,12 +291,11 @@ pub async fn post_buy_benedictions(
     }))
 }
 
-pub async fn post_save_skill_masteries(
-    State(master_store): State<MasterStore>,
+pub async fn post_save_favorite_skills(
     State(db_pool): State<db::DbPool>,
     Extension(user): Extension<User>,
-    Json(payload): Json<SaveSkillMasteriesRequest>,
-) -> Result<Json<SaveSkillMasteriesResponse>, AppError> {
+    Json(payload): Json<SaveFavoriteSkillsRequest>,
+) -> Result<Json<SaveFavoriteSkillsResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
@@ -298,11 +305,41 @@ pub async fn post_save_skill_masteries(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    skill_masteries_controller::update_skill_masteries(
+    skill_masteries_controller::update_favorite_skills(
+        &mut tx,
+        &payload.character_id,
+        &payload.favorite_skills,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(SaveFavoriteSkillsResponse {
+        favorite_skills: payload.favorite_skills,
+    }))
+}
+
+pub async fn post_save_skill_mastery_upgrades(
+    State(master_store): State<MasterStore>,
+    State(db_pool): State<db::DbPool>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<SaveSkillMasteryUpgradesRequest>,
+) -> Result<Json<SaveSkillMasteryUpgradesResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    skill_masteries_controller::update_skill_mastery_upgrades(
         &mut tx,
         &master_store,
         &payload.character_id,
-        &payload.skill_masteries,
+        &payload.skill_id,
+        &payload.upgrades_bought,
     )
     .await?;
 
@@ -313,13 +350,23 @@ pub async fn post_save_skill_masteries(
             .await?
             .unwrap_or_default();
 
-    Ok(Json(SaveSkillMasteriesResponse {
-        skill_mastery_skill_specs: skills_updater::compute_skill_mastery_skill_specs(
-            &master_store.statuses_store,
-            &master_store.skills_store,
-            &master_store.skill_masteries_store,
-            &skill_masteries,
-        ),
-        skill_masteries,
+    let skill_mastery = skill_masteries
+        .masteries
+        .get(&payload.skill_id)
+        .cloned()
+        .unwrap_or_default();
+
+    let skill_specs = skills_updater::compute_skill_mastery_skill_specs_for_skill(
+        &master_store.statuses_store,
+        &master_store.skills_store,
+        &master_store.skill_masteries_store,
+        &payload.skill_id,
+        &skill_mastery,
+    )
+    .ok_or(AppError::NotFound)?;
+
+    Ok(Json(SaveSkillMasteryUpgradesResponse {
+        skill_specs,
+        skill_mastery,
     }))
 }

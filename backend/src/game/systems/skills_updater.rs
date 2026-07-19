@@ -283,25 +283,41 @@ pub fn compute_skill_mastery_skill_specs(
                 .any(|upgrade_level| *upgrade_level > 0)
         })
         .filter_map(|(skill_id, skill_mastery_state)| {
-            let base_skill_specs = skills_store.get(skill_id)?;
-            let skill_mastery_specs = skill_masteries_store.get(skill_id)?;
-            let global_stat_effects =
-                compute_skill_mastery_stat_effects(skill_mastery_specs, skill_mastery_state);
-            Some((
-                skill_id.clone(),
-                update_skill_specs(
-                    statuses_store,
-                    skill_id.clone(),
-                    base_skill_specs,
-                    1,
-                    &global_stat_effects,
-                    &CharacterAttrs::default(),
-                    None,
-                    Some((skill_mastery_specs, skill_mastery_state)),
-                ),
-            ))
+            compute_skill_mastery_skill_specs_for_skill(
+                statuses_store,
+                skills_store,
+                skill_masteries_store,
+                skill_id,
+                skill_mastery_state,
+            )
+            .map(|skill_specs| (skill_id.clone(), skill_specs))
         })
         .collect()
+}
+
+/// Only for frontend displaying purposes, not used in game
+pub fn compute_skill_mastery_skill_specs_for_skill(
+    statuses_store: &StatusesStore,
+    skills_store: &SkillsStore,
+    skill_masteries_store: &SkillMasteriesStore,
+    skill_id: &str,
+    skill_mastery_state: &SkillMasteryState,
+) -> Option<SkillSpecs> {
+    let base_skill_specs = skills_store.get(skill_id)?;
+    let skill_mastery_specs = skill_masteries_store.get(skill_id)?;
+    let global_stat_effects =
+        compute_skill_mastery_stat_effects(skill_mastery_specs, skill_mastery_state);
+
+    Some(update_skill_specs(
+        statuses_store,
+        skill_id.to_string(),
+        base_skill_specs,
+        1,
+        &global_stat_effects,
+        &CharacterAttrs::default(),
+        None,
+        Some((skill_mastery_specs, skill_mastery_state)),
+    ))
 }
 
 fn compute_skill_mastery_stat_effects(
