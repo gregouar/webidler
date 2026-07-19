@@ -1,22 +1,135 @@
 {
-    "blessing_haste": {
+    "blessing_haste"     : {"max_level": 100, "upgrades": {}},
+    "blessing_crit"      : {
         "max_level": 100,
-        "upgrades": { }
+        "upgrades" : {
+            "power"      : {
+                "title"       : "Status Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 2,
+                        "upgrade_value": 2,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "blessing_crit"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration"   : {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "blessing_crit"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "more_damage": {
+                "title"       : "Heartseeker",
+                "base_cost"   : 10,
+                "upgrade_cost": 10,
+                "max_level"   : 5,
+                "effects"     : [
+                    {
+                        "value"        : 10,
+                        "upgrade_value": 10,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : {"CritDamage": {}},
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "blessing_crit"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
     },
-    "blessing_crit": {
+    "blessing_protection": {"max_level": 100, "upgrades": {}},
+    "blessing_heal"      : {"max_level": 100, "upgrades": {}},
+    "meditate"           : {
         "max_level": 100,
-        "upgrades": { }
-    },
-    "blessing_protection": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "blessing_heal": {
-        "max_level": 100,
-        "upgrades": { }
-    },
-    "meditate": {
-        "max_level": 100,
-        "upgrades": { }
+        "upgrades" : {
+            "speed": {
+                "title"       : "Speed",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "Speed": {"skill_id": "meditate"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "deep" : {
+                "title"       : "Deep Meditation",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 2,
+                        "upgrade_value": 2,
+                        "StatEffect"   : {
+                            "stat"    : { "Restore": {"restore_type": "Mana"} },
+                            "modifier": "Flat"
+                        }
+                    },
+                    {
+                        "value"        : -0.5,
+                        "upgrade_value": -0.5,
+                        "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
+                    },
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SuccessChance": {
+                                    "skill_type" : null,
+                                    "skill_id"   : null,
+                                    "effect_type": { "ApplyStatus": {"status_id": "focus"} }
+                                }
+                            },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "focus": {
+                "title"       : "Inner Focus",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "SkillEffect"  : { "success_chance": 30, "ApplyStatus": {"status_id": "focus", "value": 100} }
+                    }
+                ]
+            }
+        }
     }
 }

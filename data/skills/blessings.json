@@ -42,7 +42,7 @@
       {
         "target_type": "Me",
         "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_crit", "value": 20} }
+          { "ApplyStatus": {"status_id": "blessing_crit", "value": 50} }
         ]
       }
     ]
@@ -81,10 +81,9 @@
     "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
-        "stat"        : { "StatusPower": {"status_id": "blessing_heal"} },
-        "modifier"    : "Flat",
-        "value"       : 1,
-        "description2": "+0.1% Restored Life per Second"
+        "stat"    : { "StatusPower": {"status_id": "blessing_heal"} },
+        "modifier": "Flat",
+        "value"   : 1
       }
     ],
     "targets"        : [
@@ -106,11 +105,10 @@
     "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
-        "stat"    : { "Restore": {"restore_type": "Mana"} },
-        "modifier": "Flat",
+        "stat"    : { "Speed": {"skill_id": "meditate"} },
+        "modifier": "Increased",
         "value"   : 1
-      },
-      { "stat": {"Speed": {}}, "modifier": "Flat", "value": -0.3 }
+      }
     ],
     "targets"        : [
       {
