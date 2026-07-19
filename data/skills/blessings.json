@@ -4,21 +4,21 @@
     "description"    : "A blessing that increases your speed, allowing quicker actions in battle.",
     "icon"           : "skills/haste.svg",
     "skill_type"     : "Blessing",
-    "cooldown"       : 10,
+    "cooldown"       : 15,
     "mana_cost"      : 30,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "blessing_haste"} },
+        "stat"    : { "Speed": {"skill_type": "Blessing"} },
         "modifier": "Increased",
-        "value"   : 2
+        "value"   : 1
       }
     ],
     "targets"        : [
       {
         "target_type": "Me",
         "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_haste", "value": 20} }
+          { "ApplyStatus": {"status_id": "blessing_haste", "value": 30} }
         ]
       }
     ]

@@ -1,5 +1,81 @@
 {
-    "blessing_haste"     : {"max_level": 100, "upgrades": {}},
+    "blessing_haste"     : {
+        "max_level": 100,
+        "upgrades" : {
+            "speed"   : {
+                "title"       : "Blessing Speed",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "Speed": {"skill_type": "Blessing"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "power"   : {
+                "title"       : "Blessing Effects",
+                "base_cost"   : 2,
+                "upgrade_cost": 2,
+                "max_level"   : 20,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "blessing_haste"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "movement": {
+                "title"       : "Fleetness",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 5,
+                "effects"     : [
+                    {
+                        "value"        : 10,
+                        "upgrade_value": 10,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : "MovementSpeed",
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "blessing_haste"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
     "blessing_crit"      : {
         "max_level": 100,
         "upgrades" : {
@@ -29,7 +105,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"status_id": "blessing_crit"} },
+                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
                             "modifier": "Increased"
                         }
                     }
@@ -66,8 +142,8 @@
     "meditate"           : {
         "max_level": 100,
         "upgrades" : {
-            "speed": {
-                "title"       : "Speed",
+            "speed"             : {
+                "title"       : "Meditate Speed",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
                 "max_level"   : 100,
@@ -82,7 +158,7 @@
                     }
                 ]
             },
-            "deep" : {
+            "deep"              : {
                 "title"       : "Deep Meditation",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -102,8 +178,8 @@
                         "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
                     },
                     {
-                        "value"        : 5,
-                        "upgrade_value": 5,
+                        "value"        : 2,
+                        "upgrade_value": 2,
                         "StatEffect"   : {
                             "stat"    : {
                                 "SuccessChance": {
@@ -117,7 +193,7 @@
                     }
                 ]
             },
-            "focus": {
+            "focus"             : {
                 "title"       : "Inner Focus",
                 "base_cost"   : 10,
                 "upgrade_cost": 0,
@@ -127,6 +203,27 @@
                         "value"        : 1,
                         "upgrade_value": 0,
                         "SkillEffect"  : { "success_chance": 30, "ApplyStatus": {"status_id": "focus", "value": 100} }
+                    }
+                ]
+            },
+            "damage_per_restore": {
+                "title"       : "Enlightenment",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "meditate_damage_per_restore",
+                            "skill_type": "Blessing",
+                            "OnHit"     : { "skill_ids": ["meditate"] },
+                            "target"    : "Me",
+                            "effects"   : [
+                                { "ApplyStatus": {"status_id": "meditate_damage", "value": 0} }
+                            ]
+                        }
                     }
                 ]
             }

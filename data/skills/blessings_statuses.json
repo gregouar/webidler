@@ -89,5 +89,20 @@
                 "modifier"             : "Percent"
             }
         ]
+    },
+    "meditate_damage"    : {
+        "name"      : "Enlightenment",
+        "adjective" : "Enlightened",
+        "icon"      : "statuses/enlightenment.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More" },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
     }
 }
