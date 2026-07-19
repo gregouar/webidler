@@ -976,7 +976,7 @@
   "voodoo_doll"    : {
     "max_level": 100,
     "upgrades" : {
-      "damage" : {
+      "damage"       : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -989,7 +989,127 @@
           }
         ]
       },
-      "culling": {
+      "repeat"       : {
+        "title"       : "Needle Rain",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_type": null,
+                  "skill_id"  : "voodoo_doll",
+                  "range"     : null,
+                  "shape"     : null,
+                  "repeat"    : {"min_value": 2, "max_value": 2, "target": "Same"}
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "elemental"    : {
+        "title"       : "Cursed Energy",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "Damage": {"damage_type": "Fire"} },
+                  "conditions": [
+                    { "HasStatus": {"status_id": "curse_flammability"} }
+                  ]
+                }
+              },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : 2,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+                  "conditions": [
+                    { "HasStatus": {"status_id": "curse_conductivity"} }
+                  ]
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "damage_cursed": {
+        "title"       : "Malevolent Effigy",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 200,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : {"Damage": {}},
+                  "conditions": [
+                    { "StatusStacks": {"skill_type": "Curse"} }
+                  ]
+                }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "poison_heal"  : {
+        "title"       : "Dark Communion",
+        "base_cost"   : 10,
+        "upgrade_cost": 5,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id": "voodoo_doll_poison_heal",
+              "skill_type": "Spell",
+              "OnHit"     : {
+                "skill_ids" : ["voodoo_doll"],
+                "is_hurt"   : true,
+                "conditions": [
+                  { "HasStatus": {"status_id": "poison"} }
+                ]
+              },
+              "target"    : "Me",
+              "effects"   : [
+                { "Restore": {"restore_type": "Life", "value": 1, "modifier": "Flat"} }
+              ]
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "Restore": {"restore_type": "Life"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "culling"      : {
         "title"       : "Heart Pin",
         "base_cost"   : 10,
         "upgrade_cost": 0,

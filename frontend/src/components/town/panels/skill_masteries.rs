@@ -546,7 +546,7 @@ fn MasteryUpgradePanel(
                                 })}
                         </div>
 
-                        <div class="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
+                        <Separator />
 
                         <div class="mb-2 mt-1 grid grid-cols-1 gap-2 px-1 text-xs xl:grid-cols-[1fr_auto_1fr] xl:text-sm">
                             <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 xl:justify-start">
