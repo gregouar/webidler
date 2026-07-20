@@ -16,7 +16,7 @@ use shared::{
 
 use crate::game::{
     data::{
-        event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
+        event::{EventsQueue, GameEvent, HitEvent, RestoreEvent, StatusEvent},
         master_store::StatusesStore,
     },
     systems::statuses_controller,
@@ -171,15 +171,43 @@ fn compute_damage(
 }
 
 pub fn restore_character(
+    events_queue: &mut EventsQueue,
+    target: &mut Target,
+    attacker: CharacterId,
+    restore_type: RestoreType,
+    amount: f64,
+    modifier: RestoreModifier,
+    skill_type: SkillType,
+    skill_id: &str,
+    trigger_depth: u8,
+) -> bool {
+    let (applied, value) = regenerate_character(target, restore_type, amount, modifier);
+
+    if applied {
+        events_queue.register_event(GameEvent::Restored(RestoreEvent {
+            source: attacker,
+            target: target.0,
+            skill_type,
+            skill_id: skill_id.into(),
+            trigger_depth,
+            restore_type,
+            value: value.into(),
+        }));
+    }
+
+    applied
+}
+
+pub fn regenerate_character(
     target: &mut Target,
     restore_type: RestoreType,
     amount: f64,
     modifier: RestoreModifier,
-) -> bool {
+) -> (bool, f64) {
     let (_, (target_specs, target_state)) = target;
 
     if !target_state.is_alive {
-        return false;
+        return (false, 0.0);
     }
 
     let factor = match modifier {
@@ -190,23 +218,27 @@ pub fn restore_character(
         RestoreModifier::Flat => 1.0,
     };
 
+    let amount: NonNegative = (amount * factor).into();
+
     match restore_type {
         RestoreType::Life => {
-            if target_state.life.get() < target_specs.character_attrs.max_life.get() || amount < 0.0
-            {
-                target_state.life += (amount * factor).into();
-                true
+            let max_life = target_specs.character_attrs.max_life.get();
+            let capped_amount = amount.get().min(max_life - target_state.life.get());
+            if capped_amount > 0.0 {
+                target_state.life += amount;
+                (true, capped_amount)
             } else {
-                false
+                (false, 0.0)
             }
         }
         RestoreType::Mana => {
-            if target_state.mana.get() < target_specs.character_attrs.max_mana.get() || amount < 0.0
-            {
-                target_state.mana += (amount * factor).into();
-                true
+            let max_mana = target_specs.character_attrs.max_mana.get();
+            let capped_amount = amount.get().min(max_mana - target_state.mana.get());
+            if capped_amount > 0.0 {
+                target_state.mana += amount;
+                (true, capped_amount)
             } else {
-                false
+                (false, 0.0)
             }
         }
     }

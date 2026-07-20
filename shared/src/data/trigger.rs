@@ -3,8 +3,12 @@ use std::collections::{HashMap, hash_map};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, conditional_modifier::Condition, item::SkillShape, modifier::Modifier,
-    skill::TargetType, stat_effect::StatStatusFilter,
+    character::CharacterId,
+    conditional_modifier::Condition,
+    item::SkillShape,
+    modifier::Modifier,
+    skill::{RestoreType, TargetType},
+    stat_effect::StatStatusFilter,
 };
 
 use super::{
@@ -82,6 +86,7 @@ pub enum EventTrigger {
     OnDeath(TargetType),
     OnApplyStatus(StatusTrigger),
     OnReceiveStatus(StatusTrigger),
+    OnRestored(RestoreTrigger),
 }
 
 // TODO: replace by simple tag system?
@@ -118,10 +123,20 @@ pub struct StatusTrigger {
     #[serde(default)]
     pub is_evaded: Option<bool>,
 }
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct KillTrigger {
     #[serde(default)]
     pub conditions: Vec<Condition>,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
+pub struct RestoreTrigger {
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+    #[serde(default)]
+    pub restore_type: Option<RestoreType>,
+    #[serde(default)]
+    pub is_triggered: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -189,6 +204,7 @@ pub enum TriggerEffectModifierSource {
     TriggerStatusDuration,
     TriggerStatusValue,
     HitCrit,
+    RestoreValue,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

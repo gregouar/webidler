@@ -8,8 +8,8 @@ use shared::data::{
     skill::{SkillType, TargetType},
     stat_effect::{StatEffect, StatSkillFilter, StatType},
     trigger::{
-        EventTrigger, HitTrigger, KillTrigger, StatusTrigger, TriggerEffectModifier,
-        TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
+        EventTrigger, HitTrigger, KillTrigger, RestoreTrigger, StatusTrigger,
+        TriggerEffectModifier, TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
     },
     values::NonNegative,
 };
@@ -237,6 +237,7 @@ pub fn trigger_modifier_source_str(
                 )
             )
         }
+        TriggerEffectModifierSource::RestoreValue => "Restored Amount".to_string(),
         TriggerEffectModifierSource::TriggerStatusDuration => match trigger_status_name {
             Some(trigger_status_name) => format!("{} Duration", trigger_status_name),
             None => "Status Duration".to_string(),
@@ -285,6 +286,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             },
             _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
         },
+        EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
     }
 }
 
@@ -408,6 +410,13 @@ fn critical_str(value: Option<bool>) -> &'static str {
         },
         None => "",
     }
+}
+
+fn format_restore_trigger(restore_trigger: &RestoreTrigger) -> String {
+    format!(
+        "On{} Restored",
+        skill_tooltip::restore_type_str(restore_trigger.restore_type)
+    )
 }
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {

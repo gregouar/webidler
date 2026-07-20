@@ -9,7 +9,7 @@ use shared::data::{
 
 use crate::game::{
     data::{
-        event::{EventsQueue, HitEvent, StatusEvent},
+        event::{EventsQueue, HitEvent, RestoreEvent, StatusEvent},
         master_store::StatusesStore,
     },
     game_data::GameInstanceData,
@@ -27,6 +27,7 @@ pub struct TriggerContext<'a> {
 
     pub hit_context: Option<&'a HitEvent>,
     pub status_context: Option<&'a StatusEvent>,
+    pub restore_context: Option<&'a RestoreEvent>,
     pub level: usize,
 }
 
@@ -183,6 +184,11 @@ pub fn apply_trigger_effects(
                                         )
                                     })
                                     .count() as f64,
+                                TriggerEffectModifierSource::RestoreValue => trigger_context
+                                    .restore_context
+                                    .as_ref()
+                                    .map(|restore| restore.value.get())
+                                    .unwrap_or_default(),
                                 TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
                                 TriggerEffectModifierSource::TriggerStatusValue => 0.0,
                             },

@@ -14,7 +14,7 @@ use shared::{
 
 use crate::game::{
     data::{
-        event::{EventsQueue, GameEvent, HitEvent, StatusEvent},
+        event::{EventsQueue, GameEvent, HitEvent, RestoreEvent, StatusEvent},
         master_store::MasterStore,
     },
     game_data::GameInstanceData,
@@ -56,6 +56,9 @@ pub async fn resolve_events(
             }
             GameEvent::StatusApplied(status_event) => {
                 handle_status_event(&mut trigger_contexts, game_data, status_event)
+            }
+            GameEvent::Restored(restore_event) => {
+                handle_restore_event(&mut trigger_contexts, game_data, restore_event)
             }
         }
     }
@@ -166,6 +169,7 @@ fn handle_hit_event<'a>(
                         target: hit_event.target,
                         hit_context: Some(hit_event),
                         status_context: None,
+                        restore_context: None,
                         level: game_data.area_state.read().area_level as usize,
                         trigger_depth: hit_event.trigger_depth,
                     }),
@@ -233,8 +237,74 @@ fn handle_status_event<'a>(
                         target: status_event.target,
                         hit_context: None,
                         status_context: Some(status_event),
+                        restore_context: None,
                         level: game_data.area_state.read().area_level as usize,
                         trigger_depth: status_event.trigger_depth,
+                    }),
+            );
+        }
+    }
+}
+
+fn handle_restore_event<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &mut GameInstanceData,
+    restore_event: &'a RestoreEvent,
+) {
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
+
+    for (character_id, character_specs) in characters {
+        for (trigger, owned_triggers) in character_specs.triggers.iter() {
+            let restore_trigger = match trigger {
+                EventTrigger::OnRestored(status_trigger)
+                    if restore_event.target == character_id =>
+                {
+                    status_trigger
+                }
+                _ => continue,
+            };
+
+            if !compare_options(&restore_trigger.skill_type, &Some(restore_event.skill_type))
+                || !compare_options(
+                    &restore_trigger.restore_type,
+                    &Some(restore_event.restore_type),
+                )
+                || !compare_options(
+                    &restore_trigger.is_triggered,
+                    &Some(restore_event.trigger_depth > 0),
+                )
+            {
+                continue;
+            }
+
+            trigger_contexts.extend(
+                owned_triggers
+                    .iter()
+                    .filter(|owned_trigger| {
+                        restore_event.skill_id != owned_trigger.trigger_effect.trigger_id
+                    })
+                    .cloned()
+                    .map(|owned_trigger| TriggerContext {
+                        owned_trigger,
+                        source: restore_event.source,
+                        target: restore_event.target,
+                        hit_context: None,
+                        status_context: None,
+                        restore_context: Some(restore_event),
+                        level: game_data.area_state.read().area_level as usize,
+                        trigger_depth: restore_event.trigger_depth,
                     }),
             );
         }
@@ -299,6 +369,7 @@ fn handle_kill_event(
                             target,
                             hit_context: None,
                             status_context: None,
+                            restore_context: None,
                             level: game_data.area_state.read().area_level as usize,
                             trigger_depth: 0,
                         }
@@ -335,6 +406,7 @@ fn handle_kill_event(
                                 target,
                                 hit_context: None,
                                 status_context: None,
+                                restore_context: None,
                                 level: game_data.area_state.read().area_level as usize,
                                 trigger_depth: 0,
                             },
@@ -459,6 +531,7 @@ fn handle_wave_completed_event(
                     target: CharacterId::Player,
                     hit_context: None,
                     status_context: None,
+                    restore_context: None,
                     level: area_level as usize,
                     trigger_depth: 0,
                 }
@@ -493,6 +566,7 @@ fn handle_threat_increased_event(
                     target: CharacterId::Player,
                     hit_context: None,
                     status_context: None,
+                    restore_context: None,
                     level: threat_level as usize,
                     trigger_depth: 0,
                 }

@@ -4,7 +4,7 @@ use shared::data::{
     area::{AreaLevel, ThreatLevel},
     character::CharacterId,
     character_status::StatusId,
-    skill::{DamageType, SkillRange, SkillType},
+    skill::{DamageType, RestoreType, SkillRange, SkillType},
     values::NonNegative,
 };
 
@@ -21,7 +21,7 @@ pub enum GameEvent {
     WaveCompleted(AreaLevel),
     ThreatIncreased(ThreatLevel),
     StatusApplied(StatusEvent),
-    // MaximumLife(CharacterId),
+    Restored(RestoreEvent), // MaximumLife(CharacterId),
 }
 
 #[derive(Debug, Clone)]
@@ -55,6 +55,20 @@ pub struct StatusEvent {
     pub is_evaded: bool,
     pub value: NonNegative,
     pub duration: NonNegative,
+}
+
+#[derive(Debug, Clone)]
+pub struct RestoreEvent {
+    pub source: CharacterId,
+    pub target: CharacterId,
+
+    pub trigger_depth: u8,
+    pub skill_id: String,
+
+    pub restore_type: RestoreType,
+    pub skill_type: SkillType,
+
+    pub value: NonNegative,
 }
 
 #[derive(Debug, Default)]

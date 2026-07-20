@@ -20,9 +20,7 @@ use crate::game::{
         event::{EventsQueue, GameEvent},
         master_store::StatusesStore,
     },
-    systems::{
-        characters_controller::restore_character, skills_updater, stats_updater, triggers_updater,
-    },
+    systems::{characters_controller, skills_updater, stats_updater, triggers_updater},
 };
 
 use super::statuses_controller;
@@ -80,14 +78,14 @@ pub fn update_character_state(
         });
     }
 
-    restore_character(
+    characters_controller::regenerate_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
         elapsed_time_f64 * *character_specs.character_attrs.life_regen * 0.1,
         RestoreModifier::Percent,
     );
 
-    restore_character(
+    characters_controller::regenerate_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
         elapsed_time_f64 * *character_specs.character_attrs.mana_regen * 0.1,

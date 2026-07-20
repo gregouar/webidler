@@ -209,8 +209,8 @@
             "damage_per_restore": {
                 "title"       : "Enlightenment",
                 "base_cost"   : 10,
-                "upgrade_cost": 0,
-                "max_level"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 2,
                 "effects"     : [
                     {
                         "value"        : 1,
@@ -218,12 +218,25 @@
                         "Trigger"      : {
                             "trigger_id": "meditate_damage_per_restore",
                             "skill_type": "Blessing",
-                            "OnHit"     : { "skill_ids": ["meditate"] },
+                            "OnRestored": { "skill_ids": ["meditate"], "restore_type": "Mana" },
                             "target"    : "Me",
                             "effects"   : [
                                 { "ApplyStatus": {"status_id": "meditate_damage", "value": 0} }
+                            ],
+                            "modifiers" : [
+                                {
+                                    "stat"    : {"StatusPower": {}},
+                                    "modifier": "Flat",
+                                    "factor"  : 2,
+                                    "source"  : "RestoreValue"
+                                }
                             ]
                         }
+                    },
+                    {
+                        "value"        : 0,
+                        "upgrade_value": -1e200,
+                        "StatEffect"   : {"stat": "ManaRegen", "modifier": "More", "scope": "Global"}
                     }
                 ]
             }
