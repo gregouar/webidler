@@ -170,6 +170,7 @@ fn compute_damage(
     (damage_taken * armor_factor * block_factor * amount.get()).into()
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn restore_character(
     events_queue: &mut EventsQueue,
     target: &mut Target,
