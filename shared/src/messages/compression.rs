@@ -12,7 +12,14 @@ const MAGIC: &[u8; 4] = b"WIC2";
 const ZSTD: u8 = 1;
 
 const MIN_COMPRESSION_SIZE: usize = 1024;
+
+#[cfg(not(target_arch = "wasm32"))]
 const MAX_DECOMPRESSED_SIZE: usize = 256 * 1024;
+
+// Game-state snapshots come from our server and can legitimately exceed the
+// tighter limit used for untrusted client messages decoded by the backend.
+#[cfg(target_arch = "wasm32")]
+const MAX_DECOMPRESSED_SIZE: usize = 1024 * 1024;
 
 pub fn encode_payload(raw: Vec<u8>) -> Result<Vec<u8>> {
     if let Some(encoded) = encode_payload_from_slice(&raw)? {
