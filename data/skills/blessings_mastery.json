@@ -219,13 +219,43 @@
                         }
                     }
                 ]
+            },
+            "threat"  : {
+                "title"       : "Defiance",
+                "base_cost"   : 10,
+                "upgrade_cost": 10,
+                "max_level"   : 5,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : {
+                                        "StatConditionalModifier": {
+                                            "stat"               : {"Damage": {}},
+                                            "conditions"         : ["ThreatLevel"],
+                                            "conditions_duration": 0
+                                        }
+                                    },
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "blessing_protection"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
             }
         }
     },
     "blessing_heal"      : {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"            : {
                 "title"       : "Blessing Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -241,7 +271,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"         : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -257,7 +287,7 @@
                     }
                 ]
             },
-            "damage"  : {
+            "damage"           : {
                 "title"       : "Renewed Vigor",
                 "base_cost"   : 10,
                 "upgrade_cost": 10,
@@ -275,6 +305,23 @@
                                     ]
                                 }
                             },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            },
+            "poison_resistance": {
+                "title"       : "Fortitude",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : -100,
+                        "upgrade_value": 0,
+                        "StatEffect"   : {
+                            "stat"    : { "DamageTaken": {"damage_type": "Poison"} },
                             "modifier": "More",
                             "scope"   : "Global"
                         }
