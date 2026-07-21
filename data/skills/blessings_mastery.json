@@ -393,7 +393,11 @@
                     {
                         "value"        : 1,
                         "upgrade_value": 0,
-                        "SkillEffect"  : { "success_chance": 30, "ApplyStatus": {"status_id": "focus", "value": 100} }
+                        "SkillEffect"  : {
+                            "success_chance"         : 30,
+                            "ApplyStatus"            : {"status_id": "focus", "value": 100},
+                            "independent_application": true
+                        }
                     }
                 ]
             },

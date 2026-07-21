@@ -230,7 +230,11 @@ pub fn status_filter_str(status_filter: &StatStatusFilter) -> String {
     } else if let Some(damage_type) = status_filter.damage_type {
         status_damage_type_str(damage_type).into()
     } else {
-        "Effects over Time".to_string()
+        match status_filter.debuff {
+            Some(true) => "Debuffs".to_string(),
+            Some(false) => "Buffs".to_string(),
+            None => "Effects over Time".to_string(),
+        }
     }
 }
 
@@ -285,6 +289,7 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
                 };
                 format!("Apply {}", status_filter_str(&status_filter))
             }
+            StatSkillEffectType::RefreshStatus => "Refresh Statuses".into(),
             StatSkillEffectType::Restore { restore_type } => {
                 format!("Restore{}", restore_type_str(*restore_type))
             }

@@ -58,8 +58,8 @@ fn update_status(
 
         status_state.elapsed_escalation += elapsed_time_f64;
 
-        if status_state.elapsed_escalation.get() > status_state.max_escalation.get() {
-            status_state.elapsed_escalation = status_state.max_escalation;
+        if status_state.elapsed_escalation.get() > status_state.max_duration.get() {
+            status_state.elapsed_escalation = status_state.max_duration;
         }
     }
 
@@ -198,7 +198,7 @@ pub fn initialize_status_state(
         skill_type,
         base_value: value,
         elapsed_escalation: Default::default(),
-        max_escalation: duration,
+        max_duration: duration,
         escalation,
     }
 }

@@ -25,6 +25,7 @@ pub fn compute_stats_effects_status_value(
     skill_type: Option<SkillType>,
     status_id: &StatusId,
     status_damage_type: Option<DamageType>,
+    status_debuff: bool,
 ) -> f64 {
     let mut factor = Factor::new();
 
@@ -38,7 +39,7 @@ pub fn compute_stats_effects_status_value(
             skill_filter,
             min_max: _,
         } = &effect.stat
-            && status_filter.is_match_with_status(status_id, status_damage_type)
+            && status_filter.is_match_with_status(status_id, status_damage_type, status_debuff)
             && skill_filter.is_match_with_skill(skill_type, skill_id)
         {
             factor.apply_effect(&effect);
@@ -69,6 +70,7 @@ pub fn compute_stats_effects_status_duration(
     skill_type: Option<SkillType>,
     status_id: &StatusId,
     status_damage_type: Option<DamageType>,
+    status_debuff: bool,
 ) -> f64 {
     let mut factor = Factor::new();
 
@@ -81,7 +83,7 @@ pub fn compute_stats_effects_status_duration(
             status_filter,
             skill_filter,
         } = &effect.stat
-            && status_filter.is_match_with_status(status_id, status_damage_type)
+            && status_filter.is_match_with_status(status_id, status_damage_type, status_debuff)
             && skill_filter.is_match_with_skill(skill_type, skill_id)
         {
             factor.apply_effect(&effect);

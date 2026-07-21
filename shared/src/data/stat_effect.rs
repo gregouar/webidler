@@ -121,11 +121,14 @@ pub struct StatStatusFilter {
     pub status_id: Option<StatusId>,
     #[serde(default)]
     pub damage_type: Option<StatusDamageType>,
+    #[serde(default)]
+    pub debuff: Option<bool>,
 }
 
 impl Matchable for StatStatusFilter {
     fn is_match(&self, second: &StatStatusFilter) -> bool {
         compare_options(&self.status_id, &second.status_id)
+            && compare_options(&self.debuff, &second.debuff)
             && match (self.damage_type, second.damage_type) {
                 (None, None) => true,
                 (None, Some(_)) | (Some(_), None) => false,
@@ -139,6 +142,7 @@ impl StatStatusFilter {
         &self,
         status_id: &StatusId,
         damage_type: Option<DamageType>,
+        debuff: bool,
     ) -> bool {
         self.status_id
             .as_ref()
@@ -151,6 +155,10 @@ impl StatStatusFilter {
                     None => false, // not damage over time
                     Some(damage_type) => filter_damage_type.is_match(&damage_type.into()),
                 })
+                .unwrap_or(true)
+            && self
+                .debuff
+                .map(|filter_debuff| filter_debuff == debuff)
                 .unwrap_or(true)
     }
 }
@@ -513,6 +521,7 @@ pub enum StatSkillEffectType {
         #[serde(default)]
         status_id: Option<StatusId>,
     },
+    RefreshStatus,
     Restore {
         #[serde(default)]
         restore_type: Option<RestoreType>,
@@ -553,6 +562,7 @@ impl From<&SkillEffectType> for Option<StatSkillEffectType> {
                     status_id: Some(status_id.clone()),
                 })
             }
+            SkillEffectType::RefreshStatus { .. } => Some(StatSkillEffectType::RefreshStatus),
             SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
                 restore_type: Some(*restore_type),
             }),

@@ -718,6 +718,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         status_filter: StatStatusFilter {
                                             status_id: None,
                                             damage_type: Some(StatusDamageType::Any),
+                                            debuff: None,
                                         },
                                         skill_filter: Default::default(),
                                         min_max: None,

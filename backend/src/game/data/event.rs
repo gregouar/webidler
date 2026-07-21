@@ -50,6 +50,7 @@ pub struct StatusEvent {
 
     pub status_id: StatusId,
     pub damage_type: Option<DamageType>,
+    pub debuff: bool,
     pub skill_type: SkillType,
 
     pub is_evaded: bool,

@@ -9,7 +9,7 @@ use shared::{
         item::SkillRange,
         player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
-        stat_effect::{StatSkillFilter, compare_options},
+        stat_effect::{StatSkillFilter, StatStatusFilter, compare_options},
         values::{Cooldown, NonNegative},
     },
 };
@@ -361,7 +361,7 @@ pub fn apply_status(
     duration: NonNegative,
     escalation: NonNegative,
     max_stacks: u8,
-    avoidable: Option<DamageType>,
+    avoidable: bool,
     skill_id: &str,
     trigger_depth: u8,
 ) -> bool {
@@ -391,7 +391,9 @@ pub fn apply_status(
         return false;
     }
 
-    let is_evaded = if let Some(damage_type) = avoidable {
+    let is_evaded = if let Some(damage_type) = status_specs.damage_type
+        && avoidable
+    {
         target_specs
             .character_attrs
             .evade
@@ -441,7 +443,7 @@ pub fn apply_status(
             cur_status_state.value = value;
             cur_status_state.duration = duration;
             cur_status_state.escalation = escalation;
-            cur_status_state.max_escalation = duration;
+            cur_status_state.max_duration = duration;
             cur_status_state.skill_type = skill_type;
         } else {
             applied = false;
@@ -467,6 +469,7 @@ pub fn apply_status(
         skill_type,
         status_id,
         damage_type: status_specs.damage_type,
+        debuff: status_specs.debuff,
         value,
         duration,
         is_evaded,
@@ -487,7 +490,7 @@ pub fn apply_status(
             duration + stun_lockout,
             0.0.into(),
             1,
-            None,
+            false,
             "stun_lockout",
             0,
         );
@@ -512,6 +515,40 @@ fn compute_effect_weight(
     } else {
         value * duration.get().min(99999.0)
     }
+}
+
+pub fn refresh_status_cooldown(
+    statuses_store: &StatusesStore,
+    target: &mut Target,
+    status_filter: &StatStatusFilter,
+    amount: f64,
+    modifier: &RestoreModifier,
+) -> bool {
+    let mut refreshed = false;
+
+    for (status_id, status_stacks) in target.1.1.statuses.iter_mut() {
+        let Some(status_specs) = statuses_store.get(status_id) else {
+            continue;
+        };
+
+        if !status_filter.is_match_with_status(
+            status_id,
+            status_specs.damage_type,
+            status_specs.debuff,
+        ) {
+            continue;
+        }
+
+        for status_state in status_stacks.iter_mut() {
+            status_state.duration += match modifier {
+                RestoreModifier::Flat => amount.into(),
+                RestoreModifier::Percent => (status_state.max_duration * amount * 0.01).into(),
+            };
+            refreshed = true;
+        }
+    }
+
+    refreshed
 }
 
 pub fn mana_available(

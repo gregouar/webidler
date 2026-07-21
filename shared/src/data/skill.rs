@@ -12,7 +12,8 @@ use crate::{
         item::{ItemCategory, ItemSpecs},
         modifier::ModifiableValue,
         stat_effect::{
-            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType,
+            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
+            StatType,
         },
         trigger::{TriggerEffect, TriggerSpecs},
         values::{Cooldown, NonNegative},
@@ -274,8 +275,8 @@ pub enum SkillEffectType {
         escalation: Option<ModifiableValue<NonNegative>>,
         #[serde(default)]
         max_stacks: Option<ModifiableValue<u8>>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
+        // #[serde(default)]
+        // damage_type: Option<DamageType>,
         #[serde(default)]
         avoidable: Option<bool>,
 
@@ -284,6 +285,12 @@ pub enum SkillEffectType {
 
         #[serde(default, skip_serializing_if = "Option::is_none")]
         computed_status_triggers: Option<HashMap<String, TriggerEffect>>,
+    },
+    RefreshStatus {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        value: ChanceRange<ModifiableValue<f64>>,
+        modifier: RestoreModifier,
     },
     Restore {
         restore_type: RestoreType,

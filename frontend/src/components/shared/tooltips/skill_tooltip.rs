@@ -571,7 +571,7 @@ pub fn format_skill_effect(
             value_factor,
             duration,
             escalation,
-            damage_type: _,
+            // damage_type: _,
             max_stacks,
             avoidable: _,
             replace_on_value_only: _,
@@ -598,7 +598,7 @@ pub fn format_skill_effect(
                     let max_stacks = max_stacks.map(|max_stacks| *max_stacks).unwrap_or(status_specs.max_stacks);
                     let status_filter = StatStatusFilter {
                         status_id: Some(status_id.clone()),
-                        damage_type: None,
+                        ..Default::default()
                     };
                     let trigger_modifier_duration_str = format_trigger_modifier(
                         find_trigger_modifier(
@@ -665,6 +665,50 @@ pub fn format_skill_effect(
                         .into_any()
                 }
                 None => view! { <EffectLi>{success_chance}"Apply "{status_name}" " {format_min_max(value)}</EffectLi> }
+                .into_any(),
+            }
+        }
+        SkillEffectType::RefreshStatus {
+            status_filter,
+            value,
+            modifier,
+        } => {
+            let status_filter_str = effects_tooltip::status_filter_str(&status_filter);
+            let min = *value.min;
+            let max = *value.max;
+
+            match modifier {
+                RestoreModifier::Percent if min == 100.0 && max == 100.0 => view! { <EffectLi>{success_chance}"Refresh "{status_filter_str}" Duration"</EffectLi> }
+                .into_any(),
+                RestoreModifier::Percent if min == -100.0 && max == -100.0 => view! { <EffectLi>{success_chance}"Remove "{status_filter_str}</EffectLi> }
+                .into_any(),
+                RestoreModifier::Percent if max < 0.0 => view! {
+                    <EffectLi>
+                        {success_chance}"Reduce "{status_filter_str}" Duration by "
+                        {format_min_max_f64(-max, -min)}"%"
+                    </EffectLi>
+                }
+                .into_any(),
+                RestoreModifier::Percent => view! {
+                    <EffectLi>
+                        {success_chance}"Refresh "{format_min_max(value)}"% of " {status_filter_str}
+                        " Duration"
+                    </EffectLi>
+                }
+                .into_any(),
+                RestoreModifier::Flat if max < 0.0 => view! {
+                    <EffectLi>
+                        {success_chance}"Reduce "{status_filter_str}" Duration by "
+                        {format_min_max_f64(-max, -min)}" seconds"
+                    </EffectLi>
+                }
+                .into_any(),
+                RestoreModifier::Flat => view! {
+                    <EffectLi>
+                        {success_chance}"Extend "{status_filter_str}" Duration by "
+                        {format_min_max_f64(min, max)}" seconds"
+                    </EffectLi>
+                }
                 .into_any(),
             }
         }
@@ -991,6 +1035,19 @@ pub fn skill_effect_text(
 
             format!("Apply {status_name}")
         }
+        SkillEffectType::RefreshStatus {
+            status_filter,
+            value,
+            ..
+        } => format!(
+            "{} {}",
+            if *value.max < 0.0 {
+                "Expire"
+            } else {
+                "Refresh"
+            },
+            effects_tooltip::status_filter_str(&status_filter),
+        ),
         SkillEffectType::Resurrect
         | SkillEffectType::Kill
         | SkillEffectType::Restore { .. }

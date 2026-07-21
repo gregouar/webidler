@@ -603,6 +603,7 @@ impl From<OldStatType> for StatType {
                 status_filter: StatStatusFilter {
                     status_id: None,
                     damage_type: damage_type.map(|d| d.into()),
+                    debuff: None,
                 },
                 skill_filter: skill_filter.into(),
             },
@@ -613,6 +614,7 @@ impl From<OldStatType> for StatType {
                 status_filter: StatStatusFilter {
                     status_id: None,
                     damage_type: damage_type.map(|d| d.into()),
+                    debuff: None,
                 },
                 skill_filter: skill_filter.into(),
             },
@@ -649,18 +651,22 @@ fn status_type_to_status_filter(value: Option<OldStatStatusType>) -> StatStatusF
             OldStatStatusType::Stun => StatStatusFilter {
                 status_id: Some("stun".into()),
                 damage_type: None,
+                debuff: None,
             },
             OldStatStatusType::DamageOverTime { damage_type } => StatStatusFilter {
                 status_id: None,
                 damage_type: damage_type.map(|d| d.into()),
+                debuff: None,
             },
             OldStatStatusType::StatModifier { .. } => StatStatusFilter {
                 status_id: None,
                 damage_type: None,
+                debuff: None,
             },
             OldStatStatusType::Trigger { trigger_id, .. } => StatStatusFilter {
                 status_id: trigger_id.map(|x| x.into()),
                 damage_type: None,
+                debuff: None,
             },
         },
         None => Default::default(),

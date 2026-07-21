@@ -440,7 +440,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
             escalation,
             max_stacks,
             avoidable: _,
-            damage_type: _,
+            // damage_type: _,
             replace_on_value_only,
             computed_status_triggers: _,
         } => {
@@ -456,6 +456,9 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
                 max_stacks.map(|x| *x).unwrap_or_default(),
                 *replace_on_value_only,
             )
+        }
+        SkillEffectType::RefreshStatus { .. } => {
+            target.1.1.is_alive // TODO: Actually verify skills
         }
         SkillEffectType::Restore { restore_type, .. } => {
             target.1.1.is_alive
@@ -543,7 +546,7 @@ fn apply_skill_effect_on_target(
             escalation,
             max_stacks,
             avoidable,
-            damage_type,
+            // damage_type,
             replace_on_value_only: _,
             computed_status_triggers: _,
         } => {
@@ -561,15 +564,22 @@ fn apply_skill_effect_on_target(
                 duration,
                 *escalation.unwrap_or_default(),
                 max_stacks.map(|x| *x).unwrap_or_default(),
-                if avoidable.unwrap_or_default() {
-                    *damage_type
-                } else {
-                    None
-                },
+                avoidable.unwrap_or_default(),
                 skill_id,
                 trigger_depth,
             )
         }
+        SkillEffectType::RefreshStatus {
+            status_filter,
+            value,
+            modifier,
+        } => characters_controller::refresh_status_cooldown(
+            statuses_store,
+            target,
+            status_filter,
+            value.roll_with_seed(seed),
+            modifier,
+        ),
         SkillEffectType::Restore {
             restore_type,
             value,
