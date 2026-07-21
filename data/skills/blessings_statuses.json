@@ -53,8 +53,8 @@
         ]
     },
     "blessing_protection": {
-        "name"      : "Blessing of Protection",
-        "adjective" : "Blessed by Protection",
+        "name"      : "Blessing of Fortification",
+        "adjective" : "Blessed by Fortification",
         "icon"      : "skills/blessing_protection.svg",
         "debuff"    : false,
         "duration"  : 5,
@@ -62,7 +62,7 @@
         "effects"   : [
             {
                 "replace_on_value_only": true,
-                "StatModifier"         : { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": true },
+                "StatModifier"         : { "stat": {"DamageTaken": {}}, "modifier": "Increased", "debuff": true },
                 "value"                : 17.6,
                 "modifier"             : "Flat"
             },

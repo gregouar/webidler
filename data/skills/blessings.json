@@ -48,8 +48,8 @@
     ]
   },
   "blessing_protection": {
-    "name"           : "Blessing of Protection",
-    "description"    : "A blessing that massively increase your defense.",
+    "name"           : "Blessing of Fortification",
+    "description"    : "A blessing that massively increase your defenses.",
     "icon"           : "skills/blessing_protection.svg",
     "skill_type"     : "Blessing",
     "cooldown"       : 10,

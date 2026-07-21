@@ -5814,7 +5814,7 @@
         "socket": false
       },
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
-        "name": "Sadism",
+        "name": "Calculated Strike",
         "icon": "passives/critical.svg",
         "x": -145.0,
         "y": 80.0,
@@ -5829,8 +5829,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 50.0
           },
           {
             "stat": {
@@ -5839,8 +5839,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": -50.0
           }
         ],
         "triggers": [],
@@ -5853,8 +5853,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 50.0
           },
           {
             "stat": {
@@ -5863,8 +5863,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": -50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13489,23 +13489,6 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -13520,6 +13503,23 @@
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -13610,20 +13610,20 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
@@ -13643,12 +13643,12 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
                       "skill_type": null,
                       "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "min_max": null
                     }
                   }
                 ],
@@ -13739,6 +13739,23 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -13756,28 +13773,11 @@
                     }
                   },
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],

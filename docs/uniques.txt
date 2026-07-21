@@ -2,7 +2,7 @@ Uniques:
 
 Amulets: 4+1
 Body: 5+2
-Boots: 4
+Boots: 4+1
 Cloak: 6+1
 Focus: 4+1
 Gloves: 4

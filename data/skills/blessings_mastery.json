@@ -80,7 +80,7 @@
         "max_level": 100,
         "upgrades" : {
             "power"      : {
-                "title"       : "Status Effects",
+                "title"       : "Blessing Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
                 "max_level"   : 100,
@@ -111,6 +111,30 @@
                     }
                 ]
             },
+            "crit_chance": {
+                "title"       : "Keen Eye",
+                "base_cost"   : 10,
+                "upgrade_cost": 5,
+                "max_level"   : 5,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : {"CritChance": {}},
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "blessing_crit"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            },
             "more_damage": {
                 "title"       : "Heartseeker",
                 "base_cost"   : 10,
@@ -137,8 +161,128 @@
             }
         }
     },
-    "blessing_protection": {"max_level": 100, "upgrades": {}},
-    "blessing_heal"      : {"max_level": 100, "upgrades": {}},
+    "blessing_protection": {
+        "max_level": 100,
+        "upgrades" : {
+            "power"   : {
+                "title"       : "Blessing Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "blessing_protection"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "evade"   : {
+                "title"       : "Vigilance",
+                "base_cost"   : 3,
+                "upgrade_cost": 3,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 2,
+                        "upgrade_value": 2,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : {"Evade": null},
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "blessing_protection"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Flat",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "blessing_heal"      : {
+        "max_level": 100,
+        "upgrades" : {
+            "power"   : {
+                "title"       : "Blessing Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "blessing_heal"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "damage"  : {
+                "title"       : "Renewed Vigor",
+                "base_cost"   : 10,
+                "upgrade_cost": 10,
+                "max_level"   : 5,
+                "effects"     : [
+                    {
+                        "value"        : 10,
+                        "upgrade_value": 10,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : {"Damage": {}},
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "blessing_heal"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
     "meditate"           : {
         "max_level": 100,
         "upgrades" : {

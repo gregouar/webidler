@@ -1,72 +1,48 @@
 {
     "lantern_prank": {
-        "name": "Lantern Prank",
-        "icon": "skills/asian_lantern.svg",
-        "debuff": true,
-        "duration": 5,
+        "name"      : "Lantern Prank",
+        "icon"      : "skills/asian_lantern.svg",
+        "debuff"    : true,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
+            { "StatModifier": {"stat": "ManaRegen", "debuff": true}, "value": 100, "modifier": "Percent" },
             {
                 "StatModifier": {
-                    "stat": "ManaRegen",
-                    "debuff": true
+                    "stat"    : { "DamageTaken": {"damage_type": "Fire"} },
+                    "modifier": "Increased",
+                    "debuff"  : false
                 },
-                "value": 100,
-                "modifier": "Percent"
-            },
-            {
-                "StatModifier": {
-                    "stat": {
-                        "DamageTaken": {
-                            "damage_type": "Fire"
-                        }
-                    },
-                    "modifier": "More",
-                    "debuff": false
-                },
-                "value": 50,
-                "modifier": "Percent"
+                "value"       : 50,
+                "modifier"    : "Percent"
             }
         ]
     },
-    "ward_evil": {
-        "name": "Ward Evil",
-        "icon": "skills/blessing_protection.svg",
-        "debuff": false,
-        "duration": [
-            5,
-            10
-        ],
+    "ward_evil"    : {
+        "name"      : "Ward Evil",
+        "icon"      : "skills/blessing_protection.svg",
+        "debuff"    : false,
+        "duration"  : [5, 10],
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
-                "StatModifier": {
-                    "stat": {
-                        "Armor": null
-                    },
-                    "modifier": "Flat"
-                },
-                "value": 100,
-                "modifier": "Percent"
+                "StatModifier": { "stat": {"Armor": null}, "modifier": "Flat" },
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     },
-    "distracted": {
-        "name": "Distracted",
-        "icon": "skills/lips.svg",
-        "debuff": true,
-        "duration": 5,
+    "distracted"   : {
+        "name"      : "Distracted",
+        "icon"      : "skills/lips.svg",
+        "debuff"    : true,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
-                "StatModifier": {
-                    "stat": {
-                        "SuccessChance": { }
-                    },
-                    "debuff": true
-                },
-                "value": 100,
-                "modifier": "Percent"
+                "StatModifier": { "stat": {"SuccessChance": {}}, "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     }
