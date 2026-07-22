@@ -766,7 +766,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter,
         } => {
             format!(
-                "Restore {} more{}{}",
+                "Restore {} additional{}{}",
                 format_flat_number(value, false),
                 restore_type_str(*restore_type),
                 skill_filter_str(skill_filter, " with ", true)

@@ -3,7 +3,7 @@
         "max_level": 100,
         "upgrades" : {
             "power": {
-                "title"       : "Status Effects",
+                "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
                 "max_level"   : 100,
@@ -20,10 +20,154 @@
             }
         }
     },
-    "curse_conductivity": {"max_level": 100, "upgrades": {}},
-    "curse_putridity"   : {"max_level": 100, "upgrades": {}},
-    "curse_flammability": {"max_level": 100, "upgrades": {}},
-    "curse_weakness"    : {"max_level": 100, "upgrades": {}},
-    "curse_clumsy"      : {"max_level": 100, "upgrades": {}},
-    "curse_vampirism"   : {"max_level": 100, "upgrades": {}}
+    "curse_conductivity": {
+        "max_level": 100,
+        "upgrades" : {
+            "power": {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_conductivity"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_putridity"   : {
+        "max_level": 100,
+        "upgrades" : {
+            "power": {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_putridity"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_flammability": {
+        "max_level": 100,
+        "upgrades" : {
+            "power": {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_flammability"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_weakness"    : {
+        "max_level": 100,
+        "upgrades" : {
+            "power" : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_weakness"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "clumsy": {
+                "title"       : "Clumsiness",
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "SkillEffect"  : { "ApplyStatus": {"status_id": "curse_clumsy", "value": 100} }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_vampirism"   : {
+        "max_level": 100,
+        "upgrades" : {
+            "power" : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_vampirism"} },
+                            "modifier": "Flat"
+                        },
+                        "hidden"       : true
+                    },
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : { "stat": {"Description": "Restore +0.1 additional Life"}, "modifier": "Flat" }
+                    }
+                ]
+            },
+            "damage": {
+                "title"       : "Vampiric Power",
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "curse_vampirism_damage",
+                            "skill_type": "Other",
+                            "OnHit"     : {
+                                "skill_type": "Attack",
+                                "conditions": [
+                                    { "HasStatus": {"status_id": "curse_vampirism"} }
+                                ]
+                            },
+                            "target"    : "Source",
+                            "effects"   : [
+                                { "ApplyStatus": {"status_id": "curse_vampirism_damage", "value": 1} }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
 }

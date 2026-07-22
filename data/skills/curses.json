@@ -124,31 +124,6 @@
       }
     ]
   },
-  "curse_clumsy"      : {
-    "name"           : "Curse of Clumsiness",
-    "description"    : "A crippling curse that hinders enemies ability to evade or block your attacks.",
-    "icon"           : "skills/curse_clumsy.svg",
-    "skill_type"     : "Curse",
-    "cooldown"       : 10,
-    "mana_cost"      : 10,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      {
-        "stat"    : { "StatusPower": {"status_id": "curse_clumsy"} },
-        "modifier": "Flat",
-        "value"   : 1
-      }
-    ],
-    "targets"        : [
-      {
-        "range"  : "Any",
-        "shape"  : "All",
-        "effects": [
-          { "ApplyStatus": {"status_id": "curse_clumsy", "value": 17} }
-        ]
-      }
-    ]
-  },
   "curse_vampirism"   : {
     "name": "Curse of Vampirism",
     "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins.",
@@ -162,7 +137,7 @@
         "stat"       : { "StatusPower": {"status_id": "curse_vampirism"} },
         "modifier"   : "Flat",
         "value"      : 5,
-        "description": "Curse of Vampirism grants +0.1 Life Restored"
+        "description": "Restore +0.1 additional Life"
       }
     ],
     "targets": [

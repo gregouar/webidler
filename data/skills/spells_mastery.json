@@ -1211,7 +1211,7 @@
       },
       "remove_debuffs": {
         "title"       : "Cleanse the Body",
-        "base_cost"   : 20,
+        "base_cost"   : 10,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [

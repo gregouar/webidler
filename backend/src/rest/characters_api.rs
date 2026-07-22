@@ -167,7 +167,7 @@ async fn read_character_details(
     );
 
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension_data, benedictions, skill_masteries) =
+    let (inventory_data, ascension_data, benedictions, mut skill_masteries) =
         character_data?.unwrap_or_default();
     // let last_grind_data = last_grind_data?;
     let character_stash = character_stash?.map(|x| x.into());
@@ -191,6 +191,9 @@ async fn read_character_details(
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
     let passives_build = passives_build?.unwrap_or_default();
+    skill_masteries
+        .favorite_skills
+        .retain(|skill_id| master_store.skills_store.contains_key(skill_id));
     let skill_mastery_skill_specs = skills_updater::compute_skill_mastery_skill_specs(
         &master_store.statuses_store,
         &master_store.skills_store,
