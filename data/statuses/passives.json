@@ -55,7 +55,7 @@
     "name"      : "Open Wound",
     "icon"      : "passives/open_wound.svg",
     "debuff"    : true,
-    "duration"  : 5,
+    "duration"  : 8,
     "max_stacks": 20,
     "effects"   : [
       {

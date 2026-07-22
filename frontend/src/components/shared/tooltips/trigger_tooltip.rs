@@ -352,7 +352,12 @@ fn format_blocked_hit_trigger(hit_trigger: &HitTrigger) -> String {
 fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
     format!(
         "{}{}",
-        if status_trigger.is_triggered == Some(false) {
+        if status_trigger.is_triggered == Some(false)
+            && matches!(
+                status_trigger.skill_type,
+                Some(SkillType::Blessing) | Some(SkillType::Curse)
+            )
+        {
             "self-cast "
         } else {
             ""

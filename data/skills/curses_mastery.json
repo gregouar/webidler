@@ -2,7 +2,7 @@
     "curse_frailty"     : {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"     : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -18,7 +18,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"  : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -34,7 +34,7 @@
                     }
                 ]
             },
-            "destroy" : {
+            "destroy"   : {
                 "title"       : "Crushing Blow",
                 "base_cost"   : 10,
                 "upgrade_cost": 0,
@@ -60,13 +60,39 @@
                         }
                     }
                 ]
+            },
+            "open_wound": {
+                "title"       : "Grievous Injury",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : { "StatusPower": {"status_id": "open_wound"} },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_frailty"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_conductivity": {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"      : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -82,7 +108,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"   : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -98,7 +124,7 @@
                     }
                 ]
             },
-            "contact" : {
+            "contact"    : {
                 "title"       : "Superconductor",
                 "base_cost"   : 10,
                 "upgrade_cost": 0,
@@ -174,13 +200,39 @@
                         }
                     }
                 ]
+            },
+            "crit_damage": {
+                "title"       : "Instable Current",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : {"CritDamage": {}},
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_conductivity"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_putridity"   : {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"          : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -196,7 +248,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"       : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -212,7 +264,7 @@
                     }
                 ]
             },
-            "hit"     : {
+            "hit"            : {
                 "title"       : "Brittle Bones",
                 "base_cost"   : 10,
                 "upgrade_cost": 0,
@@ -253,13 +305,39 @@
                         }
                     }
                 ]
+            },
+            "poison_duration": {
+                "title"       : "Lasting Agony",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : { "StatusDuration": {"status_id": "poison"} },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_putridity"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_flammability": {
         "max_level": 100,
         "upgrades" : {
-            "power"     : {
+            "power"      : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -275,7 +353,7 @@
                     }
                 ]
             },
-            "duration"  : {
+            "duration"   : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -291,7 +369,7 @@
                     }
                 ]
             },
-            "extra_burn": {
+            "extra_burn" : {
                 "title"       : "Combustible",
                 "base_cost"   : 10,
                 "upgrade_cost": 0,
@@ -342,6 +420,32 @@
                                     }
                                 }
                             ]
+                        }
+                    }
+                ]
+            },
+            "burn_stacks": {
+                "title"       : "Kindle",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : { "StatusStacks": {"status_id": "burn"} },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_flammability"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Flat",
+                            "scope"   : "Global"
                         }
                     }
                 ]
@@ -401,7 +505,7 @@
     "curse_vampirism"   : {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"       : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -423,7 +527,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"    : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -439,7 +543,7 @@
                     }
                 ]
             },
-            "damage"  : {
+            "damage"      : {
                 "title"       : "Vampiric Power",
                 "base_cost"   : 20,
                 "upgrade_cost": 0,
@@ -461,6 +565,33 @@
                             "effects"   : [
                                 { "ApplyStatus": {"status_id": "curse_vampirism_damage", "value": 1} }
                             ]
+                        }
+                    }
+                ]
+            },
+            "damage_bleed": {
+                "title"       : "Bloodlust",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : {"Damage": {}},
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_vampirism"} },
+                                        { "HasStatus": {"status_id": "bleed"          } }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
                         }
                     }
                 ]

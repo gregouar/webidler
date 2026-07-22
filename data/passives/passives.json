@@ -4279,7 +4279,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -6813,7 +6814,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -6914,7 +6916,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -7683,7 +7686,8 @@
               "damage_type": "Fire",
               "debuff": null,
               "is_triggered": null,
-              "is_evaded": false
+              "is_evaded": false,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "pyromaniac",
@@ -7713,7 +7717,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -8497,7 +8502,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -8541,7 +8547,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -8552,7 +8559,8 @@
               "damage_type": null,
               "debuff": null,
               "is_triggered": null,
-              "is_evaded": null
+              "is_evaded": null,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "elemental_conflux_fire",
@@ -8582,7 +8590,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -9992,7 +10001,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -10416,7 +10426,8 @@
               "damage_type": "Poison",
               "debuff": null,
               "is_triggered": null,
-              "is_evaded": false
+              "is_evaded": false,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "sickening_concoction",
@@ -10471,7 +10482,8 @@
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -11241,7 +11253,8 @@
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -11354,7 +11367,8 @@
               "damage_type": null,
               "debuff": null,
               "is_triggered": null,
-              "is_evaded": null
+              "is_evaded": null,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "chaotic_mind",
@@ -11384,7 +11398,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -12505,7 +12520,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -12768,7 +12784,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 35.0,
+                  "value": 25.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -12784,7 +12800,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -13648,7 +13665,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13657,17 +13674,7 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13685,7 +13692,17 @@
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13696,7 +13713,8 @@
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -13784,6 +13802,16 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -13799,16 +13827,6 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
                     }
                   },
                   {
@@ -13832,7 +13850,8 @@
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -13920,34 +13939,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13964,11 +13956,39 @@
                       "skill_id": null,
                       "min_max": null
                     }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
                   }
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -14783,7 +14803,8 @@
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
                 "independent_application": false,
-                "optional_application": false
+                "optional_application": false,
+                "description": null
               }
             ]
           }

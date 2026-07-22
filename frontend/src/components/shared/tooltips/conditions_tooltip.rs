@@ -76,7 +76,7 @@ pub fn format_skill_modifier_conditions_post(
                 status_filter,
                 skill_type,
             } => Some(format!(
-                " per {} Stack", // on them for SkillConditionalModifier ?
+                " per Stack of {}", // on them for SkillConditionalModifier ?
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
