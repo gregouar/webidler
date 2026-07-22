@@ -542,7 +542,7 @@ pub fn refresh_status_cooldown(
         for status_state in status_stacks.iter_mut() {
             status_state.duration += match modifier {
                 RestoreModifier::Flat => amount.into(),
-                RestoreModifier::Percent => (status_state.max_duration * amount * 0.01).into(),
+                RestoreModifier::Percent => status_state.max_duration * amount * 0.01,
             };
             refreshed = true;
         }

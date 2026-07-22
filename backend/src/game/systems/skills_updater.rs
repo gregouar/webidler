@@ -1103,10 +1103,7 @@ pub fn apply_stat_effect_on_skill_effect(
             replace_on_value_only: _,
             computed_status_triggers: _,
         } => {
-            let Some(status_specs) = statuses_store.get(skill_status_id) else {
-                return None;
-            };
-
+            let status_specs = statuses_store.get(skill_status_id)?;
             if let (
                 Some(duration),
                 StatType::StatusDuration {
@@ -1281,9 +1278,7 @@ fn into_stat_skill_effect_type(
         SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
         SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
         SkillEffectType::ApplyStatus { status_id, .. } => {
-            let Some(status_specs) = statuses_store.get(status_id) else {
-                return None;
-            };
+            let status_specs = statuses_store.get(status_id)?;
             Some(StatSkillEffectType::ApplyStatus {
                 status_id: Some(status_id.clone()),
                 debuff: Some(status_specs.debuff),
