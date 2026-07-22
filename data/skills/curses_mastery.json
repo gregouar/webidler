@@ -2,7 +2,7 @@
     "curse_frailty"     : {
         "max_level": 100,
         "upgrades" : {
-            "power": {
+            "power"   : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -17,13 +17,29 @@
                         }
                     }
                 ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_conductivity": {
         "max_level": 100,
         "upgrades" : {
-            "power": {
+            "power"   : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -38,13 +54,29 @@
                         }
                     }
                 ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_putridity"   : {
         "max_level": 100,
         "upgrades" : {
-            "power": {
+            "power"   : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -59,13 +91,29 @@
                         }
                     }
                 ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_flammability": {
         "max_level": 100,
         "upgrades" : {
-            "power": {
+            "power"   : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -80,13 +128,29 @@
                         }
                     }
                 ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_weakness"    : {
         "max_level": 100,
         "upgrades" : {
-            "power" : {
+            "power"   : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -102,7 +166,23 @@
                     }
                 ]
             },
-            "clumsy": {
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "clumsy"  : {
                 "title"       : "Clumsiness",
                 "base_cost"   : 20,
                 "upgrade_cost": 0,
@@ -120,7 +200,7 @@
     "curse_vampirism"   : {
         "max_level": 100,
         "upgrades" : {
-            "power" : {
+            "power"   : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -142,7 +222,23 @@
                     }
                 ]
             },
-            "damage": {
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "damage"  : {
                 "title"       : "Vampiric Power",
                 "base_cost"   : 20,
                 "upgrade_cost": 0,
