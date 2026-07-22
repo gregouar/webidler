@@ -3,9 +3,7 @@
   "portrait": "monsters/peaks/troll.webp",
   "max_life": 15,
   "life_regen": 50,
-  "power_factor": 4,
   "size": "Tall",
-  "initiative": [ 1, 2 ],
   "armor": { "Poison": 100 },
   "skills": [
     {

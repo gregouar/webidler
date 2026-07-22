@@ -470,6 +470,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 SkillShape::Square4 => ", 2x2 area",
                 SkillShape::All => ", all",
                 SkillShape::Contact => ", contact",
+                SkillShape::Cross => ", contact area",
             };
 
             let range = match specs.range {
@@ -773,7 +774,7 @@ pub fn item_slot_str(item_slot: ItemSlot) -> &'static str {
         ItemSlot::Gloves => "Gloves",
         ItemSlot::Helmet => "Helmet",
         ItemSlot::Ring => "Ring",
-        ItemSlot::Shield => "Off Hand",
+        ItemSlot::Shield => "Offhand",
         ItemSlot::Accessory => "Cloak",
         ItemSlot::Weapon => "Weapon",
     }

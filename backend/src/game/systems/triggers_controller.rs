@@ -9,7 +9,7 @@ use shared::data::{
 
 use crate::game::{
     data::{
-        event::{EventsQueue, HitEvent, StatusEvent},
+        event::{EventsQueue, HitEvent, RestoreEvent, StatusEvent},
         master_store::StatusesStore,
     },
     game_data::GameInstanceData,
@@ -27,6 +27,7 @@ pub struct TriggerContext<'a> {
 
     pub hit_context: Option<&'a HitEvent>,
     pub status_context: Option<&'a StatusEvent>,
+    pub restore_context: Option<&'a RestoreEvent>,
     pub level: usize,
 }
 
@@ -66,41 +67,45 @@ pub fn apply_trigger_effects(
             ),
         };
 
-        let statuses_context: Vec<StatusModifierData> =
-            if let Some(status_context) = trigger_context.status_context {
-                [StatusModifierData {
-                    status_id: &status_context.status_id,
-                    damage_type: status_context.damage_type,
-                    skill_type: status_context.skill_type,
-                    value: status_context.value,
-                    duration: status_context.duration,
-                }]
-                .into()
-            } else {
-                game_data
-                    .character_state(trigger_context.target)
-                    .map(|character_state| {
-                        character_state
-                            .statuses
-                            .iter()
-                            .flat_map(|(status_id, status_stacks)| {
-                                let damage_type = statuses_store
-                                    .get(status_id)
-                                    .and_then(|status_specs| status_specs.damage_type);
-                                status_stacks
-                                    .iter()
-                                    .map(move |status_state| StatusModifierData {
-                                        skill_type: status_state.skill_type,
-                                        damage_type,
-                                        status_id,
-                                        value: status_state.value,
-                                        duration: status_state.duration,
-                                    })
-                            })
-                            .collect()
-                    })
-                    .unwrap_or_default()
-            };
+        let statuses_context: Vec<StatusModifierData> = if let Some(status_context) =
+            trigger_context.status_context
+        {
+            [StatusModifierData {
+                status_id: &status_context.status_id,
+                damage_type: status_context.damage_type,
+                debuff: status_context.debuff,
+                skill_type: status_context.skill_type,
+                value: status_context.value,
+                duration: status_context.duration,
+            }]
+            .into()
+        } else {
+            game_data
+                .character_state(trigger_context.target)
+                .map(|character_state| {
+                    character_state
+                        .statuses
+                        .iter()
+                        .flat_map(|(status_id, status_stacks)| {
+                            let (damage_type, debuff) = statuses_store
+                                .get(status_id)
+                                .map(|status_specs| (status_specs.damage_type, status_specs.debuff))
+                                .unwrap_or_default();
+                            status_stacks
+                                .iter()
+                                .map(move |status_state| StatusModifierData {
+                                    skill_type: status_state.skill_type,
+                                    damage_type,
+                                    debuff,
+                                    status_id,
+                                    value: status_state.value,
+                                    duration: status_state.duration,
+                                })
+                        })
+                        .collect()
+                })
+                .unwrap_or_default()
+        };
 
         let trigger_effects: Vec<_> =
             if trigger_effect.modifiers.is_empty() && !trigger_effect.inherit_source_effects {
@@ -145,6 +150,7 @@ pub fn apply_trigger_effects(
                                         status_filter.is_match_with_status(
                                             status_data.status_id,
                                             status_data.damage_type,
+                                            status_data.debuff,
                                         ) && compare_options(
                                             &skill_type.as_ref(),
                                             &Some(&status_data.skill_type),
@@ -161,6 +167,7 @@ pub fn apply_trigger_effects(
                                         status_filter.is_match_with_status(
                                             status_data.status_id,
                                             status_data.damage_type,
+                                            status_data.debuff,
                                         ) && compare_options(
                                             &skill_type.as_ref(),
                                             &Some(&status_data.skill_type),
@@ -177,12 +184,18 @@ pub fn apply_trigger_effects(
                                         status_filter.is_match_with_status(
                                             status_data.status_id,
                                             status_data.damage_type,
+                                            status_data.debuff,
                                         ) && compare_options(
                                             &skill_type.as_ref(),
                                             &Some(&status_data.skill_type),
                                         )
                                     })
                                     .count() as f64,
+                                TriggerEffectModifierSource::RestoreValue => trigger_context
+                                    .restore_context
+                                    .as_ref()
+                                    .map(|restore| restore.value.get())
+                                    .unwrap_or_default(),
                                 TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
                                 TriggerEffectModifierSource::TriggerStatusValue => 0.0,
                             },
@@ -190,20 +203,21 @@ pub fn apply_trigger_effects(
                     })
                     .collect();
 
-                let source_effects: Vec<_> = if trigger_effect.inherit_source_effects {
+                let empty_vec = Default::default();
+                let source_effects = if trigger_effect.inherit_source_effects {
                     game_data
                         .character_specs(trigger_context.source)
-                        .map(|character_specs| character_specs.effects.iter().collect())
-                        .unwrap_or_default()
+                        .map(|character_specs| &character_specs.effects)
+                        .unwrap_or(&empty_vec)
                 } else {
-                    Default::default()
+                    &empty_vec
                 };
 
                 trigger_effect
                     .effects
                     .into_iter()
                     .map(|mut effect| {
-                        skills_updater::compute_skill_specs_effect(
+                        skills_updater::compute_skill_specs_effects(
                             statuses_store,
                             &trigger_effect.trigger_id,
                             trigger_effect.skill_type,
@@ -286,6 +300,7 @@ pub fn apply_trigger_effects(
 struct StatusModifierData<'a> {
     status_id: &'a StatusId,
     damage_type: Option<DamageType>,
+    debuff: bool,
     skill_type: SkillType,
     value: NonNegative,
     duration: NonNegative,

@@ -3,7 +3,6 @@
   "portrait": "monsters/inn/adventurer_paladin.webp",
   "rarity": "Boss",
   "max_life": 200,
-  "power_factor": 8,
   "armor": {
     "Physical": 100
   },

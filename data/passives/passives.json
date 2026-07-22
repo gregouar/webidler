@@ -2,7 +2,7 @@
   "default": {
     "nodes": {
       "0088c436-0b23-4993-a966-b57d2444e996": {
-        "name": "Evade Chance",
+        "name": "Greater Evade Chance",
         "icon": "passives/curled_leaf.svg",
         "x": 90.0,
         "y": -130.0,
@@ -180,6 +180,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -197,6 +198,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -309,6 +311,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -326,6 +329,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -409,6 +413,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -425,6 +430,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -488,7 +494,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "RangedWeapon"
+                      "item_category": "RangedWeapon",
+                      "not": false
                     }
                   }
                 ],
@@ -518,7 +525,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "RangedWeapon"
+                      "item_category": "RangedWeapon",
+                      "not": false
                     }
                   }
                 ],
@@ -643,6 +651,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -676,6 +685,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -704,6 +714,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -721,6 +732,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -784,6 +796,7 @@
               "StatusPower": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -801,6 +814,7 @@
               "StatusPower": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -932,6 +946,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -948,6 +963,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -973,6 +989,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -990,6 +1007,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -1090,6 +1108,7 @@
               "StatusDuration": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -1106,6 +1125,7 @@
               "StatusDuration": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -1145,6 +1165,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -1178,6 +1199,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -1248,6 +1270,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -1279,6 +1302,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -1358,6 +1382,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -1677,6 +1702,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -1694,6 +1720,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -1865,6 +1892,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -1954,6 +1982,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null
               }
@@ -1970,6 +1999,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null
               }
@@ -2022,6 +2052,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -2038,6 +2069,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -2187,6 +2219,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -2204,6 +2237,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -2267,6 +2301,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -2283,6 +2318,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -2657,6 +2693,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -2673,6 +2710,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -2698,6 +2736,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -2715,6 +2754,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -2854,6 +2894,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -3031,6 +3072,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3047,6 +3089,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3059,24 +3102,26 @@
         "socket": false
       },
       "39e8a993-9893-42f8-b75a-ff0df25bb6d0": {
-        "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "name": "Greater Damage over Time Duration",
+        "icon": "passives/solar_time.svg",
         "x": 57.5,
         "y": -110.0,
         "size": 1,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 12.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3084,14 +3129,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 6.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3126,7 +3173,7 @@
       },
       "3a4861a5-e8e3-455d-b458-fe23d932b190": {
         "name": "Ain't Nobody Got Time for That",
-        "icon": "passives/broken_skull.svg",
+        "icon": "passives/mailed_fist.svg",
         "x": 57.5,
         "y": 182.5,
         "size": 2,
@@ -3138,6 +3185,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -3278,6 +3326,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": false
                     }
@@ -3307,6 +3356,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": true
                     }
@@ -3340,6 +3390,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": false
                     }
@@ -3369,6 +3420,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": true
                     }
@@ -3397,6 +3449,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -3414,6 +3467,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -3498,6 +3552,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3529,6 +3584,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3554,12 +3610,28 @@
               "StatusStacks": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
             },
             "modifier": "Flat",
             "value": 1.0
+          },
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "skill_id": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "open_wound"
+                  }
+                }
+              }
+            },
+            "modifier": "More",
+            "value": -1e200
           }
         ],
         "triggers": [],
@@ -3722,6 +3794,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -3918,6 +3991,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3949,6 +4023,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4069,6 +4144,7 @@
               "StatusPower": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -4086,6 +4162,7 @@
               "StatusPower": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -4196,13 +4273,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -4226,6 +4304,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -4243,6 +4322,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -4398,6 +4478,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4414,6 +4495,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4450,7 +4532,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "RangedWeapon"
+                      "item_category": "RangedWeapon",
+                      "not": false
                     }
                   }
                 ],
@@ -4480,7 +4563,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "RangedWeapon"
+                      "item_category": "RangedWeapon",
+                      "not": false
                     }
                   }
                 ],
@@ -4508,6 +4592,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -4525,6 +4610,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -4551,6 +4637,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4567,6 +4654,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4592,6 +4680,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4608,6 +4697,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4635,6 +4725,7 @@
                   "StatusPower": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null,
                     "min_max": null
@@ -4647,6 +4738,7 @@
                     "StatusStacks": {
                       "status_id": "open_wound",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null
                     }
                   }
@@ -4667,6 +4759,7 @@
                   "StatusPower": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null,
                     "min_max": null
@@ -4679,6 +4772,7 @@
                     "StatusStacks": {
                       "status_id": "open_wound",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null
                     }
                   }
@@ -4729,25 +4823,24 @@
         "socket": false
       },
       "52f99688-5acc-486c-95e5-e595a61e0755": {
-        "name": "Greater Effects Duration",
-        "icon": "passives/duration.svg",
+        "name": "Greater Success Chance",
+        "icon": "passives/success.svg",
         "x": 95.0,
         "y": 65.0,
         "size": 1,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4755,15 +4848,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4797,7 +4889,7 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -4822,7 +4914,7 @@
               }
             },
             "modifier": "More",
-            "value": 14.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4884,6 +4976,7 @@
               "StatusStacks": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -4915,6 +5008,7 @@
               "StatusStacks": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5174,6 +5268,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5190,6 +5285,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5265,6 +5361,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -5419,6 +5516,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": false
                     }
@@ -5448,6 +5546,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": true
                     }
@@ -5481,6 +5580,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": false
                     }
@@ -5510,6 +5610,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": true
                     }
@@ -5538,6 +5639,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5554,6 +5656,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -5649,7 +5752,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "RangedWeapon"
+                      "item_category": "RangedWeapon",
+                      "not": false
                     }
                   }
                 ],
@@ -5679,7 +5783,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "RangedWeapon"
+                      "item_category": "RangedWeapon",
+                      "not": false
                     }
                   }
                 ],
@@ -5792,7 +5897,7 @@
         "socket": false
       },
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
-        "name": "Sadism",
+        "name": "Calculated Strike",
         "icon": "passives/critical.svg",
         "x": -145.0,
         "y": 80.0,
@@ -5807,8 +5912,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": 50.0
           },
           {
             "stat": {
@@ -5817,8 +5922,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 20.0
+            "modifier": "More",
+            "value": -50.0
           }
         ],
         "triggers": [],
@@ -5831,8 +5936,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": 50.0
           },
           {
             "stat": {
@@ -5841,8 +5946,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Increased",
-            "value": 10.0
+            "modifier": "More",
+            "value": -50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5926,6 +6031,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -5943,6 +6049,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -6066,6 +6173,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -6082,6 +6190,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -6121,13 +6230,13 @@
         "socket": false
       },
       "65390d39-8d88-4b4e-b88b-afbfeab3d4e9": {
-        "name": "Block",
+        "name": "Life Regenration",
         "icon": "passives/life_regen.svg",
         "x": -90.0,
         "y": -75.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Armor",
+        "node_type": "Life",
         "effects": [
           {
             "stat": "LifeRegen",
@@ -6364,6 +6473,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -6380,6 +6490,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -6419,6 +6530,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": false
                     }
@@ -6448,6 +6560,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": true
                     }
@@ -6481,6 +6594,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": false
                     }
@@ -6510,6 +6624,7 @@
                     "HasStatus": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": "Curse",
                       "not": true
                     }
@@ -6618,6 +6733,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -6635,6 +6751,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -6661,6 +6778,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -6695,7 +6813,9 @@
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -6795,7 +6915,9 @@
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -6980,24 +7102,26 @@
         "socket": false
       },
       "725a5390-2c74-47b9-93ee-80ba57ad29b0": {
-        "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "name": "Damage over Time Duration",
+        "icon": "passives/solar_time.svg",
         "x": 82.5,
         "y": -100.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -7005,14 +7129,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7276,6 +7402,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -7305,6 +7432,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": true
                     }
@@ -7338,6 +7466,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -7367,6 +7496,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": true
                     }
@@ -7395,6 +7525,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -7412,6 +7543,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -7552,8 +7684,10 @@
               "skill_type": null,
               "status_id": null,
               "damage_type": "Fire",
+              "debuff": null,
               "is_triggered": null,
-              "is_evaded": false
+              "is_evaded": false,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "pyromaniac",
@@ -7577,13 +7711,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -7713,6 +7848,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -7729,6 +7865,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -7891,7 +8028,7 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -7916,7 +8053,7 @@
               }
             },
             "modifier": "More",
-            "value": 14.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7936,6 +8073,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -7952,6 +8090,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -8041,6 +8180,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -8057,6 +8197,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -8082,6 +8223,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -8095,6 +8237,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null
               }
@@ -8111,6 +8254,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null,
                 "min_max": null
@@ -8124,6 +8268,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null
               }
@@ -8151,6 +8296,7 @@
                   "StatusPower": {
                     "status_id": null,
                     "damage_type": "Any",
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null,
                     "min_max": null
@@ -8177,6 +8323,7 @@
                   "StatusPower": {
                     "status_id": null,
                     "damage_type": "Any",
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null,
                     "min_max": null
@@ -8274,6 +8421,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8291,6 +8439,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8347,13 +8496,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -8391,13 +8541,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -8406,8 +8557,10 @@
               "skill_type": null,
               "status_id": "poison",
               "damage_type": null,
+              "debuff": null,
               "is_triggered": null,
-              "is_evaded": null
+              "is_evaded": null,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "elemental_conflux_fire",
@@ -8431,13 +8584,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -8461,6 +8615,7 @@
               "StatusPower": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8478,6 +8633,7 @@
               "StatusPower": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8743,6 +8899,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8786,6 +8943,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8803,6 +8961,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -8840,7 +8999,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "MeleeWeapon2H"
+                      "item_category": "MeleeWeapon2H",
+                      "not": false
                     }
                   }
                 ],
@@ -8870,7 +9030,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "MeleeWeapon2H"
+                      "item_category": "MeleeWeapon2H",
+                      "not": false
                     }
                   }
                 ],
@@ -9073,6 +9234,7 @@
               "StatusDuration": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -9089,6 +9251,7 @@
               "StatusDuration": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -9252,6 +9415,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -9269,6 +9433,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -9309,6 +9474,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -9342,6 +9508,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -9428,6 +9595,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -9445,6 +9613,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -9826,13 +9995,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -9893,6 +10063,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -9910,6 +10081,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -9967,6 +10139,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -9983,6 +10156,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10086,6 +10260,7 @@
               "StatusDuration": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10102,6 +10277,7 @@
               "StatusDuration": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10141,6 +10317,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -10174,6 +10351,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -10246,8 +10424,10 @@
               "skill_type": null,
               "status_id": null,
               "damage_type": "Poison",
+              "debuff": null,
               "is_triggered": null,
-              "is_evaded": false
+              "is_evaded": false,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "sickening_concoction",
@@ -10258,6 +10438,7 @@
                   "StatusDuration": {
                     "status_id": null,
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null
                   }
@@ -10285,7 +10466,6 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
@@ -10294,13 +10474,16 @@
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null
                     }
                   }
                 ],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -10544,6 +10727,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10615,6 +10799,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -10632,6 +10817,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -10722,6 +10908,7 @@
               "StatusFaster": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10738,6 +10925,7 @@
               "StatusFaster": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10750,7 +10938,7 @@
         "socket": false
       },
       "a796f363-7d58-4ebd-b78d-8f4cf92614bd": {
-        "name": "Burn Stacks",
+        "name": "Let It Burn",
         "icon": "passives/wildfires.svg",
         "x": 192.5,
         "y": 150.0,
@@ -10763,6 +10951,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10779,6 +10968,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -10818,6 +11008,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -10851,6 +11042,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -10910,6 +11102,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -10927,6 +11120,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -11043,7 +11237,6 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
@@ -11059,7 +11252,9 @@
                   }
                 ],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -11170,8 +11365,10 @@
               "skill_type": null,
               "status_id": "stun",
               "damage_type": null,
+              "debuff": null,
               "is_triggered": null,
-              "is_evaded": null
+              "is_evaded": null,
+              "conditions": []
             },
             "description": null,
             "trigger_id": "chaotic_mind",
@@ -11195,13 +11392,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -11249,25 +11447,24 @@
         "socket": false
       },
       "ae845698-b47f-47ca-bd07-8504a5eecf16": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
         "x": 102.5,
         "y": 75.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 5.0
           }
         ],
         "triggers": [],
@@ -11275,15 +11472,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11374,6 +11570,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -11417,6 +11614,7 @@
               "StatusDuration": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -11433,6 +11631,7 @@
               "StatusDuration": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -11506,7 +11705,7 @@
         "socket": false
       },
       "b5fce054-f56b-47de-9e4f-d565c54f830c": {
-        "name": "Vampire",
+        "name": "Vampirism",
         "icon": "passives/fangs_circle.svg",
         "x": -57.5,
         "y": 110.0,
@@ -11756,25 +11955,24 @@
         "socket": false
       },
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
-        "name": "Effects Duration",
-        "icon": "passives/duration.svg",
+        "name": "Success Chance",
+        "icon": "passives/success.svg",
         "x": 95.0,
         "y": 85.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Utility",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 5.0
           }
         ],
         "triggers": [],
@@ -11782,15 +11980,14 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
+              "SuccessChance": {
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "effect_type": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11852,7 +12049,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -11868,7 +12066,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12081,24 +12280,26 @@
         "socket": false
       },
       "c25151c2-f5bd-4992-9626-555178681fd7": {
-        "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "name": "Damage over Time Duration",
+        "icon": "passives/solar_time.svg",
         "x": 70.0,
         "y": -105.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Utility",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -12106,14 +12307,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "SuccessChance": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12311,13 +12514,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -12341,6 +12545,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12357,6 +12562,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12397,6 +12603,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12428,6 +12635,7 @@
               "StatusDuration": {
                 "status_id": "stun",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12555,6 +12763,7 @@
                   "StatusPower": {
                     "status_id": "open_wound",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null,
                     "min_max": null
@@ -12575,7 +12784,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 35.0,
+                  "value": 25.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -12585,13 +12794,14 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -12663,7 +12873,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "MeleeWeapon2H"
+                      "item_category": "MeleeWeapon2H",
+                      "not": false
                     }
                   }
                 ],
@@ -12693,7 +12904,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "MeleeWeapon2H"
+                      "item_category": "MeleeWeapon2H",
+                      "not": false
                     }
                   }
                 ],
@@ -12728,12 +12940,12 @@
           },
           {
             "stat": {
-              "StatusPower": {
+              "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
-                "skill_id": null,
-                "min_max": null
+                "skill_id": null
               }
             },
             "modifier": "More",
@@ -12979,6 +13191,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -13008,6 +13221,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": true
                     }
@@ -13041,6 +13255,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -13070,6 +13285,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": true
                     }
@@ -13139,6 +13355,7 @@
                     "StatusStacks": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null
                     }
                   }
@@ -13171,6 +13388,7 @@
                     "StatusStacks": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null
                     }
                   }
@@ -13245,7 +13463,7 @@
         "socket": false
       },
       "d103b2b7-0801-4c7d-ad6d-fc735f713026": {
-        "name": "Frenzy",
+        "name": "Warfare",
         "icon": "passives/frenzy.svg",
         "x": -120.0,
         "y": 0.0,
@@ -13370,6 +13588,7 @@
                   "HasStatus": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "not": false
                   }
@@ -13396,6 +13615,7 @@
                   "StatusValue": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null
                   }
                 }
@@ -13405,6 +13625,7 @@
                   "StatusDuration": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null
                   }
@@ -13415,6 +13636,7 @@
                   "StatusDuration": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null
                   }
                 }
@@ -13438,7 +13660,6 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
@@ -13447,17 +13668,18 @@
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null
                     }
                   },
                   {
-                    "StatusPower": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
+                      "skill_id": null
                     }
                   },
                   {
@@ -13470,24 +13692,29 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "min_max": null
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null
                     }
                   }
                 ],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -13498,6 +13725,7 @@
                   "HasStatus": {
                     "status_id": "burn",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "not": false
                   }
@@ -13524,6 +13752,7 @@
                   "StatusValue": {
                     "status_id": "burn",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null
                   }
                 }
@@ -13533,6 +13762,7 @@
                   "StatusDuration": {
                     "status_id": "burn",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null
                   }
@@ -13543,6 +13773,7 @@
                   "StatusDuration": {
                     "status_id": "burn",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null
                   }
                 }
@@ -13566,7 +13797,6 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
@@ -13575,33 +13805,10 @@
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -13612,10 +13819,39 @@
                       "min_max": null,
                       "is_hit": null
                     }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
                   }
                 ],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           },
@@ -13626,6 +13862,7 @@
                   "HasStatus": {
                     "status_id": "poison",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "not": false
                   }
@@ -13652,6 +13889,7 @@
                   "StatusValue": {
                     "status_id": "poison",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null
                   }
                 }
@@ -13661,6 +13899,7 @@
                   "StatusDuration": {
                     "status_id": "poison",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "skill_id": null
                   }
@@ -13671,6 +13910,7 @@
                   "StatusDuration": {
                     "status_id": "poison",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null
                   }
                 }
@@ -13694,15 +13934,24 @@
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
@@ -13718,17 +13967,10 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null
                     }
@@ -13737,13 +13979,16 @@
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null
                     }
                   }
                 ],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -14062,6 +14307,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -14074,6 +14320,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -14091,6 +14338,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -14103,6 +14351,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null,
                 "min_max": null
@@ -14291,6 +14540,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -14308,6 +14558,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -14334,6 +14585,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14350,6 +14602,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14454,7 +14707,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "MeleeWeapon2H"
+                      "item_category": "MeleeWeapon2H",
+                      "not": false
                     }
                   }
                 ],
@@ -14484,7 +14738,8 @@
                   {
                     "HasItem": {
                       "item_slot": null,
-                      "item_category": "MeleeWeapon2H"
+                      "item_category": "MeleeWeapon2H",
+                      "not": false
                     }
                   }
                 ],
@@ -14539,16 +14794,17 @@
                   "status_id": "stun",
                   "value": 1.0,
                   "value_factor": 1.0,
-                  "duration": 2.0,
+                  "duration": null,
                   "escalation": null,
                   "max_stacks": null,
-                  "damage_type": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [],
                 "conditional_modifiers": [],
-                "independent_application": false
+                "independent_application": false,
+                "optional_application": false,
+                "description": null
               }
             ]
           }
@@ -14711,7 +14967,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14727,7 +14984,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": null,
+                "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -14767,6 +15025,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -14800,6 +15059,7 @@
                     "HasStatus": {
                       "status_id": "stun",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -14930,6 +15190,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -14947,6 +15208,7 @@
               "StatusPower": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -14973,6 +15235,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -14990,6 +15253,7 @@
               "StatusPower": {
                 "status_id": null,
                 "damage_type": "Fire",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null,
                 "min_max": null
@@ -15107,6 +15371,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15123,6 +15388,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15243,6 +15509,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15259,6 +15526,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15354,6 +15622,7 @@
               "StatusFaster": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15370,6 +15639,7 @@
               "StatusFaster": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15650,6 +15920,7 @@
               "StatusStacks": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15681,6 +15952,7 @@
               "StatusStacks": {
                 "status_id": "open_wound",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15819,6 +16091,7 @@
                     "HasStatus": {
                       "status_id": "bleed",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -15845,6 +16118,7 @@
                     "HasStatus": {
                       "status_id": "bleed",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -15875,6 +16149,7 @@
                     "HasStatus": {
                       "status_id": "bleed",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -15901,6 +16176,7 @@
                     "HasStatus": {
                       "status_id": "bleed",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -15929,6 +16205,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15945,6 +16222,7 @@
               "StatusDuration": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15984,6 +16262,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -16013,6 +16292,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": true
                     }
@@ -16046,6 +16326,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": false
                     }
@@ -16075,6 +16356,7 @@
                     "HasStatus": {
                       "status_id": "burn",
                       "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "not": true
                     }
@@ -16130,6 +16412,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null
               }
@@ -16146,6 +16429,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Blessing",
                 "skill_id": null
               }
@@ -16238,7 +16522,7 @@
         "socket": false
       },
       "f275006b-3e0a-4177-a128-f501b7b91b4e": {
-        "name": "Assassin Strike",
+        "name": "Assassin",
         "icon": "passives/ninja_head.svg",
         "x": 85.0,
         "y": 145.0,
@@ -16438,6 +16722,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -16454,6 +16739,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
@@ -16722,6 +17008,7 @@
               "StatusFaster": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -16738,6 +17025,7 @@
               "StatusFaster": {
                 "status_id": null,
                 "damage_type": "Any",
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -16837,6 +17125,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -16853,6 +17142,7 @@
               "StatusEscalation": {
                 "status_id": "poison",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -16893,6 +17183,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -16924,6 +17215,7 @@
               "StatusStacks": {
                 "status_id": "burn",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "skill_id": null
               }

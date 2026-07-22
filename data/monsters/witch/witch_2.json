@@ -4,8 +4,6 @@
   "rarity": "Boss",
   "max_life": 20000,
   "size": "Gargantuan",
-  "power_factor": 20,
-  "initiative": 2,
   "armor": { "Physical": 300, "Fire": 300, "Poison": 300, "Storm": 300 },
   "stun_lockout": 3.0,
   "status_resistances": [

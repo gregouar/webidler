@@ -50,7 +50,7 @@ pub async fn post_affix(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies can't forge items".into()))?;
@@ -132,7 +132,7 @@ pub async fn post_upgrade(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies can't forge items".into()))?;
@@ -200,7 +200,7 @@ pub async fn post_gamble(
         return Err(AppError::UserError("forbidden item category".into()));
     }
 
-    let (inventory_data, _, _) =
+    let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
             .await?
             .ok_or(AppError::UserError("newbies can't forge items".into()))?;

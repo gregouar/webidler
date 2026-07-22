@@ -66,6 +66,7 @@ async fn migrate_character_data(
             inventory_data,
             passives_data,
             benedictions_data,
+            skill_masteries_data,
             created_at,
             updated_at
          FROM characters_data
@@ -311,6 +312,28 @@ impl From<OldStatEffect> for StatEffect {
             };
         }
 
+        if let OldStatType::DamageResistance {
+            skill_type,
+            damage_type,
+        } = value.stat
+            && value.modifier == Modifier::Flat
+        {
+            let value_value = if value.value < 0.0 {
+                -value.value
+            } else {
+                100.0 / (1.0 - value.value * 0.01) - 100.0
+            };
+            return Self {
+                stat: StatType::DamageTaken {
+                    skill_type,
+                    damage_type,
+                },
+                modifier: Modifier::More,
+                value: -value_value,
+                bypass_ignore: value.bypass_ignore,
+            };
+        }
+
         Self {
             stat: value.stat.into(),
             modifier: value.modifier,
@@ -459,13 +482,7 @@ impl From<OldStatType> for StatType {
                 skill_filter: skill_filter.into(),
             },
             OldStatType::Armor(damage_type) => Armor(damage_type),
-            OldStatType::DamageResistance {
-                skill_type,
-                damage_type,
-            } => DamageResistance {
-                skill_type,
-                damage_type,
-            },
+            OldStatType::DamageResistance { .. } => todo!(),
             OldStatType::TakeFromManaBeforeLife => TakeFromManaBeforeLife,
             OldStatType::Block(skill_type) => Block(skill_type),
             OldStatType::BlockDamageTaken => BlockDamageTaken,
@@ -586,6 +603,7 @@ impl From<OldStatType> for StatType {
                 status_filter: StatStatusFilter {
                     status_id: None,
                     damage_type: damage_type.map(|d| d.into()),
+                    debuff: None,
                 },
                 skill_filter: skill_filter.into(),
             },
@@ -596,6 +614,7 @@ impl From<OldStatType> for StatType {
                 status_filter: StatStatusFilter {
                     status_id: None,
                     damage_type: damage_type.map(|d| d.into()),
+                    debuff: None,
                 },
                 skill_filter: skill_filter.into(),
             },
@@ -632,18 +651,22 @@ fn status_type_to_status_filter(value: Option<OldStatStatusType>) -> StatStatusF
             OldStatStatusType::Stun => StatStatusFilter {
                 status_id: Some("stun".into()),
                 damage_type: None,
+                debuff: None,
             },
             OldStatStatusType::DamageOverTime { damage_type } => StatStatusFilter {
                 status_id: None,
                 damage_type: damage_type.map(|d| d.into()),
+                debuff: None,
             },
             OldStatStatusType::StatModifier { .. } => StatStatusFilter {
                 status_id: None,
                 damage_type: None,
+                debuff: None,
             },
             OldStatStatusType::Trigger { trigger_id, .. } => StatStatusFilter {
                 status_id: trigger_id.map(|x| x.into()),
                 damage_type: None,
+                debuff: None,
             },
         },
         None => Default::default(),
@@ -673,6 +696,7 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
             OldStatSkillEffectType::FlatDamage {} => FlatDamage {},
             OldStatSkillEffectType::ApplyStatus { status_type } => ApplyStatus {
                 status_id: status_type.map(status_type_to_status_id),
+                debuff: None,
             },
             OldStatSkillEffectType::Restore { restore_type } => Restore { restore_type },
             OldStatSkillEffectType::Resurrect => Resurrect,

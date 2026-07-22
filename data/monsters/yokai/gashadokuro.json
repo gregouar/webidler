@@ -1,35 +1,26 @@
 {
-    "name": "Gashadokuro",
-    "portrait": "monsters/yokai/gashadokuro.webp",
-    "rarity": "Boss",
-    "max_life": 1200,
-    "life_regen": 30,
-    "size": "Gargantuan",
-    "power_factor": 20,
-    "initiative": 3,
-    "armor": { "Physical": 200, "Storm": 50, "Poison": 50, "Fire": 50 },
-    "stun_lockout": 3.0,
-    "status_resistances": [
+    "name"              : "Gashadokuro",
+    "portrait"          : "monsters/yokai/gashadokuro.webp",
+    "rarity"            : "Boss",
+    "max_life"          : 800,
+    "life_regen"        : 30,
+    "size"              : "Gargantuan",
+    "armor"             : {"Physical": 200, "Storm": 50, "Poison": 50, "Fire": 50},
+    "stun_lockout"      : 3.0,
+    "status_resistances": [ {"status_id": "stun", "value": 50} ],
+    "skills"            : [
         {
-            "status_id": "stun",
-            "value": 50
-        }
-    ],
-    "skills": [
-        {
-            "name": "Crushing Left Hand",
-            "icon": "skills/skeletal_hand.svg",
+            "name"      : "Crushing Left Hand",
+            "icon"      : "skills/skeletal_hand.svg",
             "skill_type": "Attack",
-            "cooldown": 3.0,
-            "targets": [
+            "cooldown"  : 3.0,
+            "targets"   : [
                 {
-                    "range": "Melee",
+                    "range"  : "Melee",
                     "effects": [
                         {
                             "FlatDamage": {
-                                "damage": {
-                                    "Physical": [ 20, 40 ]
-                                }
+                                "damage": { "Physical": [20, 40] }
                             }
                         }
                     ]
@@ -37,19 +28,17 @@
             ]
         },
         {
-            "name": "Crushing Right Hand",
-            "icon": "skills/skeletal_hand.svg",
+            "name"      : "Crushing Right Hand",
+            "icon"      : "skills/skeletal_hand.svg",
             "skill_type": "Attack",
-            "cooldown": 3.0,
-            "targets": [
+            "cooldown"  : 3.0,
+            "targets"   : [
                 {
-                    "range": "Melee",
+                    "range"  : "Melee",
                     "effects": [
                         {
                             "FlatDamage": {
-                                "damage": {
-                                    "Physical": [ 20, 40 ]
-                                }
+                                "damage": { "Physical": [20, 40] }
                             }
                         }
                     ]
@@ -57,22 +46,15 @@
             ]
         },
         {
-            "name": "Gachi Gachi",
-            "icon": "skills/skull.svg",
+            "name"      : "Gachi Gachi",
+            "icon"      : "skills/skull.svg",
             "skill_type": "Curse",
-            "cooldown": 8.0,
-            "targets": [
+            "cooldown"  : 8.0,
+            "targets"   : [
                 {
-                    "range": "Any",
+                    "range"  : "Any",
                     "effects": [
-                        {
-                            "ApplyStatus": {
-                                "status_id": "chill",
-                                "duration": 4,
-                                "value": 100
-                            }
-                        }
-
+                        { "ApplyStatus": {"status_id": "chill", "duration": 4, "value": 100} }
                     ]
                 }
             ]

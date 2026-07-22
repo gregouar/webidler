@@ -3,8 +3,6 @@
   "portrait": "monsters/yokai/ushi_oni.webp",
   "max_life": 20,
   "size": "Large",
-  "power_factor": 3.0,
-  "initiative": [ 1.0, 2.0 ],
   "armor": { "Physical": 100, "Poison": 50 },
   "skills": [
     {

@@ -113,14 +113,17 @@ pub fn check_condition(
                     let Some(status_specs) = statuses_store.get(status_id) else {
                         return false;
                     };
-                    status_filter.is_match_with_status(status_id, status_specs.damage_type)
-                        && skill_type
-                            .map(|skill_type| {
-                                status_states
-                                    .iter()
-                                    .any(|status_state| status_state.skill_type == skill_type)
-                            })
-                            .unwrap_or(true)
+                    status_filter.is_match_with_status(
+                        status_id,
+                        status_specs.damage_type,
+                        status_specs.debuff,
+                    ) && skill_type
+                        .map(|skill_type| {
+                            status_states
+                                .iter()
+                                .any(|status_state| status_state.skill_type == skill_type)
+                        })
+                        .unwrap_or(true)
                 })
                 != *not) as usize as f64
         }
@@ -134,7 +137,11 @@ pub fn check_condition(
                 let Some(status_specs) = statuses_store.get(status_id) else {
                     return 0;
                 };
-                if status_filter.is_match_with_status(status_id, status_specs.damage_type) {
+                if status_filter.is_match_with_status(
+                    status_id,
+                    status_specs.damage_type,
+                    status_specs.debuff,
+                ) {
                     skill_type
                         .map(|skill_type| {
                             status_states
@@ -182,24 +189,28 @@ pub fn check_condition(
         Condition::HasItem {
             item_slot,
             item_category,
-        } => character_inventory
-            .map(|character_inventory| {
-                character_inventory
-                    .equipped_items()
-                    .any(|(equipped_slot, item_specs)| {
-                        item_slot
-                            .map(|item_slot| {
-                                equipped_slot == item_slot
-                                    || item_specs.base.extra_slots.contains(&item_slot)
-                            })
-                            .unwrap_or(true)
-                            && item_category
-                                .map(|item_category| {
-                                    item_specs.base.categories.contains(&item_category)
+            not,
+        } => {
+            (character_inventory
+                .map(|character_inventory| {
+                    character_inventory
+                        .equipped_items()
+                        .any(|(equipped_slot, item_specs)| {
+                            item_slot
+                                .map(|item_slot| {
+                                    equipped_slot == item_slot
+                                        || item_specs.base.extra_slots.contains(&item_slot)
                                 })
                                 .unwrap_or(true)
-                    }) as usize as f64
-            })
-            .unwrap_or_default(),
+                                && item_category
+                                    .map(|item_category| {
+                                        item_specs.base.categories.contains(&item_category)
+                                    })
+                                    .unwrap_or(true)
+                        })
+                })
+                .unwrap_or_default()
+                != *not) as usize as f64
+        }
     }
 }

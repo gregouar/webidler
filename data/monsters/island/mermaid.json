@@ -2,8 +2,6 @@
   "name": "Enthralling Mermaid",
   "portrait": "monsters/island/mermaid.webp",
   "max_life": 10,
-  "power_factor": 2.0,
-  "initiative": [ 0.5, 1.0 ],
   "skills": [
     {
       "name": "Mermaid's Kiss",

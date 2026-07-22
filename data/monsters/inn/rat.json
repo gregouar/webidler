@@ -2,8 +2,6 @@
   "name": "Giant Rat",
   "portrait": "monsters/inn/rat.webp",
   "max_life": 8,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 1.0 ],
   "skills": [
     {
       "name": "Vicious Bite",

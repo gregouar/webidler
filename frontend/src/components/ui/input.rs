@@ -47,7 +47,7 @@ where
             class=move || {
                 format!(
                     "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px]
-                    border text-white placeholder:text-zinc-500
+                    border text-white placeholder:text-zinc-400
                     text-sm xl:text-base {}
                     focus:outline-none {}",
                     match settings.graphics_quality() {
@@ -133,7 +133,7 @@ where
                 class=move || {
                     format!(
                         "w-full px-2 xl:px-4 py-1 xl:py-2 rounded-[4px] xl:rounded-[6px] border
-                        text-white placeholder:text-zinc-500
+                        text-white placeholder:text-zinc-400
                         text-sm xl:text-base
                         {}
                         focus:outline-none {}",

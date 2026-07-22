@@ -2,8 +2,6 @@
   "name": "Teapot Wraith",
   "portrait": "monsters/castle/teapot_wraith.webp",
   "max_life": 10,
-  "power_factor": 2.0,
-  "initiative": [ 0.5, 1.5 ],
   "armor": { "Storm": 50 },
   "evade": {
     "Physical": 20,

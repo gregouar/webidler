@@ -420,7 +420,7 @@
     "upgrade_effects": []
   },
   "brigandine_unique": {
-    "name": "Crustback Bulwark",
+    "name": "Crustback",
     "icon": "items/body_armors/crab_armor.webp",
     "description": "Strength enough to weather any storm, at the price of the warmth that once kept you alive.",
     "slot": "Body",
@@ -681,7 +681,8 @@
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
@@ -806,7 +807,7 @@
         "stat": {
           "StatConditionalModifier": {
             "stat": {
-              "DamageResistance": {
+              "DamageTaken": {
                 "skill_type": null,
                 "damage_type": null
               }
@@ -823,9 +824,9 @@
             "conditions_duration": 0
           }
         },
-        "modifier": "Flat",
+        "modifier": "Increased",
         "scope": "Global",
-        "value": 5.0,
+        "value": -10.0,
         "ignore_quality": true
       },
       {

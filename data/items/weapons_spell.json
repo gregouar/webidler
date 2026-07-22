@@ -185,7 +185,8 @@
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
@@ -338,6 +339,24 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          80.0,
+          120.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
             "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
@@ -380,21 +399,14 @@
       },
       {
         "stat": {
-          "SkillTargetModifier": {
+          "SkillRepeat": {
             "skill_type": null,
-            "skill_id": "magic_missile",
-            "range": null,
-            "shape": null,
-            "repeat": {
-              "min_value": 2,
-              "max_value": 2,
-              "target": "Any"
-            }
+            "skill_id": "magic_missile"
           }
         },
-        "modifier": "Flat",
+        "modifier": "More",
         "scope": "Global",
-        "value": 1.0,
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
@@ -427,6 +439,22 @@
           },
           "modifier": "More",
           "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
         }
       },
       {

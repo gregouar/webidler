@@ -1,35 +1,25 @@
 {
-  "curse_frailty": {
-    "name": "Curse of Frailty",
-    "description": "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
-    "icon": "skills/curse_frailty.svg",
-    "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 20,
-    "upgrade_cost": 50,
+  "curse_frailty"     : {
+    "name"           : "Curse of Frailty",
+    "description"    : "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
+    "icon"           : "skills/curse_frailty.svg",
+    "skill_type"     : "Curse",
+    "cooldown"       : 10,
+    "mana_cost"      : 20,
+    "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "StatusPower": {
-            "skill_type": "Curse"
-          }
-        },
+        "stat"    : { "StatusPower": {"status_id": "curse_frailty"} },
         "modifier": "Flat",
-        "value": 3,
-        "description": "+3% Increased Physical Damage Taken"
+        "value"   : 3
       }
     ],
-    "targets": [
+    "targets"        : [
       {
-        "range": "Any",
-        "shape": "All",
+        "range"  : "Any",
+        "shape"  : "All",
         "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_frailty",
-              "value": 30
-            }
-          }
+          { "ApplyStatus": {"status_id": "curse_frailty", "value": 30} }
         ]
       }
     ]
@@ -44,60 +34,42 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "StatusPower": {
-          }
-        },
+        "stat"    : { "StatusPower": {"status_id": "curse_conductivity"} },
         "modifier": "Flat",
-        "value": 3,
-        "description": "+3% Increased Storm Damage Taken"
+        "value"   : 3
       }
     ],
     "targets": [
       {
-        "range": "Any",
-        "shape": "All",
+        "range"  : "Any",
+        "shape"  : "All",
         "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_conductivity",
-              "value": 30
-            }
-          }
+          { "ApplyStatus": {"status_id": "curse_conductivity", "value": 30} }
         ]
       }
     ]
   },
-  "curse_putridity": {
-    "name": "Curse of Putridity",
-    "description": "Curse your foes with the rot, making their bodies crumble.",
-    "icon": "skills/curse_putridity.svg",
-    "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 20,
-    "upgrade_cost": 50,
+  "curse_putridity"   : {
+    "name"           : "Curse of Putridity",
+    "description"    : "Curse your foes with the rot, making their bodies crumble.",
+    "icon"           : "skills/curse_putridity.svg",
+    "skill_type"     : "Curse",
+    "cooldown"       : 10,
+    "mana_cost"      : 20,
+    "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "StatusPower": {
-          }
-        },
+        "stat"    : { "StatusPower": {"status_id": "curse_putridity"} },
         "modifier": "Flat",
-        "value": 3,
-        "description": "+3% Increased Poison Damage Taken"
+        "value"   : 3
       }
     ],
-    "targets": [
+    "targets"        : [
       {
-        "range": "Any",
-        "shape": "All",
+        "range"  : "Any",
+        "shape"  : "All",
         "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_putridity",
-              "value": 30
-            }
-          }
+          { "ApplyStatus": {"status_id": "curse_putridity", "value": 30} }
         ]
       }
     ]
@@ -112,102 +84,49 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "StatusPower": {
-          }
-        },
+        "stat"    : { "StatusPower": {"status_id": "curse_flammability"} },
         "modifier": "Flat",
-        "value": 3,
-        "description": "+3% Increased Fire Damage Taken"
+        "value"   : 3
       }
     ],
     "targets": [
       {
-        "range": "Any",
-        "shape": "All",
+        "range"  : "Any",
+        "shape"  : "All",
         "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_flammability",
-              "value": 30
-            }
-          }
+          { "ApplyStatus": {"status_id": "curse_flammability", "value": 30} }
         ]
       }
     ]
   },
-  "curse_weakness": {
-    "name": "Curse of Weakness",
-    "description": "A debilitating curse that reduces enemies' damage output.",
-    "icon": "skills/curse_weakness.svg",
-    "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 20,
-    "upgrade_cost": 50,
+  "curse_weakness"    : {
+    "name"           : "Curse of Weakness",
+    "description"    : "A debilitating curse that reduces enemies' damage output.",
+    "icon"           : "skills/curse_weakness.svg",
+    "skill_type"     : "Curse",
+    "cooldown"       : 10,
+    "mana_cost"      : 20,
+    "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "StatusPower": {
-          }
-        },
+        "stat"    : { "StatusPower": {"status_id": "curse_weakness"} },
         "modifier": "Flat",
-        "value": 1,
-        "description": "+1% Less Damage"
+        "value"   : 1
       }
     ],
-    "targets": [
+    "targets"        : [
       {
-        "range": "Any",
-        "shape": "All",
+        "range"  : "Any",
+        "shape"  : "All",
         "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_weakness",
-              "value": 17
-            }
-          }
+          { "ApplyStatus": {"status_id": "curse_weakness", "value": 17} }
         ]
       }
     ]
   },
-  "curse_clumsy": {
-    "name": "Curse of Clumsiness",
-    "description": "A crippling curse that hinders enemies ability to evade or block your attacks.",
-    "icon": "skills/curse_clumsy.svg",
-    "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 10,
-    "upgrade_cost": 50,
-    "upgrade_effects": [
-      {
-        "stat": {
-          "StatusPower": {
-            "skill_type": "Curse"
-          }
-        },
-        "modifier": "Flat",
-        "value": 1,
-        "description": "+1% Reduced Block and Evade Chance"
-      }
-    ],
-    "targets": [
-      {
-        "range": "Any",
-        "shape": "All",
-        "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_clumsy",
-              "value": 17
-            }
-          }
-        ]
-      }
-    ]
-  },
-  "curse_vampirism": {
+  "curse_vampirism"   : {
     "name": "Curse of Vampirism",
-    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins, healing you and making you stronger.",
+    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins.",
     "icon": "skills/curse_vampirism.svg",
     "skill_type": "Curse",
     "cooldown": 10,
@@ -215,25 +134,18 @@
     "upgrade_cost": 50,
     "upgrade_effects": [
       {
-        "stat": {
-          "StatusPower": { }
-        },
-        "modifier": "Flat",
-        "value": 5,
-        "description": "+0.1 Life Restored"
+        "stat"       : { "StatusPower": {"status_id": "curse_vampirism"} },
+        "modifier"   : "Flat",
+        "value"      : 5,
+        "description": "Restore +0.1 additional Life"
       }
     ],
     "targets": [
       {
-        "range": "Any",
-        "shape": "All",
+        "range"  : "Any",
+        "shape"  : "All",
         "effects": [
-          {
-            "ApplyStatus": {
-              "status_id": "curse_vampirism",
-              "value": 100
-            }
-          }
+          { "ApplyStatus": {"status_id": "curse_vampirism", "value": 100} }
         ]
       }
     ]

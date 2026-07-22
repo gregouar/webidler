@@ -1,25 +1,20 @@
 {
-  "name": "Captain Hook",
+  "name"    : "Captain Hook",
   "portrait": "monsters/island/pirate_captain.webp",
   "max_life": 12,
-  "power_factor": 3,
-  "initiative": [ 1.0, 2.5 ],
-  "armor": { "Fire": 50, "Physical": 50 },
-  "skills": [
+  "armor"   : {"Fire": 50, "Physical": 50},
+  "skills"  : [
     {
-      "name": "Shoot",
-      "icon": "skills/fireball.svg",
-      "cooldown": 3.0,
+      "name"      : "Shoot",
+      "icon"      : "skills/fireball.svg",
+      "cooldown"  : 3.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 8, 12 ],
-                  "Fire": [ 8, 12 ]
-                }
+                "damage": { "Physical": [8, 12], "Fire": [8, 12] }
               }
             }
           ]

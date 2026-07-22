@@ -2,8 +2,6 @@
   "name": "Briar Ornament",
   "portrait": "monsters/castle/briar_ornament.webp",
   "max_life": 7,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 0.5 ],
   "armor": { "Physical": 50 },
   "skills": [
     {

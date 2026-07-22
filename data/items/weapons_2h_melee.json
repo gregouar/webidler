@@ -160,26 +160,79 @@
       },
       {
         "stat": {
-          "SuccessChance": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
             "skill_type": null,
             "skill_id": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_id": "burn"
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "burn",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null
+                }
               }
-            }
+            ]
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
-        "value": [
-          50.0,
-          100.0
-        ],
+        "value": 5.0,
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": "Fire",
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "sootreaver_burn_refresh",
+        "target": "SameTarget",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 20.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "burn",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
+          }
+        ]
+      }
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -425,6 +478,7 @@
           "StatusDuration": {
             "status_id": null,
             "damage_type": null,
+            "debuff": null,
             "skill_type": "Curse",
             "skill_id": null
           }
@@ -456,6 +510,7 @@
                 "StatusStacks": {
                   "status_id": null,
                   "damage_type": null,
+                  "debuff": null,
                   "skill_type": "Curse"
                 }
               }
@@ -567,6 +622,7 @@
                   "StatusStacks": {
                     "status_id": null,
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": "Curse"
                   }
                 }
@@ -782,7 +838,8 @@
               }
             ],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }

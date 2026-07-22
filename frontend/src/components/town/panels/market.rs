@@ -1507,6 +1507,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
                 status_filter: StatStatusFilter {
                     status_id: None,
                     damage_type: Some(StatusDamageType::Any),
+                    debuff: None,
                 },
                 skill_filter: Default::default(),
                 min_max: None,
@@ -1534,7 +1535,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::SuccessChance {
                 skill_filter: Default::default(),
-                effect_type: Some(StatSkillEffectType::ApplyStatus { status_id: None }),
+                effect_type: Some(StatSkillEffectType::ApplyStatus {
+                    status_id: None,
+                    debuff: None,
+                }),
             },
             Modifier::Increased,
         ),

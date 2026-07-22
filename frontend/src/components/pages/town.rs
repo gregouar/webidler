@@ -17,8 +17,13 @@ use crate::components::{
         TownContext,
         header_menu::HeaderMenu,
         panels::{
-            forge::ForgePanel, inventory::TownInventoryPanel, market::MarketPanel,
-            passives::PassivesPanel, stash::StashPanel, temple::TemplePanel,
+            forge::ForgePanel,
+            inventory::TownInventoryPanel,
+            market::MarketPanel,
+            passives::PassivesPanel,
+            skill_masteries::{SkillMasteriesPanel, SkillMasteryDetailsModal},
+            stash::StashPanel,
+            temple::TemplePanel,
         },
         town_scene::TownScene,
     },
@@ -76,10 +81,12 @@ pub fn TownPage() -> impl IntoView {
                     ascension,
                     passives_build,
                     benedictions,
-                    last_grind,
+                    // last_grind,
                     character_stash,
                     user_stash,
                     market_stash,
+                    skill_masteries,
+                    skill_mastery_skill_specs,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
                         use_navigate()("/game", Default::default())
@@ -90,7 +97,11 @@ pub fn TownPage() -> impl IntoView {
                     town_context.passives_tree_ascension.set(ascension);
                     town_context.passives_tree_build.set(passives_build);
                     town_context.player_benedictions.set(benedictions);
-                    town_context.last_grind.set(last_grind);
+                    town_context.player_skill_masteries.set(skill_masteries);
+                    town_context
+                        .skill_mastery_skill_specs
+                        .set(skill_mastery_skill_specs);
+                    // town_context.last_grind.set(last_grind);
                     if let Some(character_stash) = character_stash {
                         town_context.character_stash.set(character_stash);
                     }
@@ -127,6 +138,8 @@ pub fn TownPage() -> impl IntoView {
                             <TownScene />
                             <ChatPanel />
                             <TemplePanel open=town_context.open_temple />
+                            <SkillMasteriesPanel open=town_context.open_skill_masteries />
+                            <SkillMasteryDetailsModal />
                             <MarketPanel open=town_context.open_market />
                             <StashPanel open=town_context.open_stash />
                             <PassivesPanel open=town_context.open_ascend />

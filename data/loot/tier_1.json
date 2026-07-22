@@ -1,84 +1,21 @@
 {
   "entries": [
-    {
-      "item_id": "dagger",
-      "weight": 1000
-    },
-    {
-      "item_id": "cloth_hood",
-      "weight": 1000
-    },
-    {
-      "item_id": "padded_tunic",
-      "weight": 1000
-    },
-    {
-      "item_id": "padded_tunic_unique",
-      "weight": 1,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "cloth_wraps",
-      "weight": 1000
-    },
-    {
-      "item_id": "cloth_wraps_unique",
-      "weight": 4999,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "cloth_shoes",
-      "weight": 1000
-    },
-    {
-      "item_id": "dagger_unique",
-      "weight": 4999,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "poop_knife",
-      "weight": 499,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "quarterstaff",
-      "weight": 1000,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "shortbow",
-      "weight": 1000,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "wooden_rod",
-      "weight": 1000,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "buckler",
-      "weight": 1000,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "grigri",
-      "weight": 1000,
-      "min_area_level": 5
-    },
-    {
-      "item_id": "wool_cloak",
-      "weight": 1000,
-      "min_area_level": 10
-    },
-    {
-      "item_id": "copper_ring",
-      "weight": 1000,
-      "min_area_level": 10
-    },
-    {
-      "item_id": "wooden_beads",
-      "weight": 1000,
-      "min_area_level": 10
-    }
+    {"item_id": "dagger",              "weight": 1000                      },
+    {"item_id": "cloth_hood",          "weight": 1000                      },
+    {"item_id": "padded_tunic",        "weight": 1000                      },
+    {"item_id": "padded_tunic_unique", "weight":    1, "min_area_level":  5},
+    {"item_id": "cloth_wraps",         "weight": 1000                      },
+    {"item_id": "cloth_wraps_unique",  "weight": 4999, "min_area_level":  5},
+    {"item_id": "cloth_shoes",         "weight": 1000                      },
+    {"item_id": "dagger_unique",       "weight": 4999, "min_area_level":  5},
+    {"item_id": "poop_knife",          "weight":  499, "min_area_level":  5},
+    {"item_id": "quarterstaff",        "weight": 1000, "min_area_level":  5},
+    {"item_id": "shortbow",            "weight": 1000, "min_area_level":  5},
+    {"item_id": "wooden_rod",          "weight": 1000, "min_area_level":  5},
+    {"item_id": "buckler",             "weight": 1000, "min_area_level":  5},
+    {"item_id": "grigri",              "weight": 1000, "min_area_level":  5},
+    {"item_id": "wool_cloak",          "weight": 1000, "min_area_level": 10},
+    {"item_id": "copper_ring",         "weight": 1000, "min_area_level": 10},
+    {"item_id": "wooden_beads",        "weight": 1000, "min_area_level": 10}
   ]
 }

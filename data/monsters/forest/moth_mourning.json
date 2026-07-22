@@ -2,8 +2,6 @@
   "name": "Mourning Moth",
   "portrait": "monsters/forest/moth_mourning.webp",
   "max_life": 7,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 0.5 ],
   "skills": [
     {
       "name": "Lamenting Embrace",

@@ -2,9 +2,7 @@
   "name": "Crow's Nest",
   "portrait": "monsters/island/pirate_lookout.webp",
   "max_life": 12,
-  "power_factor": 2,
   "size": "Tall",
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {

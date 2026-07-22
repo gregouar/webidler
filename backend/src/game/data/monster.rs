@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use shared::data::{
+    character::CharacterSize,
     character_status::StatusId,
     modifier::Modifier,
     monster::{MonsterRarity, MonsterSpecs},
@@ -31,25 +32,25 @@ pub struct BaseMonsterSpecs {
     #[serde(default)]
     pub rarity: MonsterRarity,
 
-    // pub initiative: ChanceRange<f32>,
-    pub power_factor: f64,
-
     #[serde(default)]
     pub status_resistances: Vec<StatusResistanceBlueprint>,
 }
 
 impl DataInit<&BaseMonsterSpecs> for MonsterSpecs {
     fn init(specs: &BaseMonsterSpecs) -> Self {
+        let reward_factor = match specs.character_specs.character_static.size {
+            CharacterSize::Small => 1.0,
+            CharacterSize::Large | CharacterSize::Tall => 2.0,
+            CharacterSize::Huge => 4.0,
+            CharacterSize::Gargantuan => 6.0,
+        };
         let mut monster_specs = Self {
             character_specs: specs.character_specs.clone(),
             rarity: specs.rarity,
-            power_factor: specs.power_factor,
-            reward_factor: specs.power_factor,
+            experience_reward: reward_factor,
+            gold_reward: reward_factor,
+            skill_reward: reward_factor,
         };
-
-        // TODO
-        // monster_specs.character_specs.skills_specs =
-        //     specs.skills.iter().cloned().map(SkillSpecs::init).collect();
 
         monster_specs
             .character_specs

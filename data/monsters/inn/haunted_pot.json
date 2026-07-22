@@ -2,8 +2,6 @@
   "name": "Cursed Cauldron",
   "portrait": "monsters/inn/haunted_pot.webp",
   "max_life": 15,
-  "power_factor": 4,
-  "initiative": [ 1, 2 ],
   "armor": { "Fire": 50, "Physical": 50 },
   "skills": [
     {

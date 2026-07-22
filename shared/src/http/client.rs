@@ -82,6 +82,21 @@ pub struct BuyBenedictionsRequest {
     pub player_benedictions: PlayerBenedictions,
 }
 
+// Skill Masteries
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveFavoriteSkillsRequest {
+    pub character_id: UserCharacterId,
+    pub favorite_skills: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveSkillMasteryUpgradesRequest {
+    pub character_id: UserCharacterId,
+    pub skill_id: String,
+    pub upgrades_bought: HashMap<String, u16>,
+}
+
 // Ascend
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -159,7 +159,8 @@
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }
@@ -328,8 +329,12 @@
             "skill_type": null,
             "skill_id": "fireball",
             "range": null,
-            "shape": "All",
-            "repeat": null
+            "shape": null,
+            "repeat": {
+              "min_value": 2,
+              "max_value": 2,
+              "target": "Any"
+            }
           }
         },
         "modifier": "Flat",
@@ -417,7 +422,7 @@
     ]
   },
   "engraved_tablet": {
-    "name": "Engraved Tabled",
+    "name": "Engraved Tablet",
     "icon": "items/focuses/engraved_tablet.webp",
     "description": null,
     "slot": "Shield",
@@ -444,6 +449,226 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "rose_bleed": {
+    "name": "Briar Rose",
+    "icon": "items/focuses/rose_bleed.webp",
+    "description": "Where envy took root, only thorns would ever bloom.",
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          120.0,
+          160.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusDuration": {
+            "status_id": null,
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusEscalation": {
+            "status_id": "bleed",
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Spell",
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": "Physical",
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "rose_bleed",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Physical"
+            }
+          }
+        ],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 50.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "bleed",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Spell",
+                  "skill_id": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusDuration": {
+              "status_id": null,
+              "damage_type": null,
+              "skill_type": null,
+              "skill_id": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "seer_lens": {
     "name": "Seer's Lens",
@@ -611,11 +836,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
+                "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "min_max": null
                 }
               },
               {
@@ -636,17 +862,17 @@
                 }
               },
               {
-                "StatusPower": {
+                "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
+                  "skill_id": null
                 }
               }
             ],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false
           }
         ]
       }

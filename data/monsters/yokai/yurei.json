@@ -2,7 +2,6 @@
   "name": "Yurei",
   "portrait": "monsters/yokai/yurei.webp",
   "max_life": 7,
-  "power_factor": 2.0,
   "evade": {
     "Physical": 20,
     "Fire": 20,

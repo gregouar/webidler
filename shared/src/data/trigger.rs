@@ -3,8 +3,12 @@ use std::collections::{HashMap, hash_map};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    character::CharacterId, conditional_modifier::Condition, item::SkillShape, modifier::Modifier,
-    skill::TargetType, stat_effect::StatStatusFilter,
+    character::CharacterId,
+    conditional_modifier::Condition,
+    item::SkillShape,
+    modifier::Modifier,
+    skill::{RestoreType, TargetType},
+    stat_effect::StatStatusFilter,
 };
 
 use super::{
@@ -82,6 +86,7 @@ pub enum EventTrigger {
     OnDeath(TargetType),
     OnApplyStatus(StatusTrigger),
     OnReceiveStatus(StatusTrigger),
+    OnRestored(RestoreTrigger),
 }
 
 // TODO: replace by simple tag system?
@@ -117,11 +122,23 @@ pub struct StatusTrigger {
     pub is_triggered: Option<bool>,
     #[serde(default)]
     pub is_evaded: Option<bool>,
+    #[serde(default)]
+    pub conditions: Vec<Condition>,
 }
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct KillTrigger {
     #[serde(default)]
     pub conditions: Vec<Condition>,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
+pub struct RestoreTrigger {
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+    #[serde(default)]
+    pub restore_type: Option<RestoreType>,
+    #[serde(default)]
+    pub is_triggered: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -164,7 +181,7 @@ pub struct TriggerEffectModifier {
     pub source: TriggerEffectModifierSource,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     AreaLevel,
@@ -188,8 +205,8 @@ pub enum TriggerEffectModifierSource {
     },
     TriggerStatusDuration,
     TriggerStatusValue,
-    // TODO: Move to conditional modifiers?
     HitCrit,
+    RestoreValue,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]

@@ -2,8 +2,6 @@
   "name": "Lava Beetle",
   "portrait": "monsters/peaks/beetle_lava.webp",
   "max_life": 5,
-  "power_factor": 1.0,
-  "initiative": [ 0.5, 1.5 ],
   "armor": { "Fire": 50 },
   "block": {
     "Attack": 30,

@@ -2,8 +2,6 @@
   "name": "Royal Guard",
   "portrait": "monsters/castle/royal_guard.webp",
   "max_life": 15,
-  "power_factor": 3.0,
-  "initiative": [ 2.0, 4.0 ],
   "armor": { "Physical": 100 },
   "block": {
     "Attack": 40,

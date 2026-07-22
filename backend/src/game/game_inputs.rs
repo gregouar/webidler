@@ -114,7 +114,7 @@ fn handle_client_message(
         }
         ClientMessage::EquipItem(m) => {
             if let Err(err) = player_controller::equip_item_from_bag(
-                &master_store.statuses_store,
+                master_store,
                 game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
@@ -146,6 +146,7 @@ fn handle_client_message(
         }
         ClientMessage::SheathItem(m) => {
             if let Err(err) = player_controller::toggle_sheathe_item(
+                &master_store.skills_store,
                 game_data.player_base_specs.mutate(),
                 &mut game_data.player_state,
                 &mut game_data.player_controller,

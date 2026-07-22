@@ -34,7 +34,7 @@ pub fn MenuButton(
                     active:text-white
                     active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
                     w-auto
-                    disabled:text-zinc-500
+                    disabled:text-zinc-400
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
                     disabled:before:hidden"
@@ -56,7 +56,7 @@ pub fn MenuButton(
                     active:brightness-90
                     active:text-white
                     w-auto
-                    disabled:text-zinc-500
+                    disabled:text-zinc-400
                     disabled:border-[#4b4030]
                     disabled:opacity-60
                      disabled:shadow-none"
@@ -74,7 +74,7 @@ pub fn MenuButton(
                     hover:border-[#8b7347] hover:text-[#efe1bf]
                     active:translate-y-[1px] active:brightness-95
                     w-auto
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60"
+                    disabled:text-zinc-400 disabled:border-[#4b4030] disabled:opacity-60"
                     }
                 };
                 format!("{quality_class} {}", class.unwrap_or_default())
@@ -155,7 +155,7 @@ pub fn MenuButtonRed(
                     active:before:opacity-0 active:brightness-90
                     active:text-[#d7aca2]
                     active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(34,10,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
-                    disabled:text-zinc-500
+                    disabled:text-zinc-400
                     disabled:border-[#4f312d]
                     disabled:opacity-60 disabled:shadow-none
                     disabled:before:hidden"
@@ -173,7 +173,7 @@ pub fn MenuButtonRed(
                     before:border before:border-[#d78b78]/10
                     hover:border-[#b55d4c] hover:text-[#ffd8d0]
                     active:translate-y-[1px] active:brightness-90 active:text-[#d7aca2]
-                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60
+                    disabled:text-zinc-400 disabled:border-[#4f312d] disabled:opacity-60
                     disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
@@ -188,7 +188,7 @@ pub fn MenuButtonRed(
                     before:border before:border-[#c08a78]/10
                     hover:border-[#b55d4c] hover:text-[#ffd8d0]
                     active:translate-y-[1px] active:brightness-95
-                    disabled:text-zinc-500 disabled:border-[#4f312d] disabled:opacity-60"
+                    disabled:text-zinc-400 disabled:border-[#4f312d] disabled:opacity-60"
                     }
                 };
                 format!("{quality_class} {}", class.unwrap_or_default())
@@ -251,7 +251,7 @@ pub fn FancyButton(
                     active:before:opacity-0 active:brightness-90
                     active:text-white
                     active:shadow-[0_4px_10px_rgba(0,0,0,0.45),0_1px_0_rgba(26,17,10,0.95),inset_0_3px_5px_rgba(0,0,0,0.55),inset_0_-1px_0_rgba(0,0,0,0.22)]
-                    disabled:text-zinc-500
+                    disabled:text-zinc-400
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
                     disabled:before:hidden"
@@ -270,7 +270,7 @@ pub fn FancyButton(
                     before:border before:border-[#d5b16d]/10
                     hover:border-[#a27f46] hover:text-[#f3ead2]
                     active:translate-y-[1px] active:brightness-90 active:text-white
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60
+                    disabled:text-zinc-400 disabled:border-[#4b4030] disabled:opacity-60
                     disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
@@ -285,7 +285,7 @@ pub fn FancyButton(
                     before:border before:border-[#a88a53]/10
                     hover:border-[#8b7347] hover:text-[#efe1bf]
                     active:translate-y-[1px] active:brightness-95
-                    disabled:text-zinc-500 disabled:border-[#4b4030] disabled:opacity-60"
+                    disabled:text-zinc-400 disabled:border-[#4b4030] disabled:opacity-60"
                     }
                 };
                 format!("{quality_class} {}", class.unwrap_or_default())
@@ -315,7 +315,9 @@ pub fn FancyButton(
             // <Show when=move || settings.uses_heavy_effects()>
             // <span class="pointer-events-none absolute left-[2px] top-[2px] bottom-[2px] w-px bg-gradient-to-b from-[#f0d79f]/35 via-transparent to-black/40"></span>
             // </Show>
-            <span class="relative z-10 flex h-full w-full items-center justify-center">{children()}</span>
+            <span class="relative z-10 flex h-full w-full items-center justify-center">
+                {children()}
+            </span>
         </button>
     }
 }
@@ -404,7 +406,7 @@ pub fn Toggle(
                     hover:border-[#a27f46]
                     hover:text-[#f1e4c4]
                     active:text-white
-                    disabled:text-zinc-500
+                    disabled:text-zinc-400
                     disabled:border-[#4b4030]
                     disabled:opacity-60 disabled:shadow-none
                     disabled:before:hidden
@@ -446,7 +448,9 @@ pub fn Toggle(
                     style="background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%, rgba(0,0,0,0.04));"
                 ></span>
             </Show>
-            <span class="relative z-1 flex h-full w-full items-center justify-center">{children()}</span>
+            <span class="relative z-1 flex h-full w-full items-center justify-center">
+                {children()}
+            </span>
         </button>
     }
 }
@@ -477,7 +481,7 @@ pub fn TabButton(
             hover:text-[#f1e4c4]
             hover:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(244,225,181,0.2),inset_0_-1px_0_rgba(0,0,0,0.45)]
             active:shadow-[0_4px_10px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_2px_3px_rgba(0,0,0,0.45),inset_0_-1px_0_rgba(0,0,0,0.18)]
-            disabled:text-zinc-500
+            disabled:text-zinc-400
             disabled:border-[#4b4030]
             disabled:opacity-60
             "

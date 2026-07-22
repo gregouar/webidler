@@ -160,7 +160,7 @@ pub fn PlayerCount() -> impl IntoView {
                                         <div class="absolute bottom-full right-0 z-50 mb-2 min-w-48
                                         rounded-md border border-zinc-700/80 bg-zinc-900/95 p-3
                                         text-xs text-zinc-300 shadow-lg backdrop-blur-sm">
-                                            <div class="text-center text-zinc-500">
+                                            <div class="text-center text-zinc-400">
                                                 "No players grinding"
                                             </div>
                                         </div>
@@ -192,7 +192,7 @@ pub fn PlayerCount() -> impl IntoView {
                                                                 <span class="block truncate font-semibold text-zinc-100">
                                                                     {entry.character_name.clone()}
                                                                 </span>
-                                                                <span class="block truncate text-zinc-500">
+                                                                <span class="block truncate text-zinc-400">
                                                                     {entry.username.clone()}
                                                                 </span>
                                                             </div>
@@ -203,7 +203,7 @@ pub fn PlayerCount() -> impl IntoView {
                                                                         " "{entry.area_level}
                                                                     </span>
                                                                 </div>
-                                                                <div class="text-zinc-500">{entry.realm_label}</div>
+                                                                <div class="text-zinc-400">{entry.realm_label}</div>
                                                             </div>
                                                         </button>
                                                     }

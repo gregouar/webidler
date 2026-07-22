@@ -56,13 +56,6 @@ impl<'a> GameInstance<'a> {
     }
 
     pub async fn run(mut self) -> Result<()> {
-        let last_skills_bought =
-            db::game_stats::load_last_game_stats(&self.db_pool, self.character_id)
-                .await
-                .ok()
-                .flatten()
-                .and_then(|last_game| last_game.1)
-                .unwrap_or_default();
         let passives_tree_build =
             db::characters_builds::load_character_build(&self.db_pool, self.character_id)
                 .await
@@ -75,7 +68,6 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             self.game_data,
             passives_tree_build,
-            last_skills_bought.into_keys().collect(),
         )
         .await?;
 
@@ -193,6 +185,32 @@ impl<'a> GameInstance<'a> {
                 &mut *tx,
                 self.character_id,
                 self.game_data.player_inventory.read(),
+            )
+            .await?;
+
+            let mut player_skill_masteries = self
+                .game_data
+                .player_base_specs
+                .read()
+                .skill_masteries
+                .clone();
+            for (skill_id, experience) in self
+                .game_data
+                .player_resources
+                .read()
+                .skill_masteries_experience
+                .iter()
+            {
+                player_skill_masteries
+                    .masteries
+                    .entry(skill_id.clone())
+                    .or_default()
+                    .experience += experience;
+            }
+            db::characters_data::save_character_skill_masteries(
+                &mut *tx,
+                self.character_id,
+                &player_skill_masteries,
             )
             .await?;
 

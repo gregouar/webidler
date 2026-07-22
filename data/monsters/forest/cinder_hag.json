@@ -2,8 +2,6 @@
   "name": "Cinder Hag",
   "portrait": "monsters/forest/cinder_hag.webp",
   "max_life": 7,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 1.0 ],
   "armor": { "Fire": 50 },
   "skills": [
     {

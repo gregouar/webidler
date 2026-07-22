@@ -2,7 +2,6 @@
   "name": "Karakasa Kozo",
   "portrait": "monsters/yokai/karakasa_kozo.webp",
   "max_life": 8,
-  "power_factor": 1.5,
   "armor": { "Physical": 50 },
   "skills": [
     {

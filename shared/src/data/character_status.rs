@@ -167,6 +167,6 @@ pub struct StatusState {
 
     pub base_value: NonNegative,
     pub elapsed_escalation: NonNegative,
-    pub max_escalation: NonNegative,
+    pub max_duration: NonNegative,
     pub escalation: NonNegative,
 }

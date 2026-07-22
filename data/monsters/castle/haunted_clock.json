@@ -2,9 +2,7 @@
   "name": "Hollow Chime",
   "portrait": "monsters/castle/haunted_clock.webp",
   "max_life": 15,
-  "power_factor": 4,
   "size": "Tall",
-  "initiative": [ 1, 2 ],
   "armor": { "Storm": 50 },
   "skills": [
     {

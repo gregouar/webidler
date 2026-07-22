@@ -2,8 +2,6 @@
   "name": "Gilt Digger",
   "portrait": "monsters/island/cursed_pirate_digger.webp",
   "max_life": 15,
-  "power_factor": 1,
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {

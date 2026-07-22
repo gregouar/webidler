@@ -16,8 +16,9 @@ use shared::{
             EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
             ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
             InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
-            ResetPasswordRequest, SavePassivesRequest, SellMarketItemRequest, SignInRequest,
-            SignUpRequest, SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
+            ResetPasswordRequest, SaveFavoriteSkillsRequest, SavePassivesRequest,
+            SaveSkillMasteryUpgradesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
             UpdateAccountRequest, UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
@@ -30,10 +31,10 @@ use shared::{
             GetSkillsResponse, GetStatusesResponse, GetUserCharactersResponse,
             GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
             InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
-            RejectMarketItemResponse, ResetPasswordResponse, SavePassivesResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
-            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
-            UpgradeStashResponse,
+            RejectMarketItemResponse, ResetPasswordResponse, SaveFavoriteSkillsResponse,
+            SavePassivesResponse, SaveSkillMasteryUpgradesResponse, SellMarketItemResponse,
+            SignInResponse, SignUpResponse, SocketPassiveResponse, StoreStashItemResponse,
+            TakeStashItemResponse, UpdateAccountResponse, UpgradeStashResponse,
         },
     },
 };
@@ -161,6 +162,22 @@ impl BackendClient {
         request: &BuyBenedictionsRequest,
     ) -> Result<BuyBenedictionsResponse, BackendError> {
         self.post_auth("game/benedictions", request).await
+    }
+
+    pub async fn post_save_favorite_skills(
+        &self,
+        request: &SaveFavoriteSkillsRequest,
+    ) -> Result<SaveFavoriteSkillsResponse, BackendError> {
+        self.post_auth("game/skill-masteries/favorites", request)
+            .await
+    }
+
+    pub async fn post_save_skill_mastery_upgrades(
+        &self,
+        request: &SaveSkillMasteryUpgradesRequest,
+    ) -> Result<SaveSkillMasteryUpgradesResponse, BackendError> {
+        self.post_auth("game/skill-masteries/upgrades", request)
+            .await
     }
 
     // Auth

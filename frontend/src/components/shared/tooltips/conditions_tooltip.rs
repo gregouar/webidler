@@ -35,10 +35,12 @@ pub fn format_skill_modifier_conditions_pre(
             Condition::HasItem {
                 item_slot,
                 item_category,
+                not,
             } => {
                 format!(
-                    " while equipped with {}",
-                    format_has_item_condition(*item_slot, *item_category)
+                    " while {}equipped with {}",
+                    if *not { "not " } else { "" },
+                    format_has_item_condition(*item_slot, *item_category),
                 )
             }
         })
@@ -74,7 +76,7 @@ pub fn format_skill_modifier_conditions_post(
                 status_filter,
                 skill_type,
             } => Some(format!(
-                " per {} Stack", // on them for SkillConditionalModifier ?
+                " per Stack of {}", // on them for SkillConditionalModifier ?
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,

@@ -2,7 +2,6 @@
   "name": "Chochin Obake",
   "portrait": "monsters/yokai/chochin_obake.webp",
   "max_life": 5,
-  "power_factor": 2.0,
   "armor": { "Fire": 100 },
   "skills": [
     {

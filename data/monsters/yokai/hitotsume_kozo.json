@@ -2,7 +2,6 @@
   "name": "Hitotsume Kozo",
   "portrait": "monsters/yokai/hitotsume_kozo.webp",
   "max_life": 10,
-  "power_factor": 1.0,
   "skills": [
     {
       "name": "Lantern Prank",

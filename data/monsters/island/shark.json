@@ -3,8 +3,6 @@
   "portrait": "monsters/island/shark.webp",
   "max_life": 20,
   "size": "Large",
-  "power_factor": 5.0,
-  "initiative": [ 1, 2 ],
   "skills": [
     {
       "name": "Big Bite",

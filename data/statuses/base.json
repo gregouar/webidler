@@ -4,7 +4,7 @@
         "adjective": "Stunned",
         "icon": "statuses/stunned.svg",
         "debuff": true,
-        "duration": 0,
+        "duration": [ 1, 3 ],
         "max_stacks": 1,
         "effects": [
             {
@@ -55,6 +55,115 @@
                     },
                     "modifier": "Increased",
                     "debuff": true
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_damage": {
+        "name": "Damage Vulnerability",
+        "icon": "statuses/cross_mark.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageTaken": {
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_physical": {
+        "name": "Physical Vulnerability",
+        "icon": "skills/curse_frailty.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageTaken": {
+                            "damage_type": "Physical"
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_fire": {
+        "name": "Fire Vulnerability",
+        "icon": "skills/curse_flammability.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageTaken": {
+                            "damage_type": "Fire"
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_poison": {
+        "name": "Poison Vulnerability",
+        "icon": "skills/curse_putridity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageTaken": {
+                            "damage_type": "Poison"
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
+    },
+    "vulnerability_storm": {
+        "name": "Storm Vulnerability",
+        "icon": "skills/curse_conductivity.svg",
+        "debuff": true,
+        "duration": 5,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "StatModifier": {
+                    "stat": {
+                        "DamageTaken": {
+                            "damage_type": "Storm"
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff": false
                 },
                 "value": 100,
                 "modifier": "Percent"

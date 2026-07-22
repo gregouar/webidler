@@ -45,5 +45,7 @@ pub enum Condition {
         item_slot: Option<ItemSlot>,
         #[serde(default)]
         item_category: Option<ItemCategory>,
+        #[serde(default)]
+        not: bool,
     },
 }

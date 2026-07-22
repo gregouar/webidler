@@ -1,20 +1,23 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, matches};
 
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
-    modifier::ModifiableValue,
+    modifier::{ModifiableValue, Modifier},
     stat_effect::{StatEffect, StatType},
     trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
 
-use crate::components::shared::tooltips::{
-    effects_tooltip,
-    skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
-    trigger_tooltip::{format_trigger, format_trigger_modifier},
+use crate::components::{
+    shared::tooltips::{
+        effects_tooltip,
+        skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
+        trigger_tooltip::{format_trigger, format_trigger_modifier},
+    },
+    ui::number::format_number,
 };
 
 pub fn format_status_effects(
@@ -56,9 +59,9 @@ pub fn format_status_effects(
         .collect::<Vec<_>>();
 
     let grant_str = if status_specs.debuff {
-        "inflict"
+        "causes"
     } else {
-        "grant"
+        "grants"
     };
 
     if effect_lines.is_empty() {
@@ -138,31 +141,91 @@ fn format_status_effect_line(
                 return None;
             }
 
-            let effect = StatEffect {
-                stat,
-                modifier,
-                value: if debuff { -value.0 } else { value.0 },
-                bypass_ignore: false,
-            };
-            Some(if value.0 != value.1 {
-                let max_effect = StatEffect {
-                    value: if debuff { -value.1 } else { value.1 },
-                    ..effect.clone()
+            // let trigger_modifier_value_str = format_trigger_modifier(
+            //     find_trigger_modifier(
+            //         StatType::StatusPower {
+            //             skill_filter: Default::default(),
+            //             status_filter: Default::default(),
+            //             min_max: None,
+            //         },
+            //         modifiers,
+            //     ),
+            //     " as",
+            //     value_factor,
+            //     None,
+            //     Some(status_name),
+            //     Some(skill_value),
+            // );
+
+            // let effect = if modifiers.is_some() || value == (0.0, 0.0) {
+            //     StatEffect {
+            //         stat,
+            //         modifier,
+            //         value: if debuff {
+            //             -status_effect.value.get()
+            //         } else {
+            //             status_effect.value.get()
+            //         },
+            //         bypass_ignore: false,
+            //     }
+            // } else {
+            //     StatEffect {
+            //         stat,
+            //         modifier,
+            //         value: if debuff { -value.0 } else { value.0 },
+            //         bypass_ignore: false,
+            //     }
+            // };
+
+            Some(if modifiers.is_some() && value == (0.0, 0.0) {
+                let modifier_str = match (modifier, debuff) {
+                    (Modifier::Increased, true) => "Reduced",
+                    (Modifier::Increased, false) => "Increased",
+                    (Modifier::Flat, true) => "Removed",
+                    (Modifier::Flat, false) => "Added",
+                    (Modifier::More, true) => "Less",
+                    (Modifier::More, false) => "More",
                 };
+                let (value, percent_str) =
+                    if matches!(modifier, Modifier::Increased | Modifier::More) {
+                        (status_effect.value.get() * 0.01, "%")
+                    } else {
+                        (status_effect.value.get(), "")
+                    };
                 view! {
                     <span class="text-blue-400 whitespace-pre-line">
-                        {effects_tooltip::format_stat(&effect)} " to "
-                        {effects_tooltip::format_stat(&max_effect)}
+                        {format_number(value)}{percent_str}" "{modifier_str}" "
+                        {effects_tooltip::format_multiplier_stat_name(&stat)}
                     </span>
                 }
                 .into_any()
             } else {
-                view! {
-                    <span class="text-blue-400 whitespace-pre-line">
-                        {effects_tooltip::format_stat(&effect)}
-                    </span>
+                let effect = StatEffect {
+                    stat,
+                    modifier,
+                    value: if debuff { -value.0 } else { value.0 },
+                    bypass_ignore: false,
+                };
+                if value.0 != value.1 {
+                    let max_effect = StatEffect {
+                        value: if debuff { -value.1 } else { value.1 },
+                        ..effect.clone()
+                    };
+                    view! {
+                        <span class="text-blue-400 whitespace-pre-line">
+                            {effects_tooltip::format_stat(&effect)} " to "
+                            {effects_tooltip::format_stat(&max_effect)}
+                        </span>
+                    }
+                    .into_any()
+                } else {
+                    view! {
+                        <span class="text-blue-400 whitespace-pre-line">
+                            {effects_tooltip::format_stat(&effect)}
+                        </span>
+                    }
+                    .into_any()
                 }
-                .into_any()
             })
         }
         StatusEffectType::Trigger {

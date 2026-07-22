@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
@@ -12,9 +12,10 @@ use crate::{
         item::{ItemCategory, ItemSpecs},
         modifier::ModifiableValue,
         stat_effect::{
-            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType,
+            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
+            StatType,
         },
-        trigger::TriggerSpecs,
+        trigger::{TriggerEffect, TriggerSpecs},
         values::{Cooldown, NonNegative},
     },
     serde_utils::default_1f64,
@@ -57,6 +58,9 @@ pub struct BaseSkillSpecs {
 
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -65,6 +69,8 @@ pub struct SkillUpgradeEffect {
     pub stat_effect: StatEffect,
     #[serde(default)]
     pub description: Option<String>,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -77,6 +83,7 @@ pub struct SkillSpecs {
     pub skill_type: SkillType,
 
     // Should we split in two here?
+    pub usable: bool,
     pub cooldown: ModifiableValue<NonNegative>,
     pub mana_cost: ModifiableValue<NonNegative>,
 
@@ -85,8 +92,9 @@ pub struct SkillSpecs {
 
     pub level_modifier: u16,
 
-    #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+    pub extra_modifier_effects: Vec<ModifierEffect>,
+    pub auto_use_conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -166,8 +174,7 @@ pub enum ItemStatsSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    Range,
-    Shape,
+    Target,
     Equipped,
 }
 
@@ -232,11 +239,21 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub independent_application: bool,
+    #[serde(default)]
+    pub optional_application: bool,
+
+    #[serde(default)]
+    pub description: Option<String>,
 }
 
 #[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
+    WeaponEffect {
+        item_slot: ItemSlot,
+        #[serde(default)]
+        factor: ModifiableValue<f64>,
+    },
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]
@@ -261,14 +278,22 @@ pub enum SkillEffectType {
         escalation: Option<ModifiableValue<NonNegative>>,
         #[serde(default)]
         max_stacks: Option<ModifiableValue<u8>>,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
+        // #[serde(default)]
+        // damage_type: Option<DamageType>,
         #[serde(default)]
         avoidable: Option<bool>,
 
         #[serde(default)]
         replace_on_value_only: bool,
-        // TODO? Computed status effects for inherit_trigger_owner?
+
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        computed_status_triggers: Option<HashMap<String, TriggerEffect>>,
+    },
+    RefreshStatus {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        value: ChanceRange<ModifiableValue<f64>>,
+        modifier: RestoreModifier,
     },
     Restore {
         restore_type: RestoreType,
@@ -276,6 +301,7 @@ pub enum SkillEffectType {
         modifier: RestoreModifier,
     },
     Resurrect,
+    Kill,
     RefreshCooldown {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
@@ -326,6 +352,7 @@ pub enum SkillShape {
     Square4,
     All,
     Contact,
+    Cross,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

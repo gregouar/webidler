@@ -347,16 +347,28 @@ fn compute_weapon_specs(
             {
                 match damage_type {
                     Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(*damage_type).or_default();
-                        if let Some(MinMax::Min) | None = min_max {
-                            value.min.apply_effect(effect);
-                        }
-                        if let Some(MinMax::Max) | None = min_max {
-                            value.max.apply_effect(effect);
+                        if compare_options(
+                            is_hit,
+                            &Some(!matches!(damage_type, DamageType::Poison)),
+                        ) {
+                            let value = weapon_specs.damage.entry(*damage_type).or_default();
+                            if let Some(MinMax::Min) | None = min_max {
+                                value.min.apply_effect(effect);
+                            }
+                            if let Some(MinMax::Max) | None = min_max {
+                                value.max.apply_effect(effect);
+                            }
                         }
                     }
                     None => {
                         for damage_type in DamageType::iter() {
+                            if !compare_options(
+                                is_hit,
+                                &Some(!matches!(damage_type, DamageType::Poison)),
+                            ) {
+                                continue;
+                            }
+
                             let value = weapon_specs.damage.entry(damage_type).or_default();
                             if let Some(MinMax::Min) | None = min_max {
                                 value.min.apply_effect(effect);

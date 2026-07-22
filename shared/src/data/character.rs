@@ -8,9 +8,9 @@ use crate::data::{
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
     skill::{DamageType, RepeatedSkillEffect, SkillType},
-    stat_effect::EffectsMap,
+    stat_effect::StatEffect,
     trigger::TriggersMap,
-    values::{AtLeastOne, BoundedValue, NonNegative, Percent},
+    values::{AtLeastOne, NonNegative, Percent},
 };
 
 use super::character_status::StatusMap;
@@ -62,7 +62,7 @@ pub struct CharacterSpecs {
     #[serde(default)]
     pub triggers: TriggersMap,
     #[serde(default)]
-    pub effects: EffectsMap,
+    pub effects: Vec<StatEffect>,
 
     #[serde(default, skip_serializing, skip_deserializing)]
     pub conditional_modifiers: Vec<ConditionalModifier>,
@@ -116,8 +116,10 @@ pub struct CharacterAttrs {
     #[serde(default)]
     pub stun_lockout: ModifiableValue<NonNegative>,
 
+    // #[serde(default)]
+    // pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
     #[serde(default)]
-    pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
+    pub damage_taken: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -141,6 +143,8 @@ pub struct CharacterState {
     pub monitored_conditions: HashMap<Condition, MonitoredCondition>,
     #[serde(default, skip_serializing, skip_deserializing)]
     pub repeated_skills: Vec<RepeatedSkillEffect>,
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub resurrected: bool,
 }
 
 // This shouldn't be here

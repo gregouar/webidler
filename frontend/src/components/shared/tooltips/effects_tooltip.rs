@@ -4,6 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
+    character_status::{StatusEffectType, StatusModifier},
     item_affix::AffixEffectScope,
     modifier::Modifier,
     skill::{DamageType, SkillRepeat, SkillType},
@@ -17,7 +18,10 @@ use crate::components::{
     data_context::DataContext,
     shared::tooltips::{
         conditions_tooltip,
-        skill_tooltip::{self, restore_type_str, skill_filter_str, skill_type_str},
+        skill_tooltip::{
+            self, restore_type_str, skill_filter_str, skill_type_str, skills_type_str,
+        },
+        trigger_tooltip,
     },
     ui::number::format_number,
 };
@@ -201,11 +205,21 @@ pub fn skill_status_filter_str(
         {
             skill_filter_str(skill_filter, "", plural)
         }
-        (_, _, status_filter) => format!(
-            "{}{}",
-            skill_filter_str(skill_filter, "", plural),
-            status_filter_str(status_filter)
-        ),
+        (_, _, status_filter) => {
+            if plural {
+                format!(
+                    "{}{}",
+                    status_filter_str(status_filter),
+                    skill_filter_str(skill_filter, " with ", true),
+                )
+            } else {
+                format!(
+                    "{}{}",
+                    skill_filter_str(skill_filter, "", false),
+                    status_filter_str(status_filter)
+                )
+            }
+        }
     }
 }
 
@@ -216,7 +230,11 @@ pub fn status_filter_str(status_filter: &StatStatusFilter) -> String {
     } else if let Some(damage_type) = status_filter.damage_type {
         status_damage_type_str(damage_type).into()
     } else {
-        "Effects over Time".to_string()
+        match status_filter.debuff {
+            Some(true) => "Debuffs".to_string(),
+            Some(false) => "Buffs".to_string(),
+            None => "Effects over Time".to_string(),
+        }
     }
 }
 
@@ -262,18 +280,22 @@ fn status_damage_type_str(damage_type: StatusDamageType) -> &'static str {
 pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> String {
     match effect_type {
         Some(skill_effect_type) => match skill_effect_type {
+            StatSkillEffectType::WeaponEffect => "Weapon Effect".into(),
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
-            StatSkillEffectType::ApplyStatus { status_id } => {
+            StatSkillEffectType::ApplyStatus { status_id, debuff } => {
                 let status_filter = StatStatusFilter {
                     status_id: status_id.clone(),
+                    debuff: *debuff,
                     ..Default::default()
                 };
                 format!("Apply {}", status_filter_str(&status_filter))
             }
+            StatSkillEffectType::RefreshStatus => "Refresh Statuses".into(),
             StatSkillEffectType::Restore { restore_type } => {
                 format!("Restore{}", restore_type_str(*restore_type))
             }
             StatSkillEffectType::Resurrect => "Resurrect".into(),
+            StatSkillEffectType::Kill => "Kill".into(),
             StatSkillEffectType::RefreshCooldown => "Refresh Skills".into(),
         },
         None => "All Skill Effects".into(),
@@ -513,7 +535,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "{} Escalation {}",
+                "{} Escalation{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -523,7 +545,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "Maximum {} Stacks {}",
+                "Maximum {} Stacks{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -533,7 +555,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             skill_filter,
         } => {
             format!(
-                "{}{} Compression",
+                "{} Compression{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " with ", true),
             )
@@ -563,7 +585,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             format!(
                 "{}Speed",
                 if skill_str.is_empty() {
-                    "Skills "
+                    "Action "
                 } else {
                     &skill_str
                 }
@@ -585,11 +607,11 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 skill_type_str(*skill_type)
             )
         }
-        StatType::DamageResistance {
+        StatType::DamageTaken {
             skill_type,
             damage_type,
         } => format!(
-            "{}{}Damage Resistance",
+            "{}{}Damage Taken",
             damage_type_str(*damage_type),
             skill_type_str(*skill_type)
         ),
@@ -607,8 +629,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             effect_type,
         } => format!(
             "Chance to {}{}",
-            skill_filter_str(skill_filter, "", false),
-            stat_skill_effect_type_str(effect_type.as_ref())
+            stat_skill_effect_type_str(effect_type.as_ref()),
+            skill_filter_str(skill_filter, " with ", true),
         ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
@@ -625,6 +647,20 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
         ),
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
+        StatType::SkillEffectModifier { .. } => "TODO?".into(),
+        StatType::SkillRepeat { skill_filter } => {
+            format!("{}Repeat", skill_filter_str(skill_filter, "", false))
+        }
+        StatType::TriggerEffectModifier {
+            stat,
+            source,
+            skill_filter,
+        } => format!(
+            "{}{}{}",
+            format_multiplier_stat_name(stat),
+            trigger_tooltip::format_trigger_modifier_per(source),
+            skill_filter_str(skill_filter, " with ", true)
+        ),
         StatType::StatConditionalModifier {
             stat,
             conditions,
@@ -692,9 +728,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             )
         }
         StatType::Block(skill_type) => format!(
-            "{} {}Block Chance",
+            "{} Chance to Block {}",
             format_adds_removes(value, false, "%"),
-            skill_type_str(*skill_type)
+            skills_type_str(*skill_type)
         ),
         StatType::BlockDamageTaken => {
             format!(
@@ -731,7 +767,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter,
         } => {
             format!(
-                "Restore {} more{}{}",
+                "Restore {} additional{}{}",
                 format_flat_number(value, false),
                 restore_type_str(*restore_type),
                 skill_filter_str(skill_filter, " with ", true)
@@ -761,15 +797,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             status_filter,
             skill_filter,
             min_max,
-        } => {
-            format!(
-                "{} {}{}{}",
-                format_adds_removes(value, false, " to"),
-                min_max_str(*min_max),
-                skill_filter_str(skill_filter, "", false),
-                status_type_value_str(status_filter)
-            )
-        }
+        } => format_status_power(value, status_filter, skill_filter, min_max),
         StatType::StatusDuration {
             status_filter,
             skill_filter,
@@ -903,25 +931,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             restore_type_str(Some(*restore_type)),
             skill_type_str(*skill_type)
         ),
-        StatType::DamageResistance {
+        StatType::DamageTaken {
             skill_type,
             damage_type,
         } => {
-            if value.unwrap_or_default() >= 0.0 {
-                format!(
-                    "Take {}% Less {}{}Damage",
-                    format_flat_number(value, false),
-                    damage_type_str(*damage_type),
-                    skill_type_str(*skill_type)
-                )
-            } else {
-                format!(
-                    "Take {}% Increased {}{}Damage",
-                    format_flat_number(value.map(|v| -v), false),
-                    damage_type_str(*damage_type),
-                    skill_type_str(*skill_type)
-                )
-            }
+            format!(
+                "{} extra {}{}Damage Taken",
+                format_flat_number(value, false),
+                damage_type_str(*damage_type),
+                skill_type_str(*skill_type)
+            )
         }
         StatType::Lucky {
             skill_filter,
@@ -960,21 +979,21 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if unwrap_value >= 100.0 {
                 format!(
                     "Guaranteed to {}{}",
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             } else if unwrap_value <= -100.0 {
                 format!(
                     "Impossible to {}{}",
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             } else {
                 format!(
                     "{} Chance to {}{}",
                     format_adds_removes(value, false, "%"),
-                    skill_filter_str(skill_filter, "", false),
-                    stat_skill_effect_type_str(effect_type.as_ref())
+                    stat_skill_effect_type_str(effect_type.as_ref()),
+                    skill_filter_str(skill_filter, " with ", true),
                 )
             }
         }
@@ -998,9 +1017,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         } => {
             let range_str = match range {
                 Some(range) => match range {
-                    shared::data::item::SkillRange::Melee => "Melee",
-                    shared::data::item::SkillRange::Distance => "Distance",
-                    shared::data::item::SkillRange::Any => "Any",
+                    shared::data::item::SkillRange::Melee => "Melee range",
+                    shared::data::item::SkillRange::Distance => "Distance range",
+                    shared::data::item::SkillRange::Any => "Any range",
                 },
                 None => "",
             };
@@ -1036,6 +1055,49 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_filter_str(skill_filter, "", false),
             )
         }
+        StatType::SkillRepeat { skill_filter } => {
+            format!(
+                "{}Repeat {} additional times",
+                skill_filter_str(skill_filter, "", false),
+                format_flat_number(value, false),
+            )
+        }
+        StatType::SkillEffectModifier {
+            skill_filter,
+            unblockable,
+            avoidable,
+        } => {
+            let unblockable_str = unblockable.map(|unblockable| match unblockable {
+                true => "Unblockable",
+                false => "Blockable",
+            });
+
+            let avoidable_str = avoidable.map(|avoidable| match avoidable {
+                true => "Avoidable",
+                false => "Unavoidable",
+            });
+
+            let result_str = vec![unblockable_str, avoidable_str]
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .join(", ");
+
+            format!(
+                "{} becomes {result_str}",
+                skill_filter_str(skill_filter, "", false),
+            )
+        }
+        StatType::TriggerEffectModifier {
+            stat,
+            source,
+            skill_filter,
+        } => format!(
+            "{}{}{}",
+            format_flat_stat(stat, value),
+            trigger_tooltip::format_trigger_modifier_per(source),
+            skill_filter_str(skill_filter, " with ", true)
+        ),
         StatType::SkillConditionalModifier {
             stat,
             skill_filter,
@@ -1091,4 +1153,78 @@ fn format_flat_number(value: Option<f64>, precise: bool) -> String {
         }
         None => if precise { ".#" } else { "#" }.to_string(),
     }
+}
+
+fn format_status_power(
+    value: Option<f64>,
+    status_filter: &StatStatusFilter,
+    skill_filter: &StatSkillFilter,
+    min_max: &Option<MinMax>,
+) -> String {
+    let data_context: DataContext = expect_context();
+    if let Some(status_id) = &status_filter.status_id
+        && let Some(status_specs) = data_context.statuses_specs.read().get(status_id)
+    {
+        let mut effects_str = Vec::new();
+        let mut stop = false;
+        for effect in status_specs.effects.iter() {
+            match (&effect.status_effect_type, effect.modifier) {
+                (
+                    StatusEffectType::StatModifier {
+                        stat,
+                        modifier,
+                        debuff,
+                    },
+                    StatusModifier::Percent,
+                ) => {
+                    let value = value
+                        .map(|value| {
+                            (if *debuff { -value } else { value }) * effect.value.get() * 0.01
+                        })
+                        .unwrap_or_default();
+                    let stat_str = format_stat(&StatEffect {
+                        stat: stat.clone(),
+                        modifier: *modifier,
+                        value,
+                        bypass_ignore: false,
+                    });
+                    match modifier {
+                        Modifier::Flat => {
+                            effects_str.push(stat_str);
+                        }
+                        Modifier::Increased | Modifier::More => {
+                            effects_str.push(format!("+{}", stat_str));
+                        }
+                    }
+                }
+                (_, StatusModifier::Percent) => {
+                    stop = true;
+                    break;
+                }
+                _ => {}
+            }
+        }
+
+        if !stop {
+            return format!(
+                "{} {} {}{}",
+                data_context.status_name(status_id),
+                if status_specs.debuff {
+                    "causes"
+                } else {
+                    "grants"
+                },
+                effects_str.join(", and "),
+                skill_filter_str(skill_filter, " with ", true)
+            );
+        }
+    }
+
+    format!(
+        "{} {}{}{}",
+        format_adds_removes(value, false, " to"),
+        min_max_str(*min_max),
+        skill_filter_str(skill_filter, "", false),
+        status_type_value_str(status_filter)
+    )
 }

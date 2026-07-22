@@ -48,7 +48,11 @@ pub fn use_skill<'a>(
     }
 
     let mut applied = false;
+
+    // Same seed for same amount of repeats
+    let seed = rng::roll_seed();
     for targets_group in skill_specs.targets.iter() {
+        let mut seed = seed.clone();
         applied |= apply_skill_on_targets(
             statuses_store,
             events_queue,
@@ -58,6 +62,7 @@ pub fn use_skill<'a>(
             me,
             friends,
             enemies,
+            &mut seed,
         );
     }
 
@@ -83,8 +88,9 @@ fn apply_skill_on_targets<'a>(
     me: &mut Target<'a>,
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
+    seed: &mut RngSeed,
 ) -> bool {
-    let max_repeat = targets_group.repeat.value.roll();
+    let max_repeat = targets_group.repeat.value.roll_with_seed(seed);
 
     if max_repeat == 0 {
         return false;
@@ -304,11 +310,12 @@ pub fn find_sub_targets<'a, 'b>(
                     .min((pos.1 - skill_position.1 - skill_size.1 as i32 + 1).abs());
 
                 x_dis + y_dis == 1
+            }
+            SkillShape::Cross => {
+                let x_dis = (pos.0 - skill_position.0).abs();
+                let y_dis = (pos.1 - skill_position.1).abs();
 
-                // ((pos.0 - skill_position.0).abs() <= 1
-                //     || (pos.0 - skill_position.0 - skill_size.0 as i32 + 1).abs() <= 1)
-                //     && ((pos.1 - skill_position.1).abs() <= 1
-                //         || (pos.1 - skill_position.1 - skill_size.1 as i32 + 1).abs() <= 1)
+                x_dis + y_dis == 1 || x_dis + y_dis == 0
             }
         }
     };
@@ -383,7 +390,7 @@ pub fn apply_skill_effects(
                 skill_id,
                 trigger_depth,
                 &mut seed,
-            )
+            ) || skill_effect.optional_application
         }
     }
 
@@ -399,7 +406,7 @@ fn apply_conditional_modifiers(
 ) -> SkillEffect {
     let mut new_skill_effect = skill_effect.clone();
 
-    skills_updater::compute_skill_specs_effect(
+    skills_updater::compute_skill_specs_effects(
         statuses_store,
         skill_id,
         skill_type,
@@ -420,6 +427,10 @@ fn apply_conditional_modifiers(
 
 fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Target) -> bool {
     match &skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { .. } => {
+            // Should already have been converted
+            false
+        }
         SkillEffectType::FlatDamage { .. } => target.1.1.is_alive,
         SkillEffectType::ApplyStatus {
             status_id,
@@ -429,8 +440,9 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
             escalation,
             max_stacks,
             avoidable: _,
-            damage_type: _,
+            // damage_type: _,
             replace_on_value_only,
+            computed_status_triggers: _,
         } => {
             let value = *value.max;
             let duration = *duration.unwrap_or_default().max;
@@ -445,6 +457,9 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
                 *replace_on_value_only,
             )
         }
+        SkillEffectType::RefreshStatus { .. } => {
+            target.1.1.is_alive // TODO: Actually verify skills
+        }
         SkillEffectType::Restore { restore_type, .. } => {
             target.1.1.is_alive
                 && match restore_type {
@@ -457,6 +472,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
                 }
         }
         SkillEffectType::Resurrect => !target.1.1.is_alive,
+        SkillEffectType::Kill => target.1.1.is_alive,
         SkillEffectType::RefreshCooldown { .. } => {
             target.1.1.is_alive // TODO: Actually verify skills
         }
@@ -482,6 +498,10 @@ fn apply_skill_effect_on_target(
     }
 
     match &skill_effect.effect_type {
+        SkillEffectType::WeaponEffect { .. } => {
+            // Should already have been converted
+            false
+        }
         SkillEffectType::FlatDamage {
             damage,
             crit_chance,
@@ -526,8 +546,9 @@ fn apply_skill_effect_on_target(
             escalation,
             max_stacks,
             avoidable,
-            damage_type,
+            // damage_type,
             replace_on_value_only: _,
+            computed_status_triggers: _,
         } => {
             let value = value.roll_with_seed(seed);
             let duration = duration.unwrap_or_default().roll_with_seed(seed);
@@ -543,26 +564,39 @@ fn apply_skill_effect_on_target(
                 duration,
                 *escalation.unwrap_or_default(),
                 max_stacks.map(|x| *x).unwrap_or_default(),
-                if avoidable.unwrap_or_default() {
-                    *damage_type
-                } else {
-                    None
-                },
+                avoidable.unwrap_or_default(),
                 skill_id,
                 trigger_depth,
             )
         }
+        SkillEffectType::RefreshStatus {
+            status_filter,
+            value,
+            modifier,
+        } => characters_controller::refresh_status_cooldown(
+            statuses_store,
+            target,
+            status_filter,
+            value.roll_with_seed(seed),
+            modifier,
+        ),
         SkillEffectType::Restore {
             restore_type,
             value,
             modifier,
         } => characters_controller::restore_character(
+            events_queue,
             target,
+            attacker,
             *restore_type,
             value.roll_with_seed(seed),
             *modifier,
+            skill_type,
+            skill_id,
+            trigger_depth,
         ),
         SkillEffectType::Resurrect => characters_controller::resuscitate_character(target),
+        SkillEffectType::Kill => characters_controller::kill_character(target),
         SkillEffectType::RefreshCooldown {
             skill_filter,
             value,

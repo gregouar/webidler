@@ -2,8 +2,6 @@
   "name": "Ember Butler",
   "portrait": "monsters/castle/ember_butler.webp",
   "max_life": 5,
-  "power_factor": 1,
-  "initiative": [ 0.0, 0.5 ],
   "armor": { "Fire": 100 },
   "skills": [
     {
