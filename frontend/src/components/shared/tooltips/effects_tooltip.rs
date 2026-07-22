@@ -282,9 +282,10 @@ pub fn stat_skill_effect_type_str(effect_type: Option<&StatSkillEffectType>) -> 
         Some(skill_effect_type) => match skill_effect_type {
             StatSkillEffectType::WeaponEffect => "Weapon Effect".into(),
             StatSkillEffectType::FlatDamage {} => "Hit".into(),
-            StatSkillEffectType::ApplyStatus { status_id } => {
+            StatSkillEffectType::ApplyStatus { status_id, debuff } => {
                 let status_filter = StatStatusFilter {
                     status_id: status_id.clone(),
+                    debuff: *debuff,
                     ..Default::default()
                 };
                 format!("Apply {}", status_filter_str(&status_filter))

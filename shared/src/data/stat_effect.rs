@@ -10,7 +10,7 @@ use crate::{
         conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
-        skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
+        skill::{RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
         values::NonNegative,
     },
@@ -520,6 +520,8 @@ pub enum StatSkillEffectType {
     ApplyStatus {
         #[serde(default)]
         status_id: Option<StatusId>,
+        #[serde(default)]
+        debuff: Option<bool>,
     },
     RefreshStatus,
     Restore {
@@ -542,36 +544,38 @@ impl Matchable for StatSkillEffectType {
                 },
             ) => compare_options(restore_type, restore_type_2),
             (
-                ApplyStatus { status_id },
+                ApplyStatus { status_id, debuff },
                 ApplyStatus {
                     status_id: status_id_2,
+                    debuff: debuff_2,
                 },
-            ) => compare_options(status_id, status_id_2),
+            ) => compare_options(status_id, status_id_2) && compare_options(debuff, debuff_2),
             _ => self == skill_effect_type,
         }
     }
 }
 
-impl From<&SkillEffectType> for Option<StatSkillEffectType> {
-    fn from(value: &SkillEffectType) -> Self {
-        match value {
-            SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
-            SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
-            SkillEffectType::ApplyStatus { status_id, .. } => {
-                Some(StatSkillEffectType::ApplyStatus {
-                    status_id: Some(status_id.clone()),
-                })
-            }
-            SkillEffectType::RefreshStatus { .. } => Some(StatSkillEffectType::RefreshStatus),
-            SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
-                restore_type: Some(*restore_type),
-            }),
-            SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
-            SkillEffectType::Kill => Some(StatSkillEffectType::Kill),
-            SkillEffectType::RefreshCooldown { .. } => Some(StatSkillEffectType::RefreshCooldown),
-        }
-    }
-}
+// impl From<&SkillEffectType> for Option<StatSkillEffectType> {
+//     fn from(value: &SkillEffectType) -> Self {
+//         match value {
+//             SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
+//             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
+//             SkillEffectType::ApplyStatus { status_id, .. } => {
+//                 Some(StatSkillEffectType::ApplyStatus {
+//                     status_id: Some(status_id.clone()),
+//                     debuff:
+//                 })
+//             }
+//             SkillEffectType::RefreshStatus { .. } => Some(StatSkillEffectType::RefreshStatus),
+//             SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
+//                 restore_type: Some(*restore_type),
+//             }),
+//             SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
+//             SkillEffectType::Kill => Some(StatSkillEffectType::Kill),
+//             SkillEffectType::RefreshCooldown { .. } => Some(StatSkillEffectType::RefreshCooldown),
+//         }
+//     }
+// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum LuckyRollType {

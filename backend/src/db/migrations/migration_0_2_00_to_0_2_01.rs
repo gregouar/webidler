@@ -696,6 +696,7 @@ impl From<OldStatSkillEffectType> for StatSkillEffectType {
             OldStatSkillEffectType::FlatDamage {} => FlatDamage {},
             OldStatSkillEffectType::ApplyStatus { status_type } => ApplyStatus {
                 status_id: status_type.map(status_type_to_status_id),
+                debuff: None,
             },
             OldStatSkillEffectType::Restore { restore_type } => Restore { restore_type },
             OldStatSkillEffectType::Resurrect => Resurrect,

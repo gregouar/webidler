@@ -14,9 +14,7 @@ use shared::data::{
         RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{
-        Matchable, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
-    },
+    stat_effect::{Matchable, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
     trigger::TriggerEffectModifier,
     values::NonNegative,
 };
@@ -27,8 +25,7 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
-            self, damage_type_str, format_multiplier_stat_name, formatted_effects_list,
-            min_max_str, stat_skill_effect_type_str,
+            self, damage_type_str, format_multiplier_stat_name, formatted_effects_list, min_max_str,
         },
         frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip, status_tooltip,
@@ -1011,7 +1008,6 @@ pub fn skill_effect_text(
     modifiers: Option<&[TriggerEffectModifier]>,
 ) -> String {
     let _ = modifiers;
-    let stat_skill_effect: Option<StatSkillEffectType> = (&effect.effect_type).into();
     match effect.effect_type {
         SkillEffectType::WeaponEffect { item_slot, .. } => {
             format!("Deal {} Damage", item_tooltip::item_slot_str(item_slot))
@@ -1051,11 +1047,17 @@ pub fn skill_effect_text(
             },
             effects_tooltip::status_filter_str(&status_filter),
         ),
-        SkillEffectType::Resurrect
-        | SkillEffectType::Kill
-        | SkillEffectType::Restore { .. }
-        | SkillEffectType::RefreshCooldown { .. } => {
-            stat_skill_effect_type_str(stat_skill_effect.as_ref())
+        SkillEffectType::Resurrect => "Resurrect".into(),
+        SkillEffectType::Kill => "Kill".into(),
+        SkillEffectType::Restore { restore_type, .. } => {
+            format!("Restore {}", restore_type_str(Some(restore_type)))
+        }
+
+        SkillEffectType::RefreshCooldown { skill_filter, .. } => {
+            format!(
+                "Refresh {} Cooldown",
+                skill_filter_str(&skill_filter, " ", true)
+            )
         }
     }
 }

@@ -499,6 +499,36 @@
                         "SkillEffect"  : { "ApplyStatus": {"status_id": "curse_clumsy", "value": 100} }
                     }
                 ]
+            },
+            "debuff"  : {
+                "title"       : "Debilitation",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : {
+                                        "SuccessChance": {
+                                            "effect_type": { "ApplyStatus": {"debuff": true} }
+                                        }
+                                    },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_weakness"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
             }
         }
     },

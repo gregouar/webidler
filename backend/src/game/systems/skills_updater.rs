@@ -20,7 +20,7 @@ use shared::data::{
     },
     stat_effect::{
         EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
-        StatEffect, StatType, compare_options,
+        StatEffect, StatSkillEffectType, StatType, compare_options,
     },
     trigger::TriggerEffect,
 };
@@ -930,12 +930,15 @@ pub fn apply_stat_effect_on_skill_effect(
         return None;
     }
 
+    let stat_skill_effect_type =
+        into_stat_skill_effect_type(statuses_store, &skill_effect.effect_type);
+
     if let StatType::Lucky {
         skill_filter,
         roll_type: LuckyRollType::SuccessChance { effect_type },
     } = &effect.stat
         && skill_filter.is_match_with_skill(skill_type, skill_id)
-        && compare_options(effect_type, &(&skill_effect.effect_type).into())
+        && compare_options(effect_type, &stat_skill_effect_type)
     {
         skill_effect
             .success_chance
@@ -949,7 +952,7 @@ pub fn apply_stat_effect_on_skill_effect(
         effect_type,
     } = &effect.stat
         && skill_filter.is_match_with_skill(skill_type, skill_id)
-        && compare_options(effect_type, &(&skill_effect.effect_type).into())
+        && compare_options(effect_type, &stat_skill_effect_type)
     {
         skill_effect.success_chance.value.apply_effect(effect);
         return None;
@@ -1268,4 +1271,30 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     None
+}
+
+fn into_stat_skill_effect_type(
+    statuses_store: &StatusesStore,
+    value: &SkillEffectType,
+) -> Option<StatSkillEffectType> {
+    match value {
+        SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
+        SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
+        SkillEffectType::ApplyStatus { status_id, .. } => {
+            let Some(status_specs) = statuses_store.get(status_id) else {
+                return None;
+            };
+            Some(StatSkillEffectType::ApplyStatus {
+                status_id: Some(status_id.clone()),
+                debuff: Some(status_specs.debuff),
+            })
+        }
+        SkillEffectType::RefreshStatus { .. } => Some(StatSkillEffectType::RefreshStatus),
+        SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
+            restore_type: Some(*restore_type),
+        }),
+        SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
+        SkillEffectType::Kill => Some(StatSkillEffectType::Kill),
+        SkillEffectType::RefreshCooldown { .. } => Some(StatSkillEffectType::RefreshCooldown),
+    }
 }
