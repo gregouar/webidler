@@ -483,7 +483,10 @@ pub fn format_skill_effect(
 
     let mut skip = false;
 
-    let base_effects = match skill_effect.effect_type {
+    let base_effects = if let Some(description) = skill_effect.description {
+        view! { <EffectLi>{success_chance}{description}</EffectLi> }.into_any()
+    } else {
+        match skill_effect.effect_type {
         SkillEffectType::WeaponEffect { item_slot, factor } => {
             let item_slot_str = item_tooltip::item_slot_str(item_slot);
 
@@ -787,7 +790,7 @@ pub fn format_skill_effect(
             };
             view! { <EffectLi>{success_chance}"Refresh " {value_str} {skill_filter_str} " Cooldown"</EffectLi> }
             .into_any()
-        }
+        }}
     };
 
     let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);

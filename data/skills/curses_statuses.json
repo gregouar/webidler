@@ -16,70 +16,6 @@
                 },
                 "value"                : 100,
                 "modifier"             : "Percent"
-            },
-            {
-                "replace_on_value_only": true,
-                "Trigger"              : {
-                    "trigger_id" : "curse_conductivity",
-                    "name"       : "Curse of Conductivity",
-                    "icon"       : "skills/curse_conductivity.svg",
-                    "OnTakeHit"  : {"damage_type": "Storm", "is_triggered": null},
-                    "target"     : "SameTarget",
-                    "skill_range": "Any",
-                    "skill_shape": "Contact",
-                    "skill_type" : "Curse",
-                    "effects"    : [
-                        {
-                            "FlatDamage"         : { "damage": {"Storm": 0} },
-                            "ignore_stat_effects": [
-                                { "Damage": {"damage_type": "Storm"}                   },
-                                {                                     "CritChance": {} }
-                            ]
-                        }
-                    ],
-                    "modifiers"  : [
-                        {
-                            "stat"    : { "Damage": {"damage_type": "Storm"} },
-                            "modifier": "Flat",
-                            "factor"  : 0.5,
-                            "source"  : {"HitDamage": "Storm"}
-                        }
-                    ]
-                },
-                "value"                : 1,
-                "modifier"             : "Flat"
-            },
-            {
-                "replace_on_value_only": true,
-                "Trigger"              : {
-                    "trigger_id" : "curse_conductivity",
-                    "name"       : "Curse of Conductivity",
-                    "icon"       : "skills/curse_conductivity.svg",
-                    "OnTakeHit"  : {"is_crit": true, "damage_type": "Storm", "is_triggered": null},
-                    "target"     : "SameTarget",
-                    "skill_range": "Any",
-                    "skill_shape": "All",
-                    "skill_type" : "Curse",
-                    "effects"    : [
-                        {
-                            "FlatDamage"         : { "damage": {"Storm": 0} },
-                            "ignore_stat_effects": [
-                                { "Damage": {"damage_type": "Storm"}                   },
-                                {                                     "CritChance": {} }
-                            ]
-                        }
-                    ],
-                    "modifiers"  : [
-                        {
-                            "stat"    : { "Damage": {"damage_type": "Storm"} },
-                            "modifier": "Flat",
-                            "factor"  : 0.1,
-                            "source"  : {"HitDamage": "Storm"}
-                        }
-                    ]
-                },
-                "value"                : 1,
-                "modifier"             : "Flat"
             }
         ]
     },
@@ -100,48 +36,6 @@
                 },
                 "value"                : 100,
                 "modifier"             : "Percent"
-            },
-            {
-                "replace_on_value_only": true,
-                "Trigger"              : {
-                    "trigger_id": "curse_flammability",
-                    "name": "Curse of Flammability",
-                    "icon": "skills/curse_flammability.svg",
-                    "description": "Trigger an Intense Fire that deals additional Fire Damage equal to 10% of the Hit's Fire Damage for each Stack of Burn present on the target.",
-                    "OnTakeHit": {"is_hurt": true, "damage_type": "Fire", "is_triggered": null},
-                    "target": "SameTarget",
-                    "skill_range": "Any",
-                    "skill_shape": "Single",
-                    "skill_type": "Curse",
-                    "effects": [
-                        {
-                            "FlatDamage"         : {"damage": {}},
-                            "ignore_stat_effects": [
-                                {"CritChance": {}},
-                                {"CritDamage": {}},
-                                { "Damage": {"skill_type": null, "damage_type": null, "min_max": null} }
-                            ]
-                        }
-                    ],
-                    "modifiers": [
-                        {
-                            "stat"    : { "Damage": {"damage_type": "Fire"} },
-                            "modifier": "More",
-                            "factor"  : 100,
-                            "source"  : {"HitDamage": "Fire"}
-                        },
-                        {
-                            "stat"    : { "Damage": {"damage_type": "Fire"} },
-                            "modifier": "Flat",
-                            "factor"  : 0.1,
-                            "source"  : {
-                                "StatusStacks": { "DamageOverTime": {"damage_type": "Fire"} }
-                            }
-                        }
-                    ]
-                },
-                "value"                : 1,
-                "modifier"             : "Flat"
             }
         ]
     },
@@ -162,27 +56,10 @@
                 },
                 "value"                : 100,
                 "modifier"             : "Percent"
-            },
-            {
-                "replace_on_value_only": true,
-                "Trigger"              : {
-                    "trigger_id" : "curse_frailty",
-                    "name"       : "Curse of Frailty",
-                    "icon"       : "skills/curse_frailty.svg",
-                    "OnTakeHit"  : {"is_crit": true, "is_hurt": true, "is_triggered": null},
-                    "target"     : "SameTarget",
-                    "skill_range": "Any",
-                    "skill_type" : "Curse",
-                    "effects"    : [
-                        { "ApplyStatus": {"status_id": "curse_frailty_armor", "value": 1} }
-                    ]
-                },
-                "value"                : 1,
-                "modifier"             : "Flat"
             }
         ]
     },
-    "curse_frailty_armor"   : {
+    "curse_frailty_destroy" : {
         "name"      : "Broken Armor",
         "icon"      : "statuses/debuff_armor.svg",
         "debuff"    : true,
@@ -214,37 +91,6 @@
                 },
                 "value"                : 100,
                 "modifier"             : "Percent"
-            },
-            {
-                "replace_on_value_only": true,
-                "Trigger"              : {
-                    "inherit_source_effects": true,
-                    "trigger_id"            : "curse_putridity",
-                    "OnTakeHit"             : {"is_hurt": true, "is_triggered": false},
-                    "target"                : "SameTarget",
-                    "skill_range"           : "Any",
-                    "skill_type"            : "Curse",
-                    "effects"               : [
-                        {
-                            "FlatDamage"         : {"damage": {}},
-                            "ignore_stat_effects": [
-                                {"CritChance": {}},
-                                {"CritDamage": {}},
-                                { "Damage": {"skill_type": null, "damage_type": "Poison", "min_max": null} }
-                            ]
-                        }
-                    ],
-                    "modifiers"             : [
-                        {
-                            "stat"    : { "Damage": {"damage_type": "Physical"} },
-                            "modifier": "Flat",
-                            "factor"  : 0.25,
-                            "source"  : { "StatusValue": {"damage_type": "Poison"} }
-                        }
-                    ]
-                },
-                "value"                : 1,
-                "modifier"             : "Flat"
             }
         ]
     },

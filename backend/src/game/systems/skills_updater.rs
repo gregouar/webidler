@@ -235,6 +235,7 @@ fn weapon_skill_effect(
             conditional_modifiers: Vec::new(),
             independent_application: false,
             optional_application: false,
+            description: None,
         }),
         Some(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
@@ -262,6 +263,7 @@ fn weapon_skill_effect(
             conditional_modifiers: Vec::new(),
             independent_application: false,
             optional_application: true,
+            description: None,
         }),
     ]
 }

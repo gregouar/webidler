@@ -55,7 +55,7 @@ pub async fn resolve_events(
                 handle_threat_increased_event(&mut trigger_contexts, game_data, *threat_level)
             }
             GameEvent::StatusApplied(status_event) => {
-                handle_status_event(&mut trigger_contexts, game_data, status_event)
+                handle_status_event(&mut trigger_contexts, game_data, master_store, status_event)
             }
             GameEvent::Restored(restore_event) => {
                 handle_restore_event(&mut trigger_contexts, game_data, restore_event)
@@ -181,6 +181,7 @@ fn handle_hit_event<'a>(
 fn handle_status_event<'a>(
     trigger_contexts: &mut Vec<TriggerContext<'a>>,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
     status_event: &'a StatusEvent,
 ) {
     let characters = iter::once((
@@ -211,6 +212,24 @@ fn handle_status_event<'a>(
                 _ => continue,
             };
 
+            let (target_specs, target_state) = match status_event.target {
+                CharacterId::Player => (
+                    &game_data.player_specs.read().character_specs,
+                    &game_data.player_state.character_state,
+                ),
+
+                CharacterId::Monster(idx) => {
+                    match game_data
+                        .monster_specs
+                        .get(idx)
+                        .zip(game_data.monster_states.get(idx))
+                    {
+                        Some((specs, state)) => (&specs.character_specs, &state.character_state),
+                        None => continue,
+                    }
+                }
+            };
+
             if !compare_options(&status_trigger.skill_type, &Some(status_event.skill_type))
                 || !compare_options(
                     &status_trigger.is_triggered,
@@ -222,6 +241,16 @@ fn handle_status_event<'a>(
                     status_event.debuff,
                 )
                 || !compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
+                || status_trigger.conditions.iter().any(|condition| {
+                    check_condition(
+                        &master_store.statuses_store,
+                        &game_data.area_threat,
+                        &target_specs.character_attrs,
+                        target_state,
+                        None,
+                        condition,
+                    ) <= 0.0
+                })
             {
                 continue;
             }

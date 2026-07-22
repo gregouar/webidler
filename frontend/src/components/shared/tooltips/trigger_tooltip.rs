@@ -3,6 +3,7 @@ use leptos::prelude::*;
 
 use shared::data::{
     chance::ChanceRange,
+    conditional_modifier::Condition,
     item::{SkillRange, SkillShape},
     modifier::{ModifiableValue, Modifier},
     skill::{SkillType, TargetType},
@@ -254,7 +255,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnHit(hit_trigger) => format!(
             "On {}{}",
             format_hit_trigger(hit_trigger),
-            format_hit_trigger_conditions(hit_trigger, " against ", " Enemies")
+            format_target_conditions(&hit_trigger.conditions, " against ", " Enemies")
         ),
         EventTrigger::OnTakeHit(hit_trigger) => match hit_trigger.is_blocked {
             Some(true) => format!("On {}Block", format_blocked_hit_trigger(hit_trigger)),
@@ -262,7 +263,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
                 format!(
                     "On {} Taken{}",
                     format_hit_trigger(hit_trigger),
-                    format_hit_trigger_conditions(hit_trigger, " when ", "")
+                    format_target_conditions(&hit_trigger.conditions, " when ", "")
                 )
             }
         },
@@ -273,7 +274,11 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             format!("On {}Death", format_target_type(target_type))
         }
         EventTrigger::OnApplyStatus(status_trigger) => {
-            format!("On Applying {}", format_status_trigger(status_trigger))
+            format!(
+                "On Applying {}{}",
+                format_status_trigger(status_trigger),
+                format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
+            )
         }
         EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
             Some(true) => match (&status_trigger.skill_type, &status_trigger.status_filter) {
@@ -316,20 +321,20 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
     )
 }
 
-fn format_hit_trigger_conditions(
-    hit_trigger: &HitTrigger,
+fn format_target_conditions(
+    conditions: &[Condition],
     prefix: &'static str,
     middlefix: &'static str,
 ) -> String {
-    if hit_trigger.conditions.is_empty() {
+    if conditions.is_empty() {
         "".into()
     } else {
         format!(
             "{}{}{}{}",
             prefix,
-            conditions_tooltip::format_skill_modifier_conditions_pre(&hit_trigger.conditions, ""),
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
             middlefix,
-            conditions_tooltip::format_skill_modifier_conditions_post(&hit_trigger.conditions, "")
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
         )
     }
 }

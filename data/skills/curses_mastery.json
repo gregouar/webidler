@@ -33,6 +33,33 @@
                         }
                     }
                 ]
+            },
+            "destroy" : {
+                "title"       : "Crushing Blow",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "curse_frailty_destroy",
+                            "skill_type": "Other",
+                            "OnHit"     : {
+                                "skill_type": "Attack",
+                                "is_crit"   : true,
+                                "conditions": [
+                                    { "HasStatus": {"status_id": "curse_frailty"} }
+                                ]
+                            },
+                            "target"    : "SameTarget",
+                            "effects"   : [
+                                { "ApplyStatus": {"status_id": "curse_frailty_destroy", "value": 1} }
+                            ]
+                        }
+                    }
+                ]
             }
         }
     },
@@ -67,6 +94,83 @@
                         "StatEffect"   : {
                             "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
                             "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "contact" : {
+                "title"       : "Superconductor",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id" : "curse_conductivity_contact",
+                            "OnHit"      : {
+                                "damage_type": "Storm",
+                                "conditions" : [
+                                    { "HasStatus": {"status_id": "curse_conductivity"} }
+                                ]
+                            },
+                            "skill_type" : "Other",
+                            "target"     : "SameTarget",
+                            "skill_range": "Any",
+                            "skill_shape": "Contact",
+                            "effects"    : [
+                                {
+                                    "FlatDamage"         : { "damage": {"Storm": 0} },
+                                    "ignore_stat_effects": [
+                                        { "Damage": {"damage_type": "Storm"}                   },
+                                        {                                     "CritChance": {} }
+                                    ]
+                                }
+                            ],
+                            "modifiers"  : [
+                                {
+                                    "stat"    : { "Damage": {"damage_type": "Storm"} },
+                                    "modifier": "Flat",
+                                    "factor"  : 0.4,
+                                    "source"  : {"HitDamage": "Storm"}
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id" : "curse_conductivity_contact",
+                            "OnHit"      : {
+                                "damage_type": "Storm",
+                                "is_crit"    : true,
+                                "conditions" : [
+                                    { "HasStatus": {"status_id": "curse_conductivity"} }
+                                ]
+                            },
+                            "skill_type" : "Other",
+                            "target"     : "SameTarget",
+                            "skill_range": "Any",
+                            "skill_shape": "All",
+                            "effects"    : [
+                                {
+                                    "FlatDamage"         : { "damage": {"Storm": 0} },
+                                    "ignore_stat_effects": [
+                                        { "Damage": {"damage_type": "Storm"}                   },
+                                        {                                     "CritChance": {} }
+                                    ]
+                                }
+                            ],
+                            "modifiers"  : [
+                                {
+                                    "stat"    : { "Damage": {"damage_type": "Storm"} },
+                                    "modifier": "Flat",
+                                    "factor"  : 0.2,
+                                    "source"  : {"HitDamage": "Storm"}
+                                }
+                            ]
                         }
                     }
                 ]
@@ -107,13 +211,55 @@
                         }
                     }
                 ]
+            },
+            "hit"     : {
+                "title"       : "Brittle Bones",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "curse_putridity_hit",
+                            "OnHit"     : {
+                                "damage_type": "Physical",
+                                "is_hurt"    : true,
+                                "conditions" : [
+                                    { "HasStatus": {"status_id": "curse_putridity"} }
+                                ]
+                            },
+                            "skill_type": "Other",
+                            "target"    : "SameTarget",
+                            "effects"   : [
+                                {
+                                    "FlatDamage"         : {"damage": {}},
+                                    "ignore_stat_effects": [
+                                        {"CritChance": {}},
+                                        {"CritDamage": {}},
+                                        { "Damage": {"skill_type": null, "damage_type": "Poison", "min_max": null} }
+                                    ]
+                                }
+                            ],
+                            "modifiers" : [
+                                {
+                                    "stat"    : { "Damage": {"damage_type": "Physical"} },
+                                    "modifier": "Flat",
+                                    "factor"  : 0.25,
+                                    "source"  : { "StatusValue": {"damage_type": "Poison"} }
+                                }
+                            ]
+                        }
+                    }
+                ]
             }
         }
     },
     "curse_flammability": {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"     : {
                 "title"       : "Curse Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -129,7 +275,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"  : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -141,6 +287,61 @@
                         "StatEffect"   : {
                             "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
                             "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "extra_burn": {
+                "title"       : "Combustible",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id"   : "curse_flammability_extra_burn",
+                            "skill_type"   : "Other",
+                            "OnApplyStatus": {
+                                "status_id"   : "burn",
+                                "is_triggered": false,
+                                "conditions"  : [
+                                    { "HasStatus": {"status_id": "curse_flammability"} }
+                                ]
+                            },
+                            "target"       : "SameTarget",
+                            "effects"      : [
+                                {
+                                    "success_chance"     : 10,
+                                    "ApplyStatus"        : {"status_id": "burn", "value": 0},
+                                    "ignore_stat_effects": [ {"StatusPower": {}}, {"Damage": {}} ],
+                                    "description"        : "Apply an extra Stack of Burn"
+                                }
+                            ],
+                            "modifiers"    : [
+                                {
+                                    "stat"    : {
+                                        "Damage": {
+                                            "skill_type" : null,
+                                            "skill_id"   : null,
+                                            "damage_type": null,
+                                            "min_max"    : null,
+                                            "is_hit"     : null
+                                        }
+                                    },
+                                    "modifier": "Flat",
+                                    "factor"  : 1,
+                                    "source"  : {
+                                        "StatusValue": {
+                                            "status_id"  : "burn",
+                                            "damage_type": null,
+                                            "debuff"     : null,
+                                            "skill_type" : null
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 ]

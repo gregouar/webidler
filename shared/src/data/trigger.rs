@@ -122,6 +122,8 @@ pub struct StatusTrigger {
     pub is_triggered: Option<bool>,
     #[serde(default)]
     pub is_evaded: Option<bool>,
+    #[serde(default)]
+    pub conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]

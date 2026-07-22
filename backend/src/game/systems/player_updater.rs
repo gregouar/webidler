@@ -283,6 +283,7 @@ fn compute_player_specs(
                     conditional_modifiers: Default::default(),
                     independent_application: false,
                     optional_application: false,
+                    description: None,
                 }],
                 trigger_propagate: false,
                 inherit_source_effects: false,
