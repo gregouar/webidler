@@ -1036,7 +1036,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -1055,7 +1056,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -1257,7 +1259,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -1289,7 +1292,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -1657,7 +1661,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -1676,7 +1681,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -3222,7 +3228,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3539,7 +3545,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -3571,7 +3578,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -3625,7 +3633,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -3699,7 +3708,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -3718,7 +3728,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -3978,7 +3989,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -4010,7 +4022,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -4963,7 +4976,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -4995,7 +5009,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -5913,7 +5928,7 @@
               }
             },
             "modifier": "More",
-            "value": 50.0
+            "value": 75.0
           },
           {
             "stat": {
@@ -5937,7 +5952,7 @@
               }
             },
             "modifier": "More",
-            "value": 50.0
+            "value": 75.0
           },
           {
             "stat": {
@@ -7803,7 +7818,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -7822,7 +7838,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -8360,7 +8377,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8374,7 +8391,7 @@
               }
             },
             "modifier": "More",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9279,7 +9296,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -9298,7 +9316,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -10029,7 +10048,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -10043,7 +10062,7 @@
               }
             },
             "modifier": "More",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10215,7 +10234,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -10234,7 +10254,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -11426,7 +11447,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -11440,7 +11461,7 @@
               }
             },
             "modifier": "More",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12590,7 +12611,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -12622,7 +12644,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -13665,7 +13688,17 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusEscalation": {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13683,31 +13716,21 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -13802,31 +13825,12 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -13845,6 +13849,25 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -13948,6 +13971,15 @@
                     }
                   },
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -13958,30 +13990,21 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -15710,7 +15733,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -15729,7 +15753,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -15907,7 +15932,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -15939,7 +15965,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "open_wound"
+                    "status_id": "open_wound",
+                    "debuff": null
                   }
                 }
               }
@@ -16767,7 +16794,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -16786,7 +16814,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -16916,7 +16945,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -16935,7 +16965,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -16963,7 +16994,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -16982,7 +17014,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "stun"
+                    "status_id": "stun",
+                    "debuff": null
                   }
                 }
               }
@@ -17170,7 +17203,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
@@ -17202,7 +17236,8 @@
                 "skill_id": null,
                 "effect_type": {
                   "ApplyStatus": {
-                    "status_id": "burn"
+                    "status_id": "burn",
+                    "debuff": null
                   }
                 }
               }
