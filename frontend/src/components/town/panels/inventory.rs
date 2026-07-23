@@ -2,7 +2,7 @@ use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::http::client::{
-    InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest,
+    InventoryDeleteRequest, InventoryEquipRequest, InventorySortRequest, InventoryUnequipRequest,
 };
 
 use crate::components::{
@@ -138,6 +138,27 @@ pub fn TownInventoryPanel(
         })
     };
 
+    let on_sort = move |sort_type| {
+        let character_id = town_context.character.read_untracked().character_id;
+
+        spawn_local(async move {
+            match backend
+                .inventory_sort(&InventorySortRequest {
+                    character_id,
+                    sort_type,
+                })
+                .await
+            {
+                Ok(response) => town_context.inventory.set(response.inventory),
+                Err(e) => show_toast(
+                    toaster,
+                    format!("Failed to sort inventory: {e}"),
+                    ToastVariant::Error,
+                ),
+            }
+        });
+    };
+
     let inventory_config = if view_only {
         InventoryConfig {
             player_inventory: town_context.inventory,
@@ -152,6 +173,7 @@ pub fn TownInventoryPanel(
             on_sheathe: None,
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),
+            on_sort: Some(Arc::new(on_sort)),
             sell_type: SellType::Discard,
             max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
             equip_filter: town_context.equip_filter.into(),

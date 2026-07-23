@@ -3,7 +3,10 @@ use std::sync::Arc;
 
 use shared::{
     data::{item::ItemSlot, player::EquippedSlot},
-    messages::client::{EquipItemMessage, SellItemsMessage, SheathItemMessage, UnequipItemMessage},
+    messages::client::{
+        EquipItemMessage, SellItemsMessage, SheathItemMessage, SortInventoryMessage,
+        UnequipItemMessage,
+    },
 };
 
 use crate::components::{
@@ -155,6 +158,13 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         }
     };
 
+    let sort = {
+        let conn = conn.clone();
+        move |sort_type| {
+            conn.send(&SortInventoryMessage { sort_type }.into());
+        }
+    };
+
     let inventory_config = InventoryConfig {
         player_inventory: game_context.player_inventory,
         // loot_preference: Some(game_context.loot_preference),
@@ -163,6 +173,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         on_sheathe: Some(Arc::new(try_sheathe)),
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
+        on_sort: Some(Arc::new(sort)),
         sell_type: SellType::Sell,
         max_item_level: Signal::derive(move || {
             game_context.player_base_specs.read().max_area_level

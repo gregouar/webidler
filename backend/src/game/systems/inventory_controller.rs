@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemSlot, ItemSpecs},
+    item::{InventorySortType, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -132,4 +132,34 @@ pub fn remove_item_from_bag(
     } else {
         Err(AppError::NotFound)
     }
+}
+
+pub fn sort_bag(player_inventory: &mut PlayerInventory, sort_type: InventorySortType) {
+    player_inventory.bag.sort_by(|a, b| {
+        let rarity = || b.modifiers.rarity.cmp(&a.modifiers.rarity);
+        let item_type = || {
+            a.base
+                .categories
+                .iter()
+                .next_back()
+                .cmp(&b.base.categories.iter().next_back())
+                .then_with(|| a.base.slot.cmp(&b.base.slot))
+        };
+        // let item_level = || b.modifiers.level.cmp(&a.modifiers.level);
+        let req_level = || b.required_level.cmp(&a.required_level);
+
+        let ordering = match sort_type {
+            InventorySortType::Rarity => rarity().then_with(item_type).then_with(req_level),
+            InventorySortType::ItemType => item_type().then_with(rarity).then_with(req_level),
+            InventorySortType::ItemLevel => req_level().then_with(item_type).then_with(rarity),
+        };
+
+        ordering
+            // .then_with(|| a.required_level.cmp(&b.required_level))
+            .then_with(|| a.modifiers.level.cmp(&b.modifiers.level))
+            // .then_with(|| b.modifiers.upgrade_level.cmp(&a.modifiers.upgrade_level))
+            .then_with(|| b.modifiers.quality.total_cmp(&a.modifiers.quality))
+            // .then_with(|| a.modifiers.name.cmp(&b.modifiers.name))
+            .then_with(|| a.modifiers.base_item_id.cmp(&b.modifiers.base_item_id))
+    });
 }

@@ -5,8 +5,14 @@ use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 use shared::{
     data::area::AreaLevel,
     http::{
-        client::{InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest},
-        server::{InventoryDeleteResponse, InventoryEquipResponse, InventoryUnequipResponse},
+        client::{
+            InventoryDeleteRequest, InventoryEquipRequest, InventorySortRequest,
+            InventoryUnequipRequest,
+        },
+        server::{
+            InventoryDeleteResponse, InventoryEquipResponse, InventorySortResponse,
+            InventoryUnequipResponse,
+        },
     },
 };
 
@@ -27,10 +33,43 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/inventory/equip", post(post_equip_item))
         .route("/inventory/unequip", post(post_unequip_item))
         .route("/inventory/delete", post(post_delete_items))
+        .route("/inventory/sort", post(post_sort_inventory))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
         ))
+}
+
+pub async fn post_sort_inventory(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<InventorySortRequest>,
+) -> Result<Json<InventorySortResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, _, _, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    inventory_controller::sort_bag(&mut inventory, payload.sort_type);
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(InventorySortResponse { inventory }))
 }
 
 pub async fn post_equip_item(

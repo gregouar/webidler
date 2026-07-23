@@ -16,7 +16,10 @@ use crate::{
 
 use super::{
     game_data::GameInstanceData,
-    systems::{loot_controller, passives_controller, player_controller, skills_controller},
+    systems::{
+        inventory_controller, loot_controller, passives_controller, player_controller,
+        skills_controller,
+    },
 };
 
 /// Handle client events, return whether the game should stop or continue
@@ -170,6 +173,9 @@ fn handle_client_message(
                     item_index,
                 )
             }
+        }
+        ClientMessage::SortInventory(m) => {
+            inventory_controller::sort_bag(game_data.player_inventory.mutate(), m.sort_type);
         }
         // ClientMessage::FilterLoot(m) => {
         //     game_data.player_controller.preferred_loot = m.preferred_loot;

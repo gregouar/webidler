@@ -46,6 +46,14 @@ pub enum ItemRarity {
     Unique,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum InventorySortType {
+    #[default]
+    Rarity,
+    ItemType,
+    ItemLevel,
+}
+
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter, PartialOrd, Ord,
 )]

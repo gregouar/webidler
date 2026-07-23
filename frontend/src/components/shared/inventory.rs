@@ -5,7 +5,7 @@ use leptos_use::on_click_outside;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
+    item::{InventorySortType, ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -57,6 +57,7 @@ pub struct InventoryConfig {
     pub on_sheathe: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
     pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
+    pub on_sort: Option<Arc<dyn Fn(InventorySortType) + Send + Sync>>,
     pub sell_type: SellType,
     pub max_item_level: Signal<AreaLevel>,
     pub equip_filter: Signal<InventoryEquipFilter>,
@@ -363,24 +364,25 @@ pub fn EquippedItemContextMenu(
                 .on_sheathe
                 .clone()
                 .and_then(|on_sheathe| {
-                    is_weapon.then(|| {
-                        view! {
-                            <ActionMenuRow
-                                label_signal=Signal::derive(move || {
-                                    if is_sheathed.get() {
-                                        "Unsheathe".to_string()
-                                    } else {
-                                        "Sheathe".to_string()
+                    is_weapon
+                        .then(|| {
+                            view! {
+                                <ActionMenuRow
+                                    label_signal=Signal::derive(move || {
+                                        if is_sheathed.get() {
+                                            "Unsheathe".to_string()
+                                        } else {
+                                            "Sheathe".to_string()
+                                        }
+                                    })
+                                    tone=ActionMenuTone::Skill
+                                    on_click=move || {
+                                        on_sheathe(item_slot);
+                                        on_close.run(());
                                     }
-                                })
-                                tone=ActionMenuTone::Skill
-                                on_click=move || {
-                                    on_sheathe(item_slot);
-                                    on_close.run(());
-                                }
-                            />
-                        }
-                    })
+                                />
+                            }
+                        })
                 })}
             {inventory
                 .on_unequip
@@ -424,6 +426,9 @@ pub fn EquippedItemContextMenu(
 
 #[component]
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
+    let next_sort_type = RwSignal::new(InventorySortType::Rarity);
+    let sell_queue: SellQueue = expect_context();
+
     view! {
         // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
         <MenuCard class="h-full w-[70%]">
@@ -439,6 +444,33 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                             )
                         }}
                     </span>
+                    {inventory
+                        .on_sort
+                        .clone()
+                        .map(|on_sort| {
+                            view! {
+                                <MenuButton on:click=move |_| {
+                                    let sort_type = next_sort_type.get_untracked();
+                                    sell_queue.write().drain();
+                                    on_sort(sort_type);
+                                    next_sort_type
+                                        .set(
+                                            match sort_type {
+                                                InventorySortType::Rarity => InventorySortType::ItemType,
+                                                InventorySortType::ItemType => InventorySortType::ItemLevel,
+                                                InventorySortType::ItemLevel => InventorySortType::Rarity,
+                                            },
+                                        );
+                                }>"Sort"// {move || {
+                                // match next_sort_type.get() {
+                                // InventorySortType::Rarity => "Sort: Rarity",
+                                // InventorySortType::ItemType => "Sort: Type",
+                                // InventorySortType::ItemLevel => "Sort: Level",
+                                // }
+                                // }}
+                                </MenuButton>
+                            }
+                        })}
                 </div>
 
                 // {inventory

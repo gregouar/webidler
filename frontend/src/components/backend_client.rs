@@ -15,11 +15,12 @@ use shared::{
             BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
             EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
             ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
-            InventoryEquipRequest, InventoryUnequipRequest, RejectMarketItemRequest,
-            ResetPasswordRequest, SaveFavoriteSkillsRequest, SavePassivesRequest,
-            SaveSkillMasteryUpgradesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
-            SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
-            UpdateAccountRequest, UpdateCharacterRequest, UpgradeStashRequest,
+            InventoryEquipRequest, InventorySortRequest, InventoryUnequipRequest,
+            RejectMarketItemRequest, ResetPasswordRequest, SaveFavoriteSkillsRequest,
+            SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SellMarketItemRequest,
+            SignInRequest, SignUpRequest, SocketPassiveRequest, StoreStashItemRequest,
+            TakeStashItemRequest, UpdateAccountRequest, UpdateCharacterRequest,
+            UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
@@ -30,11 +31,12 @@ use shared::{
             GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
             GetSkillsResponse, GetStatusesResponse, GetUserCharactersResponse,
             GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
-            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
-            RejectMarketItemResponse, ResetPasswordResponse, SaveFavoriteSkillsResponse,
-            SavePassivesResponse, SaveSkillMasteryUpgradesResponse, SellMarketItemResponse,
-            SignInResponse, SignUpResponse, SocketPassiveResponse, StoreStashItemResponse,
-            TakeStashItemResponse, UpdateAccountResponse, UpgradeStashResponse,
+            InventorySortResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
+            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
+            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
+            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
+            UpgradeStashResponse,
         },
     },
 };
@@ -418,6 +420,13 @@ impl BackendClient {
         request: &InventoryDeleteRequest,
     ) -> Result<InventoryDeleteResponse, BackendError> {
         self.post_auth("inventory/delete", request).await
+    }
+
+    pub async fn inventory_sort(
+        &self,
+        request: &InventorySortRequest,
+    ) -> Result<InventorySortResponse, BackendError> {
+        self.post_auth("inventory/sort", request).await
     }
 
     // Protected

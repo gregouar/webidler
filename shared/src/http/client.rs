@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
-        item::{ItemCategory, ItemSlot},
+        item::{InventorySortType, ItemCategory, ItemSlot},
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
@@ -249,4 +249,10 @@ pub struct InventoryUnequipRequest {
 pub struct InventoryDeleteRequest {
     pub character_id: UserCharacterId,
     pub item_indexes: Vec<u8>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventorySortRequest {
+    pub character_id: UserCharacterId,
+    pub sort_type: InventorySortType,
 }

@@ -292,3 +292,8 @@ pub struct InventoryUnequipResponse {
 pub struct InventoryDeleteResponse {
     pub inventory: PlayerInventory,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventorySortResponse {
+    pub inventory: PlayerInventory,
+}
