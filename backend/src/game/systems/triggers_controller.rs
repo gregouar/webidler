@@ -52,18 +52,28 @@ pub fn apply_trigger_effects(
             continue;
         }
 
+        let owner_id = trigger_context
+            .owned_trigger
+            .owner
+            .unwrap_or(CharacterId::Player);
         let (target_id, attacker) = match trigger_effect.target {
             TriggerTarget::SameTarget => (trigger_context.target, trigger_context.source),
             TriggerTarget::Source => (trigger_context.source, trigger_context.target),
-            TriggerTarget::Me => (
-                trigger_context
-                    .owned_trigger
-                    .owner
-                    .unwrap_or(CharacterId::Player),
-                trigger_context
-                    .owned_trigger
-                    .owner
-                    .unwrap_or(CharacterId::Player),
+            TriggerTarget::Me => (owner_id, owner_id),
+            TriggerTarget::Enemy => (
+                match owner_id {
+                    CharacterId::Player => CharacterId::Monster(
+                        game_data
+                            .monster_states
+                            .iter()
+                            .enumerate()
+                            .find(|(_, monster_state)| monster_state.character_state.is_alive)
+                            .map(|(i, _)| i)
+                            .unwrap_or_default(),
+                    ),
+                    CharacterId::Monster(_) => CharacterId::Player,
+                },
+                owner_id,
             ),
         };
 

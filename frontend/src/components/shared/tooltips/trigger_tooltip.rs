@@ -62,8 +62,12 @@ pub fn format_trigger(
         }
     });
 
-    let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single)
-        .then(|| format!(", {}", shape_str(trigger.trigger_effect.skill_shape)));
+    let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single).then(|| {
+        format!(
+            ", targeting {}",
+            shape_str(trigger.trigger_effect.skill_shape)
+        )
+    });
 
     // let name_str = trigger_status_name.map(|name| format!("{} do ", name));
 
@@ -289,7 +293,11 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
                 }
                 _ => format!("On Evaded {}", format_status_trigger(status_trigger)),
             },
-            _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+            _ => match &status_trigger.skill_type {
+                Some(SkillType::Blessing) => "On Blessed".into(),
+                Some(SkillType::Curse) => "On Cursed".into(),
+                _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+            },
         },
         EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
     }
@@ -378,6 +386,7 @@ fn trigger_target_str(trigger_target: TriggerTarget) -> &'static str {
         TriggerTarget::SameTarget => "Same Target",
         TriggerTarget::Source => "Source",
         TriggerTarget::Me => "Self",
+        TriggerTarget::Enemy => "Enemies",
     }
 }
 

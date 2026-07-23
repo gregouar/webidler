@@ -1,107 +1,29 @@
 {
   "entries": [
-    {
-      "item_id": "spiked_mace",
-      "weight": 16000
-    },
-    {
-      "item_id": "nasal_helm",
-      "weight": 16000
-    },
-    {
-      "item_id": "brigandine",
-      "weight": 16000
-    },
-    {
-      "item_id": "brigandine_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "leather_gauntlets",
-      "weight": 16000
-    },
-    {
-      "item_id": "iron_shod_boots",
-      "weight": 16000
-    },
-    {
-      "item_id": "bardiche",
-      "weight": 16000
-    },
-    {
-      "item_id": "bardiche_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "light_crossbow",
-      "weight": 16000
-    },
-    {
-      "item_id": "decorated_wand",
-      "weight": 16000
-    },
-    {
-      "item_id": "decorated_wand_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "targe",
-      "weight": 16000
-    },
-    {
-      "item_id": "throwing_shield",
-      "weight": 4999
-    },
-    {
-      "item_id": "seer_lens",
-      "weight": 16000
-    },
-    {
-      "item_id": "reinforced_cloak",
-      "weight": 16000
-    },
-    {
-      "item_id": "butcher_apron",
-      "weight": 4999
-    },
-    {
-      "item_id": "inlaid_ring",
-      "weight": 16000
-    },
-    {
-      "item_id": "inlaid_ring_unique",
-      "weight": 2499
-    },
-    {
-      "item_id": "inlaid_ring_unique_2",
-      "weight": 2499
-    },
-    {
-      "item_id": "crest_pendant",
-      "weight": 16000
-    },
-    {
-      "item_id": "jellyfish",
-      "weight": 4999
-    },
-    {
-      "item_id": "edict",
-      "weight": 400,
-      "min_area_level": 190
-    },
-    {
-      "item_id": "rune",
-      "weight": 1600,
-      "min_area_level": 190
-    },
-    {
-      "item_id": "rune_root",
-      "weight": 160,
-      "min_area_level": 190
-    },
-    {
-      "item_id": "rune_poison_fire",
-      "weight": 999
-    }
+    {"item_id": "spiked_mace",           "weight": 16000                       },
+    {"item_id": "nasal_helm",            "weight": 16000                       },
+    {"item_id": "brigandine",            "weight": 16000                       },
+    {"item_id": "brigandine_unique",     "weight":  4999                       },
+    {"item_id": "leather_gauntlets",     "weight": 16000                       },
+    {"item_id": "iron_shod_boots",       "weight": 16000                       },
+    {"item_id": "bardiche",              "weight": 16000                       },
+    {"item_id": "bardiche_unique",       "weight":  4999                       },
+    {"item_id": "light_crossbow",        "weight": 16000                       },
+    {"item_id": "decorated_wand",        "weight": 16000                       },
+    {"item_id": "decorated_wand_unique", "weight":  4999                       },
+    {"item_id": "targe",                 "weight": 16000                       },
+    {"item_id": "throwing_shield",       "weight":  4999                       },
+    {"item_id": "seer_lens",             "weight": 16000                       },
+    {"item_id": "reinforced_cloak",      "weight": 16000                       },
+    {"item_id": "butcher_apron",         "weight":  4999                       },
+    {"item_id": "inlaid_ring",           "weight": 16000                       },
+    {"item_id": "inlaid_ring_unique",    "weight":  2499                       },
+    {"item_id": "inlaid_ring_unique_2",  "weight":  2499                       },
+    {"item_id": "crest_pendant",         "weight": 16000                       },
+    {"item_id": "jellyfish",             "weight":  4999                       },
+    {"item_id": "edict",                 "weight":   400, "min_area_level": 190},
+    {"item_id": "rune",                  "weight":  1600, "min_area_level": 190},
+    {"item_id": "rune_root",             "weight":   160, "min_area_level": 190},
+    {"item_id": "rune_poison_fire",      "weight":   999                       }
   ]
 }

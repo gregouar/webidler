@@ -1,50 +1,38 @@
 {
-  "name": "Amelia, the Broodborne Witch",
-  "portrait": "monsters/witch/witch_2.webp",
-  "rarity": "Boss",
-  "max_life": 20000,
-  "size": "Gargantuan",
-  "armor": { "Physical": 300, "Fire": 300, "Poison": 300, "Storm": 300 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Amelia, the Broodborne Witch",
+  "portrait"          : "monsters/witch/witch_2.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 1000000,
+  "size"              : "Gargantuan",
+  "armor"             : {"Physical": 300, "Fire": 300, "Poison": 300, "Storm": 300},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Evil Cackling",
-      "icon": "skills/pointy_hat.svg",
+      "name"      : "Evil Cackling",
+      "icon"      : "skills/pointy_hat.svg",
       "skill_type": "Curse",
-      "cooldown": 10.0,
-      "targets": [
+      "cooldown"  : 10.0,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "witch_curse",
-                "value": 33
-              }
-            }
+            { "ApplyStatus": {"status_id": "witch_curse", "value": 33} }
           ]
         }
       ]
     },
     {
-      "name": "Grandmother's Slap",
-      "icon": "skills/claw.svg",
+      "name"      : "Grandmother's Slap",
+      "icon"      : "skills/claw.svg",
       "skill_type": "Attack",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 3.0,
+      "targets"   : [
         {
-          "range": "Melee",
+          "range"  : "Melee",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 40, 80 ]
-                }
+                "damage": { "Physical": [40, 80] }
               }
             }
           ]
@@ -52,19 +40,17 @@
       ]
     },
     {
-      "name": "Witch's Zap",
-      "icon": "skills/chain_lightning.svg",
+      "name"      : "Witch's Zap",
+      "icon"      : "skills/chain_lightning.svg",
       "skill_type": "Spell",
-      "cooldown": 5.0,
-      "targets": [
+      "cooldown"  : 5.0,
+      "targets"   : [
         {
-          "range": "Distance",
+          "range"  : "Distance",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 120 ]
-                }
+                "damage": { "Storm": [0, 120] }
               }
             }
           ]
@@ -72,21 +58,15 @@
       ]
     },
     {
-      "name": "Tasty Soup",
-      "icon": "skills/poison_cloud.svg",
+      "name"      : "Tasty Soup",
+      "icon"      : "skills/poison_cloud.svg",
       "skill_type": "Spell",
-      "cooldown": 8.0,
-      "targets": [
+      "cooldown"  : 8.0,
+      "targets"   : [
         {
-          "range": "Distance",
+          "range"  : "Distance",
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 32,
-                "escalation": 30
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 32, "escalation": 30} }
           ]
         }
       ]

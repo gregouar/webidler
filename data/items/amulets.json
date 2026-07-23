@@ -141,7 +141,8 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_id": "burn"
+                "status_id": "burn",
+                "debuff": null
               }
             }
           }
@@ -825,7 +826,7 @@
   "hourglass": {
     "name": "Sands of Time",
     "icon": "items/amulets/hourglass.webp",
-    "description": null,
+    "description": "Dynasties rise, kingdoms crumble, and even mountains return to dust. Their gold is buried, their names forgotten, but a single grain still glints beneath the endless march of time.",
     "slot": "Amulet",
     "extra_slots": [],
     "categories": [
@@ -840,6 +841,80 @@
         "modifier": "More",
         "scope": "Global",
         "value": 160.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "StatusFaster": {
+            "status_id": null,
+            "damage_type": "Any",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusEscalation": {
+            "status_id": null,
+            "damage_type": "Any",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusDuration": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": false,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": -50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": null,
+            "damage_type": "Any",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          250.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          400.0,
+          500.0
+        ],
         "ignore_quality": false
       }
     ],
@@ -859,7 +934,24 @@
         "stat_effect": {
           "stat": "GoldFind",
           "modifier": "More",
-          "value": 20.0
+          "value": 70.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_id": null,
+              "damage_type": "Any",
+              "debuff": null,
+              "skill_type": null,
+              "skill_id": null,
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
         }
       }
     ]

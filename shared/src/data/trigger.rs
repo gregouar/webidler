@@ -215,7 +215,7 @@ pub enum TriggerTarget {
     SameTarget,
     Source,
     Me,
-    // TODO: others?
+    Enemy,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

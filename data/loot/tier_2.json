@@ -1,121 +1,33 @@
 {
   "entries": [
-    {
-      "item_id": "padded_tunic_unique",
-      "weight": 3,
-      "min_area_level": 50
-    },
-    {
-      "item_id": "shortsword",
-      "weight": 2000
-    },
-    {
-      "item_id": "shortsword_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "leather_cap",
-      "weight": 2000
-    },
-    {
-      "item_id": "leather_cap_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "leather_armor",
-      "weight": 2000
-    },
-    {
-      "item_id": "leather_armor_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "leather_gloves",
-      "weight": 2000
-    },
-    {
-      "item_id": "leather_gloves_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "leather_boots",
-      "weight": 2000
-    },
-    {
-      "item_id": "leather_boots_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "woodcutter_axe",
-      "weight": 2000
-    },
-    {
-      "item_id": "woodcutter_axe_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "hunting_bow",
-      "weight": 2000
-    },
-    {
-      "item_id": "hunting_bow_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "wand",
-      "weight": 2000
-    },
-    {
-      "item_id": "wand_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "small_round_shield",
-      "weight": 2000
-    },
-    {
-      "item_id": "small_round_shield_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "spellbook",
-      "weight": 2000
-    },
-    {
-      "item_id": "spellbook_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "hooded_wrap",
-      "weight": 2000
-    },
-    {
-      "item_id": "hooded_wrap_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "silver_ring",
-      "weight": 2000
-    },
-    {
-      "item_id": "silver_ring_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "medallion",
-      "weight": 2000
-    },
-    {
-      "item_id": "medallion_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "rune",
-      "weight": 200
-    },
-    {
-      "item_id": "rune_gilded",
-      "weight": 499
-    }
+    {"item_id": "padded_tunic_unique",       "weight":    3, "min_area_level": 50},
+    {"item_id": "shortsword",                "weight": 2000                      },
+    {"item_id": "shortsword_unique",         "weight": 4999                      },
+    {"item_id": "leather_cap",               "weight": 2000                      },
+    {"item_id": "leather_cap_unique",        "weight": 4999                      },
+    {"item_id": "leather_armor",             "weight": 2000                      },
+    {"item_id": "leather_armor_unique",      "weight": 4999                      },
+    {"item_id": "leather_gloves",            "weight": 2000                      },
+    {"item_id": "leather_gloves_unique",     "weight": 4999                      },
+    {"item_id": "leather_boots",             "weight": 2000                      },
+    {"item_id": "leather_boots_unique",      "weight": 4999                      },
+    {"item_id": "woodcutter_axe",            "weight": 2000                      },
+    {"item_id": "woodcutter_axe_unique",     "weight": 4999                      },
+    {"item_id": "hunting_bow",               "weight": 2000                      },
+    {"item_id": "hunting_bow_unique",        "weight": 4999                      },
+    {"item_id": "wand",                      "weight": 2000                      },
+    {"item_id": "wand_unique",               "weight": 4999                      },
+    {"item_id": "small_round_shield",        "weight": 2000                      },
+    {"item_id": "small_round_shield_unique", "weight": 4999                      },
+    {"item_id": "spellbook",                 "weight": 2000                      },
+    {"item_id": "spellbook_unique",          "weight": 4999                      },
+    {"item_id": "hooded_wrap",               "weight": 2000                      },
+    {"item_id": "hooded_wrap_unique",        "weight": 4999                      },
+    {"item_id": "silver_ring",               "weight": 2000                      },
+    {"item_id": "silver_ring_unique",        "weight": 4999                      },
+    {"item_id": "medallion",                 "weight": 2000                      },
+    {"item_id": "medallion_unique",          "weight": 4999                      },
+    {"item_id": "rune",                      "weight":  200                      },
+    {"item_id": "rune_gilded",               "weight":  499                      }
   ]
 }
