@@ -1,568 +1,344 @@
 {
-  "grigri": {
-    "name": "Gri-Gri",
-    "icon": "items/focuses/grigri.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "grigri"           : {
+    "name"           : "Gri-Gri",
+    "icon"           : "items/focuses/grigri.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 0,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 20.0, "ignore_quality": false}
     ],
-    "min_area_level": 0,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 20.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "spellbook": {
-    "name": "Spellbook",
-    "icon": "items/focuses/spellbook.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "spellbook"        : {
+    "name"           : "Spellbook",
+    "icon"           : "items/focuses/spellbook.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 40,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 30.0, "ignore_quality": false}
     ],
-    "min_area_level": 40,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "spellbook_unique": {
-    "name": "Vile Codex",
-    "icon": "items/focuses/vile_codex.webp",
-    "description": "Each cursed name written in its pages rots faster than flesh should.",
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
-    ],
-    "min_area_level": 50,
-    "rarity": "Unique",
-    "affixes": [
+  "spellbook_unique" : {
+    "name"           : "Vile Codex",
+    "icon"           : "items/focuses/vile_codex.webp",
+    "description"    : "Each cursed name written in its pages rots faster than flesh should.",
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 50,
+    "rarity"         : "Unique",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "ignore_quality": false},
       {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : [40.0, 60.0],
         "ignore_quality": true
       },
+      { "stat": "ManaRegen", "modifier": "Flat", "scope": "Global", "value": [3.0, 5.0], "ignore_quality": true },
       {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          3.0,
-          5.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
+        "stat"          : {"Armor": "Poison"},
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : [40.0, 60.0],
         "ignore_quality": true
       }
     ],
-    "triggers": [
+    "triggers"       : [
       {
-        "OnKill": {
+        "OnKill"                : {
           "conditions": [
-            {
-              "HasStatus": {
-                "status_id": null,
-                "damage_type": null,
-                "skill_type": "Curse",
-                "not": false
-              }
-            }
+            { "HasStatus": {"status_id": null, "damage_type": null, "skill_type": "Curse", "not": false} }
           ]
         },
-        "description": null,
-        "trigger_id": "vile_codex",
-        "target": "Me",
-        "modifiers": [],
+        "description"           : null,
+        "trigger_id"            : "vile_codex",
+        "target"                : "Me",
+        "modifiers"             : [],
         "inherit_source_effects": false,
-        "trigger_propagate": false,
-        "skill_type": "Curse",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
-        "effects": [
+        "trigger_propagate"     : false,
+        "skill_type"            : "Curse",
+        "skill_range"           : "Melee",
+        "skill_shape"           : "Single",
+        "effects"               : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "vile_codex",
-              "value": 200.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "damage_type": null,
-              "avoidable": null,
+            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "vile_codex",
+              "value"                : 200.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "damage_type"          : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application"   : false
           }
         ]
       }
     ],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      100,
-      150,
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
+      { "scope": "Global", "stat_effect": {"stat": "Mana", "modifier": "Flat", "value": 10.0} },
+      { "scope": "Global", "stat_effect": {"stat": "ManaRegen", "modifier": "Flat", "value": 2.0} },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": "Mana",
-          "modifier": "Flat",
-          "value": 10.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": "ManaRegen",
-          "modifier": "Flat",
-          "value": 2.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Poison",
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 25.0
+          "value"   : 25.0
         }
       }
     ]
   },
-  "focus_stone": {
-    "name": "Focus Stone",
-    "icon": "items/focuses/focus_stone.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "focus_stone"      : {
+    "name"           : "Focus Stone",
+    "icon"           : "items/focuses/focus_stone.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 90,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "ignore_quality": false}
     ],
-    "min_area_level": 90,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "sandal": {
-    "name": "Eternal Flame Slipper",
-    "icon": "items/focuses/sandal.webp",
-    "description": "The otter swore it was a masterpiece of wizardry.",
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
-    ],
-    "min_area_level": 100,
-    "rarity": "Unique",
-    "affixes": [
+  "sandal"           : {
+    "name"           : "Eternal Flame Slipper",
+    "icon"           : "items/focuses/sandal.webp",
+    "description"    : "The otter swore it was a masterpiece of wizardry.",
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 100,
+    "rarity"         : "Unique",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "ignore_quality": false},
       {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
-        ],
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : [80.0, 120.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "CritChance": {
-            "skill_type": "Spell",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
+        "stat"          : { "CritChance": {"skill_type": "Spell", "skill_id": null} },
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [40.0, 60.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "CritDamage": {
-            "skill_type": "Spell",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
-        ],
+        "stat"          : { "CritDamage": {"skill_type": "Spell", "skill_id": null} },
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [50.0, 100.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          140.0
-        ],
+        "stat"          : {"Armor": "Fire"},
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : [100.0, 140.0],
         "ignore_quality": true
       },
       {
-        "stat": {
+        "stat"          : {
           "SkillTargetModifier": {
             "skill_type": null,
-            "skill_id": "fireball",
-            "range": null,
-            "shape": null,
-            "repeat": {
-              "min_value": 2,
-              "max_value": 2,
-              "target": "Any"
-            }
+            "skill_id"  : "fireball",
+            "range"     : null,
+            "shape"     : null,
+            "repeat"    : {"min_value": 2, "max_value": 2, "target": "Any"}
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 1.0,
         "ignore_quality": true
       }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      150,
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
+      { "scope": "Global", "stat_effect": {"stat": "Mana", "modifier": "Flat", "value": 10.0} },
       {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": "Mana",
-          "modifier": "Flat",
-          "value": 10.0
-        }
+        "scope"      : "Global",
+        "stat_effect": { "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": 25.0 }
       },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Armor": "Fire"
-          },
-          "modifier": "Flat",
-          "value": 25.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "CritChance": {
-              "skill_type": "Spell",
-              "skill_id": null
-            }
-          },
+          "stat"    : { "CritChance": {"skill_type": "Spell", "skill_id": null} },
           "modifier": "Increased",
-          "value": 10.0
+          "value"   : 10.0
         }
       },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "CritDamage": {
-              "skill_type": "Spell",
-              "skill_id": null
-            }
-          },
+          "stat"    : { "CritDamage": {"skill_type": "Spell", "skill_id": null} },
           "modifier": "Increased",
-          "value": 20.0
+          "value"   : 20.0
         }
       },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Fire",
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 25.0
+          "value"   : 25.0
         }
       }
     ]
   },
-  "engraved_tablet": {
-    "name": "Engraved Tablet",
-    "icon": "items/focuses/engraved_tablet.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "engraved_tablet"  : {
+    "name"           : "Engraved Tablet",
+    "icon"           : "items/focuses/engraved_tablet.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 140,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 50.0, "ignore_quality": false}
     ],
-    "min_area_level": 140,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "rose_bleed": {
-    "name": "Briar Rose",
-    "icon": "items/focuses/rose_bleed.webp",
-    "description": "Where envy took root, only thorns would ever bloom.",
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
-    ],
-    "min_area_level": 150,
-    "rarity": "Unique",
-    "affixes": [
+  "rose_bleed"       : {
+    "name"           : "Briar Rose",
+    "icon"           : "items/focuses/rose_bleed.webp",
+    "description"    : "Where envy took root, only thorns would ever bloom.",
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 150,
+    "rarity"         : "Unique",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 50.0, "ignore_quality": false},
       {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
+        "stat"          : {"Armor": "Poison"},
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : [100.0, 150.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Physical", "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          120.0,
-          160.0
-        ],
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : [120.0, 160.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "skill_type": null,
-            "skill_id": null
-          }
+        "stat"          : {
+          "StatusDuration": {"status_id": null, "damage_type": null, "skill_type": null, "skill_id": null}
         },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [40.0, 60.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": "bleed",
-            "damage_type": null,
-            "skill_type": null,
-            "skill_id": null
-          }
+        "stat"          : {
+          "StatusEscalation": {"status_id": "bleed", "damage_type": null, "skill_type": null, "skill_id": null}
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 50.0,
         "ignore_quality": true
       }
     ],
-    "triggers": [
+    "triggers"       : [
       {
         "OnHit": {
-          "skill_type": "Spell",
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": true,
+          "skill_type"  : "Spell",
+          "range"       : null,
+          "is_crit"     : null,
+          "is_blocked"  : null,
+          "is_hurt"     : true,
           "is_triggered": null,
-          "damage_type": "Physical",
-          "skill_ids": null,
-          "conditions": []
+          "damage_type" : "Physical",
+          "skill_ids"   : null,
+          "conditions"  : []
         },
         "description": null,
         "trigger_id": "rose_bleed",
         "target": "SameTarget",
         "modifiers": [
           {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"    : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
             "modifier": "Flat",
-            "factor": 0.5,
-            "source": {
-              "HitDamage": "Physical"
-            }
+            "factor"  : 0.5,
+            "source"  : {"HitDamage": "Physical"}
           }
         ],
         "inherit_source_effects": false,
@@ -572,244 +348,149 @@
         "skill_shape": "Single",
         "effects": [
           {
-            "success_chance": {
-              "value": 50.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "bleed",
-              "value": 0.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "damage_type": null,
-              "avoidable": null,
+            "success_chance"         : {"value": 50.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "bleed",
+              "value"                : 0.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "damage_type"          : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [
+            "ignore_stat_effects"    : [
               {
                 "Damage": {
-                  "skill_type": "Spell",
-                  "skill_id": null,
+                  "skill_type" : "Spell",
+                  "skill_id"   : null,
                   "damage_type": "Physical",
-                  "min_max": null,
-                  "is_hit": null
+                  "min_max"    : null,
+                  "is_hit"     : null
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application"   : false
           }
         ]
       }
     ],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
+      { "scope": "Global", "stat_effect": {"stat": "Mana", "modifier": "Flat", "value": 10.0} },
       {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": "Mana",
-          "modifier": "Flat",
-          "value": 10.0
-        }
+        "scope"      : "Global",
+        "stat_effect": { "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": 25.0 }
       },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Armor": "Poison"
-          },
-          "modifier": "Flat",
-          "value": 25.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Physical",
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Physical", "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 25.0
+          "value"   : 25.0
         }
       },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "StatusDuration": {
-              "status_id": null,
-              "damage_type": null,
-              "skill_type": null,
-              "skill_id": null
-            }
+          "stat"    : {
+            "StatusDuration": {"status_id": null, "damage_type": null, "skill_type": null, "skill_id": null}
           },
           "modifier": "Increased",
-          "value": 10.0
+          "value"   : 10.0
         }
       }
     ]
   },
-  "seer_lens": {
-    "name": "Seer's Lens",
-    "icon": "items/focuses/seer_lens.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "seer_lens"        : {
+    "name"           : "Seer's Lens",
+    "icon"           : "items/focuses/seer_lens.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 190,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 60.0, "ignore_quality": false}
     ],
-    "min_area_level": 190,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "treasure_idol": {
-    "name": "Idol of the Serpent Queen",
-    "icon": "items/focuses/treasure_idol.webp",
-    "description": "Her children drank the poison willingly. The wise died quickly.",
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
-    ],
-    "min_area_level": 200,
-    "rarity": "Unique",
-    "affixes": [
+  "treasure_idol"    : {
+    "name"           : "Idol of the Serpent Queen",
+    "icon"           : "items/focuses/treasure_idol.webp",
+    "description"    : "Her children drank the poison willingly. The wise died quickly.",
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 200,
+    "rarity"         : "Unique",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 60.0, "ignore_quality": false},
+      { "stat": "Mana", "modifier": "Increased", "scope": "Global", "value": [12.0, 16.0], "ignore_quality": true },
+      { "stat": "ManaRegen", "modifier": "Flat", "scope": "Global", "value": [8.0, 12.0], "ignore_quality": true },
       {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": "Mana",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          12.0,
-          16.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": "poison",
-            "damage_type": null,
-            "skill_type": null,
-            "skill_id": null
-          }
+        "stat"          : {
+          "StatusDuration": {"status_id": "poison", "damage_type": null, "skill_type": null, "skill_id": null}
         },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [40.0, 60.0],
         "ignore_quality": true
       },
       {
-        "stat": {
+        "stat"          : {
           "StatConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"               : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
             },
-            "conditions": [
-              "LowLife"
-            ],
+            "conditions"         : ["LowLife"],
             "conditions_duration": 0
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 400.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 400.0,
         "ignore_quality": true
       }
     ],
-    "triggers": [
+    "triggers"       : [
       {
         "OnApplyStatus": {
-          "skill_type": null,
-          "status_id": "poison",
-          "damage_type": null,
+          "skill_type"  : null,
+          "status_id"   : "poison",
+          "damage_type" : null,
           "is_triggered": null,
-          "is_evaded": null
+          "is_evaded"   : null
         },
         "description": "When not on Low Life, inflict a stack a Venom on yourself dealing 20 Poison Damage per Second for the same Duration. You gain 50% More Poison Damage per stack of Venom.",
         "trigger_id": "treasure_idol",
         "target": "Me",
         "modifiers": [
           {
-            "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
-                "skill_type": null,
-                "skill_id": null
-              }
+            "stat"    : {
+              "StatusDuration": {"status_id": null, "damage_type": null, "skill_type": null, "skill_id": null}
             },
             "modifier": "Flat",
-            "factor": 1.0,
-            "source": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
-                "skill_type": null
-              }
-            }
+            "factor"  : 1.0,
+            "source"  : { "StatusDuration": {"status_id": "poison", "damage_type": null, "skill_type": null} }
           }
         ],
         "inherit_source_effects": false,
@@ -819,362 +500,224 @@
         "skill_shape": "Single",
         "effects": [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "treasure_idol",
-              "value": 1.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "damage_type": null,
-              "avoidable": null,
+            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "treasure_idol",
+              "value"                : 1.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "damage_type"          : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [
+            "ignore_stat_effects"    : [
               {
                 "StatusPower": {
-                  "status_id": null,
+                  "status_id"  : null,
                   "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
+                  "skill_type" : null,
+                  "skill_id"   : null,
+                  "min_max"    : null
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
+                "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
               },
-              {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              }
+              { "StatusEscalation": {"status_id": null, "damage_type": null, "skill_type": null, "skill_id": null} },
+              { "StatusDuration": {"status_id": null, "damage_type": null, "skill_type": null, "skill_id": null} }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application"   : false
           }
         ]
       }
     ],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [260, 330, 410, 500, 600],
     "upgrade_effects": [
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": "Mana",
-          "modifier": "Flat",
-          "value": 10.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": "ManaRegen",
-          "modifier": "Flat",
-          "value": 2.0
-        }
-      }
+      { "scope": "Global", "stat_effect": {"stat": "Mana",      "modifier": "Flat", "value": 10.0} },
+      { "scope": "Global", "stat_effect": {"stat": "ManaRegen", "modifier": "Flat", "value":  2.0} }
     ]
   },
-  "ritual_orb": {
-    "name": "Ritual Orb",
-    "icon": "items/focuses/ritual_orb.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "ritual_orb"       : {
+    "name"           : "Ritual Orb",
+    "icon"           : "items/focuses/ritual_orb.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 250,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 70.0, "ignore_quality": false}
     ],
-    "min_area_level": 250,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 70.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "ritual_orb_unique": {
-    "name": "Zael's Eye",
-    "icon": "items/focuses/dragon_eye.webp",
-    "description": "Zael's gaze weighed the sky and found it wanting.",
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
-    ],
-    "min_area_level": 260,
-    "rarity": "Unique",
-    "affixes": [
+    "name"           : "Zael's Eye",
+    "icon"           : "items/focuses/dragon_eye.webp",
+    "description"    : "Zael's gaze weighed the sky and found it wanting.",
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 260,
+    "rarity"         : "Unique",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 70.0, "ignore_quality": false},
       {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 70.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          150.0,
-          200.0
-        ],
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : [150.0, 200.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          60.0,
-          80.0
-        ],
+        "stat"          : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [60.0, 80.0],
         "ignore_quality": true
       },
       {
-        "stat": {
-          "CritDamage": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
-        ],
+        "stat"          : { "CritDamage": {"skill_type": null, "skill_id": null} },
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [100.0, 200.0],
         "ignore_quality": true
       },
       {
-        "stat": {
+        "stat"          : {
           "Lucky": {
             "skill_type": null,
-            "skill_id": null,
-            "roll_type": {
-              "Damage": {
-                "damage_type": null
-              }
-            }
+            "skill_id"  : null,
+            "roll_type" : { "Damage": {"damage_type": null} }
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 100.0,
         "ignore_quality": true
       }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      330,
-      410,
-      500,
-      600
-    ],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [330, 410, 500, 600],
     "upgrade_effects": [
+      { "scope": "Global", "stat_effect": {"stat": "Mana", "modifier": "Flat", "value": 10.0} },
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": "Mana",
-          "modifier": "Flat",
-          "value": 10.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": "Spell",
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 25.0
+          "value"   : 25.0
         }
       }
     ]
   },
-  "focus_7": {
-    "name": "Grimoire",
-    "icon": "items/focuses/grimoire.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "focus_7"          : {
+    "name"           : "Grimoire",
+    "icon"           : "items/focuses/grimoire.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 320,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 80.0, "ignore_quality": false}
     ],
-    "min_area_level": 320,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 80.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "focus_8": {
-    "name": "Astrolabe",
-    "icon": "items/focuses/astrolabe.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "focus_8"          : {
+    "name"           : "Astrolabe",
+    "icon"           : "items/focuses/astrolabe.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 400,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 90.0, "ignore_quality": false}
     ],
-    "min_area_level": 400,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 90.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "focus_9": {
-    "name": "Alchemical Jewel",
-    "icon": "items/focuses/alchemical_jewel.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "focus_9"          : {
+    "name"           : "Alchemical Jewel",
+    "icon"           : "items/focuses/alchemical_jewel.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 490,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 100.0, "ignore_quality": false}
     ],
-    "min_area_level": 490,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "focus_10": {
-    "name": "Phylactery",
-    "icon": "items/focuses/phylactery.webp",
-    "description": null,
-    "slot": "Shield",
-    "extra_slots": [],
-    "categories": [
-      "Focus"
+  "focus_10"         : {
+    "name"           : "Phylactery",
+    "icon"           : "items/focuses/phylactery.webp",
+    "description"    : null,
+    "slot"           : "Shield",
+    "extra_slots"    : [],
+    "categories"     : ["Focus"],
+    "min_area_level" : 590,
+    "rarity"         : "Normal",
+    "affixes"        : [
+      {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 120.0, "ignore_quality": false}
     ],
-    "min_area_level": 590,
-    "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 120.0,
-        "ignore_quality": false
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   }
 }
