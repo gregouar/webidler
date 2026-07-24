@@ -23,7 +23,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 20.0,
+        "value": 30.0,
         "ignore_quality": false
       }
     ],
@@ -60,7 +60,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 40.0,
+        "value": 60.0,
         "ignore_quality": false
       }
     ],
@@ -97,7 +97,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 40.0,
+        "value": 60.0,
         "ignore_quality": false
       },
       {
@@ -179,14 +179,14 @@
               "duration": null,
               "escalation": null,
               "max_stacks": null,
-              "damage_type": null,
               "avoidable": null,
               "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -220,7 +220,7 @@
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -257,7 +257,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 60.0,
+        "value": 90.0,
         "ignore_quality": false
       }
     ],
@@ -294,7 +294,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 80.0,
+        "value": 120.0,
         "ignore_quality": false
       }
     ],
@@ -331,7 +331,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 80.0,
+        "value": 120.0,
         "ignore_quality": false
       },
       {
@@ -438,7 +438,7 @@
             }
           },
           "modifier": "More",
-          "value": 20.0
+          "value": 30.0
         }
       },
       {
@@ -454,7 +454,7 @@
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 35.0
         }
       },
       {
@@ -470,7 +470,7 @@
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 35.0
         }
       },
       {
@@ -512,7 +512,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": 150.0,
         "ignore_quality": false
       }
     ],
@@ -549,7 +549,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": 150.0,
         "ignore_quality": false
       },
       {
@@ -565,8 +565,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          100.0,
-          150.0
+          150.0,
+          250.0
         ],
         "ignore_quality": true
       },
@@ -653,7 +653,7 @@
             }
           },
           "modifier": "More",
-          "value": 40.0
+          "value": 70.0
         }
       }
     ]
@@ -682,7 +682,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 120.0,
+        "value": 180.0,
         "ignore_quality": false
       }
     ],
@@ -719,7 +719,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 120.0,
+        "value": 180.0,
         "ignore_quality": false
       },
       {
@@ -804,7 +804,7 @@
             }
           },
           "modifier": "More",
-          "value": 45.0
+          "value": 55.0
         }
       },
       {
@@ -820,7 +820,7 @@
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 35.0
         }
       }
     ]
@@ -849,7 +849,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 140.0,
+        "value": 210.0,
         "ignore_quality": false
       }
     ],
@@ -886,7 +886,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 160.0,
+        "value": 240.0,
         "ignore_quality": false
       }
     ],
@@ -923,7 +923,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 180.0,
+        "value": 270.0,
         "ignore_quality": false
       }
     ],
@@ -960,7 +960,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 200.0,
+        "value": 300.0,
         "ignore_quality": false
       }
     ],

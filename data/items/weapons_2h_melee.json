@@ -228,7 +228,8 @@
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -330,6 +331,62 @@
     "min_area_level": 90,
     "rarity": "Normal",
     "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          8.0,
+          26.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "spider_hammer": {
+    "name": "The Hatchery",
+    "icon": "items/weapons_2h/spider_hammer.webp",
+    "description": "Every wound left open is a cradle for the next brood.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "StatusEscalation": {
+            "status_id": "open_wound",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -816,13 +873,13 @@
             },
             "ignore_stat_effects": [
               {
-                "CritDamage": {
+                "CritChance": {
                   "skill_type": null,
                   "skill_id": null
                 }
               },
               {
-                "CritChance": {
+                "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
                 }
@@ -839,7 +896,8 @@
             ],
             "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application": false,
+            "description": null
           }
         ]
       }
