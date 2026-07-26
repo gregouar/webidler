@@ -1,7 +1,7 @@
 {
   "edict"             : {
     "name"           : "Lesser Edict",
-    "icon"           : "items/maps/edict.webp",
+    "icon"           : "items/maps/edict_1.webp",
     "description"    : null,
     "slot"           : null,
     "extra_slots"    : [],

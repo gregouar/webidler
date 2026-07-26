@@ -119,7 +119,7 @@ fn handle_hit_event<'a>(
 
             if !compare_options(&hit_trigger.skill_type, &Some(hit_event.skill_type))
                 || !compare_options(&hit_trigger.range, &Some(hit_event.range))
-                || !compare_options(&hit_trigger.is_crit, &Some(hit_event.is_crit))
+                || !compare_options(&hit_trigger.is_crit, &Some(hit_event.crit_damage.is_some()))
                 || !compare_options(&hit_trigger.is_blocked, &Some(hit_event.is_blocked))
                 || !compare_options(&hit_trigger.is_hurt, &Some(hit_event.is_hurt))
                 || !compare_options(

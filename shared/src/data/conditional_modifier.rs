@@ -32,6 +32,12 @@ pub enum Condition {
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
+    StatusDuration {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Slowed,
     // StatusValue(Option<StatStatusType>),
     // StatusDuration(Option<StatStatusType>),

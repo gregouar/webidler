@@ -34,7 +34,7 @@ pub fn attack_character(
     damage: HashMap<DamageType, NonNegative>,
     skill_type: SkillType,
     range: SkillRange,
-    is_crit: bool,
+    crit_damage: Option<f64>,
     unblockable: bool,
     skill_id: &str,
     trigger_depth: u8,
@@ -67,7 +67,7 @@ pub fn attack_character(
 
     if is_hurt {
         target_state.just_hurt = true;
-        if is_crit {
+        if crit_damage.is_some() {
             target_state.just_hurt_crit = true;
         }
     }
@@ -89,7 +89,7 @@ pub fn attack_character(
         skill_type,
         range,
         damage: event_damage,
-        is_crit,
+        crit_damage,
         is_blocked,
         is_hurt,
         skill_id: skill_id.into(),

@@ -244,8 +244,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 5,
-            "upgrade_value": 5,
+            "value"        : 10,
+            "upgrade_value": 10,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "poison_coating"} },
               "modifier": "Increased"

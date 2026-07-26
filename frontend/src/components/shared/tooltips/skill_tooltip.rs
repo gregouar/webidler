@@ -434,7 +434,7 @@ fn format_escalation(escalation: f64) -> Option<impl IntoView + use<>> {
         view! {
             ", Escalating by "
             {format_number(escalation)}
-            "% More Damage per Second"
+            "% More Damage per second"
         }
     })
 }

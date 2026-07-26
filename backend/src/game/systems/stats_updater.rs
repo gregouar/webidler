@@ -157,6 +157,24 @@ pub fn check_condition(
                 }
             })
             .sum::<usize>() as f64,
+        Condition::StatusDuration {
+            status_filter,
+            skill_type,
+        } => character_state
+            .statuses
+            .iter()
+            .filter_map(|(status_id, status_states)| {
+                let status_specs = statuses_store.get(status_id)?;
+                status_filter
+                    .is_match_with_status(status_id, status_specs.damage_type, status_specs.debuff)
+                    .then_some(status_states)
+            })
+            .flatten()
+            .filter(|status_state| {
+                skill_type.is_none_or(|skill_type| status_state.skill_type == skill_type)
+            })
+            .map(|status_state| status_state.duration.get())
+            .fold(0.0_f64, f64::max),
         Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
             let Some(status_specs) = statuses_store.get(status_id) else {
                 return false;

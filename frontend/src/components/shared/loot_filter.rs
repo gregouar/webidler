@@ -627,7 +627,7 @@ pub fn EditRule(
                         id="item_damages"
                         label="Damage:"
                         input_type="number"
-                        placeholder="Damage per Second"
+                        placeholder="Damage per second"
                         bind=item_damages
                     />
                     <ValidatedInput

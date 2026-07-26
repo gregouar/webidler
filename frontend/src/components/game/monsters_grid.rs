@@ -738,7 +738,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
                     <span class="font-semibold">{format!("{:.1}%", life_regen)}</span>
-                    " Life Regenerated per Second"
+                    " Life Regenerated per second"
                 </span>
             </div>
         }

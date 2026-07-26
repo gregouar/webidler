@@ -697,12 +697,12 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
-            "{} Life Regeneration per Second",
+            "{} Life Regeneration per second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
         StatType::Mana => format!("{} Maximum Mana", format_adds_removes(value, false, "")),
         StatType::ManaRegen => format!(
-            "{} Mana Regeneration per Second",
+            "{} Mana Regeneration per second",
             format_adds_removes(value.map(|value| value * 0.1), true, "%")
         ),
         StatType::ManaCost { skill_filter } => format!(
@@ -814,7 +814,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             } else {
                 format!(
-                    "{} seconds duration to {}",
+                    "{} seconds Duration to {}",
                     format_adds_removes(value, true, ""),
                     skill_status_filter_str(skill_filter, status_filter, true)
                 )
@@ -825,7 +825,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter,
         } => {
             format!(
-                "{}{} Escalates by {}% More Damage per Second",
+                "{}{} Escalates by {}% More Damage per second",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " inflicted by ", true),
                 format_flat_number(value, false),

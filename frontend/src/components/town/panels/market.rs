@@ -1247,7 +1247,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damages"
                         label="Min Damage:"
                         input_type="number"
-                        placeholder="Minimum Damage per Second"
+                        placeholder="Minimum Damage per second"
                         bind=item_damages
                     />
                     <ValidatedInput

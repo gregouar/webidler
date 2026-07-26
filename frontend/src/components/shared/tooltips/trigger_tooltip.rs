@@ -220,6 +220,7 @@ pub fn trigger_modifier_source_str(
             format!("{}Hit Damage", damage_type_str(*damage_type))
         }
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
+        TriggerEffectModifierSource::HitCritDamage => "Critical Hit Damage Modifier".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Power Level".to_string(),
         TriggerEffectModifierSource::StatusValue {
             status_filter,

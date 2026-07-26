@@ -53,7 +53,7 @@
         "effects"   : [
             {
                 "StatModifier": {"stat": "GoldFind", "modifier": "More", "debuff": false},
-                "value"       : 20.0,
+                "value"       : 50.0,
                 "modifier"    : "Flat"
             },
             {

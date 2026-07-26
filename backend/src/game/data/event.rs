@@ -34,7 +34,7 @@ pub struct HitEvent {
 
     pub skill_type: SkillType,
     pub range: SkillRange,
-    pub is_crit: bool,
+    pub crit_damage: Option<f64>,
     pub is_blocked: bool,
     pub is_hurt: bool,
 

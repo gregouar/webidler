@@ -145,7 +145,12 @@ pub fn apply_trigger_effects(
                                 TriggerEffectModifierSource::HitCrit => trigger_context
                                     .hit_context
                                     .as_ref()
-                                    .map(|hit| hit.is_crit as i64 as f64)
+                                    .map(|hit| hit.crit_damage.is_some() as i64 as f64)
+                                    .unwrap_or_default(),
+                                TriggerEffectModifierSource::HitCritDamage => trigger_context
+                                    .hit_context
+                                    .as_ref()
+                                    .and_then(|hit| hit.crit_damage)
                                     .unwrap_or_default(),
                                 TriggerEffectModifierSource::AreaLevel => {
                                     trigger_context.level as f64

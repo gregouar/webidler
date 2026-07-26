@@ -144,7 +144,7 @@
         "effects"   : [
             {
                 "StatModifier": {
-                    "stat"    : { "Damage": {"damage_type": "Physical", "skill_type": "Attack"} },
+                    "stat"    : { "Damage": {"skill_type": "Attack"} },
                     "modifier": "More"
                 },
                 "value"       : 10,

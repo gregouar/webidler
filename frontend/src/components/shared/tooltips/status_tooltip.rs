@@ -127,7 +127,7 @@ fn format_status_effect_line(
                     <span class=format!(
                         "font-semibold {damage_color}",
                     )>{format_min_max_f64(value.0, value.1)}</span> {trigger_modifier_damage_str}
-                    " " {effects_tooltip::damage_type_str(Some(damage_type))} " Damage per Second"
+                    " " {effects_tooltip::damage_type_str(Some(damage_type))} " Damage per second"
                 </span>
             }
             .into_any())

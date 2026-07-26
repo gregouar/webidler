@@ -532,7 +532,7 @@ fn apply_skill_effect_on_target(
                 damage,
                 skill_type,
                 range,
-                is_crit,
+                is_crit.then(|| **crit_damage),
                 *unblockable,
                 skill_id,
                 trigger_depth,

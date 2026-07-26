@@ -1332,8 +1332,8 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": [
-          5.0,
-          10.0
+          15.0,
+          20.0
         ],
         "ignore_quality": true
       },
@@ -1350,8 +1350,8 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": [
-          35.0,
-          50.0
+          20.0,
+          25.0
         ],
         "ignore_quality": true
       },
@@ -1390,20 +1390,33 @@
       },
       {
         "stat": {
-          "StatusDuration": {
-            "status_id": "poison",
-            "damage_type": null,
-            "debuff": null,
+          "SkillConditionalModifier": {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
             "skill_type": null,
-            "skill_id": null
+            "skill_id": null,
+            "conditions": [
+              {
+                "StatusDuration": {
+                  "status_id": "bleed",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null
+                }
+              }
+            ]
           }
         },
-        "modifier": "Increased",
+        "modifier": "Flat",
         "scope": "Global",
-        "value": [
-          100.0,
-          200.0
-        ],
+        "value": 1.0,
         "ignore_quality": true
       },
       {
@@ -1438,7 +1451,69 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": true,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "deathstinger",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 1.0,
+            "source": "HitCritDamage"
+          }
+        ],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "vulnerability_poison",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": {
       "range": "Distance",
       "shape": "Horizontal2",

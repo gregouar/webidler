@@ -206,6 +206,7 @@ pub enum TriggerEffectModifierSource {
     TriggerStatusDuration,
     TriggerStatusValue,
     HitCrit,
+    HitCritDamage,
     RestoreValue,
 }
 

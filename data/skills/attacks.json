@@ -97,7 +97,7 @@
       {
         "stat"    : { "StatusPower": {"status_id": "poison_coating"} },
         "modifier": "Increased",
-        "value"   : 5
+        "value"   : 10
       }
     ],
     "ignore_stat_effects": [ {"Speed": {}} ],
@@ -264,7 +264,7 @@
     ]
   },
   "double_strike"       : {
-    "name"            : "Second Strike",
+    "name"            : "second Strike",
     "description"     : "A second, slightly slower strike with your weapon.",
     "icon"            : "skills/attack.svg",
     "skill_type"      : "Attack",

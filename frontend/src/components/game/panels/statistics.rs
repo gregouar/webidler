@@ -104,7 +104,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
-                                    label="Average Damage per Second"
+                                    label="Average Damage per second"
                                     value=move || {
                                         format_number(game_context.game_local_stats.average_dps())
                                     }
@@ -160,7 +160,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
-                                    label="Life Regeneration per Second"
+                                    label="Life Regeneration per second"
                                     value=move || {
                                         let value = *game_context
                                             .player_specs
@@ -190,7 +190,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
-                                    label="Mana Regeneration per Second"
+                                    label="Mana Regeneration per second"
                                     value=move || {
                                         let value = *game_context
                                             .player_specs
