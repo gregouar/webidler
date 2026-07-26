@@ -146,6 +146,19 @@
           "modifier": "Flat",
           "value": 3.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillLevel": {
+              "skill_type": null,
+              "skill_id": "weapon_skill"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
       }
     ]
   },
@@ -369,7 +382,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 35.0
         }
       },
       {
@@ -503,6 +516,37 @@
         "scope": "Global",
         "value": 50.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "open_wound",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 10.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -582,7 +626,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 20.0
+          "value": 35.0
         }
       },
       {
@@ -923,6 +967,39 @@
           "modifier": "Increased",
           "value": 40.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_id": "sickening_concoction",
+                    "damage_type": null,
+                    "debuff": null,
+                    "skill_type": null,
+                    "not": false
+                  }
+                }
+              ]
+            }
+          },
+          "modifier": "More",
+          "value": 15.0
+        }
       }
     ]
   },
@@ -1234,7 +1311,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 20.0
+          "value": 35.0
         }
       },
       {
@@ -1251,7 +1328,7 @@
             }
           },
           "modifier": "More",
-          "value": 20.0
+          "value": 40.0
         }
       }
     ]

@@ -4,7 +4,7 @@
     "icon": "items/rings/copper_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -20,21 +20,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "silver_ring": {
     "name": "Silver Ring",
     "icon": "items/rings/silver_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -50,21 +50,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "silver_ring_unique": {
     "name": "Gambler's Luck",
     "icon": "items/rings/gamblers_ring.webp",
     "description": "It does not favor you, it does not curse you, it simply spins the wheel and dares you to wear it.",
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -83,8 +83,10 @@
         "stat": {
           "Damage": {
             "skill_type": "Attack",
+            "skill_id": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -99,8 +101,10 @@
         "stat": {
           "Damage": {
             "skill_type": "Spell",
+            "skill_id": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -115,6 +119,7 @@
         "stat": {
           "Lucky": {
             "skill_type": null,
+            "skill_id": null,
             "roll_type": {
               "Damage": {
                 "damage_type": null
@@ -134,6 +139,7 @@
         "stat": {
           "Lucky": {
             "skill_type": null,
+            "skill_id": null,
             "roll_type": "Block"
           }
         },
@@ -149,6 +155,7 @@
         "stat": {
           "Lucky": {
             "skill_type": null,
+            "skill_id": null,
             "roll_type": {
               "Evade": null
             }
@@ -166,6 +173,7 @@
         "stat": {
           "Lucky": {
             "skill_type": null,
+            "skill_id": null,
             "roll_type": "CritChance"
           }
         },
@@ -181,6 +189,7 @@
         "stat": {
           "Lucky": {
             "skill_type": null,
+            "skill_id": null,
             "roll_type": {
               "SuccessChance": {
                 "effect_type": null
@@ -197,7 +206,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -228,12 +237,14 @@
           "stat": {
             "Damage": {
               "skill_type": "Attack",
+              "skill_id": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -242,12 +253,14 @@
           "stat": {
             "Damage": {
               "skill_type": "Spell",
+              "skill_id": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       }
     ]
@@ -257,7 +270,7 @@
     "icon": "items/rings/gold_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -273,21 +286,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "signet_ring": {
     "name": "Signet Ring",
     "icon": "items/rings/signet_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -303,21 +316,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "signet_ring_unique": {
     "name": "Heartstone Band",
     "icon": "items/rings/princess_ring.webp",
     "description": "Who says battle can't be fabulous?",
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -360,8 +373,10 @@
         "stat": {
           "Damage": {
             "skill_type": "Attack",
+            "skill_id": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -376,8 +391,10 @@
         "stat": {
           "Damage": {
             "skill_type": "Spell",
+            "skill_id": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -401,10 +418,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "signet_ring_unique",
         "OnTakeHit": {
           "skill_type": null,
           "range": null,
@@ -412,12 +425,19 @@
           "is_blocked": true,
           "is_hurt": null,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "signet_ring_unique",
         "target": "SameTarget",
-        "modifiers": [ ],
-        "skill_range": "Melee",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -432,28 +452,33 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       },
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "signet_ring_unique_mana",
         "OnReceiveStatus": {
           "skill_type": null,
+          "status_id": null,
+          "damage_type": null,
+          "debuff": null,
           "is_triggered": null,
-          "is_evaded": true
+          "is_evaded": true,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "signet_ring_unique_mana",
         "target": "SameTarget",
-        "modifiers": [ ],
-        "skill_range": "Melee",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -468,13 +493,13 @@
               ],
               "modifier": "Flat"
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -525,12 +550,14 @@
           "stat": {
             "Damage": {
               "skill_type": "Attack",
+              "skill_id": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -539,12 +566,14 @@
           "stat": {
             "Damage": {
               "skill_type": "Spell",
+              "skill_id": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       }
     ]
@@ -554,7 +583,7 @@
     "icon": "items/rings/inlaid_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -570,21 +599,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "inlaid_ring_unique": {
     "name": "Band of Blessing",
     "icon": "items/rings/band_blessing.webp",
     "description": "In devotion, there is no room for doubt, nor for curses.",
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -602,7 +631,11 @@
       {
         "stat": {
           "StatusPower": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
             "skill_type": "Blessing",
+            "skill_id": null,
             "min_max": null
           }
         },
@@ -617,7 +650,11 @@
       {
         "stat": {
           "StatusPower": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
             "skill_type": "Curse",
+            "skill_id": null,
             "min_max": null
           }
         },
@@ -629,7 +666,11 @@
       {
         "stat": {
           "StatusDuration": {
-            "skill_type": "Blessing"
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": "Blessing",
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -644,8 +685,10 @@
         "stat": {
           "Damage": {
             "skill_type": "Attack",
+            "skill_id": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -669,7 +712,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -697,12 +740,14 @@
           "stat": {
             "Damage": {
               "skill_type": "Attack",
+              "skill_id": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -722,7 +767,7 @@
     "icon": "items/rings/band_cursing.webp",
     "description": "Every blessing denied leaves space for something far worse.",
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -740,7 +785,11 @@
       {
         "stat": {
           "StatusPower": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
             "skill_type": "Curse",
+            "skill_id": null,
             "min_max": null
           }
         },
@@ -755,7 +804,11 @@
       {
         "stat": {
           "StatusPower": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
             "skill_type": "Blessing",
+            "skill_id": null,
             "min_max": null
           }
         },
@@ -767,7 +820,11 @@
       {
         "stat": {
           "StatusDuration": {
-            "skill_type": "Curse"
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": "Curse",
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -782,8 +839,10 @@
         "stat": {
           "Damage": {
             "skill_type": "Spell",
+            "skill_id": null,
             "damage_type": null,
-            "min_max": null
+            "min_max": null,
+            "is_hit": null
           }
         },
         "modifier": "More",
@@ -807,7 +866,7 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -835,12 +894,14 @@
           "stat": {
             "Damage": {
               "skill_type": "Spell",
+              "skill_id": null,
               "damage_type": null,
-              "min_max": null
+              "min_max": null,
+              "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -860,7 +921,7 @@
     "icon": "items/rings/jewelled_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -876,21 +937,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "ring_7": {
     "name": "Runic Ring",
     "icon": "items/rings/runic_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -906,21 +967,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "ring_8": {
     "name": "Noble Ring",
     "icon": "items/rings/regal_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -936,21 +997,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "witch_ring": {
     "name": "The Brood Sigil",
     "icon": "items/rings/witch_ring.webp",
     "description": "You thought you ended the forbidden ritual... But you became one with it.",
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -967,7 +1028,10 @@
       },
       {
         "stat": {
-          "SkillLevel": { }
+          "SkillLevel": {
+            "skill_type": null,
+            "skill_id": null
+          }
         },
         "modifier": "Flat",
         "scope": "Global",
@@ -978,14 +1042,14 @@
         "stat": "Life",
         "modifier": "More",
         "scope": "Global",
-        "value": 10.0,
+        "value": 20.0,
         "ignore_quality": true
       },
       {
         "stat": "Mana",
         "modifier": "More",
         "scope": "Global",
-        "value": 10.0,
+        "value": 20.0,
         "ignore_quality": true
       },
       {
@@ -994,14 +1058,20 @@
             "stat": {
               "Damage": {
                 "skill_type": null,
+                "skill_id": null,
                 "damage_type": null,
-                "min_max": null
+                "min_max": null,
+                "is_hit": null
               }
             },
             "skill_type": null,
+            "skill_id": null,
             "conditions": [
               {
                 "HasStatus": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
                   "skill_type": "Curse",
                   "not": false
                 }
@@ -1020,10 +1090,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "witch_ring",
         "OnHit": {
           "skill_type": null,
           "range": null,
@@ -1031,12 +1097,19 @@
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "witch_ring",
         "target": "SameTarget",
-        "modifiers": [ ],
-        "skill_range": "Melee",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -1045,15 +1118,21 @@
             },
             "ApplyStatus": {
               "status_id": "enwebbed",
-              "value": 1
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
-            "ignore_stat_effects": [ ],
-            "conditional_modifiers": [ ]
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -1078,7 +1157,10 @@
         "scope": "Global",
         "stat_effect": {
           "stat": {
-            "SkillLevel": { }
+            "SkillLevel": {
+              "skill_type": null,
+              "skill_id": null
+            }
           },
           "modifier": "Flat",
           "value": 1.0
@@ -1091,7 +1173,7 @@
     "icon": "items/rings/platinum_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -1107,21 +1189,21 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "ring_10": {
     "name": "King's Ring",
     "icon": "items/rings/king_ring.webp",
     "description": null,
     "slot": "Ring",
-    "extra_slots": [ ],
+    "extra_slots": [],
     "categories": [
       "Jewelry",
       "Ring"
@@ -1137,13 +1219,13 @@
         "ignore_quality": false
       }
     ],
-    "triggers": [ ],
+    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [ ],
-    "upgrade_effects": [ ]
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

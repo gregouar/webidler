@@ -264,7 +264,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 4.0
+          "value": 7.0
         }
       },
       {
@@ -280,7 +280,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 4.0
+          "value": 7.0
         }
       },
       {
@@ -296,7 +296,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 35.0
         }
       },
       {
@@ -622,7 +622,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 8.0
+          "value": 15.0
         }
       },
       {
@@ -638,7 +638,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 20.0
+          "value": 40.0
         }
       },
       {
@@ -918,7 +918,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 20.0
+          "value": 40.0
         }
       }
     ]
@@ -1222,6 +1222,22 @@
           },
           "modifier": "Flat",
           "value": 6.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 35.0
         }
       }
     ]

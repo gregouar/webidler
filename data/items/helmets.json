@@ -247,6 +247,7 @@
           "StatusDuration": {
             "status_id": null,
             "damage_type": null,
+            "debuff": null,
             "skill_type": null,
             "skill_id": null
           }
@@ -315,13 +316,14 @@
               "duration": null,
               "escalation": null,
               "max_stacks": null,
-              "damage_type": null,
               "avoidable": null,
               "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -507,7 +509,8 @@
             "skill_id": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_id": "stun"
+                "status_id": "stun",
+                "debuff": null
               }
             }
           }
@@ -544,7 +547,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 25.0,
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
@@ -670,6 +673,7 @@
           "StatusStacks": {
             "status_id": "burn",
             "damage_type": null,
+            "debuff": null,
             "skill_type": null,
             "skill_id": null
           }
@@ -760,6 +764,7 @@
           "StatusStacks": {
             "status_id": "focus",
             "damage_type": null,
+            "debuff": null,
             "skill_type": null,
             "skill_id": null
           }

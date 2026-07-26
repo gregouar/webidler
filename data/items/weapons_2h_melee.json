@@ -278,7 +278,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value": 5.0
         }
       },
       {
@@ -294,7 +294,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 8.0
+          "value": 13.0
         }
       },
       {
@@ -310,7 +310,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 30.0
+          "value": 40.0
         }
       }
     ]
@@ -385,6 +385,36 @@
         "scope": "Global",
         "value": 50.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": "Attack"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 3.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -408,8 +438,78 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 8.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "RestoreOnHit": {
+              "restore_type": "Life",
+              "skill_type": "Attack"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
+      }
+    ]
   },
   "halberd": {
     "name": "Halberd",
@@ -522,7 +622,7 @@
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Mana",
-            "skill_type": null
+            "skill_type": "Attack"
           }
         },
         "modifier": "Flat",
@@ -655,7 +755,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -688,6 +788,19 @@
           },
           "modifier": "More",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "RestoreOnHit": {
+              "restore_type": "Mana",
+              "skill_type": "Attack"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
         }
       }
     ]
@@ -845,7 +958,7 @@
             "modifier": "Flat",
             "factor": 0.1,
             "source": {
-              "HitDamage": "Physical"
+              "HitDamage": null
             }
           }
         ],
@@ -873,12 +986,6 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
@@ -891,6 +998,12 @@
                   "damage_type": "Physical",
                   "min_max": null,
                   "is_hit": null
+                }
+              },
+              {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
@@ -943,7 +1056,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value": 5.0
         }
       },
       {
@@ -959,7 +1072,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 8.0
+          "value": 11.0
         }
       },
       {
@@ -975,7 +1088,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 45.0
         }
       }
     ]
@@ -1171,7 +1284,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 40.0
         }
       }
     ]
