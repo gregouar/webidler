@@ -297,7 +297,7 @@ async fn post_forgot_password(
 
     let reset_link = format!(
         "{}/reset-password?user_id={}&token={}",
-        app_settings.frontend_url, &user.user_id, token,
+        app_settings.frontend_url, user.user_id, token,
     );
 
     let subject = "Reset your password";

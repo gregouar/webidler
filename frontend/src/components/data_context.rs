@@ -73,7 +73,6 @@ impl DataContext {
         self.statuses_specs
             .read_untracked()
             .get(status_id)
-            .map(|status_specs| status_specs.adjective.clone())
-            .flatten()
+            .and_then(|status_specs| status_specs.adjective.clone())
     }
 }

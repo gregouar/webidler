@@ -621,7 +621,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             roll_type,
         } => format!(
             "Luck {}{}",
-            &lucky_roll_str(roll_type),
+            lucky_roll_str(roll_type),
             skill_filter_str(skill_filter, " to ", true)
         ),
         StatType::SuccessChance {

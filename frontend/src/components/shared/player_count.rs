@@ -176,7 +176,7 @@ pub fn PlayerCount() -> impl IntoView {
                                                 .map(|entry| {
                                                     let href = format!(
                                                         "/view-character/{}",
-                                                        &entry.character_name,
+                                                        entry.character_name,
                                                     );
                                                     let navigate = navigate.clone();
                                                     view! {

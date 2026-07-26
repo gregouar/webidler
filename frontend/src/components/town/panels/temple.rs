@@ -261,6 +261,7 @@ fn BenedictionCategorySection(
             });
             let available_gold = town_context.character.read().resource_gold - cost.get();
 
+            #[allow(clippy::explicit_counter_loop)]
             for _ in 0..10 {
                 if category_specs
                     .max_upgrade_level

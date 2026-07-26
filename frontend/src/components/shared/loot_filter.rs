@@ -139,7 +139,7 @@ pub fn LootFilterPanel(
                 &local_loot_filter.get_untracked(),
                 &filename
                     .get()
-                    .unwrap_or(format!("loot_filter_{}.json", &character_name)),
+                    .unwrap_or(format!("loot_filter_{}.json", character_name)),
             );
         }
     };

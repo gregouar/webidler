@@ -149,20 +149,14 @@ pub fn format_adjective_status_condition(
     let status_type_str = if let Some(status_id) = &status_filter.status_id {
         let data_context: DataContext = leptos::prelude::expect_context();
         data_context.status_adjective(status_id)
-    } else if let Some(damage_type) = status_filter.damage_type {
-        Some(
-            match damage_type {
+    } else { status_filter.damage_type.map(|damage_type| match damage_type {
                 StatusDamageType::Any => "affected by Damage over Time ",
                 StatusDamageType::Physical => "affected by Physical Damage over Time",
                 StatusDamageType::Fire => "affected by Fire Damage over Time",
                 StatusDamageType::Poison => "affected by Poison Damage over Time",
                 StatusDamageType::Storm => "affected by Storm Damage over Time",
             }
-            .to_string(),
-        )
-    } else {
-        None
-    };
+            .to_string()) };
 
     if status_type_str.is_some() || skill_type.is_some() {
         Some(format!(
@@ -183,20 +177,14 @@ pub fn format_affected_by_status_condition(status_filter: &StatStatusFilter) -> 
         } else {
             None
         }
-    } else if let Some(damage_type) = status_filter.damage_type {
-        Some(
-            match damage_type {
+    } else { status_filter.damage_type.map(|damage_type| match damage_type {
                 StatusDamageType::Any => "Damage over Time",
                 StatusDamageType::Physical => "Physical Damage over Time",
                 StatusDamageType::Fire => "Fire Damage over Time",
                 StatusDamageType::Poison => "Poison Damage over Time",
                 StatusDamageType::Storm => "Storm Damage over Time",
             }
-            .to_string(),
-        )
-    } else {
-        None
-    };
+            .to_string()) };
 
     status_type_str.map(|status_type_str| format!("affected by {}", status_type_str))
 }

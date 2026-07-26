@@ -62,9 +62,7 @@ pub fn format_trigger(
                 Some(&trigger.trigger_effect.modifiers),
                 // effects_map,
                 if trigger_event_status_name.is_some() {
-                    trigger_event_status_name
-                        .as_ref()
-                        .map(|status_name| status_name.as_str())
+                    trigger_event_status_name.as_deref()
                 } else {
                     trigger_status_name
                 },

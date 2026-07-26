@@ -146,7 +146,7 @@ impl PlayerController {
             .character_specs
             .skills_specs
             .iter()
-            .zip(no_auto_use.into_iter())
+            .zip(no_auto_use)
             .take(player_base_specs.max_skills as usize)
             .enumerate()
         {

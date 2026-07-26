@@ -1405,6 +1405,37 @@
           200.0
         ],
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "poison",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "bleed",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],

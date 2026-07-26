@@ -130,7 +130,7 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                                                             let navigate = use_navigate();
                                                             let href = format!(
                                                                 "/view-character/{}",
-                                                                &entry.character_name,
+                                                                entry.character_name,
                                                             );
                                                             move || {
                                                                 navigate(&href, Default::default());

@@ -600,7 +600,7 @@
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : { "StatusPower": {"status_id": "bleed"} },
+                  "stat"      : {"Damage": {}},
                   "conditions": [
                     { "StatusStacks": {"status_id": "bleed"} }
                   ]
