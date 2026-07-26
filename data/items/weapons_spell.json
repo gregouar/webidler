@@ -899,6 +899,177 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "staff_desert": {
+    "name": "Horns of Khem-Netcher",
+    "icon": "items/weapons_spell/staff_desert.webp",
+    "description": "When the first dawn broke across the endless sands, the faithful believed they witnessed a god. The wise knew they were merely witnessing its shadow.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 240.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Description": "Use both Hands"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillLevel": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "meditate_damage",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Blessing",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Restore": {
+            "restore_type": "Mana",
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "Mana",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 200.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 30.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillLevel": {
+              "skill_type": "Spell",
+              "skill_id": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
+      }
+    ]
+  },
   "weapon_spell_9": {
     "name": "Scepter",
     "icon": "items/weapons_spell/scepter.webp",
