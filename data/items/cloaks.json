@@ -1364,7 +1364,53 @@
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": true,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "sandwhisper",
+        "target": "SameTarget",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 10.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "focus",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,

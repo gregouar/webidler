@@ -1,7 +1,6 @@
 {
     "blessing_haste"     : {
         "name"      : "Blessing of Haste",
-        "adjective" : "Blessed by Haste",
         "icon"      : "skills/haste.svg",
         "debuff"    : false,
         "duration"  : 5,
@@ -29,7 +28,6 @@
     },
     "blessing_crit"      : {
         "name"      : "Blessing of Precision",
-        "adjective" : "Blessed by Precision",
         "icon"      : "skills/blessing_crit.svg",
         "debuff"    : false,
         "duration"  : 5,
@@ -54,7 +52,6 @@
     },
     "blessing_protection": {
         "name"      : "Blessing of Fortification",
-        "adjective" : "Blessed by Fortification",
         "icon"      : "skills/blessing_protection.svg",
         "debuff"    : false,
         "duration"  : 5,
@@ -76,7 +73,6 @@
     },
     "blessing_heal"      : {
         "name"      : "Blessing of Renewal",
-        "adjective" : "Blessed by Renewal",
         "icon"      : "skills/blessing_renewal.svg",
         "debuff"    : false,
         "duration"  : 5,

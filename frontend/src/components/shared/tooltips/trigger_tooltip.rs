@@ -34,6 +34,23 @@ pub fn format_trigger(
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
+    // let trigger_status_name = trigger_status_name.unwrap_or(default)
+
+    let data_context: DataContext = expect_context();
+
+    let trigger_event_status_name = if let EventTrigger::OnApplyStatus(StatusTrigger {
+        ref status_filter,
+        ..
+    }) = trigger.trigger
+    {
+        status_filter
+            .status_id
+            .as_ref()
+            .map(|status_id| data_context.status_name(status_id))
+    } else {
+        None
+    };
+
     let effects = trigger
         .trigger_effect
         .effects
@@ -44,7 +61,13 @@ pub fn format_trigger(
                 trigger.trigger_effect.target == TriggerTarget::Me,
                 Some(&trigger.trigger_effect.modifiers),
                 // effects_map,
-                trigger_status_name,
+                if trigger_event_status_name.is_some() {
+                    trigger_event_status_name
+                        .as_ref()
+                        .map(|status_name| status_name.as_str())
+                } else {
+                    trigger_status_name
+                },
                 trigger_status_value,
             )
         })

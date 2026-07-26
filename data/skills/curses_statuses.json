@@ -1,7 +1,6 @@
 {
     "curse_conductivity"    : {
         "name"      : "Curse of Conductivity",
-        "adjective" : "Cursed by Conductivity",
         "icon"      : "skills/curse_conductivity.svg",
         "debuff"    : true,
         "duration"  : 5,
@@ -21,7 +20,6 @@
     },
     "curse_flammability"    : {
         "name"      : "Curse of Flammability",
-        "adjective" : "Cursed by Flammability",
         "icon"      : "skills/curse_flammability.svg",
         "debuff"    : true,
         "duration"  : 5,
@@ -41,7 +39,6 @@
     },
     "curse_frailty"         : {
         "name"      : "Curse of Frailty",
-        "adjective" : "Cursed by Frailty",
         "icon"      : "skills/curse_frailty.svg",
         "debuff"    : true,
         "duration"  : 5,
@@ -76,7 +73,6 @@
     },
     "curse_putridity"       : {
         "name"      : "Curse of Putridity",
-        "adjective" : "Cursed by Putridity",
         "icon"      : "skills/curse_putridity.svg",
         "debuff"    : true,
         "duration"  : 5,
@@ -96,7 +92,6 @@
     },
     "curse_weakness"        : {
         "name"      : "Curse of Weakness",
-        "adjective" : "Cursed by Weakness",
         "icon"      : "skills/curse_weakness.svg",
         "debuff"    : true,
         "duration"  : 5,
@@ -137,7 +132,6 @@
     },
     "curse_vampirism"       : {
         "name"      : "Curse of Vampirism",
-        "adjective" : "Cursed by Vampirism",
         "icon"      : "skills/curse_vampirism.svg",
         "debuff"    : true,
         "duration"  : 5,

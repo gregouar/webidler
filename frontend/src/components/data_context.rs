@@ -69,16 +69,11 @@ impl DataContext {
             .unwrap_or(status_id.to_string())
     }
 
-    pub fn status_adjective(&self, status_id: &StatusId) -> String {
+    pub fn status_adjective(&self, status_id: &StatusId) -> Option<String> {
         self.statuses_specs
             .read_untracked()
             .get(status_id)
-            .map(|status_specs| {
-                status_specs
-                    .adjective
-                    .clone()
-                    .unwrap_or(status_specs.name.clone())
-            })
-            .unwrap_or(status_id.to_string())
+            .map(|status_specs| status_specs.adjective.clone())
+            .flatten()
     }
 }

@@ -1,322 +1,219 @@
 {
-    "poison_coating": {
-        "name": "Poison Coating",
-        "adjective": "Poison Coating",
-        "icon": "skills/poison_coating.svg",
-        "debuff": false,
-        "duration": 5,
+    "poison_coating"            : {
+        "name"      : "Poison Coating",
+        "icon"      : "skills/poison_coating.svg",
+        "debuff"    : false,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "skill_type": "Attack",
-                            "damage_type": "Poison",
-                            "min_max": "Min"
-                        }
-                    },
+                    "stat"    : { "Damage": {"skill_type": "Attack", "damage_type": "Poison", "min_max": "Min"} },
                     "modifier": "Flat"
                 },
-                "value": 2,
-                "modifier": "Percent"
+                "value"       : 2,
+                "modifier"    : "Percent"
             },
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "skill_type": "Attack",
-                            "damage_type": "Poison",
-                            "min_max": "Max"
-                        }
-                    },
+                    "stat"    : { "Damage": {"skill_type": "Attack", "damage_type": "Poison", "min_max": "Max"} },
                     "modifier": "Flat"
                 },
-                "value": 4,
-                "modifier": "Percent"
+                "value"       : 4,
+                "modifier"    : "Percent"
             }
         ]
     },
-    "pyroclastic_infusion": {
-        "name": "Pyroclastic Infusion",
-        "icon": "skills/pyroclastic_infusion.svg",
-        "debuff": false,
-        "duration": 5,
+    "pyroclastic_infusion"      : {
+        "name"      : "Pyroclastic Infusion",
+        "icon"      : "skills/pyroclastic_infusion.svg",
+        "debuff"    : false,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "damage_type": "Fire",
-                            "skill_type": "Attack"
-                        }
-                    },
+                    "stat"    : { "Damage": {"damage_type": "Fire", "skill_type": "Attack"} },
                     "modifier": "More"
                 },
-                "value": 30,
-                "modifier": "Percent"
+                "value"       : 30,
+                "modifier"    : "Percent"
             },
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "damage_type": "Storm",
-                            "skill_type": "Attack"
-                        }
-                    },
+                    "stat"    : { "Damage": {"damage_type": "Storm", "skill_type": "Attack"} },
                     "modifier": "More"
                 },
-                "value": 30,
-                "modifier": "Percent"
+                "value"       : 30,
+                "modifier"    : "Percent"
             },
             {
                 "StatModifier": {
-                    "stat": {
+                    "stat"    : {
                         "StatConverter": {
-                            "source": {
-                                "Damage": {
-                                    "damage_type": "Physical"
-                                }
-                            },
-                            "stat": {
-                                "Damage": {
-                                    "damage_type": "Fire"
-                                }
-                            }
+                            "source": { "Damage": {"damage_type": "Physical"} },
+                            "stat"  : { "Damage": {"damage_type": "Fire"    } }
                         }
                     },
                     "modifier": "Flat"
                 },
-                "value": 50,
-                "modifier": "Flat"
+                "value"       : 50,
+                "modifier"    : "Flat"
             },
             {
                 "StatModifier": {
-                    "stat": {
+                    "stat"    : {
                         "StatConverter": {
-                            "source": {
-                                "Damage": {
-                                    "damage_type": "Physical"
-                                }
-                            },
-                            "stat": {
-                                "Damage": {
-                                    "damage_type": "Storm",
-                                    "min_max": "Max"
-                                }
-                            }
+                            "source": { "Damage": {"damage_type": "Physical"                  } },
+                            "stat"  : { "Damage": {"damage_type": "Storm",    "min_max": "Max"} }
                         }
                     },
                     "modifier": "Flat"
                 },
-                "value": 50,
-                "modifier": "Flat"
+                "value"       : 50,
+                "modifier"    : "Flat"
             }
         ]
     },
-    "pyroclastic_infusion_fire": {
-        "name": "Magmatic Infusion",
-        "icon": "skills/pyroclastic_infusion.svg",
-        "debuff": false,
-        "duration": 5,
+    "pyroclastic_infusion_fire" : {
+        "name"      : "Magmatic Infusion",
+        "icon"      : "skills/pyroclastic_infusion.svg",
+        "debuff"    : false,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "damage_type": "Fire",
-                            "skill_type": "Attack"
-                        }
-                    },
+                    "stat"    : { "Damage": {"damage_type": "Fire", "skill_type": "Attack"} },
                     "modifier": "More"
                 },
-                "value": 30,
-                "modifier": "Percent"
+                "value"       : 30,
+                "modifier"    : "Percent"
             },
             {
                 "StatModifier": {
-                    "stat": {
+                    "stat"    : {
                         "StatConverter": {
-                            "source": {
-                                "Damage": {
-                                    "damage_type": "Physical"
-                                }
-                            },
-                            "stat": {
-                                "Damage": {
-                                    "damage_type": "Fire"
-                                }
-                            }
+                            "source": { "Damage": {"damage_type": "Physical"} },
+                            "stat"  : { "Damage": {"damage_type": "Fire"    } }
                         }
                     },
                     "modifier": "Flat"
                 },
-                "value": 100,
-                "modifier": "Flat"
+                "value"       : 100,
+                "modifier"    : "Flat"
             }
         ]
     },
     "pyroclastic_infusion_storm": {
-        "name": "Galvanic Infusion",
-        "icon": "skills/pyroclastic_infusion.svg",
-        "debuff": false,
-        "duration": 5,
+        "name"      : "Galvanic Infusion",
+        "icon"      : "skills/pyroclastic_infusion.svg",
+        "debuff"    : false,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "damage_type": "Storm",
-                            "skill_type": "Attack"
-                        }
-                    },
+                    "stat"    : { "Damage": {"damage_type": "Storm", "skill_type": "Attack"} },
                     "modifier": "More"
                 },
-                "value": 30,
-                "modifier": "Percent"
+                "value"       : 30,
+                "modifier"    : "Percent"
             },
             {
                 "StatModifier": {
-                    "stat": {
+                    "stat"    : {
                         "StatConverter": {
-                            "source": {
-                                "Damage": {
-                                    "damage_type": "Physical"
-                                }
-                            },
-                            "stat": {
-                                "Damage": {
-                                    "damage_type": "Storm",
-                                    "min_max": "Max"
-                                }
-                            }
+                            "source": { "Damage": {"damage_type": "Physical"                  } },
+                            "stat"  : { "Damage": {"damage_type": "Storm",    "min_max": "Max"} }
                         }
                     },
                     "modifier": "Flat"
                 },
-                "value": 100,
-                "modifier": "Flat"
+                "value"       : 100,
+                "modifier"    : "Flat"
             }
         ]
     },
-    "sharpen_weapon": {
-        "name": "Sharpen Weapon",
-        "icon": "skills/sharpen_weapon.svg",
-        "debuff": false,
-        "duration": 5,
+    "sharpen_weapon"            : {
+        "name"      : "Sharpen Weapon",
+        "icon"      : "skills/sharpen_weapon.svg",
+        "debuff"    : false,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "damage_type": "Physical",
-                            "skill_type": "Attack"
-                        }
-                    },
+                    "stat"    : { "Damage": {"damage_type": "Physical", "skill_type": "Attack"} },
                     "modifier": "More"
                 },
-                "value": 10,
-                "modifier": "Percent"
+                "value"       : 10,
+                "modifier"    : "Percent"
             },
             {
-                "Trigger": {
+                "Trigger" : {
                     "inherit_owner_effects": true,
-                    "trigger_id": "sharpen_weapon",
-                    "target": "SameTarget",
-                    "skill_type": "Attack",
-                    "OnHit": {
-                        "skill_type": "Attack",
-                        "is_hurt": true
-                    },
-                    "effects": [
+                    "trigger_id"           : "sharpen_weapon",
+                    "target"               : "SameTarget",
+                    "skill_type"           : "Attack",
+                    "OnHit"                : {"skill_type": "Attack", "is_hurt": true},
+                    "effects"              : [
                         {
-                            "success_chance": 30,
-                            "ApplyStatus": {
-                                "status_id": "bleed",
-                                "value": 0
-                            },
+                            "success_chance"     : 30,
+                            "ApplyStatus"        : {"status_id": "bleed", "value": 0},
                             "ignore_stat_effects": [
-                                {
-                                    "Damage": {
-                                        "skill_type": "Attack",
-                                        "damage_type": "Physical"
-                                    }
-                                }
+                                { "Damage": {"skill_type": "Attack", "damage_type": "Physical"} }
                             ]
                         }
                     ],
-                    "modifiers": [
+                    "modifiers"            : [
                         {
-                            "stat": {
-                                "Damage": { }
-                            },
+                            "stat"    : {"Damage": {}},
                             "modifier": "Flat",
-                            "factor": 0.5,
-                            "source": {
-                                "HitDamage": "Physical"
-                            }
+                            "factor"  : 0.5,
+                            "source"  : {"HitDamage": "Physical"}
                         }
                     ]
                 },
-                "value": 1,
+                "value"   : 1,
                 "modifier": "Flat"
             }
         ]
     },
-    "double_strike_feint": {
-        "name": "Distracted",
-        "icon": "statuses/distraction.svg",
-        "debuff": true,
-        "duration": 3,
+    "double_strike_feint"       : {
+        "name"      : "Distracted",
+        "icon"      : "statuses/distraction.svg",
+        "debuff"    : true,
+        "duration"  : 3,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "DamageTaken": {
-                            "skill_type": "Attack"
-                        }
-                    },
+                    "stat"    : { "DamageTaken": {"skill_type": "Attack"} },
                     "modifier": "More",
-                    "debuff": false
+                    "debuff"  : false
                 },
-                "value": 100,
-                "modifier": "Percent"
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     },
-    "whirlwind_guard": {
-        "name": "Deflecting Spin",
-        "icon": "skills/whirlwind.svg",
-        "debuff": false,
-        "duration": 0.5,
+    "whirlwind_guard"           : {
+        "name"      : "Deflecting Spin",
+        "icon"      : "skills/whirlwind.svg",
+        "debuff"    : false,
+        "duration"  : 0.5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
-                "StatModifier": {
-                    "stat": {
-                        "Block": "Attack"
-                    },
-                    "modifier": "Flat",
-                    "debuff": false
-                },
-                "value": 100,
-                "modifier": "Percent"
+                "StatModifier": { "stat": {"Block": "Attack"}, "modifier": "Flat", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
             },
             {
-                "StatModifier": {
-                    "stat": {
-                        "Evade": null
-                    },
-                    "modifier": "Flat",
-                    "debuff": false
-                },
-                "value": 100,
-                "modifier": "Percent"
+                "StatModifier": { "stat": {"Evade": null}, "modifier": "Flat", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     }

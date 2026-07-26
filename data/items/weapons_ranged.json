@@ -115,6 +115,7 @@
           "StatusStacks": {
             "status_id": "bleed",
             "damage_type": null,
+            "debuff": null,
             "skill_type": null,
             "skill_id": null
           }
@@ -158,6 +159,7 @@
                 "HasStatus": {
                   "status_id": "bleed",
                   "damage_type": null,
+                  "debuff": null,
                   "skill_type": null,
                   "not": false
                 }
@@ -179,6 +181,7 @@
               "HasStatus": {
                 "status_id": "bleed",
                 "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
                 "not": false
               }
@@ -210,7 +213,9 @@
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -315,6 +320,7 @@
                   "HasStatus": {
                     "status_id": "bleed",
                     "damage_type": null,
+                    "debuff": null,
                     "skill_type": null,
                     "not": false
                   }
@@ -552,7 +558,6 @@
               "duration": null,
               "escalation": null,
               "max_stacks": null,
-              "damage_type": null,
               "avoidable": null,
               "replace_on_value_only": false
             },
@@ -568,7 +573,9 @@
               }
             ],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -1104,7 +1111,6 @@
               "duration": null,
               "escalation": null,
               "max_stacks": null,
-              "damage_type": null,
               "avoidable": null,
               "replace_on_value_only": false
             },
@@ -1120,7 +1126,9 @@
               }
             ],
             "conditional_modifiers": [],
-            "independent_application": false
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -1298,7 +1306,7 @@
   },
   "scorpion_crossbow": {
     "name": "Deathstinger",
-    "icon": "items/weapons_ranged/scorpion_crossbow_2.webp",
+    "icon": "items/weapons_ranged/scorpion_crossbow_3.webp",
     "description": "The desert teaches that the smallest wound may carry the longest death.",
     "slot": "Weapon",
     "extra_slots": [
@@ -1385,6 +1393,7 @@
           "StatusDuration": {
             "status_id": "poison",
             "damage_type": null,
+            "debuff": null,
             "skill_type": null,
             "skill_id": null
           }

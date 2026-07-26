@@ -5,7 +5,10 @@ use shared::data::{
     stat_effect::{StatSkillFilter, StatStatusFilter, StatusDamageType},
 };
 
-use crate::components::shared::tooltips::{effects_tooltip, item_tooltip};
+use crate::components::{
+    data_context::DataContext,
+    shared::tooltips::{effects_tooltip, item_tooltip},
+};
 
 pub fn format_skill_modifier_conditions_pre(
     conditions: &[Condition],
@@ -19,12 +22,16 @@ pub fn format_skill_modifier_conditions_pre(
                 status_filter,
                 skill_type,
                 not,
-            } => format!(
-                " {}{}{} ",
-                prefix,
-                if *not { "Non-" } else { "" },
-                format_under_status_condition(status_filter, *skill_type),
-            ),
+            } => format_adjective_status_condition(status_filter, *skill_type)
+                .map(|status_str| {
+                    format!(
+                        " {}{}{} ",
+                        prefix,
+                        if *not { "Non-" } else { "" },
+                        status_str,
+                    )
+                })
+                .unwrap_or("".into()),
             Condition::StatusStacks { .. } => "".into(),
             Condition::Slowed => "Slowed ".into(),
             Condition::MaximumLife => "".into(),
@@ -56,13 +63,23 @@ pub fn format_skill_modifier_conditions_post(
     let on_conditions_str = conditions
         .iter()
         .filter_map(|condition| match condition {
-            Condition::HasStatus { .. } => None,
+            Condition::HasStatus {
+                status_filter,
+                skill_type: _,
+                not,
+            } => format_affected_by_status_condition(status_filter).map(|status_str| format!(
+                " {}{}",
+                if *not { "not " } else { "" },
+                status_str,
+            ))
+            ,
+            // Condition::HasStatus { .. } => None,
             Condition::StatusStacks { .. } => None,
             Condition::Slowed => None,
-            Condition::MaximumLife => Some(" on Maximum Life"),
-            Condition::MaximumMana => Some(" on Maximum Mana"),
-            Condition::LowLife => Some(" on Low Life"),
-            Condition::LowMana => Some(" on Low Mana"),
+            Condition::MaximumLife => Some(" on Maximum Life".to_string()),
+            Condition::MaximumMana => Some(" on Maximum Mana".to_string()),
+            Condition::LowLife => Some(" on Low Life".to_string()),
+            Condition::LowMana => Some(" on Low Mana".to_string()),
             Condition::ThreatLevel => None,
             Condition::HasItem { .. } => None,
         })
@@ -125,29 +142,63 @@ fn format_has_item_condition(
         (None, None) => "Item".into(),
     }
 }
-
-pub fn format_under_status_condition(
+pub fn format_adjective_status_condition(
     status_filter: &StatStatusFilter,
     skill_type: Option<SkillType>,
-) -> String {
+) -> Option<String> {
     let status_type_str = if let Some(status_id) = &status_filter.status_id {
-        let data_context: crate::components::data_context::DataContext =
-            leptos::prelude::expect_context();
+        let data_context: DataContext = leptos::prelude::expect_context();
         data_context.status_adjective(status_id)
     } else if let Some(damage_type) = status_filter.damage_type {
-        match damage_type {
-            StatusDamageType::Any => "under Damage over Time ",
-            StatusDamageType::Physical => "under Physical Damage over Time",
-            StatusDamageType::Fire => "under Fire Damage over Time",
-            StatusDamageType::Poison => "under Poison Damage over Time",
-            StatusDamageType::Storm => "under Storm Damage over Time",
-        }
-        .to_string()
+        Some(
+            match damage_type {
+                StatusDamageType::Any => "affected by Damage over Time ",
+                StatusDamageType::Physical => "affected by Physical Damage over Time",
+                StatusDamageType::Fire => "affected by Fire Damage over Time",
+                StatusDamageType::Poison => "affected by Poison Damage over Time",
+                StatusDamageType::Storm => "affected by Storm Damage over Time",
+            }
+            .to_string(),
+        )
     } else {
-        "".to_string()
+        None
     };
 
-    format!("{}{}", skilled_type_str(skill_type), status_type_str)
+    if status_type_str.is_some() || skill_type.is_some() {
+        Some(format!(
+            "{}{}",
+            skilled_type_str(skill_type),
+            status_type_str.unwrap_or("".into())
+        ))
+    } else {
+        None
+    }
+}
+
+pub fn format_affected_by_status_condition(status_filter: &StatStatusFilter) -> Option<String> {
+    let status_type_str = if let Some(status_id) = &status_filter.status_id {
+        let data_context: DataContext = leptos::prelude::expect_context();
+        if data_context.status_adjective(status_id).is_none() {
+            Some(data_context.status_name(status_id))
+        } else {
+            None
+        }
+    } else if let Some(damage_type) = status_filter.damage_type {
+        Some(
+            match damage_type {
+                StatusDamageType::Any => "Damage over Time",
+                StatusDamageType::Physical => "Physical Damage over Time",
+                StatusDamageType::Fire => "Fire Damage over Time",
+                StatusDamageType::Poison => "Poison Damage over Time",
+                StatusDamageType::Storm => "Storm Damage over Time",
+            }
+            .to_string(),
+        )
+    } else {
+        None
+    };
+
+    status_type_str.map(|status_type_str| format!("affected by {}", status_type_str))
 }
 
 pub fn skilled_type_str(skill_type: Option<SkillType>) -> &'static str {
