@@ -541,37 +541,40 @@ pub fn CircularProgressBar(
                         ></div>
                     </div>
                 </div>
-                <div class=move || {
-                    match settings.graphics_quality() {
-                        GraphicsQuality::High => {
-                            format!(
-                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
-                            bg-radial {} to-zinc-950 to-70%
-                            border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
-                                bar_width / 2,
-                                tint_background.unwrap_or("from-stone-600"),
-                            )
-                        }
-                        GraphicsQuality::Medium => {
-                            format!(
-                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
-                            bg-radial {} to-zinc-950 to-70%
-                            border border-[#6d532e]/70",
-                                bar_width / 2,
-                                tint_background.unwrap_or("from-stone-600"),
-                            )
-                        }
-                        GraphicsQuality::Low => {
-                            format!(
-                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
-                            bg-radial {} to-zinc-950 to-70%
-                            border border-[#5c4a2e]",
-                                bar_width / 2,
-                                tint_background.unwrap_or("from-stone-600"),
-                            )
+                <div
+                    style="clip-path: circle(50% at 50% 50%);"
+                    class=move || {
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                format!(
+                                    "absolute inset-{} 2xl:inset-{bar_width} rounded-full
+                                bg-radial {} to-zinc-950 to-70%
+                                border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
+                                    bar_width / 2,
+                                    tint_background.unwrap_or("from-stone-600"),
+                                )
+                            }
+                            GraphicsQuality::Medium => {
+                                format!(
+                                    "absolute inset-{} 2xl:inset-{bar_width} rounded-full
+                                bg-radial {} to-zinc-950 to-70%
+                                border border-[#6d532e]/70",
+                                    bar_width / 2,
+                                    tint_background.unwrap_or("from-stone-600"),
+                                )
+                            }
+                            GraphicsQuality::Low => {
+                                format!(
+                                    "absolute inset-{} 2xl:inset-{bar_width} rounded-full
+                                bg-radial {} to-zinc-950 to-70%
+                                border border-[#5c4a2e]",
+                                    bar_width / 2,
+                                    tint_background.unwrap_or("from-stone-600"),
+                                )
+                            }
                         }
                     }
-                }>// Icon
+                >// Icon
                 </div>
                 <div
                     class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
