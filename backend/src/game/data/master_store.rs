@@ -247,7 +247,9 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         })
         .chain(
             master_store
-                .monster_specs_store.values().flat_map(|monster| {
+                .monster_specs_store
+                .values()
+                .flat_map(|monster| {
                     monster.skills.iter().flat_map(|skill_specs| {
                         skill_specs
                             .targets
@@ -267,22 +269,20 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
                 .passives_store
                 .get("default")
                 .unwrap()
-                .nodes.values().flat_map(|passive| {
+                .nodes
+                .values()
+                .flat_map(|passive| {
                     passive
                         .triggers
                         .iter()
                         .flat_map(|trigger| trigger.trigger_effect.effects.iter())
                 }),
         )
-        .chain(
-            master_store
-                .items_store
-                .content.values().flat_map(|item| {
-                    item.triggers
-                        .iter()
-                        .flat_map(|trigger| trigger.trigger_effect.effects.iter())
-                }),
-        )
+        .chain(master_store.items_store.content.values().flat_map(|item| {
+            item.triggers
+                .iter()
+                .flat_map(|trigger| trigger.trigger_effect.effects.iter())
+        }))
         .chain(
             master_store
                 .statuses_store

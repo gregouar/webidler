@@ -10,16 +10,17 @@ use shared::{
 };
 
 use crate::{
-    assets::img_asset,
+    assets::{img_asset, screenshot_asset},
     components::{
         backend_client::BackendClient,
         captcha::*,
         events::keyboard_event_key,
-        shared::{leaderboard::LeaderboardPanel, player_count::PlayerCount},
+        settings::SettingsContext,
+        shared::{leaderboard::LeaderboardPanel, news::NewsInset, player_count::PlayerCount},
         ui::{
             ALink,
             buttons::MenuButton,
-            card::Card,
+            card::{Card, CardInset, CardTitle},
             input::{Input, ValidatedInput},
             list_row::MenuListRow,
             toast::*,
@@ -138,109 +139,332 @@ fn MainMenu() -> impl IntoView {
 
     let show_forgot_password_modal = RwSignal::new(false);
     let open_leaderboard = RwSignal::new(false);
+    let selected_screenshot = RwSignal::new(None);
 
     view! {
-        <main class="my-0 mx-auto max-w-3xl text-center flex flex-col justify-around">
-            <PlayerCount />
-            <LeaderboardPanel open=open_leaderboard />
-            <div>
+        <main class="w-full max-w-[112rem] mx-auto px-2 pb-4">
+            <div class="w-full max-w-3xl mx-auto text-center">
+                <PlayerCount />
+                <LeaderboardPanel open=open_leaderboard />
                 <Logo />
-                // <div class="flex flex-col space-y-2">
-                <Card>
-                    // <form>
-                    <div class="w-full mx-auto text-left">
-                        <label class="block mb-2 text-sm font-medium text-zinc-400">
-                            "Sign In:"
-                        </label>
-                        <Input
-                            id="username"
-                            input_type="text"
-                            placeholder="Enter your username"
-                            bind=username
-                            on:keydown=move |ev: leptos::ev::KeyboardEvent| {
-                                if keyboard_event_key(&ev).as_deref() == Some("Enter")
-                                    && let Some(pw) = password_ref.get()
-                                {
-                                    pw.focus().unwrap();
-                                }
-                            }
-                        />
-                    </div>
-                    <div class="w-full mx-auto mb-6 text-left">
-                        <Input
-                            node_ref=password_ref
-                            id="password"
-                            input_type="password"
-                            placeholder="Enter your password"
-                            bind=password
-                            on:keydown={
-                                let signin = signin.clone();
-                                move |ev| {
-                                    if keyboard_event_key(&ev).as_deref() == Some("Enter") {
-                                        signin();
-                                    }
-                                }
-                            }
-                        />
-                    </div>
-                    <div class="text-right -mt-4 mb-2">
-                        <button
-                            class="btn text-amber-300 text-sm underline hover:text-amber-200"
-                            on:click=move |_| show_forgot_password_modal.set(true)
-                        >
-                            "I forgot my password"
-                        </button>
-                    </div>
-                    <Captcha token=captcha_token />
-                    // </form>
-
-                    <MenuButton on:click=move |_| signin() disabled=disable_connect class="mb-4">
-                        {move || if connecting.get() { "Connecting..." } else { "Connect" }}
-                    </MenuButton>
-                    <MenuButton
-                        on:click=move |_| guest_signin()
-                        disabled=disable_guest
-                        class="mb-4"
-                    >
-                        "Play as Guest"
-                    </MenuButton>
-                    <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
-                    <MenuButton on:click=move |_| {
-                        open_leaderboard.set(true)
-                    }>"Leaderboard"</MenuButton>
-
-                </Card>
-                <ForgotPasswordModal open=show_forgot_password_modal />
-                <GuestModal open=show_guest_modal captcha_token />
             </div>
 
-            <MenuListRow class="mt-2 px-4 py-3 text-left">
-                <div class="space-y-3">
-                    <div class="space-y-1.5">
-                        <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-amber-300/90">
-                            "Disclaimer"
-                        </h2>
-                        <p class="text-sm leading-relaxed text-zinc-300">
-                            "2D artworks featured in this app are generated using AI tools, with DALL-E 3 (free version via "
-                            <a
-                                href="https://chatgpt.com"
-                                class="text-amber-300 underline hover:text-amber-200"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                "chatgpt.com"
-                            </a>")."
-                        </p>
-                    </div>
+            <div class="2xl:grid 2xl:grid-cols-[minmax(18rem,1fr)_minmax(0,48rem)_minmax(18rem,1fr)] 2xl:items-start 2xl:gap-6">
+                <ScreenshotColumn
+                    screenshots=[
+                        ("battle.jpg", "Battle", "Fight waves of enemies across endless grinds."),
+                        (
+                            "skills.jpg",
+                            "Skills",
+                            "Shape your build with skills and permanent upgrades.",
+                        ),
+                        (
+                            "passives.jpg",
+                            "Passive progression",
+                            "Master a two-layer passives tree for in-run and persistent progression.",
+                        ),
+                    ]
+                    selected=selected_screenshot
+                />
 
-                    <div class="flex justify-center gap-6 border-t border-[#5f4c30]/55 pt-2 text-sm">
-                        <ALink href="/terms">"Terms & Conditions"</ALink>
-                        <ALink href="/privacy">"Privacy Notice"</ALink>
-                    </div>
+                <div class="w-full max-w-3xl mx-auto text-center">
+
+                    <Card>
+                        <CardTitle>"Kill. Loot. Trade. Build. Repeat."</CardTitle>
+                        <CardInset class="mb-3 text-left">
+                            <div class="space-y-1.5">
+                                <p class="text-sm leading-relaxed text-zinc-300">
+                                    "Grind to Rust is a free, open-source browser incremental idle game inspired by Path of Exile. Discover powerful loot, master a deep item and crafting system, trade with other players, and theorycraft unique builds through multiple layers of long-term progression."
+                                </p>
+                            </div>
+                        </CardInset>
+
+                        <div class="text-left">
+                            <CardTitle>"Sign In"</CardTitle>
+                        </div>
+                        <CardInset class="text-left">
+                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(18.75rem,1fr)] sm:items-start">
+                                <div class="min-w-0">
+                                    <div class="w-full mx-auto text-left">
+                                        // <label class="block mb-2 text-sm font-medium text-zinc-400">
+                                        // "Sign In:"
+                                        // </label>
+                                        <Input
+                                            id="username"
+                                            input_type="text"
+                                            placeholder="Enter your username"
+                                            bind=username
+                                            on:keydown=move |ev: leptos::ev::KeyboardEvent| {
+                                                if keyboard_event_key(&ev).as_deref() == Some("Enter")
+                                                    && let Some(pw) = password_ref.get()
+                                                {
+                                                    pw.focus().unwrap();
+                                                }
+                                            }
+                                        />
+                                    </div>
+                                    <div class="w-full mx-auto text-left mt-2">
+                                        <Input
+                                            node_ref=password_ref
+                                            id="password"
+                                            input_type="password"
+                                            placeholder="Enter your password"
+                                            bind=password
+                                            on:keydown={
+                                                let signin = signin.clone();
+                                                move |ev| {
+                                                    if keyboard_event_key(&ev).as_deref() == Some("Enter") {
+                                                        signin();
+                                                    }
+                                                }
+                                            }
+                                        />
+                                    </div>
+                                    <div class="text-right mt-1">
+                                        <button
+                                            class="btn text-amber-300 text-sm underline hover:text-amber-200"
+                                            on:click=move |_| show_forgot_password_modal.set(true)
+                                        >
+                                            "I forgot my password"
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="min-w-0">
+                                    <div class="flex min-h-[4.1rem] items-start justify-center overflow-hidden">
+                                        <Captcha token=captcha_token />
+                                    </div>
+                                    <div class="mx-auto mt-2 flex w-[18.75rem] max-w-full flex-col">
+                                        <MenuButton
+                                            on:click=move |_| signin()
+                                            disabled=disable_connect
+                                            class="w-full"
+                                        >
+                                            {move || {
+                                                if connecting.get() { "Connecting..." } else { "Connect" }
+                                            }}
+                                        </MenuButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </CardInset>
+
+                        <MenuButton
+                            on:click=move |_| guest_signin()
+                            disabled=disable_guest
+                            class="mt-4 mb-4"
+                        >
+                            "Play as Guest"
+                        </MenuButton>
+                        <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
+                        <MenuButton on:click=move |_| {
+                            open_leaderboard.set(true)
+                        }>"Leaderboard"</MenuButton>
+
+                        <div class="mt-4 text-left">
+                            <CardTitle>"News"</CardTitle>
+                            <NewsInset class="w-full gap-3 max-h-80" />
+                        </div>
+                    </Card>
+                    <ForgotPasswordModal open=show_forgot_password_modal />
+                    <GuestModal open=show_guest_modal captcha_token />
+
+                    <MenuListRow class="mt-2 px-4 py-3 text-left">
+                        <div class="space-y-3">
+                            <div class="space-y-1.5">
+                                <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-amber-300/90">
+                                    "Disclaimer"
+                                </h2>
+                                <p class="text-sm leading-relaxed text-zinc-300">
+                                    "This game uses AI-generated dummy assets, which are currently being replaced by artwork from GDCA. The game is developed by Gregouar. Icons are from "
+                                    <a
+                                        href="https://game-icons.net"
+                                        class="text-amber-300 underline hover:text-amber-200"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        "game-icons.net"
+                                    </a>"."
+                                </p>
+                            </div>
+
+                            <div class="flex justify-center gap-6 border-t border-[#5f4c30]/55 pt-2 text-sm">
+                                <ALink href="/terms">"Terms & Conditions"</ALink>
+                                <ALink href="/privacy">"Privacy Notice"</ALink>
+                            </div>
+                        </div>
+                    </MenuListRow>
                 </div>
-            </MenuListRow>
 
+                <ScreenshotColumn
+                    screenshots=[
+                        (
+                            "unique_item.jpg",
+                            "Unique items",
+                            "Discover build-defining unique items.",
+                        ),
+                        ("forge.jpg", "Forge", "Craft, trade, and perfect powerful items."),
+                        ("edicts.jpg", "Edicts", "Customize every grinds with dangerous edicts."),
+                    ]
+                    selected=selected_screenshot
+                />
+            </div>
+
+            <ScreenshotLightbox selected=selected_screenshot />
         </main>
+    }
+}
+
+#[component]
+fn ScreenshotColumn(
+    screenshots: [(&'static str, &'static str, &'static str); 3],
+    selected: RwSignal<Option<&'static str>>,
+) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
+    let stone_texture = img_asset("ui/dark_stone.webp");
+
+    view! {
+        <aside class="hidden 2xl:flex flex-col gap-6 mt-16" aria-label="Game screenshots">
+            {screenshots
+                .into_iter()
+                .map(|(file, title, description)| {
+                    let stone_texture = stone_texture.clone();
+                    view! {
+                        <article class="group mx-auto w-[90%] max-w-sm">
+                            <div
+                                class="relative"
+                                style=move || {
+                                    if settings.uses_heavy_effects() {
+                                        "filter: drop-shadow(0 10px 25px rgba(0,0,0,0.45));"
+                                    } else {
+                                        ""
+                                    }
+                                }
+                            >
+                                <div
+                                    class="absolute inset-0 bg-black clip-octagon"
+                                    aria-hidden="true"
+                                ></div>
+
+                                <div
+                                    class=move || {
+                                        format!(
+                                            "clip-octagon absolute inset-0 border {}",
+                                            if settings.uses_heavy_effects() {
+                                                "border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                                            } else if settings.uses_surface_effects() {
+                                                "border-[#665131]/50"
+                                            } else {
+                                                "border-[#5c4a2e]/60"
+                                            },
+                                        )
+                                    }
+                                    style=move || {
+                                        if settings.uses_textures() {
+                                            format!(
+                                                "background-image: url('{}'); background-blend-mode: normal; background-color: rgb(39, 39, 42);",
+                                                stone_texture,
+                                            )
+                                        } else {
+                                            "background-image: linear-gradient(180deg, rgba(74,69,76,0.98), rgba(30,29,34,1)); background-color: rgb(39, 39, 42);"
+                                                .to_string()
+                                        }
+                                    }
+                                >
+                                    <Show when=move || settings.uses_surface_effects()>
+                                        <div class="pointer-events-none clip-octagon [--cut:11px] absolute inset-[1px] border border-[#d4b57a]/8"></div>
+                                    </Show>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="btn clip-octagon relative z-10 block w-full overflow-hidden p-[3px] transition-transform duration-300 active:scale-[0.98]"
+                                    aria-label=format!("View {title} screenshot at full size")
+                                    on:click=move |_| selected.set(Some(file))
+                                >
+                                    <div class="clip-octagon [--cut:9px] overflow-hidden">
+                                        <img
+                                            src=screenshot_asset(file)
+                                            alt=format!("{title} gameplay screenshot")
+                                            class="aspect-video w-full object-cover opacity-85
+                                            saturate-[0.7] sepia-[0.2] brightness-90
+                                            transition-[filter,transform] duration-300
+                                            group-hover:grayscale-0 group-hover:sepia-0 group-hover:saturate-100 group-hover:brightness-100
+                                            group-hover:scale-[1.01]"
+                                        />
+                                    </div>
+                                </button>
+                            </div>
+                            <p class="px-2 pt-1 text-center text-sm leading-relaxed text-zinc-300">
+                                {description}
+                            </p>
+                        </article>
+                    }
+                })
+                .collect_view()}
+        </aside>
+    }
+}
+
+#[component]
+fn ScreenshotLightbox(selected: RwSignal<Option<&'static str>>) -> impl IntoView {
+    let lightbox_ref = NodeRef::<Div>::new();
+    Effect::new(move |_| {
+        if selected.get().is_some()
+            && let Some(lightbox) = lightbox_ref.get()
+        {
+            let _ = lightbox.focus();
+        }
+    });
+
+    view! {
+        <style>
+            "@keyframes screenshot-lightbox-fade-in {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes screenshot-lightbox-scale-in {
+                from { opacity: 0; transform: scale(0.97); }
+                to { opacity: 1; transform: scale(1); }
+            }"
+        </style>
+        <Show when=move || selected.get().is_some()>
+            <div
+                node_ref=lightbox_ref
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+                style="animation: screenshot-lightbox-fade-in 160ms ease-out both;"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Full-size game screenshot"
+                tabindex="0"
+                on:click=move |_| selected.set(None)
+                on:keydown=move |ev| {
+                    if keyboard_event_key(&ev).as_deref() == Some("Escape") {
+                        selected.set(None);
+                    }
+                }
+            >
+                <div
+                    class="relative flex max-h-full max-w-full items-center justify-center"
+                    style="animation: screenshot-lightbox-scale-in 180ms ease-out both;"
+                >
+                    <img
+                        src=move || { selected.get().map(screenshot_asset).unwrap_or_default() }
+                        alt="Full-size game screenshot"
+                        class="max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] object-contain shadow-2xl"
+                        on:click=|ev| ev.stop_propagation()
+                    />
+                    <button
+                        type="button"
+                        class="btn absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full border border-zinc-500 bg-black/75 text-2xl text-white hover:border-amber-300 hover:text-amber-200"
+                        aria-label="Close full-size screenshot"
+                        on:click=move |_| selected.set(None)
+                    >
+                        "×"
+                    </button>
+                </div>
+            </div>
+        </Show>
     }
 }
 
