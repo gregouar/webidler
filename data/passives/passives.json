@@ -13642,9 +13642,9 @@
                 }
               ]
             },
-            "description": "Bleed spreads to nearby Enemies, for half its remaining Duration.",
+            "description": null,
             "trigger_id": "spread_bleed",
-            "target": "SameTarget",
+            "target": "Enemy",
             "modifiers": [
               {
                 "stat": {
@@ -13657,7 +13657,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 1.0,
+                "factor": 0.3,
                 "source": {
                   "StatusValue": {
                     "status_id": "bleed",
@@ -13678,7 +13678,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 0.3,
                 "source": {
                   "StatusDuration": {
                     "status_id": "bleed",
@@ -13693,7 +13693,7 @@
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
-            "skill_shape": "Contact",
+            "skill_shape": "Single",
             "effects": [
               {
                 "success_chance": {
@@ -13704,7 +13704,7 @@
                   "status_id": "bleed",
                   "value": 0.0,
                   "value_factor": 1.0,
-                  "duration": null,
+                  "duration": 0.0,
                   "escalation": null,
                   "max_stacks": null,
                   "avoidable": null,
@@ -13779,9 +13779,9 @@
                 }
               ]
             },
-            "description": "Burn spreads to nearby Enemies, for half its remaining Duration.",
+            "description": null,
             "trigger_id": "spread_burn",
-            "target": "SameTarget",
+            "target": "Enemy",
             "modifiers": [
               {
                 "stat": {
@@ -13794,7 +13794,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 1.0,
+                "factor": 0.3,
                 "source": {
                   "StatusValue": {
                     "status_id": "burn",
@@ -13815,7 +13815,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 0.3,
                 "source": {
                   "StatusDuration": {
                     "status_id": "burn",
@@ -13830,7 +13830,7 @@
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
-            "skill_shape": "Contact",
+            "skill_shape": "Single",
             "effects": [
               {
                 "success_chance": {
@@ -13839,34 +13839,15 @@
                 },
                 "ApplyStatus": {
                   "status_id": "burn",
-                  "value": 1.0,
+                  "value": 0.0,
                   "value_factor": 1.0,
-                  "duration": null,
+                  "duration": 0.0,
                   "escalation": null,
                   "max_stacks": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
                   {
                     "Damage": {
                       "skill_type": null,
@@ -13892,6 +13873,25 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -13916,9 +13916,9 @@
                 }
               ]
             },
-            "description": "Poison spreads to nearby Enemies, for half its remaining Duration.",
+            "description": null,
             "trigger_id": "spread_poison",
-            "target": "SameTarget",
+            "target": "Enemy",
             "modifiers": [
               {
                 "stat": {
@@ -13931,7 +13931,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 1.0,
+                "factor": 0.3,
                 "source": {
                   "StatusValue": {
                     "status_id": "poison",
@@ -13952,7 +13952,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 0.3,
                 "source": {
                   "StatusDuration": {
                     "status_id": "poison",
@@ -13967,7 +13967,7 @@
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
-            "skill_shape": "Contact",
+            "skill_shape": "Single",
             "effects": [
               {
                 "success_chance": {
@@ -13976,42 +13976,15 @@
                 },
                 "ApplyStatus": {
                   "status_id": "poison",
-                  "value": 1.0,
+                  "value": 0.0,
                   "value_factor": 1.0,
-                  "duration": null,
+                  "duration": 0.0,
                   "escalation": null,
                   "max_stacks": null,
                   "avoidable": null,
                   "replace_on_value_only": false
                 },
                 "ignore_stat_effects": [
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
                   {
                     "StatusPower": {
                       "status_id": null,
@@ -14029,6 +14002,33 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],

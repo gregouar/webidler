@@ -1,3 +1,5 @@
+use rand::{self, seq::IteratorRandom};
+
 use shared::data::{
     character::CharacterId,
     character_status::StatusId,
@@ -67,8 +69,9 @@ pub fn apply_trigger_effects(
                             .monster_states
                             .iter()
                             .enumerate()
-                            .find(|(_, monster_state)| monster_state.character_state.is_alive)
+                            .filter(|(_, monster_state)| monster_state.character_state.is_alive)
                             .map(|(i, _)| i)
+                            .choose(&mut rand::rng())
                             .unwrap_or_default(),
                     ),
                     CharacterId::Monster(_) => CharacterId::Player,

@@ -16,6 +16,7 @@ Content:
 Balance Changes:
 
 - Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
+- Nerf Spread Destruction, only target a single other enemy and do less damage and duration.
 - Almost all "More Critical Damage" have been transformed to "Increased Critical Damage" (this is a nerf).
 - Damage Taken modifier can now be More and become multiplicative with each others.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.

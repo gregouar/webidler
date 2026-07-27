@@ -83,12 +83,19 @@ pub fn format_trigger(
         }
     });
 
-    let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single).then(|| {
-        format!(
-            ", targeting {}",
-            shape_str(trigger.trigger_effect.skill_shape)
-        )
-    });
+    let shape_infos = (trigger.trigger_effect.skill_shape != SkillShape::Single
+        || trigger.trigger_effect.target == TriggerTarget::Enemy)
+        .then(|| {
+            format!(
+                ", targeting {}{}",
+                shape_str(trigger.trigger_effect.skill_shape),
+                if trigger.trigger_effect.target == TriggerTarget::Enemy {
+                    " Enemy"
+                } else {
+                    ""
+                }
+            )
+        });
 
     // let name_str = trigger_status_name.map(|name| format!("{} do ", name));
 
