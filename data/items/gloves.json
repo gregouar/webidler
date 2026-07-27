@@ -625,6 +625,21 @@
         "ignore_quality": true
       },
       {
+        "stat": {
+          "Speed": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          10.0,
+          15.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -650,7 +665,7 @@
         },
         "description": null,
         "trigger_id": "dead_man_grip",
-        "target": "SameTarget",
+        "target": "Me",
         "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
@@ -898,18 +913,18 @@
             },
             "ignore_stat_effects": [
               {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
                   "damage_type": "Storm",
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],

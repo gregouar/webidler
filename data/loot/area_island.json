@@ -5,7 +5,7 @@
         {"item_id": "throwing_shield",    "weight": 9999},
         {"item_id": "jellyfish",          "weight": 9999},
         {"item_id": "kite_shield_unique", "weight": 9999},
-        {"item_id": "dead_man_grip",      "weight": 9999},
+        {"item_id": "dead_man_grip",      "weight":  999},
         {"item_id": "edict_treasure_map", "weight": 2999}
     ]
 }
