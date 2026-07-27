@@ -16,7 +16,10 @@ use crate::{
     components::{
         data_context::DataContext,
         game::portrait::CharacterPortrait,
-        icons::area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
+        icons::{
+            area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
+            battle_scene::RushIcon,
+        },
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
@@ -28,7 +31,7 @@ use crate::{
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
-            number::format_duration_in_days,
+            number::{format_duration, format_duration_in_days},
             tooltip::{StaticTooltip, StaticTooltipPosition},
         },
     },
@@ -58,7 +61,42 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                 <Card class="w-2/3 aspect-[12/8]">
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     flex justify-between">
-                        <CardTitle>"Grinds"</CardTitle>
+                        <div class="flex items-center gap-2 items-center">
+                            <CardTitle>"Grinds"</CardTitle>
+                            <StaticTooltip
+                                position=StaticTooltipPosition::Bottom
+                                tooltip=move || {
+                                    let stamina = town_context.character.read().resource_stamina;
+                                    view! {
+                                        <div class="max-w-xs whitespace-normal">
+                                            {if stamina.is_zero() {
+                                                "Stamina can only be accumulated while offline in a Grind."
+                                                    .to_string()
+                                            } else {
+                                                format!(
+                                                    "{} Stamina available for your next Grind.",
+                                                    format_duration(stamina, false),
+                                                )
+                                            }}
+                                        </div>
+                                    }
+                                }
+                            >
+                                <span class=move || {
+                                    format!(
+                                        "inline-flex text-base xl:text-xl text-amber-300 {}",
+                                        if town_context.character.read().resource_stamina.is_zero()
+                                        {
+                                            "grayscale"
+                                        } else {
+                                            ""
+                                        },
+                                    )
+                                }>
+                                    <RushIcon />
+                                </span>
+                            </StaticTooltip>
+                        </div>
                         <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-base xl:text-lg">
                             {move || {
                                 (!town_context.character.read().played_time.is_zero())

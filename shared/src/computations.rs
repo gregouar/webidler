@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::{
     constants::{
         self, CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
@@ -13,6 +15,11 @@ use crate::{
 
 pub fn exponential(level: AreaLevel, factor: f64) -> f64 {
     10f64.powf(level.saturating_sub(1) as f64 * factor)
+}
+
+pub fn stamina_spill(stamina: Duration) -> Duration {
+    let spill_seconds = stamina.as_secs_f64() * constants::STAMINA_SPILL_PERCENT;
+    Duration::from_secs((spill_seconds / 60.0).floor() as u64 * 60)
 }
 
 // for armor physical damage decrease
@@ -134,6 +141,19 @@ pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn stamina_spill_rounds_down_to_whole_minutes() {
+        assert_eq!(stamina_spill(Duration::from_secs(599)), Duration::ZERO);
+        assert_eq!(
+            stamina_spill(Duration::from_secs(600)),
+            Duration::from_secs(60)
+        );
+        assert_eq!(
+            stamina_spill(Duration::from_hours(24)),
+            Duration::from_secs(2 * 60 * 60 + 24 * 60)
+        );
+    }
 
     #[test]
     fn skill_mastery_costs_are_consistent_at_level_boundaries() {

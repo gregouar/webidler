@@ -26,6 +26,7 @@ pub struct CharacterEntry {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
+    pub resource_stamina: f64,
     pub played_time_seconds: f64,
 
     pub created_at: UtcDateTime,
@@ -123,6 +124,7 @@ pub async fn read_character<'c>(
             resource_gems,
             resource_shards,
             resource_gold,
+            resource_stamina,
             played_time_seconds,
             created_at,
             updated_at,
@@ -203,6 +205,7 @@ pub async fn read_all_user_characters<'c>(
             resource_gems,
             resource_shards,
             resource_gold,
+            resource_stamina,
             played_time_seconds,
             created_at,
             updated_at,
@@ -296,6 +299,28 @@ pub async fn update_character_resources<'c>(
     )
     .fetch_one(executor)
     .await
+}
+
+pub async fn set_character_stamina<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    resource_stamina: f64,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        r#"
+        UPDATE characters
+        SET
+            resource_stamina = $2,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE character_id = $1
+        "#,
+        character_id,
+        resource_stamina,
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(())
 }
 
 pub async fn update_character_max_area_level<'c>(

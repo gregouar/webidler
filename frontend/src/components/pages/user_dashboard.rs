@@ -686,7 +686,7 @@ pub fn CreateCharacterPanel(
     };
 
     let portraits = [
-        "human_male_1",
+        "human_male_1_gdca",
         "human_female_1",
         "human_male_2",
         "human_female_2",

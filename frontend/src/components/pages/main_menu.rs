@@ -169,7 +169,7 @@ fn MainMenu() -> impl IntoView {
 
                 <div class="w-full max-w-3xl mx-auto text-center">
 
-                    <Card>
+                    <Card class:py-2 class:px-4>
                         <CardTitle>"Kill. Loot. Trade. Build. Repeat."</CardTitle>
                         <CardInset class="mb-3 text-left">
                             <div class="space-y-1.5">

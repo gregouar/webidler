@@ -6,6 +6,7 @@ use leptos::{html::*, prelude::*};
 use crate::components::{
     data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
+    icons::battle_scene::RushIcon,
     shared::{
         item_card::ItemCard,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -16,7 +17,8 @@ use crate::components::{
         card::{CardHeader, CardInset, MenuCard},
         confirm::ConfirmContext,
         menu_panel::MenuPanel,
-        number::format_duration,
+        number::{NumberInset, format_duration},
+        tooltip::{StaticTooltip, StaticTooltipPosition},
     },
 };
 use shared::{
@@ -61,6 +63,8 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 
     let gems_value = Signal::derive(move || game_context.player_resources.read().gems);
     let shards_value = Signal::derive(move || game_context.player_resources.read().shards);
+    let stamina_kept =
+        Signal::derive(move || computations::stamina_spill(game_context.player_stamina.get()));
 
     let area_completed = move || game_context.area_state.read().max_area_level;
 
@@ -152,7 +156,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
             <CardHeader title="End Grind" on_close=move || open.set(false) />
 
             <CardInset>
-                <div class="grid grid-cols-3 gap-4 text-center">
+                <div class="grid grid-cols-4 gap-4 text-center">
                     <div class="flex flex-col items-center gap-1">
                         <GoldCounter value=gold_donation_value w_full=true />
                     </div>
@@ -161,6 +165,39 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <ShardsCounter value=shards_value w_full=true />
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <StaticTooltip
+                            position=StaticTooltipPosition::Bottom
+                            tooltip=|| {
+                                view! {
+                                    {format!(
+                                        "{:.0}% of Stamina kept",
+                                        constants::STAMINA_SPILL_PERCENT * 100.0,
+                                    )}
+                                }
+                            }
+                        >
+                            <div class=move || {
+                                format!(
+                                    "flex items-center gap-1 text-sm xl:text-xl font-number font-semibold text-amber-300 {}",
+                                    if stamina_kept.get() < std::time::Duration::from_secs(60) {
+                                        "grayscale"
+                                    } else {
+                                        ""
+                                    },
+                                )
+                            }>
+                                <NumberInset>
+                                    <div class="text-right w-[8ch]">
+                                        {move || format_duration(stamina_kept.get(), false)}
+                                    </div>
+                                </NumberInset>
+                                <span class="text-base xl:text-2xl">
+                                    <RushIcon />
+                                </span>
+                            </div>
+                        </StaticTooltip>
                     </div>
                 </div>
 

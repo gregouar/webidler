@@ -1,0 +1,2 @@
+ALTER TABLE characters
+ADD COLUMN resource_stamina FLOAT NOT NULL DEFAULT 0;

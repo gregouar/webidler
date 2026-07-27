@@ -229,6 +229,13 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
+            db::characters::set_character_stamina(
+                &mut *tx,
+                self.character_id,
+                computations::stamina_spill(self.game_data.player_stamina).as_secs_f64(),
+            )
+            .await?;
+
             db::characters::update_character_max_area_level(
                 &mut tx,
                 self.character_id,

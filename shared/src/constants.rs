@@ -15,6 +15,7 @@ pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
 pub const WAVES_PER_AREA_LEVEL: u8 = 5;
 pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
 pub const MAX_PLAYER_STAMINA: Duration = Duration::from_hours(24);
+pub const STAMINA_SPILL_PERCENT: f64 = 0.1;
 
 pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
 // pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07765;

@@ -261,7 +261,7 @@ async fn new_game_instance(
         player_resources,
         player_base_specs,
         player_inventory,
-        Default::default(),
+        Duration::from_secs_f64(character.resource_stamina),
         player_controller,
     )?;
 
