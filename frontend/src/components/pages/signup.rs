@@ -11,7 +11,7 @@ use crate::components::{
     pages::{privacy::PrivacyContent, terms::TermsContent},
     ui::{
         buttons::MenuButton,
-        card::{Card, CardTitle},
+        card::{Card, CardInset, CardTitle},
         input::{Input, ValidatedInput},
         toast::*,
     },
@@ -105,7 +105,7 @@ pub fn SignUpPage() -> impl IntoView {
                     </div>
                 </div>
 
-                <div class="space-y-4 text-left text-white">
+                <CardInset class="space-y-4 text-left text-white">
                     <ValidatedInput
                         label="Username"
                         id="username"
@@ -172,7 +172,7 @@ pub fn SignUpPage() -> impl IntoView {
                     <div class="w-full flex justify-center">
                         <Captcha token=captcha_token />
                     </div>
-                </div>
+                </CardInset>
                 <MenuButton class="w-full" on:click=on_submit disabled=disable_submit>
                     "Confirm"
                 </MenuButton>

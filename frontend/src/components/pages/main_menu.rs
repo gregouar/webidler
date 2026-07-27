@@ -145,7 +145,7 @@ fn MainMenu() -> impl IntoView {
         <main class="w-full max-w-[112rem] mx-auto px-2 pb-4">
             <div class="w-full max-w-3xl mx-auto text-center">
                 <PlayerCount />
-                <LeaderboardPanel open=open_leaderboard />
+                <LeaderboardPanel open=open_leaderboard class:fixed />
                 <Logo />
             </div>
 
@@ -252,24 +252,24 @@ fn MainMenu() -> impl IntoView {
                         <MenuButton
                             on:click=move |_| guest_signin()
                             disabled=disable_guest
-                            class="mt-4 mb-4"
+                            class="mt-4"
                         >
                             "Play as Guest"
                         </MenuButton>
                         <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
-                        <MenuButton on:click=move |_| {
-                            open_leaderboard.set(true)
-                        }>"Leaderboard"</MenuButton>
+                        <MenuButton class="mt-4" on:click=move |_| { open_leaderboard.set(true) }>
+                            "Leaderboard"
+                        </MenuButton>
 
                         <div class="mt-4 text-left">
                             <CardTitle>"News"</CardTitle>
-                            <NewsInset class="w-full gap-3 max-h-80" />
                         </div>
+                        <NewsInset class="w-full gap-3 max-h-80" />
                     </Card>
                     <ForgotPasswordModal open=show_forgot_password_modal />
                     <GuestModal open=show_guest_modal captcha_token />
 
-                    <MenuListRow class="mt-2 px-4 py-3 text-left">
+                    <MenuListRow class="mt-6 mb-2 px-4 py-3 text-left">
                         <div class="space-y-3">
                             <div class="space-y-1.5">
                                 <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-amber-300/90">

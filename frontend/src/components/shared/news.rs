@@ -15,7 +15,7 @@ pub fn NewsInset(#[prop(default = "w-full gap-3")] class: &'static str) -> impl 
     });
 
     view! {
-        <CardInset class=class>
+        <CardInset class=class class:text-left>
             <Transition fallback=move || {
                 view! { <p class="text-zinc-400">"Loading..."</p> }
             }>
