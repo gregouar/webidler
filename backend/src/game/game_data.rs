@@ -187,6 +187,7 @@ impl GameInstanceData {
             &player_inventory,
             &passives_tree_specs,
             &passives_tree_state,
+            &area_specs,
             &area_threat,
         );
 

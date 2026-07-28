@@ -3,7 +3,7 @@ use std::{collections::HashMap, time::Duration};
 use shared::{
     constants::{DEFAULT_MAX_LEVEL, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST},
     data::{
-        area::{AreaLevel, AreaThreat},
+        area::{AreaLevel, AreaSpecs, AreaThreat},
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
         item::{SkillRange, SkillShape},
@@ -116,6 +116,7 @@ pub fn update_player_specs(
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_state: &PassivesTreeState,
+    area_specs: &AreaSpecs,
     area_threat: &AreaThreat,
 ) -> PlayerSpecs {
     let effects: Vec<_> = [
@@ -143,6 +144,7 @@ pub fn update_player_specs(
     let mut player_specs = compute_player_specs(
         skill_masteries_store,
         statuses_store,
+        area_specs,
         area_threat,
         player_base_specs,
         player_state,
@@ -190,6 +192,7 @@ pub fn update_player_specs(
 fn compute_player_specs(
     skill_masteries_store: &SkillMasteriesStore,
     statuses_store: &StatusesStore,
+    area_specs: &AreaSpecs,
     area_threat: &AreaThreat,
     player_base_specs: &PlayerBaseSpecs,
     player_state: &PlayerState,
@@ -250,7 +253,7 @@ fn compute_player_specs(
     );
 
     player_specs.movement_cooldown = *movement_cooldown;
-    player_specs.gold_find = *gold_find;
+    player_specs.gold_find = *gold_find * *area_specs.gold_find * 0.01;
     player_specs.threat_gain = *threat_gain;
 
     for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {

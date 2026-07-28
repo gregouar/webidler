@@ -1419,6 +1419,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Armor(Some(ArmorStatType::Fire)), Modifier::Flat),
         (StatType::Armor(Some(ArmorStatType::Poison)), Modifier::Flat),
         (StatType::Armor(Some(ArmorStatType::Storm)), Modifier::Flat),
+        (
+            StatType::Armor(Some(ArmorStatType::Elemental)),
+            Modifier::Flat,
+        ),
         (StatType::Armor(None), Modifier::Increased),
         (StatType::Evade(None), Modifier::Flat),
         (
@@ -1490,7 +1494,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             },
             Modifier::More,
         ),
-        (StatType::CritDamage(Default::default()), Modifier::More),
+        (
+            StatType::CritDamage(Default::default()),
+            Modifier::Increased,
+        ),
         (
             StatType::CritChance(Default::default()),
             Modifier::Increased,

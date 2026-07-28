@@ -69,6 +69,7 @@ pub async fn tick(
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
             game_data.passives_tree_state.read(),
+            &game_data.area_specs,
             &game_data.area_threat,
         );
     }
@@ -293,6 +294,7 @@ fn respawn_player(game_data: &mut GameInstanceData, master_store: &MasterStore) 
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,
         game_data.passives_tree_state.read(),
+        &game_data.area_specs,
         &game_data.area_threat,
     );
 

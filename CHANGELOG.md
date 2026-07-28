@@ -4,8 +4,8 @@
 
 Features:
 
-- Skill persistently gain experience and level up. This reward with Skill Mastery points which can be used to buy various upgrades and modifiers for the Skills.
-- Rework of the Statuses system, so that various statuses can be multiplicative with each other.
+- Skill persistently gain experience and level up. This reward Skill Mastery points which can be used to buy various upgrades and modifiers for the Skills.
+- Rework of the Statuses system, so that various statuses can be multiplicative with each other and introduce new synergies.
 
 Content:
 
@@ -21,7 +21,7 @@ Balance Changes:
 - Damage Taken modifier can now be More and become multiplicative with each others.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
 - Merge Curse of Clumsiness into Curse of Weakness.
-- Buffed high tier item affixes.
+- Buffed high tier item affixes granting damage.
 - Removed flat crit chance affixes from weapons.
 
 ## Major Game Update: «Awakening of the Spider Witch»

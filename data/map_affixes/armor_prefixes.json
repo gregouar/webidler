@@ -1,326 +1,146 @@
 [
   {
-    "name": "Tough",
-    "family": "add_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "Map" ],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 50
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 20
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 4
-      }
+    "name"        : "Tough",
+    "family"      : "add_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["Map"],
+    "item_level"  : 100,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value": 50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 50 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value": 20 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  4 }
     ]
   },
   {
-    "name": "Sturdy",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "Map" ],
-    "item_level": 200,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 100
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 40
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 8
-      }
+    "name"        : "Sturdy",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["Map"],
+    "item_level"  : 200,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 100 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value":  40 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":   8 }
     ]
   },
   {
-    "name": "Reinforcing",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "Map" ],
-    "item_level": 300,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 200
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 60
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 12
-      }
+    "name"        : "Reinforcing",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["Map"],
+    "item_level"  : 300,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 200 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value":  60 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  12 }
     ]
   },
   {
-    "name": "Bulwarked",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "Map" ],
-    "item_level": 400,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 300
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 80
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 16
-      }
+    "name"        : "Bulwarked",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["Map"],
+    "item_level"  : 400,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 300 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value":  80 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  16 }
     ]
   },
   {
-    "name": "Protective",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "Map" ],
-    "item_level": 500,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 400
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 100
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 20
-      }
+    "name"        : "Protective",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["Map"],
+    "item_level"  : 500,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 400 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value": 100 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  20 }
     ]
   },
   {
-    "name": "Defensive",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "Map" ],
-    "item_level": 600,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 500
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 120
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 24
-      }
+    "name"        : "Defensive",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["Map"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 500 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value": 120 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  24 }
     ]
   },
   {
-    "name": "Guardian",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "Map" ],
-    "item_level": 700,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 600
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 140
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 28
-      }
+    "name"        : "Guardian",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["Map"],
+    "item_level"  : 700,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 600 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value": 140 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  28 }
     ]
   },
   {
-    "name": "Sentinel",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 8,
-    "weight": 700,
-    "restrictions": [ "Map" ],
-    "item_level": 800,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 700
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 160
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 32
-      }
+    "name"        : "Sentinel",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 8,
+    "weight"      : 700,
+    "restrictions": ["Map"],
+    "item_level"  : 800,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 700 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value": 160 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  32 }
     ]
   },
   {
-    "name": "Bastion",
-    "family": "inc_armor",
-    "tags": [ "Armor" ],
-    "affix_type": "Prefix",
-    "tier": 9,
-    "weight": 500,
-    "restrictions": [ "Map" ],
-    "item_level": 900,
-    "effects": [
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Flat",
-        "value": 50
-      },
-      {
-        "scope": "Local",
-        "stat": { "Armor": null },
-        "modifier": "Increased",
-        "value": 800
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "value": 200
-      },
-      {
-        "scope": "Global",
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "value": 40
-      }
+    "name"        : "Bastion",
+    "family"      : "inc_armor",
+    "tags"        : ["Armor"],
+    "affix_type"  : "Prefix",
+    "tier"        : 9,
+    "weight"      : 500,
+    "restrictions": ["Map"],
+    "item_level"  : 900,
+    "effects"     : [
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Flat",      "value":  50 },
+      { "scope": "Local",  "stat": {"Armor": null}, "modifier": "Increased", "value": 800 },
+      { "scope": "Global", "stat": "ItemRarity",    "modifier": "Increased", "value": 200 },
+      { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  40 }
     ]
   }
 ]
