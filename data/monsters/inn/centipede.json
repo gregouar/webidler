@@ -1,32 +1,24 @@
 {
-  "name": "Creepy Centipede",
-  "portrait": "monsters/inn/centipede.webp",
+  "name"    : "Creepy Centipede",
+  "portrait": "monsters/inn/centipede_gdca.webp",
   "max_life": 10,
-  "size": "Large",
-  "armor": { "Physical": 20, "Storm": 20 },
-  "skills": [
+  "size"    : "Large",
+  "armor"   : {"Physical": 20, "Storm": 20},
+  "skills"  : [
     {
-      "name": "Venom Lash",
-      "icon": "skills/claw.svg",
-      "cooldown": 4.0,
+      "name"      : "Venom Lash",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 4.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 6 ]
-                }
+                "damage": { "Physical": [3, 6] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 2,
-                "escalation": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 2, "escalation": 20} }
           ]
         }
       ]

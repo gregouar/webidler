@@ -1,22 +1,20 @@
 {
-  "name": "Booze Elemental",
-  "portrait": "monsters/inn/haunted_mug.webp",
+  "name"    : "Booze Elemental",
+  "portrait": "monsters/inn/haunted_mug_gdca.webp",
   "max_life": 5,
-  "armor": { "Storm": 50 },
-  "skills": [
+  "armor"   : {"Storm": 50},
+  "skills"  : [
     {
-      "name": "Drunken Smash",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name"      : "Drunken Smash",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 2.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 7 ]
-                }
+                "damage": { "Storm": [0, 7] }
               }
             }
           ]

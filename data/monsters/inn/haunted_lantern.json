@@ -1,24 +1,18 @@
 {
-  "name": "Lantern Shade",
-  "portrait": "monsters/inn/haunted_lantern.webp",
+  "name"    : "Lantern Shade",
+  "portrait": "monsters/inn/haunted_lantern_gdca.webp",
   "max_life": 5,
-  "armor": { "Fire": 100 },
-  "skills": [
+  "armor"   : {"Fire": 100},
+  "skills"  : [
     {
-      "name": "Flame Throw",
-      "icon": "skills/burning_ray.svg",
+      "name"      : "Flame Throw",
+      "icon"      : "skills/burning_ray.svg",
       "skill_type": "Spell",
-      "cooldown": 2.0,
-      "targets": [
+      "cooldown"  : 2.0,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "duration": 3,
-                "status_id": "burn",
-                "value": 3
-              }
-            }
+            { "ApplyStatus": {"duration": 3, "status_id": "burn", "value": 3} }
           ]
         }
       ]
