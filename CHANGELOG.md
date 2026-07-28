@@ -6,6 +6,7 @@ Features:
 
 - Skill persistently gain experience and level up. This reward Skill Mastery points which can be used to buy various upgrades and modifiers for the Skills.
 - Rework of the Statuses system, so that various statuses can be multiplicative with each other and introduce new synergies.
+- Power Shards now unlock only up to Area Level 100 (10 Power Shards) by default. Unlocking more requires to use an Edict, with maximum level computed from Edict Affixes level.
 
 Content:
 

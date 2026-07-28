@@ -21,6 +21,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             waves_done: 1,
             max_area_level: 0,
             max_area_level_ever: 0,
+            max_power_shard_level_ever: 0,
             last_champion_spawn: 0,
             auto_progress: true,
             going_back: 0,

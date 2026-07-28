@@ -78,7 +78,8 @@ pub struct SavedGameData {
     area_id: String,
     map_item: Option<ItemSpecs>,
     area_level: AreaLevel,
-    max_area_level_completed: AreaLevel,
+    max_area_level_ever: AreaLevel,
+    max_power_shard_level_ever: AreaLevel,
     passives_tree_id: String,
     passives_tree_state: PassivesTreeState,
     player_resources: PlayerResources,
@@ -111,7 +112,8 @@ impl GameInstanceData {
         realm_id: RealmId,
         area_id: String,
         map_item: Option<ItemSpecs>,
-        max_area_level_completed: AreaLevel,
+        max_area_level_ever: AreaLevel,
+        max_power_shard_level_ever: AreaLevel,
         passives_tree_id: &str,
         mut passives_tree_state: PassivesTreeState,
         mut player_resources: PlayerResources,
@@ -150,7 +152,8 @@ impl GameInstanceData {
         }
 
         let mut area_state = AreaState::init(&area_specs);
-        area_state.max_area_level_ever = max_area_level_completed;
+        area_state.max_area_level_ever = max_area_level_ever;
+        area_state.max_power_shard_level_ever = max_power_shard_level_ever;
 
         let mut passives_tree_specs = master_store
             .passives_store
@@ -243,7 +246,8 @@ impl GameInstanceData {
             map_item: self.map_item,
             area_level: self.area_state.read().area_level,
             max_area_level: self.area_state.read().max_area_level,
-            max_area_level_completed: self.area_state.read().max_area_level_ever,
+            max_area_level_ever: self.area_state.read().max_area_level_ever,
+            max_power_shard_level_ever: self.area_state.read().max_power_shard_level_ever,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_resources: self.player_resources.unwrap(),
@@ -267,7 +271,8 @@ impl GameInstanceData {
             map_item,
             area_level,
             max_area_level,
-            max_area_level_completed,
+            max_area_level_ever,
+            max_power_shard_level_ever,
             passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -288,7 +293,8 @@ impl GameInstanceData {
             realm_id,
             area_id,
             map_item,
-            max_area_level_completed,
+            max_area_level_ever,
+            max_power_shard_level_ever,
             &passives_tree_id,
             passives_tree_state,
             player_resources,

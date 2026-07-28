@@ -62,8 +62,12 @@ pub async fn post_affix(
         .nth_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
 
-    let price = affix_operation_price(payload.operation, item.modifiers.count_nonunique_affixes())
-        .ok_or(AppError::UserError("forge operation unavailable".into()))?;
+    let price = affix_operation_price(
+        payload.operation,
+        item.modifiers.count_nonunique_affixes(),
+        &item.base,
+    )
+    .ok_or(AppError::UserError("forge operation unavailable".into()))?;
 
     let character_resources = db::characters::update_character_resources(
         &mut *tx,

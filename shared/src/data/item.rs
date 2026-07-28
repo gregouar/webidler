@@ -201,6 +201,7 @@ pub struct ItemSpecs {
 
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
+    pub map_specs: Option<MapSpecs>,
 
     // Deprecated, to be removed later
     pub old_game: bool,
@@ -266,6 +267,9 @@ pub struct MapSpecs {
     pub reward_picks: u8,
     #[serde(default)]
     pub reward_slots: u8,
+    #[serde(default)]
+    pub max_power_shards_level: Option<AreaLevel>,
+
     #[serde(default)]
     pub loot_tables: Vec<String>,
     #[serde(default)]

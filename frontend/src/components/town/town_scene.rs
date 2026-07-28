@@ -423,6 +423,12 @@ fn GrindingAreaCard(
                                 {move || {
                                     if area_specs.read().training {
                                         "Training".to_string()
+                                    } else if area.max_power_shard_level > 0 {
+                                        format!(
+                                            "Level Reached: {} ({})",
+                                            area.max_level_reached,
+                                            area.max_power_shard_level,
+                                        )
                                     } else if area.max_level_reached > 0 {
                                         format!("Level Reached: {}", area.max_level_reached)
                                     } else {
@@ -577,6 +583,16 @@ pub fn StartGrindPanel(
                                             <span class="font-semibold text-white">
                                                 "+"
                                                 {*area_specs.power_level + *area_specs.item_level_modifier}
+                                            </span>
+                                        </li>
+                                        <li>
+                                            "Power Shards unlocked up to Area Level: "
+                                            <span class="font-semibold text-white">
+                                                {selected_area
+                                                    .read()
+                                                    .as_ref()
+                                                    .map(|area| area.max_power_shard_level)
+                                                    .unwrap_or_default()}
                                             </span>
                                         </li>
                                     </ul>

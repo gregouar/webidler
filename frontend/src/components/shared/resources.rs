@@ -43,6 +43,7 @@ pub fn ResourceCounter(
     w_full: bool,
     text_color: &'static str,
     disabled: Signal<bool>,
+    #[prop(default = Signal::derive(|| None))] disabled_description: Signal<Option<String>>,
 ) -> impl IntoView {
     view! {
         <div
@@ -67,7 +68,9 @@ pub fn ResourceCounter(
                 name
                 description=move || {
                     if disabled.get() {
-                        format!("{} are disabled in this area.", name)
+                        disabled_description
+                            .get()
+                            .unwrap_or_else(|| format!("{} are disabled in this area.", name))
                     } else {
                         description.to_string()
                     }
@@ -159,6 +162,7 @@ pub fn ShardsCounter(
     value: Signal<f64>,
     #[prop(default = false)] w_full: bool,
     #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
+    #[prop(default = Signal::derive(|| None))] disabled_description: Signal<Option<String>>,
 ) -> impl IntoView {
     view! {
         <ResourceCounter
@@ -169,6 +173,7 @@ pub fn ShardsCounter(
             value
             w_full
             disabled
+            disabled_description
         />
     }
 }

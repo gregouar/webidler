@@ -1,12 +1,15 @@
 use std::collections::{HashMap, VecDeque};
 
-use shared::data::{
-    area::AreaLevel,
-    item::{ItemRarity, ItemSpecs},
-    item_affix::AffixEffectScope,
-    passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
-    player::PlayerResources,
-    user::UserCharacterId,
+use shared::{
+    constants::POWER_SHARD_LEVELS_NEEDED,
+    data::{
+        area::AreaLevel,
+        item::{ItemRarity, ItemSpecs},
+        item_affix::AffixEffectScope,
+        passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
+        player::PlayerResources,
+        user::UserCharacterId,
+    },
 };
 use sqlx::Transaction;
 
@@ -254,7 +257,7 @@ fn compute_total_shards(
                 })
                 .unwrap_or_default()
             {
-                (area.max_area_level / 10) as f64
+                (area.max_power_shard_level / POWER_SHARD_LEVELS_NEEDED as i32) as f64
             } else {
                 0.0
             }

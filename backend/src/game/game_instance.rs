@@ -243,14 +243,16 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
-            let delta_area_level = self.game_data.area_state.read().max_area_level_ever as i32;
-            if delta_area_level > 0 {
+            let max_area_level_ever = self.game_data.area_state.read().max_area_level_ever as i32;
+            let max_power_shard_level_ever =
+                self.game_data.area_state.read().max_power_shard_level_ever as i32;
+            if max_area_level_ever > 0 {
                 db::characters::update_character_area_progress(
                     &mut tx,
                     self.character_id,
                     &self.game_data.area_id,
-                    // I don't like this
-                    delta_area_level,
+                    max_area_level_ever,
+                    max_power_shard_level_ever,
                 )
                 .await?;
             }

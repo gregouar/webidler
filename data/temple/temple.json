@@ -1,154 +1,122 @@
 {
   "quickstart": {
-    "title": "Quickstart",
-    "price": 1e5,
+    "title"                : "Quickstart",
+    "price"                : 1e5,
     "price_increase_factor": 1e5,
-    "max_upgrade_level": 60,
-    "benedictions": {
-      "starting_gold": {
-        "value": 100,
-        "effect": "StartingGold",
-        "upgrade_value": 50,
-        "upgrade_modifier": "More"
-      },
-      "starting_level": {
-        "value": 1,
-        "effect": "StartingLevel",
-        "upgrade_value": 1,
-        "upgrade_modifier": "Flat"
-      }
+    "max_upgrade_level"    : 60,
+    "benedictions"         : {
+      "starting_gold" : {"value": 100, "effect": "StartingGold",  "upgrade_value": 100, "upgrade_modifier": "More"},
+      "starting_level": {"value":   1, "effect": "StartingLevel", "upgrade_value":   1, "upgrade_modifier": "Flat"}
     }
   },
   "attributes": {
-    "title": "Attributes",
-    "price": 1e6,
+    "title"                : "Attributes",
+    "price"                : 1e6,
     "price_increase_factor": 6,
-    "max_upgrade_level": 200,
-    "benedictions": {
+    "max_upgrade_level"    : 200,
+    "benedictions"         : {
       "life_max": {
-        "value": 5,
-        "effect": {
-          "StatEffect": {
-            "stat": "Life",
-            "modifier": "Flat"
-          }
-        },
-        "upgrade_value": 1,
+        "value"           : 5,
+        "effect"          : { "StatEffect": {"stat": "Life", "modifier": "Flat"} },
+        "upgrade_value"   : 1,
         "upgrade_modifier": "Flat"
       },
       "mana_max": {
-        "value": 5,
-        "effect": {
-          "StatEffect": {
-            "stat": "Mana",
-            "modifier": "Flat"
-          }
-        },
-        "upgrade_value": 1,
+        "value"           : 5,
+        "effect"          : { "StatEffect": {"stat": "Mana", "modifier": "Flat"} },
+        "upgrade_value"   : 1,
         "upgrade_modifier": "Flat"
       }
     }
   },
-  "defenses": {
-    "title": "Defenses",
-    "price": 1e7,
+  "defenses"  : {
+    "title"                : "Defenses",
+    "price"                : 1e7,
     "price_increase_factor": 6,
-    "max_upgrade_level": 200,
-    "benedictions": {
+    "max_upgrade_level"    : 200,
+    "benedictions"         : {
       "armor_physical": {
-        "value": 5,
-        "effect": {
-          "StatEffect": {
-            "stat": { "Armor": "Physical" },
-            "modifier": "Flat"
-          }
+        "value"           : 5,
+        "effect"          : {
+          "StatEffect": { "stat": {"Armor": "Physical"}, "modifier": "Flat" }
         },
-        "upgrade_value": 5,
+        "upgrade_value"   : 5,
         "upgrade_modifier": "Flat"
       },
-      "armor_fire": {
-        "value": 5,
-        "effect": {
-          "StatEffect": {
-            "stat": { "Armor": "Fire" },
-            "modifier": "Flat"
-          }
+      "armor_fire"    : {
+        "value"           : 5,
+        "effect"          : {
+          "StatEffect": { "stat": {"Armor": "Fire"}, "modifier": "Flat" }
         },
-        "upgrade_value": 5,
+        "upgrade_value"   : 5,
         "upgrade_modifier": "Flat"
       },
-      "armor_poison": {
-        "value": 5,
-        "effect": {
-          "StatEffect": {
-            "stat": { "Armor": "Poison" },
-            "modifier": "Flat"
-          }
+      "armor_poison"  : {
+        "value"           : 5,
+        "effect"          : {
+          "StatEffect": { "stat": {"Armor": "Poison"}, "modifier": "Flat" }
         },
-        "upgrade_value": 5,
+        "upgrade_value"   : 5,
         "upgrade_modifier": "Flat"
       },
-      "armor_storm": {
-        "value": 5,
-        "effect": {
-          "StatEffect": {
-            "stat": { "Armor": "Storm" },
-            "modifier": "Flat"
-          }
+      "armor_storm"   : {
+        "value"           : 5,
+        "effect"          : {
+          "StatEffect": { "stat": {"Armor": "Storm"}, "modifier": "Flat" }
         },
-        "upgrade_value": 5,
+        "upgrade_value"   : 5,
         "upgrade_modifier": "Flat"
       }
     }
   },
-  "damages": {
-    "title": "Damages",
-    "price": 1e8,
+  "damages"   : {
+    "title"                : "Damages",
+    "price"                : 1e8,
     "price_increase_factor": 6,
-    "max_upgrade_level": 200,
-    "benedictions": {
+    "max_upgrade_level"    : 200,
+    "benedictions"         : {
       "damage_physical": {
-        "value": 5,
-        "effect": {
+        "value"           : 5,
+        "effect"          : {
           "StatEffect": {
-            "stat": { "Damage": { "damage_type": "Physical" } },
+            "stat"    : { "Damage": {"damage_type": "Physical"} },
             "modifier": "More"
           }
         },
-        "upgrade_value": 2.5,
+        "upgrade_value"   : 2.5,
         "upgrade_modifier": "Flat"
       },
-      "damage_fire": {
-        "value": 5,
-        "effect": {
+      "damage_fire"    : {
+        "value"           : 5,
+        "effect"          : {
           "StatEffect": {
-            "stat": { "Damage": { "damage_type": "Fire" } },
+            "stat"    : { "Damage": {"damage_type": "Fire"} },
             "modifier": "More"
           }
         },
-        "upgrade_value": 2.5,
+        "upgrade_value"   : 2.5,
         "upgrade_modifier": "Flat"
       },
-      "damage_poison": {
-        "value": 5,
-        "effect": {
+      "damage_poison"  : {
+        "value"           : 5,
+        "effect"          : {
           "StatEffect": {
-            "stat": { "Damage": { "damage_type": "Poison" } },
+            "stat"    : { "Damage": {"damage_type": "Poison"} },
             "modifier": "More"
           }
         },
-        "upgrade_value": 2.5,
+        "upgrade_value"   : 2.5,
         "upgrade_modifier": "Flat"
       },
-      "damage_storm": {
-        "value": 5,
-        "effect": {
+      "damage_storm"   : {
+        "value"           : 5,
+        "effect"          : {
           "StatEffect": {
-            "stat": { "Damage": { "damage_type": "Storm" } },
+            "stat"    : { "Damage": {"damage_type": "Storm"} },
             "modifier": "More"
           }
         },
-        "upgrade_value": 2.5,
+        "upgrade_value"   : 2.5,
         "upgrade_modifier": "Flat"
       }
     }

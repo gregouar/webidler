@@ -184,6 +184,11 @@ async fn read_character_details(
                 .find(|area_completed| area_completed.area_id.eq(area_id))
                 .map(|area_completed| area_completed.max_area_level as AreaLevel)
                 .unwrap_or_default(),
+            max_power_shard_level: areas_completed
+                .iter()
+                .find(|area_completed| area_completed.area_id.eq(area_id))
+                .map(|area_completed| area_completed.max_power_shard_level as AreaLevel)
+                .unwrap_or_default(),
         })
         .collect();
 

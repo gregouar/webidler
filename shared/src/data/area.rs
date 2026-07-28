@@ -47,6 +47,8 @@ pub struct AreaSpecs {
     pub gems_find: ModifiableValue<f64>,
     #[serde(default = "default_item_rarity")]
     pub gold_find: ModifiableValue<f64>,
+    #[serde(default)]
+    pub max_power_shards_level: AreaLevel,
 
     #[serde(default)]
     pub effects: EffectsMap,
@@ -86,8 +88,9 @@ pub struct AreaState {
     pub is_boss: bool,
     pub waves_done: u8, // TODO: could rename to current wave
 
-    pub max_area_level: AreaLevel,      // Max for this grind
-    pub max_area_level_ever: AreaLevel, // Max for all grind of this area
+    pub max_area_level: AreaLevel,             // Max for this grind
+    pub max_area_level_ever: AreaLevel,        // Max for all grind of this area
+    pub max_power_shard_level_ever: AreaLevel, // Max for all grind of this area
     pub last_champion_spawn: AreaLevel,
 
     pub auto_progress: bool,

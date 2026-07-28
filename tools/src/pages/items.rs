@@ -308,6 +308,7 @@ pub fn create_item_specs(
         armor_specs: base.armor_specs.as_ref().map(|armor_specs| {
             compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
         }),
+        map_specs: base.map_specs.clone(),
         base,
         modifiers,
         old_game,
