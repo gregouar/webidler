@@ -7,7 +7,7 @@ Cloak: 6+1
 Focus: 4+1
 Gloves: 4+1
 Helmet: 4+1
-Rings: 5
+Rings: 5+1
 Shields: 4+1
 1h: 5
 2h: 4+1

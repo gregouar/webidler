@@ -176,6 +176,7 @@
   },
   "focus"               : {
     "name"      : "Focus",
+    "adjective" : "Focused",
     "icon"      : "passives/yin_yang.svg",
     "debuff"    : false,
     "duration"  : 10,
@@ -183,7 +184,7 @@
     "effects"   : [
       {
         "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
-        "value"       : 50,
+        "value"       : 60,
         "modifier"    : "Percent"
       },
       {
