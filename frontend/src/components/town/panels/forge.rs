@@ -164,6 +164,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
                     deleted_by: None,
                 }));
             }
+
+            town_context.selected_item_index.set(None);
         }
     });
 
