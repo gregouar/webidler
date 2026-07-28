@@ -223,15 +223,14 @@ fn compute_armor_specs(
 
 fn compute_map_specs(mut map_specs: MapSpecs, modifiers: &ItemModifiers) -> MapSpecs {
     map_specs.max_power_shards_level = (modifiers.rarity != ItemRarity::Unique).then(|| {
-        let max_power_shards_level = map_specs.max_power_shards_level.unwrap_or(
-            MAX_POWER_SHARD_LEVEL_BASE
-                + modifiers
-                    .affixes
-                    .iter()
-                    .map(|affix| affix.item_level)
-                    .sum::<AreaLevel>()
-                    / 4,
-        );
+        let max_power_shards_level = MAX_POWER_SHARD_LEVEL_BASE
+            + map_specs.max_power_shards_level.unwrap_or_default()
+            + modifiers
+                .affixes
+                .iter()
+                .map(|affix| affix.item_level)
+                .sum::<AreaLevel>()
+                / 4;
 
         max_power_shards_level - max_power_shards_level % POWER_SHARD_LEVELS_NEEDED
     });
