@@ -257,9 +257,23 @@ fn MainMenu() -> impl IntoView {
                             "Play as Guest"
                         </MenuButton>
                         <MenuButton on:click=navigate_to_signup>"Create Account"</MenuButton>
-                        <MenuButton class="mt-4" on:click=move |_| { open_leaderboard.set(true) }>
-                            "Leaderboard"
-                        </MenuButton>
+
+                        <div class="flex gap-2 mt-4 w-full">
+                            <MenuButton
+                                class:flex-1
+                                on:click=move |_| { open_leaderboard.set(true) }
+                            >
+                                "Leaderboard"
+                            </MenuButton>
+                            <a
+                                href="https://webidler.gitbook.io/wiki/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex-1"
+                            >
+                                <MenuButton class:w-full>"Wiki"</MenuButton>
+                            </a>
+                        </div>
 
                         <div class="mt-4 text-left">
                             <CardTitle>"News"</CardTitle>
