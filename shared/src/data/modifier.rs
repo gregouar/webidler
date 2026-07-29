@@ -340,3 +340,16 @@ pub fn compute_more_factor(value: f64) -> f64 {
         }
     }
 }
+
+pub fn invert_formatted_effect_value(value: f64, modifier: Modifier) -> f64 {
+    if value >= 0.0 || modifier == Modifier::Flat {
+        return value;
+    }
+
+    let divisor = 1.0 + value * 0.01;
+    if divisor <= 0.0 {
+        -1e299
+    } else {
+        (value / divisor).round()
+    }
+}

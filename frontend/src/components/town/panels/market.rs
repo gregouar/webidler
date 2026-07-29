@@ -7,13 +7,13 @@ use strum::IntoEnumIterator;
 use shared::{
     data::{
         item::{ItemCategory, ItemRarity},
-        market::{MarketFilters, MarketItem, MarketOrderBy},
+        market::{MarketFilters, MarketItem, MarketOrderBy, MarketStatFilter},
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
         stat_effect::{
-            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
-            StatType, StatusDamageType,
+            ArmorStatType, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
+            StatusDamageType,
         },
     },
     http::client::{
@@ -39,6 +39,7 @@ use crate::components::{
         Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
+        checkbox::Checkbox,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
@@ -1331,25 +1332,36 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
 #[component]
 pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
-    let stat_filters = filters.get_untracked().stat_filters.map(|stat_effect| {
+    let stat_filters = filters.get_untracked().stat_filters.map(|stat_filter| {
         (
             RwSignal::new(
-                stat_effect
+                stat_filter
                     .as_ref()
-                    .map(|stat_effect| (stat_effect.stat.clone(), stat_effect.modifier)),
+                    .map(|stat_filter| (stat_filter.stat.clone(), stat_filter.modifier)),
             ),
-            RwSignal::new(stat_effect.as_ref().map(|stat_effect| stat_effect.value)),
+            RwSignal::new(
+                stat_filter
+                    .as_ref()
+                    .and_then(|stat_filter| stat_filter.value),
+            ),
+            RwSignal::new(
+                stat_filter
+                    .as_ref()
+                    .map(|stat_filter| stat_filter.exclude)
+                    .unwrap_or_default(),
+            ),
         )
     });
 
     Effect::new(move || {
-        for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
-            filters.write().stat_filters[i] = stat_type.get().map(|(stat, modifier)| StatEffect {
-                stat,
-                modifier,
-                value: stat_value.get().unwrap_or_default(),
-                bypass_ignore: false,
-            })
+        for (i, (stat_type, stat_value, stat_excluded)) in stat_filters.iter().enumerate() {
+            filters.write().stat_filters[i] =
+                stat_type.get().map(|(stat, modifier)| MarketStatFilter {
+                    stat,
+                    modifier,
+                    value: stat_value.get(),
+                    exclude: stat_excluded.get(),
+                })
         }
     });
 
@@ -1359,7 +1371,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
             <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
                 {stat_filters
-                    .map(|(stat_type, stat_value)| {
+                    .map(|(stat_type, stat_value, stat_excluded)| {
                         view! {
                             <div class="flex gap-2 xl:gap-4 items-center">
                                 {move || {
@@ -1373,6 +1385,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                                                     on:click=move |_| {
                                                         stat_type.set(None);
                                                         stat_value.set(None);
+                                                        stat_excluded.set(false);
                                                     }
                                                 >
                                                     "❌"
@@ -1399,10 +1412,22 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                                                     <Input
                                                         id="stat_value_1"
                                                         input_type="number"
-                                                        placeholder="Min"
+                                                        placeholder="Value"
                                                         bind=stat_value
                                                     />
                                                 </div>
+                                                <StaticTooltip
+                                                    position=StaticTooltipPosition::Top
+                                                    tooltip=|| {
+                                                        "Require the stat to be absent or below the given value."
+                                                    }
+                                                >
+                                                    <Checkbox
+                                                        label="Exclude".to_string()
+                                                        checked=stat_excluded
+                                                        on_change=move |checked| { stat_excluded.set(checked) }
+                                                    />
+                                                </StaticTooltip>
                                             }
                                         })
                                 }}
@@ -1577,6 +1602,15 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
                 skill_type: Some(SkillType::Spell),
                 ..Default::default()
             }),
+            Modifier::Increased,
+        ),
+        (
+            StatType::ManaCost {
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Spell),
+                    ..Default::default()
+                },
+            },
             Modifier::Increased,
         ),
         (StatType::MovementSpeed, Modifier::Increased),

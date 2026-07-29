@@ -6,6 +6,7 @@ use shared::data::{
     item::ItemSpecs,
     item_affix::AffixEffectScope,
     market::MarketFilters,
+    modifier::invert_formatted_effect_value,
     realms::RealmId,
     skill::DamageType,
     stash::StashId,
@@ -377,10 +378,16 @@ pub async fn read_stash_items<'c>(
     let stat_filters = filters.stat_filters.map(|stat_filter| {
         stat_filter
             .and_then(|stat_filter| {
+                let value = stat_filter.value.filter(|value| *value != 0.0);
                 Some((
                     serde_json::to_value(stat_filter.stat).ok()?,
                     serde_plain::to_string(&stat_filter.modifier).ok()?,
-                    stat_filter.value,
+                    value
+                        .map(|value| invert_formatted_effect_value(value, stat_filter.modifier))
+                        .unwrap_or_default(),
+                    stat_filter.exclude,
+                    value.is_some(),
+                    value.is_some_and(|value| value < 0.0),
                 ))
             })
             .unwrap_or_default()
@@ -409,28 +416,28 @@ pub async fn read_stash_items<'c>(
                 AND stat1.stat_modifier = $29
         LEFT JOIN
             stash_items_stats AS stat2 ON stat2.stash_item_id = stash_items.stash_item_id
-                AND stat2.item_stat = $31
-                AND stat2.stat_modifier = $32
+                AND stat2.item_stat = $34
+                AND stat2.stat_modifier = $35
         LEFT JOIN
             stash_items_stats AS stat3 ON stat3.stash_item_id = stash_items.stash_item_id
-                AND stat3.item_stat = $34
-                AND stat3.stat_modifier = $35
+                AND stat3.item_stat = $40
+                AND stat3.stat_modifier = $41
         LEFT JOIN
             stash_items_stats AS stat4 ON stat4.stash_item_id = stash_items.stash_item_id
-                AND stat4.item_stat = $37
-                AND stat4.stat_modifier = $38
+                AND stat4.item_stat = $46
+                AND stat4.stat_modifier = $47
         LEFT JOIN
             stash_items_stats AS stat5 ON stat5.stash_item_id = stash_items.stash_item_id
-                AND stat5.item_stat = $40
-                AND stat5.stat_modifier = $41
+                AND stat5.item_stat = $52
+                AND stat5.stat_modifier = $53
         WHERE 
             stash_items.stash_id = $4
             AND stash_items.deleted_at IS NULL
             AND ($5 OR UPPER(stash_items.item_name) LIKE $6)
             AND (stash_items.item_level >= $7)
-            AND (stash_items.item_level <= $43)
-            AND (stash_items.item_power_level >= $44)
-            AND (stash_items.item_upgrade_level >= $45)
+            AND (stash_items.item_level <= $58)
+            AND (stash_items.item_power_level >= $59)
+            AND (stash_items.item_upgrade_level >= $60)
             AND ($8 = '' OR stash_items.item_rarity = $8)
             AND ($9 = '' OR EXISTS (
                 SELECT 1
@@ -438,8 +445,8 @@ pub async fn read_stash_items<'c>(
                 WHERE cat.stash_item_id = stash_items.stash_item_id
                 AND cat.category = $9
             ))
-            AND ($46 OR stash_items.item_cooldown <= $47)
-            AND ($48 OR stash_items.max_power_shard_level >= $49)
+            AND ($61 OR stash_items.item_cooldown <= $62)
+            AND ($63 OR stash_items.max_power_shard_level >= $64)
             AND ($10 OR stash_items.item_damages >= $11)
             AND ($12 OR stash_items.item_damage_physical >= $13)
             AND ($14 OR stash_items.item_damage_fire >= $15)
@@ -449,11 +456,141 @@ pub async fn read_stash_items<'c>(
             AND ($22 OR stash_items.item_crit_damage >= $23)
             AND ($24 OR stash_items.item_armor >= $25)
             AND ($26 OR stash_items.item_block >= $27)
-            AND ($29 = '' OR stat1.stat_value >= $30)
-            AND ($32 = '' OR stat2.stat_value >= $33)
-            AND ($35 = '' OR stat3.stat_value >= $36)
-            AND ($38 = '' OR stat4.stat_value >= $39)
-            AND ($41 = '' OR stat5.stat_value >= $42)
+            AND (
+                $29 = ''
+                OR (
+                    NOT $31
+                    AND stat1.stat_value IS NOT NULL
+                    AND stat1.stat_value != 0
+                    AND (
+                        NOT $32
+                        OR ($33 AND stat1.stat_value <= $30)
+                        OR (NOT $33 AND stat1.stat_value >= $30)
+                    )
+                )
+                OR (
+                    $31
+                    AND (
+                        stat1.stat_value IS NULL
+                        OR stat1.stat_value = 0
+                        OR (
+                            $32
+                            AND (
+                                ($33 AND stat1.stat_value > $30)
+                                OR (NOT $33 AND stat1.stat_value < $30)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $35 = ''
+                OR (
+                    NOT $37
+                    AND stat2.stat_value IS NOT NULL
+                    AND stat2.stat_value != 0
+                    AND (
+                        NOT $38
+                        OR ($39 AND stat2.stat_value <= $36)
+                        OR (NOT $39 AND stat2.stat_value >= $36)
+                    )
+                )
+                OR (
+                    $37
+                    AND (
+                        stat2.stat_value IS NULL
+                        OR stat2.stat_value = 0
+                        OR (
+                            $38
+                            AND (
+                                ($39 AND stat2.stat_value > $36)
+                                OR (NOT $39 AND stat2.stat_value < $36)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $41 = ''
+                OR (
+                    NOT $43
+                    AND stat3.stat_value IS NOT NULL
+                    AND stat3.stat_value != 0
+                    AND (
+                        NOT $44
+                        OR ($45 AND stat3.stat_value <= $42)
+                        OR (NOT $45 AND stat3.stat_value >= $42)
+                    )
+                )
+                OR (
+                    $43
+                    AND (
+                        stat3.stat_value IS NULL
+                        OR stat3.stat_value = 0
+                        OR (
+                            $44
+                            AND (
+                                ($45 AND stat3.stat_value > $42)
+                                OR (NOT $45 AND stat3.stat_value < $42)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $47 = ''
+                OR (
+                    NOT $49
+                    AND stat4.stat_value IS NOT NULL
+                    AND stat4.stat_value != 0
+                    AND (
+                        NOT $50
+                        OR ($51 AND stat4.stat_value <= $48)
+                        OR (NOT $51 AND stat4.stat_value >= $48)
+                    )
+                )
+                OR (
+                    $49
+                    AND (
+                        stat4.stat_value IS NULL
+                        OR stat4.stat_value = 0
+                        OR (
+                            $50
+                            AND (
+                                ($51 AND stat4.stat_value > $48)
+                                OR (NOT $51 AND stat4.stat_value < $48)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $53 = ''
+                OR (
+                    NOT $55
+                    AND stat5.stat_value IS NOT NULL
+                    AND stat5.stat_value != 0
+                    AND (
+                        NOT $56
+                        OR ($57 AND stat5.stat_value <= $54)
+                        OR (NOT $57 AND stat5.stat_value >= $54)
+                    )
+                )
+                OR (
+                    $55
+                    AND (
+                        stat5.stat_value IS NULL
+                        OR stat5.stat_value = 0
+                        OR (
+                            $56
+                            AND (
+                                ($57 AND stat5.stat_value > $54)
+                                OR (NOT $57 AND stat5.stat_value < $54)
+                            )
+                        )
+                    )
+                )
+            )
         ORDER BY 
             CASE
                 WHEN  $3 = 'Level' THEN stash_items.item_level
@@ -507,26 +644,41 @@ pub async fn read_stash_items<'c>(
         item_block,
         stat_filters[0].0,
         stat_filters[0].1,
-        stat_filters[0].2, // 30
+        stat_filters[0].2,
+        stat_filters[0].3,
+        stat_filters[0].4,
+        stat_filters[0].5, // $33
         stat_filters[1].0,
         stat_filters[1].1,
         stat_filters[1].2,
+        stat_filters[1].3,
+        stat_filters[1].4,
+        stat_filters[1].5, // $39
         stat_filters[2].0,
-        stat_filters[2].1, // $35
+        stat_filters[2].1,
         stat_filters[2].2,
+        stat_filters[2].3,
+        stat_filters[2].4,
+        stat_filters[2].5, // $45
         stat_filters[3].0,
         stat_filters[3].1,
         stat_filters[3].2,
-        stat_filters[4].0, // $40
+        stat_filters[3].3,
+        stat_filters[3].4,
+        stat_filters[3].5, // $51
+        stat_filters[4].0,
         stat_filters[4].1,
         stat_filters[4].2,
+        stat_filters[4].3,
+        stat_filters[4].4,
+        stat_filters[4].5, // $57
         max_req_level,
         min_power_level,
-        min_upgrade_level, // $45
+        min_upgrade_level, // $60
         no_filter_item_cooldown,
         item_cooldown,
         no_filter_max_power_shard_level,
-        min_max_power_shard_level
+        min_max_power_shard_level // $64
     )
     .fetch_all(executor)
     .await?;

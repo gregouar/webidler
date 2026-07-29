@@ -9,6 +9,7 @@ use shared::{
         item::{ItemRarity, ItemSpecs},
         item_affix::AffixEffectScope,
         loot::{LootState, QueuedLoot},
+        modifier::invert_formatted_effect_value,
         player::EquippedSlot,
         skill::DamageType,
     },
@@ -641,26 +642,204 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         .modifiers
         .aggregate_effects(AffixEffectScope::Global, true)
         .0;
-    for stat_filter in stat_filters {
-        if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref()
-            && !effects
-                .get(&(stat_type.clone(), *stat_modifier, false))
-                .map(|value| {
-                    if *value == 0.0 {
-                        return false;
-                    };
-                    stat_value
-                        .map(|stat_value| match rule_type {
-                            FilterRuleType::Pickup => *value >= stat_value,
-                            FilterRuleType::Sell => *value <= stat_value,
-                        })
-                        .unwrap_or(true)
-                })
-                .unwrap_or_default()
+    for stat_filter in stat_filters.iter() {
+        if let Some(((stat_type, stat_modifier), stat_value, stat_excluded)) = stat_filter.as_ref()
         {
-            return false;
+            let effect_value = effects
+                .get(&(stat_type.clone(), *stat_modifier, false))
+                .copied();
+
+            if !stat_filter_matches(
+                effect_value,
+                *stat_value,
+                *stat_excluded,
+                *stat_modifier,
+                *rule_type,
+            ) {
+                return false;
+            }
         }
     }
 
     true
+}
+
+fn stat_filter_matches(
+    effect_value: Option<f64>,
+    filter_value: Option<f64>,
+    exclude: bool,
+    stat_modifier: shared::data::modifier::Modifier,
+    rule_type: FilterRuleType,
+) -> bool {
+    let effect_value = effect_value.filter(|value| *value != 0.0);
+    let filter_value = filter_value.filter(|value| *value != 0.0).map(|value| {
+        (
+            invert_formatted_effect_value(value, stat_modifier),
+            value < 0.0,
+        )
+    });
+
+    if exclude {
+        match filter_value {
+            Some((filter_value, is_negative)) => effect_value
+                .map(|value| match (rule_type, is_negative) {
+                    (FilterRuleType::Pickup, false) | (FilterRuleType::Sell, true) => {
+                        value < filter_value
+                    }
+                    (FilterRuleType::Pickup, true) | (FilterRuleType::Sell, false) => {
+                        value > filter_value
+                    }
+                })
+                .unwrap_or(true),
+            None => effect_value.is_none(),
+        }
+    } else {
+        effect_value
+            .map(|value| {
+                filter_value
+                    .map(
+                        |(filter_value, is_negative)| match (rule_type, is_negative) {
+                            (FilterRuleType::Pickup, false) | (FilterRuleType::Sell, true) => {
+                                value >= filter_value
+                            }
+                            (FilterRuleType::Pickup, true) | (FilterRuleType::Sell, false) => {
+                                value <= filter_value
+                            }
+                        },
+                    )
+                    .unwrap_or(true)
+            })
+            .unwrap_or_default()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use shared::data::modifier::Modifier;
+
+    use super::{FilterRuleType, stat_filter_matches};
+
+    #[test]
+    fn normal_stat_filter_requires_the_stat_and_applies_the_rule_threshold() {
+        assert!(!stat_filter_matches(
+            None,
+            None,
+            false,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(10.0),
+            None,
+            false,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(10.0),
+            Some(10.0),
+            false,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(!stat_filter_matches(
+            Some(9.0),
+            Some(10.0),
+            false,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(9.0),
+            Some(10.0),
+            false,
+            Modifier::Increased,
+            FilterRuleType::Sell
+        ));
+    }
+
+    #[test]
+    fn excluded_stat_filter_accepts_absent_or_at_or_below_the_maximum() {
+        assert!(stat_filter_matches(
+            None,
+            None,
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(!stat_filter_matches(
+            Some(1.0),
+            None,
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            None,
+            Some(10.0),
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(9.0),
+            Some(10.0),
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(10.0),
+            Some(10.0),
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(0.0),
+            None,
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+    }
+
+    #[test]
+    fn negative_stat_filter_inverts_the_display_value_and_comparison() {
+        assert!(stat_filter_matches(
+            Some(-100.0),
+            Some(-50.0),
+            false,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(!stat_filter_matches(
+            Some(-99.0),
+            Some(-50.0),
+            false,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(-99.0),
+            Some(-50.0),
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(!stat_filter_matches(
+            Some(-101.0),
+            Some(-50.0),
+            true,
+            Modifier::Increased,
+            FilterRuleType::Pickup
+        ));
+        assert!(stat_filter_matches(
+            Some(-99.0),
+            Some(-50.0),
+            false,
+            Modifier::Increased,
+            FilterRuleType::Sell
+        ));
+    }
 }
