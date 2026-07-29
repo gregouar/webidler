@@ -268,7 +268,7 @@ pub struct MapSpecs {
     #[serde(default)]
     pub reward_slots: u8,
     #[serde(default)]
-    pub max_power_shards_level: Option<AreaLevel>,
+    pub max_power_shard_level: Option<AreaLevel>,
 
     #[serde(default)]
     pub loot_tables: Vec<String>,

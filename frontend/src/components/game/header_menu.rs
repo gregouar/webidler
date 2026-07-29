@@ -62,7 +62,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let shard_level_exceeded = Signal::derive(move || {
         let area_specs = game_context.area_specs.read();
         area_specs.can_reward_shards()
-            && game_context.area_state.read().area_level > area_specs.max_power_shards_level
+            && game_context.area_state.read().area_level > area_specs.max_power_shard_level
     });
 
     let open_inventory = move || {

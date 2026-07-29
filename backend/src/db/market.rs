@@ -77,9 +77,10 @@ pub async fn sell_item<'c>(
             item_cooldown,
             item_upgrade_level,
             item_power_level,
+            max_power_shard_level,
             realm_id
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
         RETURNING market_id
         "#,
         stash_item_id,
@@ -101,6 +102,7 @@ pub async fn sell_item<'c>(
         stash_item_flatten_stats.item_cooldown,
         stash_item_flatten_stats.item_upgrade_level,
         stash_item_flatten_stats.item_power_level,
+        stash_item_flatten_stats.max_power_shard_level,
         realm_id
     )
     .fetch_one(&mut **executor)
@@ -133,6 +135,11 @@ pub async fn read_market_items<'c>(
 
     let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
     let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
+    let no_filter_max_power_shard_level = filters.min_max_power_shard_level.is_none();
+    let min_max_power_shard_level = filters
+        .min_max_power_shard_level
+        .map(i32::from)
+        .unwrap_or_default();
 
     let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
 
@@ -284,6 +291,7 @@ pub async fn read_market_items<'c>(
                 AND cat.category = $9
             ))
             AND ($49 OR market.item_cooldown <= $50)
+            AND ($52 OR market.max_power_shard_level >= $53)
             AND ($10 OR market.item_damages >= $11)
             AND ($12 OR market.item_damage_physical >= $13)
             AND ($14 OR market.item_damage_fire >= $15)
@@ -379,7 +387,9 @@ pub async fn read_market_items<'c>(
         min_upgrade_level,
         no_filter_item_cooldown,
         item_cooldown, // $50
-        realm_id
+        realm_id,
+        no_filter_max_power_shard_level,
+        min_max_power_shard_level
     )
     .fetch_all(executor)
     .await?;

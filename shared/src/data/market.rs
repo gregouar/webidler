@@ -45,6 +45,8 @@ pub struct MarketFilters {
 
     pub min_power_level: Option<AreaLevel>,
     pub min_upgrade_level: Option<u8>,
+    #[serde(default)]
+    pub min_max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,

@@ -43,6 +43,7 @@ pub struct StashItemFlattenStats {
     pub item_level: i32,
     pub item_power_level: i32,
     pub item_upgrade_level: i32,
+    pub max_power_shard_level: Option<i32>,
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
     pub item_damages: Option<f64>,
@@ -91,6 +92,11 @@ impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
             item_level: value.required_level as i32,
             item_power_level: value.modifiers.level as i32,
             item_upgrade_level: value.modifiers.upgrade_level as i32,
+            max_power_shard_level: value
+                .map_specs
+                .as_ref()
+                .and_then(|map_specs| map_specs.max_power_shard_level)
+                .map(i32::from),
             item_armor: value
                 .armor_specs
                 .as_ref()
@@ -185,9 +191,10 @@ async fn create_stash_item<'c>(
             data_version,
             item_cooldown,
             item_upgrade_level,
-            item_power_level
+            item_power_level,
+            max_power_shard_level
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
         RETURNING stash_item_id
         "#,
         stash_id,
@@ -209,7 +216,8 @@ async fn create_stash_item<'c>(
         DATA_VERSION,
         stash_item_flatten_stats.item_cooldown,
         stash_item_flatten_stats.item_upgrade_level,
-        stash_item_flatten_stats.item_power_level
+        stash_item_flatten_stats.item_power_level,
+        stash_item_flatten_stats.max_power_shard_level
     )
     .fetch_one(&mut **executor)
     .await?;
@@ -318,6 +326,11 @@ pub async fn read_stash_items<'c>(
 
     let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
     let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
+    let no_filter_max_power_shard_level = filters.min_max_power_shard_level.is_none();
+    let min_max_power_shard_level = filters
+        .min_max_power_shard_level
+        .map(i32::from)
+        .unwrap_or_default();
 
     let no_filter_item_cooldown = filters.item_cooldown.is_none();
     let item_cooldown = filters.item_cooldown.unwrap_or_default();
@@ -426,6 +439,7 @@ pub async fn read_stash_items<'c>(
                 AND cat.category = $9
             ))
             AND ($46 OR stash_items.item_cooldown <= $47)
+            AND ($48 OR stash_items.max_power_shard_level >= $49)
             AND ($10 OR stash_items.item_damages >= $11)
             AND ($12 OR stash_items.item_damage_physical >= $13)
             AND ($14 OR stash_items.item_damage_fire >= $15)
@@ -510,7 +524,9 @@ pub async fn read_stash_items<'c>(
         min_power_level,
         min_upgrade_level, // $45
         no_filter_item_cooldown,
-        item_cooldown
+        item_cooldown,
+        no_filter_max_power_shard_level,
+        min_max_power_shard_level
     )
     .fetch_all(executor)
     .await?;

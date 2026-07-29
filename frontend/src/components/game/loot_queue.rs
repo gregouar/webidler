@@ -341,6 +341,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         item_level,
         req_item_level,
         req_affix_level,
+        max_power_shard_level,
         item_rarity,
         item_category,
         item_damages,
@@ -423,6 +424,23 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                 .affixes
                 .iter()
                 .all(|affix| affix.item_level <= req_affix_level),
+        })
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    if max_power_shard_level
+        .map(|max_power_shard_level| {
+            item_specs
+                .map_specs
+                .as_ref()
+                .and_then(|map_specs| map_specs.max_power_shard_level)
+                .map(|item_max_power_shard_level| match rule_type {
+                    FilterRuleType::Pickup => item_max_power_shard_level < max_power_shard_level,
+                    FilterRuleType::Sell => item_max_power_shard_level > max_power_shard_level,
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {

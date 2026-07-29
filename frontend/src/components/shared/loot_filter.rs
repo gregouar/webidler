@@ -64,6 +64,8 @@ pub struct FilterRule {
     pub req_item_level: Option<AreaLevel>,
     #[serde(default)]
     pub req_affix_level: Option<AreaLevel>,
+    #[serde(default)]
+    pub max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
@@ -463,6 +465,7 @@ pub fn EditRule(
     rule_field!(req_item_level);
     rule_field!(req_affix_level);
     rule_field!(item_level);
+    rule_field!(max_power_shard_level);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
     rule_field!(item_damage_fire);
@@ -694,6 +697,13 @@ pub fn EditRule(
                         input_type="number"
                         placeholder="Block Percent Chance"
                         bind=item_block
+                    />
+                    <ValidatedInput
+                        id="max_power_shard_level"
+                        label="Power Shards Unlock Level:"
+                        input_type="number"
+                        placeholder="Power Shards Unlock Level"
+                        bind=max_power_shard_level
                     />
                 </div>
             </div>

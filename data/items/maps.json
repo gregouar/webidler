@@ -46,7 +46,7 @@
       "loot_tables"           : [],
       "replace_area_id"       : null,
       "reward_loot_table"     : null,
-      "max_power_shards_level": 100
+      "max_power_shard_level": 100
     },
     "ignore_quality" : true,
     "upgrade_levels" : [],
@@ -73,7 +73,7 @@
       "loot_tables"           : [],
       "replace_area_id"       : null,
       "reward_loot_table"     : null,
-      "max_power_shards_level": 200
+      "max_power_shard_level": 200
     },
     "ignore_quality" : true,
     "upgrade_levels" : [],

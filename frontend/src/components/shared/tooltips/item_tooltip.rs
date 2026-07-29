@@ -598,12 +598,12 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     }
                 })}
 
-            {match specs.max_power_shards_level {
-                Some(max_power_shards_level) => {
+            {match specs.max_power_shard_level {
+                Some(max_power_shard_level) => {
                     view! {
                         <li class="text-zinc-400 text-xs xl:text-sm ">
                             "Unlocks Power Shards up to Area Level: "
-                            <span class="text-white font-semibold">{max_power_shards_level}</span>
+                            <span class="text-white font-semibold">{max_power_shard_level}</span>
                         </li>
                     }
                         .into_any()

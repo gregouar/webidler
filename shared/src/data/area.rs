@@ -48,7 +48,7 @@ pub struct AreaSpecs {
     #[serde(default = "default_item_rarity")]
     pub gold_find: ModifiableValue<f64>,
     #[serde(default)]
-    pub max_power_shards_level: AreaLevel,
+    pub max_power_shard_level: AreaLevel,
 
     #[serde(default)]
     pub effects: EffectsMap,

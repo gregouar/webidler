@@ -73,10 +73,10 @@ pub fn init_area_specs(
         std::iter::once(map_effects).chain(std::iter::once(area_specs.effects)),
     );
 
-    area_specs.max_power_shards_level = map_item
+    area_specs.max_power_shard_level = map_item
         .as_ref()
         .and_then(|map_item| map_item.map_specs.as_ref())
-        .and_then(|map_specs| map_specs.max_power_shards_level)
+        .and_then(|map_specs| map_specs.max_power_shard_level)
         .unwrap_or(MAX_POWER_SHARD_LEVEL_BASE);
 
     compute_area_specs(&mut area_specs);

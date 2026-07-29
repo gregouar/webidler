@@ -1079,6 +1079,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(max_req_level);
     rule_field!(min_power_level);
     rule_field!(min_upgrade_level);
+    rule_field!(min_max_power_shard_level);
     rule_field!(price);
     rule_field!(item_cooldown);
     rule_field!(item_damages);
@@ -1314,6 +1315,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         input_type="number"
                         placeholder="Minimum Block Percent Chance"
                         bind=item_block
+                    />
+                    <ValidatedInput
+                        id="max_power_shard_level"
+                        label="Min Power Shards Unlock Level:"
+                        input_type="number"
+                        placeholder="Minimum Power Shards Unlock Level"
+                        bind=min_max_power_shard_level
                     />
                 </div>
             </div>
