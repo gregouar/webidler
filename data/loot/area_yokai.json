@@ -1,9 +1,10 @@
 {
     "entries": [
-        {"item_id": "oni_mask",        "weight": 9999},
-        {"item_id": "yokai_sandals",   "weight": 9999},
-        {"item_id": "cloak_exorcist",  "weight": 9999},
-        {"item_id": "amulet_7_unique", "weight":  999},
-        {"item_id": "monk_vest",       "weight": 9999}
+        {"item_id": "oni_mask",       "weight": 9999},
+        {"item_id": "yokai_sandals",  "weight": 9999},
+        {"item_id": "cloak_exorcist", "weight": 9999},
+        {"item_id": "kerden_dance",   "weight": 9999},
+        {"item_id": "evil_eye",       "weight": 9999},
+        {"item_id": "monk_vest",      "weight": 9999}
     ]
 }

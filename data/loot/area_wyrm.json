@@ -6,8 +6,8 @@
     {"item_id": "compound_bow_unique",       "weight": 9999, "min_area_level": 1, "boss_only": true},
     {"item_id": "lamellar_gauntlets_unique", "weight": 9999, "min_area_level": 1, "boss_only": true},
     {"item_id": "yeti_boots",                "weight": 9999                                        },
+    {"item_id": "amulet_7_unique",           "weight":  999                                        },
     {"item_id": "focus_ring",                "weight":  999                                        },
-    {"item_id": "kerden_dance",              "weight": 9999                                        },
     {"item_id": "wand_prism",                "weight": 9999                                        }
   ]
 }

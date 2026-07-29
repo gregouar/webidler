@@ -1,6 +1,6 @@
 Uniques:
 
-Amulets: 4+1
+Amulets: 4+2
 Body: 5+2
 Boots: 4+1
 Cloak: 6+1

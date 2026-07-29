@@ -11,7 +11,7 @@ Features:
 Content:
 
 - New Area: Eternal Sands
-- 13 new Unique Items.
+- 14 new Unique Items.
 - Tier 9 and 10 Base Items and new bases for Runes & Edicts.
 
 Balance Changes:

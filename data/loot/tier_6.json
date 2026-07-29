@@ -19,6 +19,7 @@
     {"item_id": "jewelled_ring",       "weight": 32000                       },
     {"item_id": "focus_ring",          "weight":   499                       },
     {"item_id": "amulet",              "weight": 32000                       },
+    {"item_id": "evil_eye",            "weight":  4999                       },
     {"item_id": "edict",               "weight":   400, "min_area_level": 250},
     {"item_id": "edict_2",             "weight":   400                       },
     {"item_id": "edict_treasure_map",  "weight":  1999                       },
