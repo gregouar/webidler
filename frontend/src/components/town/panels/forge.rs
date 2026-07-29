@@ -164,6 +164,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
                     deleted_by: None,
                 }));
             }
+
+            town_context.selected_item_index.set(None);
         }
     });
 
@@ -339,7 +341,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 if item.item_specs.base.rarity == ItemRarity::Unique {
                     return None;
                 }
-                forge::affix_price(item.item_specs.modifiers.count_nonunique_affixes())
+                forge::affix_operation_price(
+                    ForgeAffixOperation::Add(None),
+                    item.item_specs.modifiers.count_nonunique_affixes(),
+                    &item.item_specs.base,
+                )
             }
             _ => None,
         })
@@ -356,8 +362,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
 
                 if prefixes == suffixes {
-                    forge::affix_price(prefixes + suffixes)
-                        .map(|price| price * forge::PREFIX_PRICE_FACTOR)
+                    forge::affix_operation_price(
+                        ForgeAffixOperation::Add(Some(AffixType::Prefix)),
+                        prefixes + suffixes,
+                        &item.item_specs.base,
+                    )
                 } else {
                     None
                 }
@@ -377,8 +386,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
 
                 if suffixes == prefixes {
-                    forge::affix_price(prefixes + suffixes)
-                        .map(|price| price * forge::SUFFIX_PRICE_FACTOR)
+                    forge::affix_operation_price(
+                        ForgeAffixOperation::Add(Some(AffixType::Suffix)),
+                        prefixes + suffixes,
+                        &item.item_specs.base,
+                    )
                 } else {
                     None
                 }
@@ -389,9 +401,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 
     let remove_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => {
-                forge::remove_price(item.item_specs.modifiers.count_nonunique_affixes())
-            }
+            SelectedItem::InMarket(item) => forge::affix_operation_price(
+                ForgeAffixOperation::Remove,
+                item.item_specs.modifiers.count_nonunique_affixes(),
+                &item.item_specs.base,
+            ),
             _ => None,
         })
     };

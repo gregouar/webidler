@@ -550,7 +550,7 @@ pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let data_context: DataContext = expect_context();
 
-    item_specs.base.map_specs.as_ref().map(|specs| {
+    item_specs.map_specs.as_ref().map(|specs| {
         let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
             <li class="text-zinc-400 text-xs xl:text-sm ">{item_rarity}" Edict"</li>
@@ -597,6 +597,26 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         </li>
                     }
                 })}
+
+            {match specs.max_power_shard_level {
+                Some(max_power_shard_level) => {
+                    view! {
+                        <li class="text-zinc-400 text-xs xl:text-sm ">
+                            "Unlocks Power Shards up to Area Level: "
+                            <span class="text-white font-semibold">{max_power_shard_level}</span>
+                        </li>
+                    }
+                        .into_any()
+                }
+                None => {
+                    view! {
+                        <li class="text-zinc-400 text-xs xl:text-sm ">
+                            "Does not unlock Power Shards"
+                        </li>
+                    }
+                        .into_any()
+                }
+            }}
 
             <li class="text-zinc-400 text-xs xl:text-sm  italic">
                 "Apply to a Grind to give all Enemies the following effects:"

@@ -64,6 +64,8 @@ pub struct FilterRule {
     pub req_item_level: Option<AreaLevel>,
     #[serde(default)]
     pub req_affix_level: Option<AreaLevel>,
+    #[serde(default)]
+    pub max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
@@ -80,7 +82,7 @@ pub struct FilterRule {
     pub item_block: Option<f64>,
 
     #[allow(clippy::type_complexity)]
-    pub stat_filters: [Option<((StatType, Modifier), Option<f64>)>; STAT_FILTERS_AMOUNT],
+    pub stat_filters: [Option<((StatType, Modifier), Option<f64>, bool)>; STAT_FILTERS_AMOUNT],
 }
 
 impl FilterRule {
@@ -463,6 +465,7 @@ pub fn EditRule(
     rule_field!(req_item_level);
     rule_field!(req_affix_level);
     rule_field!(item_level);
+    rule_field!(max_power_shard_level);
     rule_field!(item_damages);
     rule_field!(item_damage_physical);
     rule_field!(item_damage_fire);
@@ -475,29 +478,36 @@ pub fn EditRule(
     rule_field!(item_block);
 
     // Stats
-    let stat_filters: [(_, _); STAT_FILTERS_AMOUNT] =
-        std::array::from_fn(|_| (RwSignal::new(None), RwSignal::new(None)));
+    let stat_filters: [(_, _, _); STAT_FILTERS_AMOUNT] = std::array::from_fn(|_| {
+        (
+            RwSignal::new(None),
+            RwSignal::new(None),
+            RwSignal::new(false),
+        )
+    });
 
     Effect::new(move || {
         with_selected_rule(selected_rule, loot_filter, move |rule| {
-            for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
-                if let Some((stat_type_2, stat_value_2)) = &rule.stat_filters[i] {
+            for (i, (stat_type, stat_value, stat_excluded)) in stat_filters.iter().enumerate() {
+                if let Some((stat_type_2, stat_value_2, stat_excluded_2)) = &rule.stat_filters[i] {
                     stat_type.set(Some(stat_type_2.clone()));
                     stat_value.set(*stat_value_2);
+                    stat_excluded.set(*stat_excluded_2);
                 } else {
                     stat_type.set(None);
                     stat_value.set(None);
+                    stat_excluded.set(false);
                 }
             }
         });
     });
 
     Effect::new(move || {
-        for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
+        for (i, (stat_type, stat_value, stat_excluded)) in stat_filters.iter().enumerate() {
             update_selected_rule(selected_rule, loot_filter, move |rule| {
                 rule.stat_filters[i] = stat_type
                     .get()
-                    .map(|stat_type| (stat_type, stat_value.get()))
+                    .map(|stat_type| (stat_type, stat_value.get(), stat_excluded.get()));
             });
         }
     });
@@ -695,12 +705,19 @@ pub fn EditRule(
                         placeholder="Block Percent Chance"
                         bind=item_block
                     />
+                    <ValidatedInput
+                        id="max_power_shard_level"
+                        label="Power Shards Unlock Level:"
+                        input_type="number"
+                        placeholder="Power Shards Unlock Level"
+                        bind=max_power_shard_level
+                    />
                 </div>
             </div>
 
             <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
                 {stat_filters
-                    .map(|(stat_type, stat_value)| {
+                    .map(|(stat_type, stat_value, stat_excluded)| {
                         view! {
                             <div class="flex gap-2 xl:gap-4 items-center">
                                 {move || {
@@ -714,6 +731,7 @@ pub fn EditRule(
                                                     on:click=move |_| {
                                                         stat_type.set(None);
                                                         stat_value.set(None);
+                                                        stat_excluded.set(false);
                                                     }
                                                 >
                                                     "❌"
@@ -740,10 +758,22 @@ pub fn EditRule(
                                                     <Input
                                                         id="stat_value_1"
                                                         input_type="number"
-                                                        placeholder="Min"
+                                                        placeholder="Value"
                                                         bind=stat_value
                                                     />
                                                 </div>
+                                                <StaticTooltip
+                                                    position=StaticTooltipPosition::Top
+                                                    tooltip=|| {
+                                                        "Require the stat to be absent or below the given value."
+                                                    }
+                                                >
+                                                    <Checkbox
+                                                        label="Exclude".to_string()
+                                                        checked=stat_excluded
+                                                        on_change=move |checked| { stat_excluded.set(checked) }
+                                                    />
+                                                </StaticTooltip>
                                             }
                                         })
                                 }}

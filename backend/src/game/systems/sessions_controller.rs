@@ -131,14 +131,20 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let area_level_completed = db::characters::read_character_area_completed(
-        db_pool,
-        &character.character_id,
-        &area_config.area_id,
-    )
-    .await?
-    .map(|area_completed| area_completed.max_area_level)
-    .unwrap_or_default();
+    let (max_area_level_ever, max_power_shard_level_ever) =
+        db::characters::read_character_area_completed(
+            db_pool,
+            &character.character_id,
+            &area_config.area_id,
+        )
+        .await?
+        .map(|area_completed| {
+            (
+                area_completed.max_area_level,
+                area_completed.max_power_shard_level,
+            )
+        })
+        .unwrap_or_default();
 
     let (mut player_inventory, passives_tree_state, player_benedictions, player_skill_masteries) =
         match character_data {
@@ -255,7 +261,8 @@ async fn new_game_instance(
         character.realm_id,
         area_id,
         map_item,
-        area_level_completed as AreaLevel,
+        max_area_level_ever as AreaLevel,
+        max_power_shard_level_ever as AreaLevel,
         "default",
         passives_tree_state,
         player_resources,

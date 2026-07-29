@@ -6,7 +6,8 @@ use crate::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity, ItemSpecs},
-        stat_effect::StatEffect,
+        modifier::Modifier,
+        stat_effect::StatType,
         user::UserCharacterId,
     },
     types::{ItemName, ItemPrice},
@@ -34,6 +35,15 @@ pub struct MarketItem {
 
 pub const STAT_FILTERS_AMOUNT: usize = 5;
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct MarketStatFilter {
+    pub stat: StatType,
+    pub modifier: Modifier,
+    pub value: Option<f64>,
+    #[serde(default)]
+    pub exclude: bool,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct MarketFilters {
     pub order_by: MarketOrderBy,
@@ -45,6 +55,8 @@ pub struct MarketFilters {
 
     pub min_power_level: Option<AreaLevel>,
     pub min_upgrade_level: Option<u8>,
+    #[serde(default)]
+    pub min_max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
     pub item_category: Option<ItemCategory>,
@@ -60,7 +72,7 @@ pub struct MarketFilters {
     pub item_armor: Option<f64>,
     pub item_block: Option<f64>,
 
-    pub stat_filters: [Option<StatEffect>; STAT_FILTERS_AMOUNT],
+    pub stat_filters: [Option<MarketStatFilter>; STAT_FILTERS_AMOUNT],
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]

@@ -31,6 +31,9 @@ pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X10 every 200 levels
 pub const SKILL_MASTERY_BASE_COST: f64 = 10_000.0;
 pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
 
+pub const POWER_SHARD_LEVELS_NEEDED: AreaLevel = 10;
+pub const MAX_POWER_SHARD_LEVEL_BASE: AreaLevel = 100;
+
 pub const ARMOR_FACTOR: f64 = 100.0;
 pub const MAX_BLOCK: f32 = 80.0;
 pub const MAX_EVADE: f32 = 80.0;

@@ -1,13 +1,20 @@
 use strum::IntoEnumIterator;
 
-use shared::data::{
-    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSlot, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
-    modifier::Modifier,
-    skill::{BaseSkillSpecs, DamageType, SkillType},
-    stat_effect::{
-        ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
-        compare_options,
+use shared::{
+    constants::{MAX_POWER_SHARD_LEVEL_BASE, POWER_SHARD_LEVELS_NEEDED},
+    data::{
+        area::AreaLevel,
+        item::{
+            ArmorSpecs, ItemBase, ItemModifiers, ItemRarity, ItemSlot, ItemSpecs, MapSpecs,
+            WeaponSpecs,
+        },
+        item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
+        modifier::Modifier,
+        skill::{BaseSkillSpecs, DamageType, SkillType},
+        stat_effect::{
+            ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+            compare_options,
+        },
     },
 };
 
@@ -56,12 +63,18 @@ pub fn create_item_specs(
                 .unwrap_or_default(),
         ),
         // .max(1),
-        weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
-            compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
-        }),
-        armor_specs: base.armor_specs.as_ref().map(|armor_specs| {
-            compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
-        }),
+        weapon_specs: base
+            .weapon_specs
+            .clone()
+            .map(|weapon_specs| compute_weapon_specs(weapon_specs, modifiers.quality, &effects)),
+        armor_specs: base
+            .armor_specs
+            .clone()
+            .map(|armor_specs| compute_armor_specs(armor_specs, modifiers.quality, &effects)),
+        map_specs: base
+            .map_specs
+            .clone()
+            .map(|map_specs| compute_map_specs(map_specs, &modifiers)),
         base,
         modifiers,
         old_game: true,
@@ -206,6 +219,22 @@ fn compute_armor_specs(
     }
 
     armor_specs
+}
+
+fn compute_map_specs(mut map_specs: MapSpecs, modifiers: &ItemModifiers) -> MapSpecs {
+    map_specs.max_power_shard_level = (modifiers.rarity != ItemRarity::Unique).then(|| {
+        let max_power_shard_level = MAX_POWER_SHARD_LEVEL_BASE
+            + map_specs.max_power_shard_level.unwrap_or_default()
+            + modifiers
+                .affixes
+                .iter()
+                .map(|affix| affix.item_level)
+                .sum::<AreaLevel>()
+                / 4;
+
+        max_power_shard_level - max_power_shard_level % POWER_SHARD_LEVELS_NEEDED
+    });
+    map_specs
 }
 
 fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {

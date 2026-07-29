@@ -2,6 +2,7 @@ use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
     market::MarketFilters,
+    modifier::invert_formatted_effect_value,
     realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
 };
@@ -77,9 +78,10 @@ pub async fn sell_item<'c>(
             item_cooldown,
             item_upgrade_level,
             item_power_level,
+            max_power_shard_level,
             realm_id
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
         RETURNING market_id
         "#,
         stash_item_id,
@@ -101,6 +103,7 @@ pub async fn sell_item<'c>(
         stash_item_flatten_stats.item_cooldown,
         stash_item_flatten_stats.item_upgrade_level,
         stash_item_flatten_stats.item_power_level,
+        stash_item_flatten_stats.max_power_shard_level,
         realm_id
     )
     .fetch_one(&mut **executor)
@@ -133,6 +136,11 @@ pub async fn read_market_items<'c>(
 
     let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
     let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
+    let no_filter_max_power_shard_level = filters.min_max_power_shard_level.is_none();
+    let min_max_power_shard_level = filters
+        .min_max_power_shard_level
+        .map(i32::from)
+        .unwrap_or_default();
 
     let price = filters.price.map(|x| x.into_inner()).unwrap_or(f64::MAX);
 
@@ -181,10 +189,16 @@ pub async fn read_market_items<'c>(
     let stat_filters = filters.stat_filters.map(|stat_filter| {
         stat_filter
             .and_then(|stat_filter| {
+                let value = stat_filter.value.filter(|value| *value != 0.0);
                 Some((
                     serde_json::to_value(stat_filter.stat).ok()?,
                     serde_plain::to_string(&stat_filter.modifier).ok()?,
-                    stat_filter.value,
+                    value
+                        .map(|value| invert_formatted_effect_value(value, stat_filter.modifier))
+                        .unwrap_or_default(),
+                    stat_filter.exclude,
+                    value.is_some(),
+                    value.is_some_and(|value| value < 0.0),
                 ))
             })
             .unwrap_or_default()
@@ -227,54 +241,54 @@ pub async fn read_market_items<'c>(
         LEFT JOIN
             stash_items_stats AS stat2 ON stat2.stash_item_id = market.stash_item_id
                 AND stat2.realm_id = market.realm_id
-                AND stat2.item_stat = $31
-                AND stat2.stat_modifier = $32
+                AND stat2.item_stat = $34
+                AND stat2.stat_modifier = $35
         LEFT JOIN
             stash_items_stats AS stat3 ON stat3.stash_item_id = market.stash_item_id
                 AND stat3.realm_id = market.realm_id
-                AND stat3.item_stat = $34
-                AND stat3.stat_modifier = $35
+                AND stat3.item_stat = $40
+                AND stat3.stat_modifier = $41
         LEFT JOIN
             stash_items_stats AS stat4 ON stat4.stash_item_id = market.stash_item_id
                 AND stat4.realm_id = market.realm_id
-                AND stat4.item_stat = $37
-                AND stat4.stat_modifier = $38
+                AND stat4.item_stat = $46
+                AND stat4.stat_modifier = $47
         LEFT JOIN
             stash_items_stats AS stat5 ON stat5.stash_item_id = market.stash_item_id
                 AND stat5.realm_id = market.realm_id
-                AND stat5.item_stat = $40
-                AND stat5.stat_modifier = $41
+                AND stat5.item_stat = $52
+                AND stat5.stat_modifier = $53
         WHERE 
-            market.realm_id = $51
+            market.realm_id = $66
             AND (
                 (
-                    $45
+                    $60
                     AND market.deleted_at IS NOT NULL
                     AND market.deleted_by != $4
                 )
                 OR 
                 (
-                    NOT $45 
+                    NOT $60
                     AND market.deleted_at IS NULL
                 )
             )
             AND (
                 (
-                    $44
+                    $59
                     AND owner.user_id = $4
                 )
                 OR
                 (
-                    NOT $44
+                    NOT $59
                     AND (recipient_id IS NULL OR recipient_id = $4)
                     AND NOT rejected
                 )
             )
             AND ($5 OR UPPER(market.item_name) LIKE $6)
             AND (market.item_level >= $7)
-            AND (market.item_level <= $46)
-            AND (market.item_power_level >= $47)
-            AND (market.item_upgrade_level >= $48)
+            AND (market.item_level <= $61)
+            AND (market.item_power_level >= $62)
+            AND (market.item_upgrade_level >= $63)
             AND ($8 = '' OR market.item_rarity = $8)
             AND ($9 = '' OR EXISTS (
                 SELECT 1
@@ -283,7 +297,8 @@ pub async fn read_market_items<'c>(
                 AND cat.realm_id = market.realm_id
                 AND cat.category = $9
             ))
-            AND ($49 OR market.item_cooldown <= $50)
+            AND ($64 OR market.item_cooldown <= $65)
+            AND ($67 OR market.max_power_shard_level >= $68)
             AND ($10 OR market.item_damages >= $11)
             AND ($12 OR market.item_damage_physical >= $13)
             AND ($14 OR market.item_damage_fire >= $15)
@@ -293,12 +308,142 @@ pub async fn read_market_items<'c>(
             AND ($22 OR market.item_crit_damage >= $23)
             AND ($24 OR market.item_armor >= $25)
             AND ($26 OR market.item_block >= $27)
-            AND ($29 = '' OR stat1.stat_value >= $30)
-            AND ($32 = '' OR stat2.stat_value >= $33)
-            AND ($35 = '' OR stat3.stat_value >= $36)
-            AND ($38 = '' OR stat4.stat_value >= $39)
-            AND ($41 = '' OR stat5.stat_value >= $42)
-            AND (market.price <= $43)
+            AND (
+                $29 = ''
+                OR (
+                    NOT $31
+                    AND stat1.stat_value IS NOT NULL
+                    AND stat1.stat_value != 0
+                    AND (
+                        NOT $32
+                        OR ($33 AND stat1.stat_value <= $30)
+                        OR (NOT $33 AND stat1.stat_value >= $30)
+                    )
+                )
+                OR (
+                    $31
+                    AND (
+                        stat1.stat_value IS NULL
+                        OR stat1.stat_value = 0
+                        OR (
+                            $32
+                            AND (
+                                ($33 AND stat1.stat_value > $30)
+                                OR (NOT $33 AND stat1.stat_value < $30)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $35 = ''
+                OR (
+                    NOT $37
+                    AND stat2.stat_value IS NOT NULL
+                    AND stat2.stat_value != 0
+                    AND (
+                        NOT $38
+                        OR ($39 AND stat2.stat_value <= $36)
+                        OR (NOT $39 AND stat2.stat_value >= $36)
+                    )
+                )
+                OR (
+                    $37
+                    AND (
+                        stat2.stat_value IS NULL
+                        OR stat2.stat_value = 0
+                        OR (
+                            $38
+                            AND (
+                                ($39 AND stat2.stat_value > $36)
+                                OR (NOT $39 AND stat2.stat_value < $36)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $41 = ''
+                OR (
+                    NOT $43
+                    AND stat3.stat_value IS NOT NULL
+                    AND stat3.stat_value != 0
+                    AND (
+                        NOT $44
+                        OR ($45 AND stat3.stat_value <= $42)
+                        OR (NOT $45 AND stat3.stat_value >= $42)
+                    )
+                )
+                OR (
+                    $43
+                    AND (
+                        stat3.stat_value IS NULL
+                        OR stat3.stat_value = 0
+                        OR (
+                            $44
+                            AND (
+                                ($45 AND stat3.stat_value > $42)
+                                OR (NOT $45 AND stat3.stat_value < $42)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $47 = ''
+                OR (
+                    NOT $49
+                    AND stat4.stat_value IS NOT NULL
+                    AND stat4.stat_value != 0
+                    AND (
+                        NOT $50
+                        OR ($51 AND stat4.stat_value <= $48)
+                        OR (NOT $51 AND stat4.stat_value >= $48)
+                    )
+                )
+                OR (
+                    $49
+                    AND (
+                        stat4.stat_value IS NULL
+                        OR stat4.stat_value = 0
+                        OR (
+                            $50
+                            AND (
+                                ($51 AND stat4.stat_value > $48)
+                                OR (NOT $51 AND stat4.stat_value < $48)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (
+                $53 = ''
+                OR (
+                    NOT $55
+                    AND stat5.stat_value IS NOT NULL
+                    AND stat5.stat_value != 0
+                    AND (
+                        NOT $56
+                        OR ($57 AND stat5.stat_value <= $54)
+                        OR (NOT $57 AND stat5.stat_value >= $54)
+                    )
+                )
+                OR (
+                    $55
+                    AND (
+                        stat5.stat_value IS NULL
+                        OR stat5.stat_value = 0
+                        OR (
+                            $56
+                            AND (
+                                ($57 AND stat5.stat_value > $54)
+                                OR (NOT $57 AND stat5.stat_value < $54)
+                            )
+                        )
+                    )
+                )
+            )
+            AND (market.price <= $58)
         ORDER BY 
             COALESCE(market.recipient_id = $4, false) DESC, 
             CASE
@@ -358,28 +503,45 @@ pub async fn read_market_items<'c>(
         item_block,
         stat_filters[0].0,
         stat_filters[0].1,
-        stat_filters[0].2, // 30
+        stat_filters[0].2,
+        stat_filters[0].3,
+        stat_filters[0].4,
+        stat_filters[0].5, // $33
         stat_filters[1].0,
         stat_filters[1].1,
         stat_filters[1].2,
+        stat_filters[1].3,
+        stat_filters[1].4,
+        stat_filters[1].5, // $39
         stat_filters[2].0,
-        stat_filters[2].1, // $35
+        stat_filters[2].1,
         stat_filters[2].2,
+        stat_filters[2].3,
+        stat_filters[2].4,
+        stat_filters[2].5, // $45
         stat_filters[3].0,
         stat_filters[3].1,
         stat_filters[3].2,
-        stat_filters[4].0, // $40
+        stat_filters[3].3,
+        stat_filters[3].4,
+        stat_filters[3].5, // $51
+        stat_filters[4].0,
         stat_filters[4].1,
         stat_filters[4].2,
+        stat_filters[4].3,
+        stat_filters[4].4,
+        stat_filters[4].5, // $57
         price,
         own_listings,
-        is_deleted, // $45
+        is_deleted, // $60
         max_req_level,
         min_power_level,
         min_upgrade_level,
         no_filter_item_cooldown,
-        item_cooldown, // $50
-        realm_id
+        item_cooldown, // $65
+        realm_id,
+        no_filter_max_power_shard_level,
+        min_max_power_shard_level // $68
     )
     .fetch_all(executor)
     .await?;

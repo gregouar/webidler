@@ -189,6 +189,7 @@ pub fn update_player_specs(
     player_specs
 }
 
+#[allow(clippy::too_many_arguments)]
 fn compute_player_specs(
     skill_masteries_store: &SkillMasteriesStore,
     statuses_store: &StatusesStore,

@@ -862,7 +862,7 @@ pub struct OldPassivesTreeAscensionData {
 impl From<OldPassivesTreeAscensionData> for PassivesTreeAscensionData {
     fn from(value: OldPassivesTreeAscensionData) -> Self {
         Self {
-            ascended_nodes: value.ascended_nodes,
+            ascended_nodes: Default::default(),
             socketed_nodes: value
                 .socketed_nodes
                 .into_iter()

@@ -59,6 +59,11 @@ pub fn HeaderMenu() -> impl IntoView {
     let gold = Signal::derive(move || resources.get().0);
     let gems = Signal::derive(move || resources.get().1);
     let shards = Signal::derive(move || resources.get().2);
+    let shard_level_exceeded = Signal::derive(move || {
+        let area_specs = game_context.area_specs.read();
+        area_specs.can_reward_shards()
+            && game_context.area_state.read().area_level > area_specs.max_power_shard_level
+    });
 
     let open_inventory = move || {
         game_context
@@ -140,6 +145,15 @@ pub fn HeaderMenu() -> impl IntoView {
                     w_full=true
                     disabled=Signal::derive(move || {
                         !game_context.area_specs.read().can_reward_shards()
+                            || shard_level_exceeded.get()
+                    })
+                    disabled_description=Signal::derive(move || {
+                        shard_level_exceeded
+                            .get()
+                            .then(|| {
+                                "No more Power Shards can be unlocked during this Grind."
+                                    .to_string()
+                            })
                     })
                 />
             </div>

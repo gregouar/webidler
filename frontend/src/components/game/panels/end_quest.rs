@@ -70,10 +70,12 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
 
     let item_rewards_picked = RwSignal::new(IndexSet::new());
     let end_quest_requested = RwSignal::new(false);
+    let return_to_town_requested = RwSignal::new(false);
 
     let do_confirm_end = Arc::new({
         let conn: WebsocketContext = expect_context();
         move || {
+            return_to_town_requested.set(true);
             conn.send(
                 &TerminateQuestMessage {
                     reward_picks: item_rewards_picked
@@ -123,6 +125,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                 game_context.area_specs.read_untracked().reward_slots,
             ) == 0
             {
+                return_to_town_requested.set(true);
                 conn.send(
                     &TerminateQuestMessage {
                         reward_picks: Default::default(),
@@ -143,7 +146,7 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
     };
 
     Effect::new(move || {
-        if open.get() {
+        if open.get() && !return_to_town_requested.get_untracked() {
             item_rewards_picked.set(Default::default());
             if game_context.quest_rewards.read_untracked().is_none() {
                 end_quest_requested.set(false);
@@ -253,10 +256,14 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                         view! {
                             <MenuButtonRed
                                 on:click=primary_action
-                                disabled=Signal::derive(move || { end_quest_requested.get() })
+                                disabled=Signal::derive(move || {
+                                    end_quest_requested.get() || return_to_town_requested.get()
+                                })
                             >
                                 {move || {
-                                    if predicted_item_rewards_amount(
+                                    if return_to_town_requested.get() {
+                                        "Returning to Town..."
+                                    } else if predicted_item_rewards_amount(
                                         game_context.area_state.read().max_area_level,
                                         game_context.area_specs.read().training,
                                         game_context.area_specs.read().reward_slots,
@@ -274,8 +281,17 @@ fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
                             .into_any()
                     } else {
                         view! {
-                            <MenuButton on:click=secondary_action>
-                                "Confirm Rewards & Return to Town"
+                            <MenuButton
+                                on:click=secondary_action
+                                disabled=Signal::derive(move || { return_to_town_requested.get() })
+                            >
+                                {move || {
+                                    if return_to_town_requested.get() {
+                                        "Returning to Town..."
+                                    } else {
+                                        "Confirm Rewards & Return to Town"
+                                    }
+                                }}
                             </MenuButton>
                         }
                             .into_any()

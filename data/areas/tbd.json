@@ -1,0 +1,27 @@
+{
+    "specs"      : {
+        "name"               : "TBD",
+        "description"        : "TBD.",
+        "power_level"        : 80,
+        "required_level"     : 500,
+        "item_level_modifier": 160,
+        "header_background"  : "areas/chaos_header.webp",
+        "footer_background"  : "areas/chaos_footer.webp",
+        "coming_soon"        : true
+    },
+    "loot_tables": [
+        "tier_1.json",  "tier_2.json",  "tier_3.json",  "tier_4.json",  "tier_5.json",  "tier_6.json",  "tier_7.json",
+        "tier_8.json",  "tier_9.json",  "tier_10.json"
+    ],
+    "bosses"     : [],
+    "waves"      : [
+        {
+            "min_level": 1,
+            "max_level": null,
+            "weight"   : 1000,
+            "spawns"   : [
+                { "monster": "possessed_ashigaru.json", "quantity": [1, 2] }
+            ]
+        }
+    ]
+}

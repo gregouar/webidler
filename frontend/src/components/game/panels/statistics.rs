@@ -104,6 +104,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
+                                    label="Power Shards Unlocked up to Level"
+                                    value=move || {
+                                        game_context
+                                            .area_state
+                                            .read()
+                                            .max_power_shard_level_ever
+                                            .to_string()
+                                    }
+                                />
+                                <Stat
                                     label="Average Damage per second"
                                     value=move || {
                                         format_number(game_context.game_local_stats.average_dps())
