@@ -25,6 +25,6 @@
     {"item_id": "edict_treasure_map",  "weight":  1999                       },
     {"item_id": "rune",                "weight":  3200, "min_area_level": 250},
     {"item_id": "rune_root",           "weight":   320, "min_area_level": 250},
-    {"item_id": "rune_mana_damage",    "weight":    99                       }
+    {"item_id": "rune_mana_damage",    "weight":   499                       }
   ]
 }

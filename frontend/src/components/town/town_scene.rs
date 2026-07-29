@@ -404,7 +404,7 @@ fn GrindingAreaCard(
                             />
                         </div>
 
-                        <div class="p-2 xl:p-4 xl:space-y-1 flex-1 flex flex-col justify-around">
+                        <div class="p-2 xl:p-3 xl:space-y-1 flex-1 flex flex-col justify-around">
                             <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
                                 {move || area_specs.read().name.clone()}
                             </div>
@@ -585,16 +585,27 @@ pub fn StartGrindPanel(
                                                 {*area_specs.power_level + *area_specs.item_level_modifier}
                                             </span>
                                         </li>
-                                        <li>
-                                            "Power Shards unlocked up to Area Level: "
-                                            <span class="font-semibold text-white">
-                                                {selected_area
-                                                    .read()
-                                                    .as_ref()
-                                                    .map(|area| area.max_power_shard_level)
-                                                    .unwrap_or_default()}
-                                            </span>
-                                        </li>
+                                        {if !area_specs.crucible && !area_specs.training
+                                            && !area_specs.hidden
+                                        {
+                                            view! {
+                                                <li>
+                                                    "Power Shards unlocked up to Area Level: "
+                                                    <span class="font-semibold text-white">
+                                                        {selected_area
+                                                            .read()
+                                                            .as_ref()
+                                                            .map(|area| area.max_power_shard_level)
+                                                            .unwrap_or_default()}
+                                                    </span>
+                                                </li>
+                                            }
+                                                .into_any()
+                                        } else {
+                                            view! { <li>"No Power Shards in this Grind"</li> }
+                                                .into_any()
+                                        }}
+
                                     </ul>
 
                                     <div class="w-full h-full px-4 flex items-center justify-center">

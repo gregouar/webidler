@@ -1,0 +1,27 @@
+{
+    "specs"      : {
+        "name": "Eldritch Depths",
+        "description": "No mortal tongue can name what slumbers in these depths. The fortunate lose only their sanity before the end.",
+        "power_level": 90,
+        "required_level": 600,
+        "item_level_modifier": 180,
+        "header_background": "areas/mythos_header.webp",
+        "footer_background": "areas/mythos_footer.webp",
+        "coming_soon": true
+    },
+    "loot_tables": [
+        "tier_1.json",  "tier_2.json",  "tier_3.json",  "tier_4.json",  "tier_5.json",  "tier_6.json",  "tier_7.json",
+        "tier_8.json",  "tier_9.json",  "tier_10.json"
+    ],
+    "bosses"     : [],
+    "waves"      : [
+        {
+            "min_level": 1,
+            "max_level": null,
+            "weight"   : 1000,
+            "spawns"   : [
+                { "monster": "possessed_ashigaru.json", "quantity": [1, 2] }
+            ]
+        }
+    ]
+}
