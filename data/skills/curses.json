@@ -125,26 +125,25 @@
     ]
   },
   "curse_vampirism"   : {
-    "name": "Curse of Vampirism",
-    "description": "A dark curse that binds the enemy's lifeblood to your strikes, so that every blow siphons vitality back into your veins.",
-    "icon": "skills/curse_vampirism.svg",
-    "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 10,
-    "upgrade_cost": 50,
+    "name"           : "Curse of Vampirism",
+    "description"    : "Afflict yourself with the curse of the Vampire, draining enemies blood with every attack.",
+    "icon"           : "skills/curse_vampirism.svg",
+    "skill_type"     : "Curse",
+    "cooldown"       : 10,
+    "mana_cost"      : 10,
+    "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
         "stat"       : { "StatusPower": {"status_id": "curse_vampirism"} },
         "modifier"   : "Flat",
         "value"      : 5,
-        "description": "Restore +0.1 additional Life"
+        "description": "Gain +0.1 additional Life"
       }
     ],
-    "targets": [
+    "targets"        : [
       {
-        "range"  : "Any",
-        "shape"  : "All",
-        "effects": [
+        "target_type": "Me",
+        "effects"    : [
           { "ApplyStatus": {"status_id": "curse_vampirism", "value": 100} }
         ]
       }

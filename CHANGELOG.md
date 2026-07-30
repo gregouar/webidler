@@ -21,7 +21,8 @@ Balance Changes:
 - Almost all "More Critical Damage" have been transformed to "Increased Critical Damage" (this is a nerf).
 - Damage Taken modifier can now be More and become multiplicative with each others.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
-- Merge Curse of Clumsiness into Curse of Weakness.
+- Merged Curse of Clumsiness into Curse of Weakness.
+- Curse of Vampirism now applies to Self instead of Enemies.
 - Buffed high tier item affixes granting damage.
 - Removed flat crit chance affixes from weapons.
 

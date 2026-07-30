@@ -154,8 +154,28 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_berserker": {
     "name": "Mark of the Berserker",
@@ -223,7 +243,8 @@
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -235,8 +256,28 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_storm_average": {
     "name": "Flux Stabilizer",
@@ -290,8 +331,8 @@
         "modifier": "Increased",
         "scope": "Global",
         "value": [
-          50.0,
-          100.0
+          100.0,
+          200.0
         ],
         "ignore_quality": true
       }
@@ -327,7 +368,8 @@
           "damage_type": null,
           "debuff": null,
           "is_triggered": null,
-          "is_evaded": false
+          "is_evaded": false,
+          "conditions": []
         },
         "description": null,
         "trigger_id": "rune_poison_fire",
@@ -399,21 +441,21 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -429,7 +471,8 @@
             ],
             "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -441,8 +484,28 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_mana_damage": {
     "name": "Mnemonic Singularity",
@@ -497,8 +560,28 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_storm_poison": {
     "name": "Voltrach Contraption",
@@ -580,7 +663,8 @@
             ],
             "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application": false
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -588,7 +672,7 @@
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
-      "root_node": false
+      "root_node": true
     },
     "map_specs": null,
     "ignore_quality": true,
@@ -607,6 +691,21 @@
     "min_area_level": 410,
     "rarity": "Unique",
     "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": true
+      },
       {
         "stat": {
           "StatConverter": {
@@ -671,11 +770,30 @@
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
-      "root_node": true
+      "root_node": false
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   }
 }

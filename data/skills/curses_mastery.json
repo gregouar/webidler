@@ -553,7 +553,7 @@
                     {
                         "value"        : 1,
                         "upgrade_value": 1,
-                        "StatEffect"   : { "stat": {"Description": "Restore +0.1 additional Life"}, "modifier": "Flat" }
+                        "StatEffect"   : { "stat": {"Description": "Gain +0.1 additional Life"}, "modifier": "Flat" }
                     }
                 ]
             },
@@ -574,7 +574,7 @@
                 ]
             },
             "damage"      : {
-                "title"       : "Vampiric Power",
+                "title"       : "Messy Work",
                 "base_cost"   : 20,
                 "upgrade_cost": 0,
                 "max_level"   : 1,
@@ -585,13 +585,8 @@
                         "Trigger"      : {
                             "trigger_id": "curse_vampirism_damage",
                             "skill_type": "Other",
-                            "OnHit"     : {
-                                "skill_type": "Attack",
-                                "conditions": [
-                                    { "HasStatus": {"status_id": "curse_vampirism"} }
-                                ]
-                            },
-                            "target"    : "Source",
+                            "OnHit"     : {"skill_type": "Attack"},
+                            "target"    : "Me",
                             "effects"   : [
                                 { "ApplyStatus": {"status_id": "curse_vampirism_damage", "value": 1} }
                             ]
@@ -610,13 +605,19 @@
                         "upgrade_value": 20,
                         "StatEffect"   : {
                             "stat"    : {
-                                "SkillConditionalModifier": {
-                                    "stat"      : {"Damage": {}},
-                                    "skill_type": null,
-                                    "skill_id"  : null,
+                                "StatConditionalModifier": {
+                                    "stat"      : {
+                                        "SkillConditionalModifier": {
+                                            "stat"      : {"Damage": {}},
+                                            "skill_type": null,
+                                            "skill_id"  : null,
+                                            "conditions": [
+                                                { "HasStatus": {"status_id": "bleed"} }
+                                            ]
+                                        }
+                                    },
                                     "conditions": [
-                                        { "HasStatus": {"status_id": "curse_vampirism"} },
-                                        { "HasStatus": {"status_id": "bleed"          } }
+                                        { "HasStatus": {"status_id": "curse_vampirism"} }
                                     ]
                                 }
                             },

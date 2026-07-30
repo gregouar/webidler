@@ -693,8 +693,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          150.0,
-          200.0
+          200.0,
+          300.0
         ],
         "ignore_quality": true
       }
@@ -749,7 +749,7 @@
             }
           },
           "modifier": "More",
-          "value": 50.0
+          "value": 75.0
         }
       }
     ]

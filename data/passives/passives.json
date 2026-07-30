@@ -8638,8 +8638,51 @@
           }
         ],
         "locked": true,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "vulnerability_storm",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "vulnerability_poison",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "vulnerability_fire",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 50.0
+          }
+        ],
+        "max_upgrade_level": 5,
         "socket": false
       },
       "8006615c-85c9-4d08-8330-13138fd6e918": {
@@ -13712,12 +13755,30 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
@@ -13737,24 +13798,6 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -13849,12 +13892,13 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "min_max": null
                     }
                   },
                   {
@@ -13885,13 +13929,12 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
                       "skill_id": null,
-                      "min_max": null
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -13986,33 +14029,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14029,6 +14045,33 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],

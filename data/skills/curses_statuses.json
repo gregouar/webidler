@@ -133,50 +133,41 @@
     "curse_vampirism"       : {
         "name"      : "Curse of Vampirism",
         "icon"      : "skills/curse_vampirism.svg",
-        "debuff"    : true,
+        "debuff"    : false,
         "duration"  : 5,
         "max_stacks": 1,
         "effects"   : [
             {
                 "replace_on_value_only": true,
-                "Trigger"              : {
-                    "trigger_id" : "curse_vampirism",
-                    "name"       : "Curse of Vampirism",
-                    "icon"       : "skills/curse_vampirism.svg",
-                    "OnTakeHit"  : {"is_hurt": true, "skill_type": "Attack"},
-                    "target"     : "Source",
-                    "skill_range": "Any",
-                    "skill_shape": "Single",
-                    "skill_type" : "Curse",
-                    "effects"    : [
-                        {
-                            "Restore"            : {"restore_type": "Life", "value": 0, "modifier": "Flat"},
-                            "ignore_stat_effects": []
-                        }
-                    ],
-                    "modifiers"  : [
-                        {
-                            "stat"    : { "Restore": {"restore_type": "Life"} },
-                            "modifier": "Flat",
-                            "factor"  : 0.02,
-                            "source"  : "TriggerStatusValue"
-                        }
-                    ]
+                "StatModifier"         : {
+                    "stat"    : { "RestoreOnHit": {"skill_type": "Attack", "restore_type": "Life"} },
+                    "modifier": "Flat"
                 },
-                "value"                : 100,
+                "value"                : 2,
                 "modifier"             : "Percent"
             }
         ]
     },
     "curse_vampirism_damage": {
-        "name"      : "Vampiric Power",
-        "icon"      : "skills/curse_vampirism.svg",
+        "name"      : "Covered in Blood",
+        "icon"      : "skills/blood.svg",
         "debuff"    : false,
         "duration"  : 5,
         "max_stacks": 20,
         "effects"   : [
             {
-                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "StatModifier": {
+                    "stat"    : {
+                        "StatConditionalModifier": {
+                            "stat"      : {"Damage": {}},
+                            "conditions": [
+                                { "HasStatus": {"status_id": "curse_vampirism"} }
+                            ]
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
                 "value"       : 10,
                 "modifier"    : "Flat"
             }
