@@ -211,7 +211,7 @@ impl Default for SkillRepeat {
                 lucky_chance: Default::default(),
             },
             target: SkillRepeatTarget::Any,
-            repeat_cooldown: Default::default(),
+            repeat_cooldown: NonNegative(0.3),
         }
     }
 }
