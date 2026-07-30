@@ -134,7 +134,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                                 .get(&area.area_id)
                                                 .map(|area_specs| (
                                                     !area_specs.training,
-                                                    area_specs.coming_soon,
+                                                    area_specs.crucible,
                                                     area_specs.required_level,
                                                 ))
                                                 .unwrap_or_default()
@@ -561,7 +561,7 @@ pub fn StartGrindPanel(
                                 </div>
 
                                 <CardInset class="xl:space-y-4">
-                                    <div class="w-full flex text-lg xl:text-2xl font-bold text-shadow-lg/100 shadow-gray-950 text-amber-300 justify-center items-center gap-4">
+                                    <div class="w-full flex text-lg xl:text-2xl font-bold text-shadow-lg/100 shadow-gray-950 text-amber-200 justify-center items-center gap-4">
                                         {area_specs
                                             .crucible
                                             .then(|| view! { <CrucibleAreaIcon /> })}
@@ -569,7 +569,9 @@ pub fn StartGrindPanel(
                                             .training
                                             .then(|| view! { <TrainingAreaIcon /> })}
                                         {area_specs.boss.then(|| view! { <BossAreaIcon /> })}
-                                        <span class="font-display">{area_specs.name}</span>
+                                        <span class="[font-variant:small-caps] font-display">
+                                            {area_specs.name}
+                                        </span>
                                     </div>
 
                                     <span class="block text-xs xl:text-sm font-medium text-zinc-400 italic

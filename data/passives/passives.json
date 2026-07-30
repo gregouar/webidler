@@ -151,7 +151,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -452,7 +452,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -1079,7 +1079,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -1226,7 +1226,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -1527,7 +1527,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -1554,7 +1554,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -1825,7 +1825,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2027,7 +2027,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2194,7 +2194,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2405,7 +2405,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2940,7 +2940,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -2967,7 +2967,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -3621,8 +3621,8 @@
                 "skill_id": null
               }
             },
-            "modifier": "Flat",
-            "value": 1.0
+            "modifier": "More",
+            "value": 100.0
           },
           {
             "stat": {
@@ -3919,7 +3919,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -4198,7 +4198,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -4969,7 +4969,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -6113,7 +6113,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -7930,7 +7930,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8192,7 +8192,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8433,7 +8433,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -8769,7 +8769,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9215,7 +9215,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9365,7 +9365,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9392,7 +9392,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9794,7 +9794,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -10550,7 +10550,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -10887,7 +10887,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -11380,7 +11380,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -11542,7 +11542,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -11867,7 +11867,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -12248,7 +12248,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -12706,7 +12706,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -13359,7 +13359,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -13712,7 +13712,7 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13731,7 +13731,7 @@
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13740,7 +13740,7 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13858,6 +13858,15 @@
                     }
                   },
                   {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -13868,15 +13877,6 @@
                   },
                   {
                     "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -13986,6 +13986,33 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14002,33 +14029,6 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -14916,7 +14916,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -14986,7 +14986,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -15387,7 +15387,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -17339,7 +17339,7 @@
           {
             "stat": "GoldFind",
             "modifier": "Increased",
-            "value": 30.0
+            "value": 25.0
           }
         ],
         "triggers": [],
