@@ -629,7 +629,7 @@
   "evil_eye": {
     "name": "Evil Eye",
     "icon": "items/amulets/evil_eye.webp",
-    "description": "It keeps asking to come out. I keep pretending not to hear.",
+    "description": "It keeps asking to come out. Better keep pretending not to hear.",
     "slot": "Amulet",
     "extra_slots": [],
     "categories": [
@@ -697,6 +697,41 @@
           300.0
         ],
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": "Curse",
+                  "not": false
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -750,6 +785,39 @@
           },
           "modifier": "More",
           "value": 75.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "skill_type": null,
+              "skill_id": null,
+              "conditions": [
+                {
+                  "HasStatus": {
+                    "status_id": null,
+                    "damage_type": null,
+                    "debuff": null,
+                    "skill_type": "Curse",
+                    "not": false
+                  }
+                }
+              ]
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
         }
       }
     ]

@@ -1,31 +1,24 @@
 {
-  "name": "Reflection of Grief",
-  "portrait": "monsters/castle/princess_storm.webp",
-  "rarity": "Boss",
-  "max_life": 100,
-  "size": "Tall",
-  "armor": { "Physical": 50, "Storm": 100 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Reflection of Grief",
+  "portrait"          : "monsters/castle/princess_storm.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 150,
+  "size"              : "Tall",
+  "armor"             : {"Physical": 50, "Storm": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Grieving Tear",
-      "icon": "skills/chain_lightning.svg",
-      "cooldown": 2.0,
+      "name"      : "Grieving Tear",
+      "icon"      : "skills/chain_lightning.svg",
+      "cooldown"  : 2.0,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 15 ]
-                }
+                "damage": { "Storm": [0, 15] }
               }
             }
           ]
@@ -33,24 +26,19 @@
       ]
     },
     {
-      "name": "Neverending Cry",
-      "icon": "skills/haste.svg",
+      "name"      : "Neverending Cry",
+      "icon"      : "skills/haste.svg",
       "skill_type": "Blessing",
-      "cooldown": 0.0,
-      "triggers": [
+      "cooldown"  : 0.0,
+      "triggers"  : [
         {
-          "trigger_id": "grieving_call",
+          "trigger_id" : "grieving_call",
           "description": "Get stronger on Reflection Death.",
-          "skill_type": "Spell",
-          "OnDeath": "Friend",
-          "target": "Me",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "grieving_call",
-                "value": 100
-              }
-            }
+          "skill_type" : "Spell",
+          "OnDeath"    : "Friend",
+          "target"     : "Me",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "grieving_call", "value": 100} }
           ]
         }
       ]

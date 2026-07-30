@@ -1,40 +1,46 @@
 {
-  "name": "Morvain, the Huntsman",
-  "portrait": "monsters/forest/hunter.webp",
-  "rarity": "Boss",
-  "max_life": 100,
-  "size": "Tall",
-  "armor": {
-    "Physical": 50,
-    "Poison": 100
-  },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Morvain, the Huntsman",
+  "portrait"          : "monsters/forest/hunter.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 150,
+  "size"              : "Tall",
+  "armor"             : {"Physical": 50, "Poison": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Piercing Shot",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.5,
+      "name"      : "Piercing Shot",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 2.5,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 4 ]
-                }
+                "damage": { "Physical": [2, 4] }
               }
             },
             {
-              "ApplyStatus": {
-                "status_id": "bleed",
-                "value": [ 1, 2 ]
+              "ApplyStatus": { "status_id": "bleed", "value": [1, 2] }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Toxic Barrage",
+      "icon"      : "skills/poison_coating.svg",
+      "skill_type": "Attack",
+      "cooldown"  : 5.0,
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 5, "escalation": 20} },
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 6] }
               }
             }
           ]
@@ -42,59 +48,20 @@
       ]
     },
     {
-      "name": "Toxic Barrage",
-      "icon": "skills/poison_coating.svg",
-      "skill_type": "Attack",
-      "cooldown": 5.0,
-      "targets": [
-        {
-          "range": "Distance",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "duration": 5,
-                "value": 5,
-                "escalation": 20
-              }
-            },
-            {
-              "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 6 ]
-                }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Lost of a Friend",
-      "icon": "skills/hunting_horn.svg",
+      "name"      : "Lost of a Friend",
+      "icon"      : "skills/hunting_horn.svg",
       "skill_type": "Blessing",
-      "cooldown": 0.0,
-      "triggers": [
+      "cooldown"  : 0.0,
+      "triggers"  : [
         {
-          "trigger_id": "hunter_vengeance",
+          "trigger_id" : "hunter_vengeance",
           "description": "Fully Heal and get Enraged on Fidel Hound death.",
-          "skill_type": "Spell",
-          "OnDeath": "Friend",
-          "target": "Me",
-          "effects": [
-            {
-              "Restore": {
-                "restore_type": "Life",
-                "value": 100,
-                "modifier": "Percent"
-              }
-            },
-            {
-              "ApplyStatus": {
-                "status_id": "hunter_vengeance",
-                "value": 100
-              }
-            }
+          "skill_type" : "Spell",
+          "OnDeath"    : "Friend",
+          "target"     : "Me",
+          "effects"    : [
+            { "Restore": {"restore_type": "Life", "value": 100, "modifier": "Percent"} },
+            { "ApplyStatus": {"status_id": "hunter_vengeance", "value": 100} }
           ]
         }
       ]

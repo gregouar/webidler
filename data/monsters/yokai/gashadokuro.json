@@ -2,7 +2,7 @@
     "name"              : "Gashadokuro",
     "portrait"          : "monsters/yokai/gashadokuro.webp",
     "rarity"            : "Boss",
-    "max_life"          : 800,
+    "max_life"          : 500,
     "life_regen"        : 30,
     "size"              : "Gargantuan",
     "armor"             : {"Physical": 200, "Storm": 50, "Poison": 50, "Fire": 50},
