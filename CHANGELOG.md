@@ -5,27 +5,27 @@
 Features:
 
 - Skill persistently gain experience and level up. This reward Skill Mastery points which can be used to buy various upgrades and modifiers for the Skills.
-- Rework of the Statuses system, so that various statuses can be multiplicative with each other and introduce new synergies.
 - Power Shards now unlock only up to Area Level 100 (10 Power Shards) by default. Unlocking more requires to use an Edict, with maximum level computed from Edict Affixes level.
+- Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
+- Rework of the Statuses system, so that various statuses can be multiplicative with each other and introduce new synergies.
+- Damage Taken modifier can now be More and become multiplicative with each others.
 
 Content:
 
-- New Area: Eternal Sands
+- New Area: Eternal Sands.
+- New Skill: Blessing of Greed.
 - 15 new Unique Items.
 - Tier 9 and 10 Base Items and new bases for Runes & Edicts.
 
 Balance Changes:
 
-- Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
-- Nerf Spread Destruction, only target a single other enemy and do less damage and duration.
-- Almost all "More Critical Damage" have been transformed to "Increased Critical Damage" (this is a nerf).
-- Damage Taken modifier can now be More and become multiplicative with each others.
-- Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
-- Merged Curse of Clumsiness into Curse of Weakness.
-- Added Blessing of Greed.
-- Curse of Vampirism now applies to Self instead of Enemies.
 - Buffed high tier item affixes granting damage.
 - Removed flat crit chance affixes from weapons.
+- Almost all "More Critical Damage" have been transformed to "Increased Critical Damage" (this is a nerf).
+- Nerf Spread Destruction, only target a single other enemy and do less damage and duration.
+- Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
+- Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
+- Curse of Vampirism now applies to Self instead of Enemies.
 
 ## Major Game Update: «Awakening of the Spider Witch»
 
