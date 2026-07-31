@@ -930,6 +930,24 @@
       },
       {
         "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          260.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "Description": "Use both Hands"
         },
         "modifier": "Flat",
@@ -1052,7 +1070,7 @@
             }
           },
           "modifier": "More",
-          "value": 30.0
+          "value": 100.0
         }
       },
       {

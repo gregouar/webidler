@@ -549,7 +549,7 @@ fn roll_affix(
 
 fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaLevel) -> u64 {
     let delta = area_level.saturating_sub(tier_level) as f64;
-    let factor = 1.0 + delta * tier_level as f64 / 10_000.0;
+    let factor = 1.0 + delta * (tier_level as f64).powf(1.5) / 10_000.0;
     (base_weight as f64 * factor) as u64
 }
 

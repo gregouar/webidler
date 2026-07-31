@@ -205,11 +205,8 @@
             },
             "Restore": {
               "restore_type": "Life",
-              "value": [
-                10.0,
-                20.0
-              ],
-              "modifier": "Flat"
+              "value": 5.0,
+              "modifier": "Percent"
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],

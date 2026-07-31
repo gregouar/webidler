@@ -310,7 +310,7 @@
             }
           },
           "modifier": "Increased",
-          "value": 40.0
+          "value": 35.0
         }
       }
     ]
@@ -678,6 +678,37 @@
         "scope": "Global",
         "value": 140.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": "Curse",
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -986,12 +1017,6 @@
             },
             "ignore_stat_effects": [
               {
-                "CritDamage": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
@@ -1002,6 +1027,12 @@
               },
               {
                 "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
                 }
