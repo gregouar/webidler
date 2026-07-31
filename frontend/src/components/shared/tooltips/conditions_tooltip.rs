@@ -135,7 +135,7 @@ pub fn format_skill_modifier_conditions_post(
         per_conditions_str.join(" and ")
     } else {
         format!(
-            "{}{}{}",
+            "{} {}{}",
             per_conditions_str.join(" and "),
             prefix,
             on_conditions_str.join(" and ")

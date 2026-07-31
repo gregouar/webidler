@@ -333,7 +333,7 @@
     "blessing_gold"      : {
         "max_level": 100,
         "upgrades" : {
-            "power"   : {
+            "power"      : {
                 "title"       : "Blessing Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -349,7 +349,7 @@
                     }
                 ]
             },
-            "duration": {
+            "duration"   : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -361,6 +361,51 @@
                         "StatEffect"   : {
                             "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
                             "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "fast_gold"  : {
+                "title"       : "Fortune Favors the Swift",
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id"     : "blessing_gold_fast_gold",
+                            "skill_type"     : "Other",
+                            "OnWaveCompleted": {},
+                            "effects"        : [
+                                { "ApplyStatus": {"status_id": "blessing_gold_fast_gold", "value": 100} }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "threat_gold": {
+                "title"       : "Fortune Favors the Bold",
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 50,
+                        "upgrade_value": 0,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : "GoldFind",
+                                    "conditions": [
+                                        "ThreatLevel",
+                                        { "HasStatus": {"status_id": "blessing_gold"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
                         }
                     }
                 ]

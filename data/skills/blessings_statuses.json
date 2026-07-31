@@ -1,5 +1,5 @@
 {
-    "blessing_haste"     : {
+    "blessing_haste"         : {
         "name"      : "Blessing of Haste",
         "icon"      : "skills/haste.svg",
         "debuff"    : false,
@@ -26,7 +26,7 @@
             }
         ]
     },
-    "blessing_crit"      : {
+    "blessing_crit"          : {
         "name"      : "Blessing of Precision",
         "icon"      : "skills/blessing_crit.svg",
         "debuff"    : false,
@@ -50,7 +50,7 @@
             }
         ]
     },
-    "blessing_protection": {
+    "blessing_protection"    : {
         "name"      : "Blessing of Fortification",
         "icon"      : "skills/blessing_protection.svg",
         "debuff"    : false,
@@ -71,7 +71,7 @@
             }
         ]
     },
-    "blessing_heal"      : {
+    "blessing_heal"          : {
         "name"      : "Blessing of Renewal",
         "icon"      : "skills/blessing_renewal.svg",
         "debuff"    : false,
@@ -86,7 +86,7 @@
             }
         ]
     },
-    "blessing_gold"      : {
+    "blessing_gold"          : {
         "name"      : "Blessing of Greed",
         "icon"      : "skills/blessing_gold.svg",
         "debuff"    : false,
@@ -101,7 +101,22 @@
             }
         ]
     },
-    "meditate_damage"    : {
+    "blessing_gold_fast_gold": {
+        "name"      : "Fortune Favors the Swift",
+        "icon"      : "skills/gold_shell.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {"stat": "GoldFind", "modifier": "More"},
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
+    "meditate_damage"        : {
         "name"      : "Enlightenment",
         "adjective" : "Enlightened",
         "icon"      : "statuses/enlightenment.svg",
