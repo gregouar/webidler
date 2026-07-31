@@ -1029,6 +1029,22 @@
         "scope": "Global",
         "value": 100.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "blessing_gold_fast_gold",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],

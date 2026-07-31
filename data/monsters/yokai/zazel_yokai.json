@@ -1,0 +1,25 @@
+{
+  "name"    : "Zazel",
+  "portrait": "monsters/yokai/zazel_yokai.webp",
+  "max_life": 7,
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
+    {
+      "name"      : "Blessed Cucumber",
+      "icon"      : "skills/pickle.svg",
+      "skill_type": "Blessing",
+      "cooldown"  : 3.0,
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 15] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
