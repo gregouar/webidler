@@ -22,6 +22,7 @@
         {"item_id": "rune_poison_fire",   "weight":   999                       },
         {"item_id": "rune_mana_damage",   "weight":   499                       },
         {"item_id": "rune_storm_poison",  "weight":   999                       },
-        {"item_id": "rune_phys_fire",     "weight":   499                       }
+        {"item_id": "rune_phys_fire",     "weight":   499                       },
+        {"item_id": "rune_bleed",         "weight":   499                       }
     ]
 }

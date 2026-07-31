@@ -145,6 +145,12 @@
                 },
                 "value"                : 2,
                 "modifier"             : "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {"stat": "LifeRegen", "modifier": "Flat", "debuff": true},
+                "value"                : 10,
+                "modifier"             : "Flat"
             }
         ]
     },
