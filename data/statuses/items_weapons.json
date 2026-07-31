@@ -62,7 +62,7 @@
                     "modifier": "Increased",
                     "debuff"  : false
                 },
-                "value"       : 5.0,
+                "value"       : 10.0,
                 "modifier"    : "Flat"
             }
         ]

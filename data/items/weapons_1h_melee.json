@@ -268,7 +268,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": 50.0,
         "ignore_quality": true
       }
     ],
@@ -495,7 +495,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 200.0,
+        "value": 100.0,
         "ignore_quality": true,
         "bypass_ignore": true
       },
@@ -545,7 +545,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 10.0,
+        "value": 20.0,
         "ignore_quality": true
       }
     ],
@@ -640,23 +640,6 @@
           },
           "modifier": "Flat",
           "value": 1.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "StatusPower": {
-              "status_id": "open_wound",
-              "damage_type": null,
-              "debuff": null,
-              "skill_type": null,
-              "skill_id": null,
-              "min_max": null
-            }
-          },
-          "modifier": "More",
-          "value": 25.0
         }
       }
     ]
@@ -998,7 +981,7 @@
             }
           },
           "modifier": "More",
-          "value": 15.0
+          "value": 20.0
         }
       }
     ]
@@ -1197,6 +1180,37 @@
           80.0,
           120.0
         ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": "blessing_gold",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": true
       }
     ],

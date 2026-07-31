@@ -326,8 +326,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          80.0,
-          130.0
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       },
@@ -381,7 +381,7 @@
             }
           },
           "modifier": "More",
-          "value": 35.0
+          "value": 30.0
         }
       },
       {
@@ -700,6 +700,37 @@
       },
       {
         "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": "Blessing",
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "SkillConditionalModifier": {
             "stat": {
               "Damage": {
@@ -732,6 +763,16 @@
           200.0
         ],
         "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -752,7 +793,7 @@
         "stat_effect": {
           "stat": "GoldFind",
           "modifier": "More",
-          "value": 20.0
+          "value": 60.0
         }
       },
       {
@@ -939,8 +980,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          150.0,
-          200.0
+          200.0,
+          250.0
         ],
         "ignore_quality": true
       }
@@ -994,7 +1035,7 @@
             }
           },
           "modifier": "More",
-          "value": 50.0
+          "value": 80.0
         }
       }
     ]

@@ -144,7 +144,7 @@
       {
         "target_type": "Me",
         "effects"    : [
-          { "ApplyStatus": {"status_id": "curse_vampirism", "value": 100} }
+          { "ApplyStatus": {"status_id": "curse_vampirism", "value": 150} }
         ]
       }
     ]

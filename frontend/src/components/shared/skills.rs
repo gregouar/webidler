@@ -486,7 +486,7 @@ pub fn SkillBadge(
                             alt=alt.clone()
                             class=move || {
                                 format!(
-                                    "relative z-10 h-[58%] w-[58%] flex-no-shrink fill-current invert {}",
+                                    "relative z-10 h-[68%] w-[68%] flex-no-shrink fill-current invert {}",
                                     if settings.uses_surface_effects() {
                                         "drop-shadow-[0_2px_2px_rgba(0,0,0,0.72)]"
                                     } else {

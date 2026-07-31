@@ -188,7 +188,7 @@
         },
         "description": null,
         "trigger_id": "drink_storm",
-        "target": "SameTarget",
+        "target": "Me",
         "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
@@ -461,7 +461,7 @@
         "stat_effect": {
           "stat": "GoldFind",
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       }
     ]

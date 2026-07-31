@@ -111,6 +111,14 @@
               },
               "modifier": "Flat"
             }
+          },
+          {
+            "value"        : 6,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Min"} },
+              "modifier": "Flat"
+            }
           }
         ]
       }

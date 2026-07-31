@@ -95,6 +95,30 @@
       }
     ]
   },
+  "blessing_gold"      : {
+    "name"           : "Blessing of Greed",
+    "description"    : "A blessing that increase the amount of gold rewarded.",
+    "icon"           : "skills/blessing_gold.svg",
+    "skill_type"     : "Blessing",
+    "cooldown"       : 10,
+    "mana_cost"      : 30,
+    "upgrade_cost"   : 50,
+    "upgrade_effects": [
+      {
+        "stat"    : { "StatusPower": {"status_id": "blessing_gold"} },
+        "modifier": "Flat",
+        "value"   : 2
+      }
+    ],
+    "targets"        : [
+      {
+        "target_type": "Me",
+        "effects"    : [
+          { "ApplyStatus": {"status_id": "blessing_gold", "value": 50} }
+        ]
+      }
+    ]
+  },
   "meditate"           : {
     "name"           : "Meditate",
     "description"    : "Focus your mind to recover mana, replenishing your magical energy.",

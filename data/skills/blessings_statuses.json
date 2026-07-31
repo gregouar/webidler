@@ -86,6 +86,21 @@
             }
         ]
     },
+    "blessing_gold"      : {
+        "name"      : "Blessing of Greed",
+        "icon"      : "skills/blessing_gold.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {"stat": "GoldFind", "modifier": "More"},
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
     "meditate_damage"    : {
         "name"      : "Enlightenment",
         "adjective" : "Enlightened",
