@@ -1,26 +1,21 @@
 {
-  "name": "Shore Crab",
+  "name"    : "Shore Crab",
   "portrait": "monsters/island/crab.webp",
   "max_life": 15,
-  "armor": { "Physical": 50 },
-  "block": {
-    "Attack": 30,
-    "Spell": 20
-  },
-  "skills": [
+  "armor"   : {"Physical": 50},
+  "block"   : {"Attack": 30, "Spell": 20},
+  "skills"  : [
     {
-      "name": "Pinch",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Pinch",
+      "icon"      : "skills/crab_claw.svg",
+      "cooldown"  : 3.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 5 ]
-                }
+                "damage": { "Physical": [3, 5] }
               }
             }
           ]

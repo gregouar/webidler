@@ -1,0 +1,40 @@
+{
+  "name"    : "Giant Scorpion",
+  "portrait": "monsters/desert/scorpion.webp",
+  "max_life": 20,
+  "size"    : "Large",
+  "armor"   : {"Physical": 100, "Poison": 50},
+  "block"   : {"Attack": 30, "Spell": 20},
+  "skills"  : [
+    {
+      "name"      : "Pinch",
+      "icon"      : "skills/crab_claw.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [6, 12] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Sting",
+      "icon"      : "skills/scorpion_tail.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 20} }
+          ]
+        }
+      ]
+    }
+  ]
+}

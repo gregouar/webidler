@@ -1,0 +1,26 @@
+{
+  "name"    : "Deadly Cobra",
+  "portrait": "monsters/desert/cobra.webp",
+  "max_life": 7,
+  "armor"   : {"Physical": 50, "Poison": 100},
+  "skills"  : [
+    {
+      "name"      : "Deadly Bite",
+      "icon"      : "statuses/snake_bite.svg",
+      "cooldown"  : 2.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 3, "escalation": 50} }
+          ]
+        }
+      ]
+    }
+  ]
+}

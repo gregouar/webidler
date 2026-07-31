@@ -853,7 +853,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 0.1,
             "source": {
               "StatusValue": {
                 "status_id": "open_wound",

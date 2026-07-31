@@ -1,5 +1,5 @@
 {
-  "name"    : "Zazel",
+  "name"    : "Kappas Bane",
   "portrait": "monsters/yokai/zazel_yokai.webp",
   "max_life": 7,
   "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},

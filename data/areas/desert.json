@@ -21,7 +21,12 @@
             "max_level": null,
             "weight"   : 1000,
             "spawns"   : [
-                { "monster": "possessed_ashigaru.json", "quantity": [1, 2] }
+                { "monster": "cobra.json",    "quantity": [1, 2] },
+                { "monster": "scorpion.json", "quantity": [1, 2] },
+                { "monster": "hyena.json",    "quantity": [1, 2] },
+                { "monster": "scorpion.json", "quantity": [0, 1] },
+                { "monster": "hyena.json",    "quantity": [1, 2] },
+                { "monster": "cobra.json",    "quantity": [1, 2] }
             ]
         }
     ]
