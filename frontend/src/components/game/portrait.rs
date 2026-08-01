@@ -491,43 +491,43 @@ pub fn CharacterPortrait(
                     }
                     style="box-shadow: inset 0 0 64px rgba(192, 0, 0, 1.0);"
                 ></div>
+
+                {move || {
+                    if show_block_effect.get() {
+                        Some(
+                            view! {
+                                <img
+                                    draggable="false"
+                                    src=img_asset("effects/block.svg")
+                                    class="absolute inset-0 z-10 h-full w-full object-contain pointer-events-none"
+                                    on:animationend=move |_| show_block_effect.set(false)
+                                    style="animation: shield_flash 0.5s ease-out;"
+                                />
+                            },
+                        )
+                    } else {
+                        None
+                    }
+                }}
+
+                {move || {
+                    if show_evade_effect.get() {
+                        Some(
+                            view! {
+                                <img
+                                    draggable="false"
+                                    src=img_asset("effects/evade.svg")
+                                    class="absolute inset-0 z-10 h-full w-full object-contain pointer-events-none"
+                                    on:animationend=move |_| show_evade_effect.set(false)
+                                    style="animation: evade_flash 0.5s;"
+                                />
+                            },
+                        )
+                    } else {
+                        None
+                    }
+                }}
             </div>
-
-            {move || {
-                if show_block_effect.get() {
-                    Some(
-                        view! {
-                            <img
-                                draggable="false"
-                                src=img_asset("effects/block.svg")
-                                class="absolute inset-0 w-object-contain pointer-events-none"
-                                on:animationend=move |_| show_block_effect.set(false)
-                                style="animation: shield_flash 0.5s ease-out;"
-                            />
-                        },
-                    )
-                } else {
-                    None
-                }
-            }}
-
-            {move || {
-                if show_evade_effect.get() {
-                    Some(
-                        view! {
-                            <img
-                                draggable="false"
-                                src=img_asset("effects/evade.svg")
-                                class="absolute inset-0 w-object-contain pointer-events-none"
-                                on:animationend=move |_| show_evade_effect.set(false)
-                                style="animation: evade_flash 0.5s;"
-                            />
-                        },
-                    )
-                } else {
-                    None
-                }
-            }}
         </div>
     }
 }
