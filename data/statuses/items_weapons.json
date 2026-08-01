@@ -1,5 +1,5 @@
 {
-    "cheese": {
+    "cheese"            : {
         "name"      : "Melted Cheese",
         "icon"      : "statuses/cheese.svg",
         "debuff"    : true,
@@ -44,7 +44,7 @@
             }
         ]
     },
-    "greed" : {
+    "greed"             : {
         "name"      : "Greed",
         "icon"      : "statuses/snatch.svg",
         "debuff"    : false,
@@ -65,6 +65,17 @@
                 "value"       : 10.0,
                 "modifier"    : "Flat"
             }
+        ]
+    },
+    "spider_hammer_uber": {
+        "name"       : "Infested",
+        "icon"       : "statuses/spider.svg",
+        "debuff"     : true,
+        "damage_type": "Physical",
+        "duration"   : 5,
+        "max_stacks" : 3,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
         ]
     }
 }
