@@ -73,7 +73,7 @@
         "debuff"     : true,
         "damage_type": "Physical",
         "duration"   : 5,
-        "max_stacks" : 3,
+        "max_stacks" : 10,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
         ]

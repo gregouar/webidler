@@ -1013,7 +1013,8 @@
                 "lucky_chance": 0.0
               },
               "crit_damage": 0.0,
-              "unblockable": true
+              "unblockable": true,
+              "armor_penetration": 0.0
             },
             "ignore_stat_effects": [
               {
@@ -1418,6 +1419,21 @@
     "affixes": [
       {
         "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Poison",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "StatusEscalation": {
             "status_id": "open_wound",
             "damage_type": null,
@@ -1464,7 +1480,17 @@
     ],
     "triggers": [
       {
-        "OnKill": {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": [
+            "voodoo_doll"
+          ],
           "conditions": [
             {
               "HasStatus": {
@@ -1492,7 +1518,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 2.0,
+            "factor": 0.5,
             "source": {
               "StatusValue": {
                 "status_id": "open_wound",
@@ -1507,7 +1533,7 @@
         "trigger_propagate": true,
         "skill_type": "Other",
         "skill_range": "Melee",
-        "skill_shape": "Contact",
+        "skill_shape": "Cross",
         "effects": [
           {
             "success_chance": {
