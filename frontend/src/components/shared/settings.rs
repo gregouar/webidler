@@ -40,6 +40,15 @@ pub fn SettingsModal(open: RwSignal<bool>) -> impl IntoView {
                                 settings_data.write().shake_on_crit = v;
                             }
                         />
+                        <SettingToggle
+                            label="Enable animations"
+                            value=Signal::derive(move || {
+                                settings_data.read().enable_animations
+                            })
+                            on_toggle=move |v| {
+                                settings_data.write().enable_animations = v;
+                            }
+                        />
                     </SettingsSection>
 
                     <SettingsSection title="Numbers">

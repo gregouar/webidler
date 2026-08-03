@@ -114,7 +114,7 @@ pub fn HorizontalProgressBar(
                     <div
                         class=move || {
                             format!(
-                                "relative block h-full w-full origin-left
+                                "progress-bar-animation relative block h-full w-full origin-left
                                 {} {} {}",
                                 if settings.uses_heavy_effects() {
                                     "shadow-[inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(0,0,0,0.18)]"
@@ -129,7 +129,10 @@ pub fn HorizontalProgressBar(
                     ></div>
                     // Fake copy for glow effect on reset
                     <div
-                        class=format!("absolute h-full w-full inset-0 z-1 {}", bar_color)
+                        class=format!(
+                            "progress-bar-animation absolute h-full w-full inset-0 z-1 {}",
+                            bar_color,
+                        )
                         style=reset_bar_animation
                     ></div>
                 </div>
@@ -223,7 +226,7 @@ pub fn VerticalProgressBar(
                     <div
                         class=move || {
                             format!(
-                                "relative block h-full w-full origin-bottom
+                                "progress-bar-animation relative block h-full w-full origin-bottom
                                 transition-progress-bar
                                 {} {}",
                                 if settings.uses_heavy_effects() {
@@ -240,7 +243,10 @@ pub fn VerticalProgressBar(
 
                     // Fake copy for glow effect on reset
                     <div
-                        class=format!("absolute inset-0 z-1 h-full w-full {}", bar_color)
+                        class=format!(
+                            "progress-bar-animation absolute inset-0 z-1 h-full w-full {}",
+                            bar_color,
+                        )
                         style=reset_bar_animation
                     ></div>
                 </div>
@@ -406,7 +412,7 @@ pub fn CircularProgressBar(
                     }
                 }}
                 <div
-                    class="absolute inset-0 transition-opacity duration-500"
+                    class="progress-bar-animation absolute inset-0 transition-opacity duration-500"
                     class:opacity-0=move || disabled.get() || active_buffer.get()
                 >
                     <div
@@ -414,7 +420,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || front_progress.get() <= 0.0
                     >
                         <div
-                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -445,7 +451,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || front_progress.get() <= 50.0
                     >
                         <div
-                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -474,7 +480,7 @@ pub fn CircularProgressBar(
                     </div>
                 </div>
                 <div
-                    class="absolute inset-0 transition-opacity duration-500"
+                    class="progress-bar-animation absolute inset-0 transition-opacity duration-500"
                     class:opacity-0=move || disabled.get() || !active_buffer.get()
                 >
                     <div
@@ -482,7 +488,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || back_progress.get() <= 0.0
                     >
                         <div
-                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -513,7 +519,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || back_progress.get() <= 50.0
                     >
                         <div
-                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -577,7 +583,7 @@ pub fn CircularProgressBar(
                 >// Icon
                 </div>
                 <div
-                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    class="progress-bar-animation absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
                     scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
                     transition-transform duration-500"
                     style=reset_icon_animation

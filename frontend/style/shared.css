@@ -11,6 +11,17 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Keep progress feedback moving even when decorative motion is disabled. */
+:root[data-animations-disabled] *:not(.progress-bar-animation),
+:root[data-animations-disabled] *:not(.progress-bar-animation)::before,
+:root[data-animations-disabled] *:not(.progress-bar-animation)::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+
 @utility clip-octagon {
   clip-path: polygon(
     var(--cut, 12px) 0,
