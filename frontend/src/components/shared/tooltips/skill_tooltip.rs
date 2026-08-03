@@ -630,7 +630,11 @@ pub fn format_skill_effect(
                         "Apply"
                     };
 
-                    let stacks_str = (max_stacks > 1).then(|| format!(", up to {} Stacks",max_stacks ));
+                    let stacks_str = (max_stacks > 1).then(|| view! {
+                        ", up to "
+                        <span class="font-semibold">{max_stacks}</span>
+                        " Stacks"
+                    });
 
                     // let value_factor = effects_map.map(|effects_map| {
                     //     stats_computations::compute_stats_effects_status_value(

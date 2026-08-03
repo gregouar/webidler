@@ -818,6 +818,32 @@
         "scope": "Global",
         "value": 400.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "skill_id": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "treasure_idol",
+                    "debuff": null
+                  }
+                }
+              }
+            },
+            "conditions": [
+              "LowLife"
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": -10000.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [
@@ -834,29 +860,7 @@
         "description": null,
         "trigger_id": "treasure_idol",
         "target": "Me",
-        "modifiers": [
-          {
-            "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": null,
-                "skill_id": null
-              }
-            },
-            "modifier": "Flat",
-            "factor": 1.0,
-            "source": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": null
-              }
-            }
-          }
-        ],
+        "modifiers": [],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -880,12 +884,30 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
@@ -897,52 +919,9 @@
                   "skill_id": null,
                   "min_max": null
                 }
-              },
-              {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
               }
             ],
-            "conditional_modifiers": [
-              {
-                "conditions": [
-                  "LowLife"
-                ],
-                "effects": [
-                  {
-                    "stat": {
-                      "SuccessChance": {
-                        "skill_type": null,
-                        "skill_id": null,
-                        "effect_type": {
-                          "ApplyStatus": {
-                            "status_id": "treasure_idol",
-                            "debuff": null
-                          }
-                        }
-                      }
-                    },
-                    "modifier": "More",
-                    "value": -1e200
-                  }
-                ],
-                "conditions_duration": 0
-              }
-            ],
+            "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
             "description": null
@@ -977,6 +956,30 @@
           "stat": "ManaRegen",
           "modifier": "Flat",
           "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "conditions": [
+                "LowLife"
+              ],
+              "conditions_duration": 0
+            }
+          },
+          "modifier": "More",
+          "value": 40.0
         }
       }
     ]

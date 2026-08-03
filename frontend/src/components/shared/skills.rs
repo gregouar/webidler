@@ -204,12 +204,8 @@ pub fn SkillMasteryCard(
                 };
                 let interactive_class = if on_click.is_some() {
                     match quality {
-                        GraphicsQuality::High => {
-                            "hover:border-[#7b6440] hover:-translate-y-[1px] active:translate-y-[2px]"
-                        }
-                        GraphicsQuality::Medium => {
-                            "hover:border-[#715a38] hover:-translate-y-[1px] active:translate-y-[2px]"
-                        }
+                        GraphicsQuality::High => "hover:border-[#7b6440] active:translate-y-[2px]",
+                        GraphicsQuality::Medium => "hover:border-[#715a38] active:translate-y-[2px]",
                         GraphicsQuality::Low => "hover:border-[#675236] active:translate-y-[1px]",
                     }
                 } else {

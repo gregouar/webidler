@@ -30,12 +30,12 @@
         "name"      : "Venom of the Serpent Queen",
         "icon"      : "statuses/snake_bite.svg",
         "debuff"    : false,
-        "duration"  : 0,
+        "duration"  : 4,
         "max_stacks": 20,
         "effects"   : [
             {
                 "DamageOverTime": {"damage_type": "Poison", "armor_penetration": 100},
-                "value"         : 3.0,
+                "value"         : 5.0,
                 "modifier"      : "Flat"
             },
             {

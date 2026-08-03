@@ -352,10 +352,10 @@ fn SkillCard(
                         quality_class,
                         match quality {
                             GraphicsQuality::High => {
-                                "border-[#3b3428] hover:border-[#7b6440] hover:-translate-y-[1px] active:translate-y-[2px]"
+                                "border-[#3b3428] hover:border-[#7b6440] active:translate-y-[2px]"
                             }
                             GraphicsQuality::Medium => {
-                                "border-[#4a3e2b] hover:border-[#715a38] hover:-translate-y-[1px] active:translate-y-[2px]"
+                                "border-[#4a3e2b] hover:border-[#715a38] active:translate-y-[2px]"
                             }
                             GraphicsQuality::Low => {
                                 "border-[#554631] hover:border-[#675236] active:translate-y-[1px]"
