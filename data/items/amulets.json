@@ -439,6 +439,181 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "barbed_collar": {
+    "name": "Barbed Collar",
+    "icon": "items/amulets/barbed_collar.webp",
+    "description": "The pain is exquisite.",
+    "slot": "Amulet",
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 80.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "bleed",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "bleed",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnApplyStatus": {
+          "skill_type": null,
+          "status_id": "bleed",
+          "damage_type": null,
+          "debuff": null,
+          "is_triggered": null,
+          "is_evaded": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "barbed_collar",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "barbed_collar",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 35.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_id": "bleed",
+              "damage_type": null,
+              "debuff": null,
+              "skill_type": null,
+              "skill_id": null,
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 35.0
+        }
+      }
+    ]
+  },
   "crest_pendant": {
     "name": "Crest Pendant",
     "icon": "items/amulets/crest_pendant.webp",

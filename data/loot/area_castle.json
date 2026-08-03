@@ -7,6 +7,8 @@
         {"item_id": "fur_cloak_unique",     "weight": 9999},
         {"item_id": "signet_ring_unique",   "weight": 9999},
         {"item_id": "rose_bleed",           "weight": 9999},
+        {"item_id": "barbed_collar",        "weight": 9999},
+        {"item_id": "blind_bastion",        "weight": 9999},
         {"item_id": "inlaid_ring_unique",   "weight": 4999}
     ]
 }

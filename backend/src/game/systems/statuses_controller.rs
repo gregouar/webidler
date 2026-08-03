@@ -64,7 +64,10 @@ fn update_status(
     }
 
     for status_effect in status_specs.effects.iter() {
-        if let StatusEffectType::DamageOverTime { damage_type } = &status_effect.status_effect_type
+        if let StatusEffectType::DamageOverTime {
+            damage_type,
+            armor_penetration,
+        } = &status_effect.status_effect_type
         {
             characters_controller::damage_character(
                 character_attrs,
@@ -77,6 +80,7 @@ fn update_status(
                 )]),
                 status_state.skill_type,
                 false,
+                *armor_penetration,
             );
         }
     }

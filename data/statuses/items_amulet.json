@@ -1,0 +1,17 @@
+{
+    "barbed_collar": {
+        "name"       : "Self-Mutilation",
+        "icon"       : "statuses/stitched_wound.svg",
+        "debuff"     : true,
+        "damage_type": "Physical",
+        "duration"   : 2,
+        "max_stacks" : 3,
+        "effects"    : [
+            {
+                "DamageOverTime": {"damage_type": "Physical", "armor_penetration": 100},
+                "value"         : 20,
+                "modifier"      : "Percent"
+            }
+        ]
+    }
+}

@@ -16,7 +16,7 @@ use crate::{
             StatType,
         },
         trigger::{TriggerEffect, TriggerSpecs},
-        values::{Cooldown, NonNegative},
+        values::{Cooldown, NonNegative, Percent},
     },
     serde_utils::default_1f64,
 };
@@ -262,6 +262,8 @@ pub enum SkillEffectType {
         crit_damage: ModifiableValue<f64>,
         #[serde(default)]
         unblockable: bool,
+        #[serde(default)]
+        armor_penetration: Percent,
     },
     ApplyStatus {
         status_id: StatusId,
@@ -282,7 +284,8 @@ pub enum SkillEffectType {
         // damage_type: Option<DamageType>,
         #[serde(default)]
         avoidable: Option<bool>,
-
+        // #[serde(default)]
+        // armor_penetration: Option<Percent>,
         #[serde(default)]
         replace_on_value_only: bool,
 

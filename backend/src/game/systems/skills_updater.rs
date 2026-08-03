@@ -229,6 +229,7 @@ fn weapon_skill_effect(
                 },
                 crit_damage: weapon_specs.crit_damage.as_new_base(),
                 unblockable: false,
+                armor_penetration: Default::default(),
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
@@ -1022,6 +1023,7 @@ pub fn apply_stat_effect_on_skill_effect(
             crit_chance,
             crit_damage,
             unblockable,
+            armor_penetration: _,
         } => {
             for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
                 let value = damage.entry(damage_type).or_default();

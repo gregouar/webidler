@@ -2,8 +2,13 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::data::{
-    chance::ChanceRange, character::CharacterId, indexed_key::IndexedKey, modifier::Modifier,
-    skill::SkillType, trigger::TriggerSpecs, values::NonNegative,
+    chance::ChanceRange,
+    character::CharacterId,
+    indexed_key::IndexedKey,
+    modifier::Modifier,
+    skill::SkillType,
+    trigger::TriggerSpecs,
+    values::{NonNegative, Percent},
 };
 
 use super::{skill::DamageType, stat_effect::StatType};
@@ -79,6 +84,8 @@ pub enum StatusEffectType {
     // Stun, // TODO: Replace by statmodifier speed
     DamageOverTime {
         damage_type: DamageType,
+        #[serde(default)]
+        armor_penetration: Percent,
     },
     StatModifier {
         stat: StatType,

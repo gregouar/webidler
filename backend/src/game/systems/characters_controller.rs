@@ -10,7 +10,7 @@ use shared::{
         player::CharacterSpecs,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{StatSkillFilter, StatStatusFilter, compare_options},
-        values::{Cooldown, NonNegative},
+        values::{Cooldown, NonNegative, Percent},
     },
 };
 
@@ -36,6 +36,7 @@ pub fn attack_character(
     range: SkillRange,
     crit_damage: Option<f64>,
     unblockable: bool,
+    armor_penetration: Percent,
     skill_id: &str,
     trigger_depth: u8,
 ) -> bool {
@@ -59,6 +60,7 @@ pub fn attack_character(
         &damage,
         skill_type,
         is_blocked,
+        armor_penetration,
     ) > 0.0;
 
     if is_blocked {
@@ -106,6 +108,7 @@ pub fn damage_character(
     damage: &HashMap<DamageType, NonNegative>,
     skill_type: SkillType,
     is_blocked: bool,
+    armor_penetration: Percent,
 ) -> f64 {
     let amount = damage
         .iter()
@@ -116,6 +119,7 @@ pub fn damage_character(
                 *damage_type,
                 skill_type,
                 is_blocked,
+                armor_penetration,
             )
             .get()
         })
@@ -142,6 +146,7 @@ fn compute_damage(
     damage_type: DamageType,
     skill_type: SkillType,
     is_blocked: bool,
+    armor_penetration: Percent,
 ) -> NonNegative {
     let damage_taken = character_attrs
         .damage_taken
@@ -158,8 +163,8 @@ fn compute_damage(
                 .cloned()
                 .unwrap_or_default(),
             ARMOR_FACTOR,
-        ))
-    .max(0.0);
+        ) * (1.0 - armor_penetration.get() as f64 * 0.01))
+        .max(0.0);
 
     let block_factor = if is_blocked {
         character_attrs.block_damage.get() as f64 * 0.01

@@ -98,7 +98,10 @@ fn format_status_effect_line(
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
     match status_effect.status_effect_type {
-        StatusEffectType::DamageOverTime { damage_type } => {
+        StatusEffectType::DamageOverTime {
+            damage_type,
+            armor_penetration,
+        } => {
             let damage_color = damage_color(damage_type);
             let trigger_modifier_damage_str = format_trigger_modifier(
                 find_trigger_modifier(
@@ -121,6 +124,22 @@ fn format_status_effect_line(
                 return None;
             }
 
+            let penetration_str = (armor_penetration.get() > 0.0).then(|| {
+                view! {
+                    ", Penetrating "
+                    {(armor_penetration.get() < 100.0)
+                        .then(|| {
+                            view! {
+                                <span class="font-semibold">
+                                    {format_number(armor_penetration.get() as f64)}
+                                </span>
+                                "% of "
+                            }
+                        })}
+                    "Defenses"
+                }
+            });
+
             Some(view! {
                 <span>
                     "Deal "
@@ -128,6 +147,7 @@ fn format_status_effect_line(
                         "font-semibold {damage_color}",
                     )>{format_min_max_f64(value.0, value.1)}</span> {trigger_modifier_damage_str}
                     " " {effects_tooltip::damage_type_str(Some(damage_type))} " Damage per second"
+                    {penetration_str}
                 </span>
             }
             .into_any())

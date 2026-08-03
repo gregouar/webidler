@@ -434,6 +434,154 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "blind_bastion": {
+    "name": "Blind Bastion",
+    "icon": "items/helmets/blind_bastion.webp",
+    "description": "I may feel the blow, but thou shalt feel the pain.",
+    "slot": "Helmet",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 60.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "EvadeDamageTaken",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 60.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": "Attack"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Lucky": {
+            "skill_type": null,
+            "skill_id": null,
+            "roll_type": "Block"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "legionnaire_stance",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 75.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 15.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      }
+    ]
+  },
   "bascinet": {
     "name": "Bascinet",
     "icon": "items/helmets/bascinet.webp",

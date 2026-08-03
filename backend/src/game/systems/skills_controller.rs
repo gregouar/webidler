@@ -507,6 +507,7 @@ fn apply_skill_effect_on_target(
             crit_chance,
             crit_damage,
             unblockable,
+            armor_penetration,
         } => {
             let is_crit = crit_chance.roll_with_seed(seed);
 
@@ -534,6 +535,7 @@ fn apply_skill_effect_on_target(
                 range,
                 is_crit.then(|| **crit_damage),
                 *unblockable,
+                *armor_penetration,
                 skill_id,
                 trigger_depth,
             )

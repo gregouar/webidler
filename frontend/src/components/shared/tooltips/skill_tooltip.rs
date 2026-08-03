@@ -501,6 +501,7 @@ pub fn format_skill_effect(
             crit_chance,
             crit_damage,
             unblockable,
+            armor_penetration,
         } => view! {
             {
                 let mut damage_lines = Vec::new();
@@ -545,8 +546,19 @@ pub fn format_skill_effect(
                 }
                 damage_lines
             }
-            {if crit_chance.value.get() > 0.0 {
-                Some(
+            {(armor_penetration.get() > 0.0)
+                .then(|| {
+                    view! {
+                        <EffectLi>
+                            "Penetrate "
+                            <span class="font-semibold">
+                                {format_number(armor_penetration.get() as f64)}
+                            </span> "% of Defenses"
+                        </EffectLi>
+                    }
+                })}
+            {(crit_chance.value.get() > 0.0)
+                .then(|| {
                     view! {
                         <EffectLi>
                             "Critical Hit Chance: "
@@ -558,11 +570,8 @@ pub fn format_skill_effect(
                                 {format!("+{}%", number::format_number(*crit_damage))}
                             </span>
                         </EffectLi>
-                    },
-                )
-            } else {
-                None
-            }}
+                    }
+                })}
         }
         .into_any(),
         SkillEffectType::ApplyStatus {
