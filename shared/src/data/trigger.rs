@@ -75,7 +75,16 @@ impl<'a> IntoIterator for &'a mut TriggersMap {
         self.0.iter_mut()
     }
 }
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct TriggerSpecs {
+    #[serde(flatten)]
+    pub trigger: EventTrigger,
+    #[serde(default)]
+    pub description: Option<String>, // TODO: Do something else?
 
+    #[serde(flatten)]
+    pub trigger_effect: TriggerEffect,
+}
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum EventTrigger {
     OnHit(HitTrigger),
@@ -142,20 +151,8 @@ pub struct RestoreTrigger {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct TriggerSpecs {
-    #[serde(flatten)]
-    pub trigger: EventTrigger,
-    #[serde(default)]
-    pub description: Option<String>, // TODO: Do something else?
-
-    #[serde(flatten)]
-    pub trigger_effect: TriggerEffect,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerEffect {
     pub trigger_id: String,
-    #[serde(default)]
     pub target: TriggerTarget,
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,

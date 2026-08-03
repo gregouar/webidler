@@ -54,6 +54,16 @@ pub fn apply_trigger_effects(
             continue;
         }
 
+        // Prevent triggering effects when self-inflicting
+        if trigger_context.target == trigger_context.source
+            && matches!(
+                trigger_effect.target,
+                TriggerTarget::SameTarget | TriggerTarget::Source
+            )
+        {
+            continue;
+        }
+
         let owner_id = trigger_context
             .owned_trigger
             .owner

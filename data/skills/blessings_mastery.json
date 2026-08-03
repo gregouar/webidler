@@ -378,6 +378,7 @@
                             "trigger_id"     : "blessing_gold_fast_gold",
                             "skill_type"     : "Other",
                             "OnWaveCompleted": {},
+                            "target"         : "Me",
                             "effects"        : [
                                 { "ApplyStatus": {"status_id": "blessing_gold_fast_gold", "value": 100} }
                             ]
