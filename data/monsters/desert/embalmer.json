@@ -23,13 +23,13 @@
     },
     {
       "name"      : "Prepare the Body",
-      "icon"      : "skills/curse_putridity.svg",
+      "icon"      : "skills/bandaged.svg",
       "skill_type": "Curse",
       "cooldown"  : 5.0,
       "targets"   : [
         {
           "effects": [
-            { "ApplyStatus": {"status_id": "vulnerability_poison", "value": 50} }
+            { "ApplyStatus": {"status_id": "embalmer_vulnerability", "value": 50} }
           ]
         }
       ]

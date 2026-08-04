@@ -1,5 +1,5 @@
 {
-    "obelisk_vulnerability": {
+    "obelisk_vulnerability" : {
         "name"      : "Sekhmet Condemnation",
         "icon"      : "skills/tiger_head.svg",
         "debuff"    : true,
@@ -14,6 +14,29 @@
                 },
                 "value"       : 100,
                 "modifier"    : "Percent"
+            }
+        ]
+    },
+    "embalmer_vulnerability": {
+        "name"      : "Embalmed",
+        "icon"      : "skills/bandaged.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"damage_type": "Poison"} },
+                    "modifier": "Increased",
+                    "debuff"  : false
+                },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"Speed": {}}, "modifier": "Increased", "debuff": true },
+                "value"       : 33,
+                "modifier"    : "Flat"
             }
         ]
     }
