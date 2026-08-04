@@ -583,9 +583,11 @@ pub fn CircularProgressBar(
                 >// Icon
                 </div>
                 <div
-                    class="progress-bar-animation absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
-                    transition-transform duration-500"
+                    class=format!(
+                        "progress-bar-animation absolute inset-{} 2xl:inset-{bar_width} flex items-center justify-center transform
+                       scale-80 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)] transition-transform duration-500",
+                        bar_width / 2,
+                    )
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >

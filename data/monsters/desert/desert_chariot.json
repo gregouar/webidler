@@ -1,0 +1,59 @@
+{
+  "name"    : "War Chariot",
+  "portrait": "monsters/desert/chariot.webp",
+  "max_life": 30,
+  "size"    : "Huge",
+  "skills"  : [
+    {
+      "name"      : "Spear",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 2.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 8] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Khopesh",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 2.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 8] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Vehicular Manslaughter",
+      "icon"      : "skills/cartwheel.svg",
+      "cooldown"  : 8.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [20, 40] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

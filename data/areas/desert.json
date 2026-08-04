@@ -32,9 +32,14 @@
         {
             "min_level": 1,
             "max_level": null,
-            "weight"   : 1000,
+            "weight"   : 10000,
             "spawns"   : [
-                { "monster": "dervish.json", "quantity": [0, 2] }
+                { "monster": "desert_chariot.json", "quantity": [0, 1] },
+                { "monster": "dervish.json",        "quantity": [0, 1] },
+                { "monster": "jackal_guard.json",   "quantity": [0, 1] },
+                { "monster": "desert_chariot.json", "quantity": 1      },
+                { "monster": "dervish.json",        "quantity": [1, 2] },
+                { "monster": "jackal_guard.json",   "quantity": [1, 2] }
             ]
         }
     ]
