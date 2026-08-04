@@ -159,6 +159,19 @@
           "modifier": "Flat",
           "value": 1.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillLevel": {
+              "skill_type": null,
+              "skill_id": "double_strike"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
       }
     ]
   },
@@ -1061,6 +1074,172 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "weapon_shield": {
+    "name": "The Punshield",
+    "icon": "items/weapons_1h/weapon_shield.webp",
+    "description": "The best offense is a good defense.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Description": "Do only 1 Damage"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": "Attack"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 15.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              {
+                "HasItem": {
+                  "item_slot": null,
+                  "item_category": "Shield",
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          120.0,
+          160.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillRepeat": {
+            "skill_type": null,
+            "skill_id": "retaliate"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": 1.0
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatConditionalModifier": {
+              "stat": {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              "conditions": [
+                {
+                  "HasItem": {
+                    "item_slot": null,
+                    "item_category": "Shield",
+                    "not": false
+                  }
+                }
+              ],
+              "conditions_duration": 0
+            }
+          },
+          "modifier": "More",
+          "value": 40.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "sabre": {
     "name": "Sabre",

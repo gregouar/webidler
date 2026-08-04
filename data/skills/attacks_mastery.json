@@ -743,7 +743,7 @@
             }
           },
           {
-            "value"        : -300,
+            "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
@@ -952,7 +952,7 @@
         "max_level"   : 5,
         "effects"     : [
           {
-            "value"        : -400,
+            "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           },

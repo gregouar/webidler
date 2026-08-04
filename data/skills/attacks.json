@@ -264,7 +264,7 @@
     ]
   },
   "double_strike"       : {
-    "name"            : "second Strike",
+    "name"            : "Second Strike",
     "description"     : "A second, slightly slower strike with your weapon.",
     "icon"            : "skills/attack.svg",
     "skill_type"      : "Attack",
