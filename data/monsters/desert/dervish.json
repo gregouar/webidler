@@ -1,0 +1,27 @@
+{
+  "name"    : "Dervish",
+  "portrait": "monsters/desert/dervish.webp",
+  "max_life": 10,
+  "armor"   : {"Storm": 50},
+  "block"   : {"Attack": 10, "Spell": 10},
+  "skills"  : [
+    {
+      "name"      : "Turn! Turn!",
+      "icon"      : "skills/whirlwind.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "repeat" : {"value": 6, "target": "Same", "repeat_cooldown": 0.5},
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 6], "Storm": [0, 8] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

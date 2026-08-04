@@ -1,4 +1,7 @@
 {
   "meta"     : {"enabled": true},
-  "resources": { "monsters": ["cobra.json", "hyena.json", "scorpion.json"], "statuses": ["0_statuses.json"] }
+  "resources": {
+    "monsters": ["cobra.json",      "dervish.json", "hyena.json", "scorpion.json"],
+    "statuses": ["0_statuses.json"                                               ]
+  }
 }

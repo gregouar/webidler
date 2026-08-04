@@ -46,9 +46,9 @@ pub fn update_skills_states(
 
 pub fn update_repeated_skill_effects(
     elapsed_time: Duration,
-    repeated_skill_effectd: &mut [RepeatedSkillEffect],
+    repeated_skill_effect: &mut [RepeatedSkillEffect],
 ) {
-    for repeated_skill_effect in repeated_skill_effectd.iter_mut() {
+    for repeated_skill_effect in repeated_skill_effect.iter_mut() {
         if repeated_skill_effect
             .targets_group
             .repeat

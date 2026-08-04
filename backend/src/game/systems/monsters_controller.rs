@@ -42,6 +42,11 @@ pub fn control_monsters(
             .skills_states
             .iter()
             .any(|skill_state| skill_state.is_ready)
+            && !this_monster_state
+                .character_state
+                .repeated_skills
+                .iter()
+                .any(|repeated_skill| repeated_skill.elapsed_cooldown.get() >= 1.0)
         {
             continue;
         }
