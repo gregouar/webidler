@@ -1,0 +1,40 @@
+{
+  "name"    : "Serpopard",
+  "portrait": "monsters/desert/serpopard.webp",
+  "max_life": 15,
+  "size"    : "Large",
+  "armor"   : {"Physical": 50, "Poison": 50},
+  "skills"  : [
+    {
+      "name"      : "Lash",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [6, 12] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "bleed", "value": 10} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Bite",
+      "icon"      : "skills/snake_bite.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 20} }
+          ]
+        }
+      ]
+    }
+  ]
+}

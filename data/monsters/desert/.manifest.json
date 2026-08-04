@@ -2,8 +2,9 @@
   "meta"     : {"enabled": true},
   "resources": {
     "monsters": [
-      "cobra.json",          "dervish.json",        "desert_chariot.json", "hyena.json",
-      "jackal_guard.json",   "scorpion.json"
+      "cobra.json",           "crocodile_mummy.json", "dervish.json",         "desert_chariot.json",
+      "hyena.json",           "jackal_guard.json",    "obelisk.json",         "scorpion.json",
+      "serpopard.json"
     ],
     "statuses": ["0_statuses.json"]
   }

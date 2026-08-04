@@ -28,7 +28,7 @@
     },
     "treasure_idol": {
         "name"      : "Venom of the Serpent Queen",
-        "icon"      : "statuses/snake_bite.svg",
+        "icon"      : "statuses/cobra.svg",
         "debuff"    : false,
         "duration"  : 4,
         "max_stacks": 20,

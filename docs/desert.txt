@@ -28,8 +28,9 @@ Chariot (2x2)
 
 Wave 3 (pyramid entrance):
 Crocodile (1x2)
-Sphinx (1x2)
+ - Sphinx (1x2)
 Obelisk (2x1)
+Serpopard (1x2)
 
 
 Wave 4 (temple):
@@ -42,8 +43,6 @@ Wave 5 (pyramid summit):
 Beetles
 Pharaoh
 Ammit (1x2)
-Serpopard (1x2)
-
 
 Boss:
 Grand Vizier + 4 canopic jars

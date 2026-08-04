@@ -469,9 +469,11 @@ pub fn CircularProgressBar(
                                     )
                                 };
                                 format!(
-                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ opacity: {}; transform: rotate({}deg); transform-origin: 50% 50%; transition: opacity 0ms linear {}ms, transform {}ms linear {}ms;",
                                     background,
+                                    u8::from(front_progress.get() > 50.0),
                                     front_left_deg(),
+                                    front_left_delay_ms.get(),
                                     front_left_transition_ms.get(),
                                     front_left_delay_ms.get(),
                                 )
@@ -537,9 +539,11 @@ pub fn CircularProgressBar(
                                     )
                                 };
                                 format!(
-                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ opacity: {}; transform: rotate({}deg); transform-origin: 50% 50%; transition: opacity 0ms linear {}ms, transform {}ms linear {}ms;",
                                     background,
+                                    u8::from(back_progress.get() > 50.0),
                                     back_left_deg(),
+                                    back_left_delay_ms.get(),
                                     back_left_transition_ms.get(),
                                     back_left_delay_ms.get(),
                                 )

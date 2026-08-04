@@ -1,0 +1,39 @@
+{
+  "name"    : "Obelisk",
+  "portrait": "monsters/desert/obelisk.webp",
+  "max_life": 25,
+  "size"    : "Tall",
+  "armor"   : {"Physical": 100, "Storm": 100},
+  "skills"  : [
+    {
+      "name"      : "Seth's Temper",
+      "icon"      : "skills/chain_lightning.svg",
+      "skill_type": "Spell",
+      "cooldown"  : 4.0,
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 30] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Sekhmet Condemnation",
+      "icon"      : "skills/tiger_head.svg",
+      "skill_type": "Curse",
+      "cooldown"  : 5.0,
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "obelisk_vulnerability", "value": 50} }
+          ]
+        }
+      ]
+    }
+  ]
+}
