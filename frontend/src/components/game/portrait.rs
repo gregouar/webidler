@@ -278,7 +278,7 @@ pub fn CharacterPortrait(
                                 background-size: cover;
                                 background-position: center;
                                 ",
-                                img_asset("ui/paper_background.webp"),
+                                img_asset("ui/paper_background_2.webp"),
                             )
                         } else {
                             "background-image: linear-gradient(180deg, rgba(227,207,176,0.92), rgba(189,163,121,0.88)); background-color: #e3cfb0;"

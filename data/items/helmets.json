@@ -472,14 +472,14 @@
         "stat": "BlockDamageTaken",
         "modifier": "Flat",
         "scope": "Global",
-        "value": 60.0,
+        "value": 40.0,
         "ignore_quality": true
       },
       {
         "stat": "EvadeDamageTaken",
         "modifier": "Flat",
         "scope": "Global",
-        "value": 60.0,
+        "value": 40.0,
         "ignore_quality": true
       },
       {
@@ -530,6 +530,22 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "retaliate_vulnerability",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": true
       }
     ],

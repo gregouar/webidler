@@ -702,7 +702,7 @@
             "value"        : 1,
             "upgrade_value": 0,
             "SkillEffect"  : {
-              "ApplyStatus"            : {"status_id": "vulnerability_damage", "value": 100},
+              "ApplyStatus"            : {"status_id": "retaliate_vulnerability", "value": 100},
               "independent_application": true,
               "affect_triggers"        : true
             }

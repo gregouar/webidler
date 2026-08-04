@@ -135,6 +135,20 @@
             }
         ]
     },
+    "retaliate_vulnerability"   : {
+        "name"      : "Resentment",
+        "icon"      : "skills/angry_eyes.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
     "sharpen_weapon"            : {
         "name"      : "Sharpen Weapon",
         "icon"      : "skills/sharpen_weapon.svg",
