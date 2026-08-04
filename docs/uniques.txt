@@ -9,7 +9,7 @@ Gloves: 4+1
 Helmet: 4+2
 Rings: 5+1
 Shields: 4+1
-1h: 5
+1h: 5+1
 2h: 4+2
 Ranged: 4+1
 Wand: 4+1

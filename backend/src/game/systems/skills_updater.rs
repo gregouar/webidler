@@ -405,6 +405,23 @@ pub fn apply_effects_to_skill_specs<'a>(
                     };
                 }
             }
+
+            for trigger in skill_specs.triggers.iter_mut() {
+                if let Some(range) = range {
+                    trigger.trigger_effect.skill_range = *range;
+                }
+                if let Some(shape) = shape {
+                    trigger.trigger_effect.skill_shape = *shape;
+                }
+                if let Some(repeat) = repeat {
+                    trigger.trigger_effect.skill_repeat.target = repeat.target;
+                    trigger.trigger_effect.skill_repeat.value = ChanceRange {
+                        min: repeat.min_value,
+                        max: repeat.max_value,
+                        lucky_chance: Default::default(),
+                    };
+                }
+            }
         }
 
         if let StatType::SkillRepeat { skill_filter } = &effect.stat
@@ -415,14 +432,24 @@ pub fn apply_effects_to_skill_specs<'a>(
     }
 
     if *repeat_modifier != 1.0 {
-        for target in skill_specs.targets.iter_mut() {
-            target.repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
-            target.repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
+        for repeat in skill_specs
+            .targets
+            .iter_mut()
+            .map(|target| &mut target.repeat)
+            .chain(
+                skill_specs
+                    .triggers
+                    .iter_mut()
+                    .map(|trigger| &mut trigger.trigger_effect.skill_repeat),
+            )
+        {
+            repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
+            repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
 
-            target.repeat.value.min =
-                (target.repeat.value.min as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
-            target.repeat.value.max =
-                (target.repeat.value.max as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
+            repeat.value.min =
+                (repeat.value.min as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
+            repeat.value.max =
+                (repeat.value.max as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
         }
     }
 

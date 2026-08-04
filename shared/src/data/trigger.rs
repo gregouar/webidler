@@ -7,7 +7,7 @@ use crate::data::{
     conditional_modifier::Condition,
     item::SkillShape,
     modifier::Modifier,
-    skill::{RestoreType, TargetType},
+    skill::{RestoreType, SkillRepeat, TargetType},
     stat_effect::StatStatusFilter,
 };
 
@@ -166,6 +166,8 @@ pub struct TriggerEffect {
     pub skill_range: SkillRange,
     #[serde(default)]
     pub skill_shape: SkillShape,
+    #[serde(default)]
+    pub skill_repeat: SkillRepeat,
 
     pub effects: Vec<SkillEffect>,
 }

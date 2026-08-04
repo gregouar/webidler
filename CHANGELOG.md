@@ -9,12 +9,13 @@ Features:
 - Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
 - Rework of the Statuses system, so that various statuses can be multiplicative with each other and introduce new synergies.
 - Damage Taken modifier can now be More and become multiplicative with each others.
+- 10% of accumulated Stamina can be brought back in Town for next Grind.
 
 Content:
 
 - New Area: Eternal Sands.
 - New Skill: Blessing of Greed.
-- 18 new Unique Items.
+- 19 new Unique Items.
 - Tier 9 and 10 Base Items and new bases for Runes & Edicts.
 
 Balance Changes:

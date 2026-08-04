@@ -1,9 +1,11 @@
+use std::collections::HashSet;
+
 use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::CharacterId,
     character_status::StatusId,
-    skill::{DamageType, SkillType},
+    skill::{DamageType, RepeatedSkillEffect, SkillTargetsGroup, SkillType},
     stat_effect::{StatEffect, compare_options},
     trigger::{OwnedTrigger, TriggerEffectModifierSource, TriggerTarget},
     values::NonNegative,
@@ -15,6 +17,7 @@ use crate::game::{
         master_store::StatusesStore,
     },
     game_data::GameInstanceData,
+    utils::rng::Rollable,
 };
 
 use super::{skills_controller, skills_updater};
@@ -307,7 +310,8 @@ pub fn apply_trigger_effects(
             }
         };
 
-        skills_controller::apply_skill_effects(
+        let max_repeat = trigger_effect.skill_repeat.value.roll();
+        if skills_controller::apply_skill_effects(
             statuses_store,
             events_queue,
             attacker,
@@ -321,7 +325,29 @@ pub fn apply_trigger_effects(
             } else {
                 trigger_context.trigger_depth.saturating_add(1)
             },
-        );
+        ) && max_repeat > 1
+        {
+            let owner = match owner_id {
+                CharacterId::Player => &mut game_data.player_state.character_state,
+                CharacterId::Monster(_) => todo!(),
+            };
+            owner.repeated_skills.push(RepeatedSkillEffect {
+                skill_id: trigger_effect.trigger_id.clone(),
+                skill_type: trigger_effect.skill_type,
+                targets_group: SkillTargetsGroup {
+                    range: trigger_effect.skill_range,
+                    target_type: Default::default(),
+                    shape: trigger_effect.skill_shape,
+                    target_dead: Default::default(),
+                    repeat: trigger_effect.skill_repeat,
+                    effects: trigger_effects,
+                },
+                max_repeat,
+                amount_repeat: 1,
+                elapsed_cooldown: Default::default(),
+                already_hit: HashSet::from([target_id]),
+            });
+        }
     }
 }
 

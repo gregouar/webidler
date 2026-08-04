@@ -97,6 +97,13 @@ pub fn format_trigger(
             )
         });
 
+    let repeat_infos = (trigger.trigger_effect.skill_repeat.value.max > 1).then(|| {
+        format!(
+            ", {}",
+            skill_tooltip::repeat_str(&trigger.trigger_effect.skill_repeat)
+        )
+    });
+
     // let name_str = trigger_status_name.map(|name| format!("{} do ", name));
 
     view! {
@@ -104,7 +111,7 @@ pub fn format_trigger(
             <ul class="list-none">
                 <EffectLi>
                     // {name_str}
-                    {format_trigger_event(&trigger.trigger)} {shape_infos} {details_infos}":"
+                    {format_trigger_event(&trigger.trigger)} {shape_infos} {repeat_infos} {details_infos}":"
                 </EffectLi>
                 <EffectLi>
                     <ul class="list-none xl:space-y-1">

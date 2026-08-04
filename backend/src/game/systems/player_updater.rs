@@ -271,6 +271,7 @@ fn compute_player_specs(
                 skill_range: SkillRange::Any,
                 skill_type,
                 skill_shape: SkillShape::Single,
+                skill_repeat: Default::default(),
                 modifiers: Vec::new(),
                 effects: vec![SkillEffect {
                     success_chance: Chance::new_sure(),

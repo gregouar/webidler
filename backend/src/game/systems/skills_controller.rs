@@ -336,6 +336,7 @@ pub fn find_sub_targets<'a, 'b>(
         .collect()
 }
 
+/// Return whether the skill was applicable
 #[allow(clippy::too_many_arguments)]
 pub fn apply_skill_effects(
     statuses_store: &StatusesStore,
