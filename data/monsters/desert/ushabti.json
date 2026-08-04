@@ -1,0 +1,46 @@
+{
+  "name"    : "Ushabti Guardian",
+  "portrait": "monsters/desert/ushabti.webp",
+  "max_life": 50,
+  "size"    : "Huge",
+  "block"   : {"Attack": 30, "Spell": 30},
+  "armor"   : {"Physical": 100, "Fire": 100, "Poison": 100, "Storm": 100},
+  "skills"  : [
+    {
+      "name"      : "Heavy Slice",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [6, 12] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "bleed", "value": 10} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Slab Bash",
+      "icon"      : "skills/shield_bash.svg",
+      "cooldown"  : 10.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [10, 20] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "stun", "value": 1, "duration": 2} }
+          ]
+        }
+      ]
+    }
+  ]
+}

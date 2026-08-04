@@ -1,0 +1,22 @@
+{
+  "name"      : "Mummy",
+  "portrait"  : "monsters/desert/sarcophagus.webp",
+  "max_life"  : 10,
+  "life_regen": 50,
+  "armor"     : {"Poison": 100},
+  "skills"    : [
+    {
+      "name"      : "Three Thousand Years Smell",
+      "icon"      : "skills/mummy_head.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 50, "duration": 4} }
+          ]
+        }
+      ]
+    }
+  ]
+}

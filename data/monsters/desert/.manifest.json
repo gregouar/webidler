@@ -3,8 +3,8 @@
   "resources": {
     "monsters": [
       "cobra.json",           "crocodile_mummy.json", "dervish.json",         "desert_chariot.json",
-      "hyena.json",           "jackal_guard.json",    "obelisk.json",         "scorpion.json",
-      "serpopard.json"
+      "embalmer.json",        "hyena.json",           "jackal_guard.json",    "mummy.json",
+      "obelisk.json",         "scorpion.json",        "serpopard.json",       "ushabti.json"
     ],
     "statuses": ["0_statuses.json"]
   }

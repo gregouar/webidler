@@ -34,14 +34,15 @@ Serpopard (1x2)
 
 
 Wave 4 (temple):
-Mummy
+ - Mummy
 Sarcophagus
+Embalmer
 Ushabti (2x2)
 
 
 Wave 5 (pyramid summit):
 Beetles
-Pharaoh
+Priest
 Ammit (1x2)
 
 Boss:

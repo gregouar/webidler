@@ -1,0 +1,38 @@
+{
+  "name"    : "Embalmer",
+  "portrait": "monsters/desert/embalmer.webp",
+  "max_life": 7,
+  "armor"   : {"Physical": 50},
+  "skills"  : [
+    {
+      "name"      : "Knife Cut",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Prepare the Body",
+      "icon"      : "skills/curse_putridity.svg",
+      "skill_type": "Curse",
+      "cooldown"  : 5.0,
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "vulnerability_poison", "value": 50} }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -43,13 +43,23 @@
             ]
         },
         {
-            "min_level": 1,
+            "min_level": 20,
             "max_level": null,
-            "weight"   : 100099,
+            "weight"   : 1000,
             "spawns"   : [
                 { "monster": "crocodile_mummy.json", "quantity": [0, 2] },
                 { "monster": "serpopard.json",       "quantity": 2      },
                 { "monster": "obelisk.json",         "quantity": 1      }
+            ]
+        },
+        {
+            "min_level": 30,
+            "max_level": null,
+            "weight"   : 1000,
+            "spawns"   : [
+                { "monster": "ushabti.json",  "quantity": 1      },
+                { "monster": "mummy.json",    "quantity": [1, 2] },
+                { "monster": "embalmer.json", "quantity": 1      }
             ]
         }
     ]

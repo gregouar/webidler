@@ -1,9 +1,10 @@
 {
   "name"    : "Dervish",
   "portrait": "monsters/desert/dervish.webp",
-  "max_life": 10,
+  "max_life": 5,
   "armor"   : {"Storm": 50},
-  "block"   : {"Attack": 10, "Spell": 10},
+  "block"   : {"Attack": 20, "Spell": 20},
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
   "skills"  : [
     {
       "name"      : "Turn! Turn!",
