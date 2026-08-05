@@ -24,7 +24,6 @@
     {"item_id": "edict_2",           "weight":   1600, "min_area_level": 400},
     {"item_id": "rune_power",        "weight":  12800, "min_area_level": 400},
     {"item_id": "rune_root",         "weight":   1280, "min_area_level": 400},
-    {"item_id": "rune_phys_fire",    "weight":    499                       },
-    {"item_id": "edict_witch",       "weight":    499                       }
+    {"item_id": "rune_phys_fire",    "weight":    499                       }
   ]
 }

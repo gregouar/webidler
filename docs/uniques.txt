@@ -15,3 +15,4 @@ Ranged: 4+1
 Wand: 4+1
 
 Runes: 7+1
+Maps: 3+1

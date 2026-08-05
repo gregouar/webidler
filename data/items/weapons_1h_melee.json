@@ -1112,6 +1112,18 @@
       },
       {
         "stat": {
+          "Block": null
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "StatConditionalModifier": {
             "stat": {
               "Damage": {
@@ -1192,6 +1204,16 @@
           },
           "modifier": "Flat",
           "value": 20.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Block": null
+          },
+          "modifier": "Increased",
+          "value": 10.0
         }
       },
       {
@@ -1392,6 +1414,11 @@
         "skill_type": "Curse",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {

@@ -15,7 +15,7 @@ Content:
 
 - New Area: Eternal Sands.
 - New Skill: Blessing of Greed.
-- 19 new Unique Items.
+- 20 new Unique Items.
 - Tier 9 and 10 Base Items and new bases for Runes & Edicts.
 
 Balance Changes:
