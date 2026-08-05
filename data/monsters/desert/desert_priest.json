@@ -2,7 +2,6 @@
   "name"              : "Mortuary Priest",
   "portrait"          : "monsters/desert/priest.webp",
   "max_life"          : 10,
-  "armor"             : {"Poison": 50},
   "status_resistances": [ {"skill_type": "Curse", "value": 50} ],
   "skills"            : [
     {
@@ -12,6 +11,7 @@
       "skill_type": "Spell",
       "targets"   : [
         {
+          "range"  : "Distance",
           "effects": [
             {
               "FlatDamage": {
@@ -29,6 +29,7 @@
       "skill_type": "Curse",
       "targets"   : [
         {
+          "range"  : "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "desert_priest_curse", "value": 50} }
           ]

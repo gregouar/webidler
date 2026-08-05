@@ -12,6 +12,7 @@
       "cooldown"  : 4.0,
       "targets"   : [
         {
+          "range"  : "Distance",
           "effects": [
             {
               "FlatDamage": {
@@ -29,6 +30,7 @@
       "cooldown"  : 5.0,
       "targets"   : [
         {
+          "range"  : "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "obelisk_vulnerability", "value": 50} }
           ]

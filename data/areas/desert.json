@@ -14,7 +14,19 @@
         "tier_6.json",      "tier_7.json",      "tier_8.json",      "tier_9.json",      "tier_10.json",
         "area_desert.json"
     ],
-    "bosses"     : [],
+    "bosses"     : [
+        {
+            "level"   : 1,
+            "interval": 1,
+            "spawns"  : [
+                {"monster": "canopic_jar_1.json", "quantity": 1},
+                {"monster": "canopic_jar_2.json", "quantity": 1},
+                {"monster": "vizier.json",        "quantity": 1},
+                {"monster": "canopic_jar_3.json", "quantity": 1},
+                {"monster": "canopic_jar_4.json", "quantity": 1}
+            ]
+        }
+    ],
     "waves"      : [
         {
             "min_level": 1,
@@ -63,9 +75,9 @@
             ]
         },
         {
-            "min_level": 0,
+            "min_level": 40,
             "max_level": null,
-            "weight"   : 1000999,
+            "weight"   : 1000,
             "spawns"   : [
                 { "monster": "scarabs.json",       "quantity": [0, 2] },
                 { "monster": "ammit.json",         "quantity": [1, 2] },

@@ -93,5 +93,19 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "vizier_jar"            : {
+        "name"      : "Canopic Lost",
+        "icon"      : "skills/egyptian_urns.svg",
+        "debuff"    : true,
+        "duration"  : 1e200,
+        "max_stacks": 4,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "Flat", "debuff": true},
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
     }
 }
