@@ -41,9 +41,10 @@ Ushabti (2x2)
 
 
 Wave 5 (pyramid summit):
-Beetles
-Priest
-Ammit (1x2)
+Beetles (infest? physical dot?)
+Priest (bless)
+Ammit (1x2): Devour the Deads (on enemy death, get stronger)
 
 Boss:
 Grand Vizier + 4 canopic jars
+Respawn per jar?

@@ -61,6 +61,17 @@
                 { "monster": "mummy.json",    "quantity": [1, 2] },
                 { "monster": "embalmer.json", "quantity": 1      }
             ]
+        },
+        {
+            "min_level": 0,
+            "max_level": null,
+            "weight"   : 1000999,
+            "spawns"   : [
+                { "monster": "scarabs.json",       "quantity": [0, 2] },
+                { "monster": "ammit.json",         "quantity": [1, 2] },
+                { "monster": "desert_priest.json", "quantity": 1      },
+                { "monster": "scarabs.json",       "quantity": 3      }
+            ]
         }
     ]
 }

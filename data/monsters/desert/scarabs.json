@@ -1,0 +1,22 @@
+{
+  "name"    : "Tomb Scarabs",
+  "portrait": "monsters/desert/scarabs.webp",
+  "max_life": 5,
+  "armor"   : {"Physical": 50, "Storm": 50},
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
+    {
+      "name"      : "Crawl under the Skin",
+      "icon"      : "skills/scarab_beetle.svg",
+      "cooldown"  : 3,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "scarabs_dot", "value": 10} }
+          ]
+        }
+      ]
+    }
+  ]
+}

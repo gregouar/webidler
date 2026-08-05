@@ -39,5 +39,59 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "desert_priest_curse"   : {
+        "name"      : "Anubis Judgment",
+        "icon"      : "skills/anubis.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"damage_type": "Physical"} },
+                    "modifier": "Increased",
+                    "debuff"  : false
+                },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": {"stat": "ManaRegen", "modifier": "Flat", "debuff": true},
+                "value"       : 30,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "ammit_buff"            : {
+        "name"      : "Devour the Dead",
+        "icon"      : "skills/swallow.svg",
+        "debuff"    : false,
+        "duration"  : 60,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "Increased", "debuff": false },
+                "value"       : 50,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "scarabs_dot"           : {
+        "name"       : "Scarabs Infestation",
+        "icon"       : "skills/scarab_beetle.svg",
+        "damage_type": "Physical",
+        "avoidable"  : true,
+        "debuff"     : true,
+        "duration"   : 3,
+        "max_stacks" : 5,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" },
+            {
+                "StatModifier": { "stat": {"Speed": {}}, "modifier": "Increased", "debuff": true },
+                "value"       : 5,
+                "modifier"    : "Flat"
+            }
+        ]
     }
 }
