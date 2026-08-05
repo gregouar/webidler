@@ -1,12 +1,10 @@
 {
-  "name"              : "Canopic Jar",
-  "portrait"          : "monsters/desert/canopic_jar_3.webp",
-  "rarity"            : "Boss",
-  "max_life"          : 100,
-  "armor"             : {"Storm": 100},
-  "stun_lockout"      : 3.0,
-  "status_resistances": [ {"status_id": "stun", "value": 100} ],
-  "skills"            : [
+  "name"    : "Canopic Jar",
+  "portrait": "monsters/desert/canopic_jar_3.webp",
+  "rarity"  : "Boss",
+  "max_life": 150,
+  "armor"   : {"Storm": 200},
+  "skills"  : [
     {
       "name"      : "Horus' Bolt",
       "icon"      : "skills/chain_lightning.svg",

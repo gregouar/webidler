@@ -187,7 +187,7 @@ pub fn restore_character(
     skill_id: &str,
     trigger_depth: u8,
 ) -> bool {
-    let (applied, value) = regenerate_character(target, restore_type, amount, modifier);
+    let (applied, value) = regenerate_character(target, restore_type, amount, modifier, false);
 
     if applied {
         events_queue.register_event(GameEvent::Restored(RestoreEvent {
@@ -209,6 +209,7 @@ pub fn regenerate_character(
     restore_type: RestoreType,
     amount: f64,
     modifier: RestoreModifier,
+    allow_negative: bool,
 ) -> (bool, f64) {
     let (_, (target_specs, target_state)) = target;
 
@@ -224,14 +225,19 @@ pub fn regenerate_character(
         RestoreModifier::Flat => 1.0,
     };
 
-    let amount: NonNegative = (amount * factor).into();
+    let amount = amount * factor;
+    let amount = if !allow_negative {
+        amount.max(0.0)
+    } else {
+        amount
+    };
 
     match restore_type {
         RestoreType::Life => {
             let max_life = target_specs.character_attrs.max_life.get();
-            let capped_amount = amount.get().min(max_life - target_state.life.get());
-            if capped_amount > 0.0 {
-                target_state.life += amount;
+            let capped_amount = amount.min(max_life - target_state.life.get());
+            if capped_amount != 0.0 {
+                target_state.life = (target_state.life.get() + capped_amount).into();
                 (true, capped_amount)
             } else {
                 (false, 0.0)
@@ -239,9 +245,9 @@ pub fn regenerate_character(
         }
         RestoreType::Mana => {
             let max_mana = target_specs.character_attrs.max_mana.get();
-            let capped_amount = amount.get().min(max_mana - target_state.mana.get());
-            if capped_amount > 0.0 {
-                target_state.mana += amount;
+            let capped_amount = amount.min(max_mana - target_state.mana.get());
+            if capped_amount != 0.0 {
+                target_state.mana = (target_state.mana.get() + capped_amount).into();
                 (true, capped_amount)
             } else {
                 (false, 0.0)

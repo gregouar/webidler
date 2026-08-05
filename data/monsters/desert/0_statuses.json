@@ -107,5 +107,24 @@
                 "modifier"    : "Percent"
             }
         ]
+    },
+    "vizier_protection"     : {
+        "name"      : "Pharaoh's Protection",
+        "icon"      : "skills/egypt_crown.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Block": null}, "modifier": "Flat", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"Evade": null}, "modifier": "Flat", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
     }
 }

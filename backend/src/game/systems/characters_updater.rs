@@ -83,6 +83,7 @@ pub fn update_character_state(
         RestoreType::Life,
         elapsed_time_f64 * *character_specs.character_attrs.life_regen * 0.1,
         RestoreModifier::Percent,
+        true,
     );
 
     characters_controller::regenerate_character(
@@ -90,6 +91,7 @@ pub fn update_character_state(
         RestoreType::Mana,
         elapsed_time_f64 * *character_specs.character_attrs.mana_regen * 0.1,
         RestoreModifier::Percent,
+        true,
     );
 
     for monitored_condition in character_state.monitored_conditions.values_mut() {

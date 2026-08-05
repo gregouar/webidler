@@ -1,12 +1,10 @@
 {
-  "name"              : "Canopic Jar",
-  "portrait"          : "monsters/desert/canopic_jar_4.webp",
-  "rarity"            : "Boss",
-  "max_life"          : 100,
-  "armor"             : {"Poison": 100},
-  "stun_lockout"      : 3.0,
-  "status_resistances": [ {"status_id": "stun", "value": 100} ],
-  "skills"            : [
+  "name"    : "Canopic Jar",
+  "portrait": "monsters/desert/canopic_jar_4.webp",
+  "rarity"  : "Boss",
+  "max_life": 150,
+  "armor"   : {"Poison": 200},
+  "skills"  : [
     {
       "name"      : "Babi's Plague",
       "icon"      : "skills/poison_cloud.svg",
