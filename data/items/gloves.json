@@ -259,6 +259,11 @@
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -672,6 +677,11 @@
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -896,6 +906,11 @@
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -909,7 +924,8 @@
                 "lucky_chance": 0.0
               },
               "crit_damage": 0.0,
-              "unblockable": true
+              "unblockable": true,
+              "armor_penetration": 0.0
             },
             "ignore_stat_effects": [
               {
@@ -1032,6 +1048,81 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "mummy_wraps": {
+    "name": "Mummy's Wraps",
+    "icon": "items/gloves/mummy_wraps.webp",
+    "description": "The burial cloth of a ruler who refused to remain buried.",
+    "slot": "Gloves",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Gloves"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": "LifeRegen",
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": null,
+                  "damage_type": "Poison",
+                  "debuff": null,
+                  "skill_type": null,
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "DamageTaken": {
+            "skill_type": null,
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 80.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "gloves_9": {
     "name": "Mithril Gloves",

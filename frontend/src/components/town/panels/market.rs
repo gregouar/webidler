@@ -70,6 +70,13 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         active_tab.set(new_tab);
     };
 
+    Effect::new(move || {
+        if open.get() || town_context.open_inventory.get() {
+            selected_item.set(SelectedItem::None);
+            town_context.selected_item_index.set(None);
+        }
+    });
+
     let stash = town_context.market_stash;
 
     let filters = RwSignal::new(MarketFilters {

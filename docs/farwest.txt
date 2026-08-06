@@ -1,36 +1,46 @@
-Wave 1:
+Wave 1 (saloon):
 ------
+Cowboy/Wanted Bandit
+Hangman Revenant
+Piano Mimic 
+(too much repeat with inn basement?)
 
-Wave 2:
+Wave 2 (mines?):
 ------
+Gold digger?
+Mine cart?
+Fun Guy (fungi infested prospector)
 
-Wave 3:
-------
+Wave 2bis (wastelands):
+---------
+Dancing Cactus
+Big Foot
+Vulture
 
-Wave 4:
+Wave 3 (cult):
 ------
+Chupacabra
+Wendigo 
+Flesh eating tribe - Skinwalker Shaman
+Totem Guardian — animated wooden monster (2x1)
 
-Wave 5:
+Wave 4 (vampire mansion):
 ------
+Werewolf
+Vampire
+Gargoyle
+
+Wave 5 (steampunk lab):
+------
+Mad Scientist
+Frankenstein Monster
+Steam-powered Spider (1x2?)
 
 Boss:
 ----
 
+The Black Sheriff ?
 
-Ideas:
 
-Cactus
-Cowboy
-Werewolf
-Vampire
-Chupacabra
-Wendigo 
-Flesh eating tribe
-Gold digger
-Mine cart
-Big Foot
-Vulture (remove from desert?)
-Fun Guy (fungi infested prospector)
 
-Sheriff (boss?)
 

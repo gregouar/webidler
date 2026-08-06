@@ -16,7 +16,7 @@
   "bosses"     : [
     {
       "level"   : 10,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [
         {"monster": "haunted_wine_bottle.json", "quantity": 2},
         {"monster": "haunted_wine_rack.json",   "quantity": 1}
@@ -24,7 +24,7 @@
     },
     {
       "level"   : 20,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [
         {"monster": "hound_fire.json",  "quantity": 1},
         {"monster": "hound_storm.json", "quantity": 1},
@@ -33,12 +33,12 @@
     },
     {
       "level"   : 30,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [ {"monster": "witch.json", "quantity": 1} ]
     },
     {
       "level"   : 40,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [
         {"monster": "princess_fire.json",   "quantity": 1},
         {"monster": "princess_poison.json", "quantity": 1},
@@ -47,7 +47,7 @@
     },
     {
       "level"   : 50,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [
         {"monster": "treasure_idol.json",    "quantity": 1},
         {"monster": "treasure_cutlass.json", "quantity": 1},
@@ -59,7 +59,7 @@
     },
     {
       "level"   : 60,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [
         { "monster": "dragon_black.json", "quantity": [0, 1] },
         { "monster": "dragon_red.json",   "quantity": 1      }
@@ -67,8 +67,19 @@
     },
     {
       "level"   : 70,
-      "interval": 70,
+      "interval": 80,
       "spawns"  : [ {"monster": "gashadokuro.json", "quantity": 1} ]
+    },
+    {
+      "level"   : 80,
+      "interval": 80,
+      "spawns"  : [
+        {"monster": "canopic_jar_1.json", "quantity": 1},
+        {"monster": "canopic_jar_2.json", "quantity": 1},
+        {"monster": "vizier.json",        "quantity": 1},
+        {"monster": "canopic_jar_3.json", "quantity": 1},
+        {"monster": "canopic_jar_4.json", "quantity": 1}
+      ]
     }
   ],
   "waves"      : [
@@ -394,6 +405,53 @@
         { "monster": "oni_pyro.json",    "quantity": [0, 1] },
         { "monster": "kasha.json",       "quantity": 1      },
         { "monster": "oni_pyro.json",    "quantity": 1      }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        { "monster": "cobra.json",    "quantity": [1, 2] },
+        { "monster": "scorpion.json", "quantity": [1, 2] },
+        { "monster": "hyena.json",    "quantity": [1, 2] },
+        { "monster": "scorpion.json", "quantity": [0, 1] },
+        { "monster": "hyena.json",    "quantity": [1, 2] },
+        { "monster": "cobra.json",    "quantity": [1, 2] }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        { "monster": "desert_chariot.json", "quantity": [0, 1] },
+        { "monster": "dervish.json",        "quantity": [0, 1] },
+        { "monster": "jackal_guard.json",   "quantity": [0, 1] },
+        { "monster": "desert_chariot.json", "quantity": 1      },
+        { "monster": "dervish.json",        "quantity": [1, 2] },
+        { "monster": "jackal_guard.json",   "quantity": [1, 2] }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        { "monster": "crocodile_mummy.json", "quantity": [0, 2] },
+        { "monster": "serpopard.json",       "quantity": 2      },
+        { "monster": "obelisk.json",         "quantity": 1      }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        { "monster": "ushabti.json",     "quantity": 1      },
+        { "monster": "sarcophagus.json", "quantity": [1, 2] },
+        { "monster": "embalmer.json",    "quantity": 1      }
+      ]
+    },
+    {
+      "weight": 1000,
+      "spawns": [
+        { "monster": "scarabs.json",       "quantity": [0, 2] },
+        { "monster": "ammit.json",         "quantity": [1, 2] },
+        { "monster": "desert_priest.json", "quantity": 1      },
+        { "monster": "scarabs.json",       "quantity": 3      }
       ]
     }
   ]

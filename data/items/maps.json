@@ -347,6 +347,81 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "edict_mummy": {
+    "name": "Page from the Book of the Dead",
+    "icon": "items/maps/edict_mummy.webp",
+    "description": "It's just a book. No harm ever came from reading a book.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Description": "The Desert is Invaded by Mummies"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "DamageTaken": {
+            "skill_type": null,
+            "damage_type": "Fire"
+          }
+        },
+        "modifier": "More",
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "desert.json",
+      "reward_picks": 1,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "desert_2.json",
+      "reward_loot_table": "edict_mummy.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "edict_witch": {
     "name": "Forbidden Rites",
     "icon": "items/maps/edict_witch.webp",

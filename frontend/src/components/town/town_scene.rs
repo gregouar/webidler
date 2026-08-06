@@ -483,6 +483,12 @@ pub fn StartGrindPanel(
     let town_context: TownContext = expect_context();
     let data_context: DataContext = expect_context();
 
+    Effect::new(move || {
+        if open.get() {
+            town_context.selected_item_index.set(None);
+        }
+    });
+
     let area_specs = move || {
         selected_area.read().as_ref().map(|selected_area| {
             data_context

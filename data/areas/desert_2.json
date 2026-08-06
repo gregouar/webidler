@@ -1,0 +1,38 @@
+{
+    "specs"      : {
+        "name"               : "Eternal Sands (Book of the Dead)",
+        "description"        : "The Book of the Dead? Are You Sure You Want to Be Playing Around With This Thing?",
+        "power_level"        : 70,
+        "required_level"     : 410,
+        "item_level_modifier": 140,
+        "header_background"  : "areas/desert_header.webp",
+        "footer_background"  : "areas/desert_footer.webp",
+        "hidden"             : true
+    },
+    "loot_tables": [
+        "tier_1.json",      "tier_2.json",      "tier_3.json",      "tier_4.json",      "tier_5.json",
+        "tier_6.json",      "tier_7.json",      "tier_8.json",      "tier_9.json",      "tier_10.json",
+        "area_desert.json"
+    ],
+    "bosses"     : [
+        {
+            "level"   : 50,
+            "interval": 50,
+            "spawns"  : [
+                {"monster": "canopic_jar_1.json", "quantity": 1},
+                {"monster": "canopic_jar_2.json", "quantity": 1},
+                {"monster": "vizier.json",        "quantity": 1},
+                {"monster": "canopic_jar_3.json", "quantity": 1},
+                {"monster": "canopic_jar_4.json", "quantity": 1}
+            ]
+        }
+    ],
+    "waves"      : [
+        {
+            "min_level": 1,
+            "max_level": null,
+            "weight"   : 1000,
+            "spawns"   : [ {"monster": "mummy.json", "quantity": 6} ]
+        }
+    ]
+}

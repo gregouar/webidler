@@ -824,18 +824,10 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : 1,
+            "value"        : 2,
             "upgrade_value": 0,
             "StatEffect"   : {
-              "stat"    : {
-                "SkillTargetModifier": {
-                  "skill_type": null,
-                  "skill_id"  : "poison_cloud",
-                  "range"     : null,
-                  "shape"     : null,
-                  "repeat"    : {"min_value": 4, "max_value": 4, "target": "Any"}
-                }
-              },
+              "stat"    : { "SkillRepeat": {"skill_id": "poison_cloud"} },
               "modifier": "Flat"
             }
           }

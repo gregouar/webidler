@@ -46,14 +46,23 @@ enum ForgeTab {
 
 #[component]
 pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
+    let town_context: TownContext = expect_context();
     let selected_item = RwSignal::new(SelectedItem::None);
     let gamble_category = RwSignal::new(None);
     let active_tab = RwSignal::new(ForgeTab::Affix);
 
     let switch_tab = move |new_tab| {
         selected_item.set(SelectedItem::None);
+        town_context.selected_item_index.set(None);
         active_tab.set(new_tab);
     };
+
+    Effect::new(move || {
+        if open.get() || town_context.open_inventory.get() {
+            selected_item.set(SelectedItem::None);
+            town_context.selected_item_index.set(None);
+        }
+    });
 
     view! {
         <MenuPanel open=open>

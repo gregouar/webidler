@@ -6,6 +6,7 @@
         {"item_id": "hourglass",         "weight": 9999},
         {"item_id": "desert_quiver",     "weight": 9999},
         {"item_id": "staff_desert",      "weight": 9999},
-        {"item_id": "solar_armor",       "weight":  999}
+        {"item_id": "solar_armor",       "weight":  999},
+        {"item_id": "edict_mummy",       "weight":  999}
     ]
 }

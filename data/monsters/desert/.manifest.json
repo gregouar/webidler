@@ -5,8 +5,9 @@
       "ammit.json",           "canopic_jar_1.json",   "canopic_jar_2.json",   "canopic_jar_3.json",
       "canopic_jar_4.json",   "cobra.json",           "crocodile_mummy.json", "dervish.json",
       "desert_chariot.json",  "desert_priest.json",   "embalmer.json",        "hyena.json",
-      "jackal_guard.json",    "mummy.json",           "obelisk.json",         "scarabs.json",
-      "scorpion.json",        "serpopard.json",       "ushabti.json",         "vizier.json"
+      "jackal_guard.json",    "mummy.json",           "obelisk.json",         "sarcophagus.json",
+      "scarabs.json",         "scorpion.json",        "serpopard.json",       "ushabti.json",
+      "vizier.json"
     ],
     "statuses": ["0_statuses.json"]
   }

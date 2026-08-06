@@ -5,7 +5,7 @@ Body: 5+2
 Boots: 4+1
 Cloak: 6+1
 Focus: 4+1
-Gloves: 4+1
+Gloves: 4+2
 Helmet: 4+2
 Rings: 5+1
 Shields: 4+1
@@ -15,4 +15,4 @@ Ranged: 4+1
 Wand: 4+1
 
 Runes: 7+1
-Maps: 3+1
+Maps: 3+2

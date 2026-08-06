@@ -1,27 +1,10 @@
 {
-  "name"      : "Mummy",
-  "portrait"  : "monsters/desert/mummy.webp",
+  "name"      : "Inhabited Sarcophagus",
+  "portrait"  : "monsters/desert/sarcophagus.webp",
   "max_life"  : 10,
   "life_regen": 50,
   "armor"     : {"Poison": 100},
   "skills"    : [
-    {
-      "name"      : "Choking Grasp",
-      "icon"      : "skills/grasp.svg",
-      "cooldown"  : 3.0,
-      "skill_type": "Attack",
-      "targets"   : [
-        {
-          "effects": [
-            {
-              "FlatDamage": {
-                "damage": { "Physical": [5, 10] }
-              }
-            }
-          ]
-        }
-      ]
-    },
     {
       "name"      : "Three Thousand Years Smell",
       "icon"      : "skills/mummy_head.svg",

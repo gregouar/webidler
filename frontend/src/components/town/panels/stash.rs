@@ -76,6 +76,13 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         active_tab.set(new_tab);
     };
 
+    Effect::new(move || {
+        if open.get() || town_context.open_inventory.get() {
+            selected_item.set(SelectedItem::None);
+            town_context.selected_item_index.set(None);
+        }
+    });
+
     view! {
         <MenuPanel open=open>
             <MenuCard class="h-full" gap=false>
