@@ -26,7 +26,8 @@ use crate::components::{
         town_scene::TownScene,
     },
     ui::{
-        buttons::MenuButton, fullscreen::FullscreenButton, header::BaseHeaderMenu, wiki::WikiButton,
+        buttons::MenuButton, fullscreen::FullscreenButton, header::BaseHeaderMenu,
+        loading_screen::LoadingScreen, wiki::WikiButton,
     },
 };
 
@@ -128,7 +129,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
             <PlayerCount />
 
             <Suspense fallback=move || {
-                view! { <p class="text-zinc-400">"Loading..."</p> }
+                view! { <LoadingScreen detail="Loading character and progression data." /> }
             }>
                 {move || Suspend::new(async move {
                     data_load.await;

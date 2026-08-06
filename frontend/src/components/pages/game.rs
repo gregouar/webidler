@@ -3,7 +3,7 @@ use leptos_router::hooks::use_navigate;
 
 use crate::components::{
     backend_client::BackendClient, data_context::DataContext, game::game_instance::GameInstance,
-    game::websocket::Websocket,
+    game::websocket::Websocket, ui::loading_screen::LoadingScreen,
 };
 
 #[component]
@@ -21,7 +21,7 @@ pub fn GamePage() -> impl IntoView {
 
     view! {
         <Transition fallback=move || {
-            view! { <p class="text-zinc-400">"Loading..."</p> }
+            view! { <LoadingScreen detail="Loading game data." /> }
         }>
             {move || Suspend::new(async move {
                 data_load.await;

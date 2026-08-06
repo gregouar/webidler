@@ -303,6 +303,11 @@
         "skill_type": "Curse",
         "skill_range": "Any",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -796,7 +801,7 @@
     "upgrade_effects": []
   },
   "oni_mask": {
-    "name": "Grin of the Oni",
+    "name": "Oni Grinny",
     "icon": "items/helmets/oni_mask.webp",
     "description": "It grins as the world around you melts in fire.",
     "slot": "Helmet",
@@ -834,8 +839,8 @@
       },
       {
         "stat": {
-          "StatusStacks": {
-            "status_id": "burn",
+          "StatusDuration": {
+            "status_id": "pyromaniac",
             "damage_type": null,
             "debuff": null,
             "skill_type": null,
@@ -844,7 +849,22 @@
         },
         "modifier": "Increased",
         "scope": "Global",
-        "value": 25.0,
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "pyromaniac",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 30.0,
         "ignore_quality": true
       }
     ],

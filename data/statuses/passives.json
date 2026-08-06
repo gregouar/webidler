@@ -136,7 +136,7 @@
     "icon"      : "passives/pyromaniac.svg",
     "debuff"    : false,
     "duration"  : 3,
-    "max_stacks": 40,
+    "max_stacks": 30,
     "effects"   : [
       {
         "StatModifier": {

@@ -12,7 +12,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [5, 10]
@@ -32,7 +34,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [15, 20]
@@ -52,7 +56,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [25, 30]
@@ -72,7 +78,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [35, 40]
@@ -92,7 +100,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [45, 50]
@@ -112,7 +122,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [55, 60]
@@ -132,7 +144,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [65, 70]
@@ -152,7 +166,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [75, 80]
@@ -172,7 +188,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [85, 90]
@@ -192,7 +210,9 @@
       {
         "scope"   : "Global",
         "stat"    : {
-          "SuccessChance": { "effect_type": {"ApplyStatus": {}} }
+          "SuccessChance": {
+            "effect_type": { "ApplyStatus": {"debuff": true} }
+          }
         },
         "modifier": "Increased",
         "value"   : [95, 100]

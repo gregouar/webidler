@@ -23,6 +23,7 @@ use crate::{
             card::{Card, CardInset, CardTitle},
             input::{Input, ValidatedInput},
             list_row::MenuListRow,
+            loading_screen::LoadingScreen,
             toast::*,
         },
     },
@@ -36,7 +37,9 @@ pub fn MainMenuPage() -> impl IntoView {
 
     view! {
         <Transition fallback=move || {
-            view! { <p class="text-zinc-400">"Loading..."</p> }
+            view! {
+                <LoadingScreen title="Loading..." detail="Checking your session." />
+            }
         }>
             {move || Suspend::new(async move {
                 if refresh_token.await {
@@ -621,7 +624,7 @@ pub fn Logo() -> impl IntoView {
 }
 
 #[component]
-fn LogoWord(
+pub fn LogoWord(
     text: &'static str,
     class: &'static str,
     texture_size: &'static str,

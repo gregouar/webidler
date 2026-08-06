@@ -27,6 +27,7 @@ use crate::components::{
         },
         town_scene::TownScene,
     },
+    ui::loading_screen::LoadingScreen,
 };
 
 #[component]
@@ -125,7 +126,7 @@ pub fn TownPage() -> impl IntoView {
             <PlayerCount />
 
             <Transition fallback=move || {
-                view! { <p class="text-zinc-400">"Loading..."</p> }
+                view! { <LoadingScreen detail="Loading your character and town data." /> }
             }>
                 {move || Suspend::new(async move {
                     data_load.await;

@@ -1584,7 +1584,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
                 skill_filter: Default::default(),
                 effect_type: Some(StatSkillEffectType::ApplyStatus {
                     status_id: None,
-                    debuff: None,
+                    debuff: Some(true),
                 }),
             },
             Modifier::Increased,

@@ -87,6 +87,16 @@ body {
 }
 
 @layer utilities {
+  @keyframes loading-gear {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-gear {
+    animation: loading-gear 8s linear infinite;
+  }
+
   
   @keyframes fade-in {
     from {

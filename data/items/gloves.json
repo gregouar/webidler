@@ -616,7 +616,7 @@
             "effect_type": {
               "ApplyStatus": {
                 "status_id": null,
-                "debuff": null
+                "debuff": true
               }
             }
           }
@@ -753,7 +753,7 @@
               "effect_type": {
                 "ApplyStatus": {
                   "status_id": null,
-                  "debuff": null
+                  "debuff": true
                 }
               }
             }
@@ -1063,6 +1063,28 @@
     "rarity": "Unique",
     "affixes": [
       {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          80.0,
+          100.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": {
           "StatConditionalModifier": {
             "stat": "LifeRegen",
@@ -1118,6 +1140,24 @@
           "stat": {
             "Armor": "Physical"
           },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
           "modifier": "Flat",
           "value": 10.0
         }

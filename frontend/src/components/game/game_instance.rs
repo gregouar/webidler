@@ -21,7 +21,7 @@ use crate::components::{
         websocket::WebsocketContext,
     },
     shared::settings::SettingsModal,
-    ui::{progress_bars::provide_cooldown_clock, toast::*},
+    ui::{loading_screen::LoadingScreen, progress_bars::provide_cooldown_clock, toast::*},
 };
 
 #[component]
@@ -38,8 +38,10 @@ pub fn GameInstance() -> impl IntoView {
     let (get_area_config_storage, _, _) =
         storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
+    let conn = expect_context::<WebsocketContext>();
+
     Effect::new({
-        let conn = expect_context::<WebsocketContext>();
+        let conn = conn.clone();
         move |_| {
             if conn.connected.get() {
                 let conn = conn.clone();
@@ -60,7 +62,7 @@ pub fn GameInstance() -> impl IntoView {
     });
 
     Effect::new({
-        let conn = expect_context::<WebsocketContext>();
+        let conn = conn.clone();
         move |_| {
             if let Some(message) = conn.message.get() {
                 handle_message(&game_context, message);
@@ -72,7 +74,14 @@ pub fn GameInstance() -> impl IntoView {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <Show
                 when=move || game_context.started.get()
-                fallback=move || view! { <p>"Connecting..."</p> }
+                fallback=move || {
+                    view! {
+                        <LoadingScreen
+                            title="Connecting..."
+                            detail="Connecting to the game server."
+                        />
+                    }
+                }
             >
                 <HeaderMenu />
                 <div class="relative flex-1">

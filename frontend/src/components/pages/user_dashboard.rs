@@ -34,6 +34,7 @@ use crate::{
             confirm::ConfirmContext,
             header::BaseHeaderMenu,
             input::ValidatedInput,
+            loading_screen::LoadingScreen,
             menu_panel::MenuPanel,
             toast::*,
             tooltip::{StaticTooltip, StaticTooltipPosition},
@@ -172,7 +173,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 <AccountSettingsPanel open=open_account refresh_trigger />
 
                 <Transition fallback=move || {
-                    view! { <p class="text-zinc-400">"Loading..."</p> }
+                    view! { <LoadingScreen detail="Loading your characters and account data." /> }
                 }>
                     {move || {
                         Suspend::new(async move {
