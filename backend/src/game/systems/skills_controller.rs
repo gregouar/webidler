@@ -244,9 +244,13 @@ fn find_main_target<'a, 'b>(
             .choose(&mut rand::rng())
             .map(|(id, specs)| {
                 let (x_size, y_size) = specs.character_static.size.get_xy_size();
-                let dx = rng::random_range(1..=x_size)
-                    .and_then(|v| v.checked_sub(1))
-                    .unwrap_or(0) as u8;
+                let dx = match targets_group.range {
+                    SkillRange::Melee => 0,
+                    SkillRange::Distance => x_size.saturating_sub(1) as u8,
+                    SkillRange::Any => rng::random_range(1..=x_size)
+                        .and_then(|v| v.checked_sub(1))
+                        .unwrap_or(0) as u8,
+                };
                 let dy = rng::random_range(1..=y_size)
                     .and_then(|v| v.checked_sub(1))
                     .unwrap_or(0) as u8;
