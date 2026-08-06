@@ -160,6 +160,11 @@
         "skill_type": "Curse",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -609,6 +614,11 @@
         "skill_type": "Spell",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -866,6 +876,11 @@
         "skill_type": "Other",
         "skill_range": "Any",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -884,12 +899,13 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusEscalation": {
+                "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "min_max": null
                 }
               },
               {
@@ -902,7 +918,7 @@
                 }
               },
               {
-                "StatusDuration": {
+                "StatusEscalation": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
@@ -911,13 +927,12 @@
                 }
               },
               {
-                "StatusPower": {
+                "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
+                  "skill_id": null
                 }
               }
             ],
@@ -1072,11 +1087,11 @@
             "skill_id": null
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
         "value": [
-          100.0,
-          200.0
+          50.0,
+          100.0
         ],
         "ignore_quality": true
       },

@@ -40,17 +40,18 @@ pub fn format_skill_modifier_conditions_pre(
             Condition::LowLife => "".into(),
             Condition::LowMana => "".into(),
             Condition::ThreatLevel => "".into(),
-            Condition::HasItem {
-                item_slot,
-                item_category,
-                not,
-            } => {
-                format!(
-                    " while {}equipped with {}",
-                    if *not { "not " } else { "" },
-                    format_has_item_condition(*item_slot, *item_category),
-                )
-            }
+            Condition::HasItem { .. } => "".into(),
+            // Condition::HasItem {
+            //     item_slot,
+            //     item_category,
+            //     not,
+            // } => {
+            //     format!(
+            //         " while {}equipped with {}",
+            //         if *not { "not " } else { "" },
+            //         format_has_item_condition(*item_slot, *item_category),
+            //     )
+            // }
         })
         .collect::<Vec<_>>()
         .join("")
@@ -83,7 +84,18 @@ pub fn format_skill_modifier_conditions_post(
             Condition::LowLife => Some(" on Low Life".to_string()),
             Condition::LowMana => Some(" on Low Mana".to_string()),
             Condition::ThreatLevel => None,
-            Condition::HasItem { .. } => None,
+            // Condition::HasItem { .. } => None,    
+             Condition::HasItem {
+                item_slot,
+                item_category,
+                not,
+            } => {
+               Some(format!(
+                    " {}equipped with {}",
+                    if *not { "not " } else { "" },
+                    format_has_item_condition(*item_slot, *item_category),
+                ))
+            }
         })
         .collect::<Vec<_>>();
 

@@ -180,8 +180,8 @@ pub fn PassivesPage() -> impl IntoView {
             <HeaderMenu />
             <div class="relative flex-1">
                 <div class="absolute inset-0 flex p-1 xl:p-4 items-center gap-4">
-                    <div class="w-full h-full">
-                        <Card>
+                    <div class="min-w-0 flex-1 h-full">
+                        <Card class="h-full min-w-0 min-h-0">
                             <div class="flex justify-between mx-4 items-center">
                                 <div class="flex flex-row items-center gap-1 xl:gap-2">
                                     <CardTitle>"Passives"</CardTitle>
@@ -286,7 +286,14 @@ pub fn PassivesPage() -> impl IntoView {
                                 </div>
 
                             </div>
-                            <CardInset pad=false class:flex-1 class:z-1>
+                            <CardInset
+                                pad=false
+                                class:flex-1
+                                class:min-w-0
+                                class:min-h-0
+                                class:overflow-hidden
+                                class:z-1
+                            >
                                 <PassiveSkillTree
                                     passives_tree_specs
                                     passives_history_tracker

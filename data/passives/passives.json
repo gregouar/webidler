@@ -827,7 +827,7 @@
       },
       "0dad8094-ca29-43f8-a26a-3cc334041c1f": {
         "name": "Spell Critical Hit Damage",
-        "icon": "passives/fireflake.svg",
+        "icon": "passives/eclipse_flare.svg",
         "x": -35.0,
         "y": 47.5,
         "size": 0,
@@ -1778,7 +1778,7 @@
       },
       "1ff5ccd8-cdc9-4c39-8233-221b3c391086": {
         "name": "Spell Critical Hit Damage",
-        "icon": "passives/fireflake.svg",
+        "icon": "passives/eclipse_flare.svg",
         "x": -22.5,
         "y": 57.5,
         "size": 0,
@@ -4880,7 +4880,7 @@
       },
       "52f99688-5acc-486c-95e5-e595a61e0755": {
         "name": "Greater Success Chance",
-        "icon": "passives/success.svg",
+        "icon": "passives/skull_staff.svg",
         "x": 95.0,
         "y": 65.0,
         "size": 1,
@@ -4892,7 +4892,12 @@
               "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "effect_type": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": null,
+                    "debuff": true
+                  }
+                }
               }
             },
             "modifier": "Increased",
@@ -4907,7 +4912,12 @@
               "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "effect_type": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": null,
+                    "debuff": true
+                  }
+                }
               }
             },
             "modifier": "Increased",
@@ -5955,7 +5965,7 @@
         "socket": false
       },
       "5f96379e-5249-4b0e-8a4d-1e8c0f951f82": {
-        "name": "Calculated Strike",
+        "name": "Savage Strike",
         "icon": "passives/critical.svg",
         "x": -145.0,
         "y": 80.0,
@@ -8420,7 +8430,7 @@
       },
       "7e9b531a-e784-4ea1-acd1-2bdcc53efcc4": {
         "name": "Greater Spell Critical Hit Damage",
-        "icon": "passives/fireflake.svg",
+        "icon": "passives/eclipse_flare.svg",
         "x": -5.0,
         "y": 172.5,
         "size": 1,
@@ -10087,7 +10097,7 @@
         "socket": false
       },
       "91c8b2cf-977c-48ef-9bae-ffb5b20569a7": {
-        "name": "Disciplined Strikes",
+        "name": "Discipline",
         "icon": "passives/yin_yang.svg",
         "x": -127.5,
         "y": -25.0,
@@ -10125,7 +10135,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 5.0,
+                  "value": 10.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -11539,7 +11549,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 25.0,
+                  "value": 40.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -11568,7 +11578,7 @@
       },
       "ada9e80f-4b7b-4ae7-a2a1-d411345a272b": {
         "name": "Greater Spell Critical Hit Damage",
-        "icon": "passives/fireflake.svg",
+        "icon": "passives/eclipse_flare.svg",
         "x": -27.5,
         "y": 65.0,
         "size": 1,
@@ -11605,7 +11615,7 @@
       },
       "ae845698-b47f-47ca-bd07-8504a5eecf16": {
         "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "icon": "passives/skull_staff.svg",
         "x": 102.5,
         "y": 75.0,
         "size": 0,
@@ -11617,7 +11627,12 @@
               "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "effect_type": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": null,
+                    "debuff": true
+                  }
+                }
               }
             },
             "modifier": "Increased",
@@ -11632,7 +11647,12 @@
               "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "effect_type": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": null,
+                    "debuff": true
+                  }
+                }
               }
             },
             "modifier": "Increased",
@@ -12113,7 +12133,7 @@
       },
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
         "name": "Success Chance",
-        "icon": "passives/success.svg",
+        "icon": "passives/skull_staff.svg",
         "x": 95.0,
         "y": 85.0,
         "size": 0,
@@ -12125,7 +12145,12 @@
               "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "effect_type": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": null,
+                    "debuff": true
+                  }
+                }
               }
             },
             "modifier": "Increased",
@@ -12140,7 +12165,12 @@
               "SuccessChance": {
                 "skill_type": null,
                 "skill_id": null,
-                "effect_type": null
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": null,
+                    "debuff": true
+                  }
+                }
               }
             },
             "modifier": "Increased",
@@ -13524,7 +13554,7 @@
                     "StatusStacks": {
                       "status_id": null,
                       "damage_type": null,
-                      "debuff": null,
+                      "debuff": true,
                       "skill_type": null
                     }
                   }
@@ -13557,7 +13587,7 @@
                     "StatusStacks": {
                       "status_id": null,
                       "damage_type": null,
-                      "debuff": null,
+                      "debuff": true,
                       "skill_type": null
                     }
                   }
@@ -13716,13 +13746,29 @@
               }
             },
             "modifier": "Flat",
-            "value": 50.0
+            "value": 20.0
           }
         ],
         "triggers": [],
         "locked": true,
-        "upgrade_effects": [],
-        "max_upgrade_level": null,
+        "upgrade_effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "skill_type": null,
+                "skill_id": null,
+                "roll_type": {
+                  "SuccessChance": {
+                    "effect_type": null
+                  }
+                }
+              }
+            },
+            "modifier": "Flat",
+            "value": 10.0
+          }
+        ],
+        "max_upgrade_level": 5,
         "socket": false
       },
       "d11d1937-0158-4dc4-a3c3-50122b897f4e": {
@@ -13848,6 +13894,15 @@
                     }
                   },
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -13855,15 +13910,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -13990,15 +14036,6 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14024,6 +14061,15 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -14141,13 +14187,12 @@
                     }
                   },
                   {
-                    "StatusPower": {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
+                      "skill_id": null
                     }
                   },
                   {
@@ -14160,12 +14205,13 @@
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "min_max": null
                     }
                   }
                 ],
