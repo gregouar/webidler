@@ -1,4 +1,5 @@
 {
+  "area_specific": true,
   "entries": [
     {"item_id": "breastplate_unique",        "weight": 9999, "min_area_level": 1, "boss_only": true},
     {"item_id": "sabatons_unique",           "weight": 9999, "min_area_level": 1, "boss_only": true},

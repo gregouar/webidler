@@ -1,4 +1,5 @@
 {
+  "area_specific": false,
   "entries": [
     {"item_id": "spiked_mace",           "weight": 16000                       },
     {"item_id": "weapon_shield",         "weight":  4999                       },

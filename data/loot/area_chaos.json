@@ -1,5 +1,8 @@
 {
-    "entries": [
+    "area_specific": true,
+    "entries"      : [
+        {"item_id": "rune",               "weight":   200                       },
+        {"item_id": "rune",               "weight":   400, "min_area_level":  90},
         {"item_id": "rune",               "weight":   800, "min_area_level": 140},
         {"item_id": "rune_root",          "weight":    80                       },
         {"item_id": "rune",               "weight":  1600, "min_area_level": 190},

@@ -408,6 +408,7 @@ fn modify_player_specs(
             | StatType::TriggerEffectModifier { .. } => {}
             // Other
             StatType::ItemRarity
+            | StatType::ItemAreaChance
             | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::PowerLevel

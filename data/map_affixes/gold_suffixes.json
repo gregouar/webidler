@@ -9,9 +9,9 @@
         "restrictions": ["Map"],
         "item_level"  : 100,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -50},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":  20},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   4}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -50},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":  40},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":   2}
         ]
     },
     {
@@ -24,9 +24,9 @@
         "restrictions": ["Map"],
         "item_level"  : 200,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -100},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":   40},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":    8}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -100},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":   80},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":    4}
         ]
     },
     {
@@ -39,9 +39,9 @@
         "restrictions": ["Map"],
         "item_level"  : 300,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -200},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":   60},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   12}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -200},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":  120},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":    6}
         ]
     },
     {
@@ -54,9 +54,9 @@
         "restrictions": ["Map"],
         "item_level"  : 400,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -300},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":   80},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   16}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -300},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":  160},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":    8}
         ]
     },
     {
@@ -69,9 +69,9 @@
         "restrictions": ["Map"],
         "item_level"  : 500,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -500},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":  100},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   20}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -500},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":  200},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":   10}
         ]
     },
     {
@@ -84,9 +84,9 @@
         "restrictions": ["Map"],
         "item_level"  : 600,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -800},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":  120},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   24}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -800},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":  240},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":   12}
         ]
     },
     {
@@ -99,9 +99,9 @@
         "restrictions": ["Map"],
         "item_level"  : 700,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -1300},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":   140},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":    28}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -1300},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":   280},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":    14}
         ]
     },
     {
@@ -114,9 +114,9 @@
         "restrictions": ["Map"],
         "item_level"  : 800,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -2000},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":   160},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":    32}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -2000},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":   320},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":    16}
         ]
     },
     {
@@ -129,9 +129,9 @@
         "restrictions": ["Map"],
         "item_level"  : 900,
         "effects"     : [
-            {"scope": "Local",  "stat": "GoldFind",   "modifier": "More",      "value": -3500},
-            {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value":   200},
-            {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":    40}
+            {"scope": "Local",  "stat": "GoldFind",       "modifier": "More",      "value": -3500},
+            {"scope": "Global", "stat": "ItemAreaChance", "modifier": "Increased", "value":   400},
+            {"scope": "Global", "stat": "ItemLevel",      "modifier": "Flat",      "value":    20}
         ]
     }
 ]

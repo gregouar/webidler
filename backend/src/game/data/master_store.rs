@@ -126,6 +126,7 @@ impl MasterStore {
             .expect("missing 'gamble_table.json'");
         let gamble_table = GambleTable {
             loot_table: LootTable {
+                area_specific: false,
                 entries: gamble_table_blueprint
                     .loot_tables
                     .iter()

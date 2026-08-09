@@ -4,6 +4,7 @@ use shared::{
         area::{AreaLevel, AreaSpecs, AreaState},
         item::ItemSpecs,
         item_affix::AffixEffectScope,
+        modifier::ModifiableValue,
         stat_effect::{EffectsMap, StatType},
     },
 };
@@ -31,10 +32,17 @@ pub fn init_area_specs(
 
             for loot_table_id in map_specs.loot_tables.iter() {
                 if let Some(loot_table) = loot_tables_store.get(loot_table_id) {
-                    area_blueprint
-                        .loot_table
-                        .entries
-                        .extend(loot_table.entries.iter().cloned());
+                    if loot_table.area_specific {
+                        area_blueprint
+                            .loot_table_area
+                            .entries
+                            .extend(loot_table.entries.iter().cloned());
+                    } else {
+                        area_blueprint
+                            .loot_table
+                            .entries
+                            .extend(loot_table.entries.iter().cloned());
+                    }
                 }
             }
 
@@ -79,15 +87,28 @@ pub fn init_area_specs(
         .and_then(|map_specs| map_specs.max_power_shard_level)
         .unwrap_or(MAX_POWER_SHARD_LEVEL_BASE);
 
-    compute_area_specs(&mut area_specs);
+    let item_area_chance = compute_area_specs(&mut area_specs);
+
+    for entry in area_blueprint.loot_table_area.entries.iter_mut() {
+        entry.weight = (entry.weight as f64 * item_area_chance * 0.01)
+            .round()
+            .max(0.0) as u64;
+    }
+    area_blueprint
+        .loot_table
+        .entries
+        .append(&mut area_blueprint.loot_table_area.entries);
 
     area_specs
 }
 
-fn compute_area_specs(area_specs: &mut AreaSpecs) {
+fn compute_area_specs(area_specs: &mut AreaSpecs) -> f64 {
+    let mut item_area_chance: ModifiableValue<f64> = 100.0.into();
+
     for effect in area_specs.effects.iter() {
         match effect.stat {
             StatType::ItemRarity => area_specs.loot_rarity.apply_effect(&effect),
+            StatType::ItemAreaChance => item_area_chance.apply_effect(&effect),
             StatType::ItemLevel => area_specs.item_level_modifier.apply_effect(&effect),
             StatType::GemsFind => area_specs.gems_find.apply_effect(&effect),
             StatType::GoldFind => area_specs.gold_find.apply_effect(&effect),
@@ -95,4 +116,6 @@ fn compute_area_specs(area_specs: &mut AreaSpecs) {
             _ => {}
         }
     }
+
+    *item_area_chance
 }

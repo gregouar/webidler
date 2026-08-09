@@ -1,5 +1,6 @@
 {
-    "entries": [
+    "area_specific": false,
+    "entries"      : [
         {"item_id": "weapon_1h_10",     "weight": 512000                       },
         {"item_id": "helmet_10",        "weight": 512000                       },
         {"item_id": "body_10",          "weight": 512000                       },

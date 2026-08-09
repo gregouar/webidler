@@ -550,11 +550,18 @@
     "affixes": [
       {
         "stat": {
-          "Description": "200% Increased Chance to drop Runes"
+          "Description": "Contains no Boss"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemAreaChance",
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 2000.0,
         "ignore_quality": true
       },
       {
@@ -568,10 +575,17 @@
         "ignore_quality": true
       },
       {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 300.0,
+        "ignore_quality": true
+      },
+      {
         "stat": "GoldFind",
         "modifier": "Increased",
         "scope": "Local",
-        "value": -550.0,
+        "value": -1e200,
         "ignore_quality": true
       }
     ],
@@ -584,13 +598,8 @@
       "reward_picks": 1,
       "reward_slots": 2,
       "max_power_shard_level": null,
-      "loot_tables": [
-        "area_chaos.json",
-        "area_chaos.json",
-        "area_chaos.json",
-        "area_chaos.json"
-      ],
-      "replace_area_id": null,
+      "loot_tables": [],
+      "replace_area_id": "chaos_2.json",
       "reward_loot_table": "area_chaos.json"
     },
     "ignore_quality": true,

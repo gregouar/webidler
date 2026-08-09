@@ -1,4 +1,5 @@
 {
+    "area_specific": true,
     "entries": [
         {"item_id": "oni_mask",       "weight": 9999},
         {"item_id": "yokai_sandals",  "weight": 9999},

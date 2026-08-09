@@ -594,6 +594,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::MovementSpeed => "Movement Speed".to_string(),
         StatType::GoldFind => "Gold Find".to_string(),
         StatType::ItemRarity => "Items Rarity".to_string(),
+        StatType::ItemAreaChance => "Chance to Find Area Items".to_string(),
         StatType::ItemLevel => "Items Power Level".to_string(),
         StatType::GemsFind => "Gems Find".to_string(),
         StatType::PowerLevel => "Power Level".to_string(),
@@ -900,6 +901,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format_flat_number(value, false)
         ),
         StatType::ItemRarity => format!("Adds {}% Items Rarity", format_flat_number(value, false)),
+        StatType::ItemAreaChance => format!(
+            "Adds {}% Chance to Find Area Items",
+            format_flat_number(value, false)
+        ),
         StatType::ItemLevel => {
             format!(
                 "+{} Levels to Items Power",

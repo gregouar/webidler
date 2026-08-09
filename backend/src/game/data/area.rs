@@ -21,6 +21,7 @@ pub struct AreaBlueprint {
     pub bosses: Vec<BossBlueprint>,
     pub waves: Vec<MonsterWaveBlueprint>,
     pub loot_table: LootTable,
+    pub loot_table_area: LootTable,
     pub reward_loot_table: Option<LootTable>,
 }
 
@@ -65,8 +66,18 @@ impl AreaBlueprint {
 
         Ok(Self {
             loot_table: LootTable {
+                area_specific: false,
                 entries: loot_tables
-                    .into_iter()
+                    .iter()
+                    .filter(|t| !t.area_specific)
+                    .flat_map(|t| t.entries.clone())
+                    .collect(),
+            },
+            loot_table_area: LootTable {
+                area_specific: true,
+                entries: loot_tables
+                    .iter()
+                    .filter(|t| t.area_specific)
                     .flat_map(|t| t.entries.clone())
                     .collect(),
             },
