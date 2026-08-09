@@ -272,7 +272,7 @@
       },
       "mana_cost"       : {
         "title"       : "Herbalist",
-        "base_cost"   : 10,
+        "base_cost"   : 5,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [

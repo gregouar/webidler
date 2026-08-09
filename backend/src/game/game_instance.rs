@@ -288,6 +288,7 @@ impl<'a> GameInstance<'a> {
                             Realm::Standard => "",
                             Realm::StandardSSF => " [SSF]",
                             Realm::Legacy => " [Legacy]",
+                            Realm::LegacySSF => " [Legacy SSF]",
                         };
                         if let Err(err) = self
                             .chat_integration

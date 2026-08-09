@@ -5,7 +5,10 @@ use shared::data::{
 };
 use sqlx::{FromRow, types::Json};
 
-use crate::db::{characters::CharacterEntry, pool::DbExecutor};
+use crate::{
+    constants::DATA_VERSION,
+    db::{characters::CharacterEntry, pool::DbExecutor},
+};
 
 // pub type DbStashType
 
@@ -40,8 +43,10 @@ pub async fn create_stash<'c>(
     let stash_type_value = serde_json::to_value(stash_type).unwrap();
     sqlx::query!(
         r#"
-        INSERT INTO stashes (stash_id, user_id, owner_id, stash_type, title, max_items, realm_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO stashes (
+            stash_id, user_id, owner_id, stash_type, title, max_items, realm_id, data_version
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         "#,
         stash_id,
         user_id,
@@ -49,7 +54,8 @@ pub async fn create_stash<'c>(
         stash_type_value,
         title,
         max_items,
-        realm_id
+        realm_id,
+        DATA_VERSION,
     )
     .execute(executor)
     .await?;
@@ -160,11 +166,13 @@ pub async fn update_stash_size<'c>(
         UPDATE stashes
         SET 
             max_items =  $2,
+            data_version = $3,
             updated_at = CURRENT_TIMESTAMP 
         WHERE stash_id = $1
         "#,
         stash_id,
         max_items,
+        DATA_VERSION,
     )
     .execute(executor)
     .await?;
@@ -181,6 +189,7 @@ pub async fn update_stash_gems<'c>(
         UPDATE stashes
         SET 
             resource_gems = resource_gems + $2,
+            data_version = $3,
             updated_at = CURRENT_TIMESTAMP 
         WHERE stash_id = $1
         RETURNING 
@@ -188,6 +197,7 @@ pub async fn update_stash_gems<'c>(
         "#,
         stash_id,
         gems_difference,
+        DATA_VERSION,
     )
     .fetch_one(executor)
     .await

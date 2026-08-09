@@ -21,7 +21,6 @@ use shared::data::{
 };
 
 use crate::{
-    constants::DATA_VERSION,
     db::{
         characters_data::{
             CharacterDataEntry, upsert_character_inventory_data, upsert_character_passives_data,
@@ -30,6 +29,8 @@ use crate::{
     },
     game::data::{inventory_data::InventoryData, passives::PassivesTreeAscensionData},
 };
+
+const TARGET_DATA_VERSION: &str = "0.2.01";
 
 pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;
@@ -98,6 +99,14 @@ async fn migrate_character_data(
             )
             .await?;
         }
+
+        sqlx::query!(
+            "UPDATE characters_data SET data_version = $1 WHERE character_id = $2",
+            TARGET_DATA_VERSION,
+            character_data.character_id,
+        )
+        .execute(&mut **executor)
+        .await?;
     }
 
     Ok(())
@@ -133,7 +142,7 @@ async fn migrate_stash_items(executor: &mut Transaction<'static, Database>) -> a
         sqlx::query!(
             "UPDATE stash_items SET item_data = $1, data_version = $2 WHERE stash_item_id = $3",
             item_data,
-            DATA_VERSION,
+            TARGET_DATA_VERSION,
             stash_item_id,
         )
         .execute(&mut **executor)

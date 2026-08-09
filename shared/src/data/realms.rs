@@ -8,6 +8,7 @@ pub enum Realm {
     Standard,
     StandardSSF,
     Legacy,
+    LegacySSF,
 }
 
 impl Realm {
@@ -16,6 +17,7 @@ impl Realm {
             Realm::Standard => "Standard",
             Realm::StandardSSF => "StandardSSF",
             Realm::Legacy => "Legacy",
+            Realm::LegacySSF => "LegacySSF",
         }
         .into()
     }
@@ -25,6 +27,7 @@ impl From<&RealmId> for Realm {
     fn from(value: &RealmId) -> Self {
         match value.as_str() {
             "Legacy" => Realm::Legacy,
+            "LegacySSF" => Realm::LegacySSF,
             "StandardSSF" => Realm::StandardSSF,
             _ => Realm::Standard,
         }

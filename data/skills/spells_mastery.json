@@ -719,7 +719,7 @@
       },
       "unrighteous_fire": {
         "title"       : "Apostasy",
-        "base_cost"   : 5,
+        "base_cost"   : 10,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -1076,12 +1076,12 @@
       },
       "poison_heal"  : {
         "title"       : "Dark Communion",
-        "base_cost"   : 10,
-        "upgrade_cost": 5,
+        "base_cost"   : 5,
+        "upgrade_cost": 2,
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 3,
+            "value"        : 1,
             "upgrade_value": 0,
             "Trigger"      : {
               "trigger_id": "voodoo_doll_poison_heal",
@@ -1095,7 +1095,7 @@
               },
               "target"    : "Me",
               "effects"   : [
-                { "Restore": {"restore_type": "Life", "value": 1, "modifier": "Flat"} }
+                { "Restore": {"restore_type": "Life", "value": 3, "modifier": "Flat"} }
               ]
             }
           },

@@ -33,6 +33,7 @@ fn realm_label(realm: Realm) -> &'static str {
         Realm::Standard => "Standard",
         Realm::StandardSSF => "Standard SSF",
         Realm::Legacy => "Legacy",
+        Realm::LegacySSF => "Legacy SSF",
     }
 }
 
