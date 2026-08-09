@@ -419,15 +419,38 @@
         ]
       },
       "duration": {
-        "title"       : "Status Duration",
+        "title"       : "Vitrification",
         "base_cost"   : 1,
         "upgrade_cost": 1,
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 1,
-            "upgrade_value": 1,
-            "StatEffect"   : { "stat": {"StatusDuration": {}}, "modifier": "Flat" }
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "burn", "debuff": null} }
+                }
+              },
+              "modifier": "Increased"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "stun", "debuff": null} }
+                }
+              },
+              "modifier": "Increased"
+            }
           }
         ]
       },

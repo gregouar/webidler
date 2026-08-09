@@ -369,8 +369,8 @@
       },
       "damage_burning": {
         "title"       : "Fuel to the Fire",
-        "base_cost"   : 2,
-        "upgrade_cost": 2,
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
         "max_level"   : 10,
         "effects"     : [
           {
