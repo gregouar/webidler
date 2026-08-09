@@ -40,6 +40,7 @@ pub async fn create_session(
     sessions_store: &SessionsStore,
     master_store: &MasterStore,
     character: CharacterEntry,
+    allow_parallel_characters: bool,
     area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
@@ -48,7 +49,9 @@ pub async fn create_session(
     let mut first_try = true;
     let mut session_id = None;
     for _ in 0..50 {
-        session_id = db::game_sessions::create_session(db_pool, &character_id).await?;
+        session_id =
+            db::game_sessions::create_session(db_pool, &character_id, allow_parallel_characters)
+                .await?;
         match session_id {
             Some(_) => break,
             None => {

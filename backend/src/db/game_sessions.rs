@@ -31,11 +31,13 @@ pub struct SessionGlimpse {
     pub area_level: i32,
 }
 
-/// Return Ok(None) if an active session already exists for this character
-/// or for another character of the same user in the same realm.
+/// Return Ok(None) if an active session already exists for this character, or
+/// for another character of the same user in the same realm when parallel
+/// characters are not allowed.
 pub async fn create_session(
     db_pool: &DbPool,
     character_id: &UserCharacterId,
+    allow_parallel_characters: bool,
 ) -> Result<Option<SessionId>, sqlx::Error> {
     let res = sqlx::query_scalar!(
         r#"
@@ -46,7 +48,7 @@ pub async fn create_session(
         )
         INSERT INTO game_sessions (character_id)
         SELECT $1
-        WHERE NOT EXISTS (
+        WHERE $2 OR NOT EXISTS (
             SELECT 1
             FROM game_sessions gs
             INNER JOIN characters c ON c.character_id = gs.character_id
@@ -58,7 +60,8 @@ pub async fn create_session(
         )
         RETURNING session_id
         "#,
-        character_id
+        character_id,
+        allow_parallel_characters,
     )
     .fetch_optional(db_pool)
     .await;

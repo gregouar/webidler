@@ -17,9 +17,12 @@ use std::{
     time::{Duration, Instant},
 };
 
-use shared::messages::{
-    client::{ClientConnectMessage, ClientMessage},
-    server::{ErrorMessage, ErrorType},
+use shared::{
+    data::realms::Realm,
+    messages::{
+        client::{ClientConnectMessage, ClientMessage},
+        server::{ErrorMessage, ErrorType},
+    },
 };
 
 use crate::{
@@ -151,13 +154,15 @@ async fn handle_connect(
     verify_character_user(&user_character, &user)?;
     verify_character_not_deleted(&user_character)?;
 
-    if db::game_instances::is_user_instance_running(
-        &app_state.db_pool,
-        &user_character.user_id,
-        &user_character.realm_id,
-        &user_character.character_id,
-    )
-    .await?
+    let realm: Realm = (&user_character.realm_id).into();
+    if !realm.allow_parallel_characters()
+        && db::game_instances::is_user_instance_running(
+            &app_state.db_pool,
+            &user_character.user_id,
+            &user_character.realm_id,
+            &user_character.character_id,
+        )
+        .await?
     {
         return Err(AppError::UserError(
             "Another character is already Grinding in this Realm".into(),
@@ -173,6 +178,7 @@ async fn handle_connect(
         &app_state.sessions_store,
         &app_state.master_store,
         user_character,
+        realm.allow_parallel_characters(),
         msg.area_config,
     )
     .await?;
