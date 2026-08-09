@@ -101,7 +101,12 @@ async fn migrate_leaderboard(
 ) -> anyhow::Result<()> {
     // If old leaderboard is empty, no need to transfer anything
     let source_entries = sqlx::query_scalar!(
-        "SELECT COUNT(*) FROM leaderboard WHERE realm_id = $1 AND data_version < '0.3.00'",
+        r#"
+        SELECT COUNT(*) as "count!"
+        FROM leaderboard
+        WHERE realm_id = $1
+          AND data_version < '0.3.00'
+        "#,
         source_realm,
     )
     .fetch_one(&mut **executor)
@@ -150,6 +155,16 @@ async fn migrate_leaderboard(
     });
 
     for entry in entries {
+        #[cfg(feature = "sqlite")]
+        let created_at = entry.created_at;
+        #[cfg(feature = "postgres")]
+        let created_at: chrono::DateTime<chrono::Utc> = entry.created_at.into();
+
+        #[cfg(feature = "sqlite")]
+        let updated_at = entry.updated_at;
+        #[cfg(feature = "postgres")]
+        let updated_at: chrono::DateTime<chrono::Utc> = entry.updated_at.into();
+
         sqlx::query!(
             r#"
             INSERT INTO leaderboard (
@@ -170,8 +185,8 @@ async fn migrate_leaderboard(
             entry.area_level,
             entry.elapsed_time,
             TARGET_DATA_VERSION,
-            entry.created_at,
-            entry.updated_at,
+            created_at,
+            updated_at,
         )
         .execute(&mut **executor)
         .await?;

@@ -80,12 +80,11 @@ async fn post_create_character(
         ));
     }
 
-    let realm = if payload.is_ssf {
-        Realm::StandardSSF
-    } else if payload.legacy {
-        Realm::Legacy
-    } else {
-        Realm::Standard
+    let realm = match (payload.legacy, payload.is_ssf) {
+        (true, true) => Realm::LegacySSF,
+        (true, false) => Realm::Legacy,
+        (false, true) => Realm::StandardSSF,
+        (false, false) => Realm::Standard,
     };
 
     match db::characters::create_character(

@@ -290,8 +290,9 @@ fn CharacterSlot(
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
-    let is_legacy = matches!(character.realm, Realm::Legacy);
-    let is_ssf = character.is_ssf || matches!(character.realm, Realm::StandardSSF);
+    let is_legacy = matches!(character.realm, Realm::Legacy | Realm::LegacySSF);
+    let is_ssf =
+        character.is_ssf || matches!(character.realm, Realm::StandardSSF | Realm::LegacySSF);
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
         let toaster = expect_context::<Toasts>();
@@ -660,8 +661,7 @@ pub fn CreateCharacterPanel(
                                     name: selected_character_name.get_untracked().unwrap(),
                                     portrait: selected_character_portrait.get_untracked().unwrap(),
                                     is_ssf: is_ssf_character.get_untracked(),
-                                    legacy: is_legacy_character.get_untracked()
-                                        && !is_ssf_character.get_untracked(),
+                                    legacy: is_legacy_character.get_untracked(),
                                 },
                             )
                             .await
@@ -732,19 +732,25 @@ pub fn CreateCharacterPanel(
                 <Show when=move || selected_character_id.read().is_none()>
                     <CardInset class="h-fit">
                         <div class="flex flex-col gap-2 text-left">
-                            <div
-                                class:opacity-50=move || is_ssf_character.get()
-                                class:pointer-events-none=move || is_ssf_character.get()
-                            >
+                            <div class="flex items-center gap-2">
                                 <Checkbox
                                     label="Legacy Character".to_string()
                                     checked=Signal::derive(move || is_legacy_character.get())
                                     on_change=move |checked| {
-                                        if !is_ssf_character.get_untracked() {
-                                            is_legacy_character.set(checked);
-                                        }
+                                        is_legacy_character.set(checked);
                                     }
                                 />
+
+                                <StaticTooltip
+                                    position=StaticTooltipPosition::Top
+                                    tooltip=|| {
+                                        "Legacy: this character plays in the permanent Legacy realm, with a separate economy and leaderboards."
+                                    }
+                                >
+                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
+                                        "?"
+                                    </span>
+                                </StaticTooltip>
                             </div>
 
                             <div class="flex items-center gap-2">
@@ -753,9 +759,6 @@ pub fn CreateCharacterPanel(
                                     checked=Signal::derive(move || is_ssf_character.get())
                                     on_change=move |checked| {
                                         is_ssf_character.set(checked);
-                                        if checked {
-                                            is_legacy_character.set(false);
-                                        }
                                     }
                                 />
 
