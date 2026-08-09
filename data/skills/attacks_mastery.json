@@ -271,39 +271,44 @@
         ]
       },
       "mana_cost"       : {
-        "title"       : "Herbalist",
-        "base_cost"   : 5,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
-        "effects"     : [
-          {
-            "value"        : -1e+200,
-            "upgrade_value": 0,
-            "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
-          }
-        ]
-      },
-      "faster_poison"   : {
-        "title"       : "Virulence",
-        "base_cost"   : 1,
-        "upgrade_cost": 1,
+        "title"       : "Sluggish Metabolism",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 5,
+            "upgrade_value": 0,
             "StatEffect"   : {
-              "stat"    : { "StatusFaster": {"status_id": "poison", "skill_type": "Attack"} },
-              "modifier": "More",
-              "scope"   : "Global"
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "StatusDuration": {"status_id": "poison"} },
+                  "conditions": ["Slowed"]
+                }
+              },
+              "modifier": "More"
             }
-          },
+          }
+        ]
+      },
+      "sickening_chance": {
+        "title"       : "Sickening Touch",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 5,
+        "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 14,
+            "upgrade_value": 13,
             "StatEffect"   : {
-              "stat"    : { "StatusEscalation": {"status_id": "poison", "skill_type": "Attack"} },
-              "modifier": "More",
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "sickening_concoction"} }
+                }
+              },
+              "modifier": "Flat",
               "scope"   : "Global"
             }
           }
@@ -348,24 +353,27 @@
           }
         ]
       },
-      "sickening_chance": {
-        "title"       : "Sickening Touch",
-        "base_cost"   : 2,
-        "upgrade_cost": 2,
-        "max_level"   : 5,
+      "faster_poison"   : {
+        "title"       : "Virulence",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 14,
-            "upgrade_value": 13,
+            "value"        : 10,
+            "upgrade_value": 10,
             "StatEffect"   : {
-              "stat"    : {
-                "SuccessChance": {
-                  "skill_type" : "Attack",
-                  "skill_id"   : null,
-                  "effect_type": { "ApplyStatus": {"status_id": "sickening_concoction"} }
-                }
-              },
-              "modifier": "Flat",
+              "stat"    : { "StatusFaster": {"status_id": "poison", "skill_type": "Attack"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusEscalation": {"status_id": "poison", "skill_type": "Attack"} },
+              "modifier": "More",
               "scope"   : "Global"
             }
           }

@@ -62,7 +62,7 @@ pub fn SkillMasteriesPanel(
         <MenuPanel open=open w_full=false h_full=true class:items-center>
             <MenuCard class="max-w-6xl mx-auto h-full">
                 <CardHeader title="Skill Masteries" on_close=move || open.set(false) />
-                <CardInset>
+                <CardInset class:h-full>
                     <FavoriteSkillsPicker skill_masteries view_only />
                     <MasterySkillShop skill_masteries view_only />
                 </CardInset>
@@ -450,21 +450,23 @@ fn FavoriteSkillButton(
                                 });
                             spawn_local(async move {
                                 match backend
-                                    .post_save_favorite_skills(&SaveFavoriteSkillsRequest {
-                                        character_id,
-                                        favorite_skills: skill_masteries
-                                            .read_untracked()
-                                            .favorite_skills
-                                            .clone(),
-                                    })
+                                    .post_save_favorite_skills(
+                                        &SaveFavoriteSkillsRequest {
+                                            character_id,
+                                            favorite_skills: skill_masteries
+                                                .read_untracked()
+                                                .favorite_skills
+                                                .clone(),
+                                        },
+                                    )
                                     .await
                                 {
                                     Ok(response) => {
                                         town_context
                                             .player_skill_masteries
                                             .update(|player_skill_masteries| {
-                                                player_skill_masteries.favorite_skills =
-                                                    response.favorite_skills;
+                                                player_skill_masteries.favorite_skills = response
+                                                    .favorite_skills;
                                             });
                                     }
                                     Err(e) => {
