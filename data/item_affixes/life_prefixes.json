@@ -156,7 +156,7 @@
     ]
   },
   {
-    "name"        : "Sturdy",
+    "name"        : "Stout",
     "family"      : "inc_life",
     "tags"        : ["Life"],
     "affix_type"  : "Prefix",
