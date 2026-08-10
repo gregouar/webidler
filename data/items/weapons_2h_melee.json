@@ -212,6 +212,11 @@
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -402,6 +407,24 @@
           100.0,
           150.0
         ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SuccessChance": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_id": "open_wound",
+                "debuff": null
+              }
+            }
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e200,
         "ignore_quality": true
       },
       {
@@ -998,6 +1021,11 @@
         "skill_type": "Attack",
         "skill_range": "Any",
         "skill_shape": "All",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -1018,7 +1046,7 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": {
+                "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
                 }
@@ -1033,7 +1061,7 @@
                 }
               },
               {
-                "CritDamage": {
+                "CritChance": {
                   "skill_type": null,
                   "skill_id": null
                 }
@@ -1467,6 +1495,24 @@
       },
       {
         "stat": {
+          "SuccessChance": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_id": "open_wound",
+                "debuff": null
+              }
+            }
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e200,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "RestoreOnHit": {
             "restore_type": "Life",
             "skill_type": "Attack"
@@ -1534,6 +1580,11 @@
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Cross",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {

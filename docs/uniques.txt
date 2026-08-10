@@ -16,8 +16,8 @@ Wand: 4+1
 ----
 Total: 57 + 19 = 76
 
-Runes: 7+1
-Maps: 3+2
+Runes: 7+2
+Maps: 3+3
 
 
 

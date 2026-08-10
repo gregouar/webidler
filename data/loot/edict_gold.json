@@ -1,0 +1,7 @@
+{
+  "area_specific": true,
+  "entries"      : [
+    {"item_id": "rune_edict_gold_attack", "weight": 1, "boss_only": true},
+    {"item_id": "rune_edict_gold_spell",  "weight": 1, "boss_only": true}
+  ]
+}

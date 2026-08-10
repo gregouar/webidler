@@ -1,632 +1,467 @@
 {
   "rune": {
-    "name": "Simple Rune",
-    "icon": "items/runes/rune.webp",
-    "description": null,
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 50,
-    "rarity": "Magic",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [],
+    "name"           : "Simple Rune",
+    "icon"           : "items/runes/rune.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 50,
+    "rarity"         : "Magic",
+    "affixes"        : [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "rune_root": {
-    "name": "Anchor Rune",
-    "icon": "items/runes/rune_root.webp",
-    "description": null,
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 150,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": true
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [],
+    "name"           : "Anchor Rune",
+    "icon"           : "items/runes/rune_root.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 150,
+    "rarity"         : "Normal",
+    "affixes"        : [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": true},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "rune_power": {
-    "name": "Power Rune",
-    "icon": "items/runes/rune_power.webp",
-    "description": null,
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 330,
-    "rarity": "Normal",
-    "affixes": [
+    "name"           : "Power Rune",
+    "icon"           : "items/runes/rune_power.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 330,
+    "rarity"         : "Normal",
+    "affixes"        : [
       {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 20.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 20.0,
         "ignore_quality": false
       }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "rune_divine": {
-    "name": "Divine Rune",
-    "icon": "items/runes/rune_divine.webp",
-    "description": null,
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 600,
-    "rarity": "Normal",
-    "affixes": [
+    "name"           : "Divine Rune",
+    "icon"           : "items/runes/rune_divine.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 600,
+    "rarity"         : "Normal",
+    "affixes"        : [
       {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 50.0,
         "ignore_quality": false
       }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "rune_gilded": {
-    "name": "Gilded Covenant",
-    "icon": "items/runes/rune_gilded.webp",
-    "description": "Gold answers every prayer... eventually.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
+    "name"           : "Gilded Covenant",
+    "icon"           : "items/runes/rune_gilded.webp",
+    "description"    : "Gold answers every prayer... eventually.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 50,
+    "rarity"         : "Unique",
+    "affixes"        : [
+      { "stat": "GoldFind", "modifier": "More", "scope": "Global", "value": [300.0, 500.0], "ignore_quality": true }
     ],
-    "min_area_level": 50,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          300.0,
-          500.0
-        ],
-        "ignore_quality": true
-      }
-    ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [
-      330,
-      600
-    ],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [330, 600],
     "upgrade_effects": [
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 20.0
+          "value"   : 20.0
         }
       }
     ]
   },
   "rune_berserker": {
-    "name": "Mark of the Berserker",
-    "icon": "items/runes/rune_berserker.webp",
-    "description": "Each wound feeds the mark. Each scar sharpens the beast within.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 100,
-    "rarity": "Unique",
-    "affixes": [
+    "name"           : "Mark of the Berserker",
+    "icon"           : "items/runes/rune_berserker.webp",
+    "description"    : "Each wound feeds the mark. Each scar sharpens the beast within.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 100,
+    "rarity"         : "Unique",
+    "affixes"        : [
       {
-        "stat": {
-          "DamageTaken": {
-            "skill_type": null,
-            "damage_type": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 33.3,
+        "stat"          : { "DamageTaken": {"skill_type": null, "damage_type": null} },
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 33.3,
         "ignore_quality": true
       }
     ],
-    "triggers": [
+    "triggers"       : [
       {
-        "OnTakeHit": {
-          "skill_type": null,
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": true,
+        "OnTakeHit"             : {
+          "skill_type"  : null,
+          "range"       : null,
+          "is_crit"     : null,
+          "is_blocked"  : null,
+          "is_hurt"     : true,
           "is_triggered": null,
-          "damage_type": null,
-          "skill_ids": null,
-          "conditions": []
+          "damage_type" : null,
+          "skill_ids"   : null,
+          "conditions"  : []
         },
-        "description": null,
-        "trigger_id": "rune_berserker",
-        "target": "Me",
-        "modifiers": [],
+        "description"           : null,
+        "trigger_id"            : "rune_berserker",
+        "target"                : "Me",
+        "modifiers"             : [],
         "inherit_source_effects": false,
-        "trigger_propagate": false,
-        "skill_type": "Other",
-        "skill_range": "Any",
-        "skill_shape": "Single",
-        "effects": [
+        "trigger_propagate"     : false,
+        "skill_type"            : "Other",
+        "skill_range"           : "Any",
+        "skill_shape"           : "Single",
+        "effects"               : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "berserker",
-              "value": 1.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "berserker",
+              "value"                : 1.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       }
     ],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [
-      330,
-      600
-    ],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [330, 600],
     "upgrade_effects": [
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 20.0
+          "value"   : 20.0
         }
       }
     ]
   },
   "rune_storm_average": {
-    "name": "Flux Stabilizer",
-    "icon": "items/runes/rune_flux_stabilizer.webp",
-    "description": "Tames the wildest storms, binding chaos into order.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 150,
-    "rarity": "Unique",
-    "affixes": [
+    "name"           : "Flux Stabilizer",
+    "icon"           : "items/runes/rune_flux_stabilizer.webp",
+    "description"    : "Tames the wildest storms, binding chaos into order.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 150,
+    "rarity"         : "Unique",
+    "affixes"        : [
       {
-        "stat": {
+        "stat"          : {
           "StatConverter": {
-            "source": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": "Max"
-              }
+            "source"    : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+            "stat"      : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Storm", "min_max": "Min", "is_hit": null}
             },
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Storm",
-                "min_max": "Min",
-                "is_hit": null
-              }
-            },
-            "is_extra": false,
+            "is_extra"  : false,
             "skill_type": null
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 50.0,
         "ignore_quality": true
       },
       {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Storm",
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Storm", "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
-        ],
+        "modifier"      : "Increased",
+        "scope"         : "Global",
+        "value"         : [100.0, 200.0],
         "ignore_quality": true
       }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": true
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": true},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "rune_poison_fire": {
-    "name": "Caustic Convergence",
-    "icon": "items/runes/rune_poison_fire.webp",
-    "description": "The alchemists learned that decay has a temperature.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 200,
-    "rarity": "Unique",
-    "affixes": [],
-    "triggers": [
+    "name"           : "Caustic Convergence",
+    "icon"           : "items/runes/rune_poison_fire.webp",
+    "description"    : "The alchemists learned that decay has a temperature.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 200,
+    "rarity"         : "Unique",
+    "affixes"        : [],
+    "triggers"       : [
       {
-        "OnApplyStatus": {
-          "skill_type": null,
-          "status_id": "poison",
-          "damage_type": null,
-          "debuff": null,
+        "OnApplyStatus"         : {
+          "skill_type"  : null,
+          "status_id"   : "poison",
+          "damage_type" : null,
+          "debuff"      : null,
           "is_triggered": null,
-          "is_evaded": false,
-          "conditions": []
+          "is_evaded"   : false,
+          "conditions"  : []
         },
-        "description": null,
-        "trigger_id": "rune_poison_fire",
-        "target": "SameTarget",
-        "modifiers": [
+        "description"           : null,
+        "trigger_id"            : "rune_poison_fire",
+        "target"                : "SameTarget",
+        "modifiers"             : [
           {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"    : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
             "modifier": "Flat",
-            "factor": 0.2,
-            "source": {
-              "StatusValue": {
-                "status_id": "poison",
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": null
-              }
+            "factor"  : 0.2,
+            "source"  : {
+              "StatusValue": {"status_id": "poison", "damage_type": null, "debuff": null, "skill_type": null}
             }
           },
           {
-            "stat": {
+            "stat"    : {
               "StatusDuration": {
-                "status_id": null,
+                "status_id"  : null,
                 "damage_type": null,
-                "debuff": null,
-                "skill_type": null,
-                "skill_id": null
+                "debuff"     : null,
+                "skill_type" : null,
+                "skill_id"   : null
               }
             },
             "modifier": "Flat",
-            "factor": 1.0,
-            "source": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": null
-              }
+            "factor"  : 1.0,
+            "source"  : {
+              "StatusDuration": {"status_id": "poison", "damage_type": null, "debuff": null, "skill_type": null}
             }
           }
         ],
         "inherit_source_effects": false,
-        "trigger_propagate": false,
-        "skill_type": "Other",
-        "skill_range": "Any",
-        "skill_shape": "Single",
-        "effects": [
+        "trigger_propagate"     : false,
+        "skill_type"            : "Other",
+        "skill_range"           : "Any",
+        "skill_shape"           : "Single",
+        "effects"               : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "burn",
-              "value": 0.0,
-              "value_factor": 1.0,
-              "duration": 0.0,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "burn",
+              "value"                : 0.0,
+              "value_factor"         : 1.0,
+              "duration"             : 0.0,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [
+            "ignore_stat_effects"    : [
               {
                 "StatusDuration": {
-                  "status_id": null,
+                  "status_id"  : null,
                   "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
+                  "debuff"     : null,
+                  "skill_type" : null,
+                  "skill_id"   : null
                 }
               },
               {
                 "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
+                  "skill_type" : null,
+                  "skill_id"   : null,
                   "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
+                  "min_max"    : null,
+                  "is_hit"     : null
                 }
               },
               {
                 "StatusPower": {
-                  "status_id": null,
+                  "status_id"  : null,
                   "damage_type": "Poison",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
+                  "debuff"     : null,
+                  "skill_type" : null,
+                  "skill_id"   : null,
+                  "min_max"    : null
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       }
     ],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [
-      330,
-      600
-    ],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [330, 600],
     "upgrade_effects": [
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 20.0
+          "value"   : 20.0
         }
       }
     ]
   },
   "rune_mana_damage": {
-    "name": "Mnemonic Singularity",
-    "icon": "items/runes/rune_mana_damage.webp",
-    "description": "A mind dense enough bends reality.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 260,
-    "rarity": "Unique",
-    "affixes": [
+    "name"           : "Mnemonic Singularity",
+    "icon"           : "items/runes/rune_mana_damage.webp",
+    "description"    : "A mind dense enough bends reality.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 260,
+    "rarity"         : "Unique",
+    "affixes"        : [
       {
-        "stat": {
+        "stat"          : {
           "StatConverter": {
-            "source": "MaxMana",
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "source"    : "MaxMana",
+            "stat"      : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
-            "is_extra": true,
+            "is_extra"  : true,
             "skill_type": null
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 50.0,
         "ignore_quality": true
       },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          -40.0,
-          -20.0
-        ],
-        "ignore_quality": true
-      }
+      { "stat": "ManaRegen", "modifier": "Flat", "scope": "Global", "value": [-40.0, -20.0], "ignore_quality": true }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [
-      330,
-      600
-    ],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [330, 600],
     "upgrade_effects": [
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 20.0
+          "value"   : 20.0
         }
       }
     ]
   },
   "rune_storm_poison": {
-    "name": "Voltrach Contraption",
-    "icon": "items/runes/rune_storm_poison.webp",
-    "description": "Few survived Voltrach's experiments. Fewer understood them.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 330,
-    "rarity": "Unique",
-    "affixes": [],
-    "triggers": [
+    "name"           : "Voltrach Contraption",
+    "icon"           : "items/runes/rune_storm_poison.webp",
+    "description"    : "Few survived Voltrach's experiments. Fewer understood them.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 330,
+    "rarity"         : "Unique",
+    "affixes"        : [],
+    "triggers"       : [
       {
         "OnHit": {
-          "skill_type": null,
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": true,
+          "skill_type"  : null,
+          "range"       : null,
+          "is_crit"     : null,
+          "is_blocked"  : null,
+          "is_hurt"     : true,
           "is_triggered": null,
-          "damage_type": null,
-          "skill_ids": null,
-          "conditions": []
+          "damage_type" : null,
+          "skill_ids"   : null,
+          "conditions"  : []
         },
         "description": null,
         "trigger_id": "rune_storm_poison",
         "target": "SameTarget",
         "modifiers": [
           {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"    : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
             "modifier": "Flat",
-            "factor": 1.0,
-            "source": {
-              "HitDamage": "Storm"
-            }
+            "factor"  : 1.0,
+            "source"  : {"HitDamage": "Storm"}
           }
         ],
         "inherit_source_effects": false,
@@ -636,235 +471,240 @@
         "skill_shape": "Single",
         "effects": [
           {
-            "success_chance": {
-              "value": 50.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "poison",
-              "value": 0.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance"         : {"value": 50.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "poison",
+              "value"                : 0.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [
+            "ignore_stat_effects"    : [
               {
                 "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
+                  "skill_type" : null,
+                  "skill_id"   : null,
                   "damage_type": "Storm",
-                  "min_max": null,
-                  "is_hit": null
+                  "min_max"    : null,
+                  "is_hit"     : null
                 }
               }
             ],
-            "conditional_modifiers": [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       }
     ],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": true
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": true},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "rune_phys_fire": {
-    "name": "Heart of the Pyre",
-    "icon": "items/runes/rune_phys_fire.webp",
-    "description": "The heart is weighed not for truth, but for fuel.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 410,
-    "rarity": "Unique",
-    "affixes": [
+    "name"           : "Heart of the Pyre",
+    "icon"           : "items/runes/rune_phys_fire.webp",
+    "description"    : "The heart is weighed not for truth, but for fuel.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 410,
+    "rarity"         : "Unique",
+    "affixes"        : [
       {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 20.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 20.0,
         "ignore_quality": true
       },
       {
-        "stat": {
+        "stat"          : {
           "StatConverter": {
-            "source": {
-              "Damage": {
-                "damage_type": "Physical",
-                "min_max": null
-              }
+            "source"    : { "Damage": {"damage_type": "Physical", "min_max": null} },
+            "stat"      : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
             },
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Fire",
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "is_extra": true,
+            "is_extra"  : true,
             "skill_type": null
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 50.0,
         "ignore_quality": true
       },
       {
-        "stat": {
+        "stat"          : {
           "StatConverter": {
-            "source": "MaxLife",
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Fire",
-                "min_max": null,
-                "is_hit": null
-              }
+            "source"    : "MaxLife",
+            "stat"      : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
             },
-            "is_extra": true,
+            "is_extra"  : true,
             "skill_type": null
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 25.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 25.0,
         "ignore_quality": true
       },
-      {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          -40.0,
-          -20.0
-        ],
-        "ignore_quality": true
-      }
+      { "stat": "LifeRegen", "modifier": "Flat", "scope": "Global", "value": [-40.0, -20.0], "ignore_quality": true }
     ],
-    "triggers": [],
-    "weapon_specs": null,
-    "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
-    "map_specs": null,
-    "ignore_quality": true,
-    "upgrade_levels": [
-      600
-    ],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [600],
     "upgrade_effects": [
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "More",
-          "value": 20.0
+          "value"   : 20.0
         }
       }
     ]
   },
   "rune_bleed": {
-    "name": "Bloodglass",
-    "icon": "items/runes/rune_bleed.webp",
-    "description": "They distilled suffering until it became crystal.",
-    "slot": null,
-    "extra_slots": [],
-    "categories": [
-      "Rune"
-    ],
-    "min_area_level": 500,
-    "rarity": "Unique",
-    "affixes": [
+    "name"           : "Bloodglass",
+    "icon"           : "items/runes/rune_bleed.webp",
+    "description"    : "They distilled suffering until it became crystal.",
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Rune"],
+    "min_area_level" : 500,
+    "rarity"         : "Unique",
+    "affixes"        : [
       {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+        "stat"          : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 20.0,
+        "modifier"      : "More",
+        "scope"         : "Global",
+        "value"         : 20.0,
         "ignore_quality": true
       },
       {
-        "stat": {
+        "stat"          : {
           "StatusStacks": {
-            "status_id": "bleed",
+            "status_id"  : "bleed",
             "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+            "debuff"     : null,
+            "skill_type" : null,
+            "skill_id"   : null
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 1.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : {"root_node": false},
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [600],
+    "upgrade_effects": [
+      {
+        "scope"      : "Global",
+        "stat_effect": {
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+          },
+          "modifier": "More",
+          "value"   : 20.0
+        }
+      }
+    ]
+  },
+  "rune_edict_gold_attack": {
+    "name": "Rune of the Ascetic",
+    "icon": "items/runes/rune_edict_gold_attack.webp",
+    "description": "Gold buys comfort. Comfort breeds weakness. The Ascetic sought neither. In the silence of the Trial, with nothing to gain and nothing to lose, every strike became sharper, every movement more deliberate. What remained was mastery.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": ["Rune"],
+    "min_area_level": 0,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat"          : { "SkillLevel": {"skill_type": "Attack"} },
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 1,
         "ignore_quality": true
       }
     ],
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
-    "rune_specs": {
-      "root_node": false
-    },
+    "rune_specs": {"root_node": false},
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [
-      600
-    ],
+    "upgrade_levels": [50, 100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
-        "scope": "Global",
+        "scope"      : "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
-          },
-          "modifier": "More",
-          "value": 20.0
+          "stat"    : { "SkillLevel": {"skill_type": "Attack"} },
+          "modifier": "Flat",
+          "value"   : 1.0
+        }
+      }
+    ]
+  },
+  "rune_edict_gold_spell": {
+    "name": "Rune of the Ascetic",
+    "icon": "items/runes/rune_edict_gold_spell.webp",
+    "description": "Gold buys comfort. Comfort breeds weakness. The Ascetic sought neither. In the silence of the Trial, with nothing to gain and nothing to lose, every incantation became clearer, every gesture more deliberate. What remained was mastery.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": ["Rune"],
+    "min_area_level": 0,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat"          : { "SkillLevel": {"skill_type": "Spell"} },
+        "modifier"      : "Flat",
+        "scope"         : "Global",
+        "value"         : 1,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": {"root_node": false},
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [50, 100, 150, 200, 260, 330, 410, 500, 600],
+    "upgrade_effects": [
+      {
+        "scope"      : "Global",
+        "stat_effect": {
+          "stat"    : { "SkillLevel": {"skill_type": "Spell"} },
+          "modifier": "Flat",
+          "value"   : 1.0
         }
       }
     ]
