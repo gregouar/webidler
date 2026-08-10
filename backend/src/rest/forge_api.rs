@@ -17,7 +17,10 @@ use crate::{
     db::{self},
     game::{
         data::inventory_data::inventory_data_to_player_inventory,
-        systems::{inventory_controller, items_controller, loot_generator},
+        systems::{
+            inventory_controller, items_controller,
+            loot_generator::{self, GenerateLootTemplate},
+        },
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -228,20 +231,22 @@ pub async fn post_gamble(
         return Err(AppError::UserError("not enough gems".into()));
     }
 
-    // TODO: Only max base item & max amount of affixes
     match loot_generator::generate_loot(
         &master_store.gamble_table.loot_table,
         &master_store.items_store,
         &master_store.item_affixes_table,
         &master_store.item_adjectives_table,
         &master_store.item_nouns_table,
+        &GenerateLootTemplate {
+            allow_unique: true,
+            max_base: payload.item_category.is_some(),
+            max_affixes: true,
+            filter_category: payload.item_category,
+            prevent_categories: Default::default(),
+        },
         character.max_area_level as u16,
         0,
         false,
-        true,
-        payload.item_category.is_some(),
-        true,
-        payload.item_category,
         master_store.gamble_table.item_rarity,
         0.0,
     ) {

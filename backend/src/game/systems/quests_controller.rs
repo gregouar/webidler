@@ -1,16 +1,16 @@
 use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
-    data::{
-        item::{ItemCategory, ItemRarity},
-        quest::QuestRewards,
-    },
+    data::{item::ItemRarity, quest::QuestRewards},
 };
 
 use crate::{
     app_state::MasterStore,
     game::{
         game_data::GameInstanceData,
-        systems::{inventory_controller, loot_generator},
+        systems::{
+            inventory_controller,
+            loot_generator::{self, DEFAULT_LOOT_TEMPLATE, MAP_LOOT_TEMPLATE},
+        },
     },
     rest::AppError,
 };
@@ -95,13 +95,10 @@ fn generate_end_quest_rewards(
                 &master_store.item_affixes_table,
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
+                &MAP_LOOT_TEMPLATE,
                 item_level,
                 0,
                 false,
-                true,
-                false,
-                false,
-                Some(ItemCategory::Map),
                 *game_data.area_specs.loot_rarity,
                 0.0,
             )
@@ -113,13 +110,10 @@ fn generate_end_quest_rewards(
                 &master_store.item_affixes_table,
                 &master_store.item_adjectives_table,
                 &master_store.item_nouns_table,
+                &DEFAULT_LOOT_TEMPLATE,
                 item_level,
                 0,
                 false,
-                true,
-                false,
-                false,
-                None,
                 *game_data.area_specs.loot_rarity,
                 0.0,
             )
@@ -132,12 +126,10 @@ fn generate_end_quest_rewards(
                     &master_store.item_affixes_table,
                     &master_store.item_adjectives_table,
                     &master_store.item_nouns_table,
+                    &DEFAULT_LOOT_TEMPLATE,
                     item_level,
                     0,
                     true,
-                    false,
-                    false,
-                    None,
                     ItemRarity::Unique,
                     0.0,
                 )
@@ -148,13 +140,10 @@ fn generate_end_quest_rewards(
                     &master_store.item_affixes_table,
                     &master_store.item_adjectives_table,
                     &master_store.item_nouns_table,
+                    &DEFAULT_LOOT_TEMPLATE,
                     item_level,
                     0,
                     true,
-                    true,
-                    false,
-                    false,
-                    None,
                     *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
                     0.0,
                 )

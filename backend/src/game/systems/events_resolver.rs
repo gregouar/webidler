@@ -20,7 +20,11 @@ use crate::game::{
         master_store::MasterStore,
     },
     game_data::GameInstanceData,
-    systems::{stats_updater::check_condition, triggers_controller},
+    systems::{
+        loot_generator::{DEFAULT_LOOT_TEMPLATE, REPEATED_LOOT_TEMPLATE},
+        stats_updater::check_condition,
+        triggers_controller,
+    },
 };
 
 use super::{
@@ -494,13 +498,14 @@ fn handle_area_completed_event(
             &master_store.item_affixes_table,
             &master_store.item_adjectives_table,
             &master_store.item_nouns_table,
+            if new_max {
+                &DEFAULT_LOOT_TEMPLATE
+            } else {
+                &REPEATED_LOOT_TEMPLATE
+            },
             power_level,
             *game_data.area_specs.power_level + *game_data.area_specs.item_level_modifier,
             is_boss_level,
-            new_max, // Only drop unique when new area completed
-            false,
-            false,
-            None,
             *game_data.area_specs.loot_rarity
                 * if area_state.is_boss {
                     ITEM_REWARDS_BOSS_FACTOR

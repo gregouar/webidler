@@ -15,8 +15,8 @@ Content:
 
 - New Area: Eternal Sands.
 - New Skill: Blessing of Greed.
-- 19 new Unique Items + 2 New Unique Runes + 3 new Unique Edicts.
 - Tier 9 and 10 Base Items and new bases for Runes & Edicts.
+- 19 new Unique Items + 2 new Unique Runes + 3 new Unique Edicts.
 
 Balance Changes:
 
@@ -27,6 +27,7 @@ Balance Changes:
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
 - Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
 - Curse of Vampirism now applies to Self instead of Enemies.
+- Runes can now only drop once per Area Level during a Grind.
 
 ## Major Game Update: «Awakening of the Spider Witch»
 

@@ -23,6 +23,38 @@ use crate::game::{
 
 use super::items_controller;
 
+pub struct GenerateLootTemplate {
+    pub allow_unique: bool,
+    pub max_base: bool,
+    pub max_affixes: bool,
+    pub filter_category: Option<ItemCategory>,
+    pub prevent_categories: &'static [ItemCategory],
+}
+
+pub const DEFAULT_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
+    allow_unique: true,
+    max_base: false,
+    max_affixes: false,
+    filter_category: None,
+    prevent_categories: &[],
+};
+
+pub const REPEATED_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
+    allow_unique: false,
+    max_base: false,
+    max_affixes: false,
+    filter_category: None,
+    prevent_categories: &[ItemCategory::Rune],
+};
+
+pub const MAP_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
+    allow_unique: true,
+    max_base: false,
+    max_affixes: false,
+    filter_category: Some(ItemCategory::Map),
+    prevent_categories: &[],
+};
+
 #[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
     loot_table: &LootTable,
@@ -30,18 +62,15 @@ pub fn generate_loot(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    loot_template: &GenerateLootTemplate,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
     is_boss_level: bool,
-    allow_unique: bool,
-    max_base: bool,
-    max_affixes: bool,
-    filter_category: Option<ItemCategory>,
     loot_rarity: f64,
     gold_find: f64,
 ) -> Option<ItemSpecs> {
     let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
-    if !allow_unique {
+    if !loot_template.allow_unique {
         rarity = rarity.min(ItemRarity::Rare);
     }
     roll_item(
@@ -50,12 +79,10 @@ pub fn generate_loot(
         affixes_table,
         adjectives_table,
         nouns_table,
+        loot_template,
         level,
         power_level_modifier,
         is_boss_level,
-        max_base && rarity != ItemRarity::Unique,
-        max_affixes,
-        filter_category,
         rarity,
         gold_find,
     )
@@ -81,12 +108,10 @@ pub fn roll_item(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    loot_template: &GenerateLootTemplate,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
     is_boss_level: bool,
-    max_base: bool,
-    max_affixes: bool,
-    filter_category: Option<ItemCategory>,
     rarity: ItemRarity,
     gold_find: f64,
 ) -> Option<ItemSpecs> {
@@ -96,8 +121,9 @@ pub fn roll_item(
         level,
         is_boss_level,
         rarity == ItemRarity::Unique,
-        max_base,
-        filter_category,
+        loot_template.max_base && rarity != ItemRarity::Unique,
+        loot_template.filter_category,
+        &loot_template.prevent_categories,
     )
     .map(|(base_item_id, base)| {
         let rarity = if base.rarity != ItemRarity::Unique {
@@ -114,7 +140,7 @@ pub fn roll_item(
             affixes_table,
             adjectives_table,
             nouns_table,
-            max_affixes,
+            loot_template.max_affixes,
             gold_find,
             // &items_store.signature_key,
         )
@@ -209,27 +235,24 @@ fn roll_base_item(
     is_unique: bool,
     max_base: bool,
     filter_category: Option<ItemCategory>,
+    prevent_categories: &[ItemCategory],
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()
         .filter(|l| {
-            let item_specs = items_store.content.get(&l.item_id);
-            area_level
-                >= l.min_area_level.unwrap_or(
-                    item_specs
-                        .map(|i| i.min_area_level)
-                        .unwrap_or(AreaLevel::MIN),
-                )
+            let Some(item_specs) = items_store.content.get(&l.item_id) else {
+                return false;
+            };
+            area_level >= l.min_area_level.unwrap_or(item_specs.min_area_level)
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
                 && (!l.boss_only || is_boss_level)
                 && (filter_category
-                    .map(|category| {
-                        item_specs
-                            .map(|base| base.categories.contains(&category))
-                            .unwrap_or_default()
-                    })
+                    .map(|category| item_specs.categories.contains(&category))
                     .unwrap_or(true))
+                && prevent_categories
+                    .iter()
+                    .all(|category| !item_specs.categories.contains(category))
         })
         .collect();
 

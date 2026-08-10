@@ -1,6 +1,6 @@
 {
   "area_specific": false,
-  "entries": [
+  "entries"      : [
     {"item_id": "weapon_1h_8",       "weight": 128000                       },
     {"item_id": "helmet_8",          "weight": 128000                       },
     {"item_id": "scarab_circlet",    "weight":   4999                       },

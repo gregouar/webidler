@@ -424,9 +424,9 @@ pub fn NewAreaLevel() -> impl IntoView {
 
     let tooltip = move || {
         if new_area_level.get() {
-            "New Area Level, Unique Items can drop."
+            "New Area Level, Unique Items & Runes can drop."
         } else {
-            "Cleared Area Level, Unique Items cannot drop."
+            "Cleared Area Level, Unique Items & Runes cannot drop."
         }
     };
     view! {
