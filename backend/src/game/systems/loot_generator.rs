@@ -118,12 +118,10 @@ pub fn roll_item(
     roll_base_item(
         loot_table,
         items_store,
+        loot_template,
         level,
         is_boss_level,
         rarity == ItemRarity::Unique,
-        loot_template.max_base && rarity != ItemRarity::Unique,
-        loot_template.filter_category,
-        &loot_template.prevent_categories,
     )
     .map(|(base_item_id, base)| {
         let rarity = if base.rarity != ItemRarity::Unique {
@@ -230,12 +228,10 @@ fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
 fn roll_base_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,
+    loot_template: &GenerateLootTemplate,
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
-    max_base: bool,
-    filter_category: Option<ItemCategory>,
-    prevent_categories: &[ItemCategory],
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
@@ -247,10 +243,12 @@ fn roll_base_item(
             area_level >= l.min_area_level.unwrap_or(item_specs.min_area_level)
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
                 && (!l.boss_only || is_boss_level)
-                && (filter_category
+                && (loot_template
+                    .filter_category
                     .map(|category| item_specs.categories.contains(&category))
                     .unwrap_or(true))
-                && prevent_categories
+                && loot_template
+                    .prevent_categories
                     .iter()
                     .all(|category| !item_specs.categories.contains(category))
         })
@@ -286,7 +284,7 @@ fn roll_base_item(
             .collect()
     };
 
-    let items_available = if max_base {
+    let items_available = if loot_template.max_base && !is_unique {
         let max_level = items_available
             .iter()
             .map(|l| {
