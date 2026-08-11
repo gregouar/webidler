@@ -848,10 +848,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             skill_filter,
         } => {
             format!(
-                "{}{} can Stack up to {} additional times",
+                "{}{} can Stack up to {} additional time{}",
                 status_filter_str(status_filter),
                 skill_filter_str(skill_filter, " inflicted by ", true),
                 format_flat_number(value, false),
+                if value.unwrap_or(2.0) > 1.0 { "s" } else { "" }
             )
         }
         StatType::StatusResistance {
@@ -1062,9 +1063,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         }
         StatType::SkillRepeat { skill_filter } => {
             format!(
-                "{}Repeat {} additional times",
+                "{}Repeat {} additional time{}",
                 skill_filter_str(skill_filter, "", false),
                 format_flat_number(value, false),
+                if value.unwrap_or(2.0) > 1.0 { "s" } else { "" }
             )
         }
         StatType::SkillEffectModifier {

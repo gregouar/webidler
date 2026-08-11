@@ -228,11 +228,11 @@ fn FavoriteSkillsPicker(
     view! {
         <div class="mb-4 space-y-2">
             <div class="flex items-center justify-center gap-3 px-1">
-                <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
-                <h3 class="font-display text-sm xl:text-base tracking-[0.14em] uppercase text-amber-200">
+                <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-lime-300/70 to-transparent"></div>
+                <h3 class="font-display text-sm xl:text-base tracking-[0.14em] uppercase text-lime-200">
                     "Favorites"
                 </h3>
-                <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
+                <div class="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-lime-300/70 to-transparent"></div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 xl:gap-3">
                 <For
