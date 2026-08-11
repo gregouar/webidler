@@ -513,6 +513,7 @@ fn apply_skill_effect_on_target(
             crit_damage,
             unblockable,
             armor_penetration,
+            damage_factors: _,
         } => {
             let is_crit = crit_chance.roll_with_seed(seed);
 

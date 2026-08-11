@@ -257,6 +257,8 @@ pub enum SkillEffectType {
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]
+        damage_factors: HashMap<DamageType, f64>, // For tooltip purposes
+        #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]
         crit_damage: ModifiableValue<f64>,

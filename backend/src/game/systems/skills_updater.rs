@@ -223,6 +223,7 @@ fn weapon_skill_effect(
                         )
                     })
                     .collect(),
+                damage_factors: Default::default(),
                 crit_chance: Chance {
                     value: weapon_specs.crit_chance.value.as_new_base(),
                     lucky_chance: weapon_specs.crit_chance.lucky_chance.as_new_base(),
@@ -685,6 +686,18 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
     extra_effects: impl Iterator<Item = &'b StatEffect> + Clone,
 ) -> Vec<StatEffect> {
+    if let SkillEffectType::FlatDamage {
+        damage,
+        damage_factors,
+        ..
+    } = &mut skill_effect.effect_type
+    {
+        *damage_factors = damage
+            .iter()
+            .map(|(damage_type, value)| (*damage_type, value.max.factor()))
+            .collect();
+    }
+
     if let SkillEffectType::ApplyStatus {
         status_id,
         value,
@@ -1081,6 +1094,7 @@ pub fn apply_stat_effect_on_skill_effect(
         }
         SkillEffectType::FlatDamage {
             damage,
+            damage_factors,
             crit_chance,
             crit_damage,
             unblockable,
@@ -1153,6 +1167,12 @@ pub fn apply_stat_effect_on_skill_effect(
             {
                 *unblockable = *stat_unblockable;
             }
+
+            damage_factors.extend(
+                damage
+                    .iter()
+                    .map(|(damage_type, value)| (*damage_type, value.max.factor())),
+            );
         }
         SkillEffectType::ApplyStatus {
             status_id: skill_status_id,

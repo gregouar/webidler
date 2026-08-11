@@ -498,6 +498,7 @@ pub fn format_skill_effect(
         }
         SkillEffectType::FlatDamage {
             damage,
+            damage_factors,
             crit_chance,
             crit_damage,
             unblockable,
@@ -520,7 +521,7 @@ pub fn format_skill_effect(
                             modifiers,
                         ),
                         " as",
-                        None,
+                        damage_factors.get(&damage_type).copied(),
                         Some(damage_color),
                         trigger_status_name,
                         trigger_status_value,
