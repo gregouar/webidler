@@ -24,6 +24,7 @@ Balance Changes:
 - Removed flat Critical Hit Chance affixes from weapons.
 - Almost all "More Critical Hit Damage" have been transformed to "Increased Critical Hit Damage".
 - Spread Destruction now only targets a single other enemy and do less damage and duration.
+- Added new Passives Nodes and buffed several utility nodes to also have a Damage modifier.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
 - Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
 - Curse of Vampirism now applies to Self instead of Enemies.
