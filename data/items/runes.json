@@ -451,21 +451,21 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
                   "damage_type": "Poison",
                   "min_max": null,
                   "is_hit": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
@@ -886,7 +886,7 @@
   },
   "rune_edict_gold_attack": {
     "name": "Proof of Discipline",
-    "icon": "items/runes/rune_edict_gold_attack.webp",
+    "icon": "items/runes/rune_edict_gold_attack_2.webp",
     "description": "Gold buys comfort. Comfort breeds weakness. In the silence of the Trial, with nothing to gain and nothing to lose, every strike became sharper, every movement more deliberate. What remained was Discipline.",
     "slot": null,
     "extra_slots": [],
@@ -946,7 +946,7 @@
   },
   "rune_edict_gold_spell": {
     "name": "Proof of Resolve",
-    "icon": "items/runes/rune_edict_gold_spell.webp",
+    "icon": "items/runes/rune_edict_gold_spell_2.webp",
     "description": "Gold buys comfort. Comfort breeds weakness. In the silence of the Trial, with nothing to gain and nothing to lose, every incantation became clearer, every gesture more deliberate. What remained was Resolve.",
     "slot": null,
     "extra_slots": [],
