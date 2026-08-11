@@ -20,14 +20,14 @@ Content:
 
 Balance Changes:
 
-- Buffed high tier item affixes granting damage.
-- Removed flat crit chance affixes from weapons.
-- Almost all "More Critical Damage" have been transformed to "Increased Critical Damage" (this is a nerf).
-- Nerf Spread Destruction, only target a single other enemy and do less damage and duration.
+- Buffed high tier Item affixes granting damage.
+- Removed flat Critical Hit Chance affixes from weapons.
+- Almost all "More Critical Hit Damage" have been transformed to "Increased Critical Hit Damage".
+- Spread Destruction now only targets a single other enemy and do less damage and duration.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
 - Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
 - Curse of Vampirism now applies to Self instead of Enemies.
-- Runes can now only drop once per Area Level during a Grind.
+- Runes can now only drop once per Area Level during a Grind (similar to Unique Items).
 
 ## Major Game Update: «Awakening of the Spider Witch»
 
