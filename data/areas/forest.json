@@ -30,9 +30,9 @@
       "max_level": null,
       "weight"   : 1000,
       "spawns"   : [
-        { "monster": "rat.json",   "quantity": [0, 2] },
-        { "monster": "snake.json", "quantity": 2      },
-        { "monster": "rat.json",   "quantity": 2      }
+        { "monster": "blood_mosquito.json", "quantity": [0, 2] },
+        { "monster": "snake.json",          "quantity": 2      },
+        { "monster": "blood_mosquito.json", "quantity": 2      }
       ]
     },
     {

@@ -1,5 +1,5 @@
 {
-  "name"    : "Venomous Snake",
+  "name"    : "Swamp Snake",
   "portrait": "monsters/forest/snake.webp",
   "max_life": 15,
   "size"    : "Large",
