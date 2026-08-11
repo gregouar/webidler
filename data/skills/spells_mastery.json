@@ -61,7 +61,7 @@
         "title"       : "Critical Hit Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
-        "max_level"   : 10,
+        "max_level"   : 20,
         "effects"     : [
           {
             "value"        : 10,
@@ -72,7 +72,7 @@
       },
       "mana_cost"  : {
         "title"       : "Cantrip",
-        "base_cost"   : 10,
+        "base_cost"   : 5,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -608,9 +608,9 @@
       },
       "damage_self"     : {
         "title"       : "Controlled Burn",
-        "base_cost"   : 2,
-        "upgrade_cost": 2,
-        "max_level"   : 10,
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 30,
         "effects"     : [
           {
             "value"        : -10,
@@ -635,19 +635,19 @@
         "title"       : "Fanaticism",
         "base_cost"   : 2,
         "upgrade_cost": 2,
-        "max_level"   : 10,
+        "max_level"   : 20,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 15,
+            "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
               "modifier": "More"
             }
           },
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 15,
+            "upgrade_value": 15,
             "StatEffect"   : {
               "stat"         : { "StatusPower": {"status_id": "righteous_fire_self"} },
               "modifier"     : "More",
@@ -655,8 +655,8 @@
             }
           },
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 15,
+            "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
               "modifier": "More"
@@ -664,8 +664,8 @@
             "hidden"       : true
           },
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 15,
+            "upgrade_value": 15,
             "StatEffect"   : {
               "stat"         : { "StatusPower": {"status_id": "unrighteous_fire_self"} },
               "modifier"     : "More",
@@ -820,12 +820,12 @@
       "multi"        : {
         "title"       : "Lingering Cloud",
         "base_cost"   : 10,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+        "upgrade_cost": 10,
+        "max_level"   : 2,
         "effects"     : [
           {
             "value"        : 2,
-            "upgrade_value": 0,
+            "upgrade_value": 2,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "poison_cloud"} },
               "modifier": "Flat"

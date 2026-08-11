@@ -209,7 +209,7 @@
         "title"       : "Way of the Open Hand",
         "base_cost"   : 5,
         "upgrade_cost": 1,
-        "max_level"   : 5,
+        "max_level"   : 6,
         "effects"     : [
           {
             "value"        : 1,
@@ -286,7 +286,8 @@
                   "conditions": ["Slowed"]
                 }
               },
-              "modifier": "More"
+              "modifier": "More",
+              "scope"   : "Global"
             }
           }
         ]
@@ -418,7 +419,7 @@
           }
         ]
       },
-      "duration": {
+      "status_chance": {
         "title"       : "Vitrification",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -435,7 +436,8 @@
                   "effect_type": { "ApplyStatus": {"status_id": "burn", "debuff": null} }
                 }
               },
-              "modifier": "Increased"
+              "modifier": "Increased",
+              "scope"   : "Global"
             }
           },
           {
@@ -449,7 +451,8 @@
                   "effect_type": { "ApplyStatus": {"status_id": "stun", "debuff": null} }
                 }
               },
-              "modifier": "Increased"
+              "modifier": "Increased",
+              "scope"   : "Global"
             }
           }
         ]
@@ -461,8 +464,8 @@
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
@@ -487,8 +490,8 @@
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
@@ -650,8 +653,8 @@
         "max_level"   : 20,
         "effects"     : [
           {
-            "value"        : 5,
-            "upgrade_value": 5,
+            "value"        : 10,
+            "upgrade_value": 10,
             "StatEffect"   : {
               "stat"    : { "StatusFaster": {"status_id": "bleed", "skill_type": null, "skill_id": null} },
               "modifier": "More",
@@ -800,7 +803,7 @@
       },
       "shockwave"  : {
         "title"       : "Shockwave",
-        "base_cost"   : 5,
+        "base_cost"   : 10,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -848,7 +851,7 @@
       },
       "block_speed": {
         "title"       : "Quick Reflexes",
-        "base_cost"   : 5,
+        "base_cost"   : 10,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [

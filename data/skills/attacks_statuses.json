@@ -161,7 +161,7 @@
                     "stat"    : { "Damage": {"skill_type": "Attack"} },
                     "modifier": "More"
                 },
-                "value"       : 10,
+                "value"       : 20,
                 "modifier"    : "Percent"
             },
             {

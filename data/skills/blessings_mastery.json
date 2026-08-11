@@ -28,7 +28,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "stat"    : { "StatusDuration": {"status_id": "blessing_haste"} },
                             "modifier": "Increased"
                         }
                     }
@@ -36,17 +36,22 @@
             },
             "power"   : {
                 "title"       : "Blessing Effects",
-                "base_cost"   : 2,
-                "upgrade_cost": 2,
+                "base_cost"   : 3,
+                "upgrade_cost": 3,
                 "max_level"   : 20,
                 "effects"     : [
                     {
-                        "value"        : 1,
-                        "upgrade_value": 1,
+                        "value"        : 2,
+                        "upgrade_value": 2,
                         "StatEffect"   : {
                             "stat"    : { "StatusPower": {"status_id": "blessing_haste"} },
                             "modifier": "Flat"
                         }
+                    },
+                    {
+                        "value"        : -0.5,
+                        "upgrade_value": -0.5,
+                        "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
                     }
                 ]
             },
@@ -59,18 +64,7 @@
                     {
                         "value"        : 10,
                         "upgrade_value": 10,
-                        "StatEffect"   : {
-                            "stat"    : {
-                                "StatConditionalModifier": {
-                                    "stat"      : "MovementSpeed",
-                                    "conditions": [
-                                        { "HasStatus": {"status_id": "blessing_haste"} }
-                                    ]
-                                }
-                            },
-                            "modifier": "Increased",
-                            "scope"   : "Global"
-                        }
+                        "StatEffect"   : {"stat": "MovementSpeed", "modifier": "Increased", "scope": "Global"}
                     }
                 ]
             }
@@ -105,7 +99,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "stat"    : { "StatusDuration": {"status_id": "blessing_crit"} },
                             "modifier": "Increased"
                         }
                     }
@@ -113,7 +107,7 @@
             },
             "crit_chance": {
                 "title"       : "Keen Eye",
-                "base_cost"   : 10,
+                "base_cost"   : 5,
                 "upgrade_cost": 5,
                 "max_level"   : 5,
                 "effects"     : [
@@ -190,7 +184,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "stat"    : { "StatusDuration": {"status_id": "blessing_protection"} },
                             "modifier": "Increased"
                         }
                     }
@@ -281,7 +275,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "stat"    : { "StatusDuration": {"status_id": "blessing_heal"} },
                             "modifier": "Increased"
                         }
                     }
@@ -359,7 +353,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Blessing"} },
+                            "stat"    : { "StatusDuration": {"status_id": "blessing_gold"} },
                             "modifier": "Increased"
                         }
                     }
@@ -491,6 +485,19 @@
                 "max_level"   : 2,
                 "effects"     : [
                     {
+                        "value"        : 0,
+                        "upgrade_value": -1e200,
+                        "StatEffect"   : {"stat": "ManaRegen", "modifier": "More", "scope": "Global"}
+                    },
+                    {
+                        "value"        : 0,
+                        "upgrade_value": 30,
+                        "StatEffect"   : {
+                            "stat"    : { "Restore": {"restore_type": "Mana"} },
+                            "modifier": "Increased"
+                        }
+                    },
+                    {
                         "value"        : 1,
                         "upgrade_value": 0,
                         "Trigger"      : {
@@ -510,11 +517,6 @@
                                 }
                             ]
                         }
-                    },
-                    {
-                        "value"        : 0,
-                        "upgrade_value": -1e200,
-                        "StatEffect"   : {"stat": "ManaRegen", "modifier": "More", "scope": "Global"}
                     }
                 ]
             }

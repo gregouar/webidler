@@ -28,7 +28,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "stat"    : { "StatusDuration": {"status_id": "curse_frailty"} },
                             "modifier": "Increased"
                         }
                     }
@@ -118,7 +118,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "stat"    : { "StatusDuration": {"status_id": "curse_conductivity"} },
                             "modifier": "Increased"
                         }
                     }
@@ -258,7 +258,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "stat"    : { "StatusDuration": {"status_id": "curse_putridity"} },
                             "modifier": "Increased"
                         }
                     }
@@ -313,8 +313,8 @@
                 "max_level"   : 10,
                 "effects"     : [
                     {
-                        "value"        : 20,
-                        "upgrade_value": 20,
+                        "value"        : 5,
+                        "upgrade_value": 5,
                         "StatEffect"   : {
                             "stat"    : {
                                 "SkillConditionalModifier": {
@@ -326,7 +326,7 @@
                                     ]
                                 }
                             },
-                            "modifier": "Increased",
+                            "modifier": "More",
                             "scope"   : "Global"
                         }
                     }
@@ -363,7 +363,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "stat"    : { "StatusDuration": {"status_id": "curse_flammability"} },
                             "modifier": "Increased"
                         }
                     }
@@ -481,7 +481,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "stat"    : { "StatusDuration": {"status_id": "curse_weakness"} },
                             "modifier": "Increased"
                         }
                     }
@@ -567,7 +567,7 @@
                         "value"        : 5,
                         "upgrade_value": 5,
                         "StatEffect"   : {
-                            "stat"    : { "StatusDuration": {"skill_type": "Curse"} },
+                            "stat"    : { "StatusDuration": {"status_id": "curse_vampirism"} },
                             "modifier": "Increased"
                         }
                     }
@@ -585,7 +585,7 @@
                         "Trigger"      : {
                             "trigger_id": "curse_vampirism_damage",
                             "skill_type": "Other",
-                            "OnHit"     : {"skill_type": "Attack"},
+                            "OnHit"     : {"skill_type": "Attack", "is_hurt": true},
                             "target"    : "Me",
                             "effects"   : [
                                 { "ApplyStatus": {"status_id": "curse_vampirism_damage", "value": 1} }
