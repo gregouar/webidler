@@ -1,5 +1,14 @@
 {
-  "curse_frailty"     : {
+  "curse_putridity_hit": {
+    "name"       : "Brittle Bones",
+    "description": "",
+    "skill_type" : "Other",
+    "cooldown"   : 0,
+    "icon"       : "",
+    "targets"    : [],
+    "hidden"     : true
+  },
+  "curse_frailty"      : {
     "name"           : "Curse of Frailty",
     "description"    : "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
     "icon"           : "skills/curse_frailty.svg",
@@ -24,7 +33,7 @@
       }
     ]
   },
-  "curse_conductivity": {
+  "curse_conductivity" : {
     "name": "Curse of Conductivity",
     "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "icon": "skills/curse_conductivity.svg",
@@ -49,7 +58,7 @@
       }
     ]
   },
-  "curse_putridity"   : {
+  "curse_putridity"    : {
     "name"           : "Curse of Putridity",
     "description"    : "Curse your foes with the rot, making their bodies crumble.",
     "icon"           : "skills/curse_putridity.svg",
@@ -74,7 +83,7 @@
       }
     ]
   },
-  "curse_flammability": {
+  "curse_flammability" : {
     "name": "Curse of Flammability",
     "description": "Unleash infernal flames upon your enemies, intensifying the fire damage they suffer the longer they burn.",
     "icon": "skills/curse_flammability.svg",
@@ -99,7 +108,7 @@
       }
     ]
   },
-  "curse_weakness"    : {
+  "curse_weakness"     : {
     "name"           : "Curse of Weakness",
     "description"    : "A debilitating curse that reduces enemies' damage output.",
     "icon"           : "skills/curse_weakness.svg",
@@ -124,7 +133,7 @@
       }
     ]
   },
-  "curse_vampirism"   : {
+  "curse_vampirism"    : {
     "name"           : "Curse of Vampirism",
     "description"    : "Afflict yourself with the curse of the Vampire, draining enemies blood with every attack.",
     "icon"           : "skills/curse_vampirism.svg",

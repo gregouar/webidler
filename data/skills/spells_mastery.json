@@ -846,7 +846,7 @@
           },
           {
             "value"        : 0,
-            "upgrade_value": 10,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "poison_cloud_vulnerability"} },
               "modifier": "Flat"
@@ -879,8 +879,8 @@
         "max_level"   : 20,
         "effects"     : [
           {
-            "value"        : 0.1,
-            "upgrade_value": 0.1,
+            "value"        : 0.2,
+            "upgrade_value": 0.2,
             "StatEffect"   : {
               "stat"    : { "StatusDuration": {"status_id": "poison"} },
               "modifier": "Flat"
@@ -895,8 +895,8 @@
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 2,
-            "upgrade_value": 2,
+            "value"        : 3,
+            "upgrade_value": 3,
             "StatEffect"   : {
               "stat"    : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
               "modifier": "Flat"
@@ -950,8 +950,8 @@
       "no_storm"         : {
         "title"       : "Toxic Fallout",
         "base_cost"   : 10,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
         "effects"     : [
           {
             "value"        : -1e+200,
@@ -1054,12 +1054,12 @@
       "damage_cursed": {
         "title"       : "Malevolent Effigy",
         "base_cost"   : 10,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+        "upgrade_cost": 3,
+        "max_level"   : 11,
         "effects"     : [
           {
-            "value"        : 200,
-            "upgrade_value": 0,
+            "value"        : 100,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
@@ -1070,6 +1070,22 @@
                 }
               },
               "modifier": "More"
+            }
+          },
+          {
+            "value"        : 100,
+            "upgrade_value": 20,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "Damage": {"skill_id": "curse_putridity_hit"} },
+                  "conditions": [
+                    { "StatusStacks": {"skill_type": "Curse"} }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
             }
           }
         ]
