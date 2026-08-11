@@ -10,11 +10,11 @@ Helmet: 4+2
 Rings: 5+1
 Shields: 4+1
 1h: 5+1
-2h: 4+2
+2h: 4+3
 Ranged: 4+1
-Wand: 4+1
+Wand: 4+2
 ----
-Total: 57 + 19 = 76
+Total: 57 + 21 = 78
 
 Runes: 7+2
 Maps: 3+3

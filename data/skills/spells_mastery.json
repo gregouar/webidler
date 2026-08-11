@@ -1078,10 +1078,11 @@
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : { "Damage": {"skill_id": "curse_putridity_hit"} },
+                  "stat"      : { "Damage": {"damage_type": "Physical"} },
                   "conditions": [
                     { "StatusStacks": {"skill_type": "Curse"} }
-                  ]
+                  ],
+                  "skill_id"  : "curse_putridity_hit"
                 }
               },
               "modifier": "More",

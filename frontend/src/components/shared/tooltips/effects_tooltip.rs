@@ -481,11 +481,11 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             min_max,
             is_hit,
         } => format!(
-            "{}{}{}{}Damage",
+            "{}{}{}Damage{}",
             min_max_str(*min_max),
             damage_type_str(*damage_type),
-            skill_filter_str(skill_filter, "", false),
             is_hit_str(is_hit),
+            skill_filter_str(skill_filter, " with ", true),
         ),
         StatType::Restore {
             restore_type,

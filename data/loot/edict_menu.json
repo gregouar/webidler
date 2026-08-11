@@ -1,7 +1,8 @@
 {
     "area_specific": true,
-    "entries": [
+    "entries"      : [
         {"item_id": "sandal",         "weight": 9999, "min_area_level": 60},
+        {"item_id": "oversized_axe",  "weight": 9999, "min_area_level": 60},
         {"item_id": "cloak_backstab", "weight": 9999, "min_area_level": 60}
     ]
 }

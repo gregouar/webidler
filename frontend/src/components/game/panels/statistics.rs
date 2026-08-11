@@ -282,14 +282,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         )
                                     }
                                 />
-                                <Stat
-                                    label="Gold Collected"
-                                    value=move || {
-                                        format_number(
-                                            game_context.player_resources.read().gold_total,
-                                        )
-                                    }
-                                />
                             </StatCategory>
 
                             <StatCategory title="Character">
@@ -937,7 +929,9 @@ fn TriggersStats() -> impl IntoView {
             <div class="columns-2 xl:columns-3 gap-1">
                 <For
                     each=move || triggers.get().into_iter()
-                    key=|(_, trigger_effect)| trigger_effect.trigger_id.clone()
+                    key=|(trigger, trigger_effect)| {
+                        (trigger.clone(), trigger_effect.trigger_id.clone())
+                    }
                     let((trigger, trigger_effect))
                 >
                     <div class="relative pb-2 list-none break-inside-avoid">

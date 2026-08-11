@@ -1,6 +1,6 @@
 {
   "area_specific": false,
-  "entries": [
+  "entries"      : [
     {"item_id": "weapon_1h_7",       "weight": 64000                       },
     {"item_id": "helmet_7",          "weight": 64000                       },
     {"item_id": "oni_mask",          "weight":  4999                       },
@@ -12,6 +12,7 @@
     {"item_id": "weapon_2h_7",       "weight": 64000                       },
     {"item_id": "weapon_ranged_7",   "weight": 64000                       },
     {"item_id": "weapon_spell_7",    "weight": 64000                       },
+    {"item_id": "raven_feather",     "weight":  4999                       },
     {"item_id": "shield_7",          "weight": 64000                       },
     {"item_id": "focus_7",           "weight": 64000                       },
     {"item_id": "cloak_7",           "weight": 64000                       },

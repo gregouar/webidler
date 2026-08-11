@@ -405,23 +405,6 @@ pub fn apply_effects_to_skill_specs<'a>(
                     };
                 }
             }
-
-            for trigger in skill_specs.triggers.iter_mut() {
-                if let Some(range) = range {
-                    trigger.trigger_effect.skill_range = *range;
-                }
-                if let Some(shape) = shape {
-                    trigger.trigger_effect.skill_shape = *shape;
-                }
-                if let Some(repeat) = repeat {
-                    trigger.trigger_effect.skill_repeat.target = repeat.target;
-                    trigger.trigger_effect.skill_repeat.value = ChanceRange {
-                        min: repeat.min_value,
-                        max: repeat.max_value,
-                        lucky_chance: Default::default(),
-                    };
-                }
-            }
         }
 
         if let StatType::SkillRepeat { skill_filter } = &effect.stat
@@ -436,13 +419,57 @@ pub fn apply_effects_to_skill_specs<'a>(
             .targets
             .iter_mut()
             .map(|target| &mut target.repeat)
-            .chain(
-                skill_specs
-                    .triggers
-                    .iter_mut()
-                    .map(|trigger| &mut trigger.trigger_effect.skill_repeat),
-            )
         {
+            repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
+            repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
+
+            repeat.value.min =
+                (repeat.value.min as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
+            repeat.value.max =
+                (repeat.value.max as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
+        }
+    }
+
+    for trigger in skill_specs.triggers.iter_mut() {
+        let trigger_effect = &mut trigger.trigger_effect;
+        let mut repeat_modifier: ModifiableValue<f64> = 1.0.into();
+
+        for effect in effects.clone() {
+            if let StatType::SkillTargetModifier {
+                skill_filter,
+                range,
+                shape,
+                repeat,
+            } = &effect.stat
+                && skill_filter
+                    .is_match_with_skill(trigger_effect.skill_type, &trigger_effect.trigger_id)
+            {
+                if let Some(range) = range {
+                    trigger_effect.skill_range = *range;
+                }
+                if let Some(shape) = shape {
+                    trigger_effect.skill_shape = *shape;
+                }
+                if let Some(repeat) = repeat {
+                    trigger_effect.skill_repeat.target = repeat.target;
+                    trigger_effect.skill_repeat.value = ChanceRange {
+                        min: repeat.min_value,
+                        max: repeat.max_value,
+                        lucky_chance: Default::default(),
+                    };
+                }
+            }
+
+            if let StatType::SkillRepeat { skill_filter } = &effect.stat
+                && skill_filter
+                    .is_match_with_skill(trigger_effect.skill_type, &trigger_effect.trigger_id)
+            {
+                repeat_modifier.apply_effect(effect);
+            }
+        }
+
+        if *repeat_modifier != 1.0 {
+            let repeat = &mut trigger_effect.skill_repeat;
             repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
             repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
 
@@ -458,12 +485,6 @@ pub fn apply_effects_to_skill_specs<'a>(
         .targets
         .iter_mut()
         .flat_map(|t| t.effects.iter_mut())
-        .chain(
-            skill_specs
-                .triggers
-                .iter_mut()
-                .flat_map(|trigger| trigger.trigger_effect.effects.iter_mut()),
-        )
     {
         stats_converted.extend(compute_skill_specs_effect_with_extra(
             statuses_store,
@@ -473,6 +494,19 @@ pub fn apply_effects_to_skill_specs<'a>(
             effects.clone(),
             stats_converted.iter(),
         ));
+    }
+
+    for trigger in skill_specs.triggers.iter_mut() {
+        for skill_effect in trigger.trigger_effect.effects.iter_mut() {
+            stats_converted.extend(compute_skill_specs_effect_with_extra(
+                statuses_store,
+                &trigger.trigger_effect.trigger_id,
+                trigger.trigger_effect.skill_type,
+                skill_effect,
+                effects.clone(),
+                stats_converted.iter(),
+            ));
+        }
     }
 }
 
@@ -1015,7 +1049,7 @@ pub fn apply_stat_effect_on_skill_effect(
             &mut skill_effect_cloned,
             &stat_effect,
         );
-        if skill_effect_cloned == *skill_effect {
+        if skill_filter.skill_id.is_none() && skill_effect_cloned == *skill_effect {
             return None;
         }
 

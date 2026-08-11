@@ -168,7 +168,7 @@
                         "value"        : 1,
                         "upgrade_value": 0,
                         "Trigger"      : {
-                            "trigger_id" : "curse_conductivity_contact",
+                            "trigger_id" : "curse_conductivity_crit",
                             "OnHit"      : {
                                 "damage_type": "Storm",
                                 "is_crit"    : true,
@@ -279,14 +279,15 @@
                                 "damage_type": "Physical",
                                 "is_hurt"    : true,
                                 "conditions" : [
-                                    { "HasStatus": {"status_id": "curse_putridity"} }
+                                    { "HasStatus": {"status_id": "curse_putridity"                         } },
+                                    { "HasStatus": {                                "damage_type": "Poison"} }
                                 ]
                             },
                             "skill_type": "Other",
                             "target"    : "SameTarget",
                             "effects"   : [
                                 {
-                                    "FlatDamage"         : {"damage": {}},
+                                    "FlatDamage"         : { "damage": {"Physical": 0} },
                                     "ignore_stat_effects": [
                                         {"CritChance": {}},
                                         {"CritDamage": {}},
