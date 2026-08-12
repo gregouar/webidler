@@ -7,7 +7,7 @@
   "skills"  : [
     {
       "name"      : "Venom Lash",
-      "icon"      : "skills/claw.svg",
+      "icon"      : "skills/claw_insect.svg",
       "cooldown"  : 4.0,
       "skill_type": "Attack",
       "targets"   : [

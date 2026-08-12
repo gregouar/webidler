@@ -1,0 +1,26 @@
+{
+  "name"    : "Nasty Cockroach",
+  "portrait": "monsters/inn/cockroach.webp",
+  "max_life": 5,
+  "armor"   : {"Physical": 20, "Poison": 20},
+  "block"   : {"Attack": 20, "Spell": 10},
+  "skills"  : [
+    {
+      "name"      : "Nasty Bite",
+      "icon"      : "skills/insect_jaws.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 5] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

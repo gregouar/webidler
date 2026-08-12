@@ -1,5 +1,5 @@
 {
-  "name"    : "Swamp Snake",
+  "name"    : "Swamp Viper",
   "portrait": "monsters/forest/snake.webp",
   "max_life": 15,
   "size"    : "Large",

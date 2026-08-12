@@ -86,19 +86,20 @@
     {
       "weight": 1000,
       "spawns": [
-        { "monster": "bat.json",       "quantity": [0, 1] },
+        { "monster": "cockroach.json", "quantity": [0, 1] },
         { "monster": "centipede.json", "quantity": 1      },
-        { "monster": "bat.json",       "quantity": [0, 1] },
+        { "monster": "cockroach.json", "quantity": [0, 1] },
         { "monster": "centipede.json", "quantity": 1      },
-        { "monster": "bat.json",       "quantity": 2      }
+        { "monster": "cockroach.json", "quantity": 2      }
       ]
     },
     {
       "weight": 1000,
       "spawns": [
         { "monster": "rat.json", "quantity": [1, 2] },
-        { "monster": "bat.json", "quantity": [3, 4] },
-        { "monster": "rat.json", "quantity": 2      }
+        { "monster": "bat.json", "quantity": [2, 3] },
+        { "monster": "rat.json", "quantity": 2      },
+        { "monster": "bat.json", "quantity": 1      }
       ]
     },
     {
@@ -131,9 +132,9 @@
     {
       "weight": 1000,
       "spawns": [
-        { "monster": "rat.json",   "quantity": [0, 2] },
-        { "monster": "snake.json", "quantity": 2      },
-        { "monster": "rat.json",   "quantity": 2      }
+        { "monster": "blood_mosquito.json", "quantity": [0, 2] },
+        { "monster": "snake.json",          "quantity": 2      },
+        { "monster": "blood_mosquito.json", "quantity": 2      }
       ]
     },
     {

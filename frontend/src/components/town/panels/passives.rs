@@ -1075,8 +1075,9 @@ fn AscendNode(
                             .await
                         {
                             Ok(response) => {
-                                passives_tree_ascension.write().socketed_nodes =
-                                    response.ascension.socketed_nodes.clone();
+                                // Replace the complete local value so every node visual that
+                                // derives from the socket map is invalidated after unsocketing.
+                                passives_tree_ascension.set(response.ascension.clone());
                                 town_context.passives_tree_ascension.set(response.ascension);
                                 town_context.inventory.set(response.inventory);
                             }
