@@ -1,1 +1,182 @@
-[]
+[
+  {
+    "name"        : "of Prayer",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["Body"],
+    "item_level"  : 1,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [10, 15]
+      }
+    ]
+  },
+  {
+    "name"        : "of Worship",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["Body"],
+    "item_level"  : 50,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [20, 25]
+      }
+    ]
+  },
+  {
+    "name"        : "of Devotion",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["Body"],
+    "item_level"  : 100,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [30, 35]
+      }
+    ]
+  },
+  {
+    "name"        : "of Faith",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["Body"],
+    "item_level"  : 150,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [40, 45]
+      }
+    ]
+  },
+  {
+    "name"        : "of Grace",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["Body"],
+    "item_level"  : 200,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [50, 55]
+      }
+    ]
+  },
+  {
+    "name"        : "of Blessing",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["Body"],
+    "item_level"  : 260,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [60, 65]
+      }
+    ]
+  },
+  {
+    "name"        : "of Benediction",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["Body"],
+    "item_level"  : 330,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [70, 75]
+      }
+    ]
+  },
+  {
+    "name"        : "of Consecration",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["Body"],
+    "item_level"  : 410,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [80, 85]
+      }
+    ]
+  },
+  {
+    "name"        : "of Divinity",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["Body"],
+    "item_level"  : 500,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [90, 95]
+      }
+    ]
+  },
+  {
+    "name"        : "of Apotheosis",
+    "family"      : "inc_buff_duration",
+    "tags"        : ["Status"],
+    "affix_type"  : "Suffix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Body"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "StatusDuration": {"debuff": false} },
+        "modifier": "Increased",
+        "value"   : [100, 120]
+      }
+    ]
+  }
+]

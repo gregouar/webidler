@@ -398,26 +398,27 @@
         "socket": true
       },
       "08853117-9798-462c-801b-5ae67f80736e": {
-        "name": "Poison Duration",
-        "icon": "passives/ouroboros.svg",
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
         "x": -100.0,
         "y": -162.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Poison",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -425,16 +426,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -659,6 +661,33 @@
             },
             "modifier": "More",
             "value": 25.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": {
+                    "skill_type": null,
+                    "skill_id": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "stun",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -693,6 +722,33 @@
             },
             "modifier": "More",
             "value": 15.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": {
+                    "skill_type": null,
+                    "skill_id": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "stun",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -2684,8 +2740,8 @@
         "socket": false
       },
       "30c0d9b9-1137-4f95-8c38-6d33efc98822": {
-        "name": "Curses Duration",
-        "icon": "passives/dripping_star.svg",
+        "name": "Curse Speed",
+        "icon": "passives/trap_mask.svg",
         "x": 170.0,
         "y": 72.5,
         "size": 0,
@@ -2694,16 +2750,13 @@
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
-                "debuff": null,
+              "Speed": {
                 "skill_type": "Curse",
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 15.0
+            "value": 8.0
           }
         ],
         "triggers": [],
@@ -2711,16 +2764,13 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
-                "debuff": null,
+              "Speed": {
                 "skill_type": "Curse",
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 4.0
           }
         ],
         "max_upgrade_level": 5,
@@ -3106,7 +3156,7 @@
         "socket": false
       },
       "39e8a993-9893-42f8-b75a-ff0df25bb6d0": {
-        "name": "Greater Damage over Time Duration",
+        "name": "Greater Debuffs Duration",
         "icon": "passives/solar_time.svg",
         "x": 57.5,
         "y": -110.0,
@@ -3118,8 +3168,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3135,8 +3185,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -3440,27 +3490,26 @@
         "socket": false
       },
       "3d3833aa-643d-495b-847f-ebafafe02acb": {
-        "name": "Damage over Time",
-        "icon": "passives/damage_over_time.svg",
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
         "x": -62.5,
         "y": -152.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Poison",
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_id": null,
-                "damage_type": "Any",
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "min_max": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 50.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -3468,17 +3517,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_id": null,
-                "damage_type": "Any",
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "min_max": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -4879,7 +4927,7 @@
         "socket": false
       },
       "52f99688-5acc-486c-95e5-e595a61e0755": {
-        "name": "Greater Success Chance",
+        "name": "Greater Debuff Success Chance",
         "icon": "passives/skull_staff.svg",
         "x": 95.0,
         "y": 65.0,
@@ -5323,26 +5371,27 @@
         "socket": false
       },
       "595ac586-9537-46f5-a4b5-b621cee6d5aa": {
-        "name": "Poison Duration",
-        "icon": "passives/ouroboros.svg",
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
         "x": -97.5,
         "y": -147.5,
         "size": 0,
         "root_node": false,
-        "node_type": "Poison",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -5350,16 +5399,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -6528,7 +6578,7 @@
         "socket": false
       },
       "696014a5-7dd4-45bf-b810-56eed1368bfc": {
-        "name": "Greater Effects Duration",
+        "name": "Greater Buffs Duration",
         "icon": "passives/duration.svg",
         "x": -57.5,
         "y": -110.0,
@@ -6541,7 +6591,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
-                "debuff": null,
+                "debuff": false,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -6558,7 +6608,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
-                "debuff": null,
+                "debuff": false,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -6852,7 +6902,7 @@
               }
             },
             "modifier": "More",
-            "value": -33.0
+            "value": -50.0
           }
         ],
         "triggers": [
@@ -7180,7 +7230,7 @@
         "socket": false
       },
       "725a5390-2c74-47b9-93ee-80ba57ad29b0": {
-        "name": "Damage over Time Duration",
+        "name": "Debuffs Duration",
         "icon": "passives/solar_time.svg",
         "x": 82.5,
         "y": -100.0,
@@ -7192,8 +7242,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -7209,8 +7259,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -8049,8 +8099,8 @@
         "socket": false
       },
       "77d9af74-3e5d-4263-b3e0-1134c10fda2e": {
-        "name": "Curse Speed",
-        "icon": "passives/trap_mask.svg",
+        "name": "Curses Duration",
+        "icon": "passives/dripping_star.svg",
         "x": 62.5,
         "y": -152.5,
         "size": 0,
@@ -8059,13 +8109,16 @@
         "effects": [
           {
             "stat": {
-              "Speed": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -8073,13 +8126,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Speed": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8145,26 +8201,27 @@
         "socket": false
       },
       "7a24a6c4-5cbf-4923-a083-d323cac68612": {
-        "name": "Poison Duration",
-        "icon": "passives/ouroboros.svg",
+        "name": "Damage over Time",
+        "icon": "passives/damage_over_time.svg",
         "x": -117.5,
         "y": -145.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Poison",
+        "node_type": "Status",
         "effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 50.0
           }
         ],
         "triggers": [],
@@ -8172,16 +8229,17 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null
+                "skill_id": null,
+                "min_max": null
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "max_upgrade_level": 5,
@@ -8252,7 +8310,7 @@
         "socket": false
       },
       "7d00ab4e-8727-4ec8-9256-9b6552b468a1": {
-        "name": "Effects Duration",
+        "name": "Buffs Duration",
         "icon": "passives/duration.svg",
         "x": -82.5,
         "y": -100.0,
@@ -8265,7 +8323,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
-                "debuff": null,
+                "debuff": false,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -8282,7 +8340,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
-                "debuff": null,
+                "debuff": false,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -8493,27 +8551,26 @@
         "socket": false
       },
       "7eeea0ac-0958-49a6-a8e3-30966cb42764": {
-        "name": "Damage over Time",
-        "icon": "passives/damage_over_time.svg",
+        "name": "Poison Duration",
+        "icon": "passives/ouroboros.svg",
         "x": -62.5,
         "y": -130.0,
         "size": 0,
         "root_node": false,
-        "node_type": "Status",
+        "node_type": "Poison",
         "effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_id": null,
-                "damage_type": "Any",
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "min_max": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 50.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -8521,17 +8578,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "StatusPower": {
-                "status_id": null,
-                "damage_type": "Any",
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "min_max": null
+                "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 20.0
+            "value": 10.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10017,8 +10073,8 @@
         "socket": false
       },
       "907e3dc9-8052-4120-ab01-0abf0ee825c0": {
-        "name": "Curse Speed",
-        "icon": "passives/trap_mask.svg",
+        "name": "Curses Duration",
+        "icon": "passives/dripping_star.svg",
         "x": 62.5,
         "y": -130.0,
         "size": 0,
@@ -10027,13 +10083,16 @@
         "effects": [
           {
             "stat": {
-              "Speed": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 8.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -10041,13 +10100,16 @@
         "upgrade_effects": [
           {
             "stat": {
-              "Speed": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse",
                 "skill_id": null
               }
             },
             "modifier": "Increased",
-            "value": 4.0
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11175,6 +11237,33 @@
             },
             "modifier": "More",
             "value": 25.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": {
+                    "skill_type": null,
+                    "skill_id": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "stun",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -11209,6 +11298,33 @@
             },
             "modifier": "More",
             "value": 15.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "CritDamage": {
+                    "skill_type": null,
+                    "skill_id": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "stun",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11614,7 +11730,7 @@
         "socket": false
       },
       "ae845698-b47f-47ca-bd07-8504a5eecf16": {
-        "name": "Success Chance",
+        "name": "Debuff Success Chance",
         "icon": "passives/skull_staff.svg",
         "x": 102.5,
         "y": 75.0,
@@ -12132,7 +12248,7 @@
         "socket": false
       },
       "bd9786ee-ff44-40dd-9bdd-591d0903a074": {
-        "name": "Success Chance",
+        "name": "Debuff Success Chance",
         "icon": "passives/skull_staff.svg",
         "x": 95.0,
         "y": 85.0,
@@ -12224,7 +12340,7 @@
         "socket": false
       },
       "be2eec47-a8f1-4f26-a311-e2d66e84c09d": {
-        "name": "Damage over Time Duration",
+        "name": "Debuffs Duration",
         "icon": "passives/solar_time.svg",
         "x": 175.0,
         "y": -135.0,
@@ -12236,8 +12352,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12253,8 +12369,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12467,7 +12583,7 @@
         "socket": false
       },
       "c25151c2-f5bd-4992-9626-555178681fd7": {
-        "name": "Damage over Time Duration",
+        "name": "Debuffs Duration",
         "icon": "passives/solar_time.svg",
         "x": 70.0,
         "y": -105.0,
@@ -12479,8 +12595,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -12496,8 +12612,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -13148,7 +13264,7 @@
               }
             },
             "modifier": "More",
-            "value": -33.0
+            "value": -50.0
           }
         ],
         "triggers": [],
@@ -13903,6 +14019,15 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -13910,15 +14035,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -14027,6 +14143,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -14045,6 +14170,15 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14052,24 +14186,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -14169,21 +14285,22 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   },
                   {
@@ -14205,13 +14322,12 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
                       "skill_id": null,
-                      "min_max": null
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -15190,7 +15306,7 @@
         "socket": false
       },
       "dd5dc504-20d6-464a-9db7-a2895dc6f2a3": {
-        "name": "Damage over Time Duration",
+        "name": "Debuffs Duration",
         "icon": "passives/solar_time.svg",
         "x": 167.5,
         "y": -147.5,
@@ -15202,8 +15318,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15219,8 +15335,8 @@
             "stat": {
               "StatusDuration": {
                 "status_id": null,
-                "damage_type": "Any",
-                "debuff": null,
+                "damage_type": null,
+                "debuff": true,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15729,7 +15845,7 @@
         "socket": false
       },
       "e29bd25b-8f33-447f-9fc2-b3127c8e1c1b": {
-        "name": "Effects Duration",
+        "name": "Buffs Duration",
         "icon": "passives/duration.svg",
         "x": -70.0,
         "y": -105.0,
@@ -15742,7 +15858,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
-                "debuff": null,
+                "debuff": false,
                 "skill_type": null,
                 "skill_id": null
               }
@@ -15759,7 +15875,7 @@
               "StatusDuration": {
                 "status_id": null,
                 "damage_type": null,
-                "debuff": null,
+                "debuff": false,
                 "skill_type": null,
                 "skill_id": null
               }

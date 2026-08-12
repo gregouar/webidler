@@ -445,7 +445,15 @@
     ],
     "triggers": [
       {
-        "OnKill": {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": true,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
           "conditions": []
         },
         "description": null,
@@ -465,7 +473,7 @@
         "effects": [
           {
             "success_chance": {
-              "value": 20.0,
+              "value": 100.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
@@ -1243,6 +1251,7 @@
               "damage": {
                 "Storm": 0.0
               },
+              "damage_factors": {},
               "crit_chance": {
                 "value": 0.0,
                 "lucky_chance": 0.0
@@ -1252,12 +1261,6 @@
               "armor_penetration": 0.0
             },
             "ignore_stat_effects": [
-              {
-                "CritDamage": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
               {
                 "Damage": {
                   "skill_type": "Attack",
@@ -1269,6 +1272,12 @@
               },
               {
                 "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
                 }

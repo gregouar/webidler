@@ -1634,7 +1634,20 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusDuration {
-                status_filter: Default::default(),
+                status_filter: StatStatusFilter {
+                    debuff: Some(true),
+                    ..Default::default()
+                },
+                skill_filter: Default::default(),
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::StatusDuration {
+                status_filter: StatStatusFilter {
+                    debuff: Some(false),
+                    ..Default::default()
+                },
                 skill_filter: Default::default(),
             },
             Modifier::Increased,

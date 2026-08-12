@@ -21,8 +21,11 @@ Content:
 Balance Changes:
 
 - Buffed high tier Item affixes granting damage.
-- Removed flat Critical Hit Chance affixes from weapons.
+- Removed flat Critical Hit Chance affixes from Weapon Items.
 - Almost all "More Critical Hit Damage" have been transformed to "Increased Critical Hit Damage".
+- Focus Suffix "Status Duration" now only apply to Debuffs.
+- Gloves Suffix "Status Chance" now only apply to Debuffs.
+- Introduced new Body Armor Suffix "Buffs Status Duration".
 - Spread Destruction now only targets a single other enemy and do less damage and duration.
 - Added new Passives Nodes and buffed several utility nodes to also have a Damage modifier.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
