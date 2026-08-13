@@ -21,7 +21,7 @@ use std::{net::SocketAddr, time::Duration};
 
 use crate::{
     app_state::{AppSettings, AppState},
-    chat::chat_session::ChatSession,
+    chat::{character_resolver::CharacterResolver, chat_session::ChatSession},
     websocket::{self, WebSocketReceiver},
 };
 
@@ -52,7 +52,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
         websocket::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
 
     tracing::debug!("waiting for client to connect...");
-    let session = match timeout(
+    let mut session = match timeout(
         Duration::from_secs(30),
         wait_for_connect(&app_state, &mut ws_receiver),
     )
@@ -119,8 +119,17 @@ async fn wait_for_connect(
 
 async fn handle_connect(app_state: &AppState, msg: ClientConnectMessage) -> Result<ChatSession> {
     let user_details = authorize_jwt(&app_state.app_settings, &msg.jwt).await?;
+    let character_resolver = CharacterResolver::connect(
+        &app_state.app_settings.backend_url,
+        user_details.user.user_id,
+    )
+    .await?;
     tracing::info!("connect: {}", user_details.user.user_id);
-    Ok(ChatSession::new(app_state.chat_state.clone(), user_details))
+    Ok(ChatSession::new(
+        app_state.chat_state.clone(),
+        user_details,
+        character_resolver,
+    ))
 }
 
 // async fn handle_disconnect<'a>(session: ChatSession<'a>) -> Result<()> {

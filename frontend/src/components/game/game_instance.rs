@@ -94,7 +94,7 @@ pub fn GameInstance() -> impl IntoView {
                     <SettingsModal open=game_context.open_settings />
                 </div>
             </Show>
-            <ChatPanel />
+            <ChatPanel character_id=get_character_id_storage.get_untracked() />
         </main>
     }
 }

@@ -8,7 +8,7 @@ use leptos::{
 };
 use leptos_use::use_resize_observer;
 
-use shared::data::{badges::UserBadge, item::ItemSpecs};
+use shared::data::{badges::UserBadge, item::ItemSpecs, user::UserCharacterId};
 use shared_chat::types::{ChatChannel, ChatMessage};
 
 use crate::{
@@ -26,7 +26,7 @@ use crate::{
 };
 
 #[component]
-pub fn ChatPanel() -> impl IntoView {
+pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
@@ -95,7 +95,8 @@ pub fn ChatPanel() -> impl IntoView {
         chat_context
             .messages
             .read()
-            .iter_rev()
+            .iter()
+            .rev()
             .find(|m| matches!(m.channel, ChatChannel::Whisper(_)) || selected.contains(&m.channel))
             .cloned()
     };
@@ -103,7 +104,7 @@ pub fn ChatPanel() -> impl IntoView {
     // TODO: Do better than that...
     let filtered_messages = move || {
         let selected = chat_context.selected_channels.get();
-        let mut messages = chat_context
+        chat_context
             .messages
             .read()
             .iter()
@@ -111,9 +112,7 @@ pub fn ChatPanel() -> impl IntoView {
                 matches!(m.channel, ChatChannel::Whisper(_)) || selected.contains(&m.channel)
             })
             .cloned()
-            .collect::<Vec<_>>();
-        messages.sort_by_key(|message| message.sent_at);
-        messages
+            .collect::<Vec<_>>()
     };
 
     let dropdown_open = RwSignal::new(false);
@@ -124,7 +123,7 @@ pub fn ChatPanel() -> impl IntoView {
             return;
         }
 
-        chat_context.send.run(content);
+        chat_context.send.run((content, character_id));
 
         input_value.set(String::new());
     };
@@ -526,7 +525,11 @@ fn author_str(msg: &ChatMessage) -> String {
     {
         channel_str(msg.channel)
     } else {
-        msg.username.clone().unwrap_or_default()
+        match (&msg.username, &msg.character_name) {
+            (Some(username), Some(character_name)) => format!("{username} [{character_name}]"),
+            (Some(username), None) => username.clone(),
+            _ => String::new(),
+        }
     }
 }
 

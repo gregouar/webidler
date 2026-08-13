@@ -17,8 +17,7 @@ use shared_chat::{
         client::{ClientChatMessage, ClientConnectMessage, ClientPostMessage},
         server::{ErrorType, ServerChatMessage},
     },
-    ring_buffer::RingBuffer,
-    types::{ChatChannel, ChatContent, ChatMessage, LinkedItemBytes, UserId},
+    types::{CharacterId, ChatChannel, ChatContent, ChatMessage, LinkedItemBytes, UserId},
 };
 
 use crate::components::{
@@ -35,9 +34,9 @@ pub struct ChatContext {
 
     pub users_map: RwSignal<HashMap<UserId, String>>,
     // TODO: Split in multiple buckets to keep longer system message than global
-    pub messages: RwSignal<RingBuffer<ChatMessage>>,
+    pub messages: RwSignal<Vec<ChatMessage>>,
     set_stored_messages: WriteSignal<Vec<ChatMessage>>,
-    pub send: Callback<String>,
+    pub send: Callback<(String, Option<CharacterId>)>,
 
     pub minimized: RwSignal<bool>,
     pub opened: RwSignal<bool>,
@@ -143,12 +142,13 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     let (stored_messages, set_stored_messages, _) =
         storage::use_session_storage::<Vec<ChatMessage>, JsonSerdeCodec>(CHAT_HISTORY_STORAGE_KEY);
 
-    let send = Callback::new(move |msg| {
+    let send = Callback::new(move |(msg, character_id)| {
         if let Ok(content) = ChatContent::try_new(msg) {
             send(
                 &ClientPostMessage {
                     channel: write_channel.get_untracked(),
                     content,
+                    character_id,
                     linked_item: linked_item.read_untracked().as_ref().and_then(
                         |linked_item: &Arc<ItemSpecs>| {
                             // let mut item_specs = (**linked_item).clone();
@@ -174,7 +174,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
         user_id: RwSignal::new(None),
         send,
         users_map: Default::default(),
-        messages: RwSignal::new(ring_buffer_from_messages(
+        messages: RwSignal::new(normalize_messages(
             stored_messages.get_untracked(),
             CHAT_HISTORY_CAPACITY,
         )),
@@ -212,9 +212,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
     match message {
         ServerChatMessage::Connect(m) => {
             chat_context.user_id.set(Some(m.user_id));
-            for message in m.history.into_iter().rev() {
-                push_message(chat_context, message)
-            }
+            merge_messages(chat_context, m.history.into_iter().rev());
         }
         ServerChatMessage::Error(error_message) => {
             let toaster: Toasts = expect_context();
@@ -244,8 +242,7 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
                     .write()
                     .insert(m.target_user_id, username);
             }
-            chat_context.messages.write().push(m.chat_message);
-            persist_messages(chat_context);
+            push_message(chat_context, m.chat_message);
             chat_context
                 .write_channel
                 .set(ChatChannel::Whisper(m.target_user_id));
@@ -255,42 +252,62 @@ fn handle_message(chat_context: &ChatContext, message: ServerChatMessage) -> Con
 }
 
 fn push_message(chat_context: &ChatContext, message: ChatMessage) {
-    if let Some((user_id, username)) = message.user_id.zip(message.username.clone())
-        && !chat_context
-            .users_map
-            .read_untracked()
-            .contains_key(&user_id)
-    {
-        chat_context.users_map.write().insert(user_id, username);
+    merge_messages(chat_context, std::iter::once(message));
+}
+
+fn merge_messages(
+    chat_context: &ChatContext,
+    incoming_messages: impl IntoIterator<Item = ChatMessage>,
+) {
+    let mut messages = chat_context.messages.read_untracked().clone();
+    let mut changed = false;
+
+    for message in incoming_messages {
+        if let Some((user_id, username)) = message.user_id.zip(message.username.clone())
+            && !chat_context
+                .users_map
+                .read_untracked()
+                .contains_key(&user_id)
+        {
+            chat_context.users_map.write().insert(user_id, username);
+        }
+
+        if messages
+            .iter()
+            .any(|existing| message_key(existing) == message_key(&message))
+        {
+            continue;
+        }
+
+        messages.push(message);
+        changed = true;
     }
 
-    if !chat_context
-        .messages
-        .read_untracked()
-        .iter()
-        .any(|m| m.sent_at == message.sent_at && m.user_id == message.user_id)
-    {
-        chat_context.messages.write().push(message);
+    if changed {
+        chat_context
+            .messages
+            .set(normalize_messages(messages, CHAT_HISTORY_CAPACITY));
         persist_messages(chat_context);
     }
 }
 
-fn ring_buffer_from_messages(
-    messages: Vec<ChatMessage>,
-    capacity: usize,
-) -> RingBuffer<ChatMessage> {
-    let mut buffer = RingBuffer::new(capacity);
-    buffer.extend(messages.into_iter());
-    buffer
+fn normalize_messages(mut messages: Vec<ChatMessage>, capacity: usize) -> Vec<ChatMessage> {
+    messages.sort_by_key(|message| message.sent_at);
+    // Deduplicate between server history and local history
+    let mut seen = HashSet::new();
+    messages.retain(|message| seen.insert(message_key(message)));
+
+    let excess = messages.len().saturating_sub(capacity);
+    messages.drain(..excess);
+    messages
+}
+
+fn message_key(message: &ChatMessage) -> (chrono::DateTime<chrono::Utc>, Option<UserId>) {
+    (message.sent_at, message.user_id)
 }
 
 fn persist_messages(chat_context: &ChatContext) {
-    chat_context.set_stored_messages.set(
-        chat_context
-            .messages
-            .read_untracked()
-            .iter()
-            .cloned()
-            .collect(),
-    );
+    chat_context
+        .set_stored_messages
+        .set(chat_context.messages.read_untracked().clone());
 }
