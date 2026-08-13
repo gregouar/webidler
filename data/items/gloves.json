@@ -465,6 +465,42 @@
       },
       {
         "stat": {
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          50.0,
+          80.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SuccessChance": {
+            "skill_type": null,
+            "skill_id": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_id": null,
+                "debuff": true
+              }
+            }
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "RestoreOnHit": {
             "restore_type": "Mana",
             "skill_type": null
@@ -535,6 +571,38 @@
           },
           "modifier": "Flat",
           "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "CritChance": {
+              "skill_type": null,
+              "skill_id": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SuccessChance": {
+              "skill_type": null,
+              "skill_id": null,
+              "effect_type": {
+                "ApplyStatus": {
+                  "status_id": null,
+                  "debuff": true
+                }
+              }
+            }
+          },
+          "modifier": "Increased",
+          "value": 10.0
         }
       },
       {
@@ -895,7 +963,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.1,
+            "factor": 0.25,
             "source": {
               "HitDamage": "Storm"
             }
@@ -919,6 +987,7 @@
             },
             "FlatDamage": {
               "damage": {},
+              "damage_factors": {},
               "crit_chance": {
                 "value": 0.0,
                 "lucky_chance": 0.0

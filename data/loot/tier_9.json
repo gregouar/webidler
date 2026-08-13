@@ -1,6 +1,6 @@
 {
     "area_specific": false,
-    "entries": [
+    "entries"      : [
         {"item_id": "weapon_1h_9",     "weight": 256000                       },
         {"item_id": "helmet_9",        "weight": 256000                       },
         {"item_id": "body_9",          "weight": 256000                       },
@@ -19,6 +19,6 @@
         {"item_id": "edict_witch",     "weight":    499                       },
         {"item_id": "rune_power",      "weight":  25600, "min_area_level": 490},
         {"item_id": "rune_bleed",      "weight":    499                       },
-        {"item_id": "rune_root",       "weight":   2560, "min_area_level": 490}
+        {"item_id": "rune_root",       "weight":   5120, "min_area_level": 490}
     ]
 }

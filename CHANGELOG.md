@@ -26,12 +26,13 @@ Balance Changes:
 - Focus Suffix "Status Duration" now only apply to Debuffs.
 - Gloves Suffix "Status Chance" now only apply to Debuffs.
 - Introduced new Body Armor Suffix "Buffs Status Duration".
+- Rebalanced Passives Nodes, with usually minor nodes giving Increased modifiers, while major node give More modifiers, and many other tweaks and changes.
 - Spread Destruction now only targets a single other enemy and do less damage and duration.
-- Added new Passives Nodes and buffed several utility nodes to also have a Damage modifier.
+- Added new Passives Nodes on the outer ring, and buffed several utility nodes to also have a Damage modifier.
 - Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
 - Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
 - Curse of Vampirism now applies to Self instead of Enemies.
-- Runes can now only drop once per Area Level during a Grind (similar to Unique Items).
+- Runes can now only drop once per Area Level during a Grind (similar to Unique Items). Anchor Nodes have more chance to drop.
 
 ## Major Game Update: «Awakening of the Spider Witch»
 

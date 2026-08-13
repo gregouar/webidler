@@ -667,6 +667,11 @@
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -964,6 +969,24 @@
         "ignore_quality": true
       },
       {
+        "stat": {
+          "StatusDuration": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": false,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          80.0,
+          100.0
+        ],
+        "ignore_quality": true
+      },
+      {
         "stat": "ManaRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -1004,6 +1027,11 @@
         "skill_type": "Blessing",
         "skill_range": "Any",
         "skill_shape": "All",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {

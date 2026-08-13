@@ -5643,7 +5643,7 @@
               }
             },
             "modifier": "More",
-            "value": 25.0
+            "value": 30.0
           },
           {
             "stat": {
@@ -5707,7 +5707,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           },
           {
             "stat": {
@@ -6041,7 +6041,7 @@
               }
             },
             "modifier": "More",
-            "value": -50.0
+            "value": -25.0
           }
         ],
         "triggers": [],
@@ -6065,7 +6065,7 @@
               }
             },
             "modifier": "More",
-            "value": -50.0
+            "value": -25.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14001,6 +14001,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -14035,15 +14044,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -14143,24 +14143,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14170,7 +14152,7 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14186,6 +14168,24 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14285,26 +14285,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
                       "skill_id": null,
-                      "min_max": null
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
                     "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14322,12 +14312,22 @@
                     }
                   },
                   {
-                    "Damage": {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
                       "skill_type": null,
                       "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -16624,7 +16624,7 @@
               }
             },
             "modifier": "More",
-            "value": 25.0
+            "value": 30.0
           },
           {
             "stat": {
@@ -16688,7 +16688,7 @@
               }
             },
             "modifier": "More",
-            "value": 15.0
+            "value": 20.0
           },
           {
             "stat": {

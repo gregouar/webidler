@@ -1,6 +1,6 @@
 {
   "area_specific": false,
-  "entries": [
+  "entries"      : [
     {"item_id": "padded_tunic_unique", "weight":     3, "min_area_level": 260},
     {"item_id": "sabre",               "weight": 32000                       },
     {"item_id": "bascinet",            "weight": 32000                       },
@@ -25,7 +25,7 @@
     {"item_id": "edict_2",             "weight":   400                       },
     {"item_id": "edict_treasure_map",  "weight":  1999                       },
     {"item_id": "rune",                "weight":  3200, "min_area_level": 250},
-    {"item_id": "rune_root",           "weight":   320, "min_area_level": 250},
+    {"item_id": "rune_root",           "weight":   640, "min_area_level": 250},
     {"item_id": "rune_mana_damage",    "weight":   499                       }
   ]
 }
