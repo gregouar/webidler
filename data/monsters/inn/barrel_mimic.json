@@ -1,6 +1,6 @@
 {
   "name"    : "Barrel Mimic",
-  "portrait": "monsters/inn/barrel_mimic_gdca.webp",
+  "portrait": "monsters/inn/barrel_mimic.webp",
   "max_life": 15,
   "armor"   : {"Physical": 50},
   "skills"  : [

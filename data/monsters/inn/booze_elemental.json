@@ -1,6 +1,6 @@
 {
   "name"    : "Booze Elemental",
-  "portrait": "monsters/inn/haunted_mug_gdca.webp",
+  "portrait": "monsters/inn/haunted_mug.webp",
   "max_life": 5,
   "armor"   : {"Storm": 50},
   "skills"  : [

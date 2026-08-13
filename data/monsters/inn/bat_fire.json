@@ -1,6 +1,6 @@
 {
   "name"    : "Fiery Bat",
-  "portrait": "monsters/inn/bat_fire_gdca.webp",
+  "portrait": "monsters/inn/bat_fire.webp",
   "max_life": 5,
   "armor"   : {"Fire": 50},
   "skills"  : [

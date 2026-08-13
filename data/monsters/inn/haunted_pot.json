@@ -1,6 +1,6 @@
 {
   "name"    : "Cursed Cauldron",
-  "portrait": "monsters/inn/haunted_pot_gdca.webp",
+  "portrait": "monsters/inn/haunted_pot.webp",
   "max_life": 15,
   "armor"   : {"Fire": 50, "Physical": 50},
   "skills"  : [

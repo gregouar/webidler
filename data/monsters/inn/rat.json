@@ -1,5 +1,5 @@
 {
-  "name"    : "Giant Rat",
+  "name"    : "Dire Rat",
   "portrait": "monsters/inn/rat_gdca.webp",
   "max_life": 8,
   "skills"  : [

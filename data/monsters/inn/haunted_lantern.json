@@ -1,6 +1,6 @@
 {
   "name"    : "Lantern Shade",
-  "portrait": "monsters/inn/haunted_lantern_gdca.webp",
+  "portrait": "monsters/inn/haunted_lantern.webp",
   "max_life": 5,
   "armor"   : {"Fire": 100},
   "skills"  : [
