@@ -4,6 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use leptos_use::watch_throttled;
 use shared::{
+    computations,
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
@@ -16,18 +17,16 @@ use shared::{
     messages::client::PickUpLootMessage,
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        accessibility::AccessibilityContext,
-        game::{GameContext, websocket::WebsocketContext},
-        settings::SettingsContext,
-        shared::{
-            item_card::ItemCard,
-            loot_filter::{FilterRule, FilterRuleType, LootFilter},
-        },
-        ui::{number::format_number, tooltip::DynamicTooltipPosition},
+use crate::components::{
+    accessibility::AccessibilityContext,
+    game::{GameContext, websocket::WebsocketContext},
+    settings::SettingsContext,
+    shared::{
+        item_card::ItemCard,
+        loot_filter::{FilterRule, FilterRuleType, LootFilter},
+        resources::{ResourceReward, ResourceRewardOverlay},
     },
+    ui::tooltip::DynamicTooltipPosition,
 };
 
 #[component]
@@ -180,7 +179,19 @@ pub fn LootQueue() -> impl IntoView {
                 {
                     let item_rarity = loot.item_specs.modifiers.rarity;
                     let gold_price = loot.item_specs.gold_price;
+                    let gems_price = computations::item_gems_price(
+                        loot.item_specs.modifiers.level,
+                        item_rarity,
+                        game_context.realm.get_untracked().is_ssf(),
+                    );
                     let can_sell = !matches!(loot.item_specs.modifiers.rarity, ItemRarity::Unique);
+                    let resource_reward = Signal::derive(move || {
+                        if matches!(loot_state(loot.identifier), LootState::Sold) {
+                            (loot.identifier as u64 + 1, gold_price, gems_price)
+                        } else {
+                            ResourceReward::default()
+                        }
+                    });
                     let is_new = RwSignal::new(true);
                     let stack_style = move || {
                         format!(
@@ -290,22 +301,7 @@ pub fn LootQueue() -> impl IntoView {
                                 class="absolute bottom-0 w-[12%] aspect-[2/3] z-30 pointer-events-none"
                                 style=saved_position_style
                             >
-                                <Show when=move || {
-                                    matches!(loot_state(loot.identifier), LootState::Sold)
-                                }>
-                                    <div class="
-                                    reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
-                                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                                    flex items-center gap-1 font-number">
-                                        <span>+{format_number(gold_price)}</span>
-                                        <img
-                                            draggable="false"
-                                            src=img_asset("ui/gold.webp")
-                                            alt="Gold"
-                                            class="h-[2em] aspect-square"
-                                        />
-                                    </div>
-                                </Show>
+                                <ResourceRewardOverlay reward=resource_reward />
                             </div>
 
                         </div>

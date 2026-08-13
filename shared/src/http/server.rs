@@ -291,6 +291,10 @@ pub struct InventoryUnequipResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryDeleteResponse {
     pub inventory: PlayerInventory,
+    pub resource_gold: f64,
+    pub resource_gems: f64,
+    pub gold_reward: f64,
+    pub gems_reward: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

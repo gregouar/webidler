@@ -258,10 +258,11 @@ impl<'a> GameInstance<'a> {
             }
 
             if self.game_data.area_state.read().max_area_level > 0 {
+                let realm_id = self.game_data.realm.realm_id();
                 if let Err(err) = db::game_stats::save_game_stats(
                     &mut *tx,
                     self.character_id,
-                    &self.game_data.realm_id.clone(),
+                    &realm_id,
                     self.game_data,
                 )
                 .await
@@ -272,7 +273,7 @@ impl<'a> GameInstance<'a> {
                 match db::leaderboard::update_leaderboard(
                     &mut tx,
                     self.character_id,
-                    &self.game_data.realm_id.clone(),
+                    &realm_id,
                     &self.game_data.area_id,
                     self.game_data.area_state.read().max_area_level as i32,
                     self.game_data
@@ -283,8 +284,7 @@ impl<'a> GameInstance<'a> {
                 .await
                 {
                     Ok(true) => {
-                        let realm: Realm = (&self.game_data.realm_id).into();
-                        let realm_label = match realm {
+                        let realm_label = match self.game_data.realm {
                             Realm::Standard => "",
                             Realm::StandardSSF => " [SSF]",
                             Realm::Legacy => " [Legacy]",

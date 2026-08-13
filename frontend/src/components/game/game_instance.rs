@@ -133,6 +133,7 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
         character_id,
+        realm,
         map_item,
         area_specs,
         area_state,
@@ -148,6 +149,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 
     game_context.started.set(true);
     game_context.character_id.set(character_id);
+    game_context.realm.set(realm);
     game_context.map_item.set(map_item);
     game_context.area_specs.set(area_specs);
     game_context.area_state.set(area_state);

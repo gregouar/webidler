@@ -3,6 +3,7 @@ use anyhow::Result;
 use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
+    computations,
     data::area::AreaLevel,
     http::{
         client::{
@@ -167,14 +168,40 @@ pub async fn post_delete_items(
 
     let mut item_indexes = payload.item_indexes;
     item_indexes.sort_by_key(|&i| i);
+
+    let mut gold_reward = 0.0;
+    let mut gems_reward = 0.0;
     for &item_index in item_indexes.iter().rev() {
-        inventory_controller::remove_item_from_bag(&mut inventory, item_index)?;
+        let item_specs = inventory_controller::remove_item_from_bag(&mut inventory, item_index)?;
+        gold_reward +=
+            computations::item_gold_price(item_specs.modifiers.level, item_specs.modifiers.rarity);
+        gems_reward += computations::item_gems_price(
+            item_specs.modifiers.level,
+            item_specs.modifiers.rarity,
+            character.is_ssf,
+        );
     }
+
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        gems_reward,
+        0.0,
+        gold_reward,
+        0.0,
+    )
+    .await?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
 
     tx.commit().await?;
 
-    Ok(Json(InventoryDeleteResponse { inventory }))
+    Ok(Json(InventoryDeleteResponse {
+        inventory,
+        resource_gold: character_resources.resource_gold,
+        resource_gems: character_resources.resource_gems,
+        gold_reward,
+        gems_reward,
+    }))
 }

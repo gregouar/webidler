@@ -2,7 +2,7 @@ use std::collections::{BTreeSet, HashSet};
 
 use shared::{
     computations,
-    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL, MONSTER_REWARD_INCREASE_FACTOR},
+    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
     data::{
         area::AreaLevel,
         chance::ChanceRange,
@@ -213,7 +213,11 @@ pub fn roll_item_stats(
         );
     }
 
-    let gold_price = item_gold_price(&modifiers, power_level_modifier, gold_find);
+    let gold_price = computations::item_gold_price(
+        modifiers.level.saturating_sub(power_level_modifier),
+        modifiers.rarity,
+    ) * gold_find
+        * 0.01;
 
     items_controller::create_item_specs(base, modifiers, gold_price)
 }
@@ -683,23 +687,4 @@ impl RandomWeighted for &LootTableEntry {
     fn random_weight(&self) -> u64 {
         self.weight
     }
-}
-
-fn item_gold_price(
-    item_modifiers: &ItemModifiers,
-    power_level_modifier: AreaLevel,
-    gold_find: f64,
-) -> f64 {
-    10.0 * match item_modifiers.rarity {
-        ItemRarity::Normal => 1.0,
-        ItemRarity::Magic => 2.0,
-        ItemRarity::Rare => 4.0,
-        ItemRarity::Unique => 8.0,
-        ItemRarity::Masterwork => 8.0,
-    } * gold_find
-        * 0.01
-        * computations::exponential(
-            item_modifiers.level.saturating_sub(power_level_modifier),
-            MONSTER_REWARD_INCREASE_FACTOR,
-        )
 }

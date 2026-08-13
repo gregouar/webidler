@@ -366,16 +366,34 @@ pub fn sell_item_from_bag(
     player_inventory: &mut PlayerInventory,
     player_resources: &mut PlayerResources,
     item_index: u8,
+    is_ssf: bool,
 ) {
     let item_index = item_index as usize;
     if item_index < player_inventory.bag.len() {
-        sell_item(player_resources, &player_inventory.bag.remove(item_index));
+        sell_item(
+            player_resources,
+            &player_inventory.bag.remove(item_index),
+            is_ssf,
+        );
     }
 }
 
-pub fn sell_item(player_resources: &mut PlayerResources, item_specs: &ItemSpecs) {
+pub fn sell_item(
+    player_resources: &mut PlayerResources,
+    item_specs: &ItemSpecs,
+    is_ssf: bool,
+) -> (f64, f64) {
+    let gems_reward = computations::item_gems_price(
+        item_specs.modifiers.level,
+        item_specs.modifiers.rarity,
+        is_ssf,
+    );
+
     player_resources.gold += item_specs.gold_price;
     player_resources.gold_total += item_specs.gold_price;
+    player_resources.gems += gems_reward;
+
+    (item_specs.gold_price, gems_reward)
 }
 
 pub fn init_skills_from_inventory(

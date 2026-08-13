@@ -10,6 +10,7 @@ use shared::{
         item::ItemRarity,
         passive::PassivesTreeState,
         player::{PlayerInventory, PlayerResources},
+        realms::Realm,
         skill_mastery::PlayerSkillMasteries,
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
@@ -261,7 +262,7 @@ async fn new_game_instance(
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        character.realm_id,
+        Realm::from(&character.realm_id),
         area_id,
         map_item,
         max_area_level_ever as AreaLevel,

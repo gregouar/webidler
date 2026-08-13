@@ -15,7 +15,7 @@ use shared::data::{
         PlayerSpecs, PlayerState,
     },
     quest::QuestRewards,
-    realms::RealmId,
+    realms::{Realm, RealmId},
     skill::SkillSpecs,
 };
 
@@ -30,7 +30,7 @@ use crate::game::{
 
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
-    pub realm_id: RealmId,
+    pub realm: Realm,
     pub area_id: String,
     pub map_item: Option<ItemSpecs>,
 
@@ -109,7 +109,7 @@ impl GameInstanceData {
     #[allow(clippy::too_many_arguments)]
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
-        realm_id: RealmId,
+        realm: Realm,
         area_id: String,
         map_item: Option<ItemSpecs>,
         max_area_level_ever: AreaLevel,
@@ -200,7 +200,7 @@ impl GameInstanceData {
         }
 
         Ok(Self {
-            realm_id,
+            realm,
             area_id,
             map_item,
             area_specs,
@@ -241,7 +241,7 @@ impl GameInstanceData {
 
     pub fn to_bytes(self) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(&SavedGameData {
-            realm_id: self.realm_id,
+            realm_id: self.realm.realm_id(),
             area_id: self.area_id,
             map_item: self.map_item,
             area_level: self.area_state.read().area_level,
@@ -290,7 +290,7 @@ impl GameInstanceData {
 
         let mut s = Self::init_from_store(
             master_store,
-            realm_id,
+            Realm::from(&realm_id),
             area_id,
             map_item,
             max_area_level_ever,

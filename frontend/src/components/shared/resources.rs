@@ -3,10 +3,57 @@ use leptos::{html::*, prelude::*};
 use crate::{
     assets::img_asset,
     components::ui::{
-        number::{Number, NumberInset},
+        number::{Number, NumberInset, format_number},
         tooltip::{StaticTooltip, StaticTooltipPosition},
     },
 };
+
+pub type ResourceReward = (u64, f64, f64);
+
+pub fn show_resource_reward(reward: RwSignal<ResourceReward>, gold: f64, gems: f64) {
+    reward.update(|reward| {
+        *reward = (reward.0.wrapping_add(1), gold, gems);
+    });
+}
+
+#[component]
+pub fn ResourceRewardOverlay(#[prop(into)] reward: Signal<ResourceReward>) -> impl IntoView {
+    view! {
+        <For each=move || vec![reward.get()] key=|reward| reward.0 let(reward)>
+            <Show when=move || { reward.1 > 0.0 }>
+                <div class="
+                reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
+                absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number"
+                style="top: calc(50% - 1.5rem);">
+                    <span>+{format_number(reward.1)}</span>
+                    <img
+                        draggable="false"
+                        src=img_asset("ui/gold.webp")
+                        alt="Gold"
+                        class="h-[2em] aspect-square"
+                    />
+                </div>
+            </Show>
+
+            <Show when=move || { reward.2 > 0.0 }>
+                <div class="
+                reward-float gems-text text-fuchsia-400 text-lg xl:text-2xl text-shadow-md
+                absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
+                flex items-center gap-1 font-number"
+                style="top: calc(50% + 1.5rem);">
+                    <span>+{format_number(reward.2)}</span>
+                    <img
+                        draggable="false"
+                        src=img_asset("ui/gems.webp")
+                        alt="Gems"
+                        class="h-[1.2em] aspect-square"
+                    />
+                </div>
+            </Show>
+        </For>
+    }
+}
 
 #[component]
 pub fn ResourceIcon(

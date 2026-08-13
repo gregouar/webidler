@@ -14,6 +14,7 @@ use shared::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    realms::Realm,
     skill::SkillSpecs,
     user::UserCharacterId,
 };
@@ -29,6 +30,7 @@ pub struct GameContext {
     pub started: RwSignal<bool>,
 
     pub character_id: RwSignal<UserCharacterId>,
+    pub realm: RwSignal<Realm>,
 
     pub map_item: RwSignal<Option<ItemSpecs>>,
     pub area_specs: RwSignal<AreaSpecs>,
@@ -81,6 +83,7 @@ impl GameContext {
         GameContext {
             started: RwSignal::new(false),
             character_id: Default::default(),
+            realm: Default::default(),
 
             map_item: RwSignal::new(Default::default()),
             area_specs: RwSignal::new(Default::default()),

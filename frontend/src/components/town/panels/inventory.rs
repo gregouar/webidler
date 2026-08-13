@@ -10,6 +10,7 @@ use crate::components::{
     shared::{
         inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
         loot_filter::LootFilterPanel,
+        resources::show_resource_reward,
     },
     town::TownContext,
     ui::toast::*,
@@ -25,6 +26,7 @@ pub fn TownInventoryPanel(
     let town_context = expect_context::<TownContext>();
 
     let open_loot_filter = RwSignal::new(false);
+    let sell_reward = RwSignal::new(Default::default());
 
     let on_equip = move |item_index| {
         let character_id = town_context.character.read_untracked().character_id;
@@ -127,6 +129,15 @@ pub fn TownInventoryPanel(
                             });
 
                         town_context.inventory.set(response.inventory);
+                        town_context.character.update(|character| {
+                            character.resource_gold = response.resource_gold;
+                            character.resource_gems = response.resource_gems;
+                        });
+                        show_resource_reward(
+                            sell_reward,
+                            response.gold_reward,
+                            response.gems_reward,
+                        );
                     }
                     Err(e) => show_toast(
                         toaster,
@@ -175,6 +186,7 @@ pub fn TownInventoryPanel(
             on_sell: Some(Arc::new(on_sell)),
             on_sort: Some(Arc::new(on_sort)),
             sell_type: SellType::Discard,
+            sell_reward,
             max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
             equip_filter: town_context.equip_filter.into(),
         }

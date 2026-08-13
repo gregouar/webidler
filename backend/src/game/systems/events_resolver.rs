@@ -518,7 +518,11 @@ fn handle_area_completed_event(
                 for item_specs in
                     loot_controller::drop_loot(game_data.queued_loot.mutate(), item_specs)
                 {
-                    player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
+                    player_controller::sell_item(
+                        game_data.player_resources.mutate(),
+                        &item_specs,
+                        game_data.realm.is_ssf(),
+                    );
                 }
             }
             None => tracing::warn!("Failed to generate loot"),

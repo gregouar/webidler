@@ -171,6 +171,7 @@ fn handle_client_message(
                     game_data.player_inventory.mutate(),
                     game_data.player_resources.mutate(),
                     item_index,
+                    game_data.realm.is_ssf(),
                 )
             }
         }
@@ -185,7 +186,11 @@ fn handle_client_message(
                 if let Some(item_specs) =
                     loot_controller::take_loot(game_data.queued_loot.mutate(), m.loot_identifier)
                 {
-                    player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
+                    player_controller::sell_item(
+                        game_data.player_resources.mutate(),
+                        &item_specs,
+                        game_data.realm.is_ssf(),
+                    );
                 }
             } else if let Err(e) = loot_controller::pickup_loot(
                 game_data.player_inventory.mutate(),

@@ -25,6 +25,10 @@ impl Realm {
     pub fn allow_parallel_characters(&self) -> bool {
         matches!(self, Realm::LegacySSF)
     }
+
+    pub fn is_ssf(&self) -> bool {
+        matches!(self, Realm::StandardSSF | Realm::LegacySSF)
+    }
 }
 
 impl From<&RealmId> for Realm {

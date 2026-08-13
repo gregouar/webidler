@@ -11,6 +11,7 @@ use crate::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    realms::Realm,
     skill::SkillSpecs,
     user::UserCharacterId,
 };
@@ -47,6 +48,7 @@ pub enum ErrorType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
     pub character_id: UserCharacterId,
+    pub realm: Realm,
     pub map_item: Option<ItemSpecs>,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,

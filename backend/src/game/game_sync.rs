@@ -20,6 +20,7 @@ pub async fn sync_init_game(
         .send(
             &InitGameMessage {
                 character_id: *character_id,
+                realm: game_data.realm,
                 map_item: game_data.map_item.clone(),
                 area_specs: game_data.area_specs.clone(),
                 area_state: game_data.area_state.read().clone(),

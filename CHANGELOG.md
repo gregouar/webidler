@@ -33,6 +33,7 @@ Balance Changes:
 - Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
 - Curse of Vampirism now applies to Self instead of Enemies.
 - Runes can now only drop once per Area Level during a Grind (similar to Unique Items). Anchor Nodes have more chance to drop.
+- Selling Unique Items in SSF now rewards with some Gems.
 
 ## Major Game Update: «Awakening of the Spider Witch»
 

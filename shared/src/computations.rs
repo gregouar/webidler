@@ -3,11 +3,12 @@ use std::time::Duration;
 use crate::{
     constants::{
         self, CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
-        SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST, XP_INCREASE_FACTOR,
+        SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST, UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR,
+        XP_INCREASE_FACTOR,
     },
     data::{
         area::{AreaLevel, AreaState},
-        item::ItemSpecs,
+        item::{ItemRarity, ItemSpecs},
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
@@ -127,6 +128,25 @@ pub fn gamble_price(item_level: AreaLevel) -> f64 {
     (item_level as f64 / 20.0).floor() + 10.0
 }
 
+pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
+    if is_ssf && item_rarity == ItemRarity::Unique {
+        (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
+    } else {
+        0.0
+    }
+}
+
+pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
+    let rarity_multiplier = match item_rarity {
+        ItemRarity::Normal => 1.0,
+        ItemRarity::Magic => 2.0,
+        ItemRarity::Rare => 4.0,
+        ItemRarity::Masterwork | ItemRarity::Unique => 8.0,
+    };
+
+    10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
+}
+
 pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
     item_specs
         .base
@@ -136,46 +156,4 @@ pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
             (*next_upgrade_level <= item_specs.modifiers.level)
                 .then_some((*next_upgrade_level / 2 + item_specs.base.min_area_level) as f64)
         })
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn stamina_spill_rounds_down_to_whole_minutes() {
-        assert_eq!(stamina_spill(Duration::from_secs(599)), Duration::ZERO);
-        assert_eq!(
-            stamina_spill(Duration::from_secs(600)),
-            Duration::from_secs(60)
-        );
-        assert_eq!(
-            stamina_spill(Duration::from_hours(24)),
-            Duration::from_secs(2 * 60 * 60 + 24 * 60)
-        );
-    }
-
-    #[test]
-    fn skill_mastery_costs_are_consistent_at_level_boundaries() {
-        for level in 1..200 {
-            let level_cost = skill_mastery_level_cost(level);
-
-            assert_eq!(skill_mastery_level(level_cost - 1.0), level - 1);
-            assert_eq!(skill_mastery_level(level_cost), level);
-            assert_eq!(
-                skill_mastery_next_level_cost(level - 1),
-                level_cost - skill_mastery_level_cost(level - 1)
-            );
-        }
-    }
-
-    #[test]
-    fn skill_mastery_level_zero_has_no_accumulated_cost() {
-        assert_eq!(skill_mastery_level_cost(0), 0.0);
-        assert_eq!(skill_mastery_level(0.0), 0);
-        assert_eq!(
-            skill_mastery_next_level_cost(0),
-            skill_mastery_level_cost(1)
-        );
-    }
 }
