@@ -1614,6 +1614,269 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "desert_whip": {
+    "name": "The Taskmaster",
+    "icon": "items/weapons_1h/desert_whip.webp",
+    "description": "Lash enough, and even the desert begins to take shape.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 33.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          200.0,
+          250.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": null,
+            "skill_id": "weapon_skill"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": -2.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillTargetModifier": {
+            "skill_type": null,
+            "skill_id": "weapon_skill",
+            "range": null,
+            "shape": "Square4",
+            "repeat": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillTargetModifier": {
+            "skill_type": null,
+            "skill_id": "double_strike",
+            "range": null,
+            "shape": "Vertical2",
+            "repeat": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": false,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "desert_whip_hit",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "desert_whip",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      },
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": true,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": [
+            "weapon_skill"
+          ],
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "desert_whip_crit",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "desert_whip",
+              "damage_type": null,
+              "debuff": null,
+              "value": -100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          16.0,
+          25.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 3.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 50.0
+        }
+      }
+    ]
+  },
   "weapon_1h_9": {
     "name": "Pick",
     "icon": "items/weapons_1h/warpick.webp",

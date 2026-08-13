@@ -983,7 +983,7 @@
         "title"       : "Feint",
         "base_cost"   : 10,
         "upgrade_cost": 2,
-        "max_level"   : 5,
+        "max_level"   : 31,
         "effects"     : [
           {
             "value"        : -100,
@@ -999,7 +999,7 @@
           },
           {
             "value"        : 0,
-            "upgrade_value": 25,
+            "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "double_strike_feint"} },
               "modifier": "Increased"

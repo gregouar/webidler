@@ -10,7 +10,9 @@ use shared::{
     http::server::PlayersCountResponse,
 };
 
-use crate::components::{accessibility::AccessibilityContext, backend_client::BackendClient};
+use crate::components::{
+    accessibility::AccessibilityContext, backend_client::BackendClient, ui::buttons::CloseButton,
+};
 
 #[derive(Clone, PartialEq)]
 struct PlayerGlimpseEntry {
@@ -46,6 +48,7 @@ pub fn PlayerCount() -> impl IntoView {
     let areas_and_players_data: RwSignal<
         Option<(HashMap<String, AreaSpecs>, PlayersCountResponse)>,
     > = RwSignal::new(None);
+    let show_widget = RwSignal::new(true);
     let show_glimpse = RwSignal::new(false);
     let status = RwSignal::new(PlayerCountStatus::Loading);
     let player_count = Memo::new(move |_| {
@@ -105,6 +108,7 @@ pub fn PlayerCount() -> impl IntoView {
                 rounded-md border border-zinc-700/70 bg-black/45 px-2.5 py-1.5
                 text-xs text-zinc-300 shadow-md backdrop-blur-sm transition-colors
                 hover:border-zinc-500/80 hover:bg-black/60"
+                class:hidden=move || !show_widget.get()
                 on:click=move |_| {
                     show_glimpse.update(|s| *s = !*s);
                 }
@@ -136,6 +140,11 @@ pub fn PlayerCount() -> impl IntoView {
                                 .into_any()
                         }
                     }}
+                    <CloseButton on:click=move |ev| {
+                        ev.stop_propagation();
+                        show_glimpse.set(false);
+                        show_widget.set(false);
+                    } />
                 </div>
 
                 {move || {

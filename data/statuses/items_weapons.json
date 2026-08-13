@@ -77,5 +77,32 @@
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
         ]
+    },
+    "desert_whip"       : {
+        "name"      : "Punishment",
+        "icon"      : "statuses/whip.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "CritDamage": {"skill_id": "weapon_skill"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 200.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "CritChance": {"skill_id": "weapon_skill"} },
+                    "modifier": "Flat",
+                    "debuff"  : false
+                },
+                "value"       : 10.0,
+                "modifier"    : "Flat"
+            }
+        ]
     }
 }
