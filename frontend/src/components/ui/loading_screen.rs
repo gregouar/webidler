@@ -8,7 +8,7 @@ use crate::components::{
 #[component]
 pub fn LoadingScreen(
     #[prop(default = "Loading...")] title: &'static str,
-    detail: &'static str,
+    #[prop(into)] detail: Signal<String>,
 ) -> impl IntoView {
     view! {
         <div class="flex w-full items-center justify-center p-4 min-h-screen">
@@ -23,7 +23,9 @@ pub fn LoadingScreen(
                         aria-label=title
                     >
                         <CardTitle>{title}</CardTitle>
-                        <p class="mt-2 text-sm text-zinc-400">{detail}</p>
+                        <p class="mt-2 text-sm text-zinc-400">
+                            {move || detail.get()}
+                        </p>
                     </div>
                 </Card>
             </div>

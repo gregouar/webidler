@@ -1,5 +1,6 @@
 use std::{collections::HashMap, time::Duration};
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
@@ -22,6 +23,7 @@ impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
     pub enum ServerMessage {
         Connect(ConnectMessage),
+        ServerDown(ServerDownMessage),
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
@@ -31,6 +33,11 @@ impl_into_message! {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ConnectMessage {}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ServerDownMessage {
+    pub expected_launch_time: DateTime<Utc>,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorMessage {

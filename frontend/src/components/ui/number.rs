@@ -1,7 +1,11 @@
 use chrono::{DateTime, Utc};
 use std::time::Duration;
 
-use leptos::{prelude::*, wasm_bindgen::JsValue, web_sys::js_sys::Date};
+use leptos::{
+    prelude::*,
+    wasm_bindgen::JsValue,
+    web_sys::js_sys::{Date, Object, Reflect},
+};
 
 use crate::components::settings::SettingsContext;
 
@@ -152,6 +156,17 @@ pub fn format_duration(duration: Duration, show_seconds: bool) -> String {
 pub fn format_datetime(dt: DateTime<Utc>) -> String {
     Date::new(&JsValue::from_str(&dt.to_rfc3339()))
         .to_locale_string("default", &JsValue::UNDEFINED)
+        .as_string()
+        .unwrap_or_default()
+}
+
+pub fn format_local_time(dt: DateTime<Utc>) -> String {
+    let options = Object::new();
+    let _ = Reflect::set(&options, &"hour".into(), &"2-digit".into());
+    let _ = Reflect::set(&options, &"minute".into(), &"2-digit".into());
+
+    Date::new(&JsValue::from_str(&dt.to_rfc3339()))
+        .to_locale_string("default", &options.into())
         .as_string()
         .unwrap_or_default()
 }

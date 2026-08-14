@@ -9,6 +9,7 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
+use chrono::{DateTime, Utc};
 use tokio::time::timeout;
 
 use std::ops::ControlFlow;
@@ -21,7 +22,7 @@ use shared::{
     data::realms::Realm,
     messages::{
         client::{ClientConnectMessage, ClientMessage},
-        server::{ErrorMessage, ErrorType},
+        server::{ErrorMessage, ErrorType, ServerDownMessage},
     },
 };
 
@@ -63,12 +64,41 @@ pub async fn handler(
 
 async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState) {
     let mut conn = WebSocketConnection::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
+    let mut pending_connect = None;
+
+    if let Some(start_at) = app_state.app_settings.game_start_at_utc
+        && start_at > Utc::now()
+    {
+        tracing::info!(%addr, %start_at, "waiting for game server start time");
+        if let Err(e) = conn
+            .send(
+                &ServerDownMessage {
+                    expected_launch_time: start_at,
+                }
+                .into(),
+            )
+            .await
+        {
+            tracing::error!(%addr, "failed to send server-down message: {e}");
+            return;
+        }
+
+        pending_connect = match wait_for_game_start(&mut conn, start_at).await {
+            Ok(connect) => connect,
+            Err(e) => {
+                tracing::info!(%addr, "connection ended while waiting for game server: {e}");
+                return;
+            }
+        };
+    }
 
     tracing::debug!("waiting for client to connect...");
-    let mut session = match timeout(
-        Duration::from_secs(30),
-        wait_for_connect(&app_state, &mut conn),
-    )
+    let mut session = match timeout(Duration::from_secs(30), async {
+        match pending_connect {
+            Some(connect) => handle_connect(&app_state, connect).await,
+            None => wait_for_connect(&app_state, &mut conn).await,
+        }
+    })
     .await
     {
         Err(e) => {
@@ -120,6 +150,39 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
 
     // returning from the handler closes the websocket connection
     tracing::info!("websocket context '{addr}' destroyed");
+}
+
+async fn wait_for_game_start(
+    conn: &mut WebSocketConnection,
+    start_at: DateTime<Utc>,
+) -> Result<Option<ClientConnectMessage>> {
+    let mut pending_connect = None;
+
+    loop {
+        let Ok(wait_duration) = (start_at - Utc::now()).to_std() else {
+            return Ok(pending_connect);
+        };
+
+        tokio::select! {
+            _ = tokio::time::sleep(wait_duration) => {
+                if conn.is_disconnected() {
+                    return Err(anyhow::format_err!("disconnected"));
+                }
+                return Ok(pending_connect);
+            }
+            message = conn.block_receive() => {
+                match message {
+                    ControlFlow::Continue(ClientMessage::Connect(connect)) => {
+                        pending_connect = Some(*connect);
+                    }
+                    ControlFlow::Break(_) => {
+                        return Err(anyhow::format_err!("disconnected"));
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
 }
 
 async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) -> Result<Session> {

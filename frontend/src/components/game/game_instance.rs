@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_use::storage;
@@ -10,6 +11,7 @@ use shared::{
     },
 };
 
+use crate::components::ui::number::format_local_time;
 use crate::components::{
     backend_client::BackendClient,
     chat::chat_panel::ChatPanel,
@@ -39,6 +41,7 @@ pub fn GameInstance() -> impl IntoView {
         storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
     let conn = expect_context::<WebsocketContext>();
+    let server_down_until = RwSignal::new(None::<DateTime<Utc>>);
 
     Effect::new({
         let conn = conn.clone();
@@ -65,7 +68,7 @@ pub fn GameInstance() -> impl IntoView {
         let conn = conn.clone();
         move |_| {
             if let Some(message) = conn.message.get() {
-                handle_message(&game_context, message);
+                handle_message(&game_context, server_down_until, message);
             }
         }
     });
@@ -78,7 +81,19 @@ pub fn GameInstance() -> impl IntoView {
                     view! {
                         <LoadingScreen
                             title="Connecting..."
-                            detail="Connecting to the game server."
+                            detail=Signal::derive(move || {
+                                server_down_until
+                                    .get()
+                                    .map(|launch_time| {
+                                        format!(
+                                            "Game server not available before {}, please wait here...",
+                                            format_local_time(launch_time),
+                                        )
+                                    })
+                                    .unwrap_or_else(|| {
+                                        "Connecting to the game server.".to_owned()
+                                    })
+                            })
                         />
                     }
                 }
@@ -99,9 +114,16 @@ pub fn GameInstance() -> impl IntoView {
     }
 }
 
-fn handle_message(game_context: &GameContext, message: ServerMessage) {
+fn handle_message(
+    game_context: &GameContext,
+    server_down_until: RwSignal<Option<DateTime<Utc>>>,
+    message: ServerMessage,
+) {
     match message {
         ServerMessage::Connect(_) => {}
+        ServerMessage::ServerDown(message) => {
+            server_down_until.set(Some(message.expected_launch_time));
+        }
         ServerMessage::InitGame(m) => {
             init_game(game_context, *m);
         }

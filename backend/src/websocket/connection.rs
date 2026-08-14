@@ -129,6 +129,10 @@ impl WebSocketConnection {
             None => ControlFlow::Break(()),
         }
     }
+
+    pub fn is_disconnected(&self) -> bool {
+        self.receiver_rx.is_closed()
+    }
 }
 
 fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), Option<ClientMessage>> {
