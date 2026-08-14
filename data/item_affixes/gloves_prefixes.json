@@ -198,7 +198,7 @@
     ]
   },
   {
-    "name"        : "Imbuing",
+    "name"        : "Afflicting",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
     "affix_type"  : "Prefix",
