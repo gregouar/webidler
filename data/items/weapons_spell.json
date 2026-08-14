@@ -624,6 +624,29 @@
         "ignore_quality": true
       },
       {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              "LowMana"
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 300.0,
+        "ignore_quality": true
+      },
+      {
         "stat": "Mana",
         "modifier": "More",
         "scope": "Global",
@@ -1103,8 +1126,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          200.0,
-          260.0
+          400.0,
+          600.0
         ],
         "ignore_quality": true
       },
@@ -1126,7 +1149,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 5.0,
+        "value": 8.0,
         "ignore_quality": true
       },
       {
@@ -1204,7 +1227,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": 70.0,
         "ignore_quality": true
       }
     ],
@@ -1232,7 +1255,7 @@
             }
           },
           "modifier": "More",
-          "value": 100.0
+          "value": 200.0
         }
       },
       {
@@ -1245,7 +1268,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 1.0
+          "value": 2.0
         }
       }
     ]

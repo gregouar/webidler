@@ -1202,7 +1202,7 @@
     "upgrade_effects": []
   },
   "witch_ring": {
-    "name": "The Brood Sigil",
+    "name": "Brood Sigil",
     "icon": "items/rings/witch_ring.webp",
     "description": "You thought you ended the forbidden ritual... But you became one with it.",
     "slot": "Ring",
@@ -1230,7 +1230,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 5.0,
+        "value": 6.0,
         "ignore_quality": true
       },
       {

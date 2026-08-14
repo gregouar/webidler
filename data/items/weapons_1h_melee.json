@@ -1165,6 +1165,18 @@
         "scope": "Global",
         "value": 1.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SkillRepeat": {
+            "skill_type": null,
+            "skill_id": "shield_bash"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],

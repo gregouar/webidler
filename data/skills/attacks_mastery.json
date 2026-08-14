@@ -136,8 +136,8 @@
       "two_hands"         : {
         "title"       : "Flurry of Blows",
         "base_cost"   : 10,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+        "upgrade_cost": 3,
+        "max_level"   : 11,
         "effects"     : [
           {
             "value"        : 1,
@@ -157,6 +157,22 @@
                 }
               },
               "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 20,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConditionalModifier": {
+                  "stat"      : { "Damage": {"skill_type": "Attack"} },
+                  "conditions": [
+                    { "HasItem": {"item_slot": "Shield", "not": true} }
+                  ]
+                }
+              },
+              "modifier": "More",
               "scope"   : "Global"
             }
           }
@@ -729,8 +745,8 @@
       "vulnerability": {
         "title"       : "Resentment",
         "base_cost"   : 10,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+        "upgrade_cost": 2,
+        "max_level"   : 21,
         "effects"     : [
           {
             "value"        : 1,
@@ -739,6 +755,14 @@
               "ApplyStatus"            : {"status_id": "retaliate_vulnerability", "value": 100},
               "independent_application": true,
               "affect_triggers"        : true
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 15,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "retaliate_vulnerability"} },
+              "modifier": "Increased"
             }
           }
         ]

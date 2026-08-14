@@ -101,6 +101,13 @@ async fn migrate_character_data(
         }
 
         sqlx::query!(
+            "UPDATE characters SET resource_shards = 0 WHERE character_id = $2",
+            character_data.character_id,
+        )
+        .execute(&mut **executor)
+        .await?;
+
+        sqlx::query!(
             "UPDATE characters_data SET data_version = $1 WHERE character_id = $2",
             TARGET_DATA_VERSION,
             character_data.character_id,

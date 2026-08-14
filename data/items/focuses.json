@@ -899,6 +899,24 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -915,24 +933,6 @@
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],
@@ -1050,6 +1050,24 @@
       {
         "stat": {
           "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
             "skill_type": "Spell",
             "skill_id": null,
             "damage_type": null,
@@ -1132,6 +1150,22 @@
           "stat": "Mana",
           "modifier": "Flat",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 25.0
         }
       },
       {
