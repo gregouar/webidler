@@ -101,7 +101,7 @@ async fn migrate_character_data(
         }
 
         sqlx::query!(
-            "UPDATE characters SET resource_shards = 0 WHERE character_id = $2",
+            "UPDATE characters SET resource_shards = 0 WHERE character_id = $1",
             character_data.character_id,
         )
         .execute(&mut **executor)
