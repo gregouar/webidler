@@ -8,7 +8,7 @@ use leptos_use::storage;
 use serde::{Deserialize, Serialize};
 use web_sys::Event;
 
-#[derive(Serialize, Deserialize, Default, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct SettingsData {
     pub scientific_notation: bool,
     pub always_compare_items: bool,
@@ -20,6 +20,19 @@ pub struct SettingsData {
     pub enable_animations: bool,
     #[serde(default = "default_true")]
     pub shake_on_crit: bool,
+}
+
+impl Default for SettingsData {
+    fn default() -> Self {
+        Self {
+            scientific_notation: false,
+            always_compare_items: false,
+            always_display_affix_tiers: false,
+            graphics_quality: Default::default(),
+            enable_animations: true,
+            shake_on_crit: true,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash)]
